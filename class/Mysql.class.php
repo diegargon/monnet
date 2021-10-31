@@ -320,7 +320,7 @@ class Database {
     /*
      * $db->selectAll("users", ['uid' => 1, 'username' => "myname"], "LIMIT 1");
      * Especify operator default '=';
-     * $query = $db->selectAll("news", ["frontpage" => ["value"=> 1, "operator" => "="], "moderation" => 0, "disabled" => 0]);
+     * $query = $db->selectAll("news", ["frontpage" => ["value"=> 1, "op" => "="], "moderation" => 0, "disabled" => 0]);
      * extra not array
      */
 
@@ -624,8 +624,10 @@ class Database {
             if (!is_array($value)) {
                 $q_where_fields[] = "`$field` = " . "'" . $value . "'";
             } else {
-                //$q_where_fields[] = "$field {$value['operator']} '" . $value['value'] . "'";
-                $q_where_fields[] = "`$field` {$value['operator']} " . $value['value']; //CHANGE 100818
+                !isset($value['op']) ? $value['op'] = '=' : null;
+                //$q_where_fields[] = "$field {$value['op']} '" . $value['value'] . "'";
+                //$q_where_fields[] = "`$field` {$value['op']} " . $value['value']; //CHANGE 100818
+                $q_where_fields[] = "`$field` {$value['op']} '" . $value['value'] . "'"; //CHANGE AGAIN
             }
         }
         $query = implode(" $logic ", $q_where_fields);
