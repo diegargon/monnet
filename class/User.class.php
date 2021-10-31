@@ -40,6 +40,7 @@ Class User {
             $this->user['id'] = -1;
         }
         empty($this->user['lang']) ? $this->user['lang'] = $this->cfg['lang'] : null;
+        empty($this->user['theme']) ? $this->user['theme'] = $this->cfg['theme'] : null;
 
         $this->loadPrefs();
     }
@@ -54,6 +55,10 @@ Class User {
 
     public function getLang() {
         return $this->user['lang'];
+    }
+
+    public function getTheme() {
+        return $this->user['theme'];
     }
 
     public function getEmail() {
