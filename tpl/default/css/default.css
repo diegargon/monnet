@@ -68,6 +68,7 @@ footer {
 .bookmarks_container {
     border:0px solid red;
     float: left;
+    margin-bottom: 15px;
 }
 
 .weather-container {    
