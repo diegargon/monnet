@@ -11,10 +11,10 @@
 
 Class User {
 
-    private $cfg;
-    private $db;
-    private $user;
-    private $lang;
+    private array $cfg;
+    private Database $db;
+    private array $user = [];
+    private array $prefs = [];
 
     public function __construct(array $cfg, Database $db) {
         $this->db = $db;
@@ -40,6 +40,8 @@ Class User {
             $this->user['id'] = -1;
         }
         empty($this->user['lang']) ? $this->user['lang'] = $this->cfg['lang'] : null;
+
+        $this->loadPrefs();
     }
 
     public function getId() {
@@ -135,8 +137,50 @@ Class User {
         $this->user['sid'] = $new_sid;
     }
 
-    function encryptPassword($password) {
+    function encryptPassword(string $password) {
         return sha1($password);
+    }
+
+    private function loadPrefs() {
+
+        $prefs = [];
+        $query = 'SELECT * FROM prefs WHERE uid = ' . $this->getId();
+        $results = $this->db->query($query);
+
+        $prefs = $this->db->fetchAll($results);
+        if ($prefs && is_array($prefs)) {
+            foreach ($prefs as $pref) {
+                if (!empty($pref['pref_name']) && $pref['uid'] == 0) {
+                    $this->prefs[$pref['pref_name']] = $pref['pref_value'];
+                } else if (!empty($pref['pref_name'])) {
+                    $this->prefs[$pref['pref_name']] = $pref['pref_value'];
+                }
+            }
+        }
+    }
+
+    public function getPref(string $r_key) {
+        return !empty($this->prefs[$r_key]) ? $this->prefs[$r_key] : false;
+    }
+
+    public function setPref(string $key, string $value) {
+
+        if (isset($this->prefs[$key])) {
+            if ($this->prefs[$key] !== $value) {
+                $where['uid'] = ['value' => $this->getId()];
+                $where['pref_name'] = ['value' => $key];
+                $set['pref_value'] = $value;
+                $this->db->update('prefs', $set, $where, 'LIMIT 1');
+            }
+        } else {
+            $new_item = [
+                'uid' => $this->getId(),
+                'pref_name' => $key,
+                'pref_value' => $value,
+            ];
+            $this->db->insert('prefs', $new_item);
+        }
+        $this->prefs[$key] = $value;
     }
 
 }

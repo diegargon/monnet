@@ -16,7 +16,7 @@ Class Web {
     private array $cfg;
     private User $user;
 
-    public function __construct($cfg, $db, $user, $lng) {
+    public function __construct(array $cfg, Database $db, User $user, array $lng) {
         $this->cfg = $cfg;
         $this->db = $db;
         $this->user = $user;
@@ -50,7 +50,7 @@ Class Web {
         return false;
     }
 
-    function getPageData($page) {
+    function getPageData(string $page) {
         $page_func = 'page_' . $page;
 
         $page_defaults = [];
@@ -63,13 +63,13 @@ Class Web {
         } else if ($page == 'logout') {
             //TODO
         } else if ($page === 'index') {
-            $page_data = page_index($this->cfg, $this->db, $this->lng);
+            $page_data = page_index($this->cfg, $this->db, $this->lng, $this->user);
         }
 
         return array_merge($page_defaults, $page_data);
     }
 
-    function render($page_data) {
+    function render(array $page_data) {
         $frontend = new Frontend($this->cfg);
         $frontend->showPage($page_data);
     }
