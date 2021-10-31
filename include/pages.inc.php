@@ -23,12 +23,14 @@ function page_defaults($cfg, User $user) {
     return $page;
 }
 
-function page_index($cfg, $db, $lng) {
+function page_index($cfg, $db, $lng, $user) {
 
     $page = [];
 
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
+
+    page_index_post($user);
 
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
@@ -41,6 +43,8 @@ function page_index($cfg, $db, $lng) {
         ];
     }
     //TODO: modules_load by page request
+
+    /* Time Widget */
     require('modules/weather_widget/weather_widget.php');
 
     $page['web_main']['jsfile'][] = './modules/weather_widget/weather_widget.js';
@@ -51,7 +55,79 @@ function page_index($cfg, $db, $lng) {
         'place' => 'left_col',
     ];
 
+    /* Controls */
+    $show_bookmarks_status = $user->getPref('show_bookmarks_status');
+    $show_services_status = $user->getPref('show_services_status');
+    $show_this_system = $user->getPref('show_this_system_status');
+
+    $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 : $page['controls']['show_bookmarks_status'] = 0;
+    $show_services_status ? $page['controls']['show_services_status'] = 1 : $page['controls']['show_services_status'] = 0;
+    $show_this_system ? $page['controls']['show_this_system_status'] = 1 : $page['controls']['show_this_system_status'] = 0;
+
+    $page['load_tpl'][] = [
+        'file' => 'controls',
+        'place' => 'left_col',
+    ];
+
+    /* bookmarks */
+
+    $results = $db->select('items', '*', ['type' => 'bookmark']);
+    $bookmarks_results = $db->fetchAll($results);
+
+    /*
+      usort($bookmarks, function ($a, $b) {
+      return $a['weight'] <=> $b['weight'];
+      });
+     */
+    if ($user->getPref('show_bookmarks_status')) {
+        $bookmarks = [];
+        foreach ($bookmarks_results as $bookmark) {
+            $bookmark_conf = json_decode($bookmark['conf'], true);
+
+            $theme = $user->getTheme();
+            if ($bookmark_conf['image_type'] === 'favicon' && empty($bookmark_conf['image_resource'])) {
+                $bookmark_img = $bookmark_conf['url'] . '/favicon.ico';
+            } else if ($bookmark_conf['image_type'] === 'favicon') {
+                $favicon_path = $bookmark_conf['image_resource'];
+                $bookmark_img = $bookmark_conf['url'] . '/' . $favicon_path;
+            } elseif ($bookmark_conf['image_type'] === 'url') {
+                $bookmark_img = $bookmark_conf['image_resource'];
+            } elseif ($bookmark_conf['image_type'] === 'local_img') {
+                $bookmark_img = 'tpl/' . $theme . '/img/icons/' . $bookmark_conf['image_resource'];
+            }
+            $bookmark['img'] = $bookmark_img;
+            $bookmarks[] = array_merge($bookmark, $bookmark_conf);
+        }
+
+        $page['load_tpl'][] = [
+            'file' => 'bookmarks',
+            'place' => 'center_col',
+        ];
+
+        $page['bookmarks'] = $bookmarks;
+    }
+
     return $page;
+}
+
+function page_index_post($user) {
+    $profile_type = Filters::postString('profile_type');
+    $show_bookmarks = Filters::postInt('show_bookmarks');
+    $show_this_system = Filters::postInt('show_this_system');
+    $show_services = Filters::postInt('show_services');
+
+    if ($profile_type !== false) {
+        $user->setPref('profile_type', $profile_type);
+    }
+    if ($show_bookmarks !== false) {
+        $user->setPref('show_bookmarks_status', $show_bookmarks);
+    }
+    if ($show_this_system !== false) {
+        $user->setPref('show_this_system_status', $show_this_system);
+    }
+    if ($show_services !== false) {
+        $user->setPref('show_services_status', $show_services);
+    }
 }
 
 function page_login($cfg, $lng, $user) {

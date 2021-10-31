@@ -491,6 +491,36 @@ input:checked + .slider:before {
     text-align: center;
 }
 
+.check {
+  -webkit-appearance: none; /*hides the default checkbox*/
+  height: 12px;
+  width: 12px;
+  position: relative;
+  transition: 0.10s;
+  background-color: #FE0006;
+  text-align: center;  
+  color: white;
+  border-radius: 15px;
+  outline: 2px ridge;
+  font-size: 8px;
+}
+
+.check:checked {
+  background-color: #0E9700;
+}
+
+.check:before {
+  content: "✖";
+}
+.check:checked:before {
+  content: "✔";
+}
+
+.check:hover {
+  cursor: pointer; 
+  opacity: 0.8;
+}
+
 /* SERVICES END */
 
 @media only screen and (max-width: 1070px) {

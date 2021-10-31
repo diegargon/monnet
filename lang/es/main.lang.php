@@ -13,4 +13,8 @@ $lng = [
     'L_PASSWORD' => 'Contraseña',
     'L_HUMIDITY' => 'Humedad',
     'L_WINDSPEED' => 'Viento',
+    'L_SYSTEM' => 'Sistema',
+    'L_BOOKMARKS' => 'Links',
+    'L_SERVICES' => 'Servicios',
+    'L_PROFILE' => 'Perfil',
 ];
