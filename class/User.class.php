@@ -13,7 +13,7 @@ Class User {
 
     private array $cfg;
     private Database $db;
-    private array $user = [];
+    private $user = [];
     private array $prefs = [];
 
     public function __construct(array $cfg, Database $db) {
