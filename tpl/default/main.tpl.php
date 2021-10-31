@@ -13,9 +13,9 @@
         <meta charset="<?= $tdata['charset'] ?>" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" href="favicon.ico" />
-        <link rel="stylesheet" href="<?= $tdata['css'] ?>">
         <meta name="referrer" content="never">
         <title><?= $tdata['web_title'] ?></title>
+        <?= $tdata['main_head'] ?>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script>
             window.onload = function () {
@@ -30,9 +30,9 @@
     <body>
         <div id="loading_wrap" class="loading"></div>
         <div class="main">
-            <?= $tdata['body'] ?>
+            <?= $tdata['main_body'] ?>
         </div>
-        <footer><?= $tdata['footer'] ?></footer>
+        <footer><?= $tdata['main_footer'] ?></footer>
 
     </body>
 </html>

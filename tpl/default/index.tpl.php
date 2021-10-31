@@ -24,12 +24,15 @@
         <div class="main_container">
             <!-- left -->
             <div id="left_container" class="left_container">
+                <?= !empty($tdata['left_col']) ? $tdata['left_col'] : null; ?>
             </div>
             <!-- Center -->
             <div id="center_container" class="center_container">
+                <?= !empty($tdata['center_col']) ? $tdata['center_col'] : null; ?>
             </div>
             <!-- Right -->
             <div id="right_container" class="right_container">
+                <?= !empty($tdata['right_col']) ? $tdata['right_col'] : null; ?>
             </div>
         </div>
 

@@ -9,6 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+date_default_timezone_set('UTC');
+
 require('config/config.inc.php');
 require('include/initial_checks.inc.php');
 do_initial_db_check($cfg_db);

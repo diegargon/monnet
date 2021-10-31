@@ -18,9 +18,47 @@ class Frontend {
     }
 
     function showPage($tdata) {
-        $web['css'] = $this->getCssFile($this->cfg['theme'], $this->cfg['css']);
-        $web['body'] = $this->getTpl($tdata['page'], $tdata);
-        $web['footer'] = '';
+        $web['main_head'] = $this->cssLinkFile($this->cfg['theme'], $this->cfg['css']);
+        $web['main_footer'] = '';
+
+        /* Add custom css files */
+        if (!empty($tdata['web_main']['cssfile']) && is_array($tdata['web_main']['cssfile'])) {
+            foreach ($tdata['web_main']['cssfile'] as $cssfile) {
+                $web['main_head'] .= $this->cssLinkFile($this->cfg['theme'], $cssfile);
+            }
+        }
+        /* Add custom js files */
+        if (!empty($tdata['web_main']['jsfile']) && is_array($tdata['web_main']['jsfile'])) {
+            foreach ($tdata['web_main']['jsfile'] as $jsfile) {
+                if (file_exists($jsfile)) {
+                    $web['main_head'] .= $this->jsLinkFile($jsfile);
+                }
+            }
+        }
+
+        if (!empty($tdata['web_main']['main_head'])) {
+            $web['main_head'] .= $tdata['web_main']['main_head'];
+        }
+
+        if (!empty($tdata['web_main']['main_footer'])) {
+            $web['main_footer'] .= $tdata['web_main']['main_footer'];
+        }
+
+        /* Load Templates in tdata/tpl */
+        if (!empty($tdata['load_tpl']) and is_array($tdata['load_tpl']) && count($tdata['load_tpl']) > 0) {
+            foreach ($tdata['load_tpl'] as $tpl) {
+                if (!empty($tpl['file']) && !empty($tpl['place'])) {
+                    if (empty($tdata[$tpl['place']])) {
+                        $tdata[$tpl['place']] = $this->getTpl($tpl['file'], $tdata);
+                    } else {
+                        $tdata[$tpl['place']] .= $this->getTpl($tpl['file'], $tdata);
+                    }
+                }
+            }
+        }
+
+        $web['main_body'] = $this->getTpl($tdata['page'], $tdata);
+
         echo $this->getTpl('main', array_merge($tdata, $web));
     }
 
@@ -34,12 +72,17 @@ class Frontend {
         return ob_get_clean();
     }
 
-    function getCssFile(string $theme, string $css) {
+    function cssLinkFile(string $theme, string $css) {
         $css_file = 'tpl/' . $theme . '/css/' . $css . '.css';
         !file_exists($css_file) ? $css_file = 'tpl/default/css/default.css' : null;
         $css_file .= '?nocache=' . time(); //TODO: To Remove: avoid cache css while dev
+        $css_file = '<link rel="stylesheet" href="' . $css_file . '">' . "\n";
 
         return $css_file;
+    }
+
+    function jsLinkFile(string $jsfile) {
+        return '<script src="' . $jsfile . '"></script>' . "\n";
     }
 
     function msgBox(array $msg) {

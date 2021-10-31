@@ -23,8 +23,7 @@ function page_defaults($cfg, User $user) {
     return $page;
 }
 
-function page_index($cfg, $lng, $user) {
-    global $db;
+function page_index($cfg, $db, $lng) {
 
     $page = [];
 
@@ -41,6 +40,16 @@ function page_index($cfg, $lng, $user) {
             'name' => $conf['name'],
         ];
     }
+    //TODO: modules_load by page request
+    require('modules/weather_widget/weather_widget.php');
+
+    $page['web_main']['jsfile'][] = './modules/weather_widget/weather_widget.js';
+
+    $page['weather_widget'] = weather_widget($cfg, $lng);
+    $page['load_tpl'][] = [
+        'file' => 'weather_widget',
+        'place' => 'left_col',
+    ];
 
     return $page;
 }
@@ -59,9 +68,8 @@ function page_login($cfg, $lng, $user) {
             $userid = $user->checkUser($username, $password);
             if (!empty($userid) && $userid > 0) {
                 $user->setUser($userid);
-                //header("Location: {$cfg['rel_path']} ");
-                //echo "page.inc 42";
-                header("Location: /monnet ");
+                header("Location: {$cfg['rel_path']} ");
+
                 exit();
             }
         }

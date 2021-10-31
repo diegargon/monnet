@@ -11,4 +11,6 @@ $lng = [
     'L_LOGIN' => 'Identificarse',
     'L_USERNAME' => 'Usuario',
     'L_PASSWORD' => 'Contraseña',
+    'L_HUMIDITY' => 'Humedad',
+    'L_WINDSPEED' => 'Viento',
 ];
