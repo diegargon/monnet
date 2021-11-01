@@ -67,8 +67,8 @@ function do_initial_usermode_checks($cfg) {
         exit($lang_file . $err_nofile_msg);
     }
 
-    if (empty($cfg['sid_expire'])) {
-        exit('lang' . $err_empty_msg);
+    if (!isset($cfg['sid_expire'])) {
+        exit('sid_expire' . $err_empty_msg);
     }
 
     if (!is_numeric($cfg['sid_expire'])) {
