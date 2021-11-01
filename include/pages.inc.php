@@ -69,42 +69,23 @@ function page_index($cfg, $db, $lng, $user) {
         'place' => 'left_col',
     ];
 
+    /* Service bookmarks */
+    if ($user->getPref('show_services_status')) {
+        $services_bookmarks = get_bookmarks($db, $user, 'services');
+        $page['bookmarks_category']['services'] = $services_bookmarks;
+    }
+
     /* bookmarks */
 
-    $results = $db->select('items', '*', ['type' => 'bookmark']);
-    $bookmarks_results = $db->fetchAll($results);
-
-    /*
-      usort($bookmarks, function ($a, $b) {
-      return $a['weight'] <=> $b['weight'];
-      });
-     */
     if ($user->getPref('show_bookmarks_status')) {
-        $bookmarks = [];
-        foreach ($bookmarks_results as $bookmark) {
-            $bookmark_conf = json_decode($bookmark['conf'], true);
-
-            $theme = $user->getTheme();
-            if ($bookmark_conf['image_type'] === 'favicon' && empty($bookmark_conf['image_resource'])) {
-                $bookmark_img = $bookmark_conf['url'] . '/favicon.ico';
-            } else if ($bookmark_conf['image_type'] === 'favicon') {
-                $favicon_path = $bookmark_conf['image_resource'];
-                $bookmark_img = $bookmark_conf['url'] . '/' . $favicon_path;
-            } elseif ($bookmark_conf['image_type'] === 'url') {
-                $bookmark_img = $bookmark_conf['image_resource'];
-            } elseif ($bookmark_conf['image_type'] === 'local_img') {
-                $bookmark_img = 'tpl/' . $theme . '/img/icons/' . $bookmark_conf['image_resource'];
-            }
-            $bookmark['img'] = $bookmark_img;
-            $bookmarks[] = array_merge($bookmark, $bookmark_conf);
-        }
-
+        $bookmarks = get_bookmarks($db, $user, 'bookmarks');
+        $page['bookmarks_category']['bookmarks'] = $bookmarks;
+    }
+    if ($user->getPref('show_services_status') || $user->getPref('show_bookmarks_status')) {
         $page['load_tpl'][] = [
             'file' => 'bookmarks',
             'place' => 'center_col',
         ];
-
-        $page['bookmarks'] = $bookmarks;
     }
 
     return $page;
@@ -159,4 +140,37 @@ function page_login($cfg, $lng, $user) {
     $page['password_placeholder'] = $lng['L_PASSWORD'];
 
     return $page;
+}
+
+function get_bookmarks(Database $db, User $user, string $category) {
+
+    $results = $db->select('items', '*', ['type' => $category]);
+    $bookmarks_results = $db->fetchAll($results);
+
+    /*
+      usort($bookmarks, function ($a, $b) {
+      return $a['weight'] <=> $b['weight'];
+      });
+     */
+
+    $bookmarks = [];
+    foreach ($bookmarks_results as $bookmark) {
+        $bookmark_conf = json_decode($bookmark['conf'], true);
+
+        $theme = $user->getTheme();
+        if ($bookmark_conf['image_type'] === 'favicon' && empty($bookmark_conf['image_resource'])) {
+            $bookmark_img = $bookmark_conf['url'] . '/favicon.ico';
+        } else if ($bookmark_conf['image_type'] === 'favicon') {
+            $favicon_path = $bookmark_conf['image_resource'];
+            $bookmark_img = $bookmark_conf['url'] . '/' . $favicon_path;
+        } elseif ($bookmark_conf['image_type'] === 'url') {
+            $bookmark_img = $bookmark_conf['image_resource'];
+        } elseif ($bookmark_conf['image_type'] === 'local_img') {
+            $bookmark_img = 'tpl/' . $theme . '/img/icons/' . $bookmark_conf['image_resource'];
+        }
+        $bookmark['img'] = $bookmark_img;
+        $bookmarks[] = array_merge($bookmark, $bookmark_conf);
+    }
+
+    return $bookmarks;
 }
