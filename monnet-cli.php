@@ -22,10 +22,7 @@ chdir($ROOT_PATH);
 require_once('include/common.inc.php');
 require_once('include/climode.inc.php');
 
-$hosts = get_hosts($db);
+cron($db);
 
-ping_ports($hosts);
+return true;
 
-foreach ($hosts as $host_id => $host) {
-    update_host($db, $host_id, $host);
-}

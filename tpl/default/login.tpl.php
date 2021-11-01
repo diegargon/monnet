@@ -12,10 +12,10 @@
     <div class="profile_box">
         <form  method="POST" action="?page=login">
             <div class="profile_name">
-                <input size="15"  onfocus="this.value = ''" placeholder="<?= $tdata['username_placeholder'] ?>" class="login_username" type="text" name="username" value=""/>
+                <input size="18"  onfocus="this.value = ''" placeholder="<?= $tdata['username_placeholder'] ?>" class="login_username" type="text" name="username" value=""/>
             </div>
             <div class="profile_password">
-                <input size="15"  onfocus="this.value = ''" placeholder="<?= $tdata['password_placeholder'] ?>" class="login_password" type="password" name="password" value=""/>
+                <input size="18"  onfocus="this.value = ''" placeholder="<?= $tdata['password_placeholder'] ?>" class="login_password" type="password" name="password" value=""/>
             </div>
             <input type="submit" class="login_button" name="submit" value="<?= $tdata['log_in'] ?>"/>
         </form>
