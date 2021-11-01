@@ -17,4 +17,8 @@ $lng = [
     'L_BOOKMARKS' => 'Links',
     'L_SERVICES' => 'Servicios',
     'L_PROFILE' => 'Perfil',
+    'L_ONLINE' => 'Online',
+    'L_OFFLINE' => 'Offline',
+    'L_S_ONLINE' => 'On',
+    'L_S_OFFLINE' => 'Off',
 ];

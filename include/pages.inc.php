@@ -59,9 +59,11 @@ function page_index($cfg, $db, $lng, $user) {
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
     $show_services_status = $user->getPref('show_services_status');
     $show_this_system = $user->getPref('show_this_system_status');
+    $show_hosts_status = $user->getPref('show_hosts_status');
 
     $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 : $page['controls']['show_bookmarks_status'] = 0;
     $show_services_status ? $page['controls']['show_services_status'] = 1 : $page['controls']['show_services_status'] = 0;
+    $show_hosts_status ? $page['controls']['show_hosts_status'] = 1 : $page['controls']['show_hosts_status'] = 0;
     $show_this_system ? $page['controls']['show_this_system_status'] = 1 : $page['controls']['show_this_system_status'] = 0;
 
     $page['load_tpl'][] = [
@@ -69,13 +71,13 @@ function page_index($cfg, $db, $lng, $user) {
         'place' => 'left_col',
     ];
 
-    /* Service bookmarks */
+    /* Service Bookmarks */
     if ($user->getPref('show_services_status')) {
         $services_bookmarks = get_bookmarks($db, $user, 'services');
         $page['bookmarks_category']['services'] = $services_bookmarks;
     }
 
-    /* bookmarks */
+    /* Bookmarks */
 
     if ($user->getPref('show_bookmarks_status')) {
         $bookmarks = get_bookmarks($db, $user, 'bookmarks');
@@ -88,6 +90,15 @@ function page_index($cfg, $db, $lng, $user) {
         ];
     }
 
+    /* Hosts */
+    if ($user->getPref('show_hosts_status')) {
+        $page['hosts'] = get_hosts($cfg, $db, $user, $lng);
+        $page['load_tpl'][] = [
+            'file' => 'hosts',
+            'place' => 'right_col',
+        ];
+    }
+
     return $page;
 }
 
@@ -96,6 +107,7 @@ function page_index_post($user) {
     $show_bookmarks = Filters::postInt('show_bookmarks');
     $show_this_system = Filters::postInt('show_this_system');
     $show_services = Filters::postInt('show_services');
+    $show_hosts = Filters::postInt('show_hosts');
 
     if ($profile_type !== false) {
         $user->setPref('profile_type', $profile_type);
@@ -108,6 +120,9 @@ function page_index_post($user) {
     }
     if ($show_services !== false) {
         $user->setPref('show_services_status', $show_services);
+    }
+    if ($show_hosts !== false) {
+        $user->setPref('show_hosts_status', $show_hosts);
     }
 }
 
@@ -144,20 +159,14 @@ function page_login($cfg, $lng, $user) {
 
 function get_bookmarks(Database $db, User $user, string $category) {
 
-    $results = $db->select('items', '*', ['type' => $category]);
+    $results = $db->select('items', '*', ['type' => $category], 'ORDER BY weight');
     $bookmarks_results = $db->fetchAll($results);
 
-    /*
-      usort($bookmarks, function ($a, $b) {
-      return $a['weight'] <=> $b['weight'];
-      });
-     */
-
     $bookmarks = [];
+    $theme = $user->getTheme();
     foreach ($bookmarks_results as $bookmark) {
         $bookmark_conf = json_decode($bookmark['conf'], true);
 
-        $theme = $user->getTheme();
         if ($bookmark_conf['image_type'] === 'favicon' && empty($bookmark_conf['image_resource'])) {
             $bookmark_img = $bookmark_conf['url'] . '/favicon.ico';
         } else if ($bookmark_conf['image_type'] === 'favicon') {
@@ -173,4 +182,26 @@ function get_bookmarks(Database $db, User $user, string $category) {
     }
 
     return $bookmarks;
+}
+
+function get_hosts(array $cfg, Database $db, User $user, array $lng) {
+    $results = $db->select('hosts', '*', null, 'ORDER BY weight');
+    $hosts_results = $db->fetchAll($results);
+    $theme = $user->getTheme();
+
+    foreach ($hosts_results as $khost => $vhost) {
+        $hosts_results[$khost]['img'] = 'tpl/' . $theme . '/img/icons/' . $vhost['ico'];
+        if ($vhost['status']) {
+            $lstatus = $lng['L_S_ONLINE'];
+            $hosts_results[$khost]['status_image'] = 'tpl/' . $theme . '/img/green.png';
+        } else {
+            $lstatus = $lng['L_S_OFFLINE'];
+            $hosts_results[$khost]['status_image'] = 'tpl/' . $theme . '/img/red.png';
+        }
+        $hosts_results[$khost]['alt_status'] = $lstatus;
+        $hosts_results[$khost]['os_name'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['name'];
+        $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+    }
+
+    return $hosts_results;
 }

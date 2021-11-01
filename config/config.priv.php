@@ -12,8 +12,8 @@
 /* Systems */
 
 $cfg['os'] = [
-    1 => 'windows',
-    2 => 'linux',
+    1 => ['name' => 'windows', 'img' => 'windows.png'],
+    2 => ['name' => 'linux', 'img' => 'linux.png'],
 ];
 $cfg['os_distributions'] = [
     1 => 'microsoft',
