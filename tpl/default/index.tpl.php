@@ -18,7 +18,7 @@
         </div>
     </div>
     <!-- -->
-    <div id="this_system_container" class="this_system_container"></div>
+    <div id="top_container" class="top_container"></div>
     <!-- comment -->
     <div class="center_aligner_container">
         <div class="main_container">
@@ -35,7 +35,9 @@
                 <?= !empty($tdata['right_col']) ? $tdata['right_col'] : null; ?>
             </div>
         </div>
-
+        <div id="bottom_container" class="bottom_container">
+            <?= !empty($tdata['bottom_col']) ? $tdata['bottom_col'] : null; ?>
+        </div>
     </div>
 
 </div>

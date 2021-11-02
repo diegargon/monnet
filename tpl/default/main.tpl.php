@@ -24,6 +24,10 @@
             function show_loading() {
                 document.getElementById("loading_wrap").style.display = "block";
             }
+            function show_host(hostid) {
+                //$('#top_container').prepend(hostid);
+                $('#top_container').text(hostid);
+            }
         </script>
     </head>
 
