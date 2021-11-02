@@ -42,7 +42,7 @@ Class User {
         empty($this->user['lang']) ? $this->user['lang'] = $this->cfg['lang'] : null;
         empty($this->user['theme']) ? $this->user['theme'] = $this->cfg['theme'] : null;
 
-        $this->loadPrefs();
+        $this->user['id'] > 0 ? $this->loadPrefs() : null;
     }
 
     public function getId() {
@@ -78,8 +78,6 @@ Class User {
     }
 
     public function getProfiles() {
-
-
         $results = $this->select('users');
 
         return $this->fetchAll($results);
@@ -120,18 +118,17 @@ Class User {
     }
 
     private function updateSessionId() {
-        //echo "ENTRO 115 Userclass";
         if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
             setcookie('sid', session_id(), [
                 'expires' => time() + $this->cfg['sid_expire'],
                 'secure' => true,
                 'samesite' => 'lax',
-                    ], $this->cfg['rel_path']);
+            ]);
             setcookie('uid', $this->getId(), [
                 'expires' => time() + $this->cfg['sid_expire'],
                 'secure' => true,
                 'samesite' => 'lax',
-                    ], $this->cfg['rel_path']);
+            ]);
         } else {
             setcookie("sid", session_id(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
             setcookie("uid", $this->getId(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
