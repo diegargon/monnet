@@ -15,7 +15,6 @@
         <link rel="shortcut icon" href="favicon.ico" />
         <meta name="referrer" content="never">
         <title><?= $tdata['web_title'] ?></title>
-        <?= $tdata['main_head'] ?>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script>
             window.onload = function () {
@@ -26,9 +25,10 @@
             }
             function show_host(hostid) {
                 //$('#top_container').prepend(hostid);
-                $('#top_container').text(hostid);
+                //$('#top_container').text(hostid);
             }
         </script>
+        <?= $tdata['main_head'] ?>
     </head>
 
     <body>

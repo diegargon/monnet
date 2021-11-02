@@ -48,6 +48,8 @@ function page_index($cfg, $db, $lng, $user) {
     require('modules/weather_widget/weather_widget.php');
 
     $page['web_main']['jsfile'][] = './modules/weather_widget/weather_widget.js';
+    /* Include refresher script tpl */
+    $page['web_main']['main_head_tpl'][] = 'refresher';
 
     $page['weather_widget'] = weather_widget($cfg, $lng);
     $page['load_tpl'][] = [
@@ -192,13 +194,12 @@ function get_hosts(array $cfg, Database $db, User $user, array $lng) {
     foreach ($hosts_results as $khost => $vhost) {
         $hosts_results[$khost]['img'] = 'tpl/' . $theme . '/img/icons/' . $vhost['ico'];
         if ($vhost['online']) {
-            $lstatus = $lng['L_S_ONLINE'];
+            $hosts_results[$khost]['alt_online'] = $lng['L_S_ONLINE'];
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/green.png';
         } else {
-            $lstatus = $lng['L_S_OFFLINE'];
+            $hosts_results[$khost]['alt_online'] = $lng['L_S_OFFLINE'];
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red.png';
         }
-        $hosts_results[$khost]['alt_status'] = $lstatus;
         $hosts_results[$khost]['os_name'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['name'];
         $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
     }

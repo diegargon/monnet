@@ -39,6 +39,11 @@ class Frontend {
         if (!empty($tdata['web_main']['main_head'])) {
             $web['main_head'] .= $tdata['web_main']['main_head'];
         }
+        if (!empty($tdata['web_main']['main_head_tpl']) && is_array($tdata['web_main']['main_head_tpl'])) {
+            foreach ($tdata['web_main']['main_head_tpl'] as $head_tpl) {
+                $web['main_head'] .= $this->getTpl($head_tpl, $tdata);
+            }
+        }
 
         if (!empty($tdata['web_main']['main_footer'])) {
             $web['main_footer'] .= $tdata['web_main']['main_footer'];
@@ -104,41 +109,6 @@ class Frontend {
         echo $this->getTpl('html_mstruct', $tdata);
 
         exit();
-    }
-
-    function getMenu() {
-        global $prefs, $cfg;
-
-        if (isset($_GET['sw_opt'])) {
-            $value = $prefs->getPrefsItem('hide_opt');
-            if ($value == 0) {
-                $prefs->setPrefsItem('hide_opt', 1);
-            } else {
-                $prefs->setPrefsItem('hide_opt', 0);
-            }
-        }
-
-        if (!empty(Filter::getString('page'))) {
-            $page = Filter::getString('page');
-            $tdata['menu_opt_link'] = str_replace('&sw_opt=1', '', basename($_SERVER['REQUEST_URI'])) . '&sw_opt=1';
-        } else {
-            $tdata['menu_opt_link'] = "?page=index&sw_opt=1";
-            if (!empty($cfg['index_page'])) {
-                $page = $cfg['index_page'];
-            } else {
-                $page = 'index';
-            }
-        }
-
-        if (empty($prefs->getPrefsItem('hide_opt'))) {
-            $tdata['menu_opt'] = $this->getMenuOptions();
-            $tdata['arrow'] = '&uarr;';
-        } else {
-            $tdata['arrow'] = '&darr;';
-        }
-
-        $tdata['page'] = $page;
-        return $this->getTpl('menu', $tdata);
     }
 
     function getFooter() {

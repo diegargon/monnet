@@ -9,19 +9,27 @@
  */
 define('IN_WEB', true);
 
-require('config/config.inc.php');
-require('includes/conn.inc.php');
-require('includes/htmlbuilder.inc.php');
-require('includes/utils.inc.php');
+require_once('include/common.inc.php');
+require_once('include/usermode.inc.php');
 
+$tdata = [];
 $data = [];
+$data['conn'] = 'successful';
+if ($user->getId() > 0) {
+    $data['login'] = 'successful';
+} else {
+    $data['login'] = 'fail';
+    print(json_encode($data));
+    exit();
+}
+$frontend = new Frontend($cfg);
+$tdata['theme'] = $cfg['theme'];
 
-if (!empty($_GET['show_services'])) {
-    $data['services'] = get_services();
+if ($user->getPref('show_hosts_status')) {
+
+    $tdata['hosts'] = get_hosts($cfg, $db, $user, $lng);
+    $data['hosts'] = $frontend->getTpl('hosts', $tdata);
 }
 
-if (!empty($_GET['this_system'])) {
-    $data['this_system'] = get_this_system();
-}
 
 print json_encode($data);

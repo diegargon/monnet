@@ -16,7 +16,7 @@
             <a onclick="show_host(<?= $host['id'] ?>)" href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['title'] ?>">
                 <div class="hosts-thumb shadow1">
                     <img class="hosts-online" src="<?= $host['online_image'] ?>" alt="<?= $host['alt_online'] ?>"/>
-                    <img class="fab" src="<?= $host['os_image'] ?>" alt="<?= $host['os_name'] ?>"/>
+                    <!-- <img class="fab" src="<?= $host['os_image'] ?>" alt="<?= $host['os_name'] ?>"/> -->
                     <img class="fab" src="<?= $host['img'] ?>" alt="<?= $host['title'] ?>"/>
                     <div class="hosts-title"><?= $host['title'] ?> </div>
                 </div>
