@@ -24,3 +24,8 @@ $cfg['os_distributions'] = [
 $cfg['access_methods'] = [
     1 => 'ssh',
 ];
+
+$cfg['check_method'] = [
+    1 => 'port',
+    2 => 'ping',
+];

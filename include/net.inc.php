@@ -9,6 +9,9 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+/* TODO: Only TCP port check (check_type=1), add ping check at least (check_type=2) */
+/* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
+
 function ping_ports(&$hosts) {
 
     foreach ($hosts as $khost => $host) {
