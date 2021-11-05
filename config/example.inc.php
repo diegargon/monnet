@@ -29,7 +29,7 @@ $cfg['sid_expire'] = 0;
 $cfg['theme'] = 'default';
 $cfg['css'] = 'default';
 $cfg['charset'] = 'utf-8';
-
+$cfg['net'] = '192.168.1.0/24';
 /* Modules Config */
 /* TODO: Split load config files */
 $cfg['weather_widget']['country'] = '';
