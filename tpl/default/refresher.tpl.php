@@ -14,7 +14,7 @@
     });
 
     function refresh() {
-<?php /* $.get('../refresher.php', {show_services: <?= $cfg['show_services'] ?>, this_system: <?= $cfg['this_system'] ?>}) */ ?>
+<?php /* $.get('../refresher.php', {show_applinks: <?= $cfg['show_applinks'] ?>, this_system: <?= $cfg['this_system'] ?>}) */ ?>
         $.get('refresher.php')
                 .done(function (data) {
                     //console.log(data);

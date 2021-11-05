@@ -11,24 +11,24 @@
 <form method="POST">
     <div class="options_container">
         <div class="services_ctrl">
-            <input type="hidden" name="show_services" value="0" />
-            <input class="check" type="checkbox" value="1" name="show_services" <?= $tdata['controls']['show_services_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
-            <span class="opt_labels">Services</span>
+            <input type="hidden" name="show_applinks" value="0" />
+            <input class="check" type="checkbox" value="1" name="show_applinks" <?= $tdata['controls']['show_applinks_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
+            <span class="opt_labels"><?= $tdata['controls']['applinks_label'] ?></span>
         </div>
         <div class="bookmarks_ctrl">
             <input type="hidden" name="show_bookmarks" value="0" />
             <input class="check" type="checkbox" value="1" name="show_bookmarks" <?= $tdata['controls']['show_bookmarks_status'] ? ' checked ' : null; ?>  onchange="this.form.submit()" />
-            <span class="opt_labels">Bookmarks</span>
+            <span class="opt_labels"><?= $tdata['controls']['bookmarks_label'] ?></span>
         </div>
         <div class="hosts_ctrl">
             <input type="hidden" name="show_hosts" value="0" />
             <input class="check" type="checkbox" value="1" name="show_hosts" <?= $tdata['controls']['show_hosts_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
-            <span class="opt_labels">Hosts</span>
+            <span class="opt_labels"><?= $tdata['controls']['highlight_hosts_label'] ?></span>
         </div>
         <div class="system_ctrl">
             <input type="hidden" name="show_this_system" value="0" />
             <input class="check" type="checkbox" value="1" name="show_this_system" <?= $tdata['controls']['show_this_system_status'] ? ' checked ' : null ?>  onchange="this.form.submit()" />
-            <span class="opt_labels">System</span>
+            <span class="opt_labels"><?= $tdata['controls']['this_system_label'] ?></span>
         </div>
     </div>
     <!--

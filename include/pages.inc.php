@@ -59,13 +59,17 @@ function page_index($cfg, $db, $lng, $user) {
 
     /* Controls */
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
-    $show_services_status = $user->getPref('show_services_status');
+    $show_applinks_status = $user->getPref('show_applinks_status');
     $show_this_system = $user->getPref('show_this_system_status');
     $show_hosts_status = $user->getPref('show_hosts_status');
 
+    $page['controls']['bookmarks_label'] = $lng['L_BOOKMARKS'];
     $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 : $page['controls']['show_bookmarks_status'] = 0;
-    $show_services_status ? $page['controls']['show_services_status'] = 1 : $page['controls']['show_services_status'] = 0;
+    $page['controls']['applinks_label'] = $lng['L_APPLINKS'];
+    $show_applinks_status ? $page['controls']['show_applinks_status'] = 1 : $page['controls']['show_applinks_status'] = 0;
+    $page['controls']['highlight_hosts_label'] = $lng['L_HIGHLIGHT_HOSTS'];
     $show_hosts_status ? $page['controls']['show_hosts_status'] = 1 : $page['controls']['show_hosts_status'] = 0;
+    $page['controls']['this_system_label'] = $lng['L_THIS_SYSTEM'];
     $show_this_system ? $page['controls']['show_this_system_status'] = 1 : $page['controls']['show_this_system_status'] = 0;
 
     $page['load_tpl'][] = [
@@ -73,10 +77,10 @@ function page_index($cfg, $db, $lng, $user) {
         'place' => 'left_col',
     ];
 
-    /* Service Bookmarks */
-    if ($user->getPref('show_services_status')) {
-        $services_bookmarks = get_bookmarks($db, $user, 'services');
-        $page['bookmarks_category']['services'] = $services_bookmarks;
+    /* AppLinks Bookmarks */
+    if ($user->getPref('show_applinks_status')) {
+        $applinks_bookmarks = get_bookmarks($db, $user, 'applinks');
+        $page['bookmarks_category']['applinks'] = $applinks_bookmarks;
     }
 
     /* Bookmarks */
@@ -85,7 +89,7 @@ function page_index($cfg, $db, $lng, $user) {
         $bookmarks = get_bookmarks($db, $user, 'bookmarks');
         $page['bookmarks_category']['bookmarks'] = $bookmarks;
     }
-    if ($user->getPref('show_services_status') || $user->getPref('show_bookmarks_status')) {
+    if ($user->getPref('show_applinks_status') || $user->getPref('show_bookmarks_status')) {
         $page['load_tpl'][] = [
             'file' => 'bookmarks',
             'place' => 'center_col',
@@ -108,7 +112,7 @@ function page_index_post($user) {
     $profile_type = Filters::postString('profile_type');
     $show_bookmarks = Filters::postInt('show_bookmarks');
     $show_this_system = Filters::postInt('show_this_system');
-    $show_services = Filters::postInt('show_services');
+    $show_applinks = Filters::postInt('show_applinks');
     $show_hosts = Filters::postInt('show_hosts');
 
     if ($profile_type !== false) {
@@ -120,8 +124,8 @@ function page_index_post($user) {
     if ($show_this_system !== false) {
         $user->setPref('show_this_system_status', $show_this_system);
     }
-    if ($show_services !== false) {
-        $user->setPref('show_services_status', $show_services);
+    if ($show_applinks !== false) {
+        $user->setPref('show_applinks_status', $show_applinks);
     }
     if ($show_hosts !== false) {
         $user->setPref('show_hosts_status', $show_hosts);
