@@ -9,18 +9,18 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function get_wellknown_hosts(Database $db) {
+function get_highlight_hosts(Database $db) {
     return get_hosts($db, 1);
 }
 
-function get_hosts(Database $db, int $wellknown = null) {
+function get_hosts(Database $db, int $highlight = null) {
     $query_ports = 'SELECT * FROM ports';
     $results = $db->query($query_ports);
     $hosts_ports = $db->fetchAll($results);
 
     $query_hosts = 'SELECT * FROM hosts WHERE disable = 0';
-    if ($wellknown === 0 || $wellknown === 1) {
-        $query_hosts .= ' AND wellknown=' . $wellknown;
+    if ($highlight === 0 || $highlight === 1) {
+        $query_hosts .= ' AND highlight=' . $highlight;
     }
 
     $results = $db->query($query_hosts);
@@ -75,8 +75,8 @@ function update_host(Database $db, int $hid, array $host) {
     }
 }
 
-function check_wellknown_hosts(Database $db) {
-    $hosts = get_wellknown_hosts($db);
+function check_highlight_hosts(Database $db) {
+    $hosts = get_highlight_hosts($db);
 
     ping_ports($hosts);
 
@@ -87,11 +87,11 @@ function check_wellknown_hosts(Database $db) {
 
 function ping_net(array $cfg, Database $db) {
 
-    $hosts = get_wellknown_hosts($db, 0);
+    $hosts = get_highlight_hosts($db, 0);
 
     $iplist = get_iplist($cfg['net']);
 
-    //Remove wellknown hosts (check in another func)
+    //Remove highlight hosts (check in another func)
 
     foreach ($iplist as $kip => $ip) {
         foreach ($hosts as $host) {

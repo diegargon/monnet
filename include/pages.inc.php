@@ -94,7 +94,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     /* Hosts */
     if ($user->getPref('show_hosts_status')) {
-        $page['hosts'] = get_view_wellknown_hosts($cfg, $db, $user, $lng);
+        $page['hosts'] = get_view_highlight_hosts($cfg, $db, $user, $lng);
         $page['load_tpl'][] = [
             'file' => 'hosts',
             'place' => 'right_col',
@@ -186,8 +186,8 @@ function get_bookmarks(Database $db, User $user, string $category) {
     return $bookmarks;
 }
 
-function get_view_wellknown_hosts(array $cfg, Database $db, User $user, array $lng) {
-    $results = $db->select('hosts', '*', ['wellknown' => 1], 'ORDER BY weight');
+function get_view_highlight_hosts(array $cfg, Database $db, User $user, array $lng) {
+    $results = $db->select('hosts', '*', ['highlight' => 1], 'ORDER BY weight');
     $hosts_results = $db->fetchAll($results);
     $theme = $user->getTheme();
 
