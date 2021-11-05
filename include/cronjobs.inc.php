@@ -9,12 +9,19 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function get_hosts(Database $db) {
+function get_wellknown_hosts(Database $db) {
+    return get_hosts($db, 1);
+}
+
+function get_hosts(Database $db, $wellknown = false) {
     $query_ports = 'SELECT * FROM ports';
     $results = $db->query($query_ports);
     $hosts_ports = $db->fetchAll($results);
 
     $query_hosts = 'SELECT * FROM hosts WHERE disable = 0';
+    if ($wellknown === 0 || $wellknown === 1) {
+        ' AND wellknown=' . $wellknown;
+    }
     $results = $db->query($query_hosts);
     if ($results) {
         //use host id for array key
@@ -67,12 +74,58 @@ function update_host(Database $db, int $hid, array $host) {
     }
 }
 
-function check_hosts(Database $db) {
-    $hosts = get_hosts($db);
+function check_wellknown_hosts(Database $db) {
+    $hosts = get_wellknown_hosts($db);
 
     ping_ports($hosts);
 
     foreach ($hosts as $host_id => $host) {
         update_host($db, $host_id, $host);
+    }
+}
+
+function ping_net(array $cfg, Database $db) {
+    $ips_status = [];
+
+    $hosts = get_wellknown_hosts($db, 0);
+
+    $iplist = get_iplist($cfg['net']);
+
+    //Remove wellknown hosts (check in another func)
+
+    foreach ($iplist as $kip => $ip) {
+        foreach ($hosts as $host) {
+            if ($host['host'] == $ip) {
+                unset($iplist[$kip]);
+            }
+        }
+    }
+
+
+    foreach ($iplist as $ip) {
+        $ip_status = ping($ip);
+        if ($ip_status['isAlive']) {
+            $set['host'] = $ip;
+            $set['online'] = 1;
+            $results = $db->query('SELECT `id`,`online` FROM hosts WHERE host=\'' . $ip . '\' LIMIT 1');
+            $host_results = $db->fetchAll($results);
+            if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
+                if ($host_results[0]['online'] !== 1) {
+                    $set['online'] = 1;
+                    $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]], 'LIMIT 1');
+                }
+            } else {
+                $db->insert('hosts', $set);
+            }
+        } else {
+            $results = $db->query('SELECT `id`,`online` FROM hosts WHERE host=\'' . $ip . '\'  LIMIT 1');
+            $host_results = $db->fetchAll($results);
+            if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
+                if ($host_results[0]['online'] === 1) {
+                    $set['online'] = 0;
+                    $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]]);
+                }
+            }
+        }
     }
 }
