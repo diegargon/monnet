@@ -51,6 +51,7 @@ footer {
 
 .main {
     margin-top: 10vh;
+    padding-bottom: 50px;
 }
 .center_aligner_container {
     display:flex;
@@ -510,8 +511,15 @@ input:checked + .slider:before {
 @media only screen and (max-width: 1070px) {
     .hosts {
         grid-template-columns: repeat(5, 140px);     
-        margin-bottom: 50px;
+        margin-bottom: 10px;
     }    
+    .header {
+        padding-top: 0px;        
+    }    
+.main {
+    margin-top: 5vh;
+}    
+
 }
 @media only screen and (max-width: 815px) {
     .hosts {

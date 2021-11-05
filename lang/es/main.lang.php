@@ -10,6 +10,7 @@
 $lng = [
     //A
     'L_APPLINKS' => 'AppLinks',
+    'L_REST_HOSTS' => 'Hosts',
     //B
     'L_BOOKMARKS' => 'Links',
     //H

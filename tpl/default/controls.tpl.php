@@ -20,10 +20,15 @@
             <input class="check" type="checkbox" value="1" name="show_bookmarks" <?= $tdata['controls']['show_bookmarks_status'] ? ' checked ' : null; ?>  onchange="this.form.submit()" />
             <span class="opt_labels"><?= $tdata['controls']['bookmarks_label'] ?></span>
         </div>
-        <div class="hosts_ctrl">
+        <div class="hosts_highlight_ctrl">
             <input type="hidden" name="show_hightlight_hosts" value="0" />
             <input class="check" type="checkbox" value="1" name="show_hightlight_hosts" <?= $tdata['controls']['show_hightlight_hosts_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
             <span class="opt_labels"><?= $tdata['controls']['highlight_hosts_label'] ?></span>
+        </div>
+        <div class="hosts_ctrl">
+            <input type="hidden" name="show_rest_hosts" value="0" />
+            <input class="check" type="checkbox" value="1" name="show_rest_hosts" <?= $tdata['controls']['show_rest_hosts_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
+            <span class="opt_labels"><?= $tdata['controls']['rest_hosts_label'] ?></span>
         </div>
         <div class="system_ctrl">
             <input type="hidden" name="show_this_system" value="0" />

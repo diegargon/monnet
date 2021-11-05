@@ -21,7 +21,8 @@ function cron(array $cfg, Database $db) {
 
     if (($cron_times['cron_five'] + 300) < $time_now) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_five']], 'LIMIT 1');
-        check_highlight_hosts($db);
+        //   check_highlight_hosts($db);
+        //   ping_net($cfg, $db);
     }
 
     if (($cron_times['cron_quarter'] + 900) < $time_now) {

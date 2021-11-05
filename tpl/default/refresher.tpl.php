@@ -17,15 +17,23 @@
 <?php /* $.get('../refresher.php', {show_applinks: <?= $cfg['show_applinks'] ?>, this_system: <?= $cfg['this_system'] ?>}) */ ?>
         $.get('refresher.php')
                 .done(function (data) {
-                    //console.log(data);
+                    console.log(data);
                     var jsonData = JSON.parse(data);
-                    console.log(jsonData);
-                    if ("hosts" in jsonData) {
-                        if ($('#hosts').length === 0) {
-                            $('#right_container').prepend(jsonData.hosts);
+                    //console.log(jsonData);
+                    if ("highlight_hosts" in jsonData) {
+                        if ($('#highlight-hosts').length === 0) {
+                            $('#right_container').prepend(jsonData.highlight_hosts);
                         } else {
-                            $('#hosts').remove();
-                            $('#right_container').prepend(jsonData.hosts);
+                            $('#highlight-hosts').remove();
+                            $('#right_container').prepend(jsonData.highlight_hosts);
+                        }
+                    }
+                    if ("rest_hosts" in jsonData) {
+                        if ($('#rest-hosts').length === 0) {
+                            $('#right_container').prepend(jsonData.rest_hosts);
+                        } else {
+                            $('#rest-hosts').remove();
+                            $('#right_container').prepend(jsonData.rest_hosts);
                         }
                     }
                 });

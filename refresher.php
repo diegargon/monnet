@@ -26,10 +26,12 @@ $frontend = new Frontend($cfg);
 $tdata['theme'] = $cfg['theme'];
 
 if ($user->getPref('show_hightlight_hosts_status')) {
-
-    $tdata['hosts'] = get_hosts($cfg, $db, $user, $lng);
-    $data['hosts'] = $frontend->getTpl('hosts', $tdata);
+    $tdata['hosts'] = get_view_hosts($cfg, $db, $user, $lng, 1);
+    $data['highlight_hosts'] = $frontend->getTpl('hosts', $tdata);
 }
-
+if ($user->getPref('show_rest_hosts_status')) {
+    $tdata['hosts'] = get_view_hosts($cfg, $db, $user, $lng, 0);
+    $data['rest_hosts'] = $frontend->getTpl('rest-hosts', $tdata);
+}
 
 print json_encode($data);

@@ -87,7 +87,7 @@ function check_highlight_hosts(Database $db) {
 
 function ping_net(array $cfg, Database $db) {
 
-    $hosts = get_highlight_hosts($db, 0);
+    $hosts = get_highlight_hosts($db);
 
     $iplist = get_iplist($cfg['net']);
 
@@ -104,13 +104,15 @@ function ping_net(array $cfg, Database $db) {
 
     foreach ($iplist as $ip) {
         $ip_status = ping($ip);
+        $set = [];
         if ($ip_status['isAlive']) {
+
             $set['host'] = $ip;
             $set['online'] = 1;
             $results = $db->query('SELECT `id`,`online` FROM hosts WHERE host=\'' . $ip . '\' LIMIT 1');
             $host_results = $db->fetchAll($results);
             if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
-                if ($host_results[0]['online'] !== 1) {
+                if ($host_results[0]['online'] != 1) {
                     $set['online'] = 1;
                     $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]], 'LIMIT 1');
                 }
@@ -120,9 +122,11 @@ function ping_net(array $cfg, Database $db) {
         } else {
             $results = $db->query('SELECT `id`,`online` FROM hosts WHERE host=\'' . $ip . '\'  LIMIT 1');
             $host_results = $db->fetchAll($results);
+
             if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
-                if ($host_results[0]['online'] === 1) {
+                if ($host_results[0]['online'] == 1) {
                     $set['online'] = 0;
+
                     $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]]);
                 }
             }
