@@ -61,14 +61,14 @@ function page_index($cfg, $db, $lng, $user) {
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
     $show_applinks_status = $user->getPref('show_applinks_status');
     $show_this_system = $user->getPref('show_this_system_status');
-    $show_hosts_status = $user->getPref('show_hosts_status');
+    $show_hightlight_hosts_status = $user->getPref('show_hightlight_hosts_status');
 
     $page['controls']['bookmarks_label'] = $lng['L_BOOKMARKS'];
     $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 : $page['controls']['show_bookmarks_status'] = 0;
     $page['controls']['applinks_label'] = $lng['L_APPLINKS'];
     $show_applinks_status ? $page['controls']['show_applinks_status'] = 1 : $page['controls']['show_applinks_status'] = 0;
     $page['controls']['highlight_hosts_label'] = $lng['L_HIGHLIGHT_HOSTS'];
-    $show_hosts_status ? $page['controls']['show_hosts_status'] = 1 : $page['controls']['show_hosts_status'] = 0;
+    $show_hightlight_hosts_status ? $page['controls']['show_hightlight_hosts_status'] = 1 : $page['controls']['show_hightlight_hosts_status'] = 0;
     $page['controls']['this_system_label'] = $lng['L_THIS_SYSTEM'];
     $show_this_system ? $page['controls']['show_this_system_status'] = 1 : $page['controls']['show_this_system_status'] = 0;
 
@@ -97,7 +97,7 @@ function page_index($cfg, $db, $lng, $user) {
     }
 
     /* Hosts */
-    if ($user->getPref('show_hosts_status')) {
+    if ($user->getPref('show_hightlight_hosts_status')) {
         $page['hosts'] = get_view_highlight_hosts($cfg, $db, $user, $lng);
         $page['load_tpl'][] = [
             'file' => 'hosts',
@@ -113,7 +113,7 @@ function page_index_post($user) {
     $show_bookmarks = Filters::postInt('show_bookmarks');
     $show_this_system = Filters::postInt('show_this_system');
     $show_applinks = Filters::postInt('show_applinks');
-    $show_hosts = Filters::postInt('show_hosts');
+    $show_hightlight_hosts = Filters::postInt('show_hightlight_hosts');
 
     if ($profile_type !== false) {
         $user->setPref('profile_type', $profile_type);
@@ -127,8 +127,8 @@ function page_index_post($user) {
     if ($show_applinks !== false) {
         $user->setPref('show_applinks_status', $show_applinks);
     }
-    if ($show_hosts !== false) {
-        $user->setPref('show_hosts_status', $show_hosts);
+    if ($show_hightlight_hosts !== false) {
+        $user->setPref('show_hightlight_hosts_status', $show_hightlight_hosts);
     }
 }
 

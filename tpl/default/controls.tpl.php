@@ -21,8 +21,8 @@
             <span class="opt_labels"><?= $tdata['controls']['bookmarks_label'] ?></span>
         </div>
         <div class="hosts_ctrl">
-            <input type="hidden" name="show_hosts" value="0" />
-            <input class="check" type="checkbox" value="1" name="show_hosts" <?= $tdata['controls']['show_hosts_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
+            <input type="hidden" name="show_hightlight_hosts" value="0" />
+            <input class="check" type="checkbox" value="1" name="show_hightlight_hosts" <?= $tdata['controls']['show_hightlight_hosts_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
             <span class="opt_labels"><?= $tdata['controls']['highlight_hosts_label'] ?></span>
         </div>
         <div class="system_ctrl">

@@ -25,7 +25,7 @@ if ($user->getId() > 0) {
 $frontend = new Frontend($cfg);
 $tdata['theme'] = $cfg['theme'];
 
-if ($user->getPref('show_hosts_status')) {
+if ($user->getPref('show_hightlight_hosts_status')) {
 
     $tdata['hosts'] = get_hosts($cfg, $db, $user, $lng);
     $data['hosts'] = $frontend->getTpl('hosts', $tdata);
