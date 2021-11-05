@@ -22,7 +22,7 @@ chdir($ROOT_PATH);
 require_once('include/common.inc.php');
 require_once('include/climode.inc.php');
 
-cron($db);
+cron($cfg, $db);
 
 return true;
 

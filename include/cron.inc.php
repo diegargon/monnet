@@ -9,7 +9,7 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function cron(Database $db) {
+function cron(array $cfg, Database $db) {
     $results = $db->select('prefs', '*', ['uid' => 0]);
     $admin_prefs = $db->fetchAll($results);
 

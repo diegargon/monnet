@@ -13,15 +13,16 @@ function get_wellknown_hosts(Database $db) {
     return get_hosts($db, 1);
 }
 
-function get_hosts(Database $db, $wellknown = false) {
+function get_hosts(Database $db, int $wellknown = null) {
     $query_ports = 'SELECT * FROM ports';
     $results = $db->query($query_ports);
     $hosts_ports = $db->fetchAll($results);
 
     $query_hosts = 'SELECT * FROM hosts WHERE disable = 0';
     if ($wellknown === 0 || $wellknown === 1) {
-        ' AND wellknown=' . $wellknown;
+        $query_hosts .= ' AND wellknown=' . $wellknown;
     }
+
     $results = $db->query($query_hosts);
     if ($results) {
         //use host id for array key
@@ -85,7 +86,6 @@ function check_wellknown_hosts(Database $db) {
 }
 
 function ping_net(array $cfg, Database $db) {
-    $ips_status = [];
 
     $hosts = get_wellknown_hosts($db, 0);
 
