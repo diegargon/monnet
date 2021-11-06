@@ -102,7 +102,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     /* Highlight Hosts */
     if ($user->getPref('show_hightlight_hosts_status')) {
-        $page['hosts'] = get_view_hosts($cfg, $db, $user, $lng, 1);
+        $page['hosts'] = get_host_view($cfg, $db, $user, $lng, 1);
         $page['load_tpl'][] = [
             'file' => 'hosts',
             'place' => 'right_col',
@@ -111,7 +111,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     /* Highlight Hosts */
     if ($user->getPref('show_rest_hosts_status')) {
-        $page['rest_hosts'] = get_view_hosts($cfg, $db, $user, $lng, 0);
+        $page['rest_hosts'] = get_host_view($cfg, $db, $user, $lng, 0);
         $page['load_tpl'][] = [
             'file' => 'rest-hosts',
             'place' => 'right_col',
@@ -207,14 +207,20 @@ function get_bookmarks(Database $db, User $user, string $category) {
     return $bookmarks;
 }
 
-function get_view_hosts(array $cfg, Database $db, User $user, array $lng, int $highlight = 0) {
+function get_host_view(array $cfg, Database $db, User $user, array $lng, int $highlight = 0) {
     $results = $db->select('hosts', '*', ['highlight' => $highlight], 'ORDER BY weight');
     $hosts_results = $db->fetchAll($results);
     $theme = $user->getTheme();
 
     //var_dump($hosts_results);
     foreach ($hosts_results as $khost => $vhost) {
-        empty($vhost['title']) ? $hosts_results[$khost]['title'] = $vhost['host'] : null;
+        if (empty($vhost['title'])) {
+            if (!empty($vhost['hostname'])) {
+                $hosts_results[$khost]['title'] = $vhost['hostname'];
+            } else {
+                $hosts_results[$khost]['title'] = $vhost['ip'];
+            }
+        }
         if (!empty($vhost['img_ico'])) {
             $hosts_results[$khost]['img_ico'] = 'tpl/' . $theme . '/img/icons/' . $vhost['img_ico'];
         }

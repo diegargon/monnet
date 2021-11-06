@@ -47,7 +47,7 @@ function get_hosts(Database $db, int $highlight = null) {
 
 function update_host(Database $db, int $hid, array $host) {
     $remove_fields = [
-        'id', 'title', 'host', 'os', 'distributor', 'codename', 'version', 'ico', 'weight',
+        'id', 'title', 'hostname', 'ip', 'highlight', 'os', 'distributor', 'codename', 'version', 'ico', 'weight',
         'status', 'online', 'access_method', 'disable', 'clilog', 'ports'
     ];
     $host_log = $host;
@@ -95,7 +95,7 @@ function ping_net(array $cfg, Database $db) {
 
     foreach ($iplist as $kip => $ip) {
         foreach ($hosts as $host) {
-            if ($host['host'] == $ip) {
+            if ($host['ip'] == $ip) {
                 unset($iplist[$kip]);
             }
         }
@@ -107,9 +107,9 @@ function ping_net(array $cfg, Database $db) {
         $set = [];
         if ($ip_status['isAlive']) {
 
-            $set['host'] = $ip;
+            $set['ip'] = $ip;
             $set['online'] = 1;
-            $results = $db->query('SELECT `id`,`online` FROM hosts WHERE host=\'' . $ip . '\' LIMIT 1');
+            $results = $db->query('SELECT `id`,`online` FROM hosts WHERE ip=\'' . $ip . '\' LIMIT 1');
             $host_results = $db->fetchAll($results);
             if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
                 if ($host_results[0]['online'] != 1) {
@@ -120,7 +120,7 @@ function ping_net(array $cfg, Database $db) {
                 $db->insert('hosts', $set);
             }
         } else {
-            $results = $db->query('SELECT `id`,`online` FROM hosts WHERE host=\'' . $ip . '\'  LIMIT 1');
+            $results = $db->query('SELECT `id`,`online` FROM hosts WHERE ip=\'' . $ip . '\'  LIMIT 1');
             $host_results = $db->fetchAll($results);
 
             if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {

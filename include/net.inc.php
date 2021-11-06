@@ -26,7 +26,7 @@ function ping_ports(&$hosts) {
         if (!empty($host['ports']) && count($host['ports']) > 0) {
             foreach ($host['ports'] as $kport => $value_port) {
                 $tim_start = microtime(true);
-                $hostname = $host['host'];
+                $hostname = $host['ip'];
                 $value_port['port_type'] == 2 ? $hostname = 'udp://' . $hostname : null;
 
                 $conn = @fsockopen($hostname, $value_port['port'], $err_code, $err_msg, $timeout);
@@ -48,7 +48,7 @@ function ping_ports(&$hosts) {
     }
 }
 
-function ping($host) {
+function ping($ip) {
 
     $tim_start = microtime(true);
     $status['isAlive'] = 0;
@@ -63,7 +63,7 @@ function ping($host) {
     }
 
     socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
-    if (!socket_connect($socket, $host, 0)) {
+    if (!socket_connect($socket, $ip, 0)) {
         $status['error'] = 'socket_connect';
         $status['latency'] = round(microtime(true) - $tim_start, 2);
         socket_close($socket);
