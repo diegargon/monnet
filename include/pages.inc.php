@@ -83,7 +83,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     /*  Host Detail View */
     if ($user->getPref('host_detail')) {
-        $page['hosts'] = get_host_detail_view_data($cfg, $db, $user, $lng, $user->getPref('host_details'));
+        $page['host_detail'] = get_host_detail_view_data($cfg, $db, $user, $lng, $user->getPref('host_details'));
         $page['load_tpl'][] = [
             'file' => 'host-details',
             'place' => 'center_col',
@@ -112,7 +112,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     /* Rest Hosts */
     if ($user->getPref('show_rest_hosts_status')) {
-        $page['rest_hosts'] = get_host_view_data($cfg, $db, $user, $lng, 0);
+        $page['rest_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
         $page['load_tpl'][] = [
             'file' => 'rest-hosts',
             'place' => 'right_col',
@@ -120,7 +120,7 @@ function page_index($cfg, $db, $lng, $user) {
     }
     /* Highlight Hosts */
     if ($user->getPref('show_hightlight_hosts_status')) {
-        $page['hosts'] = get_host_view_data($cfg, $db, $user, $lng, 1);
+        $page['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
         $page['load_tpl'][] = [
             'file' => 'hosts',
             'place' => 'right_col',
@@ -218,7 +218,7 @@ function get_bookmarks(Database $db, User $user, string $category) {
     return $bookmarks;
 }
 
-function get_host_view_data(array $cfg, Database $db, User $user, array $lng, int $highlight = 0) {
+function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, int $highlight = 0) {
     $results = $db->select('hosts', '*', ['highlight' => $highlight], 'ORDER BY weight');
     $hosts_results = $db->fetchAll($results);
     $theme = $user->getTheme();
@@ -253,8 +253,8 @@ function get_host_view_data(array $cfg, Database $db, User $user, array $lng, in
             $hosts_results[$khost]['details'] .= $lng['L_OS'] . ': ' . ucfirst($hosts_results[$khost]['os_name']) . "\n";
         }
         if (!empty($vhost['distributor'])) {
-            $hosts_results[$khost]['distributor'] = $cfg['os_distributions'][$vhost['distributor']];
             $hosts_results[$khost]['details'] .= $lng['L_DISTRIBUTION'] . ': ' . ucfirst($cfg['os_distributions'][$vhost['distributor']]) . "\n";
+            $hosts_results[$khost]['distributor'] = $cfg['os_distributions'][$vhost['distributor']];
         }
         if (!empty($vhost['codename'])) {
             $hosts_results[$khost]['details'] .= $lng['L_CODENAME'] . ': ' . ucfirst($vhost['codename']) . "\n";
@@ -265,5 +265,46 @@ function get_host_view_data(array $cfg, Database $db, User $user, array $lng, in
 }
 
 function get_host_detail_view_data(array $cfg, Database $db, User $user, array $lng, $host_id) {
+    $results = $db->select('hosts', '*', ['id' => $host_id], 'LIMIT 1');
+    $host = $db->fetchAll($results);
 
+    $query_ports = 'SELECT * FROM ports WHERE hid=' . $host_id . '';
+
+    $results = $db->query($query_ports);
+    $hosts_ports = $db->fetchAll($results);
+
+    if (!$host) {
+        return false;
+    }
+    $host = $host[0];
+
+    $theme = $user->getTheme();
+
+    // Host Work
+
+    if (!empty($host['img_ico'])) {
+        $host['img_ico'] = 'tpl/' . $theme . '/img/icons/' . $host['img_ico'];
+    }
+    if ($host['online']) {
+        $host['alt_online'] = $lng['L_S_ONLINE'];
+        $host['online_image'] = 'tpl/' . $theme . '/img/green.png';
+    } else {
+        $host['alt_online'] = $lng['L_S_OFFLINE'];
+        $host['online_image'] = 'tpl/' . $theme . '/img/red.png';
+    }
+    if (!empty($host['os'])) {
+        $host['os_name'] = $cfg['os'][$host['os']]['name'];
+        $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$host['os']]['img'];
+    }
+    if (!empty($host['distributor'])) {
+        $host['distributor'] = $cfg['os_distributions'][$host['distributor']];
+    }
+
+    //Ports Work
+
+    if ($hosts_ports) {
+        $host['host_ports'] = $hosts_ports;
+    }
+
+    return $host;
 }

@@ -508,15 +508,69 @@ input:checked + .slider:before {
 
 /* SERVICES END */
 
+.host-details-container {
+    border-radius: 5px;
+    background-color: rgba(28, 28, 28, 1);
+    border:1px rgba(0,0,0,0.7);
+    padding:0px;
+    margin:0px;
+}
+.host-details-container img {
+    width:20px;
+    border-radius: 5px;
+    padding-right: 5px;
 
+}
+.host-container .fas, .fab {
+    font-size:20px;
+    margin-top: 0;
+    border-radius: 5px;
+    margin-right: 5px;
+    background: transparent;
+    color: white;
+}
+.host-details-main {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    color: rgb(255,255,255);
+    align-items: center;
+    padding: 1px;
+
+}
+.host-title, .host-hostname, .host-ip {
+    padding-right: 5px;
+    padding-left:5px;
+    border-left:1px solid #fb3434;    
+    border-right: 1px solid #fb3434;    
+
+    margin-left:-1px;
+}
+.host-details-container img:first-of-type {
+    padding-left: 5px;
+}
 .host-details {
-    border:1px solid red;
+    border:0px solid red;
     background-color:rgba(0, 0, 0, 0.4);
-border-radius: 5px;
+    border-radius: 5px;
     margin: 3px 20px 0 20px;    
-        padding: 5px;
-    padding-right: 10px;
+    padding: 5px;
     overflow: hidden;
+}
+
+.host_port_container {
+    text-align:center;
+    font-size: 0.8em;
+    border:0px solid blue;
+    overflow:auto;
+}
+.port_container {
+    display:inline-flex;
+}
+.port-online, .port-offline {
+    width:10px !important;
+    height:auto;
+
 }
 
 @media only screen and (max-width: 1070px) {
@@ -527,9 +581,9 @@ border-radius: 5px;
     .header {
         padding-top: 0px;        
     }    
-.main {
-    margin-top: 5vh;
-}    
+    .main {
+        margin-top: 5vh;
+    }    
 
 }
 @media only screen and (max-width: 815px) {

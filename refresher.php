@@ -41,11 +41,11 @@ if ($user->getPref('host_details')) {
 }
 
 if ($user->getPref('show_hightlight_hosts_status')) {
-    $tdata['hosts'] = get_host_view_data($cfg, $db, $user, $lng, 1);
+    $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
     $data['highlight_hosts'] = $frontend->getTpl('hosts', $tdata);
 }
 if ($user->getPref('show_rest_hosts_status')) {
-    $tdata['hosts'] = get_host_view_data($cfg, $db, $user, $lng, 0);
+    $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
     $data['rest_hosts'] = $frontend->getTpl('rest-hosts', $tdata);
 }
 
