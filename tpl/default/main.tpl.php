@@ -23,13 +23,6 @@
             function show_loading() {
                 document.getElementById("loading_wrap").style.display = "block";
             }
-            function show_host_detail_view(hostid) {
-                command = 'host-details';
-                value = hostid;
-                //$('#top_container').prepend(hostid);
-                //$('#top_container').text(hostid);
-                refresh(command, value);
-            }
         </script>
         <?= $tdata['main_head'] ?>
     </head>

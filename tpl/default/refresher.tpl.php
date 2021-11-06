@@ -14,8 +14,10 @@
     });
 
     function refresh(command, command_value) {
-        if (typeof command === 'undefined' || typeof command_value === 'undefined') {
+        if (typeof command === 'undefined') {
             command = false;
+        }
+        if (typeof command_value === 'undefined') {
             command_value = false;
         }
         $.get('refresher.php', {order: command, order_value: command_value})
@@ -51,7 +53,7 @@
 
         // avoid launch timer when command FIX:better way for not launch timers, disable timer and allow launch
         if (command === false) {
-            setTimeout(refresh, 5000);
+            setTimeout(refresh, 500000);
         }
 
     }

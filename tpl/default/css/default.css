@@ -512,8 +512,9 @@ input:checked + .slider:before {
     border-radius: 5px;
     background-color: rgba(28, 28, 28, 1);
     border:1px rgba(0,0,0,1);
-    padding:0px;
+    padding:5px;
     margin:0px;
+    overflow:auto;
 }
 
 .host-details-container img {
@@ -572,6 +573,19 @@ input:checked + .slider:before {
     width:10px !important;
     height:auto;
 
+}
+.host-controls{
+    display:inline-block;    
+    float:right;
+    border:0px solid blue;
+    border-radius: 5px;     
+}
+.power-off, .power-on, .reboot {
+    width:20px;  
+}
+.power-off {
+    background: white;
+    border-radius: 8px; 
 }
 
 @media only screen and (max-width: 1070px) {

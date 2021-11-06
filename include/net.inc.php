@@ -103,3 +103,7 @@ function get_iplist(string $net) {
 function get_hostname(string $ip) {
     return gethostbyaddr($ip);
 }
+
+function send_magic_packet($host_id) {
+    
+}

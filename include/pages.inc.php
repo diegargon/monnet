@@ -225,6 +225,7 @@ function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, i
 
     //var_dump($hosts_results);
     foreach ($hosts_results as $khost => $vhost) {
+        $hosts_results[$khost]['theme'] = $theme;
         $hosts_results[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
         if (empty($vhost['title'])) {
             if (!empty($vhost['hostname'])) {
@@ -281,7 +282,7 @@ function get_host_detail_view_data(array $cfg, Database $db, User $user, array $
     $theme = $user->getTheme();
 
     // Host Work
-
+    $host['theme'] = $theme;
     if (!empty($host['img_ico'])) {
         $host['img_ico'] = 'tpl/' . $theme . '/img/icons/' . $host['img_ico'];
     }

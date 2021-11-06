@@ -49,4 +49,14 @@ if ($user->getPref('show_rest_hosts_status')) {
     $data['rest_hosts'] = $frontend->getTpl('rest-hosts', $tdata);
 }
 
+if ($command == 'power_on' && !empty($command_value) && is_numeric($command_valuie)) {
+    send_magic_packet($command_value);
+}
+if ($command == 'power_off' && !empty($command_value) && is_numeric($command_valuie)) {
+    //TODO
+}
+if ($command == 'reboot' && !empty($command_value) && is_numeric($command_valuie)) {
+    //TODO
+}
+
 print json_encode($data);
