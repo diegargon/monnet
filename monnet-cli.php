@@ -25,5 +25,6 @@ require_once('include/climode.inc.php');
 cron($cfg, $db);
 check_highlight_hosts($db);
 ping_net($cfg, $db);
+
 return true;
 

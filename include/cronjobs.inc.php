@@ -87,23 +87,29 @@ function check_highlight_hosts(Database $db) {
 
 function ping_net(array $cfg, Database $db) {
 
-    $hosts = get_highlight_hosts($db);
 
+    $hosts = get_hosts($db);
     $iplist = get_iplist($cfg['net']);
 
-    //Remove highlight hosts (check in another func)
+    foreach ($iplist as $ip) {
+        $timeout = [];
+        $jump = false;
 
-    foreach ($iplist as $kip => $ip) {
         foreach ($hosts as $host) {
             if ($host['ip'] == $ip) {
-                unset($iplist[$kip]);
+                if ($host['highlight']) { //Jump checked in another check_highlight_host
+                    $jump = true;
+                    break;
+                } else {
+                    //Increase timeout for assure known host: default in ping  100 000 usec
+                    $timeout = ['sec' => 0, 'usec' => 300000];
+                }
             }
         }
-    }
-
-
-    foreach ($iplist as $ip) {
-        $ip_status = ping($ip);
+        if ($jump) {
+            continue;
+        }
+        $ip_status = ping($ip, $timeout);
         $set = [];
         if ($ip_status['isAlive']) {
 
@@ -129,6 +135,19 @@ function ping_net(array $cfg, Database $db) {
 
                     $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]]);
                 }
+            }
+        }
+    }
+}
+
+function fill_hostnames(Database $db, int $only_missing = 0) {
+    $hosts = get_hosts($db);
+
+    foreach ($hosts as $host) {
+        if (empty($host['hostname']) || $only_missing === 0) {
+            $hostname = get_hostname($host['ip']);
+            if ($hostname !== false && $hostname != $host['ip']) {
+                $db->update('hosts', ['hostname' => $hostname], ['ip' => ['value' => $host['ip']]], 'LIMIT 1');
             }
         }
     }

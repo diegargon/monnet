@@ -386,8 +386,8 @@ input:checked + .slider:before {
     margin: 3px 20px 0 20px;
     display: grid;
     grid-gap: 14px;
-    grid-template-columns: repeat(2, 145px);       
-    float:left;  
+    grid-template-columns: repeat(3, 145px);       
+    /* float:left;   */
     background-color:rgba(0, 0, 0, 0.4);
     padding: 5px;
     padding-right: 10px;

@@ -100,6 +100,14 @@ function page_index($cfg, $db, $lng, $user) {
         ];
     }
 
+    /* Rest Hosts */
+    if ($user->getPref('show_rest_hosts_status')) {
+        $page['rest_hosts'] = get_host_view($cfg, $db, $user, $lng, 0);
+        $page['load_tpl'][] = [
+            'file' => 'rest-hosts',
+            'place' => 'right_col',
+        ];
+    }
     /* Highlight Hosts */
     if ($user->getPref('show_hightlight_hosts_status')) {
         $page['hosts'] = get_host_view($cfg, $db, $user, $lng, 1);
@@ -109,14 +117,6 @@ function page_index($cfg, $db, $lng, $user) {
         ];
     }
 
-    /* Highlight Hosts */
-    if ($user->getPref('show_rest_hosts_status')) {
-        $page['rest_hosts'] = get_host_view($cfg, $db, $user, $lng, 0);
-        $page['load_tpl'][] = [
-            'file' => 'rest-hosts',
-            'place' => 'right_col',
-        ];
-    }
 
     return $page;
 }
@@ -214,11 +214,16 @@ function get_host_view(array $cfg, Database $db, User $user, array $lng, int $hi
 
     //var_dump($hosts_results);
     foreach ($hosts_results as $khost => $vhost) {
+        $hosts_results[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
         if (empty($vhost['title'])) {
             if (!empty($vhost['hostname'])) {
                 $hosts_results[$khost]['title'] = $vhost['hostname'];
             } else {
                 $hosts_results[$khost]['title'] = $vhost['ip'];
+            }
+        } else {
+            if (!empty($vhost['hostname'])) {
+                $hosts_results[$khost]['details'] .= $lng['L_HOSTNAME'] . ': ' . $vhost['hostname'] . "\n";
             }
         }
         if (!empty($vhost['img_ico'])) {
@@ -234,6 +239,14 @@ function get_host_view(array $cfg, Database $db, User $user, array $lng, int $hi
         if (!empty($vhost['os'])) {
             $hosts_results[$khost]['os_name'] = $cfg['os'][$vhost['os']]['name'];
             $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+            $hosts_results[$khost]['details'] .= $lng['L_OS'] . ': ' . ucfirst($hosts_results[$khost]['os_name']) . "\n";
+        }
+        if (!empty($vhost['distributor'])) {
+            $hosts_results[$khost]['distributor'] = $cfg['os_distributions'][$vhost['distributor']];
+            $hosts_results[$khost]['details'] .= $lng['L_DISTRIBUTION'] . ': ' . ucfirst($cfg['os_distributions'][$vhost['distributor']]) . "\n";
+        }
+        if (!empty($vhost['codename'])) {
+            $hosts_results[$khost]['details'] .= $lng['L_CODENAME'] . ': ' . ucfirst($vhost['codename']) . "\n";
         }
     }
 

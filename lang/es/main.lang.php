@@ -13,17 +13,25 @@ $lng = [
     'L_REST_HOSTS' => 'Hosts',
     //B
     'L_BOOKMARKS' => 'Links',
+    //C
+    'L_CODENAME' => 'Codename',
+    //D
+    'L_DISTRIBUTION' => 'Distribucion',
     //H
     'L_HIGHLIGHT_HOSTS' => 'Host Track',
     'L_HUMIDITY' => 'Humedad',
+    'L_HOSTNAME' => 'Hostname',
+    //I
+    'L_IP' => 'Ip',
     //L
     'L_LOGIN' => 'Identificarse',
     //O
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
-    'L_PROFILE' => 'Perfil',
+    'L_OS' => 'Os',
     //P
     'L_PASSWORD' => 'Contraseña',
+    'L_PROFILE' => 'Perfil',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',

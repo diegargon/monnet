@@ -12,7 +12,7 @@
 /* TODO: Only TCP port check (check_type=1), add ping check at least (check_type=2) */
 /* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
 
-function ping_ports(&$hosts) {
+function ping_ports(array &$hosts) {
 
     foreach ($hosts as $khost => $host) {
         $err_code = $err_msg = '';
@@ -48,12 +48,14 @@ function ping_ports(&$hosts) {
     }
 }
 
-function ping($ip) {
+function ping(string $ip, array $timeout = []) {
 
     $tim_start = microtime(true);
     $status['isAlive'] = 0;
 
-    $timeout = ['sec' => 0, 'usec' => 100000];
+    if (count($timeout) < 1) {
+        $timeout = ['sec' => 0, 'usec' => 100000];
+    }
     $protocolNumber = getprotobyname('icmp');
     $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
     if (!$socket) {
@@ -88,12 +90,16 @@ function ping($ip) {
 
 //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
 
-function get_iplist($range) {
-    $parts = explode('/', $range);
+function get_iplist(string $net) {
+    $parts = explode('/', $net);
     $exponent = 32 - $parts[1];
     $count = pow(2, $exponent);
     $start = ip2long($parts[0]) + 1;
     $end = ($start + $count) - 3;
 
     return array_map('long2ip', range($start, $end));
+}
+
+function get_hostname(string $ip) {
+    return gethostbyaddr($ip);
 }

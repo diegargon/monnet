@@ -20,20 +20,20 @@
                     console.log(data);
                     var jsonData = JSON.parse(data);
                     //console.log(jsonData);
-                    if ("highlight_hosts" in jsonData) {
-                        if ($('#highlight-hosts').length === 0) {
-                            $('#right_container').prepend(jsonData.highlight_hosts);
-                        } else {
-                            $('#highlight-hosts').remove();
-                            $('#right_container').prepend(jsonData.highlight_hosts);
-                        }
-                    }
                     if ("rest_hosts" in jsonData) {
                         if ($('#rest-hosts').length === 0) {
                             $('#right_container').prepend(jsonData.rest_hosts);
                         } else {
                             $('#rest-hosts').remove();
                             $('#right_container').prepend(jsonData.rest_hosts);
+                        }
+                    }
+                    if ("highlight_hosts" in jsonData) {
+                        if ($('#highlight-hosts').length === 0) {
+                            $('#right_container').prepend(jsonData.highlight_hosts);
+                        } else {
+                            $('#highlight-hosts').remove();
+                            $('#right_container').prepend(jsonData.highlight_hosts);
                         }
                     }
                 });
