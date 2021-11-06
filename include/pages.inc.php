@@ -81,6 +81,16 @@ function page_index($cfg, $db, $lng, $user) {
         'place' => 'left_col',
     ];
 
+    /*  Host Detail View */
+    if ($user->getPref('host_detail')) {
+        $page['hosts'] = get_host_detail_view_data($cfg, $db, $user, $lng, $user->getPref('host_details'));
+        $page['load_tpl'][] = [
+            'file' => 'host-details',
+            'place' => 'center_col',
+        ];
+    }
+
+
     /* AppLinks Bookmarks */
     if ($user->getPref('show_applinks_status')) {
         $applinks_bookmarks = get_bookmarks($db, $user, 'applinks');
@@ -102,7 +112,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     /* Rest Hosts */
     if ($user->getPref('show_rest_hosts_status')) {
-        $page['rest_hosts'] = get_host_view($cfg, $db, $user, $lng, 0);
+        $page['rest_hosts'] = get_host_view_data($cfg, $db, $user, $lng, 0);
         $page['load_tpl'][] = [
             'file' => 'rest-hosts',
             'place' => 'right_col',
@@ -110,12 +120,13 @@ function page_index($cfg, $db, $lng, $user) {
     }
     /* Highlight Hosts */
     if ($user->getPref('show_hightlight_hosts_status')) {
-        $page['hosts'] = get_host_view($cfg, $db, $user, $lng, 1);
+        $page['hosts'] = get_host_view_data($cfg, $db, $user, $lng, 1);
         $page['load_tpl'][] = [
             'file' => 'hosts',
             'place' => 'right_col',
         ];
     }
+
 
 
     return $page;
@@ -207,7 +218,7 @@ function get_bookmarks(Database $db, User $user, string $category) {
     return $bookmarks;
 }
 
-function get_host_view(array $cfg, Database $db, User $user, array $lng, int $highlight = 0) {
+function get_host_view_data(array $cfg, Database $db, User $user, array $lng, int $highlight = 0) {
     $results = $db->select('hosts', '*', ['highlight' => $highlight], 'ORDER BY weight');
     $hosts_results = $db->fetchAll($results);
     $theme = $user->getTheme();
@@ -251,4 +262,8 @@ function get_host_view(array $cfg, Database $db, User $user, array $lng, int $hi
     }
 
     return $hosts_results;
+}
+
+function get_host_detail_view_data(array $cfg, Database $db, User $user, array $lng, $host_id) {
+
 }

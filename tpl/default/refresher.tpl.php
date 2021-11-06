@@ -13,9 +13,12 @@
         refresh();
     });
 
-    function refresh() {
-<?php /* $.get('../refresher.php', {show_applinks: <?= $cfg['show_applinks'] ?>, this_system: <?= $cfg['this_system'] ?>}) */ ?>
-        $.get('refresher.php')
+    function refresh(command, command_value) {
+        if (typeof command === 'undefined' || typeof command_value === 'undefined') {
+            command = false;
+            command_value = false;
+        }
+        $.get('refresher.php', {order: command, order_value: command_value})
                 .done(function (data) {
                     console.log(data);
                     var jsonData = JSON.parse(data);
@@ -34,6 +37,14 @@
                         } else {
                             $('#highlight-hosts').remove();
                             $('#right_container').prepend(jsonData.highlight_hosts);
+                        }
+                    }
+                    if ("host_details" in jsonData) {
+                        if ($('#host-details').length === 0) {
+                            $('#center_container').prepend(jsonData.host_details);
+                        } else {
+                            $('#host-details').remove();
+                            $('#center_container').prepend(jsonData.host_details);
                         }
                     }
                 });

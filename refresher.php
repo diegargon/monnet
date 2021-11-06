@@ -25,12 +25,27 @@ if ($user->getId() > 0) {
 $frontend = new Frontend($cfg);
 $tdata['theme'] = $cfg['theme'];
 
+$command = Filters::getString('order');
+$command_value = Filters::getString('order_value');
+
+if (!empty($command) && !empty($command_value)) {
+    $data['command_receive'] = $command;
+    $data['command_value'] = $command_value;
+}
+if ($command === 'host-details' && is_numeric($command_value)) {
+    $user->setPref('host_details', $command_value);
+}
+if ($user->getPref('host_details')) {
+    $tdata['host_details'] = get_host_detail_view_data($cfg, $db, $user, $lng, $user->getPref('host_details'));
+    $data['host_details'] = $frontend->getTpl('host-details', $tdata);
+}
+
 if ($user->getPref('show_hightlight_hosts_status')) {
-    $tdata['hosts'] = get_host_view($cfg, $db, $user, $lng, 1);
+    $tdata['hosts'] = get_host_view_data($cfg, $db, $user, $lng, 1);
     $data['highlight_hosts'] = $frontend->getTpl('hosts', $tdata);
 }
 if ($user->getPref('show_rest_hosts_status')) {
-    $tdata['hosts'] = get_host_view($cfg, $db, $user, $lng, 0);
+    $tdata['hosts'] = get_host_view_data($cfg, $db, $user, $lng, 0);
     $data['rest_hosts'] = $frontend->getTpl('rest-hosts', $tdata);
 }
 
