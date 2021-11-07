@@ -229,7 +229,7 @@ function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, i
         $hosts_results[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
         if (empty($vhost['title'])) {
             if (!empty($vhost['hostname'])) {
-                $hosts_results[$khost]['title'] = $vhost['hostname'];
+                $hosts_results[$khost]['title'] = explode('.', $vhost['hostname'])[0];
             } else {
                 $hosts_results[$khost]['title'] = $vhost['ip'];
             }

@@ -23,6 +23,9 @@
                 <div class="host-hostname"><?= $tdata['host_details']['hostname'] ?> </div>
             <?php } ?>
             <div class="host-ip"><?= $tdata['host_details']['ip'] ?></div>
+            <?php if (!empty($tdata['host_details']['mac'])) { ?>
+                <div class="host-mac"><?= $tdata['host_details']['mac'] ?> </div>
+            <?php } ?>
         </div> <!-- host-details-main -->
 
         <?php

@@ -47,8 +47,8 @@ function get_hosts(Database $db, int $highlight = null) {
 
 function update_host(Database $db, int $hid, array $host) {
     $remove_fields = [
-        'id', 'title', 'hostname', 'ip', 'highlight', 'os', 'distributor', 'codename', 'version', 'ico', 'weight',
-        'status', 'online', 'access_method', 'disable', 'clilog', 'ports'
+        'id', 'title', 'hostname', 'mac', 'mac_vendor', 'ip', 'highlight', 'os', 'distributor', 'codename', 'version', 'img_ico', 'weight',
+        'status', 'online', 'wol', 'timeout', 'check_method', 'access_method', 'disable', 'clilog', 'ports', 'comment', 'updated'
     ];
     $host_log = $host;
     foreach ($remove_fields as $key) {
@@ -61,10 +61,15 @@ function update_host(Database $db, int $hid, array $host) {
         $host['clilog'] = null;
     }
 
-    $set_host = [
-        'online' => $host['online'],
-        'clilog' => $host['clilog'],
-    ];
+    if (is_local_ip($host['ip'])) {
+        $mac = get_mac($host['ip']);
+        if ($mac) {
+            $set_host['mac'] = $mac;
+        }
+    }
+
+    $set_host['online'] = $host['online'];
+    $set_host['clilog'] = $host['clilog'];
 
     $db->update('hosts', $set_host, ['id' => ['value' => $hid]], 'LIMIT 1');
 
@@ -94,6 +99,7 @@ function ping_net(array $cfg, Database $db) {
     foreach ($iplist as $ip) {
         $timeout = [];
         $jump = false;
+        $ip = trim($ip);
 
         foreach ($hosts as $host) {
             if ($host['ip'] == $ip) {
@@ -111,14 +117,19 @@ function ping_net(array $cfg, Database $db) {
         }
         $ip_status = ping($ip, $timeout);
         $set = [];
-        if ($ip_status['isAlive']) {
 
+        $mac = get_mac($ip);
+        if ($mac) {
+            $set['mac'] = $mac;
+        }
+
+        if ($ip_status['isAlive']) {
             $set['ip'] = $ip;
             $set['online'] = 1;
-            $results = $db->query('SELECT `id`,`online` FROM hosts WHERE ip=\'' . $ip . '\' LIMIT 1');
+            $results = $db->query('SELECT `id`,`mac`,`online` FROM hosts WHERE ip=\'' . $ip . '\' LIMIT 1');
             $host_results = $db->fetchAll($results);
             if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
-                if ($host_results[0]['online'] != 1) {
+                if ($host_results[0]['online'] != 1 || $host_results[0]['mac'] != $mac) {
                     $set['online'] = 1;
                     $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]], 'LIMIT 1');
                 }

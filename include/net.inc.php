@@ -19,6 +19,10 @@ function ping_ports(array &$hosts) {
         $timeout = 1;
         $hosts[$khost]['online'] = 0;
 
+        //if local less tiemout
+        (is_local_ip($host['ip'])) ? $timeout = 0.8 : null;
+
+        //Custom timeout for host
         if (!empty($host['timeout'])) {
             $timeout = $host['timeout'];
         }
@@ -26,11 +30,10 @@ function ping_ports(array &$hosts) {
         if (!empty($host['ports']) && count($host['ports']) > 0) {
             foreach ($host['ports'] as $kport => $value_port) {
                 $tim_start = microtime(true);
-                $hostname = $host['ip'];
-                $value_port['port_type'] == 2 ? $hostname = 'udp://' . $hostname : null;
+                $ip = $host['ip'];
+                $value_port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
 
-                $conn = @fsockopen($hostname, $value_port['port'], $err_code, $err_msg, $timeout);
-                //echo "Conn " . $hostname . ' port ' . $value_port['port'] . "";
+                $conn = @fsockopen($ip, $value_port['port'], $err_code, $err_msg, $timeout);
                 if (is_resource($conn)) {
                     //echo " ok \n";
                     $hosts[$khost]['online'] = 1;
@@ -104,6 +107,30 @@ function get_hostname(string $ip) {
     return gethostbyaddr($ip);
 }
 
+function get_mac(string $ip) {
+    //TODO better
+    $ip = trim($ip);
+
+    if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+        return false;
+    }
+    $arp = "arp -a $ip | awk '{print $4}'";
+    $result = shell_exec($arp);
+
+    if (filter_var(trim($result), FILTER_VALIDATE_MAC) === false) {
+        return false;
+    } else {
+        return $result;
+    }
+}
+
+function is_local_ip($ip) {
+    if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        return true;
+    }
+    return false;
+}
+
 function send_magic_packet($host_id) {
-    
+
 }
