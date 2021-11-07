@@ -9,10 +9,50 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-/* TODO: Only TCP port check (check_type=1), add ping check at least (check_type=2) */
 /* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
 
-function ping_ports(array &$hosts) {
+function ping_host_ports(array $host) {
+    if (empty($host['ports']) || !valid_array($host['ports'])) {
+        //Log err/warning no ports
+        //var_dump($host);
+        return false;
+    }
+
+    $err_code = $err_msg = '';
+    $timeout = 1;
+    //if local less tiemout
+    (is_local_ip($host['ip'])) ? $timeout = 0.8 : null;
+
+    //Custom timeout for host
+    if (!empty($host['timeout'])) {
+        $timeout = $host['timeout'];
+    }
+
+    $host['host']['warn_port'] = 0;
+    foreach ($host['ports'] as $kport => $port) {
+        $tim_start = microtime(true);
+        $ip = $host['ip'];
+        $port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
+
+        $conn = @fsockopen($ip, $port['port'], $err_code, $err_msg, $timeout);
+        if (is_resource($conn)) {
+            $host['online'] = 1;
+            $host['ports'][$kport]['online'] = 1;
+            fclose($conn);
+        } else {
+            $host['ports'][$kport]['online'] = 0;
+            $host['host']['warn_port'] = 1;
+            $host['ports'][$kport]['warn_port_msg'] = $port['port'] . ' port down';
+            $host['ports'][$kport]['err_code'] = $err_code;
+            $host['ports'][$kport]['err_msg'] = $err_msg;
+        }
+        $host['ports'][$kport]['latency'] = round(microtime(true) - $tim_start, 2);
+    }
+
+    return $host;
+}
+
+function ping_all_ports(array &$hosts) {
 
     foreach ($hosts as $khost => $host) {
         $err_code = $err_msg = '';
@@ -56,8 +96,8 @@ function ping(string $ip, array $timeout = []) {
     $tim_start = microtime(true);
     $status['isAlive'] = 0;
 
-    if (count($timeout) < 1) {
-        $timeout = ['sec' => 0, 'usec' => 100000];
+    if (count($timeout) < 2 || !isset($timeout['sec']) || !isset($timeout['usec'])) {
+        $timeout = ['sec' => 0, 'usec' => 150000];
     }
     $protocolNumber = getprotobyname('icmp');
     $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);

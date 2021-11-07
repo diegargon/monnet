@@ -21,14 +21,12 @@ function cron(array $cfg, Database $db) {
 
     if (($cron_times['cron_five'] + 300) < $time_now) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_five']], 'LIMIT 1');
-        //check_highlight_hosts($db);
-        //ping_net($cfg, $db);
+        ping_net($cfg, $db);
         fill_hostnames($db, $only_missing = 1);
     }
 
     if (($cron_times['cron_quarter'] + 900) < $time_now) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_quarter']], 'LIMIT 1');
-        ping_net($cfg, $db);
     }
 
     if (($cron_times['cron_hourly'] + 3600) < $time_now) {
@@ -40,7 +38,6 @@ function cron(array $cfg, Database $db) {
     }
     if (($cron_times['cron_daily'] + 8640) < $time_now) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_daily']], 'LIMIT 1');
-        fill_hostnames($db);
     }
 
     if (($cron_times['cron_weekly'] + 604800) < $time_now) {

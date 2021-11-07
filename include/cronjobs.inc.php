@@ -9,8 +9,15 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function get_highlight_hosts(Database $db) {
-    return get_hosts($db, 1);
+/*
+  function get_highlight_hosts(Database $db) {
+  return get_hosts($db, 1);
+  }
+ *
+ */
+
+function get_known_hosts(Database $db) {
+    return get_hosts($db);
 }
 
 function get_hosts(Database $db, int $highlight = null) {
@@ -25,18 +32,18 @@ function get_hosts(Database $db, int $highlight = null) {
 
     $results = $db->query($query_hosts);
     if ($results) {
-        //use host id for array key
-        $hosts = [];
-        $_hosts = $db->fetchAll($results);
+        $hosts = $db->fetchAll($results);
 
-        foreach ($_hosts as $_host) {
-            $host_id = $_host['id'];
-            unset($_host['id']);
-            $hosts[$host_id] = $_host;
-        }
-        //add ports
-        foreach ($hosts_ports as $host_port) {
-            $hosts[$host_port['hid']]['ports'][] = $host_port;
+        foreach ($hosts as $k_host => $host) {
+            $ports = [];
+            foreach ($hosts_ports as $host_port) {
+                if ($host_port['hid'] == $host['id']) {
+                    $ports[] = $host_port;
+                }
+            }
+            if (count($ports) > 0) {
+                $hosts[$k_host]['ports'] = $ports;
+            }
         }
 
         return $hosts;
@@ -45,10 +52,11 @@ function get_hosts(Database $db, int $highlight = null) {
     return false;
 }
 
-function update_host(Database $db, int $hid, array $host) {
+function update_host(Database $db, array $host) {
+
     $remove_fields = [
         'id', 'title', 'hostname', 'mac', 'mac_vendor', 'ip', 'highlight', 'os', 'distributor', 'codename', 'version', 'img_ico', 'weight',
-        'status', 'online', 'wol', 'timeout', 'check_method', 'access_method', 'disable', 'clilog', 'ports', 'comment', 'updated'
+        'status', 'online', 'wol', 'timeout', 'check_method', 'access_method', 'disable', 'clilog', 'warn', 'ports', 'comment', 'updated'
     ];
     $host_log = $host;
     foreach ($remove_fields as $key) {
@@ -71,7 +79,7 @@ function update_host(Database $db, int $hid, array $host) {
     $set_host['online'] = $host['online'];
     $set_host['clilog'] = $host['clilog'];
 
-    $db->update('hosts', $set_host, ['id' => ['value' => $hid]], 'LIMIT 1');
+    $db->update('hosts', $set_host, ['id' => ['value' => $host['id']]], 'LIMIT 1');
 
     foreach ($host['ports'] as $port) {
         empty($port['clilog']) ? $port['clilog'] = 'null' : null;
@@ -80,42 +88,69 @@ function update_host(Database $db, int $hid, array $host) {
     }
 }
 
-function check_highlight_hosts(Database $db) {
-    $hosts = get_highlight_hosts($db);
+function check_known_hosts(Database $db) {
+    $hosts = get_known_hosts($db);
 
-    ping_ports($hosts);
+    if (valid_array($hosts)) {
 
-    foreach ($hosts as $host_id => $host) {
-        update_host($db, $host_id, $host);
+        foreach ($hosts as $host) {
+
+            if ($host['check_method'] == 2) { //TCP
+                $host_new_status = ping_host_ports($host);
+                if ($host_new_status !== false) {
+                    update_host($db, $host);
+                }
+            } else { //Ping
+                ping_known_host($db, $host);
+            }
+        }
+    }
+}
+
+function ping_known_host(Database $db, array $host) {
+
+    $timeout = ['sec' => 0, 'usec' => 500000];
+
+    if (is_local_ip($host['ip'])) {
+        $timeout = ['sec' => 0, 'usec' => 200000];
+    }
+
+    $ip_status = ping($host['ip'], $timeout);
+    $set = [];
+
+    $mac = get_mac($host['ip']);
+    if ($mac) {
+        $set['mac'] = $mac;
+    }
+
+    $set['clilog'] = json_encode($ip_status);
+    if ($ip_status['isAlive'] && $host['online'] != 1) {
+        $set['online'] = 1;
+        $db->update('hosts', $set, ['id' => ['value' => $host['id']]], 'LIMIT 1');
+    } else if ($ip_status['isAlive'] == 0 && $host['online'] == 1) {
+        $set['online'] = 0;
+        $db->update('hosts', $set, ['id' => ['value' => $host['id']]], 'LIMIT 1');
     }
 }
 
 function ping_net(array $cfg, Database $db) {
-
-
     $hosts = get_hosts($db);
     $iplist = get_iplist($cfg['net']);
 
     foreach ($iplist as $ip) {
-        $timeout = [];
+
         $jump = false;
         $ip = trim($ip);
 
         foreach ($hosts as $host) {
-            if ($host['ip'] == $ip) {
-                if ($host['highlight']) { //Jump checked in another check_highlight_host
-                    $jump = true;
-                    break;
-                } else {
-                    //Increase timeout for assure known host: default in ping  100 000 usec
-                    $timeout = ['sec' => 0, 'usec' => 300000];
-                }
+            if ($host['ip'] == $ip) { //Jump know ips since we check in other fuc
+                $jump = true;
             }
         }
         if ($jump) {
             continue;
         }
-        $ip_status = ping($ip, $timeout);
+        $ip_status = ping($ip);
         $set = [];
 
         $mac = get_mac($ip);

@@ -26,6 +26,6 @@ $cfg['access_methods'] = [
 ];
 
 $cfg['check_method'] = [
-    1 => 'port',
-    2 => 'ping',
+    1 => 'ping',
+    2 => 'port',
 ];
