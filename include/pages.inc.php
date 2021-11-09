@@ -143,7 +143,7 @@ function page_index_post($user) {
     $show_rest_hosts = Filters::postInt('show_rest_hosts');
     $close_host_details = Filters::postAzChar('close_host_details');
 
-    if (isset($close_host_details)) {
+    if (!empty($close_host_details)) {
         $user->setPref('host_details', 0);
     }
     if ($profile_type !== false) {
