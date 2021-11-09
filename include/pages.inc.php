@@ -30,7 +30,9 @@ function page_index($cfg, $db, $lng, $user) {
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
 
-    page_index_post($user);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        page_index_post($user);
+    }
 
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
@@ -139,7 +141,11 @@ function page_index_post($user) {
     $show_applinks = Filters::postInt('show_applinks');
     $show_hightlight_hosts = Filters::postInt('show_hightlight_hosts');
     $show_rest_hosts = Filters::postInt('show_rest_hosts');
+    $close_host_details = Filters::postAzChar('close_host_details');
 
+    if (isset($close_host_details)) {
+        $user->setPref('host_details', 0);
+    }
     if ($profile_type !== false) {
         $user->setPref('profile_type', $profile_type);
     }

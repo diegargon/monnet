@@ -509,6 +509,7 @@ input:checked + .slider:before {
 /* SERVICES END */
 
 .host-details-container {
+    position:relative;
     border-radius: 5px;
     background-color: rgba(28, 28, 28, 1);
     border:1px rgba(0,0,0,1);
@@ -540,13 +541,30 @@ input:checked + .slider:before {
     padding: 1px;
 
 }
-.host-title, .host-hostname, .host-ip {
+.host-item {
     padding-right: 5px;
-    padding-left:5px;
-    border-left:1px solid #fb3434;    
+    padding-left:5px;    
     border-right: 1px solid #fb3434;    
-
     margin-left:-1px;
+
+}
+.host-details-close {
+    position:absolute;
+    top:3px;
+    right:5px; 
+}
+.host-details-close input  {
+    border: 2px solid black;
+    color: white;
+    font-weight: bold;
+    background-color: rgba(0,0,0, 0.7);       
+}
+.host-details-form-close {
+
+}
+
+.host-item:last-of-type {
+    border-right: 0;   
 }
 .host-details-container img:first-of-type {
     padding-left: 5px;

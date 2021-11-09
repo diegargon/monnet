@@ -11,20 +11,20 @@
     <div id="host-details-container" class="host-details-container">
 
         <div class="host-details-main">
-            <img class="hosts-online" src="<?= $tdata['host_details']['online_image'] ?>" alt="<?= $tdata['host_details']['alt_online'] ?>"/>
+            <img class="hosts-item" src="<?= $tdata['host_details']['online_image'] ?>" alt="<?= $tdata['host_details']['alt_online'] ?>"/>
             <?php if (!empty($tdata['host_details']['os_image'])) { ?>
                 <img class="fab" src="<?= $tdata['host_details']['os_image'] ?>" alt="<?= $tdata['host_details']['os_name'] ?>"/>
             <?php } ?>
             <?php if (!empty($tdata['host_details']['img_ico'])) { ?>
                 <img class="fab" src="<?= $tdata['host_details']['img_ico'] ?>" alt=""/>
             <?php } ?>
-            <div class="host-title"><?= $tdata['host_details']['title'] ?> </div>
+            <div class="host-item"><?= $tdata['host_details']['title'] ?> </div>
             <?php if (!empty($tdata['host_details']['hostname'])) { ?>
-                <div class="host-hostname"><?= $tdata['host_details']['hostname'] ?> </div>
+                <div class="host-item"><?= $tdata['host_details']['hostname'] ?> </div>
             <?php } ?>
-            <div class="host-ip"><?= $tdata['host_details']['ip'] ?></div>
+            <div class="host-item"><?= $tdata['host_details']['ip'] ?></div>
             <?php if (!empty($tdata['host_details']['mac'])) { ?>
-                <div class="host-mac"><?= $tdata['host_details']['mac'] ?> </div>
+                <div class="host-item"><?= $tdata['host_details']['mac'] ?> </div>
             <?php } ?>
         </div> <!-- host-details-main -->
 
@@ -57,5 +57,10 @@
                 <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image" class="reboot" src="tpl/<?= $tdata['theme'] ?>/img/reboot.png" alt="pon" title="reboot"/>
             <?php } ?>
         </div> <!--host-controls -->
+        <div class="host-details-close">
+            <form class="host-details-form-close" method="POST">
+                <input type="submit" name="close_host_details" value="X"/>
+            </form>
+        </div>
     </div> <!-- host-details-container -->
 </div> <!-- host-details -->
