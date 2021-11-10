@@ -27,7 +27,7 @@
         </div>
         <div class="hosts_ctrl">
             <input type="hidden" name="show_rest_hosts" value="0" />
-            <input class="check" type="checkbox" value="1" name="show_rest_hosts" <?= $tdata['controls']['show_rest_hosts_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
+            <input class="check" type="checkbox" value="1" name="show_rest_hosts" <?= $tdata['controls']['show_other_hosts_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
             <span class="opt_labels"><?= $tdata['controls']['rest_hosts_label'] ?></span>
         </div>
         <div class="system_ctrl">

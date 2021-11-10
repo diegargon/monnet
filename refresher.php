@@ -44,9 +44,9 @@ if ($user->getPref('show_hightlight_hosts_status')) {
     $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
     $data['highlight_hosts'] = $frontend->getTpl('hosts', $tdata);
 }
-if ($user->getPref('show_rest_hosts_status')) {
+if ($user->getPref('show_other_hosts_status')) {
     $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
-    $data['rest_hosts'] = $frontend->getTpl('rest-hosts', $tdata);
+    $data['other_hosts'] = $frontend->getTpl('other-hosts', $tdata);
 }
 
 if ($command == 'power_on' && !empty($command_value) && is_numeric($command_valuie)) {

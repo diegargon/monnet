@@ -12,8 +12,8 @@
 
         <div class="host-details-main">
             <img class="hosts-item" src="<?= $tdata['host_details']['online_image'] ?>" alt="<?= $tdata['host_details']['alt_online'] ?>"/>
-            <?php if (!empty($tdata['host_details']['os_image'])) { ?>
-                <img class="fab" src="<?= $tdata['host_details']['os_image'] ?>" alt="<?= $tdata['host_details']['os_name'] ?>"/>
+            <?php if (!empty($tdata['host_details']['system_image'])) { ?>
+                <img class="fab" src="<?= $tdata['host_details']['system_image'] ?>" alt="<?= $tdata['host_details']['system_name'] ?>"/>
             <?php } ?>
             <?php if (!empty($tdata['host_details']['img_ico'])) { ?>
                 <img class="fab" src="<?= $tdata['host_details']['img_ico'] ?>" alt=""/>
@@ -62,5 +62,34 @@
                 <input type="submit" name="close_host_details" value="X"/>
             </form>
         </div>
+        <div id="progress_bars">
+            <label for="load_avg">Load:</label>
+            <progress id="load_avg" value="50" max="100">50%</progress>
+            <label for="mem">Mem:</label>
+            <progress id="mem" value="90" max="100">90%</progress>
+            <label for="sda">sda:</label>
+            <progress id="sda" value="30" max="100">30%</progress>
+            <label for="sdb">sdb:</label>
+            <progress id="sdb" value="30" max="100">30%</progress>
+            <div class="" >
+                <label class="latency">Latency:</label>
+                <span class="latency">30ms</span>
+            </div>
+        </div>
+        <div class="charts">
+            <label class="none_opt">None</label>
+            <input type="radio" checked name="graph_choice" value="none_graph">
+            <label class="network_opt">Network</label>
+            <input type="radio" name="graph_choice" value="network_graph">
+            <label class="ping_opt">Ping</label>
+            <input type="radio" name="graph_choice" value="ping_graph">
+            <label class="logs_opt">Logs</label>
+            <input type="radio" name="graph_choice" value="show_logs">
+        </div>
+        <!--
+              <div class="ping_chart">
+            <img alt="" src="tpl/default/img/graph.png"/>
+        </div>
+        -->
     </div> <!-- host-details-container -->
 </div> <!-- host-details -->

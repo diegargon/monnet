@@ -55,7 +55,7 @@ function get_hosts(Database $db, int $highlight = null) {
 function update_host(Database $db, array $host) {
 
     $remove_fields = [
-        'id', 'title', 'hostname', 'mac', 'mac_vendor', 'ip', 'highlight', 'os', 'distributor', 'codename', 'version', 'img_ico', 'weight',
+        'id', 'title', 'hostname', 'mac', 'mac_vendor', 'ip', 'highlight', 'system', 'distributor', 'codename', 'version', 'img_ico', 'weight',
         'status', 'online', 'wol', 'timeout', 'check_method', 'access_method', 'disable', 'clilog', 'warn', 'ports', 'comment', 'updated'
     ];
     $host_log = $host;

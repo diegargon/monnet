@@ -55,7 +55,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     $page['weather_widget'] = weather_widget($cfg, $lng);
     $page['load_tpl'][] = [
-        'file' => 'weather_widget',
+        'file' => 'weather-widget',
         'place' => 'left_col',
     ];
 
@@ -64,7 +64,7 @@ function page_index($cfg, $db, $lng, $user) {
     $show_applinks_status = $user->getPref('show_applinks_status');
     $show_this_system = $user->getPref('show_this_system_status');
     $show_hightlight_hosts_status = $user->getPref('show_hightlight_hosts_status');
-    $show_rest_hosts_status = $user->getPref('show_rest_hosts_status');
+    $show_other_hosts_status = $user->getPref('show_other_hosts_status');
 
     $page['controls']['bookmarks_label'] = $lng['L_BOOKMARKS'];
     $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 : $page['controls']['show_bookmarks_status'] = 0;
@@ -73,7 +73,7 @@ function page_index($cfg, $db, $lng, $user) {
     $page['controls']['highlight_hosts_label'] = $lng['L_HIGHLIGHT_HOSTS'];
     $show_hightlight_hosts_status ? $page['controls']['show_hightlight_hosts_status'] = 1 : $page['controls']['show_hightlight_hosts_status'] = 0;
     $page['controls']['rest_hosts_label'] = $lng['L_REST_HOSTS'];
-    $show_rest_hosts_status ? $page['controls']['show_rest_hosts_status'] = 1 : $page['controls']['show_rest_hosts_status'] = 0;
+    $show_other_hosts_status ? $page['controls']['show_other_hosts_status'] = 1 : $page['controls']['show_other_hosts_status'] = 0;
 
     $page['controls']['this_system_label'] = $lng['L_THIS_SYSTEM'];
     $show_this_system ? $page['controls']['show_this_system_status'] = 1 : $page['controls']['show_this_system_status'] = 0;
@@ -112,11 +112,11 @@ function page_index($cfg, $db, $lng, $user) {
         ];
     }
 
-    /* Rest Hosts */
-    if ($user->getPref('show_rest_hosts_status')) {
-        $page['rest_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
+    /* Other Hosts */
+    if ($user->getPref('show_other_hosts_status')) {
+        $page['other_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
         $page['load_tpl'][] = [
-            'file' => 'rest-hosts',
+            'file' => 'other-hosts',
             'place' => 'right_col',
         ];
     }
@@ -140,7 +140,7 @@ function page_index_post($user) {
     $show_this_system = Filters::postInt('show_this_system');
     $show_applinks = Filters::postInt('show_applinks');
     $show_hightlight_hosts = Filters::postInt('show_hightlight_hosts');
-    $show_rest_hosts = Filters::postInt('show_rest_hosts');
+    $show_other_hosts = Filters::postInt('show_rest_hosts');
     $close_host_details = Filters::postAzChar('close_host_details');
 
     if (!empty($close_host_details)) {
@@ -161,8 +161,8 @@ function page_index_post($user) {
     if ($show_hightlight_hosts !== false) {
         $user->setPref('show_hightlight_hosts_status', $show_hightlight_hosts);
     }
-    if ($show_rest_hosts !== false) {
-        $user->setPref('show_rest_hosts_status', $show_rest_hosts);
+    if ($show_other_hosts !== false) {
+        $user->setPref('show_other_hosts_status', $show_other_hosts);
     }
 }
 
@@ -254,10 +254,10 @@ function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, i
             $hosts_results[$khost]['alt_online'] = $lng['L_S_OFFLINE'];
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red.png';
         }
-        if (!empty($vhost['os'])) {
-            $hosts_results[$khost]['os_name'] = $cfg['os'][$vhost['os']]['name'];
-            $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
-            $hosts_results[$khost]['details'] .= $lng['L_OS'] . ': ' . ucfirst($hosts_results[$khost]['os_name']) . "\n";
+        if (!empty($vhost['system'])) {
+            $hosts_results[$khost]['system_name'] = $cfg['system'][$vhost['system']]['name'];
+            $hosts_results[$khost]['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
+            $hosts_results[$khost]['details'] .= $lng['L_SYSTEM'] . ': ' . ucfirst($hosts_results[$khost]['system_name']) . "\n";
         }
         if (!empty($vhost['distributor'])) {
             $hosts_results[$khost]['details'] .= $lng['L_DISTRIBUTION'] . ': ' . ucfirst($cfg['os_distributions'][$vhost['distributor']]) . "\n";
@@ -299,9 +299,9 @@ function get_host_detail_view_data(array $cfg, Database $db, User $user, array $
         $host['alt_online'] = $lng['L_S_OFFLINE'];
         $host['online_image'] = 'tpl/' . $theme . '/img/red.png';
     }
-    if (!empty($host['os'])) {
-        $host['os_name'] = $cfg['os'][$host['os']]['name'];
-        $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$host['os']]['img'];
+    if (!empty($host['system'])) {
+        $host['system_name'] = $cfg['system'][$host['system']]['name'];
+        $host['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$host['system']]['img'];
     }
     if (!empty($host['distributor'])) {
         $host['distributor'] = $cfg['os_distributions'][$host['distributor']];

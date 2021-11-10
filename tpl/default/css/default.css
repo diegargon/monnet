@@ -93,7 +93,6 @@ footer {
 .center_container {
     border:0px solid yellow;     
     float:left;
-
     overflow:hidden;
 }
 
@@ -506,6 +505,23 @@ input:checked + .slider:before {
     opacity: 0.8;
 }
 
+/* Progress */
+
+#progress_bars {
+    /* display: inline-grid; */
+
+}
+#progress_bars progress {
+    width: 50px;    
+}
+/** Charts **/
+.charts {
+    float:left;
+}
+.ping_chart img {
+    width:80% !important;
+}
+
 /* SERVICES END */
 
 .host-details-container {
@@ -519,7 +535,7 @@ input:checked + .slider:before {
 }
 
 .host-details-container img {
-    width:20px;
+    width:30px;
     border-radius: 5px;
     padding-right: 5px;
 
@@ -550,7 +566,7 @@ input:checked + .slider:before {
 }
 .host-details-close {
     position:absolute;
-    top:3px;
+    bottom:3px;
     right:5px; 
 }
 .host-details-close input  {
