@@ -92,7 +92,6 @@ function page_index($cfg, $db, $lng, $user) {
         ];
     }
 
-
     /* AppLinks Bookmarks */
     if ($user->getPref('show_applinks_status')) {
         $applinks_bookmarks = get_bookmarks($db, $user, 'applinks');
@@ -112,14 +111,6 @@ function page_index($cfg, $db, $lng, $user) {
         ];
     }
 
-    /* Other Hosts */
-    if ($user->getPref('show_other_hosts_status')) {
-        $page['other_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
-        $page['load_tpl'][] = [
-            'file' => 'other-hosts',
-            'place' => 'right_col',
-        ];
-    }
     /* Highlight Hosts */
     if ($user->getPref('show_hightlight_hosts_status')) {
         $page['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
@@ -129,7 +120,14 @@ function page_index($cfg, $db, $lng, $user) {
         ];
     }
 
-
+    /* Other Hosts */
+    if ($user->getPref('show_other_hosts_status')) {
+        $page['other_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
+        $page['load_tpl'][] = [
+            'file' => 'other-hosts',
+            'place' => 'right_col',
+        ];
+    }
 
     return $page;
 }
@@ -304,13 +302,21 @@ function get_host_detail_view_data(array $cfg, Database $db, User $user, array $
         $host['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$host['system']]['img'];
     }
     if (!empty($host['distributor'])) {
-        $host['distributor'] = $cfg['os_distributions'][$host['distributor']];
+        $host['distributor_text'] = $cfg['os_distributions'][$host['distributor']];
     }
 
     //Ports Work
 
     if ($hosts_ports) {
         $host['host_ports'] = $hosts_ports;
+    }
+
+    //Deploy
+    $host['deploy'] = [];
+    foreach ($cfg['deploys'] as $deploy) {
+        if ($host['distributor'] == $deploy['os_distribution']) {
+            $host['deploys'][] = $deploy;
+        }
     }
 
     return $host;

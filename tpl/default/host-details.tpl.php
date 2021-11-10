@@ -86,6 +86,28 @@
             <label class="logs_opt">Logs</label>
             <input type="radio" name="graph_choice" value="show_logs">
         </div>
+        <!-- DEPLOYS -->
+        <?php
+        if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
+            ?>
+            <div class="deploy_container">
+                <form id="deploy_form" method="POST">
+                    <select class="select_deploy" name="deploy_option">
+                        <option value="0"></option>
+                        <?php
+                        foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
+                            ?>
+                            <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                    <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
+                </form>
+            </div>
+            <?php
+        }
+        ?>
         <!--
               <div class="ping_chart">
             <img alt="" src="tpl/default/img/graph.png"/>

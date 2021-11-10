@@ -48,7 +48,7 @@ $cfg['check_method'] = [
 ];
 
 $cfg['deploys'] = [
-    1 => ['name' => 'Install Apache',
+    1 => ['name' => 'Apache',
         'comment' => 'Installation apache on Ubuntu',
         'os_distribution' => 2,
         'file' => 'scripts/ubuntu-apache.sh'
