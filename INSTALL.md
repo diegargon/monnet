@@ -3,5 +3,6 @@
 3 - Install composer
 4 - on monnet home type
    composer require phpseclib/phpseclib:~3.0
+    ext-libsodim? ext-mcrypt' ext-qmp?
 5 - Add monnet-cli to your crontab
 

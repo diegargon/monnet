@@ -46,10 +46,6 @@ function do_initial_main_vars_checks($cfg) {
     if (!is_dir($cfg['path'])) {
         exit($cfg['path'] . $err_nofile_msg);
     }
-
-    if (empty($cfg['rel_path'])) {
-        exit('rel_path' . $err_empty_msg);
-    }
 }
 
 function do_initial_usermode_checks($cfg) {
