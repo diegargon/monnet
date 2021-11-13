@@ -178,6 +178,9 @@ function page_login($cfg, $lng, $user) {
             $userid = $user->checkUser($username, $password);
             if (!empty($userid) && $userid > 0) {
                 $user->setUser($userid);
+                if (empty($cfg['rel_path'])) {
+                    $cfg['rel_path'] = '/';
+                }
                 header("Location: {$cfg['rel_path']} ");
 
                 exit();
