@@ -25,12 +25,12 @@
                     console.log(data);
                     var jsonData = JSON.parse(data);
                     //console.log(jsonData);
-                    if ("others_hosts" in jsonData) {
+                    if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
-                            $('#right_container').prepend(jsonData.rest_hosts);
+                            $('#right_container').prepend(jsonData.other_hosts);
                         } else {
                             $('#other-hosts').remove();
-                            $('#right_container').prepend(jsonData.rest_hosts);
+                            $('#right_container').prepend(jsonData.other_hosts);
                         }
                     }
                     if ("highlight_hosts" in jsonData) {

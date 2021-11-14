@@ -14,9 +14,9 @@ require_once('include/usermode.inc.php');
 
 $tdata = [];
 $data = [];
-$data['conn'] = 'successful';
+$data['conn'] = 'success';
 if ($user->getId() > 0) {
-    $data['login'] = 'successful';
+    $data['login'] = 'success';
 } else {
     $data['login'] = 'fail';
     print(json_encode($data));
@@ -45,7 +45,7 @@ if ($user->getPref('show_hightlight_hosts_status')) {
     $data['highlight_hosts'] = $frontend->getTpl('hosts', $tdata);
 }
 if ($user->getPref('show_other_hosts_status')) {
-    $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
+    $tdata['other_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
     $data['other_hosts'] = $frontend->getTpl('other-hosts', $tdata);
 }
 
