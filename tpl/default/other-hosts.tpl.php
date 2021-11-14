@@ -10,7 +10,7 @@
 //var_dump($tdata['hosts']);
 ?>
 
-<div id="rest-hosts" class="hosts">
+<div id="other-hosts" class="hosts">
     <?php foreach ($tdata['other_hosts'] as $host) { ?>
         <div id="hosts-container" class="hosts-container">
             <a onclick="refresh('host-details', <?= $host['id'] ?>)" href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['details'] ?>">

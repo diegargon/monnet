@@ -94,11 +94,10 @@ function check_known_hosts(Database $db) {
     if (valid_array($hosts)) {
 
         foreach ($hosts as $host) {
-
             if ($host['check_method'] == 2) { //TCP
                 $host_new_status = ping_host_ports($host);
                 if ($host_new_status !== false) {
-                    update_host($db, $host);
+                    update_host($db, $host_new_status);
                 }
             } else { //Ping
                 ping_known_host($db, $host);

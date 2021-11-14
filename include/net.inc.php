@@ -41,7 +41,7 @@ function ping_host_ports(array $host) {
             fclose($conn);
         } else {
             $host['ports'][$kport]['online'] = 0;
-            $host['host']['warn_port'] = 1;
+            $host['warn_port'] = 1;
             $host['ports'][$kport]['warn_port_msg'] = $port['port'] . ' port down';
             $host['ports'][$kport]['err_code'] = $err_code;
             $host['ports'][$kport]['err_msg'] = $err_msg;

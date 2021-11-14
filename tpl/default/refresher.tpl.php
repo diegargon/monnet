@@ -25,11 +25,11 @@
                     console.log(data);
                     var jsonData = JSON.parse(data);
                     //console.log(jsonData);
-                    if ("rest_hosts" in jsonData) {
-                        if ($('#rest-hosts').length === 0) {
+                    if ("others_hosts" in jsonData) {
+                        if ($('#other-hosts').length === 0) {
                             $('#right_container').prepend(jsonData.rest_hosts);
                         } else {
-                            $('#rest-hosts').remove();
+                            $('#other-hosts').remove();
                             $('#right_container').prepend(jsonData.rest_hosts);
                         }
                     }
@@ -53,7 +53,7 @@
 
         // avoid launch timer when command FIX:better way for not launch timers, disable timer and allow launch
         if (command === false) {
-            setTimeout(refresh, 500000);
+            setTimeout(refresh, 5000);
         }
 
     }
