@@ -15,6 +15,7 @@ $lng = [
     'L_BOOKMARKS' => 'Links',
     //C
     'L_CODENAME' => 'Codename',
+    'L_CLOSE' => 'Cerrar',
     //D
     'L_DISTRIBUTION' => 'Distribucion',
     //H
@@ -25,6 +26,7 @@ $lng = [
     'L_IP' => 'Ip',
     //L
     'L_LOGIN' => 'Identificarse',
+    'L_LAST_SEEN' => 'Ultima vez online:',
     //O
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',

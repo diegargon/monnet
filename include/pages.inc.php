@@ -308,6 +308,12 @@ function get_host_detail_view_data(array $cfg, Database $db, User $user, array $
         $host['distributor_text'] = $cfg['os_distributions'][$host['distributor']];
     }
 
+    if (empty($host['online']) && !empty($host['last_seen']) && is_numeric($host['last_seen'])) {
+        $host['formated_last_seen'] = timestamp_to_date($host['last_seen']);
+    }
+    if ($host['online'] && !empty($host['latency'])) {
+        $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
+    }
     //Ports Work
 
     if ($hosts_ports) {

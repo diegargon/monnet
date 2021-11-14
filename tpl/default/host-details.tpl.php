@@ -59,7 +59,7 @@
         </div> <!--host-controls -->
         <div class="host-details-close">
             <form class="host-details-form-close" method="POST">
-                <input type="submit" name="close_host_details" value="X"/>
+                <input type="submit" name="close_host_details" value="Cerrar"/>
             </form>
         </div>
         <div id="progress_bars">
@@ -71,10 +71,18 @@
             <progress id="sda" value="30" max="100">30%</progress>
             <label for="sdb">sdb:</label>
             <progress id="sdb" value="30" max="100">30%</progress>
-            <div class="" >
-                <label class="latency">Latency:</label>
-                <span class="latency">30ms</span>
-            </div>
+            <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
+                <div class="" >
+                    <label class="latency">Latencia:</label>
+                    <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
+                </div>
+            <?php } ?>
+            <?php if (!empty($tdata['host_details']['formated_last_seen'])) { ?>
+                <div class="" >
+                    <label class="last_seen_label">Ultima vez visto:</label>
+                    <span class="last_seen_date"><?= $tdata['host_details']['formated_last_seen'] ?> </span>
+                </div>
+            <?php } ?>
         </div>
         <div class="charts">
             <label class="none_opt">None</label>

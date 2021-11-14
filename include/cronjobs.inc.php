@@ -54,12 +54,15 @@ function get_hosts(Database $db, int $highlight = null) {
 
 function update_host(Database $db, array $host) {
 
-    $remove_fields = [
+    //TODO better
+    $log_remove_fields = [
         'id', 'title', 'hostname', 'mac', 'mac_vendor', 'ip', 'highlight', 'system', 'distributor', 'codename', 'version', 'img_ico', 'weight',
-        'status', 'online', 'wol', 'timeout', 'check_method', 'access_method', 'disable', 'clilog', 'warn', 'ports', 'comment', 'updated'
+        'status', 'online', 'wol', 'timeout', 'check_method', 'latency', 'last_seen', 'access_method', 'disable', 'clilog', 'warn', 'warn_port', 'ports',
+        'comment', 'updated'
     ];
+
     $host_log = $host;
-    foreach ($remove_fields as $key) {
+    foreach ($log_remove_fields as $key) {
         unset($host_log[$key]);
     }
 
@@ -75,9 +78,12 @@ function update_host(Database $db, array $host) {
             $set_host['mac'] = $mac;
         }
     }
-
-    $set_host['online'] = $host['online'];
-    $set_host['clilog'] = $host['clilog'];
+    isset($host['latency']) ? $set_host['latency'] = $host['latency'] : null;
+    !empty($host['last_seen']) ? $set_host['last_seen'] = $host['last_seen'] : null;
+    isset($host['online']) ? $set_host['online'] = $host['online'] : null;
+    isset($host['warn']) ? $set_host['warn'] = $host['warn'] : null;
+    isset($host['warn_port']) ? $set_host['warn_port'] = $host['warn_port'] : null;
+    !empty($host['clilog']) ? $set_host['clilog'] = $host['clilog'] : null;
 
     $db->update('hosts', $set_host, ['id' => ['value' => $host['id']]], 'LIMIT 1');
 
@@ -121,13 +127,18 @@ function ping_known_host(Database $db, array $host) {
     if ($mac) {
         $set['mac'] = $mac;
     }
+    $clilog = $ip_status;
+    unset($clilog['latency']);
 
-    $set['clilog'] = json_encode($ip_status);
-    if ($ip_status['isAlive'] && $host['online'] != 1) {
+    $set['clilog'] = json_encode($clilog);
+    if ($ip_status['isAlive']) {
         $set['online'] = 1;
+        $set['last_seen'] = time();
+        $set['latency'] = $ip_status['latency'];
         $db->update('hosts', $set, ['id' => ['value' => $host['id']]], 'LIMIT 1');
     } else if ($ip_status['isAlive'] == 0 && $host['online'] == 1) {
         $set['online'] = 0;
+        $set['latency'] = $ip_status['latency'];
         $db->update('hosts', $set, ['id' => ['value' => $host['id']]], 'LIMIT 1');
     }
 }
@@ -137,7 +148,7 @@ function ping_net(array $cfg, Database $db) {
     $iplist = get_iplist($cfg['net']);
 
     foreach ($iplist as $ip) {
-
+        $latency = microtime(true);
         $jump = false;
         $ip = trim($ip);
 
@@ -160,11 +171,11 @@ function ping_net(array $cfg, Database $db) {
         if ($ip_status['isAlive']) {
             $set['ip'] = $ip;
             $set['online'] = 1;
+            $set['latency'] = microtime(true) - $latency;
             $results = $db->query('SELECT `id`,`mac`,`online` FROM hosts WHERE ip=\'' . $ip . '\' LIMIT 1');
             $host_results = $db->fetchAll($results);
             if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
                 if ($host_results[0]['online'] != 1 || $host_results[0]['mac'] != $mac) {
-                    $set['online'] = 1;
                     $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]], 'LIMIT 1');
                 }
             } else {
@@ -177,7 +188,7 @@ function ping_net(array $cfg, Database $db) {
             if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
                 if ($host_results[0]['online'] == 1) {
                     $set['online'] = 0;
-
+                    $set['latency'] = microtime(true) - $latency;
                     $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]]);
                 }
             }

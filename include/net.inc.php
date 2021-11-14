@@ -17,6 +17,7 @@ function ping_host_ports(array $host) {
         //var_dump($host);
         return false;
     }
+    $time_now = time();
 
     $err_code = $err_msg = '';
     $timeout = 1;
@@ -37,6 +38,7 @@ function ping_host_ports(array $host) {
         $conn = @fsockopen($ip, $port['port'], $err_code, $err_msg, $timeout);
         if (is_resource($conn)) {
             $host['online'] = 1;
+            $host['last_seen'] = $time_now;
             $host['ports'][$kport]['online'] = 1;
             fclose($conn);
         } else {
@@ -46,7 +48,9 @@ function ping_host_ports(array $host) {
             $host['ports'][$kport]['err_code'] = $err_code;
             $host['ports'][$kport]['err_msg'] = $err_msg;
         }
-        $host['ports'][$kport]['latency'] = round(microtime(true) - $tim_start, 2);
+        $host['ports'][$kport]['latency'] = microtime(true) - $tim_start;
+        //TODO port average
+        $host['latency'] = microtime(true) - $tim_start;
     }
 
     return $host;
@@ -85,7 +89,7 @@ function ping_all_ports(array &$hosts) {
                     $hosts[$khost]['ports'][$kport]['err_msg'] = $err_msg;
                     //echo " fail \n";
                 }
-                $hosts[$khost]['ports'][$kport]['latency'] = round(microtime(true) - $tim_start, 2);
+                $hosts[$khost]['ports'][$kport]['latency'] = microtime(true) - $tim_start;
             }
         }
     }
@@ -103,14 +107,14 @@ function ping(string $ip, array $timeout = []) {
     $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
     if (!$socket) {
         $status['error'] = 'socket_create';
-        $status['latency'] = round(microtime(true) - $tim_start, 2);
+        $status['latency'] = microtime(true) - $tim_start;
         return $status;
     }
 
     socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
     if (!socket_connect($socket, $ip, 0)) {
         $status['error'] = 'socket_connect';
-        $status['latency'] = round(microtime(true) - $tim_start, 2);
+        $status['latency'] = microtime(true) - $tim_start;
         socket_close($socket);
         return $status;
     }
@@ -120,10 +124,10 @@ function ping(string $ip, array $timeout = []) {
 
     if (socket_read($socket, 255)) {
         $status['isAlive'] = 1;
-        $status['latency'] = round(microtime(true) - $tim_start, 2);
+        $status['latency'] = microtime(true) - $tim_start;
     } else {
         $status['error'] = 'timeout';
-        $status['latency'] = round(microtime(true) - $tim_start, 2);
+        $status['latency'] = microtime(true) - $tim_start;
     }
 
     socket_close($socket);
