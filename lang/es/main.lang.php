@@ -34,6 +34,7 @@ $lng = [
     //P
     'L_PASSWORD' => 'Contraseña',
     'L_PROFILE' => 'Perfil',
+    'L_PORT_DOWN' => 'Puerto inacalzable',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',

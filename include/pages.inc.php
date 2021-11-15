@@ -267,6 +267,13 @@ function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, i
         if (!empty($vhost['codename'])) {
             $hosts_results[$khost]['details'] .= $lng['L_CODENAME'] . ': ' . ucfirst($vhost['codename']) . "\n";
         }
+
+        //Warn icon
+
+        if ($vhost['warn_port']) {
+            $hosts_results[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
+            $hosts_results[$khost]['details'] .= $lng['L_PORT_DOWN'];
+        }
     }
 
     return $hosts_results;
