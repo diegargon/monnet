@@ -72,21 +72,21 @@
             <label for="sdb">sdb:</label>
             <progress id="sdb" value="30" max="100">30%</progress>
             <div class="" >
-                <label class="created_label">Unido:</label>
+                <label class="created_label"><?= $lng['L_ADDED'] ?></label>
                 <span class="created"><?= $tdata['host_details']['formated_creation_date'] ?></span>
             </div>
             <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
                 <div class="" >
-                    <label class="latency">Latencia:</label>
+                    <label class="latency"><?= $lng['L_LATENCY'] ?></label>
                     <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
                 </div>
             <?php } ?>
             <?php if (!empty($tdata['host_details']['formated_last_seen'])) { ?>
                 <div class="" >
                     <?php if (empty($tdata['host_details']['online'])) { ?>
-                        <label class="last_seen_label">Ultima vez visto:</label>
+                        <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?></label>
                     <?php } else { ?>
-                        <label class="connected_label">Ultima comprobacion:</label>
+                        <label class="connected_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
                     <?php } ?>
                     <span class="connected_date"><?= $tdata['host_details']['formated_last_seen'] ?> </span>
                 </div>

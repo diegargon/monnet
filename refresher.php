@@ -22,7 +22,7 @@ if ($user->getId() > 0) {
     print(json_encode($data));
     exit();
 }
-$frontend = new Frontend($cfg);
+$frontend = new Frontend($cfg, $lng);
 $tdata['theme'] = $cfg['theme'];
 
 $command = Filters::getString('order');

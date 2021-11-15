@@ -12,9 +12,11 @@
 class Frontend {
 
     private $cfg;
+    private $lng;
 
-    public function __construct($cfg) {
+    public function __construct($cfg, $lng) {
         $this->cfg = $cfg;
+        $this->lng = $lng;
     }
 
     function showPage($tdata) {
@@ -68,6 +70,8 @@ class Frontend {
     }
 
     function getTpl(string $tpl, array $tdata = []) {
+        $lng = $this->lng;
+        $cfg = $this->cfg;
 
         ob_start();
         $tpl_file = 'tpl/' . $tdata['theme'] . '/' . $tpl . '.tpl.php';
@@ -91,36 +95,37 @@ class Frontend {
     }
 
     function msgBox(array $msg) {
-        global $LNG;
 
-        (substr($msg['title'], 0, 2) == 'L_') ? $msg['title'] = $LNG[$msg['title']] : null;
-        (substr($msg['body'], 0, 2) == 'L_') ? $msg['body'] = $LNG[$msg['body']] : null;
+        (substr($msg['title'], 0, 2) == 'L_') ? $msg['title'] = $this->lng[$msg['title']] : null;
+        (substr($msg['body'], 0, 2) == 'L_') ? $msg['body'] = $this->lng[$msg['body']] : null;
         return $this->getTpl('msgbox', $msg);
     }
 
     function msgPage(array $msg) {
-        global $cfg;
 
         $footer = $this->getFooter();
         $menu = $this->getMenu();
         $body = $this->msgBox(['title' => $msg['title'], 'body' => $msg['body']]);
         $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
-        $tdata['css_file'] = $this->getCssFile($cfg['theme'], $cfg['css']);
+        $tdata['css_file'] = $this->getCssFile($this->cfg['theme'], $this->cfg['css']);
         echo $this->getTpl('html_mstruct', $tdata);
 
         exit();
     }
 
     function getFooter() {
-        global $db, $cfg;
+        /* TODO
+          global $db, $cfg;
 
-        $cfg['show_querys'] ?? 0;
-        $querys = $db->getQuerys();
-        valid_array($querys) ? $num_querys = count($querys) : $num_querys = 0;
-        $tdata['num_querys'] = $num_querys;
-        $cfg['show_querys'] ? $tdata['querys'] = $querys : null;
+          $cfg['show_querys'] ?? 0;
+          $querys = $db->getQuerys();
+          valid_array($querys) ? $num_querys = count($querys) : $num_querys = 0;
+          $tdata['num_querys'] = $num_querys;
+          $cfg['show_querys'] ? $tdata['querys'] = $querys : null;
 
-        return $this->getTpl('footer', $tdata);
+          return $this->getTpl('footer', $tdata);
+         *
+         */
     }
 
 }

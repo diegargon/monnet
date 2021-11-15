@@ -10,7 +10,7 @@
 $lng = [
     //A
     'L_APPLINKS' => 'AppLinks',
-    'L_REST_HOSTS' => 'Hosts',
+    'L_ADDED' => 'Añadido',
     //B
     'L_BOOKMARKS' => 'Links',
     //C
@@ -27,6 +27,8 @@ $lng = [
     //L
     'L_LOGIN' => 'Identificarse',
     'L_LAST_SEEN' => 'Ultima vez online:',
+    'L_LAST_CHECK' => 'Ultima comprobación',
+    'L_LATENCY' => 'Latencia',
     //O
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
@@ -35,6 +37,8 @@ $lng = [
     'L_PASSWORD' => 'Contraseña',
     'L_PROFILE' => 'Perfil',
     'L_PORT_DOWN' => 'Puerto inacalzable',
+    //R
+    'L_REST_HOSTS' => 'Hosts',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',

@@ -70,7 +70,7 @@ Class Web {
     }
 
     function render(array $page_data) {
-        $frontend = new Frontend($this->cfg);
+        $frontend = new Frontend($this->cfg, $this->lng);
         $frontend->showPage($page_data);
     }
 
