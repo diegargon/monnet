@@ -35,6 +35,7 @@ function ping_host_ports(array $host) {
         $ip = $host['ip'];
         $port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
 
+        $host['online'] = 0;
         $conn = @fsockopen($ip, $port['port'], $err_code, $err_msg, $timeout);
         if (is_resource($conn)) {
             $host['online'] = 1;
@@ -49,7 +50,7 @@ function ping_host_ports(array $host) {
             $host['ports'][$kport]['err_msg'] = $err_msg;
         }
         $host['ports'][$kport]['latency'] = microtime(true) - $tim_start;
-        //TODO port average
+        //TODO port average?
         $host['latency'] = microtime(true) - $tim_start;
     }
 
