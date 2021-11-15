@@ -79,8 +79,12 @@
             <?php } ?>
             <?php if (!empty($tdata['host_details']['formated_last_seen'])) { ?>
                 <div class="" >
-                    <label class="last_seen_label">Ultima vez visto:</label>
-                    <span class="last_seen_date"><?= $tdata['host_details']['formated_last_seen'] ?> </span>
+                    <?php if (empty($tdata['host_details']['online'])) { ?>
+                        <label class="last_seen_label">Ultima vez visto:</label>
+                    <?php } else { ?>
+                        <label class="connected_label">Conectado:</label>
+                    <?php } ?>
+                    <span class="connected_date"><?= $tdata['host_details']['formated_last_seen'] ?> </span>
                 </div>
             <?php } ?>
         </div>
