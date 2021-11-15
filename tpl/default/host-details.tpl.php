@@ -71,6 +71,10 @@
             <progress id="sda" value="30" max="100">30%</progress>
             <label for="sdb">sdb:</label>
             <progress id="sdb" value="30" max="100">30%</progress>
+            <div class="" >
+                <label class="created_label">Unido:</label>
+                <span class="created"><?= $tdata['host_details']['formated_creation_date'] ?></span>
+            </div>
             <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
                 <div class="" >
                     <label class="latency">Latencia:</label>
@@ -82,7 +86,7 @@
                     <?php if (empty($tdata['host_details']['online'])) { ?>
                         <label class="last_seen_label">Ultima vez visto:</label>
                     <?php } else { ?>
-                        <label class="connected_label">Conectado:</label>
+                        <label class="connected_label">Ultima comprobacion:</label>
                     <?php } ?>
                     <span class="connected_date"><?= $tdata['host_details']['formated_last_seen'] ?> </span>
                 </div>

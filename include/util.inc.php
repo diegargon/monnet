@@ -26,6 +26,12 @@ function timestamp_to_date(int $timestamp) {
     return $date;
 }
 
+function formated_date($date) {
+    $fdate = strtotime($date);
+
+    return date("d/m/y H:i", $fdate);
+}
+
 function micro_to_ms(float $microseconds) {
     return round($microseconds * 1000, 3);
 }
