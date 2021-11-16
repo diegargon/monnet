@@ -13,29 +13,24 @@ define('IN_CLI', true);
 /* CONFIG */
 $ROOT_PATH = dirname(__FILE__);
 $APP_NAME = 'Monnet';
-$CLI_LOCK = '/tmp/' . $APP_NAME . '.lock';
+define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
+
 $VERSION = 0.1;
 
 /* END CONFIG */
-
-if (file_exists($CLI_LOCK)) {
-    //TODO FALLBACK
-    echo "Warning: CLI lock: " . $CLI_LOCK . "\n";
-    return false;
-} else {
-    touch($CLI_LOCK);
-}
 
 chdir($ROOT_PATH);
 
 require_once('include/common.inc.php');
 require_once('include/climode.inc.php');
 
+if (is_locked()) {
+    die();
+}
+
+register_shutdown_function('unlink', CLI_LOCK);
+
 cron($cfg, $db);
 check_known_hosts($db);
-#ping_net($cfg, $db);
 
-unlink($CLI_LOCK);
-
-return true;
-
+exit(0);

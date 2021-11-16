@@ -13,3 +13,17 @@ require_once('include/net.inc.php');
 require_once('include/cronjobs.inc.php');
 require_once('include/cron.inc.php');
 
+function is_locked() {
+
+    if (@symlink("/proc/" . getmypid(), CLI_LOCK) !== FALSE) {
+        return false;
+    }
+
+    if (is_link(CLI_LOCK) && !is_dir(CLI_LOCK)) {
+        unlink(CLI_PCK);
+
+        return is_locked();
+    }
+
+    return true;
+}
