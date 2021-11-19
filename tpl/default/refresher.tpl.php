@@ -25,6 +25,14 @@
                     console.log(data);
                     var jsonData = JSON.parse(data);
                     //console.log(jsonData);
+                    if (jsonData.login === "fail") {
+                        if ($('#other-hosts').length === 0) {
+                            $('#center_container').prepend('<div id="main_status_msg">Login: ' + jsonData.login) + "</div>";
+                        } else {
+                            $('#main_status_msg').remove();
+                            $('#center_container').prepend('<div id="main_status_msg">Login: ' + jsonData.login) + "</div>";
+                        }
+                    }
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
                             $('#right_container').prepend(jsonData.other_hosts);

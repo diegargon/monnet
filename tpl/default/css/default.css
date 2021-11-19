@@ -629,6 +629,12 @@ input:checked + .slider:before {
 }
 .deploy_btn {}
 
+#main_status_msg {
+    text-align:center;
+    color: red;
+    font-weight:bold;
+    font-size: 15px;        
+}
 @media only screen and (max-width: 1070px) {
     .hosts {
         grid-template-columns: repeat(5, 140px);     
