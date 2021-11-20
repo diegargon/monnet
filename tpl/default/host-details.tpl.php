@@ -61,16 +61,20 @@
             <form class="host-details-form-close" method="POST">
                 <input type="submit" name="close_host_details" value="Cerrar"/>
             </form>
-        </div>
-        <div id="progress_bars">
-            <label for="load_avg">Load:</label>
-            <progress id="load_avg" value="50" max="100">50%</progress>
-            <label for="mem">Mem:</label>
-            <progress id="mem" value="90" max="100">90%</progress>
-            <label for="sda">sda:</label>
-            <progress id="sda" value="30" max="100">30%</progress>
-            <label for="sdb">sdb:</label>
-            <progress id="sdb" value="30" max="100">30%</progress>
+        </div> <!-- host-details-close --->
+        <?php if (!empty($tdata['host_details']['access_method'])) { ?>
+            <div id="progress_bars">
+                <label for="load_avg">Load:</label>
+                <progress id="load_avg" value="50" max="100">50%</progress>
+                <label for="mem">Mem:</label>
+                <progress id="mem" value="90" max="100">90%</progress>
+                <label for="sda">sda:</label>
+                <progress id="sda" value="30" max="100">30%</progress>
+                <label for="sdb">sdb:</label>
+                <progress id="sdb" value="30" max="100">30%</progress>
+            </div> <!-- progress container -->
+        <?php } ?>
+        <div class="">
             <div class="" >
                 <label class="created_label"><?= $lng['L_ADDED'] ?></label>
                 <span class="created"><?= $tdata['host_details']['formated_creation_date'] ?></span>
@@ -92,16 +96,18 @@
                 </div>
             <?php } ?>
         </div>
-        <div class="charts">
-            <label class="none_opt">None</label>
-            <input type="radio" checked name="graph_choice" value="none_graph">
-            <label class="network_opt">Network</label>
-            <input type="radio" name="graph_choice" value="network_graph">
-            <label class="ping_opt">Ping</label>
-            <input type="radio" name="graph_choice" value="ping_graph">
-            <label class="logs_opt">Logs</label>
-            <input type="radio" name="graph_choice" value="show_logs">
-        </div>
+        <?php if (!empty($tdata['host_details']['access_method'])) { ?>
+            <div class="charts">
+                <label class="none_opt">None</label>
+                <input type="radio" checked name="graph_choice" value="none_graph">
+                <label class="network_opt">Network</label>
+                <input type="radio" name="graph_choice" value="network_graph">
+                <label class="ping_opt">Ping</label>
+                <input type="radio" name="graph_choice" value="ping_graph">
+                <label class="logs_opt">Logs</label>
+                <input type="radio" name="graph_choice" value="show_logs">
+            </div>
+        <?php } ?>
         <!-- DEPLOYS -->
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
