@@ -137,6 +137,10 @@ function host_access($cfg, $db) {
         $set['access_results'] = [];
 
         $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
+        if (!$ssh) {
+            //echo "Error", $host['ip'] . "\n";
+            continue;
+        }
         $ssh->setKeepAlive(1);
 
         $results = [];
@@ -155,7 +159,7 @@ function host_access($cfg, $db) {
             $set['hostname'] = $results['hostname'];
             unset($results['hostname']);
         }
-        //unset($results['motd']);
+        unset($results['motd']);
         $set['access_results'] = $db->escape(json_encode($results));
 
         $db->update('hosts', $set, ['id' => $host['id']]);

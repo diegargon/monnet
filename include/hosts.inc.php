@@ -71,7 +71,7 @@ function update_host(Database $db, array $host) {
     $log_remove_fields = [
         'id', 'title', 'hostname', 'mac', 'mac_vendor', 'ip', 'highlight', 'system', 'distributor', 'codename', 'version', 'img_ico', 'weight',
         'status', 'online', 'wol', 'timeout', 'check_method', 'latency', 'last_seen', 'access_method', 'disable', 'clilog', 'warn', 'warn_port', 'ports',
-        'comment', 'updated'
+        'comment', 'updated', 'access_results'
     ];
 
     $host_log = $host;

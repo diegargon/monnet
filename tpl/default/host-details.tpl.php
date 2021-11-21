@@ -64,14 +64,31 @@
         </div> <!-- host-details-close --->
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
             <div id="progress_bars">
-                <label for="load_avg">Load:</label>
-                <progress id="load_avg" value="50" max="100">50%</progress>
-                <label for="mem">Mem:</label>
-                <progress id="mem" value="90" max="100">90%</progress>
-                <label for="sda">sda:</label>
-                <progress id="sda" value="30" max="100">30%</progress>
-                <label for="sdb">sdb:</label>
-                <progress id="sdb" value="30" max="100">30%</progress>
+                <?php
+                if (!empty($tdata['host_details']['loadavg'][1])) {
+                    $loadavg = 100 * $tdata['host_details']['loadavg'][1];
+                    $max_load = 100 * $tdata['host_details']['ncpu'];
+                    ?>
+                    <label for="load_avg"><?= $lng['L_LOAD'] ?>:</label>
+                    <progress id="load_avg" value="<?= $loadavg ?>" max="<?= $max_load ?>"  data-label="<?= $loadavg ?>"></progress>
+                <?php } ?>
+                <?php
+                if (!empty($tdata['host_details']['mem'])) {
+                    $mem = $tdata['host_details']['mem'];
+                    ?>
+                    <label for="mem"><?= $lng['L_MEM'] ?>:</label>
+                    <progress id="mem" value="<?= $mem['mem_used'] ?>" max="<?= $mem['mem_available'] ?>"></progress>
+                <?php } ?>
+                <?php
+                if (!empty($tdata['host_details']['disks']) && count($tdata['host_details']['disks']) > 0) {
+                    foreach ($tdata['host_details']['disks'] as $disk) {
+                        ?>
+                        <label class="disk"><?= $disk['mounted'] ?>:</label>
+                        <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
+                        <?php
+                    }
+                }
+                ?>
             </div> <!-- progress container -->
         <?php } ?>
         <div class="">
@@ -79,6 +96,12 @@
                 <label class="created_label"><?= $lng['L_ADDED'] ?></label>
                 <span class="created"><?= $tdata['host_details']['formated_creation_date'] ?></span>
             </div>
+            <?php if (!empty($tdata['host_details']['uptime']) && is_array($tdata['host_details']['uptime'])) { ?>
+                <div class="" >
+                    <label class="uptime_label"><?= $lng['L_UPTIME'] ?></label>
+                    <span class="uptime"><?= formated_date($tdata['host_details']['uptime']['datetime']) ?></span>
+                </div>
+            <?php } ?>
             <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
                 <div class="" >
                     <label class="latency"><?= $lng['L_LATENCY'] ?></label>
@@ -98,7 +121,7 @@
         </div>
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
             <div class="charts">
-                <label class="none_opt">None</label>
+                <label class="none_opt"><?= $lng['L_NONE'] ?></label>
                 <input type="radio" checked name="graph_choice" value="none_graph">
                 <label class="network_opt">Network</label>
                 <input type="radio" name="graph_choice" value="network_graph">

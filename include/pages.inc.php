@@ -332,6 +332,22 @@ function get_host_detail_view_data(array $cfg, Database $db, User $user, array $
         $host['host_ports'] = $hosts_ports;
     }
 
+    //convert json access_details
+    if (!empty($host['access_results'])) {
+        $host_details = json_decode($host['access_results'], true);
+
+        if (!empty($host_details) && is_array($host_details)) {
+
+            foreach ($host_details as $k_host_details => $v_host_details) {
+                if (!empty($v_host_details)) {
+                    $host[$k_host_details] = $v_host_details;
+                }
+            }
+        }
+        unset($host['access_results']);
+        //var_dump($host);
+    }
+
     //Deploy
     $host['deploy'] = [];
     foreach ($cfg['deploys'] as $deploy) {

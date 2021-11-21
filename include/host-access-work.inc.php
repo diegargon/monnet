@@ -12,6 +12,8 @@
 function h_get_hostname($ssh, array &$result) {
     ssh_exec($ssh, $result, 'hostname');
     if (!empty($result['result'])) {
+        //Remove ANSI Term codes. https://stackoverflow.com/questions/40731273/php-remove-terminal-codes-from-string
+        $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
         $hostname = str_replace("\r\n", '', $result['result']);
         $result['hostname'] = trim($hostname);
     }
@@ -22,8 +24,12 @@ function h_get_ncpus($ssh, array &$result) {
 
     $ncpu = 0;
 
-    ssh_exec($ssh, $result, 'grep processor /proc/cpuinfo|wc -l');
+    ssh_exec($ssh, $result, 'grep --color=never processor /proc/cpuinfo|wc -l');
     if (!empty($result['result'])) {
+
+        //Remove ANSI Term codes.
+        $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
+
         $ncpu = str_replace("\r\n", '', $result['result']);
         $ncpu = trim($ncpu);
     }
@@ -35,6 +41,8 @@ function h_get_sys_mem($ssh, array &$result) {
 
     ssh_exec($ssh, $result, 'cat /proc/meminfo');
     if (!empty($result['result'])) {
+        //Remove ANSI Term codes.
+        $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
         $lines = explode("\n", $result['result']);
         foreach ($lines as $line) {
             $pieces = [];
@@ -50,8 +58,8 @@ function h_get_sys_mem($ssh, array &$result) {
                 $mem_available = str_replace("\r\n", '', $pieces[1]);
                 $result['mem']['mem_available'] = trim($mem_available);
             }
-            if (!empty($result['mem_total']) && !empty($result['mem_avaible'])) {
-                $result['mem']['mem_used'] = $result['mem_total'] - $result['mem_available'];
+            if (!empty($mem_available) && !empty($mem_free)) {
+                $result['mem']['mem_used'] = $mem_available - $mem_free;
             }
         }
     }
@@ -65,6 +73,8 @@ function h_get_sys_space($ssh, array &$result) {
     ssh_exec($ssh, $result, 'mount -t ext3,ext4,cifs,nfs,nfs4,zfs');
 
     if (!empty($result['result'])) {
+        //Remove ANSI Term codes.
+        $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
         $lines = explode("\n", $result['result']);
         foreach ($lines as $line) {
             $line = str_replace("\r\n", '', $line);
@@ -75,6 +85,8 @@ function h_get_sys_space($ssh, array &$result) {
     if (count($mount_points) > 0) {
         ssh_exec($ssh, $result, 'df');
         if (!emptY($result['result'])) {
+            //Remove ANSI Term codes.
+            $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
             $lines = explode("\n", $result['result']);
             foreach ($lines as $line) {
 
@@ -108,7 +120,8 @@ function h_get_uptime($ssh, array &$result) {
 
     ssh_exec($ssh, $result, 'uptime -s');
     if (!empty($result['result'])) {
-
+        //Remove ANSI Term codes
+        $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
         $split = explode(' ', $result['result']);
         if (count($split) == 2) {
             $result['uptime']['datetime'] = trim($result['result']);
@@ -124,6 +137,8 @@ function h_get_load_average($ssh, array &$result) {
     ssh_exec($ssh, $result, 'cat /proc/loadavg');
 
     if (!empty($result['result'])) {
+        //Remove ANSI Term codes.
+        $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
         $split = explode(' ', trim($result['result']));
         if (count($split) > 3) {
             $result['loadavg'][1] = trim($split[0]);
