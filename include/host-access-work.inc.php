@@ -148,3 +148,22 @@ function h_get_load_average($ssh, array &$result) {
     }
     $result['result'] = '';
 }
+
+function h_get_tail_syslog($ssh, $db, array &$result) {
+    ssh_exec($ssh, $result, 'tail -50 /var/log/syslog');
+
+    if (!empty($result['result'])) {
+        //Remove ANSI Term codes.
+        $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
+        $logs = explode("\r\n", $result['result']);
+        $logs = str_replace("\r", '', $logs);
+        $logs = str_replace("'", '', $logs);
+        foreach ($logs as $k_log => $v_log) {
+            $logs[$k_log] = $db->escape($v_log);
+        }
+
+        $result['tail_syslog'] = $logs; // $db->escape($result['result']);
+    }
+
+    $result['result'] = '';
+}

@@ -629,6 +629,26 @@ input:checked + .slider:before {
 }
 .deploy_btn {}
 
+.log_container {
+    clear:both;
+    display: block;
+    max-height: 300px;
+    max-width: 550px;
+    overflow: auto;
+}
+
+.log_line {
+    border-bottom: 1px solid black;
+    font-size: 1em;
+}
+.log_line:hover{
+    font-size: 1.3em;
+}
+.log_line:hover  ~ .log_line {
+    font-size: 1.3em;
+}
+
+
 #main_status_msg {
     text-align:center;
     color: red;

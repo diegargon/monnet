@@ -153,6 +153,19 @@
             <?php
         }
         ?>
+        <?php
+        if (!empty($tdata['host_details']['tail_syslog']) && valid_array($tdata['host_details']['tail_syslog'])) {
+            ?><div class="log_container">
+            <?php
+            $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
+            foreach ($logs as $log) {
+                ?>
+                    <div class="log_line"><?= $log ?></div>
+                <?php }
+                ?>
+            </div>
+        <?php }
+        ?>
         <!--
               <div class="ping_chart">
             <img alt="" src="tpl/default/img/graph.png"/>

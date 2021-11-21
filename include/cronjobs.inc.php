@@ -153,14 +153,14 @@ function host_access($cfg, $db) {
         h_get_sys_space($ssh, $results);
         h_get_uptime($ssh, $results);
         h_get_load_average($ssh, $results);
-
+        h_get_tail_syslog($ssh, $db, $results);
         //var_dump($result);
         if (!empty($results['hostname'])) {
             $set['hostname'] = $results['hostname'];
             unset($results['hostname']);
         }
         unset($results['motd']);
-        $set['access_results'] = $db->escape(json_encode($results));
+        $set['access_results'] = json_encode($results);
 
         $db->update('hosts', $set, ['id' => $host['id']]);
     }
