@@ -70,3 +70,8 @@ $cfg['ssh_profile'] = [
     'motd_end_root' => '~#',
     'motd_end_user' => '~$',
 ];
+
+$cfg['commands'] = [
+    1 => 'sudo shutdown -r now;exit',
+    2 => 'sudo shutdown -h now;exit',
+];

@@ -25,6 +25,7 @@ require_once('include/common.inc.php');
 require_once('include/climode.inc.php');
 
 if (is_locked()) {
+    echo "CLI Locked\n";
     die();
 }
 
@@ -34,5 +35,6 @@ cron($cfg, $db);
 check_known_hosts($db);
 
 host_access($cfg, $db);
+run_commands($cfg, $db);
 
 exit(0);

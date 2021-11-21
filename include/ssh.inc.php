@@ -54,6 +54,39 @@ function ssh_exec(SSH2 $ssh, array &$result, string $cmd) {
     $result['result'] = mb_substr($ssh_result, 0, -5);
 }
 
+function run_commands(array $cfg, Database $db) {
+    $result = $db->select('cmd', '*');
+    $cmds = $db->fetchAll($result);
+
+    foreach ($cmds as $cmd) {
+        $run_command = $cfg['commands'][$cmd['cmd_type']];
+        //echo "Running: $run_command\n";
+        $hid = $cmd['hid'];
+        $result = $db->select('hosts', '*', ['id' => $hid]);
+        $host = $db->fetchAll($result);
+        $ssh_conn_result = [];
+        $result = [];
+        if (!empty($host) && !empty($host[0]['ip'])) {
+            $host = $host[0];
+            $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
+            if (!$ssh) {
+                continue;
+            }
+            try {
+                ssh_exec($ssh, $result, $run_command);
+            } catch (Exception $e) {
+                //avoid error on shutdown and reboot catch it for ignore
+                if ($cmd['cmd_type'] == 1 || $cmd['cmd_type'] == 2) {
+                    //echo $e;
+                } else {
+                    echo $e;
+                }
+            }
+            $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
+        }
+    }
+}
+
 function ssh_exec_test(SSH2 $ssh, array &$result, string $cmd) {
     //Add Motd
     //empty($result['data']) ? $result['data'] = [] : null;

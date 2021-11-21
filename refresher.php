@@ -49,14 +49,25 @@ if ($user->getPref('show_other_hosts_status')) {
     $data['other_hosts'] = $frontend->getTpl('other-hosts', $tdata);
 }
 
-if ($command == 'power_on' && !empty($command_value) && is_numeric($command_valuie)) {
+if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {
     send_magic_packet($command_value);
 }
-if ($command == 'power_off' && !empty($command_value) && is_numeric($command_valuie)) {
-    //TODO
+if ($command == 'power_off' && !empty($command_value) && is_numeric($command_value)) {
+    $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 2, 'hid' => $command_value], 'LIMIT 1');
+    $coincidence = $db->fetchAll($result);
+
+    if (empty($coincidence)) {
+        $db->insert('cmd', ['cmd_type' => 2, 'hid' => $command_value]);
+    }
 }
-if ($command == 'reboot' && !empty($command_value) && is_numeric($command_valuie)) {
-    //TODO
+if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value)) {
+
+    $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 1, 'hid' => $command_value], 'LIMIT 1');
+    $coincidence = $db->fetchAll($result);
+
+    if (empty($coincidence)) {
+        $db->insert('cmd', ['cmd_type' => 1, 'hid' => $command_value]);
+    }
 }
 
 print json_encode($data);
