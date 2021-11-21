@@ -57,6 +57,11 @@ $cfg['deploys'] = [
         'comment' => 'Installation apache, mysql php on Ubuntu',
         'os_distribution' => 2,
         'file' => 'scripts/ubuntu-lamp.sh'
+    ],
+    3 => ['name' => 'Logrotate',
+        'comment' => 'Rotate logs',
+        'os_distribution' => 2,
+        'file' => ''
     ]
 ];
 
