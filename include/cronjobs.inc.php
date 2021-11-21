@@ -208,3 +208,37 @@ function fill_hostnames(Database $db, int $only_missing = 0) {
         }
     }
 }
+
+function host_access($cfg, $db) {
+    $hosts = get_known_hosts($db);
+    foreach ($hosts as $host) {
+        if ($host['access_method'] < 1 || empty($host['online'])) {
+            continue;
+        }
+        $ssh_conn_result = [];
+        $set = [];
+        $set['access_results'] = [];
+
+        $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
+        $ssh->setKeepAlive(1);
+
+        $results = [];
+
+        if (empty($host['hostname'])) {
+            h_get_hostname($ssh, $results);
+        }
+        h_get_ncpus($ssh, $results);
+        h_get_sys_mem($ssh, $results);
+        h_get_sys_space($ssh, $results);
+        h_get_uptime($ssh, $results);
+        h_get_load_average($ssh, $results);
+
+        //var_dump($result);
+        if (!empty($results['hostname'])) {
+            $set['hostname'] = $results['hostname'];
+            unset($results['hostname']);
+        }
+        $set['access_results'] = json_encode($results);
+        $db->update('hosts', $set, ['id' => $host['id']]);
+    }
+}

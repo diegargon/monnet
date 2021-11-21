@@ -59,3 +59,9 @@ $cfg['deploys'] = [
         'file' => 'scripts/ubuntu-lamp.sh'
     ]
 ];
+
+$cfg['ssh_profile'] = [
+    'os_profile_id' => 2,
+    'motd_end_root' => '~#',
+    'motd_end_user' => '~$',
+];

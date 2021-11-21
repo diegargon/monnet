@@ -33,4 +33,6 @@ register_shutdown_function('unlink', CLI_LOCK);
 cron($cfg, $db);
 check_known_hosts($db);
 
+host_access($cfg, $db);
+
 exit(0);

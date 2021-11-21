@@ -13,12 +13,6 @@ require_once('include/net.inc.php');
 require_once('include/cronjobs.inc.php');
 require_once('include/cron.inc.php');
 
-/* phpseclib deps */
-require_once 'vendor/autoload.php';
-
-use phpseclib3\Net\SSH2;
-use phpseclib3\Crypt\PublicKeyLoader;
-
 function is_locked() {
 
     if (@symlink("/proc/" . getmypid(), CLI_LOCK) !== FALSE) {
@@ -26,10 +20,13 @@ function is_locked() {
     }
 
     if (is_link(CLI_LOCK) && !is_dir(CLI_LOCK)) {
-        unlink(CLI_PCK);
+        unlink(CLI_LOCK);
 
         return is_locked();
     }
 
     return true;
 }
+
+require_once('include/ssh.inc.php');
+require_once('include/host-access-work.inc.php');

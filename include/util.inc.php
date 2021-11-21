@@ -35,3 +35,10 @@ function formated_date($date) {
 function micro_to_ms(float $microseconds) {
     return round($microseconds * 1000, 3);
 }
+
+function formatBytes($size, $precision = 2) {
+    for ($i = 0; ($size / 1024) > 0.9; $i++, $size /= 1024) {
+
+    }
+    return round($size, $precision) . ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][$i];
+}
