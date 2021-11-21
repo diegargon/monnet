@@ -10,6 +10,7 @@
 !defined('IN_CLI') ? exit : true;
 
 require_once('include/net.inc.php');
+require_once('include/phpsec_helper.inc.php');
 require_once('include/cronjobs.inc.php');
 require_once('include/cron.inc.php');
 

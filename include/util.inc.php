@@ -7,6 +7,8 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
+!defined('IN_WEB') ? exit : true;
+
 function valid_array($array) {
     if (!empty($array) && is_array($array) && count($array) > 0) {
         return true;

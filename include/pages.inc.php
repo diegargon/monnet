@@ -226,8 +226,11 @@ function get_bookmarks(Database $db, User $user, string $category) {
 }
 
 function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, int $highlight = 0) {
-    $results = $db->select('hosts', '*', ['highlight' => $highlight], 'ORDER BY weight');
-    $hosts_results = $db->fetchAll($results);
+
+    //$results = $db->select('hosts', '*', ['highlight' => $highlight], 'ORDER BY weight');
+    //$hosts_results = $db->fetchAll($results);
+    $hosts_results = get_hosts($db, $highlight);
+
     $theme = $user->getTheme();
 
     //var_dump($hosts_results);
