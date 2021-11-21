@@ -22,6 +22,7 @@ function cron(array $cfg, Database $db) {
     if (($cron_times['cron_five'] + 300) < $time_now) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_five']], 'LIMIT 1');
         fill_hostnames($db, $only_missing = 1);
+        host_access($cfg, $db);
     }
 
     if (($cron_times['cron_quarter'] + 900) < $time_now) {
