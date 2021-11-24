@@ -1,7 +1,3 @@
--- Tiempo de generación: 13-11-2021 a las 16:11:57
--- Versión del servidor: 8.0.27-0ubuntu0.20.04.1
--- Versión de PHP: 7.4.3
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -16,6 +12,18 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `monnet`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cmd`
+--
+
+CREATE TABLE `cmd` (
+  `cmd_id` int NOT NULL,
+  `hid` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `cmd_type` smallint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -41,16 +49,22 @@ CREATE TABLE `hosts` (
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '0:ok;1:warn;3:danger',
   `online` tinyint NOT NULL DEFAULT '0',
   `access_method` tinyint NOT NULL DEFAULT '0' COMMENT '0:no;1:ssh..',
+  `access_results` json DEFAULT NULL,
   `wol` tinyint NOT NULL DEFAULT '0',
   `timeout` tinyint DEFAULT NULL,
+  `last_seen` int DEFAULT NULL,
+  `latency` float DEFAULT NULL,
   `disable` tinyint NOT NULL DEFAULT '0',
   `clilog` varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'clilog keep extra cli logs',
   `warn` tinyint NOT NULL DEFAULT '0',
   `warn_port` tinyint NOT NULL DEFAULT '0',
+  `fingerprint` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `comment` varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `items`
@@ -63,6 +77,8 @@ CREATE TABLE `items` (
   `conf` varchar(4096) NOT NULL,
   `weight` tinyint NOT NULL DEFAULT '60'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `load_stats`
@@ -116,6 +132,8 @@ CREATE TABLE `prefs` (
   `pref_value` char(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
+
 --
 -- Estructura de tabla para la tabla `users`
 --
@@ -135,11 +153,17 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `isAdmin`, `created`) VALUES
-(1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', '6969ongm6grfet4s6u9uinmssa', 1, '2021-10-30 12:06:20');
+(1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', 'ed53r6u3br9num3bu8118po37h', 1, '2021-10-30 12:06:20');
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `cmd`
+--
+ALTER TABLE `cmd`
+  ADD PRIMARY KEY (`cmd_id`);
 
 --
 -- Indices de la tabla `hosts`
@@ -158,13 +182,15 @@ ALTER TABLE `items`
 -- Indices de la tabla `load_stats`
 --
 ALTER TABLE `load_stats`
-  ADD PRIMARY KEY (`timestamp`);
+  ADD PRIMARY KEY (`timestamp`),
+  ADD KEY `host` (`host`);
 
 --
 -- Indices de la tabla `ping_stats`
 --
 ALTER TABLE `ping_stats`
-  ADD PRIMARY KEY (`timestamp`);
+  ADD PRIMARY KEY (`timestamp`),
+  ADD KEY `host` (`host`);
 
 --
 -- Indices de la tabla `ports`
@@ -185,36 +211,41 @@ ALTER TABLE `prefs`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `username_2` (`username`);
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
+-- AUTO_INCREMENT de la tabla `cmd`
+--
+ALTER TABLE `cmd`
+  MODIFY `cmd_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT de la tabla `hosts`
 --
 ALTER TABLE `hosts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `ports`
 --
 ALTER TABLE `ports`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `prefs`
 --
 ALTER TABLE `prefs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
