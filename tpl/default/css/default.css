@@ -564,19 +564,9 @@ input:checked + .slider:before {
     margin-left:-1px;
 
 }
-.host-details-close {
-    position:absolute;
-    bottom:3px;
-    right:5px; 
-}
-.host-details-close input  {
-    border: 2px solid black;
-    color: white;
-    font-weight: bold;
-    background-color: rgba(0,0,0, 0.7);       
-}
+.host-details-close input  {}
 .host-details-form-close {
-
+    display:inline;
 }
 
 .host-item:last-of-type {
@@ -614,7 +604,7 @@ input:checked + .slider:before {
     border:0px solid blue;
     border-radius: 5px;     
 }
-.power-off, .power-on, .reboot {
+.action-icon {
     width:20px;  
 }
 .power-off {

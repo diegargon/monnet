@@ -17,6 +17,7 @@ $lng = [
     'L_CODENAME' => 'Codename',
     'L_CLOSE' => 'Cerrar',
     //D
+    'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
     //H
     'L_HIGHLIGHT_HOSTS' => 'Host Track',
@@ -44,6 +45,7 @@ $lng = [
     'L_PORT_DOWN' => 'Puerto inacalzable',
     //R
     'L_REST_HOSTS' => 'Hosts',
+    'L_REMOVE' => 'Eliminar',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',

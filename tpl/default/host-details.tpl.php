@@ -48,20 +48,19 @@
 
         <div class="host-controls">
             <?php if (!empty($tdata['host_details']['wol']) && empty($tdata['host_details']['online'])) { ?>
-                <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image" class="power-off" src="tpl/<?= $tdata['theme'] ?>/img/power-off.png" alt="poff" title="turn on"/>
+                <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png" alt="poff" title="turn on"/>
             <?php } ?>
             <?php if (!empty($tdata['host_details']['access_method']) && !empty($tdata['host_details']['online'])) { ?>
-                <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image" class="power-on" src="tpl/<?= $tdata['theme'] ?>/img/power-on.png" alt="pon" title="turn off"/>
+                <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png" alt="pon" title="turn off"/>
             <?php } ?>
             <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image" class="reboot" src="tpl/<?= $tdata['theme'] ?>/img/reboot.png" alt="pon" title="reboot"/>
+                <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png" alt="reboot" title="reboot"/>
             <?php } ?>
-        </div> <!--host-controls -->
-        <div class="host-details-close">
+            <input onClick="refresh('remove_host', <?= $tdata['host_details']['id'] ?>)" type="image"  class="action-icon remove" src="tpl/<?= $cfg['theme'] ?>/img/remove.png" alt="remove" />
             <form class="host-details-form-close" method="POST">
-                <input type="submit" name="close_host_details" value="Cerrar"/>
+                <input type="image"  class="action-icon remove" name="close_host_details" src="tpl/<?= $cfg['theme'] ?>/img/close.png" alt="close" />
             </form>
-        </div> <!-- host-details-close --->
+        </div> <!--host-controls -->
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
             <div id="progress_bars">
                 <?php

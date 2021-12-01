@@ -139,7 +139,7 @@ function page_index_post($user) {
     $show_applinks = Filters::postInt('show_applinks');
     $show_hightlight_hosts = Filters::postInt('show_hightlight_hosts');
     $show_other_hosts = Filters::postInt('show_rest_hosts');
-    $close_host_details = Filters::postAzChar('close_host_details');
+    $close_host_details = Filters::postInt('close_host_details_x'); //img click _x _y
 
     if (!empty($close_host_details)) {
         $user->setPref('host_details', 0);

@@ -32,6 +32,16 @@ if (!empty($command) && !empty($command_value)) {
     $data['command_receive'] = $command;
     $data['command_value'] = $command_value;
 }
+
+/* Remove host */
+if ($command === 'remove_host' && is_numeric($command_value)) {
+    $db->delete('hosts', ['id' => $command_value], 'LIMIT 1');
+    //no host_details
+    $user->setPref('host_details', 0);
+    $data['host_details'] = '';
+}
+
+/* Set show/hide host-details */
 if ($command === 'host-details' && is_numeric($command_value)) {
     $user->setPref('host_details', $command_value);
 }
@@ -40,6 +50,7 @@ if ($user->getPref('host_details')) {
     $data['host_details'] = $frontend->getTpl('host-details', $tdata);
 }
 
+/* Set show/hide highlight hosts */
 if ($user->getPref('show_hightlight_hosts_status')) {
     $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
     $data['highlight_hosts'] = $frontend->getTpl('hosts', $tdata);
@@ -49,6 +60,8 @@ if ($user->getPref('show_other_hosts_status')) {
     $data['other_hosts'] = $frontend->getTpl('other-hosts', $tdata);
 }
 
+
+/* Power ON/OFF  & Reboot */
 if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {
     send_magic_packet($command_value);
 }
@@ -69,5 +82,7 @@ if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value)
         $db->insert('cmd', ['cmd_type' => 1, 'hid' => $command_value]);
     }
 }
+
+/*  -   */
 
 print json_encode($data);
