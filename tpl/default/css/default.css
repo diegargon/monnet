@@ -641,13 +641,6 @@ input:checked + .slider:before {
     border-bottom: 1px solid black;
     font-size: 1em;
 }
-.log_line:hover{
-    font-size: 1.3em;
-}
-.log_line:hover  ~ .log_line {
-    font-size: 1.3em;
-}
-
 
 #main_status_msg {
     text-align:center;
