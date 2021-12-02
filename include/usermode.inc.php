@@ -11,6 +11,7 @@
 
 do_initial_usermode_checks($cfg);
 
+session_name('monent');
 session_start();
 
 require('class/Filters.class.php');
