@@ -56,7 +56,7 @@ function page_index($cfg, $db, $lng, $user) {
     $page['weather_widget'] = weather_widget($cfg, $lng);
     $page['load_tpl'][] = [
         'file' => 'weather-widget',
-        'place' => 'left_col',
+        'place' => 'right_col',
     ];
 
     /* Controls */
@@ -80,7 +80,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     $page['load_tpl'][] = [
         'file' => 'controls',
-        'place' => 'left_col',
+        'place' => 'right_col',
     ];
 
     /*  Host Detail View */
@@ -116,7 +116,7 @@ function page_index($cfg, $db, $lng, $user) {
         $page['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
         $page['load_tpl'][] = [
             'file' => 'hosts',
-            'place' => 'right_col',
+            'place' => 'left_col',
         ];
     }
 
@@ -125,7 +125,7 @@ function page_index($cfg, $db, $lng, $user) {
         $page['other_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
         $page['load_tpl'][] = [
             'file' => 'other-hosts',
-            'place' => 'right_col',
+            'place' => 'left_col',
         ];
     }
 

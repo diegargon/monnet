@@ -30,18 +30,18 @@
                     }
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
-                            $('#right_container').prepend(jsonData.other_hosts);
+                            $('#left_container').prepend(jsonData.other_hosts);
                         } else {
                             $('#other-hosts').remove();
-                            $('#right_container').prepend(jsonData.other_hosts);
+                            $('#left_container').prepend(jsonData.other_hosts);
                         }
                     }
                     if ("highlight_hosts" in jsonData) {
                         if ($('#highlight-hosts').length === 0) {
-                            $('#right_container').prepend(jsonData.highlight_hosts);
+                            $('#left_container').prepend(jsonData.highlight_hosts);
                         } else {
                             $('#highlight-hosts').remove();
-                            $('#right_container').prepend(jsonData.highlight_hosts);
+                            $('#left_container').prepend(jsonData.highlight_hosts);
                         }
                     }
                     if ("host_details" in jsonData) {

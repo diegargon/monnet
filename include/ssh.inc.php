@@ -68,6 +68,11 @@ function run_commands(array $cfg, Database $db) {
         $result = [];
         if (!empty($host) && !empty($host[0]['ip'])) {
             $host = $host[0];
+            $host_status = ping($host['ip']);
+            if (empty($host_status['isAlive'])) {
+                //host down skip
+                continue;
+            }
             $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
             if (!$ssh) {
                 continue;
