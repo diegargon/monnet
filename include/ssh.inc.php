@@ -71,6 +71,7 @@ function run_commands(array $cfg, Database $db) {
             $host_status = ping($host['ip']);
             if (empty($host_status['isAlive'])) {
                 //host down skip
+                $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
                 continue;
             }
             $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
