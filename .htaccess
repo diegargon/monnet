@@ -1,0 +1,8 @@
+<Files "monnet-cli.php">  
+Require all denied
+</Files>
+<Files "config/config.inc.php">  
+Require all denied
+</Files>
+#Require ip 192.168.1.0/24
+#Require ip 192.168.2.0/24
