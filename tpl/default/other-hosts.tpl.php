@@ -11,6 +11,7 @@
 ?>
 
 <div id="other-hosts" class="hosts">
+    <div class="hosts-head">Others</div>
     <?php foreach ($tdata['other_hosts'] as $host) { ?>
         <div id="hosts-container" class="hosts-container">
             <a onclick="refresh('host-details', <?= $host['id'] ?>)" href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['details'] ?>">

@@ -382,12 +382,12 @@ input:checked + .slider:before {
 .hosts {
     border: 1px solid rgba(0,0,0, 0.7);
     border-radius: 5px;
-    margin: 3px 20px 0 20px;
+    margin: 15px 15px 0 15px;
     display: grid;
     grid-gap: 14px;
     grid-template-columns: repeat(3, 145px);       
     /* float:left;   */
-    background-color:rgba(0, 0, 0, 0.4);
+    background-color:rgba(0, 0, 0, 0.6);
     padding: 5px;
     padding-right: 10px;
     overflow: hidden;
@@ -438,6 +438,15 @@ input:checked + .slider:before {
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
+}
+.hosts-head {
+    display: inline-block;
+    padding: 1px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;   
 }
 .top_container {
     text-align: center;
