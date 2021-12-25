@@ -647,9 +647,9 @@ input:checked + .slider:before {
     font-weight:bold;
     font-size: 15px;        
 }
-@media only screen and (max-width: 1070px) {
+@media only screen and (max-width: 1096px) {
     .hosts {
-        grid-template-columns: repeat(5, 140px);     
+        grid-template-columns: repeat(6, 140px);     
         margin-bottom: 10px;
     }    
     .header {
@@ -660,28 +660,28 @@ input:checked + .slider:before {
     }    
 
 }
-@media only screen and (max-width: 815px) {
+@media only screen and (max-width: 950px) {
+    .hosts {
+        grid-template-columns: repeat(5, 140px);          
+    }    
+
+}
+@media only screen and (max-width: 800px) {
+    .bookmarks_container{        
+        margin: auto;
+    }
     .hosts {
         grid-template-columns: repeat(4, 140px);          
     }    
 
 }
-@media only screen and (max-width: 700px) {
-    .bookmarks_container{        
-        margin: auto;
-    }
+@media only screen and (max-width: 635px) {
     .hosts {
         grid-template-columns: repeat(3, 140px);          
     }    
-
 }
-@media only screen and (max-width: 500px) {
-    .hosts {
-        grid-template-columns: repeat(2, 140px);          
-    }    
 
-}
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 645px) {
     .bookmarks {
         grid-template-columns: repeat(5, 75px);    
         grid-template-rows: 75px;
@@ -705,19 +705,3 @@ input:checked + .slider:before {
 
     }
 }
-
-@media only screen and (max-width: 500px) {
-    .bookmarks {
-        grid-template-columns: repeat(4, 75px);    
-        grid-template-rows: 75px;
-    }    
-
-
-}
-
-@media only screen and (max-width: 380px) {
-    .bookmarks {
-        grid-template-columns: repeat(3, 75px);    
-    }    
-}
-
