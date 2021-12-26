@@ -21,7 +21,7 @@ $cfg_db['dbprefix'] = '';
 $cfg_db['dbcharset'] = 'utf8';
 
 /* Config */
-
+$cfg['app_name'] = 'monnet';
 $cfg['web_title'] = 'Monnet';
 $cfg['path'] = '/var/www/html';
 $cfg['rel_path'] = '/';
@@ -31,6 +31,9 @@ $cfg['theme'] = 'default';
 $cfg['css'] = 'default';
 $cfg['charset'] = 'utf-8';
 $cfg['net'] = '192.168.1.0/24';
+$cfg['log_to_syslog'] = 0;
+$cfg['log_to_file'] = 1;
+$cfg['syslog_level'] = 'LOG_WARN';
 
 $cfg['cert'] = '/home/monnet/.ssh/id_rsa';
 

@@ -16,8 +16,15 @@ use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
 function ssh_connect_host(array $cfg, array &$result, array $host) {
+    global $log;
+
     $ssh = new SSH2($host['ip']);
-    $key = PublicKeyLoader::load(file_get_contents($cfg['cert']));
+    if (file_exists($cfg['cert'])) {
+        $key = PublicKeyLoader::load(file_get_contents($cfg['cert']));
+    } else {
+        $log->err('Missing certs');
+        return false;
+    }
 
     //TODO Fingerprint check
     /*

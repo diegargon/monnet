@@ -23,6 +23,10 @@ if ($cfg_db['dbtype'] == 'mysql') {
 $db = new Database($cfg_db);
 $db->connect();
 
+require_once('class/Log.class.php');
+
+$log = new Log($cfg, $db);
+
 require_once('include/util.inc.php');
 require_once('include/net.inc.php');
 /* Get default lang overwrite after with user settings */

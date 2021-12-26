@@ -11,7 +11,7 @@ define('IN_WEB', true);
 define('IN_CLI', true);
 
 /* CONFIG */
-$ROOT_PATH = dirname(__FILE__);
+$ROOT_PATH = '/var/www/monnet';
 $APP_NAME = 'Monnet';
 define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
 $VERSION = 0.1;
@@ -28,10 +28,15 @@ if (!file_exists($arp_cmd)) {
 chdir($ROOT_PATH);
 
 require_once('include/common.inc.php');
+
+isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
+
+$log->debug("Starting {$cfg['app_name']} CLI");
+
 require_once('include/climode.inc.php');
 
 if (is_locked()) {
-    echo "Monnet CLI Locked\n";
+    $log->debug("CLI Locked skipping");
     die();
 }
 
@@ -41,5 +46,7 @@ check_known_hosts($db);
 run_commands($cfg, $db);
 
 cron($cfg, $db);
+
+$log->debug("Finishing {$cfg['app_name']} CLI");
 
 exit(0);
