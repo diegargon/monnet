@@ -30,26 +30,32 @@
                     }
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
-                            $('#left_container').prepend(jsonData.other_hosts);
+                            position = jsonData.other_hosts.cfg.place;
+                            $(position).prepend(jsonData.other_hosts.data);
                         } else {
                             $('#other-hosts').remove();
-                            $('#left_container').prepend(jsonData.other_hosts);
+                            position = jsonData.other_hosts.cfg.place;
+                            $(position).prepend(jsonData.other_hosts.data);
                         }
                     }
                     if ("highlight_hosts" in jsonData) {
                         if ($('#highlight-hosts').length === 0) {
-                            $('#left_container').prepend(jsonData.highlight_hosts);
+                            position = jsonData.highlight_hosts.cfg.place;
+                            $(position).prepend(jsonData.highlight_hosts.data);
                         } else {
+                            position = jsonData.highlight_hosts.cfg.place;
                             $('#highlight-hosts').remove();
-                            $('#left_container').prepend(jsonData.highlight_hosts);
+                            $(position).prepend(jsonData.highlight_hosts.data);
                         }
                     }
                     if ("host_details" in jsonData) {
                         if ($('#host-details').length === 0) {
-                            $('#center_container').prepend(jsonData.host_details);
+                            position = jsonData.host_details.cfg.place;
+                            $(position).prepend(jsonData.host_details.data);
                         } else {
                             $('#host-details').remove();
-                            $('#center_container').prepend(jsonData.host_details);
+                            position = jsonData.host_details.cfg.place;
+                            $(position).prepend(jsonData.host_details.data);
                         }
                     }
                 });

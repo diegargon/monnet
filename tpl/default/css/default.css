@@ -36,21 +36,39 @@ body {
     background-size: cover;            
 }
 
-.header {
-    padding-top: 15px;
-}
-
 a {
     text-decoration: none;
 }
 
 p {}
+
+.header {
+    display:flex;
+    border:0px solid brown;
+    width:100%;
+}
+
+#head_left {
+    border:0px solid #0E9700;
+    width:24%;
+}
+
+#head_center {
+    border:0px solid #5ac4e3;
+    width: 50%;
+}
+
+#head_right {
+    border:0px solid #0E9700;
+    width:24%;
+}
+
 footer {
     height: 5px;
 }
 
 .main {
-    margin-top: 10vh;
+    margin-top: 4vh;
     padding-bottom: 50px;
 }
 .center_aligner_container {
@@ -91,7 +109,8 @@ footer {
 }
 
 .center_container {
-    border:0px solid yellow;     
+    border:0px solid yellow;
+    margin-top:15px;
     float:left;
     overflow:hidden;
 }
@@ -101,12 +120,14 @@ footer {
 }
 .left_container {
     border: 0px solid red;     
-    float:left;  
+    margin-top:15px;
+    float:left;      
     overflow:hidden;
 
 }
 .right_container {
     border:0px solid black;     
+    margin-top:15px;
     float:left;      
     overflow:hidden;
 
@@ -131,14 +152,14 @@ footer {
     color: #ffffff;    
     background-color: rgba(0, 0, 0, 0.4);
     text-align: center;
-    width: 30%;
+    width: 50%;
     max-width: 500px;
 }
 
 .bookmarks{
-    margin: 15px 20px 0 20px;
+    margin: 0px 5px 0 5px;
     display: grid;
-    grid-gap: 14px;
+    grid-gap: 8px;
     border: 2px;
     grid-template-columns: repeat(6, 80px);    
     grid-template-rows: 80px;
@@ -382,9 +403,9 @@ input:checked + .slider:before {
 .hosts {
     border: 1px solid rgba(0,0,0, 0.7);
     border-radius: 5px;
-    margin: 15px 15px 0 15px;
+    margin: 0px 5px 0 5px;
     display: grid;
-    grid-gap: 14px;
+    grid-gap: 8px;
     grid-template-columns: repeat(3, 145px);       
     /* float:left;   */
     background-color:rgba(0, 0, 0, 0.6);
@@ -564,7 +585,6 @@ input:checked + .slider:before {
     color: rgb(255,255,255);
     align-items: center;
     padding: 1px;
-
 }
 .host-item {
     padding-right: 5px;
@@ -588,9 +608,10 @@ input:checked + .slider:before {
     border:1px solid black;
     background-color:rgba(0, 0, 0, 0.4);
     border-radius: 5px;
-    margin: 3px 20px 0 20px;    
+    margin: 3px 5px 5px 5px;    
     padding: 10px;
     overflow: hidden;
+    max-width:450px;
 }
 
 .host_port_container {
@@ -647,6 +668,7 @@ input:checked + .slider:before {
     font-weight:bold;
     font-size: 15px;        
 }
+
 @media only screen and (max-width: 1096px) {
     .hosts {
         grid-template-columns: repeat(6, 140px);     
@@ -664,7 +686,9 @@ input:checked + .slider:before {
     .hosts {
         grid-template-columns: repeat(5, 140px);          
     }    
-
+    .search_container h1 {
+        font-size: 3rem;
+    }
 }
 @media only screen and (max-width: 800px) {
     .bookmarks_container{        
@@ -678,6 +702,9 @@ input:checked + .slider:before {
 @media only screen and (max-width: 635px) {
     .hosts {
         grid-template-columns: repeat(3, 140px);          
+    }    
+    .search_container h1 {
+        font-size: 2rem;
     }    
 }
 

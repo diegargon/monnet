@@ -47,17 +47,20 @@ if ($command === 'host-details' && is_numeric($command_value)) {
 }
 if ($user->getPref('host_details')) {
     $tdata['host_details'] = get_host_detail_view_data($cfg, $db, $user, $lng, $user->getPref('host_details'));
-    $data['host_details'] = $frontend->getTpl('host-details', $tdata);
+    $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
+    $data['host_details']['cfg']['place'] = "#left_container";
 }
 
 /* Set show/hide highlight hosts */
 if ($user->getPref('show_hightlight_hosts_status')) {
     $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
-    $data['highlight_hosts'] = $frontend->getTpl('hosts', $tdata);
+    $data['highlight_hosts']['data'] = $frontend->getTpl('hosts', $tdata);
+    $data['highlight_hosts']['cfg']['place'] = '#left_container';
 }
 if ($user->getPref('show_other_hosts_status')) {
     $tdata['other_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
-    $data['other_hosts'] = $frontend->getTpl('other-hosts', $tdata);
+    $data['other_hosts']['data'] = $frontend->getTpl('other-hosts', $tdata);
+    $data['other_hosts']['cfg']['place'] = '#left_container';
 }
 
 

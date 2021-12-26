@@ -44,6 +44,11 @@ function page_index($cfg, $db, $lng, $user) {
             'name' => $conf['name'],
         ];
     }
+    $page['load_tpl'][] = [
+        'file' => 'search-box',
+        'place' => 'head_center',
+    ];
+
     //TODO: modules_load by page request
 
     /* Time Widget */
@@ -56,7 +61,7 @@ function page_index($cfg, $db, $lng, $user) {
     $page['weather_widget'] = weather_widget($cfg, $lng);
     $page['load_tpl'][] = [
         'file' => 'weather-widget',
-        'place' => 'right_col',
+        'place' => 'head_left',
     ];
 
     /* Controls */
@@ -80,7 +85,7 @@ function page_index($cfg, $db, $lng, $user) {
 
     $page['load_tpl'][] = [
         'file' => 'controls',
-        'place' => 'right_col',
+        'place' => 'head_right',
     ];
 
     /*  Host Detail View */
