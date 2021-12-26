@@ -52,14 +52,18 @@ if ($user->getPref('host_details')) {
 }
 
 /* Set show/hide highlight hosts */
-if ($user->getPref('show_hightlight_hosts_status')) {
+if ($user->getPref('show_highlight_hosts_status')) {
     $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
-    $data['highlight_hosts']['data'] = $frontend->getTpl('hosts', $tdata);
+    $tdata['container-id'] = 'highlight-hosts';
+    $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
+    $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     $data['highlight_hosts']['cfg']['place'] = '#left_container';
 }
 if ($user->getPref('show_other_hosts_status')) {
-    $tdata['other_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
-    $data['other_hosts']['data'] = $frontend->getTpl('other-hosts', $tdata);
+    $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
+    $tdata['container-id'] = 'other-hosts';
+    $tdata['head-title'] = $lng['L_OTHERS'];
+    $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     $data['other_hosts']['cfg']['place'] = '#left_container';
 }
 

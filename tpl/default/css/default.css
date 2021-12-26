@@ -112,7 +112,7 @@ footer {
 .options_container {    
     display: grid;
     /* grid-gap: 14px; */
-    grid-template-columns: repeat(2, 90px);
+    grid-template-columns: repeat(2, 120px);
     border:0px solid red;
     padding: 5px;
     margin:auto;        
@@ -691,6 +691,11 @@ input:checked + .slider:before {
     color: red;
     font-weight:bold;
     font-size: 15px;        
+}
+
+.ctrl_fieldset {
+    border: 1px solid white;
+    border-radius: 5px;
 }
 
 @media only screen and (max-width: 1096px) {

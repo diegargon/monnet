@@ -67,19 +67,12 @@ function page_index($cfg, $db, $lng, $user) {
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
     $show_applinks_status = $user->getPref('show_applinks_status');
     $show_this_system = $user->getPref('show_this_system_status');
-    $show_hightlight_hosts_status = $user->getPref('show_hightlight_hosts_status');
+    $show_highlight_hosts_status = $user->getPref('show_highlight_hosts_status');
     $show_other_hosts_status = $user->getPref('show_other_hosts_status');
-
-    $page['controls']['bookmarks_label'] = $lng['L_BOOKMARKS'];
     $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 : $page['controls']['show_bookmarks_status'] = 0;
-    $page['controls']['applinks_label'] = $lng['L_APPLINKS'];
     $show_applinks_status ? $page['controls']['show_applinks_status'] = 1 : $page['controls']['show_applinks_status'] = 0;
-    $page['controls']['highlight_hosts_label'] = $lng['L_HIGHLIGHT_HOSTS'];
-    $show_hightlight_hosts_status ? $page['controls']['show_hightlight_hosts_status'] = 1 : $page['controls']['show_hightlight_hosts_status'] = 0;
-    $page['controls']['rest_hosts_label'] = $lng['L_REST_HOSTS'];
+    $show_highlight_hosts_status ? $page['controls']['show_highlight_hosts_status'] = 1 : $page['controls']['show_highlight_hosts_status'] = 0;
     $show_other_hosts_status ? $page['controls']['show_other_hosts_status'] = 1 : $page['controls']['show_other_hosts_status'] = 0;
-
-    $page['controls']['this_system_label'] = $lng['L_THIS_SYSTEM'];
     $show_this_system ? $page['controls']['show_this_system_status'] = 1 : $page['controls']['show_this_system_status'] = 0;
 
     $page['load_tpl'][] = [
@@ -114,7 +107,7 @@ function page_index_post($user) {
     $show_bookmarks = Filters::postInt('show_bookmarks');
     $show_this_system = Filters::postInt('show_this_system');
     $show_applinks = Filters::postInt('show_applinks');
-    $show_hightlight_hosts = Filters::postInt('show_hightlight_hosts');
+    $show_highlight_hosts = Filters::postInt('show_highlight_hosts');
     $show_other_hosts = Filters::postInt('show_rest_hosts');
     $close_host_details = Filters::postInt('close_host_details_x'); //img click _x _y
 
@@ -133,8 +126,8 @@ function page_index_post($user) {
     if ($show_applinks !== false) {
         $user->setPref('show_applinks_status', $show_applinks);
     }
-    if ($show_hightlight_hosts !== false) {
-        $user->setPref('show_hightlight_hosts_status', $show_hightlight_hosts);
+    if ($show_highlight_hosts !== false) {
+        $user->setPref('show_highlight_hosts_status', $show_highlight_hosts);
     }
     if ($show_other_hosts !== false) {
         $user->setPref('show_other_hosts_status', $show_other_hosts);

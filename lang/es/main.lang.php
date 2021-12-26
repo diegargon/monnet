@@ -20,9 +20,11 @@ $lng = [
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
     //H
-    'L_HIGHLIGHT_HOSTS' => 'Host Track',
-    'L_HUMIDITY' => 'Humedad',
+    'L_HIGHLIGHT_HOSTS' => 'Destacados',
     'L_HOSTNAME' => 'Hostname',
+    'L_HOSTS' => 'Hosts',
+    'L_HOST' => 'Host',
+    'L_HUMIDITY' => 'Humedad',
     //I
     'L_IP' => 'Ip',
     //L
@@ -39,12 +41,12 @@ $lng = [
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
     'L_OS' => 'Os',
+    'L_OTHERS' => 'Otros',
     //P
     'L_PASSWORD' => 'Contraseña',
     'L_PROFILE' => 'Perfil',
     'L_PORT_DOWN' => 'Puerto inacalzable',
     //R
-    'L_REST_HOSTS' => 'Hosts',
     'L_REMOVE' => 'Eliminar',
     //S
     'L_S_ONLINE' => 'On',
