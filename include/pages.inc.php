@@ -24,7 +24,6 @@ function page_defaults($cfg, User $user) {
 }
 
 function page_index($cfg, $db, $lng, $user) {
-
     $page = [];
 
     $page['page'] = 'index';
@@ -88,15 +87,6 @@ function page_index($cfg, $db, $lng, $user) {
         'place' => 'head_right',
     ];
 
-    /*  Host Detail View */
-    if ($user->getPref('host_detail')) {
-        $page['host_detail'] = get_host_detail_view_data($cfg, $db, $user, $lng, $user->getPref('host_details'));
-        $page['load_tpl'][] = [
-            'file' => 'host-details',
-            'place' => 'center_col',
-        ];
-    }
-
     /* AppLinks Bookmarks */
     if ($user->getPref('show_applinks_status')) {
         $applinks_bookmarks = get_bookmarks($db, $user, 'applinks');
@@ -113,24 +103,6 @@ function page_index($cfg, $db, $lng, $user) {
         $page['load_tpl'][] = [
             'file' => 'bookmarks',
             'place' => 'center_col',
-        ];
-    }
-
-    /* Highlight Hosts */
-    if ($user->getPref('show_hightlight_hosts_status')) {
-        $page['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
-        $page['load_tpl'][] = [
-            'file' => 'hosts',
-            'place' => 'left_col',
-        ];
-    }
-
-    /* Other Hosts */
-    if ($user->getPref('show_other_hosts_status')) {
-        $page['other_hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
-        $page['load_tpl'][] = [
-            'file' => 'other-hosts',
-            'place' => 'left_col',
         ];
     }
 
@@ -170,8 +142,6 @@ function page_index_post($user) {
 }
 
 function page_login($cfg, $lng, $user) {
-
-
     $page = [];
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -192,7 +162,6 @@ function page_login($cfg, $lng, $user) {
             }
         }
     }
-
 
     $page['page'] = 'login';
     $page['tpl'] = 'login';
