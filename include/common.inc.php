@@ -25,7 +25,7 @@ $db->connect();
 
 require_once('include/util.inc.php');
 require_once('include/net.inc.php');
-
 /* Get default lang overwrite after with user settings */
 require_once('lang/es/main.lang.php');
+require_once('class/Hosts.class.php');
 require_once('include/hosts.inc.php');
