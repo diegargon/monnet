@@ -8,11 +8,15 @@
  */
 ?>
 <div class="header">
-    <div id="head_left"><?= !empty($tdata['head_left']) ? $tdata['head_left'] : null; ?></div>
-    <div id="head_center">
-        <?= !empty($tdata['head_center']) ? $tdata['head_center'] : null; ?>
+    <div class="head_align_center">
+        <div id="head_left"><div class="head_left_content"><?= !empty($tdata['head_left']) ? $tdata['head_left'] : null; ?></div></div>
+        <div id="head_center">
+            <div class="head_center_content">
+                <?= !empty($tdata['head_center']) ? $tdata['head_center'] : null; ?>
+            </div>
+        </div>
+        <div id="head_right"><div class="head_right_content"><?= !empty($tdata['head_right']) ? $tdata['head_right'] : null; ?></div></div>
     </div>
-    <div id="head_right"><?= !empty($tdata['head_right']) ? $tdata['head_right'] : null; ?></div>
 </div>
 <!-- -->
 <div id="top_container" class="top_container"></div>

@@ -161,9 +161,9 @@ function get_mac(string $ip) {
         return false;
     }
     $arp = "arp -a $ip | awk '{print $4}'";
-    $result = shell_exec($arp);
+    $result = trim(shell_exec($arp));
 
-    if (filter_var(trim($result), FILTER_VALIDATE_MAC) === false) {
+    if (filter_var($result, FILTER_VALIDATE_MAC) === false) {
         return false;
     } else {
         return $result;

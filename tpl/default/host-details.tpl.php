@@ -22,12 +22,16 @@
             <?php if (!empty($tdata['host_details']['hostname'])) { ?>
                 <div class="host-item"><?= $tdata['host_details']['hostname'] ?> </div>
             <?php } ?>
+        </div> <!-- host-details-main -->
+        <div class="host-details-main">
             <div class="host-item"><?= $tdata['host_details']['ip'] ?></div>
             <?php if (!empty($tdata['host_details']['mac'])) { ?>
                 <div class="host-item"><?= $tdata['host_details']['mac'] ?> </div>
             <?php } ?>
-        </div> <!-- host-details-main -->
-
+            <?php if (!empty($tdata['host_details']['mac_vendor']) && $tdata['host_details']['mac_vendor'] != '-') { ?>
+                <div class="host-item"><?= $tdata['host_details']['mac_vendor'] ?> </div>
+            <?php } ?>
+        </div>
         <?php
         if (!empty($tdata['host_details']['host_ports'])) {
             ?>

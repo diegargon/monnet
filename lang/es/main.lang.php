@@ -56,6 +56,8 @@ $lng = [
     //U
     'L_USERNAME' => 'Usuario',
     'L_UPTIME' => 'Uptime',
+    //V
+    'L_VENDOR' => 'Vendor',
     //W
     'L_WINDSPEED' => 'Viento',
 ];

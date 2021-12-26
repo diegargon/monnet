@@ -118,8 +118,26 @@ function fill_hostnames(Database $db, int $only_missing = 0) {
         if (empty($host['hostname']) || $only_missing === 0) {
             $hostname = get_hostname($host['ip']);
             if ($hostname !== false && $hostname != $host['ip']) {
-                $db->update('hosts', ['hostname' => $hostname], ['ip' => ['value' => $host['ip']]], 'LIMIT 1');
+                $db->update('hosts', ['hostname' => $hostname], ['id' => ['value' => $host['id']]], 'LIMIT 1');
             }
+        }
+    }
+}
+
+function fill_mac_vendors(Database $db, int $only_missing = 0) {
+    $hosts = get_hosts($db);
+
+    foreach ($hosts as $host) {
+        if (!empty($host['mac']) && (empty($host['mac_vendor']) || $only_missing === 0)) {
+            $vendor = get_mac_vendor(trim($host['mac']));
+
+            if (empty($vendor['company'])) {
+                $vendor['company'] = '-';
+            } else {
+                $vendor['company'] = $db->escape($vendor['company']);
+            }
+
+            $db->update('hosts', ['mac_vendor' => $vendor['company']], ['id' => ['value' => $host['id']]], 'LIMIT 1');
         }
     }
 }
