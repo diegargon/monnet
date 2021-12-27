@@ -192,15 +192,15 @@ function get_bookmarks(Database $db, User $user, string $category) {
     return $bookmarks;
 }
 
-function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, int $highlight = 0) {
+function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, int $highlight = 0) {
 
-    //$results = $db->select('hosts', '*', ['highlight' => $highlight], 'ORDER BY weight');
-    //$hosts_results = $db->fetchAll($results);
-    $hosts_results = get_hosts($db, $highlight);
+    $hosts_results = $hosts->getHighLight($highlight);
 
+    if (!valid_array($hosts_results)) {
+        return false;
+    }
     $theme = $user->getTheme();
 
-    //var_dump($hosts_results);
     foreach ($hosts_results as $khost => $vhost) {
         $hosts_results[$khost]['theme'] = $theme;
         $hosts_results[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
@@ -239,7 +239,6 @@ function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, i
         }
 
         //Warn icon
-
         if ($vhost['warn_port']) {
             $hosts_results[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
             $hosts_results[$khost]['details'] .= $lng['L_PORT_DOWN'];
@@ -249,19 +248,12 @@ function get_hosts_view_data(array $cfg, Database $db, User $user, array $lng, i
     return $hosts_results;
 }
 
-function get_host_detail_view_data(array $cfg, Database $db, User $user, array $lng, $host_id) {
-    $results = $db->select('hosts', '*', ['id' => $host_id], 'LIMIT 1');
-    $host = $db->fetchAll($results);
+function get_host_detail_view_data(array $cfg, Hosts $hosts, User $user, array $lng, $hid) {
 
-    $query_ports = 'SELECT * FROM ports WHERE hid=' . $host_id . '';
-
-    $results = $db->query($query_ports);
-    $hosts_ports = $db->fetchAll($results);
-
+    $host = $hosts->getHostById($hid);
     if (!$host) {
         return false;
     }
-    $host = $host[0];
 
     $theme = $user->getTheme();
 
@@ -293,13 +285,7 @@ function get_host_detail_view_data(array $cfg, Database $db, User $user, array $
     if ($host['online'] && !empty($host['latency'])) {
         $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
     }
-    //Ports Work
 
-    if ($hosts_ports) {
-        $host['host_ports'] = $hosts_ports;
-    }
-
-    //convert json access_details
     if (!empty($host['access_results'])) {
         $host_details = json_decode($host['access_results'], true);
 

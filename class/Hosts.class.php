@@ -36,17 +36,6 @@ Class Hosts {
         $this->getHostsDb();
     }
 
-    public function getHighLight() {
-        $hosts = [];
-
-        foreach ($this->hosts as $host) {
-            if (!empty($host['highlight']) && empty($host['disable'])) {
-                $hosts[] = $host;
-            }
-        }
-        return $hosts;
-    }
-
     function getEnabled() {
         $hosts = [];
 
@@ -55,11 +44,68 @@ Class Hosts {
                 $hosts[] = $host;
             }
         }
+
+        return $hosts;
+    }
+
+    function getHighlight(int $highligth = 1) {
+        $hosts = $this->getEnabled();
+        foreach ($hosts as $khost => $vhost) {
+            if ($vhost['highlight'] != $highligth) {
+                unset($hosts[$khost]);
+            }
+        }
+
         return $hosts;
     }
 
     function getAll() {
         return $this->hosts;
+    }
+
+    //function setMac($id, $mac) {
+    //    $this->hosts[$id]['mac'] = $mac;
+    //}
+
+    function update(int $id, array $values) {
+        $fvalues = []; //filtered
+
+        foreach ($values as $kvalue => $vvalue) {
+            $kvalue = $this->db->escape($kvalue);
+            $vvalue = $this->db->escape($vvalue);
+            if (!empty($kvalue) && !empty($vvalue)) {
+                $this->hosts[$id][$kvalue] = $vvalue;
+                $fvalues[$kvalue] = $vvalue;
+            }
+        }
+
+
+        if (valid_array($fvalues)) {
+            $this->db->update('hosts', $fvalues, ['id' => ['value' => $id]], 'LIMIT 1');
+        }
+    }
+
+    function insert($host) {
+        $this->db->insert('hosts', $host);
+    }
+
+    function remove($hid) {
+        $this->db->delete('hosts', ['id' => $hid], 'LIMIT 1');
+        unset($this->hosts[$hid]);
+    }
+
+    function getHostById($id) {
+        return !empty($this->hosts[$id]) ? $this->hosts[$id] : false;
+    }
+
+    function getHostByIp($ip) {
+        foreach ($this->hosts as $host) {
+            if ($host['ip'] == trim($ip)) {
+                return $host;
+            }
+        }
+
+        return false;
     }
 
     private function getHostsDb() {
@@ -70,10 +116,13 @@ Class Hosts {
         }
         $_hosts = $this->db->fetchAll($results);
 
-        foreach ($_hosts as $_host) {
-            $hosts = $_host;
-            $hosts['disable'] = empty($_host['disable']) ? 0 : 1;
-            $hosts['ports'] = json_decode($_hosts['ports'], true);
+        foreach ($_hosts as $host) {
+            $id = $host['id'];
+            $this->hosts[$id] = $host;
+            $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
+            if (!empty($this->hosts[$id]['ports'])) {
+                $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
+            }
         }
     }
 

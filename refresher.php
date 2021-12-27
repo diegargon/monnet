@@ -35,7 +35,7 @@ if (!empty($command) && !empty($command_value)) {
 
 /* Remove host */
 if ($command === 'remove_host' && is_numeric($command_value)) {
-    $db->delete('hosts', ['id' => $command_value], 'LIMIT 1');
+    $hosts->remove($command_value);
     //no host_details
     $user->setPref('host_details', 0);
     $data['host_details'] = '';
@@ -46,27 +46,35 @@ if ($command === 'host-details' && is_numeric($command_value)) {
     $user->setPref('host_details', $command_value);
 }
 if ($user->getPref('host_details')) {
-    $tdata['host_details'] = get_host_detail_view_data($cfg, $db, $user, $lng, $user->getPref('host_details'));
-    $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
-    $data['host_details']['cfg']['place'] = "#left_container";
+    $host_details = get_host_detail_view_data($cfg, $hosts, $user, $lng, $user->getPref('host_details'));
+    if ($host_details) {
+        $tdata['host_details'] = $host_details;
+        $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
+        $data['host_details']['cfg']['place'] = "#left_container";
+    }
 }
 
 /* Set show/hide highlight hosts */
 if ($user->getPref('show_highlight_hosts_status')) {
-    $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 1);
-    $tdata['container-id'] = 'highlight-hosts';
-    $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
-    $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
-    $data['highlight_hosts']['cfg']['place'] = '#left_container';
+    $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);
+    if ($hosts_view) {
+        $tdata['hosts'] = $hosts_view;
+        $tdata['container-id'] = 'highlight-hosts';
+        $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
+        $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
+        $data['highlight_hosts']['cfg']['place'] = '#left_container';
+    }
 }
 if ($user->getPref('show_other_hosts_status')) {
-    $tdata['hosts'] = get_hosts_view_data($cfg, $db, $user, $lng, 0);
-    $tdata['container-id'] = 'other-hosts';
-    $tdata['head-title'] = $lng['L_OTHERS'];
-    $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
-    $data['other_hosts']['cfg']['place'] = '#left_container';
+    $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 0);
+    if ($hosts_view) {
+        $tdata['hosts'] = $hosts_view;
+        $tdata['container-id'] = 'other-hosts';
+        $tdata['head-title'] = $lng['L_OTHERS'];
+        $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
+        $data['other_hosts']['cfg']['place'] = '#left_container';
+    }
 }
-
 
 /* Power ON/OFF  & Reboot */
 if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {

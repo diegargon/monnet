@@ -12,9 +12,10 @@
 /* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
 
 function ping_host_ports(array $host) {
+    global $log;
+
     if (empty($host['ports']) || !valid_array($host['ports'])) {
-        //Log err/warning no ports
-        //var_dump($host);
+        $log->warning("No check ports for host {$host['id']}:{$host['ip']}");
         return false;
     }
     $time_now = time();
@@ -29,75 +30,38 @@ function ping_host_ports(array $host) {
         $timeout = $host['timeout'];
     }
 
-    $host['host']['warn_port'] = 0;
-    $host['online'] = 0;
-    $host['warn_port'] = 0;
     foreach ($host['ports'] as $kport => $port) {
+        $host_status['warn_port'] = 0;
+        $host_status['ports'][$kport] = $port;
         $tim_start = microtime(true);
         $ip = $host['ip'];
         $port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
-
-        $conn = @fsockopen($ip, $port['port'], $err_code, $err_msg, $timeout);
+        $log->debug("Checking host ip:port {$host['ip']}:{$port['n']}");
+        $conn = @fsockopen($ip, $port['n'], $err_code, $err_msg, $timeout);
         if (is_resource($conn)) {
-            $host['online'] = 1;
-            $host['last_seen'] = $time_now;
-            $host['ports'][$kport]['online'] = 1;
+            $host_status['online'] = 1;
+            $host_status['last_seen'] = $time_now;
+            $host_status['ports'][$kport]['online'] = 1;
             fclose($conn);
         } else {
-            $host['ports'][$kport]['online'] = 0;
-            $host['warn_port'] = 1;
-            $host['ports'][$kport]['warn_port_msg'] = $port['port'] . ' port down';
-            $host['ports'][$kport]['err_code'] = $err_code;
-            $host['ports'][$kport]['err_msg'] = $err_msg;
+            $host_status['online'] = 0;
+            $host_status['ports'][$kport]['online'] = 0;
+            $host_status['warn_port'] = 1;
+            //$host['ports'][$kport]['warn_port_msg'] = $port['port'] . ' port down';
+            //$host['ports'][$kport]['err_code'] = $err_code;
+            //$host['ports'][$kport]['err_msg'] = $err_msg;
         }
-        $host['ports'][$kport]['latency'] = microtime(true) - $tim_start;
+        $host_status['ports'][$kport]['latency'] = microtime(true) - $tim_start;
         //TODO port average?
-        $host['latency'] = microtime(true) - $tim_start;
+        $host_status['latency'] = microtime(true) - $tim_start;
     }
 
-    return $host;
+    valid_array($host_status['ports']) ? $host_status['ports'] = json_encode($host_status['ports'], true) : null;
+
+    return $host_status;
 }
 
-function ping_all_ports(array &$hosts) {
-
-    foreach ($hosts as $khost => $host) {
-        $err_code = $err_msg = '';
-        $timeout = 1;
-        $hosts[$khost]['online'] = 0;
-
-        //if local less tiemout
-        (is_local_ip($host['ip'])) ? $timeout = 0.8 : null;
-
-        //Custom timeout for host
-        if (!empty($host['timeout'])) {
-            $timeout = $host['timeout'];
-        }
-
-        if (!empty($host['ports']) && count($host['ports']) > 0) {
-            foreach ($host['ports'] as $kport => $value_port) {
-                $tim_start = microtime(true);
-                $ip = $host['ip'];
-                $value_port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
-
-                $conn = @fsockopen($ip, $value_port['port'], $err_code, $err_msg, $timeout);
-                if (is_resource($conn)) {
-                    //echo " ok \n";
-                    $hosts[$khost]['online'] = 1;
-                    $hosts[$khost]['ports'][$kport]['online'] = 1;
-                    fclose($conn);
-                } else {
-                    $hosts[$khost]['ports'][$kport]['online'] = 0;
-                    $hosts[$khost]['ports'][$kport]['err_code'] = $err_code;
-                    $hosts[$khost]['ports'][$kport]['err_msg'] = $err_msg;
-                    //echo " fail \n";
-                }
-                $hosts[$khost]['ports'][$kport]['latency'] = microtime(true) - $tim_start;
-            }
-        }
-    }
-}
-
-function ping(string $ip, array $timeout = []) {
+function ping(string $ip, $timeout = ['sec' => 1, 'usec' => 0]) {
 
     $tim_start = microtime(true);
     $status['isAlive'] = 0;
@@ -139,7 +103,7 @@ function ping(string $ip, array $timeout = []) {
 
 //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
 
-function get_iplist(string $net) {
+function build_iplist(string $net) {
     $parts = explode('/', $net);
     $exponent = 32 - $parts[1];
     $count = pow(2, $exponent);

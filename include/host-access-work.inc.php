@@ -17,7 +17,7 @@ function h_get_hostname($ssh, array &$result) {
         $hostname = str_replace("\r\n", '', $result['result']);
         $result['hostname'] = trim($hostname);
     }
-    $result['result'] = '';
+    unset($result['result']);
 }
 
 function h_get_ncpus($ssh, array &$result) {
@@ -34,7 +34,7 @@ function h_get_ncpus($ssh, array &$result) {
         $ncpu = trim($ncpu);
     }
     $result['ncpu'] = $ncpu;
-    $result['result'] = '';
+    unset($result['result']);
 }
 
 function h_get_sys_mem($ssh, array &$result) {
@@ -64,7 +64,7 @@ function h_get_sys_mem($ssh, array &$result) {
         }
     }
 
-    $result['result'] = '';
+    unset($result['result']);
 }
 
 function h_get_sys_space($ssh, array &$result) {
@@ -113,7 +113,7 @@ function h_get_sys_space($ssh, array &$result) {
         }
     }
 
-    $result['result'] = '';
+    unset($result['result']);
 }
 
 function h_get_uptime($ssh, array &$result) {
@@ -129,7 +129,7 @@ function h_get_uptime($ssh, array &$result) {
             $result['uptime']['hour'] = trim($split[1]);
         }
     }
-    $result['result'] = '';
+    unset($result['result']);
 }
 
 function h_get_load_average($ssh, array &$result) {
@@ -146,10 +146,10 @@ function h_get_load_average($ssh, array &$result) {
             $result['loadavg'][15] = trim($split[2]);
         }
     }
-    $result['result'] = '';
+    unset($result['result']);
 }
 
-function h_get_tail_syslog($ssh, $db, array &$result) {
+function h_get_tail_syslog($ssh, array &$result) {
     ssh_exec($ssh, $result, 'tail -50 /var/log/syslog');
 
     if (!empty($result['result'])) {
@@ -158,12 +158,12 @@ function h_get_tail_syslog($ssh, $db, array &$result) {
         $logs = explode("\r\n", $result['result']);
         $logs = str_replace("\r", '', $logs);
         $logs = str_replace("'", '', $logs);
-        foreach ($logs as $k_log => $v_log) {
-            $logs[$k_log] = $db->escape($v_log);
-        }
+        //foreach ($logs as $k_log => $v_log) {
+        //    $logs[$k_log] = $db->escape($v_log);
+        //}
 
         $result['tail_syslog'] = $logs; // $db->escape($result['result']);
     }
 
-    $result['result'] = '';
+    unset($result['result']);
 }

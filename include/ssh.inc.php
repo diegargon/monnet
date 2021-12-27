@@ -61,42 +61,47 @@ function ssh_exec(SSH2 $ssh, array &$result, string $cmd) {
     $result['result'] = mb_substr($ssh_result, 0, -5);
 }
 
-function run_commands(array $cfg, Database $db) {
+function run_commands(array $cfg, Database $db, Hosts $hosts) {
+    global $log;
+
     $result = $db->select('cmd', '*');
     $cmds = $db->fetchAll($result);
 
     foreach ($cmds as $cmd) {
         $run_command = $cfg['commands'][$cmd['cmd_type']];
-        //echo "Running: $run_command\n";
         $hid = $cmd['hid'];
-        $result = $db->select('hosts', '*', ['id' => $hid]);
-        $host = $db->fetchAll($result);
+        $log->notice("Run command {$cmd['cmd_type']}:$hid");
+        $host = $hosts->getHostById($hid);
+
+        if (!valid_array($host) || empty($host['ip'])) {
+            $log->warning("Wrong command for non-existent host id ($hid)");
+            $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
+            continue;
+        }
         $ssh_conn_result = [];
         $result = [];
-        if (!empty($host) && !empty($host[0]['ip'])) {
-            $host = $host[0];
-            $host_status = ping($host['ip']);
-            if (empty($host_status['isAlive'])) {
-                //host down skip
-                $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
-                continue;
-            }
-            $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
-            if (!$ssh) {
-                continue;
-            }
-            try {
-                ssh_exec($ssh, $result, $run_command);
-            } catch (Exception $e) {
-                //avoid error on shutdown and reboot catch it for ignore
-                if ($cmd['cmd_type'] == 1 || $cmd['cmd_type'] == 2) {
-                    //echo $e;
-                } else {
-                    echo $e;
-                }
-            }
+
+        $host_status = ping($host['ip']);
+        if (empty($host_status['isAlive'])) {
+            //host down skip
             $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
+            continue;
         }
+        $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
+        if (!$ssh) {
+            continue;
+        }
+        try {
+            ssh_exec($ssh, $result, $run_command);
+        } catch (Exception $e) {
+            //avoid error on shutdown and reboot catch it for ignore
+            if ($cmd['cmd_type'] == 1 || $cmd['cmd_type'] == 2) {
+                //echo $e;
+            } else {
+                echo $e;
+            }
+        }
+        $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
     }
 }
 

@@ -9,25 +9,39 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function check_known_hosts(Database $db) {
-    $hosts = get_known_hosts($db);
+function check_known_hosts(Hosts $hosts) {
+    global $log;
 
-    if (valid_array($hosts)) {
+    if (!is_object($hosts)) {
+        $log->err("hosts is not a object");
+        return false;
+    }
 
-        foreach ($hosts as $host) {
-            if ($host['check_method'] == 2) { //TCP
-                $host_new_status = ping_host_ports($host);
-                if ($host_new_status !== false) {
-                    update_host($db, $host_new_status);
-                }
-            } else { //Ping
-                ping_known_host($db, $host);
-            }
+    $db_hosts = $hosts->getHighLight();
+
+    foreach ($db_hosts as $host) {
+        $host_status = [];
+
+        if ($host['check_method'] == 2) { //TCP
+            $log->info("Pinging host ports {$host['ip']}");
+            $host_status = ping_host_ports($host);
+        } else { //Ping
+            $log->info("Pinging host {$host['ip']}");
+            $host_status = ping_known_host($host);
+        }
+        if (empty($host['mac'])) {
+            $mac = get_mac($host['ip']);
+            $mac ? $host_status['mac'] = $mac : null;
+        }
+        if (valid_array($host_status)) {
+            $log->info("Update known host {$host['id']}:{$host['ip']}");
+            defined('DUMP_VARS') ? $log->debug("Dumping host_status: " . print_r($host_status, true)) : null;
+            $hosts->update($host['id'], $host_status);
         }
     }
 }
 
-function ping_known_host(Database $db, array $host) {
+function ping_known_host(array $host) {
 
     $timeout = ['sec' => 0, 'usec' => 500000];
 
@@ -36,116 +50,115 @@ function ping_known_host(Database $db, array $host) {
     }
 
     $ip_status = ping($host['ip'], $timeout);
+
     $set = [];
 
-    $mac = get_mac($host['ip']);
-    if ($mac) {
-        $set['mac'] = $mac;
-    }
-    $clilog = $ip_status;
-    unset($clilog['latency']);
-
-    $set['clilog'] = json_encode($clilog);
     if ($ip_status['isAlive']) {
         $set['online'] = 1;
         $set['last_seen'] = time();
         $set['latency'] = $ip_status['latency'];
-        $db->update('hosts', $set, ['id' => ['value' => $host['id']]], 'LIMIT 1');
     } else if ($ip_status['isAlive'] == 0 && $host['online'] == 1) {
         $set['online'] = 0;
         $set['latency'] = $ip_status['latency'];
-        $db->update('hosts', $set, ['id' => ['value' => $host['id']]], 'LIMIT 1');
     }
+    return $set;
 }
 
-function ping_net(array $cfg, Database $db) {
-    $hosts = get_hosts($db);
-    $iplist = get_iplist($cfg['net']);
+function ping_net(array $cfg, Hosts $hosts) {
+    global $log;
+
+    $timeout = ['sec' => 0, 'usec' => 150000];
+
+    $log->info('Pinging NET ' . $cfg['net']);
+
+    $db_hosts = $hosts->getAll();
+
+    $iplist = build_iplist($cfg['net']);
+
+    /*
+     * Remove known hosts since we checked in other functions
+     * and safe trim ip
+     */
+
+    foreach ($iplist as $kip => $vip) {
+        $vip = trim($vip);
+        $iplist[$kip] = $vip;
+        foreach ($db_hosts as $host) {
+            if ($host['ip'] == $vip) {
+                unset($iplist[$kip]);
+            }
+        }
+    }
 
     foreach ($iplist as $ip) {
         $latency = microtime(true);
-        $jump = false;
-        $ip = trim($ip);
 
-        foreach ($hosts as $host) {
-            if ($host['ip'] == $ip) { //Jump know ips since we check in other fuc
-                $jump = true;
-            }
-        }
-        if ($jump) {
-            continue;
-        }
-        $ip_status = ping($ip);
+        $ip_status = ping($ip, $timeout);
         $set = [];
 
-        $mac = get_mac($ip);
-        if ($mac) {
-            $set['mac'] = $mac;
-        }
-
         if ($ip_status['isAlive']) {
-            $set['ip'] = $ip;
-            $set['online'] = 1;
-            $set['latency'] = microtime(true) - $latency;
-            $results = $db->query('SELECT `id`,`mac`,`online` FROM hosts WHERE ip=\'' . $ip . '\' LIMIT 1');
-            $host_results = $db->fetchAll($results);
-            if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
-                if ($host_results[0]['online'] != 1 || $host_results[0]['mac'] != $mac) {
-                    $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]], 'LIMIT 1');
-                }
-            } else {
-                $db->insert('hosts', $set);
-            }
-        } else {
-            $results = $db->query('SELECT `id`,`online` FROM hosts WHERE ip=\'' . $ip . '\'  LIMIT 1');
-            $host_results = $db->fetchAll($results);
+            $mac = trim(get_mac($ip));
+            $mac_vendor = '';
+            if ($mac) { //if not mac, false positive
+                $set['mac'] = $mac;
+                $mac_info = get_mac_vendor($mac);
+                (!empty($mac_info['company'])) ? $set['mac_vendor'] = $mac_info['company'] : $set['mac_vendor'] = '-';
 
-            if (!empty($host_results) && is_array($host_results) && count($host_results) > 0) {
-                if ($host_results[0]['online'] == 1) {
-                    $set['online'] = 0;
-                    $set['latency'] = microtime(true) - $latency;
-                    $db->update('hosts', $set, ['id' => ['value' => $host_results[0]['id']]]);
-                }
+                $log->info("Discover host $ip:$mac:$mac_vendor");
+
+                $set['ip'] = $ip;
+                $set['online'] = 1;
+                $set['latency'] = microtime(true) - $latency;
+                $set['last_seen'] = time();
+                $hostname = get_hostname($ip);
+                ($hostname) ? $set['hostname'] = $hostname : null;
+
+                $hosts->insert($set);
+            } else {
+                $log->debug("Ignoring possible false positive $ip");
             }
         }
     }
 }
 
-function fill_hostnames(Database $db, int $only_missing = 0) {
-    $hosts = get_hosts($db);
+function fill_hostnames(Hosts $hosts, int $only_missing = 0) {
+    $db_hosts = $hosts->getEnabled();
 
-    foreach ($hosts as $host) {
+    foreach ($db_hosts as $host) {
         if (empty($host['hostname']) || $only_missing === 0) {
             $hostname = get_hostname($host['ip']);
             if ($hostname !== false && $hostname != $host['ip']) {
-                $db->update('hosts', ['hostname' => $hostname], ['id' => ['value' => $host['id']]], 'LIMIT 1');
+                $update['hostname'] = $hostname;
+                $hosts->update($host['id'], $update);
             }
         }
     }
 }
 
-function fill_mac_vendors(Database $db, int $only_missing = 0) {
-    $hosts = get_hosts($db);
+function fill_mac_vendors(Hosts $hosts, int $only_missing = 0) {
+    $db_hosts = $hosts->getEnabled();
 
-    foreach ($hosts as $host) {
+    foreach ($db_hosts as $host) {
         if (!empty($host['mac']) && (empty($host['mac_vendor']) || $only_missing === 0)) {
             $vendor = get_mac_vendor(trim($host['mac']));
 
             if (empty($vendor['company'])) {
                 $vendor['company'] = '-';
             } else {
-                $vendor['company'] = $db->escape($vendor['company']);
+                $vendor['company'] = $vendor['company'];
             }
-
-            $db->update('hosts', ['mac_vendor' => $vendor['company']], ['id' => ['value' => $host['id']]], 'LIMIT 1');
+            $update['mac_vendor'] = $vendor['company'];
+            $hosts->update($host['id'], $update);
         }
     }
 }
 
-function host_access($cfg, $db) {
-    $hosts = get_known_hosts($db);
+function host_access(array $cfg, Hosts $hosts) {
+    global $log;
 
-    foreach ($hosts as $host) {
+    $db_hosts = $hosts->getEnabled();
+
+    foreach ($db_hosts as $host) {
         if ($host['access_method'] < 1 || empty($host['online'])) {
             continue;
         }
@@ -156,7 +169,7 @@ function host_access($cfg, $db) {
 
         $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
         if (!$ssh) {
-            //echo "Error", $host['ip'] . "\n";
+            $log->err("SSH host_access: Can connect host");
             continue;
         }
         $ssh->setKeepAlive(1);
@@ -171,8 +184,8 @@ function host_access($cfg, $db) {
         h_get_sys_space($ssh, $results);
         h_get_uptime($ssh, $results);
         h_get_load_average($ssh, $results);
-        h_get_tail_syslog($ssh, $db, $results);
-        //var_dump($result);
+        h_get_tail_syslog($ssh, $results);
+
         if (!empty($results['hostname'])) {
             $set['hostname'] = $results['hostname'];
             unset($results['hostname']);
@@ -180,6 +193,6 @@ function host_access($cfg, $db) {
         unset($results['motd']);
         $set['access_results'] = json_encode($results);
 
-        $db->update('hosts', $set, ['id' => $host['id']]);
+        $hosts->update($host['id'], $set);
     }
 }
