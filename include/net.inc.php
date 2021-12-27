@@ -151,14 +151,18 @@ function get_hostname(string $ip) {
 }
 
 function get_mac(string $ip) {
-    //TODO better
+
     $ip = trim($ip);
 
     if (!filter_var($ip, FILTER_VALIDATE_IP)) {
         return false;
     }
-    $arp = "arp -a $ip | awk '{print $4}'";
-    $result = trim(shell_exec($arp));
+
+    $parms[] = '-a';
+    $parms[] = $ip;
+    $result = run_command('arp', $parms);
+    $explode_result = explode(' ', $result['stdout']);
+    $result = trim($explode_result[3]);
 
     if (filter_var($result, FILTER_VALIDATE_MAC) === false) {
         return false;

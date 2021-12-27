@@ -9,19 +9,41 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function run_command(string $cmd, array $params) {
+function run_command(string $cmd, array $params, string $stdin = null) {
+    global $log;
+
+    $return = [];
     $pipes = [];
+    $exec_params = '';
 
     $descriptorspec = [
-        0 => ["pipe", "r"],
-        1 => ["pipe", "w"],
-        2 => ["pipe", "w"]
+        0 => ["pipe", "r"], /* stdin */
+        1 => ["pipe", "w"], /* stdout */
+        2 => ["pipe", "w"] /* sterr */
             /* 2 => array("file", "/tmp/error-output.txt", "a") */
     ];
-    $_cmd = $cmd . ' ' . implode($params);
-    $proc = proc_open($_cmd, $descriptorspec, $pipes);
 
-    $return = stream_get_contents($pipes[1]);
+    foreach ($params as $param) {
+        $exec_params .= ' ' . $param;
+    }
+    $exec_cmd = $cmd . $exec_params;
+
+    $proc = proc_open($exec_cmd, $descriptorspec, $pipes);
+
+    if (is_resource($proc)) {
+        if (!empty($stdin)) {
+            fwrite($pipes[0], $stdin);
+            fclose($pipes[0]);
+        }
+        $return['stdout'] = trim(stream_get_contents($pipes[1]));
+        fclose($pipes[1]);
+        $return['stderr'] = trim(stream_get_contents($pipes[2]));
+        fclose($pipes[2]);
+    } else {
+        $log->err('Error run command ');
+        $return = false;
+    }
+    proc_close($proc);
 
     return $return;
 }
