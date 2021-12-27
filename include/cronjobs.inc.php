@@ -88,7 +88,7 @@ function ping_net(array $cfg, Hosts $hosts) {
                 $set['latency'] = microtime(true) - $latency;
                 $set['last_seen'] = time();
                 $hostname = get_hostname($ip);
-                ($hostname) ? $set['hostname'] = $hostname : null;
+                !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
 
                 $hosts->insert($set);
             } else {
