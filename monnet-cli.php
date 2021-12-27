@@ -9,6 +9,7 @@
  */
 define('IN_WEB', true);
 define('IN_CLI', true);
+//define('DUMP_VARS', true);
 
 /* CONFIG */
 $ROOT_PATH = '/var/www/monnet';
@@ -42,11 +43,10 @@ if (is_locked()) {
 
 register_shutdown_function('unlink', CLI_LOCK);
 
-check_known_hosts($db);
-run_commands($cfg, $db);
-
-cron($cfg, $db);
+check_known_hosts($hosts);
+run_commands($cfg, $db, $hosts);
+cron($cfg, $db, $hosts);
 
 $log->debug("Finishing {$cfg['app_name']} CLI");
-
+$log->debug("****************************************************************************************");
 exit(0);
