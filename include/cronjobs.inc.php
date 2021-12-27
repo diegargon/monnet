@@ -41,29 +41,6 @@ function check_known_hosts(Hosts $hosts) {
     }
 }
 
-function ping_known_host(array $host) {
-
-    $timeout = ['sec' => 0, 'usec' => 500000];
-
-    if (is_local_ip($host['ip'])) {
-        $timeout = ['sec' => 0, 'usec' => 200000];
-    }
-
-    $ip_status = ping($host['ip'], $timeout);
-
-    $set = [];
-
-    if ($ip_status['isAlive']) {
-        $set['online'] = 1;
-        $set['last_seen'] = time();
-        $set['latency'] = $ip_status['latency'];
-    } else if ($ip_status['isAlive'] == 0 && $host['online'] == 1) {
-        $set['online'] = 0;
-        $set['latency'] = $ip_status['latency'];
-    }
-    return $set;
-}
-
 function ping_net(array $cfg, Hosts $hosts) {
     global $log;
 
@@ -169,9 +146,10 @@ function host_access(array $cfg, Hosts $hosts) {
 
         $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
         if (!$ssh) {
-            $log->err("SSH host_access: Can connect host");
+            $log->err("SSH host_access: Cant connect host {$host['ip']}");
             continue;
         }
+        $log->info("SSH hosts access: Succesful conenct to {$host['ip']}");
         $ssh->setKeepAlive(1);
 
         $results = [];

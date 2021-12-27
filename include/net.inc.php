@@ -31,6 +31,8 @@ function ping_host_ports(array $host) {
     }
 
     foreach ($host['ports'] as $kport => $port) {
+        $host_status = [];
+        $host_status['online'] = 0;
         $host_status['warn_port'] = 0;
         $host_status['ports'][$kport] = $port;
         $tim_start = microtime(true);
@@ -38,13 +40,13 @@ function ping_host_ports(array $host) {
         $port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
         $log->debug("Checking host ip:port {$host['ip']}:{$port['n']}");
         $conn = @fsockopen($ip, $port['n'], $err_code, $err_msg, $timeout);
+
         if (is_resource($conn)) {
             $host_status['online'] = 1;
             $host_status['last_seen'] = $time_now;
             $host_status['ports'][$kport]['online'] = 1;
             fclose($conn);
         } else {
-            $host_status['online'] = 0;
             $host_status['ports'][$kport]['online'] = 0;
             $host_status['warn_port'] = 1;
             //$host['ports'][$kport]['warn_port_msg'] = $port['port'] . ' port down';
@@ -56,9 +58,40 @@ function ping_host_ports(array $host) {
         $host_status['latency'] = microtime(true) - $tim_start;
     }
 
+    if ($host_status['online'] == 0) {
+        $time_now = time();
+        $host_ping = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
+        if ($host_ping['isAlive']) {
+            $host_status['online'] = 1;
+        }
+    }
     valid_array($host_status['ports']) ? $host_status['ports'] = json_encode($host_status['ports'], true) : null;
 
     return $host_status;
+}
+
+function ping_known_host(array $host) {
+
+    $timeout = ['sec' => 0, 'usec' => 500000];
+
+    if (is_local_ip($host['ip'])) {
+        $timeout = ['sec' => 0, 'usec' => 200000];
+    }
+
+    $ip_status = ping($host['ip'], $timeout);
+
+    $set = [];
+    $set['warn_port'] = 0;
+    if ($ip_status['isAlive']) {
+        $set['online'] = 1;
+        $set['last_seen'] = time();
+        $set['latency'] = $ip_status['latency'];
+    } else if ($ip_status['isAlive'] == 0 && $host['online'] == 1) {
+        $set['online'] = 0;
+        $set['latency'] = $ip_status['latency'];
+    }
+
+    return $set;
 }
 
 function ping(string $ip, $timeout = ['sec' => 1, 'usec' => 0]) {

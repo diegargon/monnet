@@ -73,7 +73,7 @@ Class Hosts {
         foreach ($values as $kvalue => $vvalue) {
             $kvalue = $this->db->escape($kvalue);
             $vvalue = $this->db->escape($vvalue);
-            if (!empty($kvalue) && !empty($vvalue)) {
+            if (!empty($kvalue) && isset($vvalue)) {
                 $this->hosts[$id][$kvalue] = $vvalue;
                 $fvalues[$kvalue] = $vvalue;
             }

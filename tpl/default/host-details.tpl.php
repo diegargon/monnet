@@ -33,10 +33,10 @@
             <?php } ?>
         </div>
         <?php
-        if (!empty($tdata['host_details']['host_ports'])) {
+        if (!empty($tdata['host_details']['ports'])) {
             ?>
             <div class="host_port_container">
-                <?php foreach ($tdata['host_details']['host_ports'] as $port) { ?>
+                <?php foreach ($tdata['host_details']['ports'] as $port) { ?>
                     <div class="port_container">
                         <?php if ($port['online']) { ?>
                             <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green.png" alt=""/>
@@ -44,7 +44,7 @@
                             <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red.png" alt=""/>
                         <?php } ?>
                         <div class="host_port_name"><?= $port['title'] ?></div>
-                        <div class="host_port">(<?= $port['port'] ?>)</div>
+                        <div class="host_port">(<?= $port['n'] ?>)</div>
                     </div> <!-- port container -->
                 <?php } ?>
             </div> <!-- host port container -->
