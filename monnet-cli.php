@@ -16,15 +16,7 @@ $ROOT_PATH = '/var/www/monnet';
 $APP_NAME = 'Monnet';
 define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
 $VERSION = 0.1;
-
-$arp_cmd = '/usr/sbin/arp';
-
 /* END CONFIG */
-
-if (!file_exists($arp_cmd)) {
-    echo "Please install arp (net-tools)\n";
-    exit();
-}
 
 chdir($ROOT_PATH);
 

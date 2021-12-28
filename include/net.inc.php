@@ -151,6 +151,15 @@ function get_hostname(string $ip) {
 }
 
 function get_mac(string $ip) {
+    global $log;
+
+    $comm_path = check_command('arp');
+
+    if (empty($comm_path)) {
+        $log->warning('arp command not exists please install net-tools');
+        return false;
+    }
+    $arp = $comm_path;
 
     $ip = trim($ip);
 
@@ -158,9 +167,7 @@ function get_mac(string $ip) {
         return false;
     }
 
-    $parms[] = '-a';
-    $parms[] = $ip;
-    $result = run_command('arp', $parms);
+    $result = run_cmd($arp, ['-a', $ip]);
     $explode_result = explode(' ', $result['stdout']);
     $result = trim($explode_result[3]);
 

@@ -9,7 +9,7 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function run_command(string $cmd, array $params, string $stdin = null) {
+function run_cmd(string $cmd, array $params, string $stdin = null) {
     global $log;
 
     $return = [];
@@ -46,4 +46,10 @@ function run_command(string $cmd, array $params, string $stdin = null) {
     proc_close($proc);
 
     return $return;
+}
+
+function check_command($cmd) {
+    $result = run_cmd('command', ['-v', $cmd]);
+
+    return empty($result['stdout']) ? false : $result['stdout'];
 }
