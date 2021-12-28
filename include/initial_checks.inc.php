@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function do_initial_db_check($cfg_db) {
+function do_initial_db_check(array $cfg_db) {
     $err_empty_msg = ' can\'t be empty check config.inc.php';
 
     if (empty($cfg_db['dbtype'])) {
@@ -36,7 +36,7 @@ function do_initial_db_check($cfg_db) {
     }
 }
 
-function do_initial_main_vars_checks($cfg) {
+function do_initial_main_vars_checks(array $cfg) {
     $err_empty_msg = ' can\'t be empty check config.inc.php';
     $err_nofile_msg = ' file/directory not exists';
 
@@ -48,7 +48,7 @@ function do_initial_main_vars_checks($cfg) {
     }
 }
 
-function do_initial_usermode_checks($cfg) {
+function do_initial_usermode_checks(array $cfg) {
     $err_empty_msg = ' can\'t be empty check config.inc.php';
     $err_nofile_msg = ' file/directory not exists';
     $err_numeric_msg = ' must be numeric';

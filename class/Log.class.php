@@ -15,12 +15,13 @@ Class Log {
     private $cfg;
     private $db;
 
-    public function __construct($cfg, $db) {
+    public function __construct(array $cfg, Database $db) {
         $this->console = false;
         $this->cfg = $cfg;
+        $this->db = $db;
     }
 
-    public function logged($type, $msg) {
+    public function logged(string $type, string $msg) {
 
         $LOG_TYPE = [
             'LOG_EMERG' => 0, // 	UNUSEDsystem is unusable
@@ -69,7 +70,7 @@ Class Log {
         }
     }
 
-    public function setConsole($value) {
+    public function setConsole(bool $value) {
         if ($value === true || $value === false) {
             $this->console = $value;
         } else {
@@ -77,31 +78,31 @@ Class Log {
         }
     }
 
-    public function debug($msg) {
+    public function debug(string $msg) {
         $this->logged('LOG_DEBUG', $msg);
     }
 
-    public function info($msg) {
+    public function info(string $msg) {
         $this->logged('LOG_INFO', $msg);
     }
 
-    public function notice($msg) {
+    public function notice(string $msg) {
         $this->logged('LOG_NOTICE', $msg);
     }
 
-    public function warning($msg) {
+    public function warning(string $msg) {
         $this->logged('LOG_WARNING', $msg);
     }
 
-    public function err($msg) {
+    public function err(string $msg) {
         $this->logged('LOG_ERR', $msg);
     }
 
-    public function alert($msg) {
+    public function alert(string $msg) {
         $this->logged('LOG_ALERT', $msg);
     }
 
-    public function emerg($msg) {
+    public function emerg(string $msg) {
         $this->logged('LOG_EMERG', $msg);
     }
 

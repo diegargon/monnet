@@ -9,7 +9,7 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function get_mac_vendor($mac) {
+function get_mac_vendor(string $mac) {
     $link = "http://macvendors.co/api/";
 
     $link = $link . $mac . '/json';

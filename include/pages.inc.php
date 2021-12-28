@@ -10,7 +10,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function page_defaults($cfg, User $user) {
+function page_defaults(array $cfg, User $user) {
     $page = [];
 
     $_user = $user->getUser();
@@ -23,7 +23,7 @@ function page_defaults($cfg, User $user) {
     return $page;
 }
 
-function page_index($cfg, $db, $lng, $user) {
+function page_index(array $cfg, Database $db, array $lng, User $user) {
     $page = [];
 
     $page['page'] = 'index';
@@ -102,7 +102,7 @@ function page_index($cfg, $db, $lng, $user) {
     return $page;
 }
 
-function page_index_post($user) {
+function page_index_post(User $user) {
     $profile_type = Filters::postString('profile_type');
     $show_bookmarks = Filters::postInt('show_bookmarks');
     $show_this_system = Filters::postInt('show_this_system');
@@ -134,7 +134,7 @@ function page_index_post($user) {
     }
 }
 
-function page_login($cfg, $lng, $user) {
+function page_login(array $cfg, array $lng, User $user) {
     $page = [];
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {

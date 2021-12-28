@@ -85,20 +85,20 @@ Class Hosts {
         }
     }
 
-    function insert($host) {
+    function insert(array $host) {
         $this->db->insert('hosts', $host);
     }
 
-    function remove($hid) {
+    function remove(int $hid) {
         $this->db->delete('hosts', ['id' => $hid], 'LIMIT 1');
         unset($this->hosts[$hid]);
     }
 
-    function getHostById($id) {
+    function getHostById(int $id) {
         return !empty($this->hosts[$id]) ? $this->hosts[$id] : false;
     }
 
-    function getHostByIp($ip) {
+    function getHostByIp(string $ip) {
         foreach ($this->hosts as $host) {
             if ($host['ip'] == trim($ip)) {
                 return $host;

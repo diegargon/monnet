@@ -98,7 +98,7 @@ function ping_known_host(array $host) {
     return $set;
 }
 
-function ping(string $ip, $timeout = ['sec' => 1, 'usec' => 0]) {
+function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
 
     $tim_start = microtime(true);
     $status['isAlive'] = 0;
@@ -182,13 +182,13 @@ function get_mac(string $ip) {
     }
 }
 
-function is_local_ip($ip) {
+function is_local_ip(string $ip) {
     if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
         return true;
     }
     return false;
 }
 
-function send_magic_packet($host_id) {
+function send_magic_packet(int $host_id) {
 
 }

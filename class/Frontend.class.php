@@ -14,12 +14,12 @@ class Frontend {
     private $cfg;
     private $lng;
 
-    public function __construct($cfg, $lng) {
+    public function __construct(array $cfg, array $lng) {
         $this->cfg = $cfg;
         $this->lng = $lng;
     }
 
-    function showPage($tdata) {
+    function showPage(array $tdata) {
         $web['main_head'] = $this->cssLinkFile($this->cfg['theme'], $this->cfg['css']);
         $web['main_footer'] = '';
 

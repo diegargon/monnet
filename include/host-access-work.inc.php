@@ -9,7 +9,9 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function h_get_hostname($ssh, array &$result) {
+use phpseclib3\Net\SSH2;
+
+function h_get_hostname(SSH2 $ssh, array &$result) {
     ssh_exec($ssh, $result, 'hostname');
     if (!empty($result['result'])) {
         //Remove ANSI Term codes. https://stackoverflow.com/questions/40731273/php-remove-terminal-codes-from-string
@@ -20,7 +22,7 @@ function h_get_hostname($ssh, array &$result) {
     unset($result['result']);
 }
 
-function h_get_ncpus($ssh, array &$result) {
+function h_get_ncpus(SSH2 $ssh, array &$result) {
 
     $ncpu = 0;
 
@@ -37,7 +39,7 @@ function h_get_ncpus($ssh, array &$result) {
     unset($result['result']);
 }
 
-function h_get_sys_mem($ssh, array &$result) {
+function h_get_sys_mem(SSH2 $ssh, array &$result) {
 
     ssh_exec($ssh, $result, 'cat /proc/meminfo');
     if (!empty($result['result'])) {
@@ -67,7 +69,7 @@ function h_get_sys_mem($ssh, array &$result) {
     unset($result['result']);
 }
 
-function h_get_sys_space($ssh, array &$result) {
+function h_get_sys_space(SSH2 $ssh, array &$result) {
     $mount_points = [];
 
     ssh_exec($ssh, $result, 'mount -t ext3,ext4,cifs,nfs,nfs4,zfs');
@@ -116,7 +118,7 @@ function h_get_sys_space($ssh, array &$result) {
     unset($result['result']);
 }
 
-function h_get_uptime($ssh, array &$result) {
+function h_get_uptime(SSH2 $ssh, array &$result) {
 
     ssh_exec($ssh, $result, 'uptime -s');
     if (!empty($result['result'])) {
@@ -132,7 +134,7 @@ function h_get_uptime($ssh, array &$result) {
     unset($result['result']);
 }
 
-function h_get_load_average($ssh, array &$result) {
+function h_get_load_average(SSH2 $ssh, array &$result) {
 
     ssh_exec($ssh, $result, 'cat /proc/loadavg');
 
@@ -149,7 +151,7 @@ function h_get_load_average($ssh, array &$result) {
     unset($result['result']);
 }
 
-function h_get_tail_syslog($ssh, array &$result) {
+function h_get_tail_syslog(SSH2 $ssh, array &$result) {
     ssh_exec($ssh, $result, 'tail -50 /var/log/syslog');
 
     if (!empty($result['result'])) {

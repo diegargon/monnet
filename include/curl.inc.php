@@ -9,7 +9,7 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function curl_get($url) {
+function curl_get(string $url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

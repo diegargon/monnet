@@ -48,7 +48,7 @@ function run_cmd(string $cmd, array $params, string $stdin = null) {
     return $return;
 }
 
-function check_command($cmd) {
+function check_command(string $cmd) {
     $result = run_cmd('command', ['-v', $cmd]);
 
     return empty($result['stdout']) ? false : $result['stdout'];

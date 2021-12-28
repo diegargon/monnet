@@ -33,6 +33,7 @@ $cfg['net'] = '192.168.1.0/24';
 $cfg['log_to_syslog'] = 0;
 $cfg['log_to_file'] = 1;
 $cfg['syslog_level'] = 'LOG_WARN';
+$cfg['timezone'] = 'UTC';
 
 $cfg['cert'] = '/var/certs/id_rsa';
 
