@@ -36,7 +36,7 @@ if (is_locked()) {
 register_shutdown_function('unlink', CLI_LOCK);
 
 check_known_hosts($hosts);
-run_commands($cfg, $db, $hosts);
+run_cmd_db_tasks($cfg, $db, $hosts);
 cron($cfg, $db, $hosts);
 
 $log->debug("Finishing {$cfg['app_name']} CLI");

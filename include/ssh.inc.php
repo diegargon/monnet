@@ -61,7 +61,7 @@ function ssh_exec(SSH2 $ssh, array &$result, string $cmd) {
     $result['result'] = mb_substr($ssh_result, 0, -5);
 }
 
-function run_commands(array $cfg, Database $db, Hosts $hosts) {
+function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts) {
     global $log;
 
     $result = $db->select('cmd', '*');
