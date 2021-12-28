@@ -30,11 +30,15 @@ function ping_host_ports(array $host) {
         $timeout = $host['timeout'];
     }
 
+    $host_status = [];
+    $host_status['online'] = 0;
+    $host_status['warn_port'] = 0;
+    $host_status['last_check'] = $time_now;
+
     foreach ($host['ports'] as $kport => $port) {
-        $host_status = [];
-        $host_status['online'] = 0;
-        $host_status['warn_port'] = 0;
         $host_status['ports'][$kport] = $port;
+        $host_status['ports'][$kport]['online'] = 0;
+
         $tim_start = microtime(true);
         $ip = $host['ip'];
         $port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
@@ -47,7 +51,6 @@ function ping_host_ports(array $host) {
             $host_status['ports'][$kport]['online'] = 1;
             fclose($conn);
         } else {
-            $host_status['ports'][$kport]['online'] = 0;
             $host_status['warn_port'] = 1;
             //$host['ports'][$kport]['warn_port_msg'] = $port['port'] . ' port down';
             //$host['ports'][$kport]['err_code'] = $err_code;
@@ -73,6 +76,7 @@ function ping_host_ports(array $host) {
 function ping_known_host(array $host) {
 
     $timeout = ['sec' => 0, 'usec' => 500000];
+    $time_now = time();
 
     if (is_local_ip($host['ip'])) {
         $timeout = ['sec' => 0, 'usec' => 200000];
@@ -80,15 +84,15 @@ function ping_known_host(array $host) {
 
     $ip_status = ping($host['ip'], $timeout);
 
+    //echo "Pinging {$host['ip']}{$ip_status['isAlive']} ";
     $set = [];
+    $set['online'] = 0;
     $set['warn_port'] = 0;
+    $set['latency'] = $ip_status['latency'];
+    $set['last_check'] = $time_now;
     if ($ip_status['isAlive']) {
         $set['online'] = 1;
-        $set['last_seen'] = time();
-        $set['latency'] = $ip_status['latency'];
-    } else if ($ip_status['isAlive'] == 0 && $host['online'] == 1) {
-        $set['online'] = 0;
-        $set['latency'] = $ip_status['latency'];
+        $set['last_seen'] = $time_now;
     }
 
     return $set;

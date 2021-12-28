@@ -278,7 +278,10 @@ function get_host_detail_view_data(array $cfg, Hosts $hosts, User $user, array $
     }
 
     if (!empty($host['last_seen']) && is_numeric($host['last_seen'])) {
-        $host['formated_last_seen'] = timestamp_to_date($host['last_seen']);
+        $host['f_last_seen'] = timestamp_to_date($host['last_seen']);
+    }
+    if (!empty($host['last_check']) && is_numeric($host['last_check'])) {
+        $host['f_last_check'] = timestamp_to_date($host['last_check']);
     }
     $host['formated_creation_date'] = formated_date($host['created']);
 

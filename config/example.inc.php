@@ -9,7 +9,6 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-require_once('config/config.priv.php');
 /* Db Config */
 
 $cfg_db['dbtype'] = 'mysql';
@@ -35,7 +34,7 @@ $cfg['log_to_syslog'] = 0;
 $cfg['log_to_file'] = 1;
 $cfg['syslog_level'] = 'LOG_WARN';
 
-$cfg['cert'] = '/home/monnet/.ssh/id_rsa';
+$cfg['cert'] = '/var/certs/id_rsa';
 
 /* Modules Config */
 /* TODO: Split load config files */

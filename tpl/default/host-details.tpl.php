@@ -111,14 +111,17 @@
                     <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
                 </div>
             <?php } ?>
-            <?php if (!empty($tdata['host_details']['formated_last_seen'])) { ?>
-                <div class="" >
-                    <?php if (empty($tdata['host_details']['online'])) { ?>
-                        <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?></label>
-                    <?php } else { ?>
-                        <label class="connected_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
-                    <?php } ?>
-                    <span class="connected_date"><?= $tdata['host_details']['formated_last_seen'] ?> </span>
+
+            <?php if (empty($tdata['host_details']['online']) && !empty($tdata['host_details']['f_last_seen'])) { ?>
+                <div>
+                    <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?></label>
+                    <span class="connected_date"><?= $tdata['host_details']['f_last_seen'] ?> </span>
+                </div>
+            <?php } ?>
+            <?php if (!empty($tdata['host_details']['f_last_check'])) { ?>
+                <div>
+                    <label class="connected_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
+                    <span class="connected_date"><?= $tdata['host_details']['f_last_check'] ?> </span>
                 </div>
             <?php } ?>
         </div>

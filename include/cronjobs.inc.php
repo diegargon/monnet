@@ -17,7 +17,7 @@ function check_known_hosts(Hosts $hosts) {
         return false;
     }
 
-    $db_hosts = $hosts->getHighLight();
+    $db_hosts = $hosts->getEnabled();
 
     foreach ($db_hosts as $host) {
         $host_status = [];

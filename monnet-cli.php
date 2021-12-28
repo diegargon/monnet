@@ -13,10 +13,11 @@ define('IN_CLI', true);
 
 /* CONFIG */
 $ROOT_PATH = '/var/www/monnet';
+/* END CONFIG */
+
 $APP_NAME = 'Monnet';
 define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
 $VERSION = 0.1;
-/* END CONFIG */
 
 chdir($ROOT_PATH);
 
