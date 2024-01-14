@@ -38,7 +38,6 @@ p {
 
 .header {
     display:flex;
-    border:0px solid brown;
     width:100%;
 }
 
@@ -101,17 +100,19 @@ footer {
     padding: 0px 5px 0px 5px;
     margin: auto;
     width: 120px;
+    float:left;
     /* margin-top: 15px; */
     /* margin-bottom: 10px; */
 }
 .options_container {
-    display: grid;
+    /* display: grid; */
+    float:left;
     /* grid-gap: 14px; */
     grid-template-columns: repeat(2, 120px);
     border:0px solid red;
     padding: 5px;
     margin:auto;
-    margin-top:15px;
+    /* margin-top:15px; */
     width:max-content;
 }
 

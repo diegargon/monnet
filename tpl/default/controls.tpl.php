@@ -8,8 +8,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 ?>
-<form method="POST">
-    <div class="options_container">
+<div class="options_container">
+    <form method="POST">        
         <fieldset class="ctrl_fieldset">
             <legend class="ctrl_legend"><?= $lng['L_BOOKMARKS'] ?></legend>
             <div class="services_ctrl">
@@ -43,12 +43,12 @@
                     <span class="opt_labels">This</span>
                 </div>
         -->
-    </div>
-    <!--
-    <div class="profile_box">
-        <select class="place_profile" name="profile_type" onchange="this.form.submit()">
-        </select>
-        <span class="opt_labels">Profile</span>
-    </div>
-    -->
-</form>
+        </form>
+</div>
+<!--
+<div class="profile_box">
+    <select class="place_profile" name="profile_type" onchange="this.form.submit()">
+    </select>
+    <span class="opt_labels">Profile</span>
+</div>
+-->

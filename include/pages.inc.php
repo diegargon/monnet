@@ -60,7 +60,7 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
     $page['weather_widget'] = weather_widget($cfg, $lng);
     $page['load_tpl'][] = [
         'file' => 'weather-widget',
-        'place' => 'head_left',
+        'place' => 'head_right',
     ];
 
     /* Controls */
@@ -77,7 +77,7 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
 
     $page['load_tpl'][] = [
         'file' => 'controls',
-        'place' => 'head_right',
+        'place' => 'head_left',
     ];
 
     /* AppLinks Bookmarks */
