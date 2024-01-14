@@ -170,11 +170,10 @@ function page_logout(array $cfg, array $lng, User $user) {
     session_destroy();
     $_SESSION['uid'] = '';
     $_SESSION['gid'] = '';
-    
+
     setcookie('sid', '', time() - 3600, '/');
     setcookie('uid', '', time() - 3600, '/');
     (empty($cfg['rel_path'])) ? $cfg['rel_path'] = '/' : null;
-    
 
     header("Location: {$cfg['rel_path']}index.php");
 }
@@ -229,28 +228,40 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
                 $hosts_results[$khost]['details'] .= $lng['L_HOSTNAME'] . ': ' . $vhost['hostname'] . "\n";
             }
         }
-        if (!empty($vhost['img_ico'])) {
-            $hosts_results[$khost]['img_ico'] = 'tpl/' . $theme . '/img/icons/' . $vhost['img_ico'];
-        }
         if ($vhost['online']) {
-            $hosts_results[$khost]['alt_online'] = $lng['L_S_ONLINE'];
+            $hosts_results[$khost]['title_online'] = $lng['L_S_ONLINE'];
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/green.png';
         } else {
-            $hosts_results[$khost]['alt_online'] = $lng['L_S_OFFLINE'];
+            $hosts_results[$khost]['tile_online'] = $lng['L_S_OFFLINE'];
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red.png';
         }
+
+        if (!empty($vhost['os'])) {
+            $hosts_results[$khost]['os'] = $cfg['system'][$vhost['os']]['name'];
+            $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+        } else {
+            $hosts_results[$khost]['os'] = $cfg['system'][$vhost['system']]['name'];
+            $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
+        }
+        /* Demasiados iconos mejor para details
+
+          if (!empty($vhost['os'])) {
+          $hosts_results[$khost]['os'] = $cfg['system'][$vhost['os']]['name'];
+          $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+          } else {
+          $hosts_results[$khost]['os'] = $cfg['system'][$vhost['system']]['name'];
+          $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
+          }
+          if (!empty($vhost['os_distribution'])) {
+          $hosts_results[$khost]['os_distribution'] = $cfg['system'][$vhost['os_distribution']]['name'];
+          $hosts_results[$khost]['os_distribution_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$vhost['os_distribution']]['img'];
+          }
+         */
         if (!empty($vhost['system'])) {
-            $hosts_results[$khost]['system_name'] = $cfg['system'][$vhost['system']]['name'];
+            $hosts_results[$khost]['system'] = $cfg['system'][$vhost['system']]['name'];
             $hosts_results[$khost]['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
-            $hosts_results[$khost]['details'] .= $lng['L_SYSTEM'] . ': ' . ucfirst($hosts_results[$khost]['system_name']) . "\n";
         }
-        if (!empty($vhost['distributor'])) {
-            $hosts_results[$khost]['details'] .= $lng['L_DISTRIBUTION'] . ': ' . ucfirst($cfg['os_distributions'][$vhost['distributor']]) . "\n";
-            $hosts_results[$khost]['distributor'] = $cfg['os_distributions'][$vhost['distributor']];
-        }
-        if (!empty($vhost['codename'])) {
-            $hosts_results[$khost]['details'] .= $lng['L_CODENAME'] . ': ' . ucfirst($vhost['codename']) . "\n";
-        }
+
 
         //Warn icon
         if ($vhost['warn_port']) {
@@ -273,22 +284,27 @@ function get_host_detail_view_data(array $cfg, Hosts $hosts, User $user, array $
 
     // Host Work
     $host['theme'] = $theme;
-    if (!empty($host['img_ico'])) {
-        $host['img_ico'] = 'tpl/' . $theme . '/img/icons/' . $host['img_ico'];
-    }
     if ($host['online']) {
-        $host['alt_online'] = $lng['L_S_ONLINE'];
+        $host['title_online'] = $lng['L_S_ONLINE'];
         $host['online_image'] = 'tpl/' . $theme . '/img/green.png';
     } else {
-        $host['alt_online'] = $lng['L_S_OFFLINE'];
+        $host['title_online'] = $lng['L_S_OFFLINE'];
         $host['online_image'] = 'tpl/' . $theme . '/img/red.png';
     }
+
+    if (!empty($host['os'])) {
+        $host['os_name'] = $cfg['os'][$host['os']]['name'];
+        $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$host['os']]['img'];
+    } 
+    
     if (!empty($host['system'])) {
         $host['system_name'] = $cfg['system'][$host['system']]['name'];
-        $host['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$host['system']]['img'];
+        $host['system_image'] =  'tpl/' . $theme . '/img/icons/' . $cfg['system'][$host['system']]['img'];
     }
-    if (!empty($host['distributor'])) {
-        $host['distributor_text'] = $cfg['os_distributions'][$host['distributor']];
+   
+    if (!empty($host['os_distribution'])) {       
+        $host['os_distribution_name'] = $cfg['os_distribution'][$host['os_distribution']]['name'];
+        $host['os_distribution_image'] =   'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$host['os_distribution']]['img'];
     }
 
     if (!empty($host['last_seen']) && is_numeric($host['last_seen'])) {

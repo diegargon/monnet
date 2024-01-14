@@ -9,6 +9,50 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+/* OS manufactures */
+$cfg['os_manufacture'] = [
+    0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
+    1 => ['name' => 'Microsoft', 'img' => 'microsoft.png'],
+    2 => ['name' => 'Apple Inc.', 'img' => 'apple.png'],
+    3 => ['name' => 'Canonical Ltd.', 'img' => 'canonical.png'],
+    4 => ['name' => 'Google', 'img' => 'google.png'],
+    5 => ['name' => 'The Linux Foundation', 'img' => 'linuxfoundation.png'],
+    6 => ['name' => 'Red Hat', 'img' => 'redhat.png'],
+    7 => ['name' => 'IBM', 'img' => 'ibm.png'],
+    8 => ['name' => 'Hewlett Packard Enterprise', 'img' => 'hpe.png'],
+    9 => ['name' => 'FreeBSD Foundation', 'img' => 'freebsd.png'],
+    10 => ['name' => 'Oracle Corporation', 'img' => 'oracle.png'],
+    11 => ['name' => 'OpenBSD Project', 'img' => 'openbsd.png'],
+    12 => ['name' => 'Samsung Electronics', 'img' => 'samsung.png'],
+    13 => ['name' => 'Sony Corporation', 'img' => 'sony.png'],
+    14 => ['name' => 'FreeRTOS', 'img' => 'freertos.png']
+];
+
+
+/* OS */
+$cfg['os'] = [
+    0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
+    1 => ['name' => 'Linux', 'img' => 'linux.png'],
+    2 => ['name' => 'Windows 10', 'img' => 'windows10.png'],
+    3 => ['name' => 'FreeBSD', 'img' => 'freebsd.png'],
+    4 => ['name' => 'Android', 'img' => '.png'],
+    5 => ['name' => 'iOS', 'img' => 'ios.png'],
+    6 => ['name' => 'macOS', 'img' => 'macos.png'],
+    7 => ['name' => 'Windows 7', 'img' => 'windows7.png'],
+    8 => ['name' => 'Windows 8/8.1', 'img' => 'windows8.png'],
+    9 => ['name' => 'Unix', 'img' => 'unix.png'],
+    10 => ['name' => 'OpenBSD', 'img' => 'openbsd.png'],
+    11 => ['name' => 'Solaris', 'img' => 'solaris.png'],
+    12 => ['name' => 'AIX', 'img' => 'aix.png'],
+    13 => ['name' => 'HP-UX', 'img' => 'hpux.png'],
+    14 => ['name' => 'Chrome OS', 'img' => 'chromeos.png'],
+    15 => ['name' => 'IBM i', 'img' => 'ibmi.png'],
+    16 => ['name' => 'z/OS', 'img' => 'zos.png'],
+    17 => ['name' => 'DOS', 'img' => 'dos.png'],
+    18 => ['name' => 'RTOS', 'img' => 'rtos.png'],
+    19 => ['name' => 'Plan 9 from Bell Labs', 'img' => 'plan9.png'],
+];
+
 /* Systems */
 
 $cfg['system'] = [
@@ -26,12 +70,16 @@ $cfg['system'] = [
     12 => ['name' => 'Smart Home', 'img' => 'smart-home.png'],
     13 => ['name' => 'Wifi AP', 'img' => 'wifi-ap.png'],
     14 => ['name' => 'Camera', 'img' => 'cam2.png'],
+    15 => ['name' => 'FreeBSD', 'img' => 'freebsd.png'],
+    16 => ['name' => 'OPNSense', 'img' => 'opnsense.png'],
 ];
-$cfg['os_distributions'] = [
-    1 => 'microsoft',
-    2 => 'ubuntu',
-    3 => 'debian',
-    4 => 'centos'
+$cfg['os_distribution'] = [
+    1 => ['name' => 'Microsoft', 'img' => 'microsoft.png'],
+    2 => ['name' => 'Ubuntu', 'img' => 'ubuntu.png'],
+    3 => ['name' => 'Debian', 'img' => 'debian.png'],
+    4 => ['name' => 'CentOS', 'img' => 'centos.png'],
+    5 => ['name' => 'FreeBSD', 'img' => 'freebsd.png'],
+    6 => ['name' => 'OPNSense', 'img' => 'opnsense.png'],
 ];
 $cfg['versions'] = [
     1 => '20.04',

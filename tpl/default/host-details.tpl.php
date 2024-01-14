@@ -9,19 +9,44 @@
 ?>
 <div id="host-details" class="host-details">
     <div id="host-details-container" class="host-details-container">
+        <div class="host-details-bar">
+            <div class="host-controls-left">
+                <form class="host-details-form-close" method="POST">
+                    <input type="image"  class="action-icon remove" name="close_host_details" src="tpl/<?= $cfg['theme'] ?>/img/close.png" alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
+                </form>
+            </div> <!--host-controls-right -->            
+            <div class="host-controls-right">
+                <?php if (!empty($tdata['host_details']['wol']) && empty($tdata['host_details']['online'])) { ?>
+                    <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png" alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
+                <?php } ?>
+                <?php if (!empty($tdata['host_details']['access_method']) && !empty($tdata['host_details']['online'])) { ?>
+                    <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png" alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
+                <?php } ?>
+                <?php if (!empty($tdata['host_details']['access_method'])) { ?>
+                    <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png" alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
+                <?php } ?>
+                <input onClick="refresh('remove_host', <?= $tdata['host_details']['id'] ?>)" type="image"  class="action-icon remove" src="tpl/<?= $cfg['theme'] ?>/img/remove.png" alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>"/>
+            </div> <!--host-controls-right -->
 
-        <div class="host-details-main">
-            <img class="hosts-item" src="<?= $tdata['host_details']['online_image'] ?>" alt="<?= $tdata['host_details']['alt_online'] ?>"/>
+        </div>
+        <div class="host-details-main">           
+            <img class="hosts-item" src="<?= $tdata['host_details']['online_image'] ?>" alt=="<?= $tdata['host_details']['title_online']?>" title="<?= $tdata['host_details']['title_online']?>"/>
+            <?php if (!empty($tdata['host_details']['os_image'])) { ?>
+                <img class="fab" src="<?= $tdata['host_details']['os_image'] ?>" alt="<?= $tdata['host_details']['os_name']?>" title="<?= $tdata['host_details']['os_name']?>"/>
+            <?php } ?>
+                
             <?php if (!empty($tdata['host_details']['system_image'])) { ?>
-                <img class="fab" src="<?= $tdata['host_details']['system_image'] ?>" alt="<?= $tdata['host_details']['system_name'] ?>"/>
+                <img class="fab" src="<?= $tdata['host_details']['system_image'] ?>" alt="<?= $tdata['host_details']['system_name'] ?>" title="<?= $tdata['host_details']['system_name'] ?>"/>
             <?php } ?>
-            <?php if (!empty($tdata['host_details']['img_ico'])) { ?>
-                <img class="fab" src="<?= $tdata['host_details']['img_ico'] ?>" alt=""/>
+            <?php if (!empty($tdata['host_details']['os_distribution_image'])) { ?>
+                <img class="fab" src="<?= $tdata['host_details']['os_distribution_image'] ?>" alt="<?= $tdata['host_details']['os_distribution_name'] ?>" title="<?= $tdata['host_details']['os_distribution_name'] ?>"/>
             <?php } ?>
+
             <div class="host-item"><?= $tdata['host_details']['title'] ?> </div>
             <?php if (!empty($tdata['host_details']['hostname'])) { ?>
                 <div class="host-item"><?= $tdata['host_details']['hostname'] ?> </div>
             <?php } ?>
+
         </div> <!-- host-details-main -->
         <div class="host-details-main">
             <div class="host-item"><?= $tdata['host_details']['ip'] ?></div>
@@ -49,22 +74,6 @@
                 <?php } ?>
             </div> <!-- host port container -->
         <?php } ?>
-
-        <div class="host-controls">
-            <?php if (!empty($tdata['host_details']['wol']) && empty($tdata['host_details']['online'])) { ?>
-                <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png" alt="poff" title="turn on"/>
-            <?php } ?>
-            <?php if (!empty($tdata['host_details']['access_method']) && !empty($tdata['host_details']['online'])) { ?>
-                <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png" alt="pon" title="turn off"/>
-            <?php } ?>
-            <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png" alt="reboot" title="reboot"/>
-            <?php } ?>
-            <input onClick="refresh('remove_host', <?= $tdata['host_details']['id'] ?>)" type="image"  class="action-icon remove" src="tpl/<?= $cfg['theme'] ?>/img/remove.png" alt="remove" />
-            <form class="host-details-form-close" method="POST">
-                <input type="image"  class="action-icon remove" name="close_host_details" src="tpl/<?= $cfg['theme'] ?>/img/close.png" alt="close" />
-            </form>
-        </div> <!--host-controls -->
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
             <div id="progress_bars">
                 <?php
@@ -127,16 +136,16 @@
         </div>
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                            <div class="charts">
-                                <label class="none_opt"><?= $lng['L_NONE'] ?></label>
-                                <input type="radio" checked name="graph_choice" value="none_graph">
-                                <label class="network_opt">Network</label>
-                                <input type="radio" name="graph_choice" value="network_graph">
-                                <label class="ping_opt">Ping</label>
-                                <input type="radio" name="graph_choice" value="ping_graph">
-                                <label class="logs_opt">Logs</label>
-                                <input type="radio" name="graph_choice" value="show_logs">
-                            </div>
+                                            <div class="charts">
+                                                <label class="none_opt"><?= $lng['L_NONE'] ?></label>
+                                                <input type="radio" checked name="graph_choice" value="none_graph">
+                                                <label class="network_opt">Network</label>
+                                                <input type="radio" name="graph_choice" value="network_graph">
+                                                <label class="ping_opt">Ping</label>
+                                                <input type="radio" name="graph_choice" value="ping_graph">
+                                                <label class="logs_opt">Logs</label>
+                                                <input type="radio" name="graph_choice" value="show_logs">
+                                            </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -144,21 +153,21 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                            <div class="deploy_container">
-                                <form id="deploy_form" method="POST">
-                                    <select class="select_deploy" name="deploy_option">
-                                        <option value="0"></option>
+                                            <div class="deploy_container">
+                                                <form id="deploy_form" method="POST">
+                                                    <select class="select_deploy" name="deploy_option">
+                                                        <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                    <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                    <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
-                                    </select>
-                                    <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
-                                </form>
-                            </div>
+                                                    </select>
+                                                    <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
+                                                </form>
+                                            </div>
             <?php
         }
         ?>
@@ -169,15 +178,15 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                            <div class="log_line"><?= $log ?></div>
+                                                                            <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                            </div>
+                                            </div>
         <?php }
         ?>
         -->
         <!--
-              <div class="ping_chart">
+        <div class="ping_chart">
             <img alt="" src="tpl/default/img/graph.png"/>
         </div>
         -->

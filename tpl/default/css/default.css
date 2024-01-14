@@ -565,7 +565,7 @@ input:checked + .slider:before {
     float:left;
 }
 .ping_chart img {
-    width:80% !important;
+    width: 300px !important;
 }
 
 /* SERVICES END */
@@ -612,12 +612,6 @@ input:checked + .slider:before {
     margin-left:-1px;
 
 }
-.host-details-close input  {
-}
-.host-details-form-close {
-    display:inline;
-}
-
 .host-item:last-of-type {
     border-right: 0;
 }
@@ -628,7 +622,7 @@ input:checked + .slider:before {
     position: absolute;
     top: 50%;
     left: 50%;
-    padding: 5px;
+    padding: 2px;
     transform: translate(-50%, -50%);
     margin: auto;
     border: 3px solid #ffa700;
@@ -638,7 +632,11 @@ input:checked + .slider:before {
     z-index: 1;
     background-color: rgb(83, 76, 58);
 }
-
+.host-details-bar {
+    height: 20px;
+    padding: 0px 0px 3px 0px;
+    margin: 0px;
+ }
 .host_port_container {
     text-align:center;
     font-size: 0.8em;
@@ -657,10 +655,26 @@ input:checked + .slider:before {
     display:inline-block;
     float:right;
     border:0px solid blue;
-    border-radius: 5px;
+    border-radius: 5px;    
+}
+.host-controls-left{
+    display:inline-block;
+    float:left;
+    border:0px solid blue;
+    width: 20px;
+}
+.host-controls-right{
+    display:inline-block;
+    float:right;
+    border:0px solid blue;    
+}
+.host-details-close input  {
+}
+.host-details-form-close {
+    border: 0px solid blue;
 }
 .action-icon {
-    width:20px;
+    width:20px;    
 }
 .power-off {
     background: white;

@@ -46,8 +46,11 @@ $lng = [
     'L_PASSWORD' => 'Contraseña',
     'L_PROFILE' => 'Perfil',
     'L_PORT_DOWN' => 'Puerto inacalzable',
+    'L_PWR_ON' => 'Encender',
+    'L_PWR_OFF' => 'Apagar',
     //R
     'L_REMOVE' => 'Eliminar',
+    'L_REBOOT' => 'Reiniciar',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',
@@ -58,6 +61,7 @@ $lng = [
     //U
     'L_USERNAME' => 'Usuario',
     'L_UPTIME' => 'Uptime',
+    'L_UNKNOWN' => 'Desconocido',
     //V
     'L_VENDOR' => 'Vendor',
     //W
