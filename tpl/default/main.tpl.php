@@ -19,9 +19,27 @@
         <script>
             window.onload = function () {
                 document.getElementById("loading_wrap").style.display = "none";
+                changeTab('tab1');
             };
             function show_loading() {
                 document.getElementById("loading_wrap").style.display = "block";
+            }
+            function changeTab(tabId) {
+                // Ocultar todos los contenidos de las pestañas
+                const tabContents = document.querySelectorAll('.host-details-tab-content');
+                tabContents.forEach(tabContent => tabContent.classList.remove('active'));
+
+                // Resaltar el botón de la pestaña seleccionada
+                const tabs = document.querySelectorAll('.host-details-tab');
+                tabs.forEach(tab => tab.classList.remove('active'));
+
+                // Mostrar el contenido de la pestaña seleccionada
+                const selectedTabContent = document.getElementById(tabId);
+                selectedTabContent.classList.add('active');
+
+                // Resaltar el botón de la pestaña seleccionada
+                const selectedTab = document.querySelector(`button[onclick="changeTab('${tabId}')"]`);
+                selectedTab.classList.add('active');
             }
         </script>
     <!-- <style>* { border: 1px solid red;}</style>  -->

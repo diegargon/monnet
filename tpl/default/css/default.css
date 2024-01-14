@@ -634,10 +634,42 @@ input:checked + .slider:before {
     background-color: rgb(83, 76, 58);
 }
 .host-details-bar {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    border: 1px solid blue;
     height: 20px;
     padding: 0px 0px 3px 0px;
     margin: 0px;
- }
+}
+.host-details-select {
+    border: 1px solid black;
+    margin: 0px;
+    padding: 0px;
+    height: 20px;
+}
+.host-details-form-options {
+    display: inline-block;
+    vertical-align: super;
+    margin: 0px;
+    padding: 0px;
+}
+.host-details-tabs-head {
+    display: inline-block;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+.host-details-tabs-head:hover {
+    background-color: #e0e0e0;
+}
+.host-details-tab-content {
+    display: none;
+}
+.host-details-tab-content.active {
+    display: inline-block;
+}
+
 .host_port_container {
     text-align:center;
     font-size: 0.8em;
@@ -656,26 +688,28 @@ input:checked + .slider:before {
     display:inline-block;
     float:right;
     border:0px solid blue;
-    border-radius: 5px;    
+    border-radius: 5px;
 }
 .host-controls-left{
     display:inline-block;
+    vertical-align: middle;
     float:left;
     border:0px solid blue;
-    width: 20px;
+
 }
 .host-controls-right{
     display:inline-block;
     float:right;
-    border:0px solid blue;    
+    border:0px solid blue;
 }
 .host-details-close input  {
 }
 .host-details-form-close {
+    display: inline-block;
     border: 0px solid blue;
 }
 .action-icon {
-    width:20px;    
+    width:20px;
 }
 .power-off {
     background: white;

@@ -72,6 +72,7 @@ $cfg['system'] = [
     14 => ['name' => 'Camera', 'img' => 'cam2.png'],
     15 => ['name' => 'FreeBSD', 'img' => 'freebsd.png'],
     16 => ['name' => 'OPNSense', 'img' => 'opnsense.png'],
+    17 => ['name' => 'Proxmox', 'img' => 'linux-server.png'],
 ];
 $cfg['os_distribution'] = [
     1 => ['name' => 'Microsoft', 'img' => 'microsoft.png'],

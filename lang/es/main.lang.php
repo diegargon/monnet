@@ -42,6 +42,7 @@ $lng = [
     'L_OFFLINE' => 'Offline',
     'L_OS' => 'Os',
     'L_OTHERS' => 'Otros',
+    'L_OVERVIEW' => 'Resumen',
     //P
     'L_PASSWORD' => 'Contraseña',
     'L_PROFILE' => 'Perfil',
