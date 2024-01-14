@@ -27,7 +27,7 @@ $tdata['theme'] = $cfg['theme'];
 
 $command = Filters::getString('order');
 $command_value = Filters::getString('order_value');
-
+ 
 if (!empty($command) && !empty($command_value)) {
     $data['command_receive'] = $command;
     $data['command_value'] = $command_value;

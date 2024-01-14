@@ -165,6 +165,20 @@ function page_login(array $cfg, array $lng, User $user) {
     return $page;
 }
 
+function page_logout(array $cfg, array $lng, User $user) {
+
+    session_destroy();
+    $_SESSION['uid'] = '';
+    $_SESSION['gid'] = '';
+    
+    setcookie('sid', '', time() - 3600, '/');
+    setcookie('uid', '', time() - 3600, '/');
+    (empty($cfg['rel_path'])) ? $cfg['rel_path'] = '/' : null;
+    
+
+    header("Location: {$cfg['rel_path']}index.php");
+}
+
 function get_bookmarks(Database $db, User $user, string $category) {
 
     $results = $db->select('items', '*', ['type' => $category], 'ORDER BY weight');
@@ -313,4 +327,8 @@ function get_host_detail_view_data(array $cfg, Hosts $hosts, User $user, array $
     }
 
     return $host;
+}
+
+function top_bar() {
+    
 }

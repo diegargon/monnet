@@ -19,7 +19,16 @@
     </div>
 </div>
 <!-- -->
-<div id="top_container" class="top_container"></div>
+
+<div id="top_container_bar" class="top_container_bar">
+    <div class="bar_item_container">
+        <a href="<?= $cfg['rel_path']?>?page=logout">
+            <img src="tpl/<?= $cfg['theme'] ?>/img/icons/logout.png" alt="logout"/>
+        </a>
+    </div>
+    <?= !empty($tdata['top_container_bar']) ? $tdata['top_container_bar'] : null; ?>
+</div>        
+
 <!-- comment -->
 <div class="center_aligner_container">
     <div class="main_container">

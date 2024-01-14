@@ -17,23 +17,20 @@ function valid_array($array) {
     return false;
 }
 
-function timestamp_to_date(int $timestamp) {
-    //TODO custom user format
-
-    if (!is_numeric($timestamp)) {
-        return false;
-    }
-    $date = date("d/m/y H:i", $timestamp);
-
-    return $date;
-}
-
 function formated_date($date) {
     $fdate = strtotime($date);
 
     return date("d/m/y H:i", $fdate);
 }
 
+function timestamp_to_date(int $timestamp, string $format = 'd/m/y') {
+    //TODO date not handle timezone
+    if (!is_numeric($timestamp)) {
+        return false;
+    }
+    
+    return date($format, $timestamp);
+}
 function micro_to_ms(float $microseconds) {
     return round($microseconds * 1000, 3);
 }

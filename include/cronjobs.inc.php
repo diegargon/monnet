@@ -44,7 +44,7 @@ function check_known_hosts(Hosts $hosts) {
 function ping_net(array $cfg, Hosts $hosts) {
     global $log;
 
-    $timeout = ['sec' => 0, 'usec' => 150000];
+    $timeout = ['sec' => 0, 'usec' => 110000];
 
     $log->info('Pinging NET ' . $cfg['net']);
 
@@ -149,7 +149,7 @@ function host_access(array $cfg, Hosts $hosts) {
             $log->err("SSH host_access: Cant connect host {$host['ip']}");
             continue;
         }
-        $log->info("SSH hosts access: Succesful conenct to {$host['ip']}");
+        $log->info("SSH hosts access: Succesful connect to {$host['ip']}");
         $ssh->setKeepAlive(1);
 
         $results = [];

@@ -62,7 +62,7 @@
 
         // avoid launch timer when command FIX:better way for not launch timers, disable timer and allow launch
         if (command === false) {
-            setTimeout(refresh, 5000);
+            setTimeout(refresh, 100000);
         }
 
     }

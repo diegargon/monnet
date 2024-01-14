@@ -39,7 +39,7 @@ Class Web {
 
         //echo $this->user->getId();
 
-        $valid_pages = ['index', 'login'];
+        $valid_pages = ['index', 'login', 'logout'];
 
         (!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
 
@@ -61,7 +61,7 @@ Class Web {
         if ($page == 'login') {
             $page_data = page_login($this->cfg, $this->lng, $this->user);
         } else if ($page == 'logout') {
-            //TODO
+            $page_data = page_logout($this->cfg, $this->lng, $this->user);
         } else if ($page === 'index') {
             $page_data = page_index($this->cfg, $this->db, $this->lng, $this->user);
         }

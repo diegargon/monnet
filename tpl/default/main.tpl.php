@@ -24,6 +24,7 @@
                 document.getElementById("loading_wrap").style.display = "block";
             }
         </script>
+    <!-- <style>* { border: 1px solid red;}</style>  -->
         <?= $tdata['main_head'] ?>
     </head>
 

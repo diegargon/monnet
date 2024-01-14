@@ -18,7 +18,12 @@ use phpseclib3\Crypt\PublicKeyLoader;
 function ssh_connect_host(array $cfg, array &$result, array $host) {
     global $log;
 
+    $originalConnectionTimeout = ini_get('default_socket_timeout');
+    ini_set('default_socket_timeout', 2);
+    $log->info('SSH Connection to '. $host['ip']);
     $ssh = new SSH2($host['ip']);
+    ini_set('default_socket_timeout', $originalConnectionTimeout);
+       
     if (file_exists($cfg['cert'])) {
         $key = PublicKeyLoader::load(file_get_contents($cfg['cert']));
     } else {

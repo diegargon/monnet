@@ -39,7 +39,7 @@ Class Log {
                 if (is_array($msg)) {
                     $msg = var_dump($msg, true);
                 }
-                echo $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
+                echo '['. timestamp_to_date(time()) .'][' . $this->cfg['app_name'] . "][" . $type . '] ' . $msg . "\n";
             }
 
             if ($this->cfg['log_to_file']) {
@@ -47,7 +47,8 @@ Class Log {
                 if (is_array($msg)) {
                     $msg = print_r($msg, true);
                 }
-                $content = '[' . strftime("%d %h %X", time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
+                $content = '';
+                $content = '[' . timestamp_to_date(time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     touch($log_file);
                 }
