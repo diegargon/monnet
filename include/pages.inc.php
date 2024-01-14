@@ -232,16 +232,16 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
             $hosts_results[$khost]['title_online'] = $lng['L_S_ONLINE'];
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/green.png';
         } else {
-            $hosts_results[$khost]['tile_online'] = $lng['L_S_OFFLINE'];
+            $hosts_results[$khost]['title_online'] = $lng['L_S_OFFLINE'];
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red.png';
         }
 
         if (!empty($vhost['os'])) {
-            $hosts_results[$khost]['os'] = $cfg['system'][$vhost['os']]['name'];
+            $hosts_results[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
             $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
         } else {
-            $hosts_results[$khost]['os'] = $cfg['system'][$vhost['system']]['name'];
-            $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
+            $hosts_results[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
+            $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
         }
         /* Demasiados iconos mejor para details
 
@@ -337,7 +337,7 @@ function get_host_detail_view_data(array $cfg, Hosts $hosts, User $user, array $
     //Deploy
     $host['deploy'] = [];
     foreach ($cfg['deploys'] as $deploy) {
-        if ($host['distributor'] == $deploy['os_distribution']) {
+        if ($host['os_distribution'] == $deploy['os_distribution']) {
             $host['deploys'][] = $deploy;
         }
     }
