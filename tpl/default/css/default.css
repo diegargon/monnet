@@ -73,7 +73,7 @@ footer {
 }
 
 .main {
-    margin-top: 4vh;
+    margin-top: 1vh;
     padding-bottom: 50px;
 }
 .center_aligner_container {
@@ -98,11 +98,11 @@ footer {
 
 .weather-container {
     border: 0px solid grey;
-    padding: 5px;
+    padding: 0px 5px 0px 5px;
     margin: auto;
     width: 120px;
-    margin-top: 15px;
-    margin-bottom: 10px;
+    /* margin-top: 15px; */
+    /* margin-bottom: 10px; */
 }
 .options_container {
     display: grid;
@@ -128,7 +128,7 @@ footer {
 }
 .left_container {
     border: 0px solid red;
-    margin-top:15px;
+    margin-top:5px;
     float:left;
     overflow:hidden;
     width:49%;
@@ -136,7 +136,7 @@ footer {
 }
 .right_container {
     border:0px solid black;
-    margin-top:15px;
+    margin-top:5px;
     float:left;
     overflow:hidden;
 
