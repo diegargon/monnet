@@ -626,21 +626,22 @@ input:checked + .slider:before {
     padding: 2px;
     transform: translate(-50%, -50%);
     margin: auto;
-    border: 3px solid #ffa700;
+    border: 1px solid #9d9d9d;
     border-radius: 5px;
     overflow: hidden;
     min-width: 50%;
     z-index: 1;
-    background-color: rgb(83, 76, 58);
+    background-color: rgb(55, 50, 37);
 }
 .host-details-bar {
     display: inline-block;
     vertical-align: middle;
     width: 100%;
-    border: 1px solid blue;
+    border-bottom: 2px solid #313131;
     height: 20px;
-    padding: 0px 0px 3px 0px;
+    padding: 0px 0px 4px 0px;
     margin: 0px;
+    background-color: #808080;
 }
 .host-details-select {
     border: 1px solid black;
@@ -654,14 +655,34 @@ input:checked + .slider:before {
     margin: 0px;
     padding: 0px;
 }
+.host-details-tabs-head-container {
+    display: inline-block;
+    font-family: "antique-olive" !important;
+    border: none;
+    /*overflow: hidden;*/
+}
 .host-details-tabs-head {
+    margin: 0px;
     display: inline-block;
     overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
+    background: none;
+    border:none;
+    text-align: center;
+    border-radius: 7px 7px 0 0 !important;
+    background-color: #313131;
+    color:white;
+    text-transform: uppercase;
+    font-size: 12pt;
+    cursor: pointer;
+    font-weight: 300;
+    padding: 2px 6px 1px 6px;
+
+}
+.host-details-tabs-head.active {
+    color: deepskyblue;
 }
 .host-details-tabs-head:hover {
-    background-color: #e0e0e0;
+    color: gray;
 }
 .host-details-tab-content {
     display: none;

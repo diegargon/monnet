@@ -14,23 +14,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" href="favicon.ico" />
         <meta name="referrer" content="never">
-        <title><?= $tdata['web_title'] ?></title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <title><?= $tdata['web_title'] ?></title>        
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
         <script>
             window.onload = function () {
                 document.getElementById("loading_wrap").style.display = "none";
-                changeTab('tab1');
             };
             function show_loading() {
                 document.getElementById("loading_wrap").style.display = "block";
-            }
+            };
             function changeTab(tabId) {
                 // Ocultar todos los contenidos de las pestañas
                 const tabContents = document.querySelectorAll('.host-details-tab-content');
                 tabContents.forEach(tabContent => tabContent.classList.remove('active'));
 
                 // Resaltar el botón de la pestaña seleccionada
-                const tabs = document.querySelectorAll('.host-details-tab');
+                const tabs = document.querySelectorAll('.host-details-tabs-head');
                 tabs.forEach(tab => tab.classList.remove('active'));
 
                 // Mostrar el contenido de la pestaña seleccionada
@@ -40,7 +40,7 @@
                 // Resaltar el botón de la pestaña seleccionada
                 const selectedTab = document.querySelector(`button[onclick="changeTab('${tabId}')"]`);
                 selectedTab.classList.add('active');
-            }
+            };
         </script>
     <!-- <style>* { border: 1px solid red;}</style>  -->
         <?= $tdata['main_head'] ?>

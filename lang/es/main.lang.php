@@ -19,6 +19,7 @@ $lng = [
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
+    'L_DEPLOYS' => 'Deploys',
     //H
     'L_HIGHLIGHT_HOSTS' => 'Destacados',
     'L_HOSTNAME' => 'Hostname',
@@ -35,8 +36,10 @@ $lng = [
     'L_LOAD' => 'Carga',
     //M
     'L_MEM' => 'Mem',
+    'L_METRICS' => 'Metricas',
     //N
     'L_NONE' => 'Nada',
+    'L_NOTES' => 'Notas',
     //O
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
@@ -57,6 +60,7 @@ $lng = [
     'L_S_OFFLINE' => 'Off',
     'L_SYSTEM' => 'Sistema',
     'L_SERVICES' => 'Servicios',
+    'L_STATUS' => 'Estado',
     //T
     'L_THIS_SYSTEM' => 'This',
     //U

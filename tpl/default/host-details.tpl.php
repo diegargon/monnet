@@ -24,10 +24,14 @@
                     </select>
                 </form>
                 -->
-                <div class="host-details-tabs-head">
-                    <button class="host-details-tab" onclick="changeTab('tab1')">Pestaña 1</button>
-                    <button class="host-details-tab" onclick="changeTab('tab2')">Pestaña 2</button>
-                    <button class="host-details-tab" onclick="changeTab('tab3')">Pestaña 3</button>
+                <div class="host-details-tabs-head-container">
+                    <button id="tab1_btn" class="host-details-tabs-head" onclick="changeTab('tab1')"><?= $lng['L_OVERVIEW'] ?></button>
+                    <button id="tab2_btn" class="host-details-tabs-head" onclick="changeTab('tab2')"><?= $lng['L_STATUS'] ?></button>
+                    <button id="tab3_btn" class="host-details-tabs-head" onclick="changeTab('tab3')"><?= $lng['L_NOTES'] ?></button>
+                    <!-- 
+                    <button id="tabx_btn" class="host-details-tabs-head" onclick="changeTab('tab2')"><?= $lng['L_METRICS'] ?></button>
+                    <button id="tabx_btn" class="host-details-tabs-head" onclick="changeTab('tab2')"><?= $lng['L_DEPLOYS'] ?></button>
+                    -->
                 </div>
             </div> <!--host-controls-right -->            
             <div class="host-controls-right">
@@ -103,7 +107,7 @@
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
             <div id="progress_bars">
                 <?php
-                if (!empty($tdata['host_details']['loadavg'][1])) {
+                if (!empty($tdata['host_details']['loadavg'][1]) && is_numeric($tdata['host_details']['loadavg'][1])) {
                     $loadavg = 100 * $tdata['host_details']['loadavg'][1];
                     $max_load = 100 * $tdata['host_details']['ncpu'];
                     ?>
@@ -162,16 +166,16 @@
         </div>
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                            <div class="charts">
-                                                                <label class="none_opt"><?= $lng['L_NONE'] ?></label>
-                                                                <input type="radio" checked name="graph_choice" value="none_graph">
-                                                                <label class="network_opt">Network</label>
-                                                                <input type="radio" name="graph_choice" value="network_graph">
-                                                                <label class="ping_opt">Ping</label>
-                                                                <input type="radio" name="graph_choice" value="ping_graph">
-                                                                <label class="logs_opt">Logs</label>
-                                                                <input type="radio" name="graph_choice" value="show_logs">
-                                                            </div>
+                                                                <div class="charts">
+                                                                    <label class="none_opt"><?= $lng['L_NONE'] ?></label>
+                                                                    <input type="radio" checked name="graph_choice" value="none_graph">
+                                                                    <label class="network_opt">Network</label>
+                                                                    <input type="radio" name="graph_choice" value="network_graph">
+                                                                    <label class="ping_opt">Ping</label>
+                                                                    <input type="radio" name="graph_choice" value="ping_graph">
+                                                                    <label class="logs_opt">Logs</label>
+                                                                    <input type="radio" name="graph_choice" value="show_logs">
+                                                                </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -179,21 +183,21 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                            <div class="deploy_container">
-                                                                <form id="deploy_form" method="POST">
-                                                                    <select class="select_deploy" name="deploy_option">
-                                                                        <option value="0"></option>
+                                                                <div class="deploy_container">
+                                                                    <form id="deploy_form" method="POST">
+                                                                        <select class="select_deploy" name="deploy_option">
+                                                                            <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                                    <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                            <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
-                                                                    </select>
-                                                                    <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
-                                                                </form>
-                                                            </div>
+                                                                        </select>
+                                                                        <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
+                                                                    </form>
+                                                                </div>
             <?php
         }
         ?>
@@ -204,10 +208,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                            <div class="log_line"><?= $log ?></div>
+                                                                                                                    <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                            </div>
+                                                                </div>
         <?php }
         ?>
         -->

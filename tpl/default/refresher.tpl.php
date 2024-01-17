@@ -52,10 +52,14 @@
                         if ($('#host-details').length === 0) {
                             position = jsonData.host_details.cfg.place;
                             $(position).prepend(jsonData.host_details.data);
+                            $('#tab1_btn').addClass('active');
+                            $('#tab1').addClass('active');
                         } else {
                             $('#host-details').remove();
                             position = jsonData.host_details.cfg.place;
                             $(position).prepend(jsonData.host_details.data);
+                            $('#tab1_btn').addClass('active');
+                            $('#tab1').addClass('active');
                         }
                     }
                 });
