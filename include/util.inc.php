@@ -28,16 +28,33 @@ function timestamp_to_date(int $timestamp, string $format = 'd/m/y') {
     if (!is_numeric($timestamp)) {
         return false;
     }
-    
+
     return date($format, $timestamp);
 }
+
 function micro_to_ms(float $microseconds) {
     return round($microseconds * 1000, 3);
 }
 
 function formatBytes(int $size, int $precision = 2) {
     for ($i = 0; ($size / 1024) > 0.9; $i++, $size /= 1024) {
-
+        
     }
     return round($size, $precision) . ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][$i];
+}
+
+function get_datatime_now($timezone, $time_format = 'd-m-Y H:i:s') {
+    $data_timezone = new DateTimeZone($timezone);
+    $now = new DateTime('now', $data_timezone);
+    return $now->format($time_format);
+}
+function get_time_now($timezone, $time_format = 'H:i:s') {
+    $data_timezone = new DateTimeZone($timezone);
+    $now = new DateTime('now', $data_timezone);
+    return $now->format($time_format);
+}
+function get_date_now($timezone, $time_format = 'd-m-Y') {
+    $data_timezone = new DateTimeZone($timezone);
+    $now = new DateTime('now', $data_timezone);
+    return $now->format($time_format);
 }
