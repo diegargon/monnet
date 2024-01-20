@@ -17,21 +17,6 @@ function valid_array($array) {
     return false;
 }
 
-function formated_date($date) {
-    $fdate = strtotime($date);
-
-    return date("d/m/y H:i", $fdate);
-}
-
-function timestamp_to_date(int $timestamp, string $format = 'd/m/y') {
-    //TODO date not handle timezone
-    if (!is_numeric($timestamp)) {
-        return false;
-    }
-
-    return date($format, $timestamp);
-}
-
 function micro_to_ms(float $microseconds) {
     return round($microseconds * 1000, 3);
 }
@@ -43,20 +28,27 @@ function formatBytes(int $size, int $precision = 2) {
     return round($size, $precision) . ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][$i];
 }
 
-function get_datetime_now($timezone, $time_format = 'Y-m-d H:i:s') {
-    $data_timezone = new DateTimeZone($timezone);
-    $now = new DateTime('now', $data_timezone);
-    return $now->format($time_format);
+function utc_date_now() {
+    $date_timezone = new DatetimeZone('UTC');
+    $date_now = new DateTime('now', $date_timezone);
+
+    return $date_now->format('Y-m-d H:i:s');
 }
 
-function get_time_now($timezone, $time_format = 'H:i:s') {
-    $data_timezone = new DateTimeZone($timezone);
-    $now = new DateTime('now', $data_timezone);
-    return $now->format($time_format);
+function formatted_date_now($timezone = 'UTC', $time_format = 'Y-m-d H:i:s') {
+    $date_timezone = new DatetimeZone($timezone);
+    $date_now = new DateTime('now', $date_timezone);
+
+    return $date_now->format($time_format);
 }
 
-function get_date_now($timezone, $time_format = 'd-m-Y') {
-    $data_timezone = new DateTimeZone($timezone);
-    $now = new DateTime('now', $data_timezone);
-    return $now->format($time_format);
+function formatted_user_date($date, $timezone = 'UTC', $time_format = 'Y-m-d H:i:s') {
+    if (empty($date)) {
+        return false;
+    }
+    $utc_date = new DateTime($date, new DateTimeZone('UTC'));
+
+    $utc_date->setTimezone(new DateTimeZone($timezone));
+
+    return $utc_date->format($time_format);
 }

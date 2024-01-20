@@ -623,13 +623,14 @@ input:checked + .slider:before {
     position: absolute;
     top: 40%;
     left: 50%;
-    padding: 2px;
+    padding: 0px;
     transform: translate(-50%, -50%);
     margin: auto;
     border: 1px solid #9d9d9d;
     border-radius: 5px;
     overflow: hidden;
     min-width: 50%;
+    min-height: 30%;
     z-index: 1;
     background-color: rgb(55, 50, 37);
 }
@@ -639,7 +640,7 @@ input:checked + .slider:before {
     width: 100%;
     border-bottom: 2px solid #313131;
     height: 20px;
-    padding: 0px 0px 4px 0px;
+    padding: 2px 0px 2px 1px;
     margin: 0px;
     background-color: #808080;
 }
@@ -686,11 +687,20 @@ input:checked + .slider:before {
 }
 .host-details-tab-content {
     display: none;
+
 }
 .host-details-tab-content.active {
     display: inline-block;
+    width:100%;
+    border:1px solid #0E9700;
+    margin: 0;
+    padding: 0;
 }
+.host-details-tab-content textarea {
+    width: 100%;
+    /* )overflow: scroll;*/
 
+}
 .host_port_container {
     text-align:center;
     font-size: 0.8em;
@@ -768,6 +778,11 @@ input:checked + .slider:before {
 .ctrl_fieldset {
     border: 1px solid white;
     border-radius: 5px;
+}
+
+.textarea-bar {
+    min-height: 25px;
+    border:1px solid red;
 }
 
 @media only screen and (max-width: 1096px) {

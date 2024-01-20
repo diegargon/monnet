@@ -15,7 +15,6 @@ function weather_widget(array $cfg, array $lng) {
 
     $weather_data = request_weather($cfg);
 
-    $page_data['date'] = ucwords(get_time_now($cfg['timezone'], $cfg['time_format'])) . ' ';
     $page_data['desc'] = ucwords($weather_data->weather[0]->description);
     $page_data['city_name'] = $weather_data->name;
     $page_data['weather_icon'] = 'https://openweathermap.org/img/wn/' . $weather_data->weather[0]->icon . '.png';

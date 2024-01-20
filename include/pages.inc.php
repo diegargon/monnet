@@ -295,25 +295,25 @@ function get_host_detail_view_data(array $cfg, Hosts $hosts, User $user, array $
     if (!empty($host['os'])) {
         $host['os_name'] = $cfg['os'][$host['os']]['name'];
         $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$host['os']]['img'];
-    } 
-    
-    if (!empty($host['system'])) {
-        $host['system_name'] = $cfg['system'][$host['system']]['name'];
-        $host['system_image'] =  'tpl/' . $theme . '/img/icons/' . $cfg['system'][$host['system']]['img'];
-    }
-   
-    if (!empty($host['os_distribution'])) {       
-        $host['os_distribution_name'] = $cfg['os_distribution'][$host['os_distribution']]['name'];
-        $host['os_distribution_image'] =   'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$host['os_distribution']]['img'];
     }
 
-    if (!empty($host['last_seen']) && is_numeric($host['last_seen'])) {
-        $host['f_last_seen'] = timestamp_to_date($host['last_seen']);
+    if (!empty($host['system'])) {
+        $host['system_name'] = $cfg['system'][$host['system']]['name'];
+        $host['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$host['system']]['img'];
     }
-    if (!empty($host['last_check']) && is_numeric($host['last_check'])) {
-        $host['f_last_check'] = timestamp_to_date($host['last_check']);
+
+    if (!empty($host['os_distribution'])) {
+        $host['os_distribution_name'] = $cfg['os_distribution'][$host['os_distribution']]['name'];
+        $host['os_distribution_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$host['os_distribution']]['img'];
     }
-    $host['formated_creation_date'] = formated_date($host['created']);
+
+    if (!empty($host['last_seen'])) {
+        $host['f_last_seen'] = formatted_user_date($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);
+    }
+    if (!empty($host['last_check'])) {
+        $host['f_last_check'] = formatted_user_date($host['last_check'], $cfg['timezone'], $cfg['datetime_format']);
+    }
+    $host['formated_creation_date'] = formatted_user_date($host['created'], $cfg['timezone'], $cfg['datetime_format']);
 
     if ($host['online'] && !empty($host['latency'])) {
         $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';

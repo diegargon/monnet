@@ -12,7 +12,6 @@
     <div id="clock"></div>
 
     <div class="time">
-        <div><?= $tdata['weather_widget']['date'] ?></div>
         <div><?= $tdata['weather_widget']['desc'] ?></div>
     </div>
 

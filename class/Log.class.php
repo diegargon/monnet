@@ -39,7 +39,7 @@ Class Log {
                 if (is_array($msg)) {
                     $msg = var_dump($msg, true);
                 }
-                echo '[' . get_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . "][" . $type . '] ' . $msg . "\n";
+                echo '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . "][" . $type . '] ' . $msg . "\n";
             }
 
             if ($this->cfg['log_to_file']) {
@@ -48,7 +48,7 @@ Class Log {
                     $msg = print_r($msg, true);
                 }
                 $content = '';
-                $content = '[' . get_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . "]:[" . $type . '] ' . $msg . "\n";
+                $content = '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . "]:[" . $type . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     touch($log_file);
                 }

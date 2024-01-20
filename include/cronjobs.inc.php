@@ -38,7 +38,7 @@ function check_known_hosts(Database $db, Hosts $hosts) {
             defined('DUMP_VARS') ? $log->debug("Dumping host_status: " . print_r($host_status, true)) : null;
             $hosts->update($host['id'], $host_status);
             $ping_latency = $host_status['latency'];
-            $set_ping_stats = ['date' => get_datetime_now('UTC'), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
+            $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
             $db->insert('stats', $set_ping_stats);
         }
     }
@@ -88,7 +88,7 @@ function ping_net(array $cfg, Hosts $hosts) {
             $set['ip'] = $ip;
             $set['online'] = 1;
             $set['latency'] = microtime(true) - $latency;
-            $set['last_seen'] = time();
+            $set['last_seen'] = utc_date_now();
             $hostname = get_hostname($ip);
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
 

@@ -18,7 +18,7 @@ function ping_host_ports(array $host) {
         $log->warning("No check ports for host {$host['id']}:{$host['ip']}");
         return false;
     }
-    $time_now = time();
+    $time_now = utc_date_now();
 
     $err_code = $err_msg = '';
     $timeout = is_local_ip($host['ip']) ? 0.6 : 1;
@@ -60,7 +60,6 @@ function ping_host_ports(array $host) {
     }
 
     if ($host_status['online'] == 0) {
-        $time_now = time();
         $host_ping = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
         if ($host_ping['isAlive']) {
             $host_status['online'] = 1;
@@ -74,7 +73,7 @@ function ping_host_ports(array $host) {
 function ping_known_host(array $host) {
 
     $timeout = ['sec' => 0, 'usec' => 500000];
-    $time_now = time();
+    $time_now = utc_date_now();
 
     if (is_local_ip($host['ip'])) {
         $timeout = ['sec' => 0, 'usec' => 200000];

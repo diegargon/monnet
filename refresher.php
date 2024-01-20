@@ -49,8 +49,8 @@ if ($user->getPref('host_details')) {
     $host_details = get_host_detail_view_data($cfg, $hosts, $user, $lng, $user->getPref('host_details'));
     if ($host_details) {
         $tdata['host_details'] = $host_details;
-        $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['host_details']['cfg']['place'] = "#left_container";
+        $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
     }
 }
 
@@ -71,8 +71,8 @@ if ($user->getPref('show_other_hosts_status')) {
         $tdata['hosts'] = $hosts_view;
         $tdata['container-id'] = 'other-hosts';
         $tdata['head-title'] = $lng['L_OTHERS'];
-        $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
         $data['other_hosts']['cfg']['place'] = '#left_container';
+        $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     }
 }
 
