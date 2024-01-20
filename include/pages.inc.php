@@ -273,11 +273,30 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
     return $hosts_results;
 }
 
-function get_host_detail_view_data(array $cfg, Hosts $hosts, User $user, array $lng, $hid) {
+function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User $user, array $lng, $hid) {
+    global $log;
 
     $host = $hosts->getHostById($hid);
     if (!$host) {
         return false;
+    }
+
+    $ping_states_query = 'SELECT *
+        FROM stats
+        WHERE host_id = ' . $host['id'] . ' AND
+        type = 1 
+        AND date >= NOW() - INTERVAL 1 DAY
+        ORDER BY date ASC;';
+    $result = $db->query($ping_states_query);
+    $ping_stats = $db->fetchAll($result);
+    if (valid_array($ping_stats)) {
+
+        foreach ($ping_stats as &$ping) {
+            $date = new DateTime($ping['date'], new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone($cfg['timezone']));
+            $ping['date'] = $date->format('Y-m-d H:i:s');
+        }
+        $host['ping_stats'] = $ping_stats;
     }
 
     $theme = $user->getTheme();

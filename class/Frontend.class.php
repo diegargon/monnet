@@ -74,7 +74,7 @@ class Frontend {
         $cfg = $this->cfg;
 
         ob_start();
-        $tpl_file = 'tpl/' . $tdata['theme'] . '/' . $tpl . '.tpl.php';
+        $tpl_file = 'tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php';
         !file_exists($tpl_file) ? $tpl_file = 'tpl/default/' . $tpl . '.tpl.php' : null;
         include($tpl_file);
 

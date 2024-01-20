@@ -14,9 +14,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" href="favicon.ico" />
         <meta name="referrer" content="never">
-        <title><?= $tdata['web_title'] ?></title>        
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+        <title><?= $tdata['web_title'] ?></title>                
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <!-- Charts -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>        
+        <!-- /Charts -->
         <script>
             window.onload = function () {
                 document.getElementById("loading_wrap").style.display = "none";
