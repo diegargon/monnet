@@ -39,7 +39,7 @@ Class Log {
                 if (is_array($msg)) {
                     $msg = var_dump($msg, true);
                 }
-                echo '['. timestamp_to_date(time()) .'][' . $this->cfg['app_name'] . "][" . $type . '] ' . $msg . "\n";
+                echo '[' . get_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . "][" . $type . '] ' . $msg . "\n";
             }
 
             if ($this->cfg['log_to_file']) {
@@ -48,7 +48,7 @@ Class Log {
                     $msg = print_r($msg, true);
                 }
                 $content = '';
-                $content = '[' . timestamp_to_date(time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
+                $content = '[' . get_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . "]:[" . $type . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     touch($log_file);
                 }
@@ -106,5 +106,4 @@ Class Log {
     public function emerg(string $msg) {
         $this->logged('LOG_EMERG', $msg);
     }
-
 }

@@ -21,9 +21,10 @@ function cron(array $cfg, Database $db, Hosts $hosts) {
 
     if (($cron_times['cron_five'] + 0) < $time_now) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_five']], 'LIMIT 1');
-        fill_hostnames($hosts, $only_missing = 1);
-        fill_mac_vendors($hosts, $only_missing = 1);
-        host_access($cfg, $hosts);
+        $only_missing = 1;
+        fill_hostnames($hosts, $only_missing);
+        fill_mac_vendors($hosts, $only_missing);
+#        host_access($cfg, $hosts);
     }
 
     if (($cron_times['cron_quarter'] + 900) < $time_now) {
@@ -47,6 +48,9 @@ function cron(array $cfg, Database $db, Hosts $hosts) {
     }
     if (($cron_times['cron_monthly'] + 2592000) < $time_now) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_monthly']], 'LIMIT 1');
+        $only_missing = 0;
+        fill_hostnames($hosts, $only_missing);
+        fill_mac_vendors($hosts, $only_missing);
     }
     if ($cron_times['cron_update'] == 0) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_update']], 'LIMIT 1');

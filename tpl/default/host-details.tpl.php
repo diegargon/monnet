@@ -35,11 +35,11 @@
                 </div>
             </div> <!--host-controls-right -->            
             <div class="host-controls-right">
-                <?php if (!empty($tdata['host_details']['wol']) && empty($tdata['host_details']['online'])) { ?>
-                    <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png" alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
+                <?php if (!empty($tdata['host_details']['mac']) && empty($tdata['host_details']['online'])) { ?>
+                    <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png" alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['access_method']) && !empty($tdata['host_details']['online'])) { ?>
-                    <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png" alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
+                    <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png" alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['access_method'])) { ?>
                     <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png" alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
@@ -94,88 +94,89 @@
             </div> <!-- host port container -->
         <?php } ?>
         <div id="tab1" class="host-details-tab-content">
-            Contenido de la pestaña 1
+            <div class="">
+                <div class="" >
+                    <label class="created_label"><?= $lng['L_ADDED'] ?></label>
+                    <span class="created"><?= $tdata['host_details']['formated_creation_date'] ?></span>
+                </div>
+                <?php if (!empty($tdata['host_details']['uptime']) && is_array($tdata['host_details']['uptime'])) { ?>
+                    <div class="" >
+                        <label class="uptime_label"><?= $lng['L_UPTIME'] ?></label>
+                        <span class="uptime"><?= formated_date($tdata['host_details']['uptime']['datetime']) ?></span>
+                    </div>
+                <?php } ?>
+                <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
+                    <div class="" >
+                        <label class="latency"><?= $lng['L_LATENCY'] ?></label>
+                        <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
+                    </div>
+                <?php } ?>
+
+                <?php if (empty($tdata['host_details']['online']) && !empty($tdata['host_details']['f_last_seen'])) { ?>
+                    <div>
+                        <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?></label>
+                        <span class="connected_date"><?= $tdata['host_details']['f_last_seen'] ?> </span>
+                    </div>
+                <?php } ?>
+                <?php if (!empty($tdata['host_details']['f_last_check'])) { ?>
+                    <div>
+                        <label class="connected_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
+                        <span class="connected_date"><?= $tdata['host_details']['f_last_check'] ?> </span>
+                    </div>
+                <?php } ?>
+            </div>
         </div>
         <div id="tab2" class="host-details-tab-content">
-            Contenido de la pestaña 2
-        </div>
-
-        <div id="tab3" class="host-details-tab-content">
-            Contenido de la pestaña 3
-        </div>
-
-        <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-            <div id="progress_bars">
-                <?php
-                if (!empty($tdata['host_details']['loadavg'][1]) && is_numeric($tdata['host_details']['loadavg'][1])) {
-                    $loadavg = 100 * $tdata['host_details']['loadavg'][1];
-                    $max_load = 100 * $tdata['host_details']['ncpu'];
-                    ?>
-                    <label for="load_avg"><?= $lng['L_LOAD'] ?>:</label>
-                    <progress id="load_avg" value="<?= $loadavg ?>" max="<?= $max_load ?>"  data-label="<?= $loadavg ?>"></progress>
-                <?php } ?>
-                <?php
-                if (!empty($tdata['host_details']['mem'])) {
-                    $mem = $tdata['host_details']['mem'];
-                    ?>
-                    <label for="mem"><?= $lng['L_MEM'] ?>:</label>
-                    <progress id="mem" value="<?= $mem['mem_used'] ?>" max="<?= $mem['mem_available'] ?>"></progress>
-                <?php } ?>
-                <?php
-                if (!empty($tdata['host_details']['disks']) && count($tdata['host_details']['disks']) > 0) {
-                    foreach ($tdata['host_details']['disks'] as $disk) {
+            <?php if (!empty($tdata['host_details']['access_method'])) { ?>
+                <div id="progress_bars">
+                    <?php
+                    if (!empty($tdata['host_details']['loadavg'][1]) && is_numeric($tdata['host_details']['loadavg'][1])) {
+                        $loadavg = 100 * $tdata['host_details']['loadavg'][1];
+                        $max_load = 100 * $tdata['host_details']['ncpu'];
                         ?>
-                        <label class="disk"><?= $disk['mounted'] ?>:</label>
-                        <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
-                        <?php
+                        <label for="load_avg"><?= $lng['L_LOAD'] ?>:</label>
+                        <progress id="load_avg" value="<?= $loadavg ?>" max="<?= $max_load ?>"  data-label="<?= $loadavg ?>"></progress>
+                    <?php } ?>
+                    <?php
+                    if (!empty($tdata['host_details']['mem'])) {
+                        $mem = $tdata['host_details']['mem'];
+                        ?>
+                        <label for="mem"><?= $lng['L_MEM'] ?>:</label>
+                        <progress id="mem" value="<?= $mem['mem_used'] ?>" max="<?= $mem['mem_available'] ?>"></progress>
+                    <?php } ?>
+                    <?php
+                    if (!empty($tdata['host_details']['disks']) && count($tdata['host_details']['disks']) > 0) {
+                        foreach ($tdata['host_details']['disks'] as $disk) {
+                            ?>
+                            <label class="disk"><?= $disk['mounted'] ?>:</label>
+                            <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
+                            <?php
+                        }
                     }
-                }
-                ?>
-            </div> <!-- progress container -->
-        <?php } ?>
-        <div class="">
-            <div class="" >
-                <label class="created_label"><?= $lng['L_ADDED'] ?></label>
-                <span class="created"><?= $tdata['host_details']['formated_creation_date'] ?></span>
-            </div>
-            <?php if (!empty($tdata['host_details']['uptime']) && is_array($tdata['host_details']['uptime'])) { ?>
-                <div class="" >
-                    <label class="uptime_label"><?= $lng['L_UPTIME'] ?></label>
-                    <span class="uptime"><?= formated_date($tdata['host_details']['uptime']['datetime']) ?></span>
-                </div>
-            <?php } ?>
-            <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
-                <div class="" >
-                    <label class="latency"><?= $lng['L_LATENCY'] ?></label>
-                    <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
-                </div>
-            <?php } ?>
-
-            <?php if (empty($tdata['host_details']['online']) && !empty($tdata['host_details']['f_last_seen'])) { ?>
-                <div>
-                    <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?></label>
-                    <span class="connected_date"><?= $tdata['host_details']['f_last_seen'] ?> </span>
-                </div>
-            <?php } ?>
-            <?php if (!empty($tdata['host_details']['f_last_check'])) { ?>
-                <div>
-                    <label class="connected_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
-                    <span class="connected_date"><?= $tdata['host_details']['f_last_check'] ?> </span>
-                </div>
+                    ?>
+                </div> <!-- progress container -->
             <?php } ?>
         </div>
+
+        <div id="tab3" class="host-details-tab-content">            
+            <textarea id="textnotes" name="textnotes" rows="10" cols="200">
+                <?= $tdata['host_details']['notes'] ?>
+            </textarea>
+        </div>
+
+
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                <div class="charts">
-                                                                    <label class="none_opt"><?= $lng['L_NONE'] ?></label>
-                                                                    <input type="radio" checked name="graph_choice" value="none_graph">
-                                                                    <label class="network_opt">Network</label>
-                                                                    <input type="radio" name="graph_choice" value="network_graph">
-                                                                    <label class="ping_opt">Ping</label>
-                                                                    <input type="radio" name="graph_choice" value="ping_graph">
-                                                                    <label class="logs_opt">Logs</label>
-                                                                    <input type="radio" name="graph_choice" value="show_logs">
-                                                                </div>
+                                                                                <div class="charts">
+                                                                                    <label class="none_opt"><?= $lng['L_NONE'] ?></label>
+                                                                                    <input type="radio" checked name="graph_choice" value="none_graph">
+                                                                                    <label class="network_opt">Network</label>
+                                                                                    <input type="radio" name="graph_choice" value="network_graph">
+                                                                                    <label class="ping_opt">Ping</label>
+                                                                                    <input type="radio" name="graph_choice" value="ping_graph">
+                                                                                    <label class="logs_opt">Logs</label>
+                                                                                    <input type="radio" name="graph_choice" value="show_logs">
+                                                                                </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -183,21 +184,21 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                                <div class="deploy_container">
-                                                                    <form id="deploy_form" method="POST">
-                                                                        <select class="select_deploy" name="deploy_option">
-                                                                            <option value="0"></option>
+                                                                                <div class="deploy_container">
+                                                                                    <form id="deploy_form" method="POST">
+                                                                                        <select class="select_deploy" name="deploy_option">
+                                                                                            <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                                            <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                                                            <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
-                                                                        </select>
-                                                                        <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
-                                                                    </form>
-                                                                </div>
+                                                                                        </select>
+                                                                                        <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
+                                                                                    </form>
+                                                                                </div>
             <?php
         }
         ?>
@@ -208,10 +209,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                                    <div class="log_line"><?= $log ?></div>
+                                                                                                                                                    <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                                </div>
+                                                                                </div>
         <?php }
         ?>
         -->

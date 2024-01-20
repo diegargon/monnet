@@ -27,7 +27,7 @@ $tdata['theme'] = $cfg['theme'];
 
 $command = Filters::getString('order');
 $command_value = Filters::getString('order_value');
- 
+
 if (!empty($command) && !empty($command_value)) {
     $data['command_receive'] = $command;
     $data['command_value'] = $command_value;
@@ -78,7 +78,13 @@ if ($user->getPref('show_other_hosts_status')) {
 
 /* Power ON/OFF  & Reboot */
 if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {
-    send_magic_packet($command_value);
+    $host = $hosts->getHostById($command_value);
+
+    if (!empty($host['mac'])) {
+        sendWOL($host['mac']);
+    } else {
+        $log->warn("Host {$host['ip']} has not mac address");
+    }
 }
 if ($command == 'power_off' && !empty($command_value) && is_numeric($command_value)) {
     $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 2, 'hid' => $command_value], 'LIMIT 1');

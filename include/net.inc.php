@@ -21,9 +21,7 @@ function ping_host_ports(array $host) {
     $time_now = time();
 
     $err_code = $err_msg = '';
-    $timeout = 1;
-    //if local less tiemout
-    (is_local_ip($host['ip'])) ? $timeout = 0.8 : null;
+    $timeout = is_local_ip($host['ip']) ? 0.6 : 1;
 
     //Custom timeout for host
     if (!empty($host['timeout'])) {
@@ -189,6 +187,35 @@ function is_local_ip(string $ip) {
     return false;
 }
 
-function send_magic_packet(int $host_id) {
+function sendWOL(string $host_mac) {
+    global $log;
 
+    $log->debug("checking mac \"{$host_mac}\"");
+    $host_mac = str_replace([':', '-'], '', $host_mac);
+
+    if (strlen($host_mac) % 2 !== 0) {
+        $log->err("MAC address must be even \"{$host_mac}\"");
+        return false;
+    }
+
+    $macAddressBinary = hex2bin($host_mac);
+    $magicPacket = str_repeat(chr(255), 6) . str_repeat($macAddressBinary, 16);
+    $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+    if ($socket === false) {
+        $log->err("Error creating socket " . socket_strerror(socket_last_error()));
+        return false;
+    }
+
+    socket_set_option($socket, SOL_SOCKET, SO_BROADCAST, 1);
+    $result = socket_sendto($socket, $magicPacket, strlen($magicPacket), 0, '255.255.255.255', 9);
+
+    if ($result) {
+        $log->debug("Sucessful sending WOL packet to {$host_mac}");
+    } else {
+        $log->debug("Failed sending WOL packet to {$host_mac}");
+    }
+    // Cerrar el socket
+    socket_close($socket);
+
+    return $result ? true : false;
 }

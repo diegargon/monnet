@@ -1,5 +1,4 @@
-# MonNet
-
+# MonNet (NOT READY FOR USE)
 Install LAMP
 
 mysql -u root -p

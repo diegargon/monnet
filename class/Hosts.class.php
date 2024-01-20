@@ -91,11 +91,22 @@ Class Hosts {
 
     function remove(int $hid) {
         $this->db->delete('hosts', ['id' => $hid], 'LIMIT 1');
+        $this->db->delete('notes', ['host_id' => $hid], 'LIMIT 1');
         unset($this->hosts[$hid]);
     }
 
     function getHostById(int $id) {
-        return !empty($this->hosts[$id]) ? $this->hosts[$id] : false;
+
+        if (empty($this->hosts[$id])) {
+            return false;
+        }
+        $host = $this->hosts[$id];
+        $result = $this->db->select('notes', '*', ['id' => $host['notes_id']], 'LIMIT 1');
+        $notes = $this->db->fetch($result);
+        $host['notes'] = $notes['content'];
+        $host['notes_date'] = $notes['update'];
+
+        return $host;
     }
 
     function getHostByIp(string $ip) {
@@ -123,7 +134,11 @@ Class Hosts {
             if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
             }
+            if (empty($host['note_id'])) {
+                $this->db->insert('notes', ['host_id' => $host['id']]);
+                $insert_id = $this->db->insertID();
+                $this->db->update('hosts', ['notes_id' => $insert_id], ['id' => $host['id']]);
+            }
         }
     }
-
 }

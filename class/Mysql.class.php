@@ -633,5 +633,4 @@ class Database {
         $query = implode(" $logic ", $q_where_fields);
         return $query;
     }
-
 }
