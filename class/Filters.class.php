@@ -29,13 +29,14 @@ Class Filters {
     }
 
     static function varInt($val, $size = PHP_INT_MAX) {
-        if (!isset($val)) {
+        if (!isset($val) || is_array($val)) {
             return false;
         }
 
-        if (!is_array($val)) {
+        $values = is_array($val) ? $val : trim($val);
 
-            if (!isset($val) || trim($val) > $size || !is_numeric(trim($val))) {
+        if (!is_array($val)) {
+            if (!is_numeric($values) || $values > $size) {
                 return false;
             }
             $values = trim($val);
@@ -44,12 +45,9 @@ Class Filters {
             if (count($values) <= 0) {
                 return false;
             }
-            foreach ($values as $key => $val) {
-                $values[$key] = trim($val);
-                if (!is_numeric($val) || $val > $size) {
-                    return false;
-                }
-                if (!is_numeric($key)) {
+            foreach ($values as $key => $value) {
+                $values[$key] = trim($value);
+                if (!is_numeric($value) || $value > $size || !is_numeric($key)) {
                     return false;
                 }
             }
@@ -75,18 +73,17 @@ Class Filters {
         return self::varString($_POST[$val], $size);
     }
 
-    //TODO FILTER
     static function varString($val, $size = null) {
+        //Valida un string simple
         if (empty($val)) {
             return false;
         }
 
-        if (is_array($val)) {
-
-        } else {
-            if ((!empty($size) && (strlen($val) > $size))) {
-                return false;
-            }
+        if (!empty($size) && strlen($val) > $size) {
+            return false;
+        }
+        if (preg_match('/[!@#$%^&*(),.?":{}|<>]/', $val)) {
+            return false;
         }
 
         return $val;
@@ -110,10 +107,12 @@ Class Filters {
     }
 
     static function varUtf8($val, $size = null) {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+        if (empty($val) || (!empty($size) && mb_strlen($val, 'UTF-8') > $size)) {
             return false;
         }
-//TODO FILTER
+        if (!mb_check_encoding($val, 'UTF-8')) {
+            return false;
+        }
         return $val;
     }
 
@@ -138,10 +137,11 @@ Class Filters {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
-//TODO
-//$url = filter_var($var, FILTER_SANITIZE_URL);
-//$url = filter_var($url, FILTER_VALIDATE_URL);
-        return $val;
+
+        $url = filter_var($val, FILTER_SANITIZE_URL);
+        $url = filter_var($url, FILTER_VALIDATE_URL);
+
+        return $url !== false ? $url : false;
     }
 
     static function getImgUrl($val, $size = null) {
@@ -163,16 +163,23 @@ Class Filters {
     static function varImgUrl($val, $size = null) {
         $exts = array('jpg', 'gif', 'png');
 
-        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+        if (empty($val) || (!empty($size) && strlen($val) > $size)) {
             return false;
         }
 
-        if (filter_var($val, FILTER_VALIDATE_URL) &&
-                in_array(strtolower(pathinfo($val, PATHINFO_EXTENSION)), $exts)) {
-            return true;
-        } else {
+        // Validar que la URL tenga un esquema válido (http o https)
+        $urlParts = parse_url($val);
+        if (!isset($urlParts['scheme']) || !in_array($urlParts['scheme'], ['http', 'https'])) {
             return false;
         }
+
+        // Validar que la extensión del archivo esté en la lista permitida
+        $extension = strtolower(pathinfo($urlParts['path'], PATHINFO_EXTENSION));
+        if (!in_array($extension, $exts)) {
+            return false;
+        }
+
+        return true;
     }
 
     // AZaz
@@ -198,7 +205,13 @@ Class Filters {
         ) {
             return false;
         }
-        if (preg_match('/[^A-Za-z]/', $var)) {
+        /*
+          if (preg_match('/[^A-Za-z]/', $var)) {
+          return false;
+          }
+         * *
+         */
+        if (!preg_match('/^[A-Za-z]+$/', $var)) {
             return false;
         }
 
@@ -223,13 +236,26 @@ Class Filters {
     }
 
     static function varAlphanum($var, $max_size = null, $min_size = null) {
-        if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
-        ) {
+        $length = strlen($var);
+
+        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
-        if (!preg_match('/^[A-Za-z0-9]+$/', $var)) {
+        /*
+          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
+          ) {
+          return false;
+          }
+
+          if (!preg_match('/^[A-Za-z0-9]+$/', $var)) {
+          return false;
+          }
+         * 
+         */
+        if (!ctype_alnum($var)) {
             return false;
         }
+
 
         return $var;
     }
@@ -252,15 +278,24 @@ Class Filters {
     }
 
     static function varUsername($var, $max_size = null, $min_size = null) {
+        //Filter name, only az, no special chars, no spaces
+        $length = strlen($var);
 
-        if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))) {
+        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
-        //TODO
-        //if (!preg_match($user_name_regex, $var)) {
-        //return false;
-        //}
+        /*
+          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))) {
+          return false;
+          }
 
+          return $var;
+         * 
+         */
+
+        if (!preg_match('/^[A-Za-z]+$/', $var)) {
+            return false;
+        }
         return $var;
     }
 
@@ -282,13 +317,27 @@ Class Filters {
     }
 
     static function varEmail($var, $max_size = null, $min_size = null) {
+        $length = strlen($var);
 
-        if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))) {
+        // Validar longitud y formato de correo electrónico
+        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
-        //TODO
+
+        // Mejora: Utilizar filter_var para verificar el formato de correo electrónico
+        if (!filter_var($var, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
 
         return $var;
+        //Validate email
+        /*
+          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))) {
+          return false;
+          }
+
+          return $var;
+         */
     }
 
     //Strict Chars: at least [A-z][0-9] _
@@ -310,15 +359,25 @@ Class Filters {
     }
 
     static function varStrict($var, $max_size = null, $min_size = null) {
+        //TODO allow only alphanumerics and _
+        $length = strlen($var);
 
-        if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
-        ) {
+        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
-        //TODO
-        //if (preg_match('', $var)) {
-        //    return false;
-        //}
+        /*
+          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
+          ) {
+          return false;
+          }
+
+
+          return $var;
+         * 
+         */
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $var)) {
+            return false;
+        }
 
         return $var;
     }
@@ -341,16 +400,39 @@ Class Filters {
     }
 
     static function varPassword($var, $max_size = null, $min_size = null) {
-
+        //Password validate safe password
         if ((!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
         ) {
             return false;
         }
         //TODO
-        //if (!preg_match('/^(\S+)+$/', $var)) {
-        //    return false;
-        //        }
         return $var;
     }
 
+    //IP
+
+    static function getIP($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varIP($_GET[$val], $size);
+    }
+
+    static function postIP($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varIP($_POST[$val], $size);
+    }
+
+    static function varIP($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+        $ip = filter_var($val, FILTER_VALIDATE_IP);
+
+        return $ip !== false ? $ip : false;
+    }
 }
