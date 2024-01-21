@@ -39,6 +39,7 @@ p {
 .header {
     display:flex;
     width:100%;
+    max-height:150px;
 }
 
 .head_align_center{
@@ -49,7 +50,7 @@ p {
 }
 #head_left {
     border:0px solid #0E9700;
-    width: 150px;
+    width: 100%;
 }
 
 #head_center {
@@ -58,7 +59,7 @@ p {
 
 #head_right {
     border:0px solid #0E9700;
-    width: 150px;
+    width: 100%;
 }
 .head_left_content {
     display:inline-block;
@@ -107,7 +108,7 @@ footer {
     /* margin-bottom: 10px; */
 }
 .options_container {
-    /* display: grid; */
+    display: flex;
     float:left;
     /* grid-gap: 14px; */
     grid-template-columns: repeat(2, 120px);
@@ -861,6 +862,59 @@ input:checked + .slider:before {
     vertical-align: middle;
 }
 
+.addlink, .closelink{
+    width: 16px;
+    padding-left: 2px;
+}
+.button-ctrl {
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+}
+
+#add-bookmark-container {
+    display:none;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    padding: 0px;
+    transform: translate(-50%, -50%);
+    margin: auto;
+    border: 1px solid #9d9d9d;
+    border-radius: 5px;
+    overflow: hidden;
+    min-width: 50%;
+    min-height: 10%;
+    z-index: 1;
+    background-color: rgb(55, 50, 37);
+}
+.front-container-bar {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    border-bottom: 2px solid #313131;
+    height: 20px;
+    padding: 2px 0px 2px 1px;
+    margin: 0px;
+    background-color: #808080;
+}
+.form_container {
+    margin: 10px;
+}
+#addBookmarkForm input{
+    margin: 5px;
+}
+#status_msg {
+    width: 100%;
+    text-align: center;
+    color: green;
+}
+#error_msg{
+    width: 100%;
+    text-align: center;
+    color: red;
+}
 
 @media only screen and (max-width: 1096px) {
     .hosts {

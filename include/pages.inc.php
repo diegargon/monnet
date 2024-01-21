@@ -62,6 +62,15 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
 
     $page = common_head($cfg, $db, $lng, $user);
 
+    $categories = new Categories($cfg, $db);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $post_data = page_index_post($db, $user, $categories, $lng);
+        $page = array_merge($post_data, $page);
+    }
+
+    $items = new Items($cfg, $db);
+
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
 
@@ -70,10 +79,6 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
     //Graph scripts
     $page['web_main']['scriptlink'][] = 'https://cdn.jsdelivr.net/npm/chart.js';
     $page['web_main']['scriptlink'][] = 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns';
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        page_index_post($user);
-    }
 
     /* Include refresher script tpl */
     $page['web_main']['main_head_tpl'][] = 'refresher';
@@ -97,14 +102,14 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
 
     /* AppLinks Bookmarks */
     if ($user->getPref('show_applinks_status')) {
-        $applinks_bookmarks = get_bookmarks($db, $user, 'applinks');
+        $applinks_bookmarks = format_items($user, $items->getCatAll(11));
         $page['bookmarks_category']['applinks'] = $applinks_bookmarks;
     }
 
     /* Bookmarks */
 
     if ($user->getPref('show_bookmarks_status')) {
-        $bookmarks = get_bookmarks($db, $user, 'bookmarks');
+        $bookmarks = format_items($user, $items->getCatAll(10));
         $page['bookmarks_category']['bookmarks'] = $bookmarks;
     }
     if ($user->getPref('show_applinks_status') || $user->getPref('show_bookmarks_status')) {
@@ -113,11 +118,18 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
             'place' => 'center_col',
         ];
     }
+    $page['load_tpl'][] = [
+        'file' => 'additem',
+        'place' => 'center_col',
+    ];
+
+    $page['items_categories'] = $categories->getByType(2);
 
     return $page;
 }
 
-function page_index_post(User $user) {
+function page_index_post(Database $db, User $user, Categories $categories, array $lng) {
+    $page_data = [];
     $profile_type = Filters::postString('profile_type');
     $show_bookmarks = Filters::postInt('show_bookmarks');
     $show_this_system = Filters::postInt('show_this_system');
@@ -125,7 +137,67 @@ function page_index_post(User $user) {
     $show_highlight_hosts = Filters::postInt('show_highlight_hosts');
     $show_other_hosts = Filters::postInt('show_rest_hosts');
     $close_host_details = Filters::postInt('close_host_details_x'); //img click _x _y
+    //add Item
+    if (isset($_POST['addBookmarkForm'])) {
+        $bookmarkName = Filters::postString('bookmarkName');
+        $url_type = Filters::postInt('url_type');
+        $urlip = Filters::postUrl('urlip');
 
+        if (!$urlip) {
+            $urlip = Filters::postIP('urlip');
+        }
+
+        $image_type = Filters::postString('image_type');
+        if ($image_type == 'image_resource') {
+            $field_img = Filters::postImgUrl('field_image');
+        } else {
+            $field_img = Filters::postStrict('field_image');
+        }
+
+        $weight = Filters::postInt('weight');
+    }
+    //
+    if (isset($_POST['addBookmarkForm'])) {
+        $page_data['show_add_bookmark'] = 1;
+
+        if (empty($bookmarkName)) {
+            $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        } else if (empty($urlip)) {
+            $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        } else if (empty($url_type)) {
+            $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        } else if (empty('weight')) {
+            $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        } else if (empty($image_type)) {
+            $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_IMAGE_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        if ($image_type != 'favicon' && empty($field_img)) {
+            $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        $page_data['bookmarkName'] = $bookmarkName;
+        $page_data['url_type'] = $url_type;
+        $page_data['urlip'] = $urlip;
+        $page_data['image_type'] = $image_type;
+        $page_data['field_img'] = $field_img;
+        $page_data['weight'] = $weight;
+        if (empty($page_data['error_msg'])) {
+            $conf = ['url' => $urlip, 'image_type' => $image_type, 'image_resource' => $field_img];
+            $set = ['cat_id' => $url_type, 'title' => $bookmarkName, 'conf' => json_encode($conf), 'weight' => $weight];
+            $db->insert('items', $set);
+            $page_data['status_msg'] = 'OK';
+        } else {
+            $page_data['bookmarkName'] = $bookmarkName;
+            $page_data['url_type'] = $url_type;
+            $page_data['urlip'] = $urlip;
+            $page_data['image_type'] = $image_type;
+            $page_data['field_img'] = $field_img;
+            $page_data['weight'] = $weight;
+        }
+
+        $cat_type = $categories->getTypeByID($url_type);
+    }
     if (!empty($close_host_details)) {
         $user->setPref('host_details', 0);
     }
@@ -147,6 +219,8 @@ function page_index_post(User $user) {
     if ($show_other_hosts !== false) {
         $user->setPref('show_other_hosts_status', $show_other_hosts);
     }
+
+    return $page_data;
 }
 
 function page_login(array $cfg, array $lng, User $user) {
@@ -208,31 +282,29 @@ function page_logout(array $cfg, array $lng, User $user) {
     header("Location: {$cfg['rel_path']}index.php");
 }
 
-function get_bookmarks(Database $db, User $user, string $category) {
+function format_items(User $user, array $items_results) {
 
-    $results = $db->select('items', '*', ['type' => $category], 'ORDER BY weight');
-    $bookmarks_results = $db->fetchAll($results);
-
-    $bookmarks = [];
+    $items = [];
     $theme = $user->getTheme();
-    foreach ($bookmarks_results as $bookmark) {
-        $bookmark_conf = json_decode($bookmark['conf'], true);
-
-        if ($bookmark_conf['image_type'] === 'favicon' && empty($bookmark_conf['image_resource'])) {
-            $bookmark_img = $bookmark_conf['url'] . '/favicon.ico';
-        } else if ($bookmark_conf['image_type'] === 'favicon') {
-            $favicon_path = $bookmark_conf['image_resource'];
-            $bookmark_img = $bookmark_conf['url'] . '/' . $favicon_path;
-        } elseif ($bookmark_conf['image_type'] === 'url') {
-            $bookmark_img = $bookmark_conf['image_resource'];
-        } elseif ($bookmark_conf['image_type'] === 'local_img') {
-            $bookmark_img = 'tpl/' . $theme . '/img/icons/' . $bookmark_conf['image_resource'];
+    foreach ($items_results as $item) {
+        $item_conf = json_decode($item['conf'], true);
+        $item_img = '';
+        if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource'])) {
+            $item_img = $item_conf['url'] . '/favicon.ico';
+        } else if ($item_conf['image_type'] === 'favicon') {
+            $favicon_path = $item_conf['image_resource'];
+            $item_img = $item_conf['url'] . '/' . $favicon_path;
+        } elseif ($item_conf['image_type'] === 'url') {
+            $item_img = $item_conf['image_resource'];
+        } elseif ($item_conf['image_type'] === 'local_img') {
+            $item_img = 'tpl/' . $theme . '/img/icons/' . $item_conf['image_resource'];
         }
-        $bookmark['img'] = $bookmark_img;
-        $bookmarks[] = array_merge($bookmark, $bookmark_conf);
+
+        $item['img'] = $item_img;
+        $items[] = array_merge($item, $item_conf);
     }
 
-    return $bookmarks;
+    return $items;
 }
 
 function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, int $highlight = 0) {

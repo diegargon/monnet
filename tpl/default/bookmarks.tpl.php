@@ -10,7 +10,7 @@
 ?>
 <div class="bookmarks_container" id="bookmarks_container">
     <?php foreach ($tdata['bookmarks_category'] as $bookmark_category) { ?>
-        <div class="bookmarks">
+        <div class="bookmarks">    
             <?php foreach ($bookmark_category as $bookmark) { ?>
                 <div class="item-container">
                     <a href="<?= $bookmark['url'] ?>" rel="noreferrer" target="_blank" class="item" title="<?= $bookmark['url'] ?>">

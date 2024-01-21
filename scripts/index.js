@@ -21,3 +21,12 @@ function changeTab(tabId) {
     selectedTab.classList.add('active');
 }
 
+$(document).ready(function () {
+    $("#addBookmark").on("click", function () {
+        $("#add-bookmark-container").css("display", "block");
+    });
+    $("#close_addbookmark").on("click", function () {
+        $("#add-bookmark-container").css("display", "none");
+    });
+
+});

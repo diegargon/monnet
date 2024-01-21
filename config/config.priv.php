@@ -9,6 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+$DEBUG=1;
+
 /* OS manufactures */
 $cfg['os_manufacture'] = [
     0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
@@ -27,7 +29,6 @@ $cfg['os_manufacture'] = [
     13 => ['name' => 'Sony Corporation', 'img' => 'sony.png'],
     14 => ['name' => 'FreeRTOS', 'img' => 'freertos.png']
 ];
-
 
 /* OS */
 $cfg['os'] = [
@@ -123,4 +124,10 @@ $cfg['ssh_profile'] = [
 $cfg['commands'] = [
     1 => 'sudo shutdown -r now;exit',
     2 => 'sudo shutdown -h now;exit',
+];
+
+$cfg['cat_types'] = [
+    1 => 'L_HOSTS',
+    2 => 'L_LINKS',
+    3 => 'L_SEARCH_ENGINE',
 ];

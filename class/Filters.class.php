@@ -375,7 +375,7 @@ Class Filters {
           return $var;
          * 
          */
-        if (!preg_match('/^[A-Za-z0-9_]+$/', $var)) {
+        if (!preg_match('/^[A-Za-z0-9_.]+$/', $var)) {
             return false;
         }
 

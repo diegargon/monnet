@@ -9,6 +9,11 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+if (!empty($DEBUG)) {
+    ini_set("xdebug.var_display_max_children", '-1');
+    ini_set("xdebug.var_display_max_data", '-1');
+    ini_set("xdebug.var_display_max_depth", '-1');
+}
 require_once('config/config.priv.php');
 require_once('config/config.inc.php');
 date_default_timezone_set($cfg['timezone']);
@@ -33,6 +38,8 @@ require_once('include/net.inc.php');
 /* Get default lang overwrite after with user settings */
 require_once('lang/es/main.lang.php');
 require_once('class/Hosts.class.php');
+require_once('class/Items.class.php');
+require_once('class/Categories.class.php');
 
 $hosts = new Hosts($db);
 
