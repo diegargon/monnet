@@ -1,73 +1,77 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
--- Base de datos: `monnet`
+-- Database: `monnet`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cmd`
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `cat_id` int NOT NULL,
+  `cat_name` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cmd`
 --
 
 CREATE TABLE `cmd` (
   `cmd_id` int NOT NULL,
-  `hid` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `hid` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `cmd_type` smallint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `hosts`
+-- Table structure for table `hosts`
 --
 
 CREATE TABLE `hosts` (
   `id` int NOT NULL,
-  `title` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `hostname` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `title` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `hostname` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `ip` char(255) NOT NULL,
   `mac` char(255) DEFAULT NULL,
-  `mac_vendor` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `mac_vendor` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `highlight` tinyint(1) NOT NULL DEFAULT '0',
-  `check_method` tinyint NOT NULL DEFAULT '1',
-  `system` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `distributor` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `check_method` tinyint NOT NULL DEFAULT '1' COMMENT '1:ping 2:tcp ports',
+  `system` int DEFAULT NULL,
+  `os` int NOT NULL DEFAULT '0',
+  `os_distribution` int DEFAULT NULL,
   `codename` char(255) DEFAULT NULL,
-  `version` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `img_ico` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `version` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `weight` tinyint NOT NULL DEFAULT '60',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '0:ok;1:warn;3:danger',
   `online` tinyint NOT NULL DEFAULT '0',
   `access_method` tinyint NOT NULL DEFAULT '0' COMMENT '0:no;1:ssh..',
   `access_results` json DEFAULT NULL,
-  `wol` tinyint NOT NULL DEFAULT '0',
   `timeout` tinyint DEFAULT NULL,
-  `last_seen` int DEFAULT NULL,
   `latency` float DEFAULT NULL,
   `disable` tinyint NOT NULL DEFAULT '0',
-  `clilog` varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'clilog keep extra cli logs',
   `warn` tinyint NOT NULL DEFAULT '0',
   `warn_port` tinyint NOT NULL DEFAULT '0',
-  `fingerprint` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fingerprint` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `comment` varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+  `ports` varchar(15000) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
+  `notes_id` int DEFAULT NULL,
+  `last_check` datetime DEFAULT NULL,
+  `last_seen` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `items`
+-- Table structure for table `items`
 --
 
 CREATE TABLE `items` (
@@ -81,7 +85,7 @@ CREATE TABLE `items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `load_stats`
+-- Table structure for table `load_stats`
 --
 
 CREATE TABLE `load_stats` (
@@ -93,36 +97,20 @@ CREATE TABLE `load_stats` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ping_stats`
+-- Table structure for table `notes`
 --
 
-CREATE TABLE `ping_stats` (
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `host` int DEFAULT NULL,
-  `value` tinyint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ports`
---
-
-CREATE TABLE `ports` (
+CREATE TABLE `notes` (
   `id` int NOT NULL,
-  `hid` int NOT NULL,
-  `port` smallint NOT NULL,
-  `port_type` tinyint NOT NULL DEFAULT '1' COMMENT '1:tcp;2:udp',
-  `title` char(255) NOT NULL,
-  `icon` char(255) DEFAULT NULL,
-  `online` tinyint NOT NULL DEFAULT '0',
-  `clilog` varchar(2048) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `host_id` int NOT NULL,
+  `update` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prefs`
+-- Table structure for table `prefs`
 --
 
 CREATE TABLE `prefs` (
@@ -135,125 +123,144 @@ CREATE TABLE `prefs` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users`
+-- Table structure for table `stats`
+--
+
+CREATE TABLE `stats` (
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `type` tinyint UNSIGNED NOT NULL COMMENT '1 ping',
+  `host_id` int NOT NULL,
+  `value` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
-  `username` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `email` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `password` char(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `sid` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `username` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `email` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `password` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `sid` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `isAdmin` tinyint NOT NULL DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
--- Volcado de datos para la tabla `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `isAdmin`, `created`) VALUES
-(1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', 'ed53r6u3br9num3bu8118po37h', 1, '2021-10-30 12:06:20');
+(1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', '5q9l1d3sadf1cmrqa2drl19mr1', 1, '2021-10-30 12:06:20');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `cmd`
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`cat_id`);
+
+--
+-- Indexes for table `cmd`
 --
 ALTER TABLE `cmd`
   ADD PRIMARY KEY (`cmd_id`);
 
 --
--- Indices de la tabla `hosts`
+-- Indexes for table `hosts`
 --
 ALTER TABLE `hosts`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `ip` (`ip`);
 
 --
--- Indices de la tabla `items`
+-- Indexes for table `items`
 --
 ALTER TABLE `items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `load_stats`
+-- Indexes for table `load_stats`
 --
 ALTER TABLE `load_stats`
   ADD PRIMARY KEY (`timestamp`),
   ADD KEY `host` (`host`);
 
 --
--- Indices de la tabla `ping_stats`
+-- Indexes for table `notes`
 --
-ALTER TABLE `ping_stats`
-  ADD PRIMARY KEY (`timestamp`),
-  ADD KEY `host` (`host`);
+ALTER TABLE `notes`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `ports`
---
-ALTER TABLE `ports`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `hid` (`hid`,`port`);
-
---
--- Indices de la tabla `prefs`
+-- Indexes for table `prefs`
 --
 ALTER TABLE `prefs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uid` (`uid`,`pref_name`);
 
 --
--- Indices de la tabla `users`
+-- Indexes for table `stats`
+--
+ALTER TABLE `stats`
+  ADD UNIQUE KEY `date` (`date`,`host_id`);
+
+--
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `cmd`
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `cat_id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `cmd`
 --
 ALTER TABLE `cmd`
-  MODIFY `cmd_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `cmd_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `hosts`
+-- AUTO_INCREMENT for table `hosts`
 --
 ALTER TABLE `hosts`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `items`
+-- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `ports`
+-- AUTO_INCREMENT for table `notes`
 --
-ALTER TABLE `ports`
+ALTER TABLE `notes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `prefs`
+-- AUTO_INCREMENT for table `prefs`
 --
 ALTER TABLE `prefs`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

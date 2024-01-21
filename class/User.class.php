@@ -129,9 +129,15 @@ Class User {
                 'secure' => true,
                 'samesite' => 'lax',
             ]);
+            setcookie('username', $this->getUsername(), [
+                'expires' => time() + (10 * 365 * 24 * 120),
+                'secure' => true,
+                'samesite' => 'lax',
+            ]);
         } else {
             setcookie("sid", session_id(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
             setcookie("uid", $this->getId(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
+            setcookie("username", $this->getUsername, time() + (10 * 365 * 24 * 120), $this->cfg['rel_path']);
         }
         $new_sid = session_id();
 
@@ -184,5 +190,4 @@ Class User {
         }
         $this->prefs[$key] = $value;
     }
-
 }

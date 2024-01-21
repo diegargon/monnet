@@ -29,6 +29,7 @@ $cfg['sid_expire'] = 99999;
 $cfg['theme'] = 'default';
 $cfg['css'] = 'default';
 $cfg['charset'] = 'utf-8';
+$cfg['graph_charset'] = 'es-ES';
 $cfg['net'] = '192.168.1.0/24';
 $cfg['log_to_syslog'] = 0;
 $cfg['log_to_file'] = 1;
@@ -37,6 +38,7 @@ $cfg['timezone'] = 'UTC';
 $cfg['date_format'] = 'd-m-Y';
 $cfg['time_format'] = 'H:i:s';
 $cfg['datetime_format'] = 'd-m-Y H:i:s';
+$cfg['datatime_graph_format'] = 'H:i';
 $cfg['datetime_log_format'] = 'd-m H:i:s';
 
 $cfg['cert'] = '/var/certs/id_rsa';

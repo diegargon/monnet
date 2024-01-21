@@ -54,6 +54,7 @@ $lng = [
     'L_PORT_DOWN' => 'Puerto inacalzable',
     'L_PWR_ON' => 'Encender',
     'L_PWR_OFF' => 'Apagar',
+    'L_PRIVACY' => 'Privacidad',
     //R
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',

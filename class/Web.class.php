@@ -39,7 +39,7 @@ Class Web {
 
         //echo $this->user->getId();
 
-        $valid_pages = ['index', 'login', 'logout', 'settings'];
+        $valid_pages = ['index', 'login', 'logout', 'privacy', 'settings'];
 
         (!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
 
@@ -62,6 +62,8 @@ Class Web {
             $page_data = page_login($this->cfg, $this->lng, $this->user);
         } else if ($page == 'logout') {
             $page_data = page_logout($this->cfg, $this->lng, $this->user);
+        } else if ($page === 'privacy') {
+            $page_data = page_privacy($this->cfg, $this->db, $this->lng, $this->user);
         } else if ($page === 'index') {
             $page_data = page_index($this->cfg, $this->db, $this->lng, $this->user);
         } else if ($page === 'settings') {

@@ -23,15 +23,18 @@
 
 <div id="top_container_bar" class="top_container_bar">
     <div class="bar_item_container">
-        <a href="<?= $cfg['rel_path']?>?page=index">
-            <img src="tpl/<?= $cfg['theme'] ?>/img/monnet.png" style="border-radius:20px" alt="home" title="<?= $lng['L_HOME'];?>"/>
-        </a>          
-        <a href="<?= $cfg['rel_path']?>?page=logout">            
-            <img src="tpl/<?= $cfg['theme'] ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT'];?>">
-        </a>        
-        <a href="<?= $cfg['rel_path']?>?page=settings">
-            <img src="tpl/<?= $cfg['theme'] ?>/img/settings.png" alt="settings" title="<?= $lng['L_SETTINGS'];?>"/>
-        </a>        
+        <a href="<?= $cfg['rel_path'] ?>?page=logout">            
+            <img src="tpl/<?= $cfg['theme'] ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT']; ?>">
+        </a>
+        <a href="<?= $cfg['rel_path'] ?>?page=index">
+            <img src="tpl/<?= $cfg['theme'] ?>/img/monnet.png" style="border-radius:20px" alt="home" title="<?= $lng['L_HOME']; ?>"/>
+        </a>
+        <a href="<?= $cfg['rel_path'] ?>?page=settings">
+            <img src="tpl/<?= $cfg['theme'] ?>/img/settings.png" alt="settings" title="<?= $lng['L_SETTINGS']; ?>"/>
+        </a>
+        <a href="<?= $cfg['rel_path'] ?>?page=privacy">
+            <img src="tpl/<?= $cfg['theme'] ?>/img/privacy.png" alt="privacy" title="<?= $lng['L_PRIVACY']; ?>"/>
+        </a>
     </div>
     <?= !empty($tdata['top_container_bar']) ? $tdata['top_container_bar'] : null; ?>
 </div>        

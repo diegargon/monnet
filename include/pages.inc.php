@@ -23,15 +23,8 @@ function page_defaults(array $cfg, User $user) {
     return $page;
 }
 
-function page_index(array $cfg, Database $db, array $lng, User $user) {
+function common_head(array $cfg, Database $db, array $lng, User $user) {
     $page = [];
-
-    $page['page'] = 'index';
-    $page['head_name'] = $cfg['web_title'];
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        page_index_post($user);
-    }
 
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
@@ -48,20 +41,42 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
         'place' => 'head_center',
     ];
 
-    //TODO: modules_load by page request
-
     /* Time Widget */
     require('modules/weather_widget/weather_widget.php');
 
-    $page['web_main']['jsfile'][] = './modules/weather_widget/weather_widget.js';
-    /* Include refresher script tpl */
-    $page['web_main']['main_head_tpl'][] = 'refresher';
+    $page['web_main']['scriptlink'][] = 'https://code.jquery.com/jquery-2.2.4.min.js';
+    $page['web_main']['scriptlink'][] = './scripts/common.js';
+    $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
 
     $page['weather_widget'] = weather_widget($cfg, $lng);
     $page['load_tpl'][] = [
         'file' => 'weather-widget',
         'place' => 'head_right',
     ];
+
+    return $page;
+}
+
+function page_index(array $cfg, Database $db, array $lng, User $user) {
+    $page = [];
+
+    $page = common_head($cfg, $db, $lng, $user);
+
+    $page['page'] = 'index';
+    $page['head_name'] = $cfg['web_title'];
+
+    //Index scripts
+    $page['web_main']['scriptlink'][] = './scripts/index.js';
+    //Graph scripts
+    $page['web_main']['scriptlink'][] = 'https://cdn.jsdelivr.net/npm/chart.js';
+    $page['web_main']['scriptlink'][] = 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        page_index_post($user);
+    }
+
+    /* Include refresher script tpl */
+    $page['web_main']['main_head_tpl'][] = 'refresher';
 
     /* Controls */
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
@@ -159,8 +174,20 @@ function page_login(array $cfg, array $lng, User $user) {
     $page['page'] = 'login';
     $page['tpl'] = 'login';
     $page['log_in'] = $lng['L_LOGIN'];
+
+    if (isset($_COOKIE['username'])) {
+        $page['username'] = htmlspecialchars($_COOKIE['username']);
+    } else {
+        $page['username'] = '';
+    }
+
     $page['username_placeholder'] = $lng['L_USERNAME'];
     $page['password_placeholder'] = $lng['L_PASSWORD'];
+    if (!empty($page['username'])) {
+        $page['set_pass_focus'] = 1;
+    } else {
+        $page['set_username_focus'] = 1;
+    }
 
     return $page;
 }
@@ -367,9 +394,19 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
 function page_settings(array $cfg, Database $db, array $lng, User $user) {
     $page = [];
 
+    $page = common_head($cfg, $db, $lng, $user);
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
 
-    
+    return $page;
+}
+
+function page_privacy(array $cfg, Database $db, array $lng, User $user) {
+    $page = [];
+
+    $page = common_head($cfg, $db, $lng, $user);
+    $page['page'] = 'index';
+    $page['head_name'] = $cfg['web_title'];
+    $page['web_main']['scriptlink'][] = './scripts/privacy.js';
     return $page;
 }

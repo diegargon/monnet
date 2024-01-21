@@ -7,7 +7,6 @@
  *  @copyright Copyright @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
 ?>
 <div class="header">
     <div class="head_align_center">

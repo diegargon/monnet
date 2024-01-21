@@ -29,11 +29,14 @@ class Frontend {
                 $web['main_head'] .= $this->cssLinkFile($this->cfg['theme'], $cssfile);
             }
         }
-        /* Add custom js files */
-        if (!empty($tdata['web_main']['jsfile']) && is_array($tdata['web_main']['jsfile'])) {
-            foreach ($tdata['web_main']['jsfile'] as $jsfile) {
-                if (file_exists($jsfile)) {
-                    $web['main_head'] .= $this->jsLinkFile($jsfile);
+        /* Add script link */
+        if (!empty($tdata['web_main']['scriptlink']) && is_array($tdata['web_main']['scriptlink'])) {
+            foreach ($tdata['web_main']['scriptlink'] as $scriptlink) {
+                if (
+                        (strpos($scriptlink, 'http') === 0) ||
+                        (file_exists($scriptlink))
+                ) {
+                    $web['main_head'] .= $this->scriptLink($scriptlink);
                 }
             }
         }
@@ -90,8 +93,9 @@ class Frontend {
         return $css_file;
     }
 
-    function jsLinkFile(string $jsfile) {
-        return '<script src="' . $jsfile . '"></script>' . "\n";
+    function scriptLink(string $scriptlink) {
+        //TODO SEC
+        return '<script src="' . $scriptlink . '"></script>' . "\n";
     }
 
     function msgBox(array $msg) {
@@ -127,5 +131,4 @@ class Frontend {
          *
          */
     }
-
 }
