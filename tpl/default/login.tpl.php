@@ -7,6 +7,25 @@
  *  @copyright Copyright @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 ?>
+<div class="header">
+    <div class="head_align_center">
+        <div id="head_left"><div class="head_left_content"></div></div>
+        <div id="head_center">
+            <div class="head_center_content">
+                <div class="search_container">
+                    <h1 class='title gradiant'><a href=""><?= strtoupper($cfg['app_name']) ?></a></h1>
+                    <div class="search-wrapper">
+                        <form target="_blank"  action="https://gooogle.com/search" method="GET">
+                            <input type="text" name="q" required class="search-box" placeholder="Google" />
+                            <button class="close-icon" type="reset"></button>
+                        </form>
+                    </div>
+                </div>                
+            </div>
+        </div>
+        <div id="head_right"><div class="head_right_content"></div></div>
+    </div>
+</div>
 
 <div class="login_page">
     <div class="profile_box">
