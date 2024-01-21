@@ -201,7 +201,7 @@ footer {
     border-style: ridge;
     border-radius: 5px;
     justify-content: center;
-    background-color:rgba(0, 0, 0, 0.4);
+    background-color:rgba(62, 61, 61, 0.4);
 }
 
 .item-thumb , .fab, .fas {
@@ -818,10 +818,48 @@ input:checked + .slider:before {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 2px;
 }
 .login_button:hover {
     background-color: #45a049
 }
+
+.top_container_bar {
+    position: absolute;
+    float:left;
+    top: 10px;
+    left: 5px;
+}
+
+.top_container_bar a {
+    /* display: flex;*/
+    border: 0px solid yellow;
+    padding: 0px;
+    margin: 0px;
+    overflow: auto;
+}
+.top_container_bar img {
+    width: 30px;
+    padding: 0px;
+    margin: 0px;
+    border: 0px solid blue;
+}
+
+.bar_item_container {
+    float:left;
+    margin: 0px;
+    padding: 3px 3px 0px 3px;
+    border: 1px rgba(0,0,0, 0.7);
+    border-style: ridge;
+    border-radius: 5px;
+    background-color: rgb(0, 132, 183);
+    color: rgb(255,255,255);
+    /* inline-size: min-content; */
+    text-align: center;
+    vertical-align: middle;
+}
+
+
 @media only screen and (max-width: 1096px) {
     .hosts {
         /* grid-template-columns: repeat(6, 140px);      */
@@ -896,39 +934,4 @@ input:checked + .slider:before {
     .bookmarks img {
 
     }
-}
-
-.top_container_bar {
-    position: absolute;
-    float:left;
-    top: 10px;
-    left: 5px;
-}
-
-.top_container_bar a {
-    /* display: flex;*/
-    border: 0px solid yellow;
-    padding: 0px;
-    margin: 0px;
-    overflow: auto;
-}
-.top_container_bar img {
-    width: 30px;
-    padding: 0px;
-    margin: 0px;
-    border: 0px solid blue;
-}
-
-.bar_item_container {
-    float:left;
-    margin: 0px;
-    padding: 3px 3px 0px 3px;
-    border: 1px rgba(0,0,0, 0.7);
-    border-style: ridge;
-    border-radius: 5px;
-    background-color: rgb(0, 132, 183);
-    color: rgb(255,255,255);
-    /* inline-size: min-content; */
-    text-align: center;
-    vertical-align: middle;
 }
