@@ -49,6 +49,7 @@ p {
 }
 #head_left {
     border:0px solid #0E9700;
+    width: 150px;
 }
 
 #head_center {
@@ -57,6 +58,7 @@ p {
 
 #head_right {
     border:0px solid #0E9700;
+    width: 150px;
 }
 .head_left_content {
     display:inline-block;
