@@ -566,7 +566,7 @@ input:checked + .slider:before {
     float:left;
 }
 .ping_chart img {
-    width: 300px !important;
+    width: 400px !important;
 }
 
 /* SERVICES END */
@@ -874,7 +874,7 @@ input:checked + .slider:before {
     overflow: auto;
 }
 .top_container_bar a {
-    display: flex;
+    /* display: flex;*/
     border: 0px solid yellow;
     padding: 0px;
     margin: 0px;
@@ -887,6 +887,12 @@ input:checked + .slider:before {
     border: 0px solid blue;
 }
 
+.top_container_bar {
+    position: absolute;
+    float:left;
+    top: 0;
+    left: 0;
+}
 .bar_item_container {
     float:left;
     margin: 0px;
@@ -896,7 +902,7 @@ input:checked + .slider:before {
     border-radius: 5px;
     background-color: rgb(87, 87, 87);
     color: rgb(255,255,255);
-    inline-size: min-content;
+    /* inline-size: min-content; */
     text-align: center;
     vertical-align: middle;
 }

@@ -25,11 +25,13 @@ $lng = [
     'L_HOSTNAME' => 'Hostname',
     'L_HOSTS' => 'Hosts',
     'L_HOST' => 'Host',
-    'L_HUMIDITY' => 'Humedad',
+    'L_HOME' => 'Inicio',
+    'L_HUMIDITY' => 'Humedad',    
     //I
     'L_IP' => 'Ip',
     //L
     'L_LOGIN' => 'Identificarse',
+    'L_LOGOUT' => 'Salir',
     'L_LAST_SEEN' => 'Ultima vez online:',
     'L_LAST_CHECK' => 'Ultima comprobación',
     'L_LATENCY' => 'Latencia',
@@ -61,6 +63,7 @@ $lng = [
     'L_SYSTEM' => 'Sistema',
     'L_SERVICES' => 'Servicios',
     'L_STATUS' => 'Estado',
+    'L_SETTINGS' => 'Configuración',
     //T
     'L_THIS_SYSTEM' => 'This',
     //U

@@ -6,6 +6,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
+!defined('IN_WEB') ? exit : true;
 ?>
 <div class="header">
     <div class="head_align_center">
@@ -22,9 +23,15 @@
 
 <div id="top_container_bar" class="top_container_bar">
     <div class="bar_item_container">
-        <a href="<?= $cfg['rel_path']?>?page=logout">
-            <img src="tpl/<?= $cfg['theme'] ?>/img/icons/logout.png" alt="logout"/>
-        </a>
+        <a href="<?= $cfg['rel_path']?>?page=index">
+            <img src="tpl/<?= $cfg['theme'] ?>/img/monnet.png" style="border-radius:20px" alt="home" title="<?= $lng['L_HOME'];?>"/>
+        </a>          
+        <a href="<?= $cfg['rel_path']?>?page=logout">            
+            <img src="tpl/<?= $cfg['theme'] ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT'];?>">
+        </a>        
+        <a href="<?= $cfg['rel_path']?>?page=settings">
+            <img src="tpl/<?= $cfg['theme'] ?>/img/settings.png" alt="settings" title="<?= $lng['L_SETTINGS'];?>"/>
+        </a>        
     </div>
     <?= !empty($tdata['top_container_bar']) ? $tdata['top_container_bar'] : null; ?>
 </div>        

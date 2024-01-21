@@ -364,6 +364,12 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     return $host;
 }
 
-function top_bar() {
+function page_settings(array $cfg, Database $db, array $lng, User $user) {
+    $page = [];
+
+    $page['page'] = 'index';
+    $page['head_name'] = $cfg['web_title'];
+
     
+    return $page;
 }
