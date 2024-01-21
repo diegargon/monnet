@@ -13,9 +13,23 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `categories` (
-  `cat_id` int NOT NULL,
+  `id` int NOT NULL,
+  `cat_type` tinyint NOT NULL COMMENT '1 Hosts 2 Links',
   `cat_name` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `cat_type`, `cat_name`) VALUES
+(1, 1, 'L_HOSTS_MAIN'),
+(2, 1, 'L_HOSTS_USERS'),
+(3, 1, 'L_HOSTS_SERVERS'),
+(4, 1, 'L_HOSTS_VM'),
+(10, 2, 'L_WEBS'),
+(11, 2, 'L_APPLINKS'),
+(20, 3, 'L_SEARCH_ENGINE');
 
 -- --------------------------------------------------------
 
@@ -76,7 +90,8 @@ CREATE TABLE `hosts` (
 
 CREATE TABLE `items` (
   `id` int NOT NULL,
-  `type` char(255) NOT NULL,
+  `cat_id` int NOT NULL,
+  `type` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `title` char(255) NOT NULL,
   `conf` varchar(4096) NOT NULL,
   `weight` tinyint NOT NULL DEFAULT '60'
@@ -164,7 +179,7 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `isAdmin`, `c
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
-  ADD PRIMARY KEY (`cat_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `cmd`
@@ -226,7 +241,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `cat_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `cmd`
