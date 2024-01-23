@@ -55,16 +55,16 @@
                             $('#tab1_btn').addClass('active');
                             $('#tab1').addClass('active');
                         } else {
-                            $('#host-details').remove();
-                            $('#tab1_btn').addClass('active');
-                            $('#tab1').addClass('active');
+                            //$('#host-details').remove();
+                            //$('#tab1_btn').addClass('active');
+                            //$('#tab1').addClass('active');
                         }
                     }
                 });
 
         // avoid launch timer when command FIX:better way for not launch timers, disable timer and allow launch
         if (command === false) {
-            setTimeout(refresh, 100000);
+            setTimeout(refresh, 75000);
         }
 
     }
