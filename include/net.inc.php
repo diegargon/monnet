@@ -107,13 +107,13 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
     $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
     if (!$socket) {
         $status['error'] = 'socket_create';
-        $status['latency'] = -0.3;
+        $status['latency'] = -0.03;
     }
 
     socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
     if (!socket_connect($socket, $ip, 0)) {
         $status['error'] = 'socket_connect';
-        $status['latency'] = -0.2;
+        $status['latency'] = -0.02;
         socket_close($socket);
         return $status;
     }
@@ -126,7 +126,7 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
         $status['latency'] = microtime(true) - $tim_start;
     } else {
         $status['error'] = 'timeout';
-        $status['latency'] = -0.1;
+        $status['latency'] = -0.01;
     }
 
     socket_close($socket);
