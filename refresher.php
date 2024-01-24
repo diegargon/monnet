@@ -79,7 +79,10 @@ if ($user->getPref('show_other_hosts_status')) {
         $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     }
 }
-
+if ($command == 'saveNote' && !empty($command_value)) {
+    
+}
+        
 /* Power ON/OFF  & Reboot */
 if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {
     $host = $hosts->getHostById($command_value);

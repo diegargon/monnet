@@ -164,9 +164,7 @@
             <div class="textarea-bar">
 
             </div>
-            <textarea id="textnotes" name="textnotes" rows="10" cols="100">
-                <?= $tdata['host_details']['notes'] ?>
-            </textarea>
+            <textarea id="textnotes" name="textnotes" rows="10" cols="100"><?= $tdata['host_details']['notes'] ?></textarea>
 
         </div>
         <div id="tab4" class="host-details-tab-content">
