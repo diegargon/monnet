@@ -585,7 +585,7 @@ input:checked + .slider:before {
 
 
 .host-details-container img {
-    width:30px;
+    width:20px;
     border-radius: 5px;
     padding-right: 5px;
 
@@ -917,6 +917,13 @@ input:checked + .slider:before {
     color: red;
 }
 
+#textarea_logs {
+    background: transparent;
+    margin: 0px 3px 0px 3px;
+    border: 1px inset #000;
+    height: 100%;
+    color: white;
+}
 @media only screen and (max-width: 1096px) {
     .hosts {
         /* grid-template-columns: repeat(6, 140px);      */

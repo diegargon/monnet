@@ -49,36 +49,32 @@
                         }
                     }
                     if ("host_details" in jsonData) {
-                        if ($('#host-details').length === 0) {
-                            position = jsonData.host_details.cfg.place;
-                            $(position).prepend(jsonData.host_details.data);
-                            $('#tab1_btn').addClass('active');
-                            $('#tab1').addClass('active');
-                            var textNote = document.getElementById('textnotes');
-                            var debounceTimeout;
+                        $('#host-details').remove();
+                        position = jsonData.host_details.cfg.place;
+                        $(position).prepend(jsonData.host_details.data);
+                        $('#tab1_btn').addClass('active');
+                        $('#tab1').addClass('active');
+                        var textNote = document.getElementById('textnotes');
+                        var debounceTimeout;
 
-                            textNote.addEventListener('input', function () {
+                        textNote.addEventListener('input', function () {
 
-                                clearTimeout(debounceTimeout);
+                            clearTimeout(debounceTimeout);
 
-                                debounceTimeout = setTimeout(function () {
-                                    $.get('refresher.php', {
-                                        order: 'saveNote',
-                                        order_value: textNote.value
-                                    })
-                                            .done(function (response) {
-                                                console.log(response);
-                                            })
-                                            .fail(function (error) {
-                                                console.error('Error:', error);
-                                            });
-                                }, 500);
-                            });
-                        } else {
-                            //$('#host-details').remove();
-                            //$('#tab1_btn').addClass('active');
-                            //$('#tab1').addClass('active');
-                        }
+                            debounceTimeout = setTimeout(function () {
+                                $.get('refresher.php', {
+                                    order: 'saveNote',
+                                    order_value: textNote.value
+                                })
+                                        .done(function (response) {
+                                            console.log(response);
+                                        })
+                                        .fail(function (error) {
+                                            console.error('Error:', error);
+                                        });
+                            }, 500);
+                        });
+
                     }
                 });
 

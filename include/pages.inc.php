@@ -136,7 +136,6 @@ function page_index_post(Database $db, User $user, Categories $categories, array
     $show_applinks = Filters::postInt('show_applinks');
     $show_highlight_hosts = Filters::postInt('show_highlight_hosts');
     $show_other_hosts = Filters::postInt('show_rest_hosts');
-    $close_host_details = Filters::postInt('close_host_details_x'); //img click _x _y
     //add Item
     if (isset($_POST['addBookmarkForm'])) {
         $bookmarkName = Filters::postString('bookmarkName');
@@ -198,9 +197,7 @@ function page_index_post(Database $db, User $user, Categories $categories, array
 
         $cat_type = $categories->getTypeByID($url_type);
     }
-    if (!empty($close_host_details)) {
-        $user->setPref('host_details', 0);
-    }
+
     if ($profile_type !== false) {
         $user->setPref('profile_type', $profile_type);
     }
@@ -462,7 +459,7 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
             $host['deploys'][] = $deploy;
         }
     }
-
+    
     return $host;
 }
 

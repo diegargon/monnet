@@ -28,5 +28,8 @@ $(document).ready(function () {
     $("#close_addbookmark").on("click", function () {
         $("#add-bookmark-container").css("display", "none");
     });
-
+    // Dynamic
+    $(document).on("click", "#close_host_details", function () {
+        $("#host-details").css("display", "none");
+    });
 });

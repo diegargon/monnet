@@ -43,16 +43,14 @@ if ($command === 'remove_host' && is_numeric($command_value)) {
 
 /* Set show/hide host-details */
 if ($command === 'host-details' && is_numeric($command_value)) {
-    $user->setPref('host_details', $command_value);
-}
-if ($user->getPref('host_details')) {
-    $host_details = get_host_detail_view_data($db, $cfg, $hosts, $user, $lng, $user->getPref('host_details'));
+    $host_details = get_host_detail_view_data($db, $cfg, $hosts, $user, $lng, $command_value);
     if ($host_details) {
         $tdata['host_details'] = $host_details;
         $data['host_details']['cfg']['place'] = "#left_container";
         if (!empty($host_details['ping_stats'])) {
             $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time', $host_details['ping_stats']);
-        }
+        }           
+        $tdata['host_details']['host_logs'] = '-';//force display test
         unset($tdata['host_details']['ping_stats']);
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
     }
@@ -82,7 +80,7 @@ if ($user->getPref('show_other_hosts_status')) {
 if ($command == 'saveNote' && !empty($command_value)) {
     
 }
-        
+
 /* Power ON/OFF  & Reboot */
 if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {
     $host = $hosts->getHostById($command_value);

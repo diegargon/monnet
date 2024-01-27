@@ -7,29 +7,36 @@
  *  @copyright Copyright @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 ?>
-<div id="host-details" class="host-details">
+<div id="host-details" class="host-details" style="display:block;">
     <div id="host-details-container" class="host-details-container">
         <div class="host-details-bar">
-            <div class="host-controls-left">
-                <form class="host-details-form-close" method="POST">
-                    <input type="image"  class="action-icon remove" name="close_host_details" src="tpl/<?= $cfg['theme'] ?>/img/close.png" alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
-                </form>
+            <div class="host-controls-left">                
+                <button id="close_host_details" type="submit"  class="button-ctrl">
+                    <img src="tpl/<?= $cfg['theme'] ?>/img/close.png" alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
+                </button>
+
                 <!--
-                <form class="host-details-form-options" method="POST">
-                    <select class="host-details-select" name="host-details-select">
-                        <option value="1"><?= $lng['L_OVERVIEW'] ?></option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                    </select>
-                </form>
+            <form class="host-details-form-options" method="POST">
+                <select class="host-details-select" name="host-details-select">
+                    <option value="1"><?= $lng['L_OVERVIEW'] ?></option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </form>
                 -->
                 <div class="host-details-tabs-head-container">
                     <button id="tab1_btn" class="host-details-tabs-head" onclick="changeTab('tab1')"><?= $lng['L_OVERVIEW'] ?></button>
                     <button id="tab2_btn" class="host-details-tabs-head" onclick="changeTab('tab2')"><?= $lng['L_STATUS'] ?></button>
                     <button id="tab3_btn" class="host-details-tabs-head" onclick="changeTab('tab3')"><?= $lng['L_NOTES'] ?></button>
+                    <?php
+                    if (!empty($tdata['host_details']['host_logs'])) {
+                        ?>
+                        <button id="tab9_btn" class="host-details-tabs-head" onclick="changeTab('tab9')"><?= $lng['L_LOG'] ?></button>
+                    <?php } ?>
+
                     <?php if (!empty($tdata['host_details']['ping_graph'])) { ?>
-                        <button id="tab4_btn" class="host-details-tabs-head" onclick="changeTab('tab4')"><?= $lng['L_METRICS'] ?></button>
+                        <button id="tab10_btn" class="host-details-tabs-head" onclick="changeTab('tab10')"><?= $lng['L_METRICS'] ?></button>
                     <?php } ?>
                     <!-- 
                     <button id="tabx_btn" class="host-details-tabs-head" onclick="changeTab('tab2')"><?= $lng['L_DEPLOYS'] ?></button>
@@ -167,7 +174,14 @@
             <textarea id="textnotes" name="textnotes" rows="10" cols="100"><?= $tdata['host_details']['notes'] ?></textarea>
 
         </div>
-        <div id="tab4" class="host-details-tab-content">
+        <?php
+        if (!empty($tdata['host_details']['host_logs'])) {
+            ?>
+            <div id="tab9" class="host-details-tab-content">
+                <textarea id="textarea_logs" readonly><?= $tdata['host_details']['host_logs'] ?></textarea>
+            </div>            
+        <?php } ?>
+        <div id="tab10" class="host-details-tab-content">
             <div class="ping_graph_container">
                 <?= $tdata['host_details']['ping_graph'] ?>
             </div>
@@ -176,16 +190,16 @@
 
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                                        <div class="charts">
-                                                                                            <label class="none_opt"><?= $lng['L_NONE'] ?></label>
-                                                                                            <input type="radio" checked name="graph_choice" value="none_graph">
-                                                                                            <label class="network_opt">Network</label>
-                                                                                            <input type="radio" name="graph_choice" value="network_graph">
-                                                                                            <label class="ping_opt">Ping</label>
-                                                                                            <input type="radio" name="graph_choice" value="ping_graph">
-                                                                                            <label class="logs_opt">Logs</label>
-                                                                                            <input type="radio" name="graph_choice" value="show_logs">
-                                                                                        </div>
+                                                                                                                                    <div class="charts">
+                                                                                                                                        <label class="none_opt"><?= $lng['L_NONE'] ?></label>
+                                                                                                                                        <input type="radio" checked name="graph_choice" value="none_graph">
+                                                                                                                                        <label class="network_opt">Network</label>
+                                                                                                                                        <input type="radio" name="graph_choice" value="network_graph">
+                                                                                                                                        <label class="ping_opt">Ping</label>
+                                                                                                                                        <input type="radio" name="graph_choice" value="ping_graph">
+                                                                                                                                        <label class="logs_opt">Logs</label>
+                                                                                                                                        <input type="radio" name="graph_choice" value="show_logs">
+                                                                                                                                    </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -193,21 +207,21 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                                                        <div class="deploy_container">
-                                                                                            <form id="deploy_form" method="POST">
-                                                                                                <select class="select_deploy" name="deploy_option">
-                                                                                                    <option value="0"></option>
+                                                                                                                                    <div class="deploy_container">
+                                                                                                                                        <form id="deploy_form" method="POST">
+                                                                                                                                            <select class="select_deploy" name="deploy_option">
+                                                                                                                                                <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                                                                                            <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                                                                                                                                                                    <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
-                                                                                                </select>
-                                                                                                <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
-                                                                                            </form>
-                                                                                        </div>
+                                                                                                                                            </select>
+                                                                                                                                            <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
+                                                                                                                                        </form>
+                                                                                                                                    </div>
             <?php
         }
         ?>
@@ -218,10 +232,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                                                                                    <div class="log_line"><?= $log ?></div>
+                                                                                                                                                                                                                                                            <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                                                        </div>
+                                                                                                                                    </div>
         <?php }
         ?>
         -->
@@ -231,4 +245,5 @@
         </div>
         -->
     </div> <!-- host-details-container -->
-</div> <!-- host-details -->
+    <!-- host-details -->
+</div> 

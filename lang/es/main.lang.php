@@ -52,6 +52,7 @@ $lng = [
     'L_LOAD' => 'Carga',
     'L_LOCAL_IMAGE' => 'Imagen Local',
     'L_LINK' => 'Enlace',
+    'L_LOG' => 'Log',
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',
