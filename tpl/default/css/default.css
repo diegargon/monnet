@@ -19,14 +19,15 @@ body {
     height: 100%;
     width: 100%;
     min-height: 100vh;
-    background: #0c0a15;
+    /* background: #0c0a15; */
     color:white;
     font-family: 'Sora', sans-serif;
     font-weight: 100;
     font-size: 11px;
     background-color: black;
-    background: url("../img/bg4.jpg") no-repeat center center fixed;
-    background-size: cover;
+    /* background: url("../img/bg4.jpg") no-repeat center center fixed; */
+    /*background-size: cover;*/
+    background-color: #151515;
 }
 
 a {
@@ -204,7 +205,7 @@ footer {
     border-style: ridge;
     border-radius: 5px;
     justify-content: center;
-    background-color:rgba(62, 61, 61, 0.4);
+    background-color:rgba(134, 132, 132, 0.6);
 }
 
 .item-thumb , .fab, .fas {
@@ -426,15 +427,15 @@ input:checked + .slider:before {
 .hosts {
     border: 1px solid rgba(0,0,0, 0.7);
     border-radius: 5px;
-    margin: 0px 5px 0 5px;
+    margin: 0px 5px 2px 5px;
     display: grid;
     grid-gap: 8px;
     /* grid-template-columns: repeat(3, 145px);  */
     grid-template-columns: repeat( auto-fit, minmax(145px, 1fr) );
     /* float:left;   */
-    background-color:rgba(0, 0, 0, 0.6);
+    background-color:rgba(134, 132, 132, 0.6);
     padding: 5px;
-    padding-right: 10px;
+    padding: 5px 10px 10px 5px;
     overflow: hidden;
 
 }

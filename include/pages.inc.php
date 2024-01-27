@@ -246,7 +246,7 @@ function page_login(array $cfg, array $lng, User $user) {
     }
     $page['head_name'] = $cfg['web_title'];
     $page['web_main']['scriptlink'][] = 'https://code.jquery.com/jquery-2.2.4.min.js';
-    $page['web_main']['scriptlink'][] = './scripts/privacy.js';
+    $page['web_main']['scriptlink'][] = './scripts/background.js';
 
     $page['page'] = 'login';
     $page['tpl'] = 'login';
@@ -483,6 +483,6 @@ function page_privacy(array $cfg, Database $db, array $lng, User $user) {
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
     $page['web_main']['scriptlink'][] = 'https://code.jquery.com/jquery-2.2.4.min.js';
-    $page['web_main']['scriptlink'][] = './scripts/privacy.js';
+    $page['web_main']['scriptlink'][] = './scripts/background.js';
     return $page;
 }
