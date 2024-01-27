@@ -26,10 +26,18 @@
         if (typeof command_value === 'undefined') {
             command_value = false;
         }
-        $.get('refresher.php', requestData)
-                .done(function (data) {
+        $.post('refresher.php', requestData)
+                .done(function (data, textStatus, xhr) {
+                    var contentType = xhr.getResponseHeader('Content-Type');
                     console.log(data);
-                    var jsonData = JSON.parse(data);
+                    if (typeof data === 'object') {
+                        //console.log('ya es un objeto');
+                        jsonData = data;
+                    } else {
+                        //console.log('no es un objeto');
+                        var jsonData = JSON.parse(data);
+                    }
+
                     //console.log(jsonData);
                     if (jsonData.login === "fail") {
                         location.href = '';
@@ -63,14 +71,13 @@
                         var textNote = document.getElementById('textnotes');
                         var debounceTimeout;
                         var object_id = $('#host_note_id').val();
+
                         textNote.addEventListener('input', function () {
-
                             clearTimeout(debounceTimeout);
-
                             debounceTimeout = setTimeout(function () {
-                                $.get('refresher.php', {
+                                $.post('refresher.php', {
                                     order: 'saveNote',
-                                    order_value: textNote.value,
+                                    order_value: encodeURIComponent(textNote.value.replace(/[']/g, '"')),
                                     object_id: object_id
                                 })
                                         .done(function (response) {
@@ -83,7 +90,12 @@
                         });
 
                     }
+
+                })
+                .fail(function (xhr, status, error) {
+                    console.error('Error en la solicitud AJAX:', status, error);
                 });
+
 
         // avoid launch timer when command FIX:better way for not launch timers, disable timer and allow launch
         if (command === false) {
