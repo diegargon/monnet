@@ -385,19 +385,31 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
         WHERE host_id = ' . $host['id'] . ' AND
         type = 1 
         AND date >= NOW() - INTERVAL 1 DAY
-        ORDER BY date ASC;';
+        ORDER BY date DESC;';
+
     $result = $db->query($ping_states_query);
     $ping_stats = $db->fetchAll($result);
     if (valid_array($ping_stats)) {
 
         foreach ($ping_stats as &$ping) {
-            $date = new DateTime($ping['date'], new DateTimeZone('UTC'));
-            $date->setTimezone(new DateTimeZone($cfg['timezone']));
-            $ping['date'] = $date->format('Y-m-d H:i:s');
+            $ping['date'] = utc_to_user_timezone($ping['date'], $cfg['timezone']);
         }
         $host['ping_stats'] = $ping_stats;
     }
 
+    //HOST LOGS
+    $hosts_log_query = 'SELECT * 
+            FROM hosts_logs
+            WHERE host_id = ' . $host['id'] . '
+            ORDER by date DESC limit 100;';
+    $result = $db->query($hosts_log_query);
+    $hosts_logs = $db->fetchAll($result);
+    if (valid_array($hosts_logs)) {
+        $host['host_logs'] = '';
+        foreach ($hosts_logs as $host_log) {
+            $host['host_logs'] .= '<div>[' . datetime_string_format($host_log['date'], $cfg['datetime_log_format']) . '] ' . $host_log['msg'] . '</div>';
+        }
+    }
     $theme = $user->getTheme();
 
     // Host Work
@@ -426,12 +438,12 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     }
 
     if (!empty($host['last_seen'])) {
-        $host['f_last_seen'] = formatted_user_date($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);
+        $host['f_last_seen'] = utc_to_user_timezone($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);
     }
     if (!empty($host['last_check'])) {
-        $host['f_last_check'] = formatted_user_date($host['last_check'], $cfg['timezone'], $cfg['datetime_format']);
+        $host['f_last_check'] = utc_to_user_timezone($host['last_check'], $cfg['timezone'], $cfg['datetime_format']);
     }
-    $host['formated_creation_date'] = formatted_user_date($host['created'], $cfg['timezone'], $cfg['datetime_format']);
+    $host['formated_creation_date'] = utc_to_user_timezone($host['created'], $cfg['timezone'], $cfg['datetime_format']);
 
     if ($host['online'] && !empty($host['latency'])) {
         $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
@@ -459,7 +471,7 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
             $host['deploys'][] = $deploy;
         }
     }
-    
+
     return $host;
 }
 

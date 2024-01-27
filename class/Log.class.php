@@ -39,7 +39,7 @@ Class Log {
                 if (is_array($msg)) {
                     $msg = var_dump($msg, true);
                 }
-                echo '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . "][" . $type . '] ' . $msg . "\n";
+                echo '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . '][' . $type . '] ' . $msg . "\n";
             }
 
             if ($this->cfg['log_to_file']) {
@@ -48,7 +48,7 @@ Class Log {
                     $msg = print_r($msg, true);
                 }
                 $content = '';
-                $content = '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . "]:[" . $type . '] ' . $msg . "\n";
+                $content = '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     touch($log_file);
                 }
@@ -60,10 +60,10 @@ Class Log {
                 if (openlog($this->cfg['app_name'] . ' ' . $this->cfg['version'], LOG_NDELAY, LOG_SYSLOG)) {
                     if (is_array($msg)) {
                         $msg = print_r($msg, true);
-                        isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
+                        isset($this->console) ? $this->cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
                         syslog($LOG_TYPE[$type], $msg);
                     } else {
-                        isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
+                        isset($this->console) ? $this->cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
                         syslog($LOG_TYPE[$type], $msg);
                     }
                 }
@@ -77,6 +77,13 @@ Class Log {
         } else {
             return false;
         }
+    }
+
+    public function loghost(string $loglevel, int $host_id, string $msg) {
+        $this->logged($loglevel, '[HOST:' . $host_id . ']' . $msg);
+        $host_msg = '[' . $loglevel . '] ' . $msg . "\n";
+        $set = ['host_id' => $host_id, 'msg' => $host_msg];
+        $this->db->insert('hosts_logs', $set);
     }
 
     public function debug(string $msg) {

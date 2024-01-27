@@ -30,13 +30,17 @@ Class Hosts {
 
     private Database $db;
     private $hosts = [];
+    private array $lng;
+    private Log $log;
 
-    public function __construct($db) {
+    public function __construct(Log $log, Database $db, array $lng) {
         $this->db = $db;
+        $this->lng = $lng;
+        $this->log = $log;
         $this->getHostsDb();
     }
 
-    function getEnabled() {
+    function getknownEnabled() {
         $hosts = [];
 
         foreach ($this->hosts as $host) {
@@ -49,7 +53,7 @@ Class Hosts {
     }
 
     function getHighlight(int $highligth = 1) {
-        $hosts = $this->getEnabled();
+        $hosts = $this->getknownEnabled();
         foreach ($hosts as $khost => $vhost) {
             if ($vhost['highlight'] != $highligth) {
                 unset($hosts[$khost]);
@@ -74,6 +78,14 @@ Class Hosts {
             $kvalue = $this->db->escape($kvalue);
             $vvalue = $this->db->escape($vvalue);
             if (!empty($kvalue) && isset($vvalue)) {
+                //TODO warning sign
+                if (
+                        ($kvalue == 'mac' || $kvalue == 'mac_vendor' || $kvalue == 'hostname') &&
+                        ($this->hosts[$id][$kvalue] != $vvalue)
+                ) {
+                    $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ' . $this->hosts[$id][$kvalue] . '->' . $vvalue;
+                    $this->log->loghost('LOG_WARNING', $id, $loghostmsg);
+                }
                 $this->hosts[$id][$kvalue] = $vvalue;
                 $fvalues[$kvalue] = $vvalue;
             }

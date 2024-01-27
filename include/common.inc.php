@@ -41,5 +41,5 @@ require_once('class/Hosts.class.php');
 require_once('class/Items.class.php');
 require_once('class/Categories.class.php');
 
-$hosts = new Hosts($db);
+$hosts = new Hosts($log, $db, $lng);
 

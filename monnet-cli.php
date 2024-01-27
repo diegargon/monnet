@@ -39,8 +39,8 @@ register_shutdown_function('unlink', CLI_LOCK);
 
 check_known_hosts($db, $hosts);
 #run_cmd_db_tasks($cfg, $db, $hosts);
-cron($cfg, $db, $hosts);
+cron($cfg, $log, $db, $hosts);
 
-$log->debug("Finishing {$cfg['app_name']} CLI");
-$log->debug("****************************************************************************************");
+$log->debug("******************* Finishing {$cfg['app_name']} CLI ************************************");
+
 exit(0);

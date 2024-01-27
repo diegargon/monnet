@@ -49,8 +49,7 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         $data['host_details']['cfg']['place'] = "#left_container";
         if (!empty($host_details['ping_stats'])) {
             $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time', $host_details['ping_stats']);
-        }           
-        $tdata['host_details']['host_logs'] = '-';//force display test
+        }
         unset($tdata['host_details']['ping_stats']);
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
     }

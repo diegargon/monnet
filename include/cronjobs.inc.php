@@ -17,16 +17,17 @@ function check_known_hosts(Database $db, Hosts $hosts) {
         return false;
     }
 
-    $db_hosts = $hosts->getEnabled();
+    $db_hosts = $hosts->getknownEnabled();
 
+    //TODO one update/insert
     foreach ($db_hosts as $host) {
         $host_status = [];
 
         if ($host['check_method'] == 2) { //TCP
-            $log->info("Pinging host ports {$host['ip']}");
+            $log->debug("Pinging host ports {$host['ip']}");
             $host_status = ping_host_ports($host);
         } else { //Ping
-            $log->info("Pinging host {$host['ip']}");
+            $log->debug("Pinging host {$host['ip']}");
             $host_status = ping_known_host($host);
         }
         if (empty($host['mac'])) {
@@ -34,20 +35,22 @@ function check_known_hosts(Database $db, Hosts $hosts) {
             $mac ? $host_status['mac'] = $mac : null;
         }
         if (valid_array($host_status)) {
-            $log->info("Update known host {$host['id']}:{$host['ip']}");
             defined('DUMP_VARS') ? $log->debug("Dumping host_status: " . print_r($host_status, true)) : null;
             $hosts->update($host['id'], $host_status);
             $ping_latency = $host_status['latency'];
             $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
             $db->insert('stats', $set_ping_stats);
+        } else {
+            $log->warn("Known host ping status error {$host['id']}:{$host['ip']}");
         }
     }
+    $log->debug('Finish check_known_hosts');
 }
 
 function ping_net(array $cfg, Hosts $hosts) {
     global $log;
 
-    $timeout = ['sec' => 0, 'usec' => 110000];
+    $timeout = ['sec' => 0, 'usec' => 100000];
 
     $log->info('Pinging NET ' . $cfg['net']);
 
@@ -100,7 +103,7 @@ function ping_net(array $cfg, Hosts $hosts) {
 function fill_hostnames(Hosts $hosts, int $only_missing = 0) {
     global $log;
 
-    $db_hosts = $hosts->getEnabled();
+    $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
         if (empty($host['hostname']) || $only_missing === 0) {
@@ -118,7 +121,7 @@ function fill_hostnames(Hosts $hosts, int $only_missing = 0) {
 function fill_mac_vendors(Hosts $hosts, int $only_missing = 0) {
     global $log;
 
-    $db_hosts = $hosts->getEnabled();
+    $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
         if (!empty($host['mac']) && (empty($host['mac_vendor']) || $only_missing === 0)) {
@@ -131,7 +134,6 @@ function fill_mac_vendors(Hosts $hosts, int $only_missing = 0) {
             } else {
                 $log->debug("Mac vendor for {$host['mac']} is {$vendor['company']} ");
                 if ($vendor['company'] != $host['mac_vendor']) {
-                    //TODO sec warn
                     $log->warn("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
                     $update['mac_vendor'] = $vendor['company'];
                     $hosts->update($host['id'], $update);
@@ -141,10 +143,25 @@ function fill_mac_vendors(Hosts $hosts, int $only_missing = 0) {
     }
 }
 
+function check_macs(Hosts $hosts) {
+    global $log;
+
+    $known_hosts = $hosts->getknownEnabled();
+
+    $log->info('Checking macs');
+    foreach ($known_hosts as $host) {
+        $new_mac = get_mac($host['ip']);
+        if (!empty($new_mac) && $host['mac'] != $new_mac) {
+            $update['mac'] = $new_mac;
+            $hosts->update($host['id'], $update);
+        }
+    }
+}
+
 function host_access(array $cfg, Hosts $hosts) {
     global $log;
 
-    $db_hosts = $hosts->getEnabled();
+    $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
         if ($host['access_method'] < 1 || empty($host['online'])) {

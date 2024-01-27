@@ -35,6 +35,12 @@ function utc_date_now() {
     return $date_now->format('Y-m-d H:i:s');
 }
 
+function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s') {
+    $date = new DateTime($utc_date, new DateTimeZone('UTC'));
+    $date->setTimezone(new DateTimeZone($timezone));
+    return $date->format($time_format);
+}
+
 function formatted_date_now($timezone = 'UTC', $time_format = 'Y-m-d H:i:s') {
     $date_timezone = new DatetimeZone($timezone);
     $date_now = new DateTime('now', $date_timezone);
@@ -42,13 +48,17 @@ function formatted_date_now($timezone = 'UTC', $time_format = 'Y-m-d H:i:s') {
     return $date_now->format($time_format);
 }
 
-function formatted_user_date($date, $timezone = 'UTC', $time_format = 'Y-m-d H:i:s') {
-    if (empty($date)) {
-        return false;
+function datetime_string_format(string $date, string $time_format = 'Y-m-d H:i:s') {
+
+    $timestamp = strtotime($date);
+
+    // Verificar si la conversión fue exitosa
+    if ($timestamp !== false) {
+
+        return date($time_format, $timestamp);
+    } else {
+        return 'Error';
     }
-    $utc_date = new DateTime($date, new DateTimeZone('UTC'));
 
-    $utc_date->setTimezone(new DateTimeZone($timezone));
-
-    return $utc_date->format($time_format);
+    return $dateTime;
 }

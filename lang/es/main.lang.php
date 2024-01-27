@@ -33,6 +33,7 @@ $lng = [
     'L_HOSTNAME' => 'Hostname',
     'L_HOSTS' => 'Hosts',
     'L_HOST' => 'Host',
+    'L_HOST_MSG_DIFF' => 'Host ha cambiado',
     'L_HOSTS_MAIN' => 'Hosts/Varios',
     'L_HOSTS_USERS' => 'Hosts/Users',
     'L_HOSTS_VM' => 'Hosts/VM',
