@@ -13,14 +13,20 @@
         refresh();
     });
 
-    function refresh(command, command_value) {
+    function refresh(command, command_value, object_id = null) {
+        var requestData = {order: command, order_value: command_value};
+
+        if (object_id !== null) {
+            requestData.object_id = object_id;
+        }
+
         if (typeof command === 'undefined') {
             command = false;
         }
         if (typeof command_value === 'undefined') {
             command_value = false;
         }
-        $.get('refresher.php', {order: command, order_value: command_value})
+        $.get('refresher.php', requestData)
                 .done(function (data) {
                     console.log(data);
                     var jsonData = JSON.parse(data);
@@ -56,7 +62,7 @@
                         $('#tab1').addClass('active');
                         var textNote = document.getElementById('textnotes');
                         var debounceTimeout;
-
+                        var object_id = $('#host_note_id').val();
                         textNote.addEventListener('input', function () {
 
                             clearTimeout(debounceTimeout);
@@ -64,7 +70,8 @@
                             debounceTimeout = setTimeout(function () {
                                 $.get('refresher.php', {
                                     order: 'saveNote',
-                                    order_value: textNote.value
+                                    order_value: textNote.value,
+                                    object_id: object_id
                                 })
                                         .done(function (response) {
                                             console.log(response);
@@ -72,7 +79,7 @@
                                         .fail(function (error) {
                                             console.error('Error:', error);
                                         });
-                            }, 500);
+                            }, 600);
                         });
 
                     }
@@ -81,7 +88,7 @@
         // avoid launch timer when command FIX:better way for not launch timers, disable timer and allow launch
         if (command === false) {
             setTimeout(refresh, 75000);
-        }
+    }
 
     }
 </script>

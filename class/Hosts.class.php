@@ -146,10 +146,11 @@ Class Hosts {
             if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
             }
-            if (empty($host['note_id'])) {
+            if (empty($host['notes_id'])) {
                 $this->db->insert('notes', ['host_id' => $host['id']]);
                 $insert_id = $this->db->insertID();
                 $this->db->update('hosts', ['notes_id' => $insert_id], ['id' => $host['id']]);
+                $this->hosts[$host['id']]['notes_id'] = $insert_id;
             }
         }
     }

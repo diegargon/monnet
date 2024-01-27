@@ -27,6 +27,7 @@ $tdata['theme'] = $cfg['theme'];
 
 $command = Filters::getString('order');
 $command_value = Filters::getString('order_value');
+$object_id = Filters::getInt('object_id');
 
 if (!empty($command) && !empty($command_value)) {
     $data['command_receive'] = $command;
@@ -76,8 +77,11 @@ if ($user->getPref('show_other_hosts_status')) {
         $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     }
 }
-if ($command == 'saveNote' && !empty($command_value)) {
-    
+if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
+    $set = ['content' => $command_value];
+    $where = ['id' => $object_id];
+
+    $db->update('notes', $set, $where, 'LIMIT 1');
 }
 
 /* Power ON/OFF  & Reboot */
