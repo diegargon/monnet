@@ -124,20 +124,30 @@ function fill_mac_vendors(Hosts $hosts, int $only_missing = 0) {
     $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
-        if (!empty($host['mac']) && (empty($host['mac_vendor']) || $only_missing === 0)) {
-            $log->debug("Getting mac vendor for {$host['mac']}");
-            $vendor = get_mac_vendor(trim($host['mac']));
+        $vendor = [];
+        $update = [];
+
+        if (!empty($host['mac']) &&
+                (empty($host['mac_vendor']) || $only_missing === 1)
+        ) {
+            $log->debug("Getting mac vendor for {$host['mac']} (local)");
+            $vendor = get_mac_vendor_local(trim($host['mac']));
+            if (empty($vendor)) {
+                $log->debug("Local lookup fail, checking mac online");
+                $vendor = get_mac_vendor(trim($host['mac']));
+            }
 
             if (empty($vendor['company'])) {
-                $log->debug("Mac vendor for {$host['mac']} null");
-                $vendor['company'] = '-';
+                $log->debug("Mac vendor for {$host['mac']} is null");
+                (empty($host['mac_vendor'])) ? $update['mac_vendor'] = '-' : null;
             } else {
-                $log->debug("Mac vendor for {$host['mac']} is {$vendor['company']} ");
                 if ($vendor['company'] != $host['mac_vendor']) {
-                    $log->warn("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
+                    $log->warning("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
                     $update['mac_vendor'] = $vendor['company'];
-                    $hosts->update($host['id'], $update);
                 }
+            }
+            if (!empty($update) && ($host['mac_vendor'] != $update['mac_vendor'])) {
+                $hosts->update($host['id'], $update);
             }
         }
     }

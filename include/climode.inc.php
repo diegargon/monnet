@@ -13,7 +13,7 @@ require_once('include/net.inc.php');
 require_once('include/commands.inc.php');
 require_once('include/phpsec_helper.inc.php');
 require_once('include/curl.inc.php');
-require_once('remote_serv_req.inc.php');
+require_once('mac_vendor.inc.php');
 require_once('include/cronjobs.inc.php');
 require_once('include/cron.inc.php');
 

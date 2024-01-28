@@ -20,7 +20,7 @@ function cron(array $cfg, Log $log, Database $db, Hosts $hosts) {
     }
 
     $time_now = time();
-
+    
     if (($cron_times['cron_five'] + 300) < $time_now) {
         $cron_task_track .= '[5]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_five']], 'LIMIT 1');
@@ -54,13 +54,13 @@ function cron(array $cfg, Log $log, Database $db, Hosts $hosts) {
     if (($cron_times['cron_weekly'] + 604800) < $time_now) {
         $cron_task_track .= '[7d]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_weekly']], 'LIMIT 1');
-    }
-    if (($cron_times['cron_monthly'] + 2592000) < $time_now) {
-        $cron_task_track .= '[30d]';
-        $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_monthly']], 'LIMIT 1');
         $only_missing = 0;
         fill_hostnames($hosts, $only_missing);
         fill_mac_vendors($hosts, $only_missing);
+        }
+    if (($cron_times['cron_monthly'] + 2592000) < $time_now) {
+        $cron_task_track .= '[30d]';
+        $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_monthly']], 'LIMIT 1');
     }
     if ($cron_times['cron_update'] == 0) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_update']], 'LIMIT 1');
