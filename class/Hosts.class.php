@@ -72,7 +72,7 @@ Class Hosts {
     //}
 
     function update(int $id, array $values) {
-        $fvalues = []; //filtered
+        $fvalues = []; //filter
 
         foreach ($values as $kvalue => $vvalue) {
             $kvalue = $this->db->escape($kvalue);
@@ -93,6 +93,7 @@ Class Hosts {
 
 
         if (valid_array($fvalues)) {
+            $this->log->debug('Updating host changes'. $id);
             $this->db->update('hosts', $fvalues, ['id' => ['value' => $id]], 'LIMIT 1');
         }
     }
