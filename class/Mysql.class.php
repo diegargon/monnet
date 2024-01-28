@@ -170,10 +170,9 @@ class Database {
      * @param string $query
      * @return array
      */
-    function query(string $query) {
+    function query(string $query) {        
         $this->query_stats++;
         $this->query_history[] = $query;
-
         $result = $this->dblink->query($query);
         if (!$result && !$this->silent) {
             $this->dbdie($query);
@@ -587,6 +586,7 @@ class Database {
      */
     private function insertProcess(array $insert_data) {
         foreach ($insert_data as $field => $value) {
+            $value = $this->escape($value);            
             //TODO FIXME correccion rapida para evitar errores en mysql 8 con groups lead (palabras reservadas)
             $fields_ary[] = '`' . $field . '`';
             $values_ary[] = "'" . $value . "'";
@@ -605,6 +605,7 @@ class Database {
      */
     private function setProcess(array $set) {
         foreach ($set as $field => $value) {
+            $value = $this->escape($value);
             $newset[] = "`$field` = " . "'" . $value . "'";
         }
         $query = implode(',', $newset);
