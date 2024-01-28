@@ -29,6 +29,7 @@
         $.post('refresher.php', requestData)
                 .done(function (data, textStatus, xhr) {
                     var contentType = xhr.getResponseHeader('Content-Type');
+                    //console.log(requestData);
                     console.log(data);
                     if (typeof data === 'object') {
                         //console.log('ya es un objeto');

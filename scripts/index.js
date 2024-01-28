@@ -32,4 +32,15 @@ $(document).ready(function () {
     $(document).on("click", "#close_host_details", function () {
         $("#host-details").css("display", "none");
     });
+
+    $(document).on("change", "#chkHighlight", function () {
+        var host_id = $('#host_id').val();
+
+        var value = 0;
+        if (this.checked) {
+            value = 1;
+        }
+        refresh('setHighlight', value, host_id);
+    });
+
 });

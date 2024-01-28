@@ -448,7 +448,6 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     if ($host['online'] && !empty($host['latency'])) {
         $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
     }
-
     if (!empty($host['access_results'])) {
         $host_details = json_decode($host['access_results'], true);
 

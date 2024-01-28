@@ -30,7 +30,7 @@ $command = Filters::postString('order');
 if ($command == 'saveNote') {
     $command_value = Filters::postUTF8('order_value');
 } else {
-    $command_value = Filters::postUTF8('order_value');
+    $command_value = Filters::postString('order_value');
 }
 $object_id = Filters::postInt('object_id');
 
@@ -40,7 +40,9 @@ if (!empty($command)) {
 if (!empty($command_value)) {
     $data['command_value'] = $command_value;
 }
-
+if (!empty($object_id)) {
+    $data['object_id'] = $object_id;
+}
 if (empty($command) || empty($command_value)) {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
@@ -92,6 +94,13 @@ if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
     $where = ['id' => $object_id];
 
     $db->update('notes', $set, $where, 'LIMIT 1');
+}
+
+if ($command == 'setHighlight' && isset($command_value) && !empty($object_id)) {
+
+    ($command_value == 0) ? $value = 0 : $value = 1;
+
+    $hosts->update($object_id, ['highlight' => $value]);
 }
 
 /* Power ON/OFF  & Reboot */

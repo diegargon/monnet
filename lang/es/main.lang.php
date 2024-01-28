@@ -19,6 +19,7 @@ $lng = [
     //C
     'L_CODENAME' => 'Codename',
     'L_CLOSE' => 'Cerrar',
+    'L_CONFIG' => 'Configuración',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
