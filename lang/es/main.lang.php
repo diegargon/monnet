@@ -13,6 +13,7 @@ $lng = [
     'L_ADDED' => 'Añadido',
     'L_ADD' => 'Añadir',
     'L_APPLINKS' => 'Web apps',
+    'L_AREYOUSURE' => '¿estas seguro?',
     //B
     'L_BOOKMARKS' => 'Links',
     'L_BOOKMARK' => 'Link',

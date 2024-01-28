@@ -13,6 +13,14 @@
         refresh();
     });
 
+    function confirmRefresh(action, param) {
+        var confirmacion = confirm('<?= $lng['L_AREYOUSURE'] ?>');
+
+        if (confirmacion) {
+            refresh(action, param);
+        }
+    }
+
     function refresh(command, command_value, object_id = null) {
         var requestData = {order: command, order_value: command_value};
 
@@ -63,8 +71,12 @@
                             $(position).prepend(jsonData.highlight_hosts.data);
                         }
                     }
+
                     if ("host_details" in jsonData) {
                         $('#host-details').remove();
+                        if ($.isEmptyObject(jsonData.host_details.cfg)) {
+                            return;
+                        }
                         position = jsonData.host_details.cfg.place;
                         $(position).prepend(jsonData.host_details.data);
                         $('#tab1_btn').addClass('active');

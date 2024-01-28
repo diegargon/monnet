@@ -43,6 +43,16 @@ if (!empty($command_value)) {
 if (!empty($object_id)) {
     $data['object_id'] = $object_id;
 }
+
+/* Remove host */
+if ($command === 'remove_host' && is_numeric($command_value)) {
+    $hosts->remove($command_value);
+    //no host_details
+    $user->setPref('host_details', 0);
+    $data['host_details'] = '';
+    $command = $command_value = '';
+}
+
 if (empty($command) || empty($command_value)) {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
@@ -65,14 +75,6 @@ if (empty($command) || empty($command_value)) {
             $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
         }
     }
-}
-
-/* Remove host */
-if ($command === 'remove_host' && is_numeric($command_value)) {
-    $hosts->remove($command_value);
-    //no host_details
-    $user->setPref('host_details', 0);
-    $data['host_details'] = '';
 }
 
 /* Set show/hide host-details */
