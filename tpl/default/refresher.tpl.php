@@ -66,8 +66,8 @@
                             position = jsonData.highlight_hosts.cfg.place;
                             $(position).prepend(jsonData.highlight_hosts.data);
                         } else {
-                            position = jsonData.highlight_hosts.cfg.place;
                             $('#highlight-hosts').remove();
+                            position = jsonData.highlight_hosts.cfg.place;
                             $(position).prepend(jsonData.highlight_hosts.data);
                         }
                     }

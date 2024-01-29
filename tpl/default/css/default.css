@@ -79,7 +79,7 @@ footer {
     margin-top: 1vh;
     padding-bottom: 50px;
 }
-.center_aligner_container {
+.main_align_container {
     display:flex;
     align-content: center;
     width:100%;
@@ -424,7 +424,7 @@ input:checked + .slider:before {
 
 /* SERVICES */
 
-.hosts {
+.hosts, .hosts_cat {
     border: 1px solid rgba(0,0,0, 0.7);
     border-radius: 5px;
     margin: 0px 5px 2px 5px;
@@ -438,6 +438,10 @@ input:checked + .slider:before {
     padding: 5px 10px 10px 5px;
     overflow: hidden;
 
+}
+.hosts_cat {
+    padding: 3px;
+    margin: 0px 5px 0px 5px;
 }
 .hosts-container{
     padding:0px;
@@ -926,6 +930,34 @@ input:checked + .slider:before {
     height: 100%;
     min-height: 150px;
     color: white;
+}
+
+.categories_container {
+    display: flex;
+    align-items: center;
+}
+.category {
+    display: flex;
+    align-items: center;
+}
+.category img {
+    width: 15px;
+    margin: 0px 4px 0px 4px;
+}
+.category a {
+    display: flex;
+    text-decoration: none;
+    color:white;
+
+}
+.category a:hover {
+    box-shadow: 6px 6px 6px rgba(255,0,0,0.40), 6px 6px 6px rgba(255,0,0,0.40);
+}
+.cat_name {
+    font-family: fantasy;
+    text-transform: uppercase;
+    font-weight: bold;
+
 }
 @media only screen and (max-width: 1096px) {
     .hosts {

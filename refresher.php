@@ -62,7 +62,7 @@ if (empty($command) || empty($command_value)) {
             $tdata['container-id'] = 'highlight-hosts';
             $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
             $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
-            $data['highlight_hosts']['cfg']['place'] = '#left_container';
+            $data['highlight_hosts']['cfg']['place'] = '#host_place';
         }
     }
     if ($user->getPref('show_other_hosts_status')) {
@@ -71,7 +71,7 @@ if (empty($command) || empty($command_value)) {
             $tdata['hosts'] = $hosts_view;
             $tdata['container-id'] = 'other-hosts';
             $tdata['head-title'] = $lng['L_OTHERS'];
-            $data['other_hosts']['cfg']['place'] = '#left_container';
+            $data['other_hosts']['cfg']['place'] = '#host_place';
             $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
         }
     }
