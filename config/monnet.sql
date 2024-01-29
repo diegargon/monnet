@@ -15,21 +15,22 @@ SET time_zone = "+00:00";
 CREATE TABLE `categories` (
   `id` int NOT NULL,
   `cat_type` tinyint NOT NULL COMMENT '1 Hosts 2 Links',
-  `cat_name` varchar(32) NOT NULL
+  `cat_name` varchar(32) NOT NULL,
+  `cat_options` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `cat_type`, `cat_name`) VALUES
-(1, 1, 'L_HOSTS_MAIN'),
-(2, 1, 'L_HOSTS_USERS'),
-(3, 1, 'L_HOSTS_SERVERS'),
-(4, 1, 'L_HOSTS_VM'),
-(10, 2, 'L_WEBS'),
-(11, 2, 'L_APPLINKS'),
-(20, 3, 'L_SEARCH_ENGINE');
+INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `cat_options`) VALUES
+(1, 1, 'L_HOSTS_MAIN', ''),
+(2, 1, 'L_HOSTS_USERS', ''),
+(3, 1, 'L_HOSTS_SERVERS', ''),
+(4, 1, 'L_HOSTS_VM', ''),
+(10, 2, 'L_WEBS', ''),
+(11, 2, 'L_APPLINKS', ''),
+(20, 3, 'L_SEARCH_ENGINE', '');
 
 -- --------------------------------------------------------
 
@@ -81,6 +82,19 @@ CREATE TABLE `hosts` (
   `last_check` datetime DEFAULT NULL,
   `last_seen` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hosts_logs`
+--
+
+CREATE TABLE `hosts_logs` (
+  `id` int NOT NULL,
+  `host_id` int NOT NULL,
+  `msg` varchar(255) NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -169,7 +183,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `isAdmin`, `created`) VALUES
-(1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', '5q9l1d3sadf1cmrqa2drl19mr1', 1, '2021-10-30 12:06:20');
+(1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', '22agcuppnndjvdkaadp1v3ji4g', 1, '2021-10-30 12:06:20');
 
 --
 -- Indexes for dumped tables
@@ -193,6 +207,12 @@ ALTER TABLE `cmd`
 ALTER TABLE `hosts`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `ip` (`ip`);
+
+--
+-- Indexes for table `hosts_logs`
+--
+ALTER TABLE `hosts_logs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `items`
@@ -253,6 +273,12 @@ ALTER TABLE `cmd`
 -- AUTO_INCREMENT for table `hosts`
 --
 ALTER TABLE `hosts`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `hosts_logs`
+--
+ALTER TABLE `hosts_logs`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
