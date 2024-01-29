@@ -1,6 +1,6 @@
 # WARNING: Changing things that going to make backguard incompatible
 # I disable the ssh stuff for redo, ping stats still works
-
+.
 
 # MonNet (NOT READY FOR USE)
 Install LAMP
