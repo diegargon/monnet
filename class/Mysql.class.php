@@ -170,7 +170,7 @@ class Database {
      * @param string $query
      * @return array
      */
-    function query(string $query) {        
+    function query(string $query) {
         $this->query_stats++;
         $this->query_history[] = $query;
         $result = $this->dblink->query($query);
@@ -499,7 +499,7 @@ class Database {
         if (empty($field) || empty($table)) {
             return false;
         }
-        $query = 'UPDATE ' . $this->db_prefix . $table . ' SET ' . $field . ' = ' . '!' . $field;
+        $query = 'UPDATE ' . $this->db_prefix . $table . ' SET `' . $field . '` =  ' . '!' . '`' . $field . '`';
         if (!empty($where)) {
             $query .= ' WHERE ' . $this->whereProcess($where, $logic);
         }
@@ -586,7 +586,7 @@ class Database {
      */
     private function insertProcess(array $insert_data) {
         foreach ($insert_data as $field => $value) {
-            $value = $this->escape($value);            
+            $value = $this->escape($value);
             //TODO FIXME correccion rapida para evitar errores en mysql 8 con groups lead (palabras reservadas)
             $fields_ary[] = '`' . $field . '`';
             $values_ary[] = "'" . $value . "'";
