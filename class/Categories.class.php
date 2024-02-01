@@ -15,10 +15,12 @@ class Categories {
     private $db;
     private $categories = [];
     private $cat_types;
+    private $lng = [];
 
-    public function __construct(array $cfg, Database $db) {
+    public function __construct(array $cfg, array $lng, Database $db) {
         $this->cfg = $cfg;
         $this->db = $db;
+        $this->lng = $lng;
 
         $results = $db->select('categories', '*');
         $this->categories = $db->fetchAll($results);
@@ -36,14 +38,15 @@ class Categories {
     }
 
     public function getByType($type) {
-        $categories = [];
+        $categories_by_type = [];
+
         foreach ($this->categories as $cat) {
             if ($cat['cat_type'] == $type) {
-                $categories[] = $cat;
+                $categories_by_type[] = $cat;
             }
         }
 
-        return empty($categories) ? false : $categories;
+        return !empty($categories_by_type) ? $categories_by_type : false;
     }
 
     public function getTypeByID($id) {
@@ -54,5 +57,33 @@ class Categories {
         }
 
         return false;
+    }
+
+    public function getOnByType($type) {
+        $by_type_return = [];
+
+        $categories_by_type = $this->getByType($type);
+
+         foreach ($categories_by_type as $typecat) {
+            if ($typecat['on']) {
+                $by_type_return[] = $typecat;
+            }
+        }
+
+        return valid_array($by_type_return) ? $by_type_return : false;
+    }
+
+    public function prepareCats(int $type) {
+        $categories_by_type = $this->getByType($type);
+        foreach ($categories_by_type as &$typecat) {
+            if (
+                    (strpos($typecat['cat_name'], 'L_') === 0 ) &&
+                    isset($this->lng[$typecat['cat_name']])
+            ) {
+                $typecat['cat_name'] = $this->lng[$typecat['cat_name']];
+            }
+        }
+
+        return $categories_by_type;
     }
 }

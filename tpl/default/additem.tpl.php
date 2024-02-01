@@ -23,7 +23,7 @@
             <label for="host"><?= $lng['L_TYPE'] ?>:</label>            
             <select id="url_type" name="url_type" required>                 
                 <?php
-                foreach ($tdata['items_categories'] as $cat) {
+                foreach ($tdata['webs_categories'] as $cat) {
                     if (isset($lng[$cat['cat_name']])) {
                         $cat_name = $lng[$cat['cat_name']];
                     } else {

@@ -23,7 +23,7 @@ class Items {
         $this->items = $db->fetchAll($results);
     }
 
-    public function getCatAll($category) {
+    public function getAllCat($category) {
         $result = [];
         foreach ($this->items as $item) {
             if ($item['cat_id'] == $category) {

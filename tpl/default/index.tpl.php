@@ -44,16 +44,6 @@
     <div class="main_container">
         <!-- left -->
         <div id="left_container" class="left_container">
-            <div class="hosts_cat">
-                <div class="categories_container">
-                    <div class="category"><a href=""><img src="/tpl/default/img/red2.png"/><span class="cat_name">Test Cat</span></a></div>
-                    <div class="category"><a href=""><img src="/tpl/default/img/green2.png"/><span class="cat_name">Test Cat</span></a></div>
-                    <div class="category"><a href=""><img src="/tpl/default/img/red2.png"/><span class="cat_name">Test Cat</span></a></div>
-                    <div class="category"><a href=""><img src="/tpl/default/img/green2.png"/><span class="cat_name">Test Cat</span></a></div>
-                    <div class="category"><a href=""><img src="/tpl/default/img/red2.png"/><span class="cat_name">Test Cat</span></a></div>
-                    <div class="category"><a href=""><img src="/tpl/default/img/green2.png"/><span class="cat_name">Test Cat</span></a></div>                    
-                </div>
-            </div>
             <?= !empty($tdata['left_col']) ? $tdata['left_col'] : null; ?>
             <div id="host_place"></div>
         </div>

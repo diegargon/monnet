@@ -62,7 +62,7 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
 
     $page = common_head($cfg, $db, $lng, $user);
 
-    $categories = new Categories($cfg, $db);
+    $categories = new Categories($cfg, $lng, $db);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post_data = page_index_post($db, $user, $categories, $lng);
@@ -102,14 +102,14 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
 
     /* AppLinks Bookmarks */
     if ($user->getPref('show_applinks_status')) {
-        $applinks_bookmarks = format_items($user, $items->getCatAll(11));
+        $applinks_bookmarks = format_items($user, $items->getAllCat(11));
         $page['bookmarks_category']['applinks'] = $applinks_bookmarks;
     }
 
     /* Bookmarks */
 
     if ($user->getPref('show_bookmarks_status')) {
-        $bookmarks = format_items($user, $items->getCatAll(10));
+        $bookmarks = format_items($user, $items->getAllCat(10));
         $page['bookmarks_category']['bookmarks'] = $bookmarks;
     }
     if ($user->getPref('show_applinks_status') || $user->getPref('show_bookmarks_status')) {
@@ -118,12 +118,22 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
             'place' => 'center_col',
         ];
     }
+    /* Add Item */
     $page['load_tpl'][] = [
         'file' => 'additem',
         'place' => 'center_col',
     ];
 
-    $page['items_categories'] = $categories->getByType(2);
+    /* Host Cat */
+    $page['load_tpl'][] = [
+        'file' => 'categories_host',
+        'place' => 'left_col',
+    ];
+
+    $page['hosts_categories'] = $categories->prepareCats(1);
+
+    /* Webs Categories */
+    $page['webs_categories'] = $categories->getByType(2);
 
     return $page;
 }
@@ -302,6 +312,83 @@ function format_items(User $user, array $items_results) {
     }
 
     return $items;
+}
+
+//TODO this and next rewrite
+function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Categories $cats) {
+    $hostscat = [];
+
+    $cats_on = $cats->getOnByType(1);
+    if ($cats_on === false) {
+        return false;
+    }
+
+    foreach ($cats_on as $cat) {
+        $hosts_cat = $hosts->getHostsByCat($cat['id']);
+        if (valid_array($hosts_cat)) {
+            $hostscat = array_merge($hostscat, $hosts_cat);
+        }
+    }
+
+    $theme = $user->getTheme();
+
+    foreach ($hostscat as $khost => $vhost) {
+        $hostscat[$khost]['theme'] = $theme;
+        $hostscat[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
+        if (empty($vhost['title'])) {
+            if (!empty($vhost['hostname'])) {
+                $hostscat[$khost]['title'] = explode('.', $vhost['hostname'])[0];
+            } else {
+                $hostscat[$khost]['title'] = $vhost['ip'];
+            }
+        } else {
+            if (!empty($vhost['hostname'])) {
+                $hostscat[$khost]['details'] .= $lng['L_HOSTNAME'] . ': ' . $vhost['hostname'] . "\n";
+            }
+        }
+        if ($vhost['online']) {
+            $hostscat[$khost]['title_online'] = $lng['L_S_ONLINE'];
+            $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/green.png';
+        } else {
+            $hostscat[$khost]['title_online'] = $lng['L_S_OFFLINE'];
+            $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/red.png';
+        }
+
+        if (!empty($vhost['os'])) {
+            $hostscat[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
+            $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+        } else {
+            $hostscat[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
+            $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+        }
+        /* Demasiados iconos mejor para details
+
+          if (!empty($vhost['os'])) {
+          $hostscat[$khost]['os'] = $cfg['system'][$vhost['os']]['name'];
+          $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+          } else {
+          $hostscat[$khost]['os'] = $cfg['system'][$vhost['system']]['name'];
+          $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
+          }
+          if (!empty($vhost['os_distribution'])) {
+          $hostscat[$khost]['os_distribution'] = $cfg['system'][$vhost['os_distribution']]['name'];
+          $hostscat[$khost]['os_distribution_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$vhost['os_distribution']]['img'];
+          }
+         */
+        if (!empty($vhost['system'])) {
+            $hostscat[$khost]['system'] = $cfg['system'][$vhost['system']]['name'];
+            $hostscat[$khost]['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
+        }
+
+
+        //Warn icon
+        if ($vhost['warn_port']) {
+            $hostscat[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
+            $hostscat[$khost]['details'] .= $lng['L_PORT_DOWN'];
+        }
+    }
+
+    return $hostscat;
 }
 
 function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, int $highlight = 0) {

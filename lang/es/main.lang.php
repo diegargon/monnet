@@ -21,6 +21,7 @@ $lng = [
     'L_CODENAME' => 'Codename',
     'L_CLOSE' => 'Cerrar',
     'L_CONFIG' => 'Configuración',
+    'L_CAMERAS' => 'Camaras',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
@@ -36,16 +37,13 @@ $lng = [
     'L_HOSTS' => 'Hosts',
     'L_HOST' => 'Host',
     'L_HOST_MSG_DIFF' => 'Host ha cambiado',
-    'L_HOSTS_MAIN' => 'Hosts/Varios',
-    'L_HOSTS_USERS' => 'Hosts/Users',
-    'L_HOSTS_VM' => 'Hosts/VM',
-    'L_HOSTS_SERVERS' => 'Hosts/Servers',
     'L_HOME' => 'Inicio',
     'L_HUMIDITY' => 'Humedad',
     //I
     'L_IP' => 'Ip',
     'L_ITEMS' => 'Items',
     'L_IMAGE_TYPE' => 'Tipo Imagen',
+    'L_IOT' => 'Iot',
     //L
     'L_LOGIN' => 'Identificarse',
     'L_LOGOUT' => 'Salir',
@@ -63,6 +61,7 @@ $lng = [
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',
     'L_NAME' => 'Nombre',
+    'L_NETWORK' => 'Red',
     //O
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
@@ -76,6 +75,7 @@ $lng = [
     'L_PWR_ON' => 'Encender',
     'L_PWR_OFF' => 'Apagar',
     'L_PRIVACY' => 'Privacidad',
+    'L_PHONE' => 'Phone',
     //R
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',
@@ -87,16 +87,21 @@ $lng = [
     'L_STATUS' => 'Estado',
     'L_SETTINGS' => 'Configuración',
     'L_SEARCH_ENGINE' => 'Search Engine',
+    'L_SERVERS' => 'Servers',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',
+    'L_TV' => 'Tv',
     //U
+    'L_USERS' => 'Usuarios',
     'L_USERNAME' => 'Usuario',
     'L_UPTIME' => 'Uptime',
     'L_UNKNOWN' => 'Desconocido',
     'L_URLIP' => 'Url o IP',
-    //V
+    'L_UNCATEGORIZED' => 'Sin Categoria',
+    //V    
     'L_VENDOR' => 'Vendor',
+    'L_VM' => 'VM',
     //W
     'L_WINDSPEED' => 'Viento',
     'L_WEIGHT' => 'Peso',

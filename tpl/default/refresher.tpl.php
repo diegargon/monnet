@@ -51,6 +51,13 @@
                     if (jsonData.login === "fail") {
                         location.href = '';
                     }
+
+                    if ('categories_host' in jsonData) {
+                        $('#hosts_cat').remove();
+                        position = jsonData.categories_host.cfg.place;
+                        $(position).prepend(jsonData.categories_host.data);
+                    }
+
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
                             position = jsonData.other_hosts.cfg.place;

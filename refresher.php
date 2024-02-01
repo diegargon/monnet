@@ -53,11 +53,22 @@ if ($command === 'remove_host' && is_numeric($command_value)) {
     $command = $command_value = '';
 }
 
-if (empty($command) || empty($command_value)) {
+/* Host Cat */
+
+if ($command == 'show_host_cat' && !empty($command_value) && is_numeric($command_value)) {
+    $db->toggleField('categories', 'on', ['id' => $command_value]);
+    $categories = new Categories($cfg, $lng, $db);
+    $tdata['hosts_categories'] = $categories->prepareCats(1);
+    $data['categories_host']['data'] = $frontend->getTpl('categories_host', $tdata);
+    $data['categories_host']['cfg']['place'] = '#left_container';
+}
+
+if (empty($command) && empty($command_value) || $command = 'show_host_cat') {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
         $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);
         if ($hosts_view) {
+            $tdata = [];
             $tdata['hosts'] = $hosts_view;
             $tdata['container-id'] = 'highlight-hosts';
             $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
@@ -66,8 +77,11 @@ if (empty($command) || empty($command_value)) {
         }
     }
     if ($user->getPref('show_other_hosts_status')) {
-        $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 0);
+        //$hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 0);
+        !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
+        $hosts_view = get_listcat_hosts($cfg, $hosts, $user, $lng, $categories);
         if ($hosts_view) {
+            $tdata = [];
             $tdata['hosts'] = $hosts_view;
             $tdata['container-id'] = 'other-hosts';
             $tdata['head-title'] = $lng['L_OTHERS'];

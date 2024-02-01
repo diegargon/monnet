@@ -93,7 +93,7 @@ Class Hosts {
 
 
         if (valid_array($fvalues)) {
-            $this->log->debug('Updating host changes'. $id);
+            $this->log->debug('Updating host changes' . $id);
             $this->db->update('hosts', $fvalues, ['id' => ['value' => $id]], 'LIMIT 1');
         }
     }
@@ -130,6 +130,19 @@ Class Hosts {
         }
 
         return false;
+    }
+
+    public function getHostsByCat(int $cat_id) {
+        $hosts_by_cat = [];
+
+        foreach ($this->hosts as $host) {
+
+            if ($host['category'] == $cat_id) {
+                $hosts_by_cat[] = $host;
+            }
+        }
+
+        return valid_array($hosts_by_cat) ? $hosts_by_cat : false;
     }
 
     private function getHostsDb() {
