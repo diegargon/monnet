@@ -43,7 +43,7 @@ CREATE TABLE `hosts` (
   `title` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `hostname` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `ip` char(255) NOT NULL,
-  `category` int NOT NULL,
+  `category` int NOT NULL DEFAULT '1',
   `mac` char(255) DEFAULT NULL,
   `mac_vendor` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `highlight` tinyint(1) NOT NULL DEFAULT '0',

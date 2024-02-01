@@ -41,7 +41,7 @@ function check_known_hosts(Database $db, Hosts $hosts) {
             $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
             $db->insert('stats', $set_ping_stats);
         } else {
-            $log->warn("Known host ping status error {$host['id']}:{$host['ip']}");
+            $log->warning("Known host ping status error {$host['id']}:{$host['ip']}");
         }
     }
     $log->debug('Finish check_known_hosts');
@@ -127,7 +127,7 @@ function fill_mac_vendors(Hosts $hosts, int $only_missing = 0) {
         $vendor = [];
         $update = [];
 
-        if (!empty($host['mac']) &&
+        if ((!empty($host['mac'])) &&
                 (empty($host['mac_vendor']) || $only_missing === 1)
         ) {
             $log->debug("Getting mac vendor for {$host['mac']} (local)");

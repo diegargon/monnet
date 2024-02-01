@@ -63,7 +63,7 @@ if ($command == 'show_host_cat' && !empty($command_value) && is_numeric($command
     $data['categories_host']['cfg']['place'] = '#left_container';
 }
 
-if (empty($command) && empty($command_value) || $command = 'show_host_cat') {
+if (empty($command) && empty($command_value) || $command == 'show_host_cat') {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
         $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);
@@ -126,7 +126,7 @@ if ($command == 'power_on' && !empty($command_value) && is_numeric($command_valu
     if (!empty($host['mac'])) {
         sendWOL($host['mac']);
     } else {
-        $log->warn("Host {$host['ip']} has not mac address");
+        $log->warning("Host {$host['ip']} has not mac address");
     }
 }
 if ($command == 'power_off' && !empty($command_value) && is_numeric($command_value)) {
