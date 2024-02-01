@@ -1,11 +1,10 @@
-# WARNING: Changing things that going to make backguard incompatible
-# I disable the ssh stuff for redo, ping stats still works
-....
+### WARNING: Changing things that going to make backguard incompatible
+### I disable the ssh stuff for redo, ping stats still works
 
 # MonNet (NOT READY FOR USE)
 Install LAMP + Composer
 
-````
+```
 mysql -u root -p
 mysql> CREATE DATABASE monnet;
 mysql> CREATE USER 'monnet'@'localhost' IDENTIFIED BY 'password';
