@@ -11,6 +11,8 @@
 
 $DEBUG=1;
 
+$cfg['monnet_version'] = 0.1;
+
 /* OS manufactures */
 $cfg['os_manufacture'] = [
     0 => ['name' => 'Unknown', 'img' => 'unknown.png'],

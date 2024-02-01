@@ -16,21 +16,9 @@ CREATE TABLE `categories` (
   `id` int NOT NULL,
   `cat_type` tinyint NOT NULL COMMENT '1 Hosts 2 Links',
   `cat_name` varchar(32) NOT NULL,
-  `cat_options` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `on` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `categories`
---
-
-INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `cat_options`) VALUES
-(1, 1, 'L_HOSTS_MAIN', ''),
-(2, 1, 'L_HOSTS_USERS', ''),
-(3, 1, 'L_HOSTS_SERVERS', ''),
-(4, 1, 'L_HOSTS_VM', ''),
-(10, 2, 'L_WEBS', ''),
-(11, 2, 'L_APPLINKS', ''),
-(20, 3, 'L_SEARCH_ENGINE', '');
 
 -- --------------------------------------------------------
 
@@ -55,6 +43,7 @@ CREATE TABLE `hosts` (
   `title` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `hostname` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `ip` char(255) NOT NULL,
+  `category` int NOT NULL,
   `mac` char(255) DEFAULT NULL,
   `mac_vendor` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `highlight` tinyint(1) NOT NULL DEFAULT '0',
@@ -94,7 +83,7 @@ CREATE TABLE `hosts_logs` (
   `host_id` int NOT NULL,
   `msg` varchar(255) NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -133,8 +122,8 @@ CREATE TABLE `notes` (
   `id` int NOT NULL,
   `host_id` int NOT NULL,
   `update` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `content` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -149,7 +138,6 @@ CREATE TABLE `prefs` (
   `pref_value` char(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `stats`
@@ -177,131 +165,3 @@ CREATE TABLE `users` (
   `isAdmin` tinyint NOT NULL DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `isAdmin`, `created`) VALUES
-(1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', '22agcuppnndjvdkaadp1v3ji4g', 1, '2021-10-30 12:06:20');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `cmd`
---
-ALTER TABLE `cmd`
-  ADD PRIMARY KEY (`cmd_id`);
-
---
--- Indexes for table `hosts`
---
-ALTER TABLE `hosts`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `ip` (`ip`);
-
---
--- Indexes for table `hosts_logs`
---
-ALTER TABLE `hosts_logs`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `items`
---
-ALTER TABLE `items`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `load_stats`
---
-ALTER TABLE `load_stats`
-  ADD PRIMARY KEY (`timestamp`),
-  ADD KEY `host` (`host`);
-
---
--- Indexes for table `notes`
---
-ALTER TABLE `notes`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `prefs`
---
-ALTER TABLE `prefs`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uid` (`uid`,`pref_name`);
-
---
--- Indexes for table `stats`
---
-ALTER TABLE `stats`
-  ADD UNIQUE KEY `date` (`date`,`host_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
--- AUTO_INCREMENT for table `cmd`
---
-ALTER TABLE `cmd`
-  MODIFY `cmd_id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `hosts`
---
-ALTER TABLE `hosts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `hosts_logs`
---
-ALTER TABLE `hosts_logs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `items`
---
-ALTER TABLE `items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `notes`
---
-ALTER TABLE `notes`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `prefs`
---
-ALTER TABLE `prefs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-COMMIT;

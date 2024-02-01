@@ -14,6 +14,9 @@ if (!empty($DEBUG)) {
     ini_set("xdebug.var_display_max_data", '-1');
     ini_set("xdebug.var_display_max_depth", '-1');
 }
+if(!file_exists('config/config.inc.php')){
+    print 'Missing config.inc.php. Leaving';
+}
 require_once('config/config.priv.php');
 require_once('config/config.inc.php');
 date_default_timezone_set($cfg['timezone']);
