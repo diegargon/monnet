@@ -15,7 +15,7 @@ Class Log {
     private $cfg;
     private $db;
 
-    public function __construct(array $cfg, Database $db) {
+    public function __construct(array $cfg, Database $db) {        
         $this->console = false;
         $this->cfg = $cfg;
         $this->db = $db;
@@ -57,7 +57,7 @@ Class Log {
                 }
             }
             if ($this->cfg['log_to_syslog']) {
-                if (openlog($this->cfg['app_name'] . ' ' . $this->cfg['version'], LOG_NDELAY, LOG_SYSLOG)) {
+                if (openlog($this->cfg['app_name'] . ' ' . $this->cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG)) {
                     if (is_array($msg)) {
                         $msg = print_r($msg, true);
                         isset($this->console) ? $this->cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
