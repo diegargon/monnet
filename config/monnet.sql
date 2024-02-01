@@ -16,7 +16,7 @@ CREATE TABLE `categories` (
   `id` int NOT NULL,
   `cat_type` tinyint NOT NULL COMMENT '1 Hosts 2 Links',
   `cat_name` varchar(32) NOT NULL,
-  `on` tinyint(1) NOT NULL DEFAULT '0'
+  `on` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
