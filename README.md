@@ -29,6 +29,12 @@ rename config/example.inc.php config.inc.php and change whatever you want.
 /var/www/html# mysql monnet < config/monnet-inserts.sql
 ```
 
+## Default user : pwd
+
+```
+monnet : monnetadmin
+```
+
 ## Setting crontab
 
 ```
