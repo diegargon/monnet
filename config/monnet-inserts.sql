@@ -1,3 +1,14 @@
+INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES
+(1, 0, 'monnet_version',0.1),
+(2, 0, 'cron_quarter', '0'),
+(3, 0, 'cron_hourly', '0'),
+(4, 0, 'cron_halfday', '0'),
+(5, 0, 'cron_weekly', '0'),
+(6, 0, 'cron_monthly', '0'),
+(7, 0, 'cron_update', '0'),
+(8, 0, 'cron_five', '0'),
+(9, 0, 'cron_daily', '0'),
+
 INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`) VALUES
 (1, 1, 'L_UNCATEGORIZED', 1),
 (2, 1, 'L_NETWORK', 1),
@@ -12,24 +23,9 @@ INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`) VALUES
 (51, 2, 'L_APPLINKS', 0),
 (100, 3, 'L_SEARCH_ENGINE', 0);
 
-
-
-INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES
-(1, 0, 'cron_quarter', '0'),
-(2, 0, 'cron_hourly', '0'),
-(3, 0, 'cron_halfday', '0'),
-(4, 0, 'cron_weekly', '0'),
-(5, 0, 'cron_monthly', '0'),
-(6, 0, 'cron_update', '0'),
-(7, 0, 'cron_five', '0'),
-(8, 0, 'cron_daily', '0'),
-
-
 INSERT INTO `items` (`id`, `cat_id`, `type`, `title`, `conf`, `weight`) VALUES
 (1, 10, NULL, 'Google', '{\"url\":\"https://google.es\",\"image_type\":\"favicon\",\"image_resource\":false}', 0),
 (2, 10, NULL, 'Yahoo', '{\"url\":\"http://es.yahoo.com\",\"image_type\":\"favicon\",\"image_resource\":false}', 0),
-
-
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `isAdmin`, `created`) VALUES
 (1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', '01s57t8jqms7f4etc9p5k492mj', 1, '2021-10-30 12:06:20');
