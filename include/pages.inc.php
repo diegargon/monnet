@@ -135,6 +135,12 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
     /* Webs Categories */
     $page['webs_categories'] = $categories->getByType(2);
 
+    /* Term */
+    $page['load_tpl'][] = [
+        'file' => 'term',
+        'place' => 'center_col',
+    ];    
+    
     return $page;
 }
 
