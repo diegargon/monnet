@@ -29,6 +29,9 @@ $lng = [
     //E    
     //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
+    'L_ERR_FILE_CREATE' => 'Error creando archivo',
+    'L_ERR_FILE_CHOWN' => 'Error cambiando el propietario del archivo',
+    'L_ERR_FILE_CHGRP' => 'Error cambiando el grupo propietario del archivo',
     //F
     'L_FIELD' => 'Campo',
     //H
