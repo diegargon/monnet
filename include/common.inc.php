@@ -14,7 +14,7 @@ if (!empty($DEBUG)) {
     ini_set("xdebug.var_display_max_data", '-1');
     ini_set("xdebug.var_display_max_depth", '-1');
 }
-if(!file_exists('config/config.inc.php')){
+if (!file_exists('config/config.inc.php')) {
     print 'Missing config.inc.php. Leaving';
 }
 require_once('config/config.priv.php');
@@ -34,12 +34,12 @@ $db->connect();
 
 require_once('class/Log.class.php');
 
-$log = new Log($cfg, $db);
+/* Get default lang overwrite after with user settings */
+require_once('lang/es/main.lang.php');
+$log = new Log($cfg, $db, $lng);
 
 require_once('include/util.inc.php');
 require_once('include/net.inc.php');
-/* Get default lang overwrite after with user settings */
-require_once('lang/es/main.lang.php');
 require_once('class/Hosts.class.php');
 require_once('class/Items.class.php');
 require_once('class/Categories.class.php');
