@@ -93,8 +93,8 @@ if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
         $tdata['container-id'] = 'other-hosts';
         $tdata['head-title'] = $lng['L_OTHERS'];
         $data['other_hosts']['cfg']['place'] = '#host_place';
-        $data['other_hosts']['cfg']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count |";
-        $data['other_hosts']['cfg']['onoff'] = $lng['L_ON'] . ": $host_on|{$lng['L_OFF']}: $host_off|";
+        $data['other_hosts']['cfg']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
+        $data['other_hosts']['cfg']['onoff'] = $lng['L_ON'] . ": $host_on|{$lng['L_OFF']}: $host_off | ";
         $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     }
 }
