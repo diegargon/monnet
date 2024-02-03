@@ -31,6 +31,7 @@ Class Hosts {
     public int $totals = 0;
     public int $on = 0;
     public int $off = 0;
+    public int $highlight_total = 0;
     private Database $db;
     private $hosts = [];
     private array $lng;
@@ -167,6 +168,7 @@ Class Hosts {
             $id = $host['id'];
             $this->hosts[$id] = $host;
             $host['online'] == 1 ? ++$this->on : ++$this->off;
+            $host['highlight'] ? $this->highlight_total++ : null;
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
             if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);

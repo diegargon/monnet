@@ -62,11 +62,13 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $data['categories_host']['data'] = $frontend->getTpl('categories_host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
 }
+$highlight_hosts = 0;
 
 if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
         $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);
+        $highlight_hosts_count = count($hosts_view);
         if ($hosts_view) {
             $tdata = [];
             $tdata['hosts'] = $hosts_view;
@@ -80,8 +82,10 @@ if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
         //$hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 0);
         !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
         $hosts_view = get_listcat_hosts($cfg, $hosts, $user, $lng, $categories);
-        $shown_hosts = count($hosts_view);
-        $hosts_totals = $hosts->totals;
+        $shown_hosts_count = count($hosts_view);
+        $hosts_totals_count = $hosts->totals;
+        $shown_hosts_count = $shown_hosts_count + $highlight_hosts_count;
+
         $host_on = $hosts->on;
         $host_off = $hosts->off;
         $tdata = [];
@@ -89,7 +93,7 @@ if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
         $tdata['container-id'] = 'other-hosts';
         $tdata['head-title'] = $lng['L_OTHERS'];
         $data['other_hosts']['cfg']['place'] = '#host_place';
-        $data['other_hosts']['cfg']['totals'] = $lng['L_SHOWED'] . ":$shown_hosts | {$lng['L_TOTAL']} : $hosts_totals |";
+        $data['other_hosts']['cfg']['totals'] = $lng['L_SHOWED'] . ":$shown_hosts_count | {$lng['L_TOTAL']} : $hosts_totals_count |";
         $data['other_hosts']['cfg']['onoff'] = $lng['L_ON'] . ":$host_on|{$lng['L_OFF']}:$host_off|";
         $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     }

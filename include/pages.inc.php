@@ -337,6 +337,11 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
 
     $theme = $user->getTheme();
 
+    foreach ($hostscat as $khost => $host) {
+        if ($user->getPref('show_highlight_hosts_status') && $host['highlight']) {
+            unset($hostscat[$khost]);
+        }
+    }
     foreach ($hostscat as $khost => $vhost) {
         $hostscat[$khost]['theme'] = $theme;
         $hostscat[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
