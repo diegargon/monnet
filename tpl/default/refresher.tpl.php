@@ -74,7 +74,7 @@
                             position = jsonData.other_hosts.cfg.place;
                             $(position).prepend(jsonData.other_hosts.data);
                             $('#host_totals').html(jsonData.other_hosts.cfg.totals);
-                            $('#host_stats').append(jsonData.other_hosts.cfg.onoff);
+                            $('#host_stats').html(jsonData.other_hosts.cfg.onoff);
                         }
                     }
                     if ("highlight_hosts" in jsonData) {
