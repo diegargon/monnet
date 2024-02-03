@@ -31,35 +31,6 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `isAdmin`, `c
 (1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', '01s57t8jqms7f4etc9p5k492mj', 1, '2021-10-30 12:06:20');
 
 --
--- Indexes for dumped tables
---
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `cmd`
---
-ALTER TABLE `cmd`
-  ADD PRIMARY KEY (`cmd_id`);
-
---
--- Indexes for table `hosts`
---
-ALTER TABLE `hosts`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `ip` (`ip`);
-
---
--- Indexes for table `hosts_logs`
---
-ALTER TABLE `hosts_logs`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `items`
 --
 ALTER TABLE `items`
@@ -90,6 +61,12 @@ ALTER TABLE `prefs`
 --
 ALTER TABLE `stats`
   ADD UNIQUE KEY `date` (`date`,`host_id`);
+
+--
+-- Indexes for table `system_logs`
+--
+ALTER TABLE `system_logs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -143,6 +120,12 @@ ALTER TABLE `notes`
 --
 ALTER TABLE `prefs`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
+--
+-- AUTO_INCREMENT for table `system_logs`
+--
+ALTER TABLE `system_logs`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`

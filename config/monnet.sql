@@ -19,7 +19,6 @@ CREATE TABLE `categories` (
   `on` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
 -- --------------------------------------------------------
 
 --
@@ -81,6 +80,7 @@ CREATE TABLE `hosts` (
 CREATE TABLE `hosts_logs` (
   `id` int NOT NULL,
   `host_id` int NOT NULL,
+  `level` tinyint NOT NULL DEFAULT '7',
   `msg` varchar(255) NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -138,6 +138,7 @@ CREATE TABLE `prefs` (
   `pref_value` char(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `stats`
@@ -149,6 +150,19 @@ CREATE TABLE `stats` (
   `host_id` int NOT NULL,
   `value` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `system_logs`
+--
+
+CREATE TABLE `system_logs` (
+  `id` int NOT NULL,
+  `level` tinyint NOT NULL,
+  `msg` varchar(255) NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
