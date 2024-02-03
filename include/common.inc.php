@@ -47,6 +47,7 @@ require_once('lang/es/main.lang.php');
 $log = new Log($cfg, $db, $lng);
 
 require_once('include/util.inc.php');
+require_once('include/time.inc.php');
 require_once('include/net.inc.php');
 require_once('class/Hosts.class.php');
 require_once('class/Items.class.php');
