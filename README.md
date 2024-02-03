@@ -28,8 +28,8 @@ can remove all unused config. Don't rename or modify directly config.defaults.ph
 
 ## Settting Database
 ```
-/var/www/html# mysql monnet < config/monnet.sql
-/var/www/html# mysql monnet < config/monnet-inserts.sql
+/var/www/html# mysql monnet < config/monnet.sql -p
+/var/www/html# mysql monnet < config/monnet-inserts.sql -p
 ```
 
 ## Default user : pwd
@@ -45,7 +45,7 @@ $ nano /etc/crontab
 */3 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
 ```
 
-## CERTS (deprecated)
+## CERTS (disable temporaraly due rewriting)
 
 (without password)
 ```
@@ -57,7 +57,7 @@ $ ssh-keygen -m PEM -t rsa -b 4096
 
 add /var/certs/id_rsa to cfg[‘certs’] 
 
-## Server to monitor (deprectated)
+## Server to monitor (disable temporaraly due rewriting)
 
 ```
 $ adduser monnet
