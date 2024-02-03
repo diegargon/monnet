@@ -29,7 +29,6 @@ Class User {
             $this->user = $this->getProfile($_COOKIE['uid']);
             if (!empty($this->user['sid']) && $this->user['sid'] == $_COOKIE['sid']) {
                 $_SESSION['uid'] = $_COOKIE['uid'];
-                //echo "LLEGO 32 Userclass\n";
                 $this->updateSessionId();
             } else {
                 $this->user = [];
@@ -41,6 +40,7 @@ Class User {
         }
         empty($this->user['lang']) ? $this->user['lang'] = $this->cfg['lang'] : null;
         empty($this->user['theme']) ? $this->user['theme'] = $this->cfg['theme'] : null;
+        empty($this->user['timezone']) ? $this->user['timezezone'] = $cfg['timezone'] : null;
 
         $this->user['id'] > 0 ? $this->loadPrefs() : null;
     }
@@ -88,6 +88,14 @@ Class User {
         $user = $this->db->fetch($result);
 
         return $user ? $user : false;
+    }
+
+    public function getTimezone() {
+        return $this->user['timezone'];
+    }
+
+    public function userDateNow() {
+        return date_now($this->user['timezone']);
     }
 
     public function checkUser(string $username, string $password) {

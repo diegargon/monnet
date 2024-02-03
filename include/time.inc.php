@@ -9,11 +9,27 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function utc_date_now() {
-    $date_timezone = new DatetimeZone('UTC');
+function valid_timezone(array $timezone) {
+    if (empty($timezone)) {
+        return false;
+    }
+    $valid_time_zones = timezone_identifiers_list();
+
+    return in_array($timezone, $valid_time_zones);
+}
+
+function date_now(string $timezone = 'UTC') {
+    if (!valid_timezone($timezone)) {
+        return false;
+    }
+    $date_timezone = new DatetimeZone($timezone);
     $date_now = new DateTime('now', $date_timezone);
 
     return $date_now->format('Y-m-d H:i:s');
+}
+
+function utc_date_now() {
+    return date_now();
 }
 
 function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s') {
@@ -23,7 +39,10 @@ function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s'
     return $date->format($time_format);
 }
 
-function formatted_date_now($timezone = 'UTC', $time_format = 'Y-m-d H:i:s') {
+function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s') {
+    if(!valid_timezone($timezone)) {
+        return fale;
+    }
     $date_timezone = new DatetimeZone($timezone);
     $date_now = new DateTime('now', $date_timezone);
 
