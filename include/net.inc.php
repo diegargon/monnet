@@ -104,8 +104,12 @@ function ping_known_host(array $host) {
 
 function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
 
+    $status = [
+        'isAlive' => 0,
+        'latency' => -0.003, // Inicializa la latencia a 0.0
+    ];
+
     $tim_start = microtime(true);
-    $status['isAlive'] = 0;
 
     if (count($timeout) < 2 || !isset($timeout['sec']) || !isset($timeout['usec'])) {
         $timeout = ['sec' => 0, 'usec' => 150000];
