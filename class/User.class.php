@@ -94,7 +94,7 @@ Class User {
         return $this->user['timezone'];
     }
 
-    public function userDateNow() {
+    public function getDateNow() {
         return date_now($this->user['timezone']);
     }
 

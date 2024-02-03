@@ -203,10 +203,8 @@ if (valid_array($term_logs)) {
     $data['term_logs']['cfg']['place'] = '#center_container';
     $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
 }
-if ($cfg['term_show_system'] && $cfg['log_to_db']) {
-    
-}
 
+$user->setPref('refresher_last_update', $user->getDateNow());
 /* END ALWAYS */
 
 
