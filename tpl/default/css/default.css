@@ -959,6 +959,8 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
     font-size: 13px;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 .category {
     display: flex;
@@ -966,6 +968,7 @@ input:checked + .slider:before {
 }
 .category img {
     width: 15px;
+    height: 15px;
     margin: 0px 4px 0px 4px;
 }
 .category a {
@@ -979,6 +982,7 @@ input:checked + .slider:before {
 }
 .cat_name {
     text-transform: uppercase;
+    word-break: keep-all;
 }
 
 .hosts_totals {
