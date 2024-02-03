@@ -60,9 +60,7 @@ function ping_net(array $cfg, Hosts $hosts) {
 
     $iplist = build_iplist($cfg['net']);
 
-    /*
-     * Remove known hosts since we checked in other functions
-     */
+    //We emove known hosts since we checked in other functions
 
     foreach ($iplist as $kip => $vip) {
         $vip = trim($vip);
