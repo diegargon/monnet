@@ -44,6 +44,7 @@ $cfg['log_file_owner_group'] = 'www-data';
   'LOG_INFO' => 6     'LOG_DEBUG' => 7
  */
 $cfg['term_log_level'] = 7;
+$cfg['term_system_log_level'] = 5;
 $cfg['term_max_lines'] = 200;
 $cfg['term_show_system'] = 'LOG_ERR'; // Empty for no or LOG_LEVEL, need log_to_db
 $cfg['term_date_format'] = '[d][H:i:s]';

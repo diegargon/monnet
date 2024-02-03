@@ -11,61 +11,83 @@
 
 Class Log {
 
+    private $recursionCount = 0;
     private $console;
     private $cfg;
     private $db;
+    private $LOG_TYPE = [
+        'LOG_EMERG' => 0, // 	system is unusable
+        'LOG_ALERT' => 1, // 	action must be taken immediately UNUSED
+        'LOG_CRIT' => 2, //     critical conditions
+        'LOG_ERR' => 3, //      error conditions
+        'LOG_WARNING' => 4, // 	warning conditions
+        'LOG_NOTICE' => 5, //	normal, but significant, condition
+        'LOG_INFO' => 6, // 	informational message
+        'LOG_DEBUG' => 7, //	debug-level message
+    ];
 
-    public function __construct(array $cfg, Database $db) {        
+    public function __construct(array $cfg, Database $db, array $lng) {
         $this->console = false;
         $this->cfg = $cfg;
         $this->db = $db;
+        $this->lng = $lng;
     }
 
-    public function logged(string $type, string $msg) {
+    public function logged(string $type, mixed $msg, ?int $self_caller = null) {
+        $LOG_TYPE = $this->LOG_TYPE;
 
-        $LOG_TYPE = [
-            'LOG_EMERG' => 0, // 	UNUSEDsystem is unusable
-            'LOG_ALERT' => 1, // 	UNUSED: action must be taken immediately UNUSED
-            'LOG_CRIT' => 2, // 	UNUSED: critical conditions
-            'LOG_ERR' => 3, //          error conditions
-            'LOG_WARNING' => 4, // 	warning conditions
-            'LOG_NOTICE' => 5, //	UNUSED: normal, but significant, condition
-            'LOG_INFO' => 6, // 	informational message
-            'LOG_DEBUG' => 7, //	debug-level message
-        ];
+        if ($self_caller === null) {
+            $this->recursionCount = 0;
+        } else {
+            $this->recursionCount++;
+            if ($this->recursionCount > 3) {
+                return;
+            }
+        }
 
-        if (isset($LOG_TYPE[$this->cfg['syslog_level']]) && $LOG_TYPE[$type] <= $LOG_TYPE[$this->cfg['syslog_level']]) {
+
+        if (isset($LOG_TYPE[$this->cfg['log_level']]) && $LOG_TYPE[$type] <= $LOG_TYPE[$this->cfg['log_level']]) {
+            if (is_array($msg)) {
+                $msg = print_r($msg, true);
+            }
             if ($this->console) {
-                if (is_array($msg)) {
-                    $msg = var_dump($msg, true);
-                }
                 echo '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . '][' . $type . '] ' . $msg . "\n";
             }
-
+            if ($this->cfg['log_to_db']) {
+                $level = $this->getLogLevelId($type);
+                $this->db->insert('system_logs', ['level' => $level, 'msg' => $msg]);
+            }
             if ($this->cfg['log_to_file']) {
-                $log_file = 'cache/logs/monnet.log';
-                if (is_array($msg)) {
-                    $msg = print_r($msg, true);
-                }
+                $log_file = $this->cfg['log_file'];
+
                 $content = '';
                 $content = '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
-                    touch($log_file);
+                    if (!touch($log_file)) {
+                        $this->err($this->lng['L_ERR_FILE_CREATE'] . ' effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
+                        $this->debug(getcwd(), 1);
+                    } else {
+                        if (!chown($log_file, $this->cfg['log_file_owner'])) {
+                            $this->err($this->lng['L_ERR_FILE_CHOWN'], 1);
+                        }
+                        if (!chgrp($log_file, $this->cfg['log_file_owner_group'])) {
+                            $this->err('L_ERR_FILE_CHGRP', 1);
+                        }
+                        if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
+                            $this->err('Error opening/writing log to file ' . 'effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
+                        }
+                    }
                 }
                 if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
-                    echo 'Error opening/writing log to file\n';
+                    $this->err('Error opening/writing log to file', 1);
                 }
             }
             if ($this->cfg['log_to_syslog']) {
                 if (openlog($this->cfg['app_name'] . ' ' . $this->cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG)) {
-                    if (is_array($msg)) {
-                        $msg = print_r($msg, true);
-                        isset($this->console) ? $this->cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
-                        syslog($LOG_TYPE[$type], $msg);
-                    } else {
-                        isset($this->console) ? $this->cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
-                        syslog($LOG_TYPE[$type], $msg);
-                    }
+                    isset($this->console) ? $this->cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
+                    syslog($LOG_TYPE[$type], $msg);
+                } else {
+                    $this->err('Error opening syslog', 1);
                 }
             }
         }
@@ -79,38 +101,75 @@ Class Log {
         }
     }
 
-    public function loghost(string $loglevel, int $host_id, string $msg) {
+    public function logHost(string $loglevel, int $host_id, string $msg) {
+        $level = $this->getLogLevelID($loglevel);
         $this->logged($loglevel, '[HOST:' . $host_id . ']' . $msg);
-        $host_msg = '[' . $loglevel . '] ' . $msg . "\n";
-        $set = ['host_id' => $host_id, 'msg' => $host_msg];
+        $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg];
         $this->db->insert('hosts_logs', $set);
     }
 
-    public function debug(string $msg) {
-        $this->logged('LOG_DEBUG', $msg);
+    public function getLoghosts(int $limit) {
+        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . $this->cfg['term_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
+        $result = $this->db->query($query);
+        $lines = $this->db->fetchAll($result);
+
+        return valid_array($lines) ? $lines : false;
     }
 
-    public function info(string $msg) {
-        $this->logged('LOG_INFO', $msg);
+    public function getLoghost(int $host_id, int $limit) {
+        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . $this->cfg['term_log_level'] . ' AND host_id = ' . $host_id . ' ORDER BY date DESC LIMIT ' . $limit;
+        $result = $this->db->query($query);
+        $lines = $this->db->fetchAll($result);
+
+        return valid_array($lines) ? $lines : false;
     }
 
-    public function notice(string $msg) {
-        $this->logged('LOG_NOTICE', $msg);
+    public function getLogLevelId(string $loglevel) {
+
+        return $this->LOG_TYPE[$loglevel];
     }
 
-    public function warning(string $msg) {
-        $this->logged('LOG_WARNING', $msg);
+    public function getLogLevelName(int $logvalue) {
+        foreach ($this->LOG_TYPE as $ktype => $vtype) {
+            if ($vtype == $logvalue) {
+                return $ktype;
+            }
+        }
     }
 
-    public function err(string $msg) {
-        $this->logged('LOG_ERR', $msg);
+    public function getSystemDBLogs(int $limit) {
+        $query = 'SELECT * FROM system_logs WHERE level <= ' . $this->cfg['term_system_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
+        $result = $this->db->query($query);
+        $lines = $this->db->fetchAll($result);
+
+        return valid_array($lines) ? $lines : false;
     }
 
-    public function alert(string $msg) {
-        $this->logged('LOG_ALERT', $msg);
+    public function debug(mixed $msg, ?int $self_caller = null) {
+        $this->logged('LOG_DEBUG', $msg, $self_caller);
     }
 
-    public function emerg(string $msg) {
-        $this->logged('LOG_EMERG', $msg);
+    public function info(mixed $msg, ?int $self_caller = null) {
+        $this->logged('LOG_INFO', $msg, $self_caller);
+    }
+
+    public function notice(mixed $msg, ?int $self_caller = null) {
+        $this->logged('LOG_NOTICE', $msg, $self_caller);
+    }
+
+    public function warning(mixed $msg, ?int $self_caller = null) {
+        $this->logged('LOG_WARNING', $msg, $self_caller);
+    }
+
+    public function err(mixed $msg, ?int $self_caller = null) {
+        $this->logged('LOG_ERR', $msg, $self_caller);
+    }
+
+    public function alert(mixed $msg, ?int $self_caller = null) {
+        $this->logged('LOG_ALERT', $msg, $self_caller);
+    }
+
+    public function emerg(mixed $msg, ?int $self_caller = null) {
+        $this->logged('LOG_EMERG', $msg, $self_caller);
     }
 }

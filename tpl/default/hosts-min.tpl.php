@@ -7,7 +7,10 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-//var_dump($tdata['hosts']);
+
+if (empty($tdata['hosts'])) {
+    return [];
+}
 ?>
 
 <div id="<?= $tdata['container-id'] ?>" class="hosts">
@@ -29,7 +32,7 @@
                     <?php if (!empty($host['system_image'])) { ?>
                         <img class="fab" src="<?= $host['system_image'] ?>" alt="system_img" title="<?= $host['system'] ?>"/>
                     <?php } ?>                                   
-                    <div class="hosts-title"><?= $host['title'] ?> </div>
+                    <div class="hosts-title text_shadow_style2"><?= $host['title'] ?> </div>
                 </div>
             </a>
         </div>

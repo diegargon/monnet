@@ -57,15 +57,24 @@
                         position = jsonData.categories_host.cfg.place;
                         $(position).prepend(jsonData.categories_host.data);
                     }
+                    if ("term_logs" in jsonData) {
+                        $('#term_container').remove();
+                        position = jsonData.term_logs.cfg.place;
+                        $(position).append(jsonData.term_logs.data);
+                    }
 
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
                             position = jsonData.other_hosts.cfg.place;
                             $(position).prepend(jsonData.other_hosts.data);
+                            $('#host_totals').html(jsonData.other_hosts.cfg.totals);
+                            $('#host_onoff').append(jsonData.other_hosts.cfg.onoff);
                         } else {
                             $('#other-hosts').remove();
                             position = jsonData.other_hosts.cfg.place;
                             $(position).prepend(jsonData.other_hosts.data);
+                            $('#host_totals').html(jsonData.other_hosts.cfg.totals);
+                            $('#host_stats').append(jsonData.other_hosts.cfg.onoff);
                         }
                     }
                     if ("highlight_hosts" in jsonData) {
@@ -115,7 +124,6 @@
                 .fail(function (xhr, status, error) {
                     console.error('Error en la solicitud AJAX:', status, error);
                 });
-
 
         // avoid launch timer when command FIX:better way for not launch timers, disable timer and allow launch
         if (command === false) {

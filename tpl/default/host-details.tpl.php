@@ -82,9 +82,9 @@
                 <?php foreach ($tdata['host_details']['ports'] as $port) { ?>
                     <div class="port_container">
                         <?php if ($port['online']) { ?>
-                            <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green.png" alt=""/>
+                            <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
                         <?php } else { ?>
-                            <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red.png" alt=""/>
+                            <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
                         <?php } ?>
                         <div class="host_port_name"><?= $port['title'] ?></div>
                         <div class="host_port">(<?= $port['n'] ?>)</div>
@@ -169,7 +169,7 @@
             ?>
             <!-- HOST LOGS -->
             <div id="tab9" class="host-details-tab-content">
-                <div id="textarea_logs"><?= $tdata['host_details']['host_logs'] ?></div>
+                <?= $tdata['host_details']['host_logs'] ?>
             </div>            
         <?php } ?>
         <!-- PING -->
@@ -193,16 +193,16 @@
         </div>
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                                                                                                                                            <div class="charts">
-                                                                                                                                                                                                <label class="none_opt"><?= $lng['L_NONE'] ?></label>
-                                                                                                                                                                                                <input type="radio" checked name="graph_choice" value="none_graph">
-                                                                                                                                                                                                <label class="network_opt">Network</label>
-                                                                                                                                                                                                <input type="radio" name="graph_choice" value="network_graph">
-                                                                                                                                                                                                <label class="ping_opt">Ping</label>
-                                                                                                                                                                                                <input type="radio" name="graph_choice" value="ping_graph">
-                                                                                                                                                                                                <label class="logs_opt">Logs</label>
-                                                                                                                                                                                                <input type="radio" name="graph_choice" value="show_logs">
-                                                                                                                                                                                            </div>
+                                                                                                                                                                                                        <div class="charts">
+                                                                                                                                                                                                            <label class="none_opt"><?= $lng['L_NONE'] ?></label>
+                                                                                                                                                                                                            <input type="radio" checked name="graph_choice" value="none_graph">
+                                                                                                                                                                                                            <label class="network_opt">Network</label>
+                                                                                                                                                                                                            <input type="radio" name="graph_choice" value="network_graph">
+                                                                                                                                                                                                            <label class="ping_opt">Ping</label>
+                                                                                                                                                                                                            <input type="radio" name="graph_choice" value="ping_graph">
+                                                                                                                                                                                                            <label class="logs_opt">Logs</label>
+                                                                                                                                                                                                            <input type="radio" name="graph_choice" value="show_logs">
+                                                                                                                                                                                                        </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -210,21 +210,21 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                                                                                                                                                            <div class="deploy_container">
-                                                                                                                                                                                                <form id="deploy_form" method="POST">
-                                                                                                                                                                                                    <select class="select_deploy" name="deploy_option">
-                                                                                                                                                                                                        <option value="0"></option>
+                                                                                                                                                                                                        <div class="deploy_container">
+                                                                                                                                                                                                            <form id="deploy_form" method="POST">
+                                                                                                                                                                                                                <select class="select_deploy" name="deploy_option">
+                                                                                                                                                                                                                    <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                                                                                                                                                                                                                                                                                                    <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                                                                                                                                                                                                                                                                                                            <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
-                                                                                                                                                                                                    </select>
-                                                                                                                                                                                                    <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
-                                                                                                                                                                                                </form>
-                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                </select>
+                                                                                                                                                                                                                <input class="deploy_btn" type="submit" name="deploy" value="Deploy">
+                                                                                                                                                                                                            </form>
+                                                                                                                                                                                                        </div>
             <?php
         }
         ?>
@@ -235,10 +235,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                                                                                                                                                                                                                                                                                            <div class="log_line"><?= $log ?></div>
+                                                                                                                                                                                                                                                                                                                                                                                                    <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                                                                                                                                                            </div>
+                                                                                                                                                                                                        </div>
         <?php }
         ?>
     </div> <!-- host-details-container -->

@@ -16,6 +16,7 @@ function check_known_hosts(Database $db, Hosts $hosts) {
         $log->err("hosts is not a object");
         return false;
     }
+    $log->debug("Pinging known host");
 
     $db_hosts = $hosts->getknownEnabled();
 
@@ -26,8 +27,7 @@ function check_known_hosts(Database $db, Hosts $hosts) {
         if ($host['check_method'] == 2) { //TCP
             $log->debug("Pinging host ports {$host['ip']}");
             $host_status = ping_host_ports($host);
-        } else { //Ping
-            $log->debug("Pinging host {$host['ip']}");
+        } else { //Ping            
             $host_status = ping_known_host($host);
         }
         if (empty($host['mac'])) {
@@ -86,13 +86,12 @@ function ping_net(array $cfg, Hosts $hosts) {
                 $mac_info = get_mac_vendor($mac);
                 (!empty($mac_info['company'])) ? $set['mac_vendor'] = $mac_info['company'] : $set['mac_vendor'] = '-';
             }
-            $log->info("Discover host $ip:$mac:$mac_vendor");
-
             $set['ip'] = $ip;
             $set['online'] = 1;
             $set['latency'] = microtime(true) - $latency;
             $set['last_seen'] = utc_date_now();
             $hostname = get_hostname($ip);
+            $log->loghost("Discover host $hostname:$ip:$mac:$mac_vendor");
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
 
             $hosts->insert($set);
@@ -110,7 +109,6 @@ function fill_hostnames(Hosts $hosts, int $only_missing = 0) {
             $log->debug("Getting hostname {$host['ip']}");
             $hostname = get_hostname($host['ip']);
             if ($hostname !== false && $hostname != $host['ip']) {
-                $log->debug("Updating hostname {$host['ip']}: $hostname");
                 $update['hostname'] = $hostname;
                 $hosts->update($host['id'], $update);
             }

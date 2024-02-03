@@ -40,8 +40,13 @@ $lng = [
     'L_HOSTS' => 'Hosts',
     'L_HOST' => 'Host',
     'L_HOST_MSG_DIFF' => 'Host ha cambiado',
+    'L_HOST_BECOME_ON' => 'Host disponible',
+    'L_HOST_BECOME_OFF' => 'Host apagado',
     'L_HOME' => 'Inicio',
     'L_HUMIDITY' => 'Humedad',
+    //O
+    'L_ON' => 'On',
+    'L_OFF' => 'Off',
     //I
     'L_IP' => 'Ip',
     'L_ITEMS' => 'Items',
@@ -91,10 +96,12 @@ $lng = [
     'L_SETTINGS' => 'Configuración',
     'L_SEARCH_ENGINE' => 'Search Engine',
     'L_SERVERS' => 'Servers',
+    'L_SHOWED' => 'Mostrando',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',
     'L_TV' => 'Tv',
+    'L_TOTAL' => 'Total',
     //U
     'L_USERS' => 'Usuarios',
     'L_USERNAME' => 'Usuario',

@@ -7,6 +7,11 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+
+$privacy_page = 'privacy';
+if (Filters::getString('page') == $privacy_page) {
+    $privacy_page = 'index';
+}
 ?>
 <div class="header">
     <div class="head_align_center">
@@ -32,7 +37,7 @@
         <a href="<?= $cfg['rel_path'] ?>?page=settings">
             <img src="tpl/<?= $cfg['theme'] ?>/img/settings.png" alt="settings" title="<?= $lng['L_SETTINGS']; ?>"/>
         </a>
-        <a href="<?= $cfg['rel_path'] ?>?page=privacy">
+        <a href="<?= $cfg['rel_path'] ?>?page=<?= $privacy_page ?>">
             <img src="tpl/<?= $cfg['theme'] ?>/img/privacy.png" alt="privacy" title="<?= $lng['L_PRIVACY']; ?>"/>
         </a>
     </div>
@@ -44,8 +49,9 @@
     <div class="main_container">
         <!-- left -->
         <div id="left_container" class="left_container">
-            <?= !empty($tdata['left_col']) ? $tdata['left_col'] : null; ?>
+            <?= !empty($tdata['left_col_pre']) ? $tdata['left_col_pre'] : null; ?>
             <div id="host_place"></div>
+            <?= !empty($tdata['left_col_post']) ? $tdata['left_col_post'] : null; ?>
         </div>
         <!-- Center -->
         <div id="center_container" class="center_container">

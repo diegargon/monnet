@@ -41,6 +41,8 @@ check_known_hosts($db, $hosts);
 #run_cmd_db_tasks($cfg, $db, $hosts);
 cron($cfg, $log, $db, $hosts);
 
-$log->debug("******************* Finishing {$cfg['app_name']} CLI ************************************");
+//$log->debug($db->getQueryHistory();
+
+$log->debug("Finishing {$cfg['app_name']} CLI");
 
 exit(0);

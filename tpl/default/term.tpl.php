@@ -1,27 +1,26 @@
-<?php ?>
+<?php
+/**
+ *
+ *  @author diego/@/envigo.net
+ *  @package
+ *  @subpackage
+ *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ */
+!defined('IN_WEB') ? exit : true;
+?>
 
-<div class="term_container">
+<div id="term_container<?= isset($tdata['host_id']) ? '_' . $tdata['host_id'] : null; ?>" class="term_container">
     <div class="term_crystal">
-    <div class="frame">
-        <div class="piece glow"></div>
-        <div class="output">
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/> 
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/> 
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/> 
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/> 
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/> 
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>
-            [17:14:50 27-01] [LOG_WARNING] Host ha cambiado 2024-01-27 15:15:03->2024-01-27 16:14:50<br/>        
-        </div>        
-    </div>
-        
+        <div id="term_frame" class="frame glow">
+            <div  id="term_output" class="term_output">
+                <?php
+                if (valid_array($tdata['term_logs'])) {
+                    foreach ($tdata['term_logs'] as $term_log) {
+                        echo $term_log . '<br />';
+                    }
+                }
+                ?>
+            </div>        
+        </div>
     </div>
 </div>

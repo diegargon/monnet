@@ -28,6 +28,9 @@
 
 Class Hosts {
 
+    public int $totals = 0;
+    public int $on = 0;
+    public int $off = 0;
     private Database $db;
     private $hosts = [];
     private array $lng;
@@ -84,27 +87,33 @@ Class Hosts {
                         ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
                     $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ' . $this->hosts[$id][$kvalue] . '->' . $vvalue;
-                    $this->log->loghost('LOG_WARNING', $id, $loghostmsg);
+                    $this->log->logHost('LOG_WARNING', $id, $loghostmsg);
                 }
                 $this->hosts[$id][$kvalue] = $vvalue;
                 $fvalues[$kvalue] = $vvalue;
             }
         }
 
-
         if (valid_array($fvalues)) {
-            $this->log->debug('Updating host changes' . $id);
             $this->db->update('hosts', $fvalues, ['id' => ['value' => $id]], 'LIMIT 1');
         }
     }
 
     function insert(array $host) {
+        $hostlog = $host['ip'];
+        !empty($host['mac']) ? $hostlog .= '[' . $host['mac'] . ']' : null;
+        !empty($host['hostname']) && ($host['hostname'] != $host['ip']) ? $hostlog .= '[' . $host['mac'] . ']' : null;
         $this->db->insert('hosts', $host);
+        $host_id = $this->db->insertID();
+        $this->log->logHost('LOG_NOTICE', $host_id, 'Found new host :' . $hostlog);
     }
 
     function remove(int $hid) {
+        $this->log->notice('Deleted host: ' . $this->hosts[$hid]['ip']);
         $this->db->delete('hosts', ['id' => $hid], 'LIMIT 1');
         $this->db->delete('notes', ['host_id' => $hid], 'LIMIT 1');
+        $this->db->delete('stats', ['host_id' => $hid], 'LIMIT 1');
+        $this->db->delete('hosts_logs', ['host_id' => $hid], 'LIMIT 1');
         unset($this->hosts[$hid]);
     }
 
@@ -151,11 +160,13 @@ Class Hosts {
         if (!$results) {
             return false;
         }
-        $_hosts = $this->db->fetchAll($results);
+        $hosts = $this->db->fetchAll($results);
+        $this->totals = count($hosts);
 
-        foreach ($_hosts as $host) {
+        foreach ($hosts as $host) {
             $id = $host['id'];
             $this->hosts[$id] = $host;
+            $host['online'] == 1 ? ++$this->on : ++$this->off;
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
             if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);

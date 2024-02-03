@@ -10,17 +10,18 @@
 ?>
 
 <div id="hosts_cat" class="hosts_cat">
-    <div class="categories_container">
+    <div class="categories_container">        
         <?php
         foreach ($tdata['hosts_categories'] as $cat) {
             ?>
             <div class="category">
-                <a onclick="refresh('show_host_cat', <?= $cat['id'] ?>)" href="#"><img src="/tpl/<?= $cfg['theme'] ?>/img/<?= $cat['on'] ? 'green2.png' : 'red2.png' ?>"/>
-                    <span class="cat_name"><?= $cat['cat_name'] ?></span>
+                <a onclick="refresh('show_host_cat', <?= $cat['id'] ?>)" href="#"><img src="/tpl/<?= $cfg['theme'] ?>/img/<?= $cat['on'] ? 'green.png' : 'red.png' ?>"/>
+                    <span class="text_shadow_style1 cat_name"><?= $cat['cat_name'] ?></span>                    
                 </a>
             </div>
             <?php
         }
-        ?>                        
+        ?>
+
     </div>
 </div>

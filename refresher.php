@@ -55,15 +55,15 @@ if ($command === 'remove_host' && is_numeric($command_value)) {
 
 /* Host Cat */
 
-if ($command == 'show_host_cat' && !empty($command_value) && is_numeric($command_value)) {
+if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
     $db->toggleField('categories', 'on', ['id' => $command_value]);
-    $categories = new Categories($cfg, $lng, $db);
+    !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
     $tdata['hosts_categories'] = $categories->prepareCats(1);
     $data['categories_host']['data'] = $frontend->getTpl('categories_host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
 }
 
-if (empty($command) && empty($command_value) || $command == 'show_host_cat') {
+if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
         $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);
@@ -80,27 +80,45 @@ if (empty($command) && empty($command_value) || $command == 'show_host_cat') {
         //$hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 0);
         !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
         $hosts_view = get_listcat_hosts($cfg, $hosts, $user, $lng, $categories);
-        if ($hosts_view) {
-            $tdata = [];
-            $tdata['hosts'] = $hosts_view;
-            $tdata['container-id'] = 'other-hosts';
-            $tdata['head-title'] = $lng['L_OTHERS'];
-            $data['other_hosts']['cfg']['place'] = '#host_place';
-            $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
-        }
+        $shown_hosts = count($hosts_view);
+        $hosts_totals = $hosts->totals;
+        $host_on = $hosts->on;
+        $host_off = $hosts->off;
+        $tdata = [];
+        $tdata['hosts'] = $hosts_view;
+        $tdata['container-id'] = 'other-hosts';
+        $tdata['head-title'] = $lng['L_OTHERS'];
+        $data['other_hosts']['cfg']['place'] = '#host_place';
+        $data['other_hosts']['cfg']['totals'] = $lng['L_SHOWED'] . ":$shown_hosts | {$lng['L_TOTAL']} : $hosts_totals |";
+        $data['other_hosts']['cfg']['onoff'] = $lng['L_ON'] . ":$host_on|{$lng['L_OFF']}:$host_off|";
+        $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     }
 }
 
 /* Set show/hide host-details */
 if ($command === 'host-details' && is_numeric($command_value)) {
-    $host_details = get_host_detail_view_data($db, $cfg, $hosts, $user, $lng, $command_value);
+    $host_id = $command_value;
+    $host_details = get_host_detail_view_data($db, $cfg, $hosts, $user, $lng, $host_id);
     if ($host_details) {
         $tdata['host_details'] = $host_details;
-        $data['host_details']['cfg']['place'] = "#left_container";
         if (!empty($host_details['ping_stats'])) {
             $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time', $host_details['ping_stats']);
         }
+        if (!empty($host_details['host_logs'])) {
+            if (valid_array($host_details['host_logs'])) {
+                $log_lines = [];
+                foreach ($host_details['host_logs'] as $term_log) {
+                    $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
+                    $loglevelname = $log->getLogLevelName($term_log['level']);
+                    $loglevelname = str_replace('LOG_', '', $loglevelname);
+                    $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'];
+                }
+
+                $tdata['host_details']['host_logs'] = $frontend->getTpl('term', ['term_logs' => $log_lines, 'host_id' => $host_id]);
+            }
+        }
         unset($tdata['host_details']['ping_stats']);
+        $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
     }
 }
@@ -146,6 +164,47 @@ if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value)
         $db->insert('cmd', ['cmd_type' => 1, 'hid' => $command_value]);
     }
 }
+
+/* ALWAYS */
+
+$logs = [];
+
+$host_logs = $log->getLoghosts($cfg['term_max_lines']);
+if (valid_array($host_logs)) {
+    $logs = $host_logs;
+}
+if ($cfg['term_show_system'] && $cfg['log_to_db']) {
+    $system_logs = $log->getSystemDBLogs($cfg['term_max_lines']);
+    if (valid_array($system_logs)) {
+        $logs = array_merge($logs, $system_logs);
+    }
+}
+
+usort($logs, function ($a, $b) {
+    $dateA = strtotime($a['date']);
+    $dateB = strtotime($b['date']);
+
+    return ($dateA < $dateB) ? 1 : -1;
+});
+
+$term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
+if (valid_array($term_logs)) {
+    $log_lines = [];
+    foreach ($term_logs as $term_log) {
+        $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
+        $loglevelname = $log->getLogLevelName($term_log['level']);
+        $loglevelname = str_replace('LOG_', '', $loglevelname);
+        $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'];
+    }
+    $data['term_logs']['cfg']['place'] = '#center_container';
+    $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
+}
+if ($cfg['term_show_system'] && $cfg['log_to_db']) {
+    
+}
+
+/* END ALWAYS */
+
 
 /*  -   */
 //$log->debug(print_r($data,true));

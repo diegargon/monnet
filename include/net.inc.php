@@ -71,6 +71,7 @@ function ping_host_ports(array $host) {
 }
 
 function ping_known_host(array $host) {
+    global $log, $lng;
 
     $timeout = ['sec' => 0, 'usec' => 500000];
     $time_now = utc_date_now();
@@ -92,6 +93,12 @@ function ping_known_host(array $host) {
         $set['last_seen'] = $time_now;
     }
 
+    $display_name = !empty($host['hostname']) ? $host['hostname'] : $host['ip'];
+    if ($set['online'] == 1 && $host['online'] == 0) {
+        $log->logHost('LOG_NOTICE', $host['id'], $display_name . ': ' . $lng['L_HOST_BECOME_ON']);
+    } else if ($set['online'] == 0 && $host['online'] == 1) {
+        $log->logHost('LOG_NOTICE', $host['id'], $display_name . ': ' . $lng['L_HOST_BECOME_OFF']);
+    }
     return $set;
 }
 

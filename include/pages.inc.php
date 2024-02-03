@@ -127,7 +127,12 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
     /* Host Cat */
     $page['load_tpl'][] = [
         'file' => 'categories_host',
-        'place' => 'left_col',
+        'place' => 'left_col_pre',
+    ];
+    /* Host Footer */
+    $page['load_tpl'][] = [
+        'file' => 'footer_hosts',
+        'place' => 'left_col_post',
     ];
 
     $page['hosts_categories'] = $categories->prepareCats(1);
@@ -135,12 +140,6 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
     /* Webs Categories */
     $page['webs_categories'] = $categories->getByType(2);
 
-    /* Term */
-    $page['load_tpl'][] = [
-        'file' => 'term',
-        'place' => 'center_col',
-    ];    
-    
     return $page;
 }
 
@@ -326,7 +325,7 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
 
     $cats_on = $cats->getOnByType(1);
     if ($cats_on === false) {
-        return false;
+        return $hostscat;
     }
 
     foreach ($cats_on as $cat) {
@@ -354,10 +353,10 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
         }
         if ($vhost['online']) {
             $hostscat[$khost]['title_online'] = $lng['L_S_ONLINE'];
-            $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/green.png';
+            $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/green2.png';
         } else {
             $hostscat[$khost]['title_online'] = $lng['L_S_OFFLINE'];
-            $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/red.png';
+            $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
         if (!empty($vhost['os'])) {
@@ -422,10 +421,10 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
         }
         if ($vhost['online']) {
             $hosts_results[$khost]['title_online'] = $lng['L_S_ONLINE'];
-            $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/green.png';
+            $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/green2.png';
         } else {
             $hosts_results[$khost]['title_online'] = $lng['L_S_OFFLINE'];
-            $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red.png';
+            $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
         if (!empty($vhost['os'])) {
@@ -491,28 +490,18 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     }
 
     //HOST LOGS
-    $hosts_log_query = 'SELECT * 
-            FROM hosts_logs
-            WHERE host_id = ' . $host['id'] . '
-            ORDER by date DESC limit 100;';
-    $result = $db->query($hosts_log_query);
-    $hosts_logs = $db->fetchAll($result);
-    if (valid_array($hosts_logs)) {
-        $host['host_logs'] = '';
-        foreach ($hosts_logs as $host_log) {
-            $host['host_logs'] .= '<div>[' . datetime_string_format($host_log['date'], $cfg['datetime_log_format']) . '] ' . $host_log['msg'] . '</div>';
-        }
-    }
+    $host['host_logs'] = $log->getLoghost($host['id'], $cfg['term_max_lines']);
+
     $theme = $user->getTheme();
 
     // Host Work
     $host['theme'] = $theme;
     if ($host['online']) {
         $host['title_online'] = $lng['L_S_ONLINE'];
-        $host['online_image'] = 'tpl/' . $theme . '/img/green.png';
+        $host['online_image'] = 'tpl/' . $theme . '/img/green2.png';
     } else {
         $host['title_online'] = $lng['L_S_OFFLINE'];
-        $host['online_image'] = 'tpl/' . $theme . '/img/red.png';
+        $host['online_image'] = 'tpl/' . $theme . '/img/red2.png';
     }
 
     if (!empty($host['os'])) {
