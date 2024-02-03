@@ -26,11 +26,13 @@ function check_known_hosts(Database $db, Hosts $hosts) {
 
         if ($host['check_method'] == 2) { //TCP
             $log->debug("Pinging host ports {$host['ip']}");
-            $host_status = ping_host_ports($host);
+            $ping_host_result = ping_host_ports($host);
+            (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
         } else { //Ping            
-            $host_status = ping_known_host($host);
+            $ping_host_result = ping_known_host($host);
+            (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
         }
-        if (empty($host['mac'])) {
+        if (valid_array($host_status) && $host_status['online'] && empty($host['mac'])) {
             $mac = get_mac($host['ip']);
             $mac ? $host_status['mac'] = $mac : null;
         }
