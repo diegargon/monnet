@@ -16,9 +16,17 @@ if (!empty($DEBUG)) {
 }
 if (!file_exists('config/config.inc.php')) {
     print 'Missing config.inc.php. Leaving';
+    exit(1);
 }
+if (!file_exists('config/config.defaults.php')) {
+    print 'Missing config.defaults.php. Leaving';
+    exit(1);
+}
+
 require_once('config/config.priv.php');
+require_once('config/config.defaults.php');
 require_once('config/config.inc.php');
+
 date_default_timezone_set($cfg['timezone']);
 
 require_once('include/initial_checks.inc.php');

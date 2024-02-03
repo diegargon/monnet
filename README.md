@@ -14,6 +14,8 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 ```
 /var/www/html# rm -rf *
 /var/www/html# git clone https://github.com/diegargon/monnet .
+
+chown www-data cache logs
 ```
 Instalamos phpseclib con composer
 
@@ -21,7 +23,8 @@ Instalamos phpseclib con composer
 /var/www/html# composer require phpseclib/phpseclib:~3.0
 ```
 
-rename config/example.inc.php config.inc.php and change whatever you want.
+Create  config/config.defaults.php  to config.inc.php and change whatever you want, you
+can remove all unused config. Don't rename or modify directly config.defaults.php
 
 ## Settting Database
 ```
