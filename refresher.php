@@ -62,7 +62,7 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $data['categories_host']['data'] = $frontend->getTpl('categories_host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
 }
-$highlight_hosts = 0;
+$highlight_hosts_count = 0;
 
 if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
     /* Set show/hide highlight hosts */
