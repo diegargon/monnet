@@ -40,7 +40,7 @@ Class User {
         }
         empty($this->user['lang']) ? $this->user['lang'] = $this->cfg['lang'] : null;
         empty($this->user['theme']) ? $this->user['theme'] = $this->cfg['theme'] : null;
-        empty($this->user['timezone']) ? $this->user['timezezone'] = $cfg['timezone'] : null;
+        empty($this->user['timezone']) ? $this->user['timezone'] = $cfg['timezone'] : null;
 
         $this->user['id'] > 0 ? $this->loadPrefs() : null;
     }
