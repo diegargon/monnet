@@ -429,7 +429,7 @@ input:checked + .slider:before {
     border-radius: 5px;
     margin: 0px 5px 2px 5px;
     display: grid;
-    grid-gap: 8px;
+    grid-gap: 6px;
     /* grid-template-columns: repeat(3, 145px);  */
     grid-template-columns: repeat( auto-fit, minmax(145px, 1fr) );
     /* float:left;   */
@@ -473,7 +473,7 @@ input:checked + .slider:before {
 .hosts-container img {
     width:20px;
     border-radius: 5px;
-    padding-right: 5px;
+    padding-right: 4px;
 
 }
 .hosts-container .fas, .fab {
@@ -485,7 +485,7 @@ input:checked + .slider:before {
     color: white;
 }
 .hosts-container img:first-of-type {
-    padding-left: 5px;
+    padding-left: 2px;
 }
 .hosts-online {
     padding:0;
