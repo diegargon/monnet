@@ -55,7 +55,7 @@ $cfg['datetime_format'] = 'd-m-Y H:i:s';
 $cfg['datetime_format_min'] = 'd/H:i';
 $cfg['datatime_graph_format'] = 'H:i';
 $cfg['datetime_log_format'] = 'd-m H:i:s';
-
+$cfg['refresher_time'] = 5; //minutes ideally same minutes than monnet-cli
 $cfg['cert'] = '/var/certs/id_rsa';
 
 /* Modules Config */

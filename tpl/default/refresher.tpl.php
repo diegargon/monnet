@@ -126,10 +126,10 @@
                 .fail(function (xhr, status, error) {
                     console.error('Error en la solicitud AJAX:', status, error);
                 });
-
-        // avoid launch timer when command FIX:better way for not launch timers, disable timer and allow launch
+        
+        //Prevent launch another timeout on command
         if (command === false) {
-            setTimeout(refresh, 75000);
+            setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);
     }
 
     }

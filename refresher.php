@@ -205,7 +205,7 @@ if (valid_array($term_logs)) {
 if (!empty($shown_host_count) || !empty($hosts_totals_count)) {
     $data['misc']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
 }
-if (!empty($host_on || !empty($host_off))) {
+if (!empty($host_on) || !empty($host_off)) {
     $data['misc']['onoff'] = $lng['L_ON'] . ": $host_on | {$lng['L_OFF']}: $host_off | ";
 }
 $data['misc']['last_refresher'] = $lng['L_LAST_UPDATE'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
