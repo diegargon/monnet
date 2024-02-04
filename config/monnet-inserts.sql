@@ -9,19 +9,20 @@ INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES
 (8, 0, 'cron_five', '0'),
 (9, 0, 'cron_daily', '0'),
 
-INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`) VALUES
-(1, 1, 'L_UNCATEGORIZED', 1),
-(2, 1, 'L_NETWORK', 1),
-(3, 1, 'L_SERVERS', 1),
-(4, 1, 'L_VM', 1),
-(5, 1, 'L_USERS', 1),
-(6, 1, 'L_IOT', 1),
-(7, 1, 'L_CAMERAS', 1),
-(8, 1, 'L_TV', 1),
-(9, 1, 'L_PHONE', 1),
-(50, 2, 'L_WEBS', 0),
-(51, 2, 'L_APPLINKS', 0),
-(100, 3, 'L_SEARCH_ENGINE', 0);
+INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`, `disable`, `weight`) VALUES
+(1, 1, 'L_UNCATEGORIZED', 1, 0, 0),
+(2, 1, 'L_NETWORK', 1, 0, 0),
+(3, 1, 'L_SERVERS', 1, 0, 0),
+(4, 1, 'L_VM', 1, 0, 0),
+(5, 1, 'L_DESKTOP', 1, 0, 0),
+(6, 1, 'L_IOT', 0, 0, 0),
+(7, 1, 'L_CAMERAS', 0, 0, 0),
+(8, 1, 'L_TV', 0, 0, 0),
+(9, 1, 'L_PHONE', 0, 0, 0),
+(50, 2, 'L_OTHERS', 0, 0, 0),
+(51, 2, 'L_WEBS', 1, 0, 0),
+(52, 2, 'L_INTERNAL', 0, 0, 0),
+(100, 3, 'L_SEARCH_ENGINE', 0, 0, 0);
 
 INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES (1, 0, 'cli_last_run', '0');
 

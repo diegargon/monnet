@@ -29,3 +29,32 @@ function formatBytes(int $size, int $precision = 2) {
 
     return round($size, $precision) . ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][$i];
 }
+
+function order(array &$ary, $sortKey = 'weight', $order = 'asc') {
+    if (empty($sortKey)) {
+        $sortKey = 'weight';
+    }
+    usort($ary, function ($a, $b) use ($sortKey, $order) {
+        if (!isset($a[$sortKey]) || !isset($b[$sortKey])) {
+            return false;
+        }
+
+        $itemA = $a[$sortKey];
+        $itemB = $b[$sortKey];
+
+        if ($order === 'desc') {
+            return ($itemA < $itemB) ? 1 : -1;
+        } else {
+            return ($itemA < $itemB) ? -1 : 1;
+        }
+    });
+}
+
+function order_date(array &$ary) {
+    usort($ary, function ($a, $b) {
+        $itemA = strtotime($a['date']);
+        $itemB = strtotime($b['date']);
+
+        return ($itemA < $itemB) ? 1 : -1;
+    });
+}

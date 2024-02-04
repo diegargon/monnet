@@ -167,6 +167,9 @@ if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value)
     }
 }
 
+if ($command == 'change_bookmarks_tab' && !empty($command_value)) {
+    $user->setPref('default_bookmarks_tab', $command_value);
+}
 /* ALWAYS */
 
 $logs = [];

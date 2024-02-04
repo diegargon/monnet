@@ -21,6 +21,22 @@ function changeTab(tabId) {
     selectedTab.classList.add('active');
 }
 
+function changeBookmarksTab(tabId) {
+    // Ocultar todos los contenidos de las pestañas
+    const tabContents = document.querySelectorAll('.bookmarks-tab-content');
+    tabContents.forEach(tabContent => tabContent.classList.remove('active'));
+    // Resaltar el botón de la pestaña seleccionada
+    const tabs = document.querySelectorAll('.bookmarks-tabs-head');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    // Mostrar el contenido de la pestaña seleccionada
+    const selectedTabContent = document.getElementById(tabId);
+    selectedTabContent.classList.add('active');
+    // Resaltar el botón de la pestaña seleccionada
+    const selectedTab = document.querySelector(`button[onclick="changeBookmarksTab('${tabId}')"]`);
+    selectedTab.classList.add('active');
+    refresh('change_bookmarks_tab', tabId);
+}
+
 $(document).ready(function () {
     $("#addBookmark").on("click", function () {
         $("#add-bookmark-container").css("display", "block");

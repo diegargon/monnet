@@ -123,7 +123,7 @@ footer {
 
 .center_container {
     border:0px solid yellow;
-    margin-top:15px;
+    margin-top:5px;
     float:left;
     overflow:hidden;
     width:49%;
@@ -683,13 +683,16 @@ input:checked + .slider:before {
     margin: 0px;
     padding: 0px;
 }
-.host-details-tabs-head-container {
+.host-details-tabs-head-container, .bookmarks-tabs-head-container {
     display: inline-block;
     font-family: "antique-olive" !important;
     border: none;
     /*overflow: hidden;*/
 }
-.host-details-tabs-head {
+.bookmarks-tabs-head-container {
+    margin: 0px 0px 0px 5px;
+}
+.host-details-tabs-head, .bookmarks-tabs-head {
     margin: 0px;
     display: inline-block;
     overflow: hidden;
@@ -705,6 +708,18 @@ input:checked + .slider:before {
     font-weight: 300;
     padding: 2px 6px 1px 6px;
 
+}
+.bookmarks-tabs-head {
+    margin: 0px 0px 0px 0px;
+}
+.bookmarks-tabs-head.active {
+    color: deepskyblue;
+}
+.bookmarks-tabs-head:hover {
+    color: gray;
+}
+.bookmarks-tab-content {
+    display:none;
 }
 .host-details-tabs-head.active {
     color: deepskyblue;
@@ -722,6 +737,9 @@ input:checked + .slider:before {
     border:0px solid #0E9700;
     margin: 0;
     padding: 0;
+}
+.bookmarks-tab-content.active {
+    display: grid;
 }
 .host-details-tab-content textarea {
     width: 100%;

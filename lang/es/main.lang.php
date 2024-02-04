@@ -9,7 +9,6 @@
  */
 $lng = [
     //A
-    'L_APPLINKS' => 'AppLinks',
     'L_ADDED' => 'Añadido',
     'L_ADD' => 'Añadir',
     'L_APPLINKS' => 'Web apps',

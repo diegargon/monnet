@@ -14,19 +14,41 @@ class Items {
     private $cfg;
     private $db;
     private $items = [];
+    private $categories;
 
-    public function __construct(array $cfg, Database $db) {
+    public function __construct(array $cfg, Database $db, Categories $categories) {
         $this->cfg = $cfg;
         $this->db = $db;
+        $this->categories = $categories->getByType(2); //2:items
 
         $results = $db->select('items', '*', null, 'ORDER BY weight');
         $this->items = $db->fetchAll($results);
     }
 
-    public function getAllCat($category) {
+    public function getAll(?string $key_order = null, ?string $dir = 'asc') {
+        if (!empty($key_order)) {
+            order($this->items, $key_order, $dir);
+        }
+
+        return $this->items;
+    }
+
+    public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc') {
         $result = [];
         foreach ($this->items as $item) {
-            if ($item['cat_id'] == $category) {
+            if ($item['type'] == $type) {
+                $result[] = $item;
+            }
+        }
+        order($result, $key_order, $dir);
+
+        return $result;
+    }
+
+    public function getByCatID($category_id) {
+        $result = [];
+        foreach ($this->items as $item) {
+            if ($item['cat_id'] == $category_id) {
                 $result[] = $item;
             }
         }
@@ -34,7 +56,7 @@ class Items {
         return $result;
     }
 
-    function getTypes() {
+    public function getTypes() {
         $types = array_column($this->items, 'type');
         //To uniq
         $uniq_types = array_unique($types);
@@ -42,5 +64,31 @@ class Items {
         $uniq_types = array_values($uniq_types);
 
         return $uniq_types;
+    }
+
+    private function getCatsIDByType($type) {
+        $cats_id = [];
+
+        foreach ($this->items as $item) {
+            if ($item['type'] == $type) {
+                $cats_id[] = $item['cat_id'];
+            }
+        }
+        return $cats_id;
+    }
+
+    public function getCatsByType($type) {
+
+        $cats = [];
+
+        $cats_id = $this->getCatsIDByType($type);
+
+        foreach ($this->categories as $cat) {
+            if (in_array($cat['id'], $cats_id)) {
+                $cats[] = $cat;
+            }
+        }
+
+        return $cats;
     }
 }

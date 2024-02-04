@@ -51,7 +51,7 @@ require_once('include/util.inc.php');
 require_once('include/time.inc.php');
 require_once('include/net.inc.php');
 require_once('class/Hosts.class.php');
-require_once('class/Items.class.php');
+require_once('class/Items.class.php'); // TODO to usermode?
 require_once('class/Categories.class.php');
 
 $hosts = new Hosts($log, $db, $lng);

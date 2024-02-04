@@ -69,7 +69,7 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
         $page = array_merge($post_data, $page);
     }
 
-    $items = new Items($cfg, $db);
+    $items = new Items($cfg, $db, $categories);
 
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
@@ -85,12 +85,10 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
 
     /* Controls */
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
-    $show_applinks_status = $user->getPref('show_applinks_status');
     $show_this_system = $user->getPref('show_this_system_status');
     $show_highlight_hosts_status = $user->getPref('show_highlight_hosts_status');
     $show_other_hosts_status = $user->getPref('show_other_hosts_status');
     $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 : $page['controls']['show_bookmarks_status'] = 0;
-    $show_applinks_status ? $page['controls']['show_applinks_status'] = 1 : $page['controls']['show_applinks_status'] = 0;
     $show_highlight_hosts_status ? $page['controls']['show_highlight_hosts_status'] = 1 : $page['controls']['show_highlight_hosts_status'] = 0;
     $show_other_hosts_status ? $page['controls']['show_other_hosts_status'] = 1 : $page['controls']['show_other_hosts_status'] = 0;
     $show_this_system ? $page['controls']['show_this_system_status'] = 1 : $page['controls']['show_this_system_status'] = 0;
@@ -100,19 +98,17 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
         'place' => 'head_left',
     ];
 
-    /* AppLinks Bookmarks */
-    if ($user->getPref('show_applinks_status')) {
-        $applinks_bookmarks = format_items($user, $items->getAllCat(11));
-        $page['bookmarks_category']['applinks'] = $applinks_bookmarks;
-    }
-
     /* Bookmarks */
 
     if ($user->getPref('show_bookmarks_status')) {
-        $bookmarks = format_items($user, $items->getAllCat(10));
-        $page['bookmarks_category']['bookmarks'] = $bookmarks;
-    }
-    if ($user->getPref('show_applinks_status') || $user->getPref('show_bookmarks_status')) {
+        $bookmarks = format_items($user, $items->getByType('bookmarks'));
+        $default_bookmarks_tab = $user->getPref('default_bookmarks_tab');
+        if ($default_bookmarks_tab == null) {
+            $default_bookmarks_tab = 0;
+        }
+        $page['bookmarks_default_tab'] = str_replace('bookmark_content_tab_', '', $default_bookmarks_tab);
+        $page['bookmarks'] = $bookmarks;
+        $page['bookmarks_head'] = $items->getCatsByType('bookmarks');
         $page['load_tpl'][] = [
             'file' => 'bookmarks',
             'place' => 'center_col',
@@ -148,7 +144,6 @@ function page_index_post(Database $db, User $user, Categories $categories, array
     $profile_type = Filters::postString('profile_type');
     $show_bookmarks = Filters::postInt('show_bookmarks');
     $show_this_system = Filters::postInt('show_this_system');
-    $show_applinks = Filters::postInt('show_applinks');
     $show_highlight_hosts = Filters::postInt('show_highlight_hosts');
     $show_other_hosts = Filters::postInt('show_rest_hosts');
     //add Item
@@ -221,9 +216,6 @@ function page_index_post(Database $db, User $user, Categories $categories, array
     }
     if ($show_this_system !== false) {
         $user->setPref('show_this_system_status', $show_this_system);
-    }
-    if ($show_applinks !== false) {
-        $user->setPref('show_applinks_status', $show_applinks);
     }
     if ($show_highlight_hosts !== false) {
         $user->setPref('show_highlight_hosts_status', $show_highlight_hosts);
@@ -299,6 +291,7 @@ function format_items(User $user, array $items_results) {
     $items = [];
     $theme = $user->getTheme();
     foreach ($items_results as $item) {
+        //global $log; $log->debug('Formatting item '. $item['title'] );
         $item_conf = json_decode($item['conf'], true);
         $item_img = '';
         if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource'])) {
@@ -480,7 +473,7 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     $ping_states_query = 'SELECT *
         FROM stats
         WHERE host_id = ' . $host['id'] . ' AND
-        type = 1 
+        type = 1
         AND date >= NOW() - INTERVAL 1 DAY
         ORDER BY date DESC;';
 
