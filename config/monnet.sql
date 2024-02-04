@@ -176,6 +176,7 @@ CREATE TABLE `users` (
   `email` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `password` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
   `sid` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `timezone` varchar(32) DEFAULT NULL,
   `isAdmin` tinyint NOT NULL DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
