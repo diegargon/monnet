@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function valid_timezone(array $timezone) {
+function valid_timezone(string $timezone) {
     if (empty($timezone)) {
         return false;
     }
