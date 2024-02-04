@@ -95,7 +95,7 @@ Class User {
     }
 
     public function getDateNow() {
-        return date_now($this->user['timezone']);
+        return formatted_date_now($this->user['timezone'], $this->cfg['datatime_format']);
     }
 
     public function checkUser(string $username, string $password) {
