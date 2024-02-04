@@ -10,9 +10,9 @@
 ?>
 <div id="add-bookmark-container" style="<?= isset($tdata['show_add_bookmark']) ? 'display:block;' : null ?>">
     <div class="front-container-bar">
-        <button id="close_addbookmark" class="button-ctrl" type="submit"><img class="closelink" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>"></button> 
+        <button id="close_addbookmark" class="button-ctrl" type="submit"><img class="closelink" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>"></button>
     </div>
-    <div class="form_container"> 
+    <div class="form_container">
         <div id="status_msg"><?= isset($tdata['status_msg']) ? $tdata['status_msg'] : null ?></div>
         <div id="error_msg"><?= isset($tdata['error_msg']) ? $tdata['error_msg'] : null ?></div>
         <form id="addBookmarkForm" method="POST">
@@ -20,8 +20,8 @@
             <label for="bookmarkName"><?= $lng['L_NAME'] ?>:</label>
             <input type="text" id="bookmarkName" name="bookmarkName"  size="12" maxlength="12" required value="<?= !empty($tdata['bookmarkName']) ? $tdata['bookmarkName'] : null ?>">
 
-            <label for="host"><?= $lng['L_TYPE'] ?>:</label>            
-            <select id="url_type" name="url_type" required>                 
+            <label for="host"><?= $lng['L_CATEGORY'] ?>:</label>
+            <select id="cat_id" name="cat_id" required>
                 <?php
                 foreach ($tdata['webs_categories'] as $cat) {
                     if (isset($lng[$cat['cat_name']])) {
@@ -62,7 +62,7 @@
                 <option value="70">70</option>
                 <option value="80">80</option>
                 <option value="90">90</option>
-            </select>            
+            </select>
 
             <!-- Botón para enviar el formulario -->
             <input type="submit" value="<?= $lng['L_ADD'] ?>"/>

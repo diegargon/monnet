@@ -149,7 +149,7 @@ function page_index_post(Database $db, User $user, Categories $categories, array
     //add Item
     if (isset($_POST['addBookmarkForm'])) {
         $bookmarkName = Filters::postString('bookmarkName');
-        $url_type = Filters::postInt('url_type');
+        $cat_id = Filters::postInt('cat_id');
         $urlip = Filters::postUrl('urlip');
 
         if (!$urlip) {
@@ -173,7 +173,7 @@ function page_index_post(Database $db, User $user, Categories $categories, array
             $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
         } else if (empty($urlip)) {
             $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
-        } else if (empty($url_type)) {
+        } else if (empty($cat_id)) {
             $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
         } else if (empty('weight')) {
             $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
@@ -186,26 +186,24 @@ function page_index_post(Database $db, User $user, Categories $categories, array
         }
 
         $page_data['bookmarkName'] = $bookmarkName;
-        $page_data['url_type'] = $url_type;
+        $page_data['cat_id'] = $cat_id;
         $page_data['urlip'] = $urlip;
         $page_data['image_type'] = $image_type;
         $page_data['field_img'] = $field_img;
         $page_data['weight'] = $weight;
         if (empty($page_data['error_msg'])) {
             $conf = ['url' => $urlip, 'image_type' => $image_type, 'image_resource' => $field_img];
-            $set = ['cat_id' => $url_type, 'title' => $bookmarkName, 'conf' => json_encode($conf), 'weight' => $weight];
+            $set = ['cat_id' => $cat_id, 'type' => 'bookmarks', 'title' => $bookmarkName, 'conf' => json_encode($conf), 'weight' => $weight];
             $db->insert('items', $set);
             $page_data['status_msg'] = 'OK';
         } else {
             $page_data['bookmarkName'] = $bookmarkName;
-            $page_data['url_type'] = $url_type;
+            $page_data['cat_id'] = $cat_id;
             $page_data['urlip'] = $urlip;
             $page_data['image_type'] = $image_type;
             $page_data['field_img'] = $field_img;
             $page_data['weight'] = $weight;
         }
-
-        $cat_type = $categories->getTypeByID($url_type);
     }
 
     if ($profile_type !== false) {

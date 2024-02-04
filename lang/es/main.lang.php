@@ -22,6 +22,8 @@ $lng = [
     'L_CLOSE' => 'Cerrar',
     'L_CONFIG' => 'Configuración',
     'L_CAMERAS' => 'Camaras',
+    'L_CATEGORY' => 'Categoria',
+    'L_CATEGORIES' => 'Categorias',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
