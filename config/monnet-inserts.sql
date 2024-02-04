@@ -23,6 +23,8 @@ INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`) VALUES
 (51, 2, 'L_APPLINKS', 0),
 (100, 3, 'L_SEARCH_ENGINE', 0);
 
+INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES (1, 0, 'cli_last_run', '0');
+
 INSERT INTO `items` (`id`, `cat_id`, `type`, `title`, `conf`, `weight`) VALUES
 (1, 10, NULL, 'Google', '{\"url\":\"https://google.es\",\"image_type\":\"favicon\",\"image_resource\":false}', 0),
 (2, 10, NULL, 'Yahoo', '{\"url\":\"http://es.yahoo.com\",\"image_type\":\"favicon\",\"image_resource\":false}', 0),
