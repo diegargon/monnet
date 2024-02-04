@@ -14,6 +14,7 @@ $lng = [
     'L_ADD' => 'Añadir',
     'L_APPLINKS' => 'Web apps',
     'L_AREYOUSURE' => '¿estas seguro?',
+    'L_ALL' => 'Todo',
     //B
     'L_BOOKMARKS' => 'Links',
     'L_BOOKMARK' => 'Link',
@@ -26,7 +27,8 @@ $lng = [
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
     'L_DEPLOYS' => 'Deploys',
-    //E    
+    'L_DESKTOP' => 'Escritorio',
+    //E
     //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
     'L_ERR_FILE_CREATE' => 'Error creando archivo',
@@ -52,6 +54,7 @@ $lng = [
     'L_ITEMS' => 'Items',
     'L_IMAGE_TYPE' => 'Tipo Imagen',
     'L_IOT' => 'Iot',
+    'L_INTERNAL' => 'Internal',
     //L
     'L_LAST_UPDATE' => 'Actualizado',
     'L_LOGIN' => 'Identificarse',
@@ -112,7 +115,7 @@ $lng = [
     'L_URLIP' => 'Url o IP',
     'L_UNCATEGORIZED' => 'Sin Categoria',
     'L_UPDATED' => 'Updated',
-    //V    
+    //V
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',
     //W
