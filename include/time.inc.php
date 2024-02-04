@@ -41,7 +41,7 @@ function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s'
 
 function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s') {
     if(!valid_timezone($timezone)) {
-        return fale;
+        return false;
     }
     $date_timezone = new DatetimeZone($timezone);
     $date_now = new DateTime('now', $date_timezone);
