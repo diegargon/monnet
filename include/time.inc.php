@@ -40,7 +40,7 @@ function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s'
 }
 
 function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s') {
-    if(!valid_timezone($timezone)) {
+    if (!valid_timezone($timezone)) {
         return false;
     }
     $date_timezone = new DatetimeZone($timezone);
@@ -53,4 +53,9 @@ function datetime_string_format(string $date, string $time_format = 'Y-m-d H:i:s
     $timestamp = strtotime($date);
 
     return ($timestamp) ? date($time_format, $timestamp) : false;
+}
+
+function datatime_machine() {
+    $now = new DateTime();
+    return $now->format('Y-m-d H:i:s');
 }
