@@ -12,10 +12,10 @@
 function cron(array $cfg, Log $log, Database $db, Hosts $hosts) {
     $log->debug("Starting cron...");
     $results = $db->select('prefs', '*', ['uid' => 0]);
-    $admin_prefs = $db->fetchAll($results);
+    $system_prefs = $db->fetchAll($results);
     $cron_task_track = '';
 
-    foreach ($admin_prefs as $vpref) {
+    foreach ($system_prefs as $vpref) {
         $cron_times[$vpref['pref_name']] = $vpref['pref_value'];
     }
 
