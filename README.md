@@ -76,3 +76,7 @@ From monnet server to server to monitor
 ```
 $ ssh-copy-id -i /var/certs/id_rsa.pub monnet@ip.ip.ip.ip
 ```
+
+
+## MAC address, latest oui.csv
+https://regauth.standards.ieee.org/standards-ra-web/pub/view.html
