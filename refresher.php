@@ -93,8 +93,6 @@ if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
         $tdata['container-id'] = 'other-hosts';
         $tdata['head-title'] = $lng['L_OTHERS'];
         $data['other_hosts']['cfg']['place'] = '#host_place';
-        $data['other_hosts']['cfg']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
-        $data['other_hosts']['cfg']['onoff'] = $lng['L_ON'] . ": $host_on | {$lng['L_OFF']}: $host_off | ";
         $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     }
 }
@@ -204,7 +202,13 @@ if (valid_array($term_logs)) {
     $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
 }
 
-$user->setPref('refresher_last_update', $user->getDateNow());
+if (!empty($shown_host_count) || !empty($hosts_totals_count)) {
+    $data['misc']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
+}
+if (!empty($host_on || !empty($host_off))) {
+    $data['misc']['onoff'] = $lng['L_ON'] . ": $host_on | {$lng['L_OFF']}: $host_off | ";
+}
+$data['misc']['last_refresher'] = $lng['L_LAST_UPDATE'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
 /* END ALWAYS */
 
 

@@ -103,7 +103,6 @@ Class Log {
 
     public function logHost(string $loglevel, int $host_id, string $msg) {
         $level = $this->getLogLevelID($loglevel);
-        $this->logged($loglevel, '[HOST:' . $host_id . ']' . $msg);
         $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg];
         $this->db->insert('hosts_logs', $set);
     }

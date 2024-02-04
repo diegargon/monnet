@@ -67,14 +67,10 @@
                         if ($('#other-hosts').length === 0) {
                             position = jsonData.other_hosts.cfg.place;
                             $(position).prepend(jsonData.other_hosts.data);
-                            $('#host_totals').html(jsonData.other_hosts.cfg.totals);
-                            $('#host_onoff').append(jsonData.other_hosts.cfg.onoff);
                         } else {
                             $('#other-hosts').remove();
                             position = jsonData.other_hosts.cfg.place;
                             $(position).prepend(jsonData.other_hosts.data);
-                            $('#host_totals').html(jsonData.other_hosts.cfg.totals);
-                            $('#host_stats').html(jsonData.other_hosts.cfg.onoff);
                         }
                     }
                     if ("highlight_hosts" in jsonData) {
@@ -118,6 +114,12 @@
                             }, 600);
                         });
 
+                    }
+
+                    if ("misc" in jsonData) {
+                        $('#host_totals').html(jsonData.misc.totals);
+                        $('#host_onoff').html(jsonData.misc.onoff);
+                        $('#last_refresher').html(jsonData.misc.last_refresher);
                     }
 
                 })

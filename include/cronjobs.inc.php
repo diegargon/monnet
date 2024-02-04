@@ -91,7 +91,7 @@ function ping_net(array $cfg, Hosts $hosts) {
             $set['latency'] = microtime(true) - $latency;
             $set['last_seen'] = utc_date_now();
             $hostname = get_hostname($ip);
-            $log->loghost("Discover host $hostname:$ip:$mac:$mac_vendor");
+            $log->notice("Discover host $hostname:$ip:$mac:$mac_vendor");
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
 
             $hosts->insert($set);

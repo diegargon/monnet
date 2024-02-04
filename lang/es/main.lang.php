@@ -53,6 +53,7 @@ $lng = [
     'L_IMAGE_TYPE' => 'Tipo Imagen',
     'L_IOT' => 'Iot',
     //L
+    'L_LAST_UPDATE' => 'Actualizado',
     'L_LOGIN' => 'Identificarse',
     'L_LOGOUT' => 'Salir',
     'L_LAST_SEEN' => 'Ultima vez online:',
