@@ -32,11 +32,5 @@ function is_locked() {
     return true;
 }
 
-function cli_emerg(Log $log) {
-    $log->emerg('Error fatal in cli mode');
-}
-
-set_error_handler('cli_emerg');
-
 require_once('include/ssh.inc.php');
 require_once('include/host-access-work.inc.php');

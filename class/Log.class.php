@@ -15,6 +15,7 @@ Class Log {
     private $console;
     private $cfg;
     private $db;
+    private $lng;
     private $LOG_TYPE = [
         'LOG_EMERG' => 0, // 	system is unusable
         'LOG_ALERT' => 1, // 	action must be taken immediately UNUSED

@@ -88,6 +88,7 @@ $lng = [
     //R
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',
+    'L_REFRESHED' => 'Refrescado',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',
@@ -110,6 +111,7 @@ $lng = [
     'L_UNKNOWN' => 'Desconocido',
     'L_URLIP' => 'Url o IP',
     'L_UNCATEGORIZED' => 'Sin Categoria',
+    'L_UPDATED' => 'Updated',
     //V    
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',

@@ -208,7 +208,21 @@ if (!empty($shown_host_count) || !empty($hosts_totals_count)) {
 if (!empty($host_on) || !empty($host_off)) {
     $data['misc']['onoff'] = $lng['L_ON'] . ": $host_on | {$lng['L_OFF']}: $host_off | ";
 }
-$data['misc']['last_refresher'] = $lng['L_LAST_UPDATE'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
+$data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
+
+//Todo instance system_prefs
+$results = $db->select('prefs', '*', ['uid' => 0]);
+$system_prefs = $db->fetchAll($results);
+$cli_last_run = 0;
+
+foreach ($system_prefs as $sys_pref) {
+    if ($sys_pref['pref_name'] == 'cli_last_run') {
+        $cli_last_run = $sys_pref['pref_value'];
+        $cli_last_run = utc_to_user_timezone($cli_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+    }
+}
+$data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;
+
 /* END ALWAYS */
 
 

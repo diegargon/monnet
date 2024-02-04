@@ -120,13 +120,14 @@
                         $('#host_totals').html(jsonData.misc.totals);
                         $('#host_onoff').html(jsonData.misc.onoff);
                         $('#last_refresher').html(jsonData.misc.last_refresher);
+                        $('#cli_last_run').html(jsonData.misc.cli_last_run);
                     }
 
                 })
                 .fail(function (xhr, status, error) {
                     console.error('Error en la solicitud AJAX:', status, error);
                 });
-        
+
         //Prevent launch another timeout on command
         if (command === false) {
             setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);

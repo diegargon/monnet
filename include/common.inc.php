@@ -14,6 +14,7 @@ if (!empty($DEBUG)) {
     ini_set("xdebug.var_display_max_data", '-1');
     ini_set("xdebug.var_display_max_depth", '-1');
 }
+error_reporting(E_ALL);
 if (!file_exists('config/config.inc.php')) {
     print 'Missing config.inc.php. Leaving';
     exit(1);

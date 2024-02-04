@@ -55,7 +55,7 @@ function datetime_string_format(string $date, string $time_format = 'Y-m-d H:i:s
     return ($timestamp) ? date($time_format, $timestamp) : false;
 }
 
-function datatime_machine() {
+function datetime_machine() {
     $now = new DateTime();
     return $now->format('Y-m-d H:i:s');
 }
