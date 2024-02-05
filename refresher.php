@@ -68,8 +68,9 @@ if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
         $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);
-        $highlight_hosts_count = count($hosts_view);
+        $highlight_hosts_count = 0;
         if ($hosts_view) {
+            $highlight_hosts_count = count($hosts_view);
             $tdata = [];
             $tdata['hosts'] = $hosts_view;
             $tdata['container-id'] = 'highlight-hosts';
