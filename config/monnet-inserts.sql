@@ -26,9 +26,9 @@ INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`, `disable`, `weight
 
 INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES (1, 0, 'cli_last_run', '0');
 
-INSERT INTO `items` (`id`, `cat_id`, `type`, `title`, `conf`, `weight`) VALUES
-(1, 10, NULL, 'Google', '{\"url\":\"https://google.es\",\"image_type\":\"favicon\",\"image_resource\":false}', 0),
-(2, 10, NULL, 'Yahoo', '{\"url\":\"http://es.yahoo.com\",\"image_type\":\"favicon\",\"image_resource\":false}', 0),
+INSERT INTO `items` (`id`, `cat_id`, `type`, `title`, `conf`, `weight`, `highlight`) VALUES
+(1, 20, 'search_engine', 'Google', '{\"url\":\"https:\\/\\/google.com\\/search\",\"name\":\"q\"}', 60, 0),
+(2, 20, 'search_engine', 'Duck', '{\"url\":\"https:\\/\\/duckdockgo.com\\/search\",\"name\":\"q\"}', 60, 0);
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `isAdmin`, `created`) VALUES
 (1, 'monnet', NULL, '50fbd2ffa0f3e68cb2d7bc818d63f29cf3a4df10', '01s57t8jqms7f4etc9p5k492mj', 1, '2021-10-30 12:06:20');
