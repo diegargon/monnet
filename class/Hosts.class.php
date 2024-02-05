@@ -103,10 +103,10 @@ Class Hosts {
     function insert(array $host) {
         $hostlog = $host['ip'];
         !empty($host['mac']) ? $hostlog .= '[' . $host['mac'] . ']' : null;
-        !empty($host['hostname']) && ($host['hostname'] != $host['ip']) ? $hostlog .= '[' . $host['mac'] . ']' : null;
+        !empty($host['hostname']) && ($host['hostname'] != $host['ip']) ? $hostlog .= '[' . $host['hostname'] . ']' : null;
         $this->db->insert('hosts', $host);
         $host_id = $this->db->insertID();
-        $this->log->logHost('LOG_NOTICE', $host_id, 'Found new host :' . $hostlog);
+        $this->log->logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $hostlog);
     }
 
     function remove(int $hid) {
