@@ -30,14 +30,14 @@
                         $cat_name = $cat['cat_name'];
                     }
                     ?>
-                    <option value="<?= $cat['id'] ?>"><?= $cat_name ?></option>
+                <option value="<?= $cat['id'] ?>"><?= $cat_name ?></option>
                     <?php
                 }
                 ?>
             </select>
 
             <label for="url">URL/IP:</label>
-            <input type="text" id="urlip" name="urlip" size="32" maxlength="250" required value="<?= !empty($tdata['urlip']) ? $tdata['urlip'] : null ?>">
+            <input type="text" id="urlip" name="urlip" size="32" maxlength="450" required value="<?= !empty($tdata['urlip']) ? $tdata['urlip'] : null ?>">
 
             <label for="image_type"><?= $lng['L_IMAGE_TYPE'] ?>:</label>
             <select id="image_type" name="image_type">

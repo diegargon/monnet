@@ -45,8 +45,8 @@
                 if ($id == 0 || $bookmark['cat_id'] == $id) {
                     ?>
                     <div class="item-container">
-                        <a href="<?= $bookmark['url'] ?>" rel="noreferrer" target="_blank" class="item" title="<?= $bookmark['url'] ?>">
-                            <div class="item-thumb shadow1">
+                                    <a href="<?= $bookmark['url'] ?>" rel="noopener noreferrer" target="_blank" class="item" title="<?= $bookmark['url'] ?>">
+                                        <div class="item-thumb shadow1">
                                 <img class="fab" src="<?= $bookmark['img'] ?>" alt="" style="<?= !empty($bookmark['icon_bg']) ? 'background-color: ' . $bookmark['icon_bg'] : null ?>"/>
                                 <div class="item-title text_shadow_style1"><?= $bookmark['title'] ?></div>
                             </div>

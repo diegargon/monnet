@@ -156,11 +156,12 @@ function page_index_post(Database $db, User $user, Categories $categories, array
             $urlip = Filters::postIP('urlip');
         }
 
+        //TODO check valid image name.
         $image_type = Filters::postString('image_type');
         if ($image_type == 'image_resource') {
-            $field_img = Filters::postImgUrl('field_image');
+            $field_img = Filters::postImgUrl('field_img');
         } else {
-            $field_img = Filters::postStrict('field_image');
+            $field_img = Filters::postPathFile('field_img');
         }
 
         $weight = Filters::postInt('weight');
@@ -182,7 +183,7 @@ function page_index_post(Database $db, User $user, Categories $categories, array
         }
 
         if ($image_type != 'favicon' && empty($field_img)) {
-            $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $page_data['error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         $page_data['bookmarkName'] = $bookmarkName;
@@ -296,7 +297,7 @@ function format_items(User $user, array $items_results) {
             $item_img = $item_conf['url'] . '/favicon.ico';
         } else if ($item_conf['image_type'] === 'favicon') {
             $favicon_path = $item_conf['image_resource'];
-            $item_img = $item_conf['url'] . '/' . $favicon_path;
+            $item_img = base_url($item_conf['url']) . '/' . $favicon_path;
         } elseif ($item_conf['image_type'] === 'url') {
             $item_img = $item_conf['image_resource'];
         } elseif ($item_conf['image_type'] === 'local_img') {
