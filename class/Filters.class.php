@@ -250,7 +250,7 @@ Class Filters {
           if (!preg_match('/^[A-Za-z0-9]+$/', $var)) {
           return false;
           }
-         * 
+         *
          */
         if (!ctype_alnum($var)) {
             return false;
@@ -290,7 +290,7 @@ Class Filters {
           }
 
           return $var;
-         * 
+         *
          */
 
         if (!preg_match('/^[A-Za-z]+$/', $var)) {
@@ -365,16 +365,7 @@ Class Filters {
         if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
-        /*
-          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
-          ) {
-          return false;
-          }
 
-
-          return $var;
-         * 
-         */
         if (!preg_match('/^[A-Za-z0-9_.]+$/', $var)) {
             return false;
         }
@@ -434,5 +425,78 @@ Class Filters {
         $ip = filter_var($val, FILTER_VALIDATE_IP);
 
         return $ip !== false ? $ip : false;
+    }
+
+    // POST PATH
+
+    static function getPath($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varPath($_GET[$val], $size);
+    }
+
+    static function postPath($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varPath($_POST[$val], $size);
+    }
+
+    static function varPath($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+
+        // Filtrar el path para permitir solo caracteres alfanuméricos, guiones bajos (_) y barras diagonales (/)
+        $filtered_path = preg_replace('/[^a-zA-Z0-9_\/]/', '', $val);
+
+        if ($filtered_path !== $val) {
+            return false;
+        }
+        return $filtered_path;
+    }
+
+    // FilePath
+    // POST PATH
+
+    static function getPathFile($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varPathFile($_GET[$val], $size);
+    }
+
+    static function postPathFile($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varPathFile($_POST[$val], $size);
+    }
+
+    static function varPathFile($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+
+        // Filtrar el path para permitir solo caracteres alfanuméricos, guiones bajos (_) y barras diagonales (/)
+        $filtered_path = preg_replace('/[^a-zA-Z0-9_\/.]/', '', $val);
+
+        if ($filtered_path !== $val) {
+            return false;
+        }
+
+        $path_parts = pathinfo($filtered_path);
+        $filename = $path_parts['basename'];
+
+        if (!$filename) {
+            return false;
+        }
+
+        return $filtered_path;
     }
 }
