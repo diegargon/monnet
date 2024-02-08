@@ -61,7 +61,20 @@ function order_date(array &$ary) {
 
 function base_url(string $url) {
     $parsed_url = parse_url($url);
+
+    if ($parsed_url === false) {
+        return false; // Si no se pudo parsear, retornamos false
+    }
+
+    if (isset($parsed_url['fragment'])) {
+        unset($parsed_url['fragment']);
+    }
+
     $base_url = $parsed_url['scheme'] . '://' . $parsed_url['host'];
+
+    if (isset($parsed_url['port'])) {
+        $base_url .= ':' . $parsed_url['port'];
+    }
 
     return $base_url;
 }

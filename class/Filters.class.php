@@ -484,7 +484,7 @@ Class Filters {
         }
 
         // Filtrar el path para permitir solo caracteres alfanuméricos, guiones bajos (_) y barras diagonales (/)
-        $filtered_path = preg_replace('/[^a-zA-Z0-9_\/.]/', '', $val);
+        $filtered_path = preg_replace('/[^a-zA-Z0-9_\/.-]/', '', $val);
 
         if ($filtered_path !== $val) {
             return false;

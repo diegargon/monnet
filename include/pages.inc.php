@@ -158,9 +158,9 @@ function page_index_post(Database $db, User $user, Categories $categories, array
 
         //TODO check valid image name.
         $image_type = Filters::postString('image_type');
-        if ($image_type == 'image_resource') {
+        if ($image_type == 'image_resource') { //Remote Image
             $field_img = Filters::postImgUrl('field_img');
-        } else {
+        } else { //favicon, local image
             $field_img = Filters::postPathFile('field_img');
         }
 
