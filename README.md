@@ -1,4 +1,4 @@
-### WARNING: Changing things that going to make backguard incompatible
+### WARNING: Changing things, no backward compatible
 ### I disable the ssh stuff for redo, ping stats still works
 
 # MonNet (NOT READY FOR USE)
@@ -12,10 +12,9 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 ```
 
 ```
-/var/www/html# rm -rf *
 /var/www/html# git clone https://github.com/diegargon/monnet .
 
-chown www-data cache logs
+/var/www/html# chown -R www-data:www-data *
 ```
 Instalamos phpseclib con composer
 
@@ -23,8 +22,8 @@ Instalamos phpseclib con composer
 /var/www/html# composer require phpseclib/phpseclib:~3.0
 ```
 
-Create  config/config.defaults.php  to config.inc.php and change whatever you want, you
-can remove all unused config. Don't rename or modify directly config.defaults.php
+Copy  config/config.defaults.php  to config.inc.php and change whatever you want, you
+can remove all unnchaged config. Don't rename or modify directly config.defaults.php
 
 ## Settting Database
 ```
@@ -42,7 +41,7 @@ monnet : monnetadmin
 
 ```
 $ nano /etc/crontab
-*/3 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
+*/5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
 ```
 
 ## CERTS (disable temporaraly due rewriting)
