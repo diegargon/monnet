@@ -920,12 +920,12 @@ input:checked + .slider:before {
 }
 
 #add-bookmark-container {
-    display:none;
+    display: none;
     position: absolute;
     top: 40%;
     left: 50%;
-    padding: 0px;
     transform: translate(-50%, -50%);
+    padding: 0px;
     margin: auto;
     border: 1px solid #9d9d9d;
     border-radius: 5px;
@@ -935,6 +935,7 @@ input:checked + .slider:before {
     z-index: 1;
     background-color: rgb(55, 50, 37);
 }
+
 .front-container-bar {
     display: inline-block;
     vertical-align: middle;
@@ -945,23 +946,58 @@ input:checked + .slider:before {
     margin: 0px;
     background-color: #808080;
 }
+#addBookmarkForm label {
+    display: block;
+    margin-bottom: 5px;
+}
+
 .form_container {
     margin: 10px;
 }
-#addBookmarkForm input{
-    margin: 5px;
-}
-#status_msg {
-    width: 100%;
-    text-align: center;
-    color: green;
-}
-#error_msg{
-    width: 100%;
-    text-align: center;
-    color: red;
+#addBookmarkForm input[type="text"] {
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 80%;
 }
 
+#weight {
+    width: 50px !important;
+}
+
+#cat_id {
+    width: 75px !important;
+}
+
+#addBookmarkForm input[type="submit"] {
+    display: block; /* Convertir el botón en un bloque para que ocupe todo el ancho disponible */
+    width: auto; /* Establecer un ancho automático */
+    margin: 10px auto 0; /* Margen superior para separarlo de otros elementos y centrarlo horizontalmente */
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+#status_msg,
+#error_msg {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#status_msg {
+    color: green;
+}
+
+#error_msg {
+    color: red;
+}
 #textarea_logs {
     display:block;
     resize:both;

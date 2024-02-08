@@ -30,10 +30,14 @@
                         $cat_name = $cat['cat_name'];
                     }
                     ?>
-                <option value="<?= $cat['id'] ?>"><?= $cat_name ?></option>
+                    <option value="<?= $cat['id'] ?>"><?= $cat_name ?></option>
                     <?php
                 }
                 ?>
+                <?php foreach ($tdata['webs_categories'] as $cat): ?>
+                    <?php $cat_name = isset($lng[$cat['cat_name']]) ? $lng[$cat['cat_name']] : $cat['cat_name']; ?>
+                    <option value="<?= $cat['id'] ?>"><?= $cat_name ?></option>
+                <?php endforeach; ?>
             </select>
 
             <label for="url">URL/IP:</label>
@@ -52,16 +56,9 @@
 
             <label for="weight"><?= $lng['L_WEIGHT'] ?>:</label>
             <select id="weight" name="weight" required>
-                <option value="0">0</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="40">40</option>
-                <option value="50">50</option>
-                <option value="60">60</option>
-                <option value="70">70</option>
-                <option value="80">80</option>
-                <option value="90">90</option>
+                <?php for ($i = 0; $i <= 90; $i += 10): ?>
+                    <option value="<?= $i ?>"><?= $i ?></option>
+                <?php endfor; ?>
             </select>
 
             <!-- Botón para enviar el formulario -->
