@@ -54,6 +54,9 @@ function common_head(array $cfg, Database $db, array $lng, User $user) {
         'place' => 'head_right',
     ];
 
+    /* Footer */
+    $page['web_main']['main_footer_tpl'][] = 'footer';
+
     return $page;
 }
 

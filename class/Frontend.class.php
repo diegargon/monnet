@@ -50,6 +50,12 @@ class Frontend {
             }
         }
 
+        if (!empty($tdata['web_main']['main_footer_tpl']) && is_array($tdata['web_main']['main_footer_tpl'])) {
+            foreach ($tdata['web_main']['main_footer_tpl'] as $head_tpl) {
+                $web['main_footer'] .= $this->getTpl($head_tpl, $tdata);
+            }
+        }
+
         if (!empty($tdata['web_main']['main_footer'])) {
             $web['main_footer'] .= $tdata['web_main']['main_footer'];
         }

@@ -176,15 +176,15 @@ footer {
     display: grid;
     grid-gap: 6px;
     border: 2px;
-    grid-template-columns: repeat( auto-fit, minmax(80px, 0fr) );
+    grid-template-columns: repeat( auto-fit, minmax(86px, 0fr) );
     /*
     grid-template-columns: repeat(6, 80px);    
     grid-template-rows: 80px;
     grid-template-rows: repeat(3, 75px); */
 }
 .item-container {
-    width:80px;
-    height:80px;
+    width:85px;
+    height:85px;
 }
 .item_icon {
     width: 30px;
@@ -221,10 +221,12 @@ footer {
 }
 
 .bookmarks img {
-    width: 30px;
+    width: 40px;
+    height: 40px;
     font-size: 0.4em; /* for alt fail */
     border-radius: 5px;
     margin:0px;
+    margin-top: 5px;
 }
 .item-title {
     display: block;
@@ -1057,6 +1059,18 @@ input:checked + .slider:before {
         rgba(0, 255, 34, 0.27) 93%,
         rgba(104, 255, 0, 0) 100%);
     opacity: 0.15;
+}
+
+.footer_bar {
+    border:0px solid pink;
+    width:95%;
+    margin: 0 auto;
+}
+.footer_right_element {
+    float:right;
+}
+.clearfix {
+    clear: both; /* Limpiar los flotadores */
 }
 
 @keyframes crt-glow {
