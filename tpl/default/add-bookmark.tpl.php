@@ -22,18 +22,6 @@
 
             <label for="host"><?= $lng['L_CATEGORY'] ?>:</label>
             <select id="cat_id" name="cat_id" required>
-                <?php
-                foreach ($tdata['webs_categories'] as $cat) {
-                    if (isset($lng[$cat['cat_name']])) {
-                        $cat_name = $lng[$cat['cat_name']];
-                    } else {
-                        $cat_name = $cat['cat_name'];
-                    }
-                    ?>
-                    <option value="<?= $cat['id'] ?>"><?= $cat_name ?></option>
-                    <?php
-                }
-                ?>
                 <?php foreach ($tdata['webs_categories'] as $cat): ?>
                     <?php $cat_name = isset($lng[$cat['cat_name']]) ? $lng[$cat['cat_name']] : $cat['cat_name']; ?>
                     <option value="<?= $cat['id'] ?>"><?= $cat_name ?></option>
