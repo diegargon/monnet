@@ -119,7 +119,7 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
     }
     /* Add Item */
     $page['load_tpl'][] = [
-        'file' => 'additem',
+        'file' => 'add-bookmark',
         'place' => 'center_col',
     ];
 
@@ -138,6 +138,9 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
 
     /* Webs Categories */
     $page['webs_categories'] = $categories->getByType(2);
+
+    /* Network Categories */
+    //$page['network_categories'] = $categories->getByType(1);
 
     return $page;
 }
