@@ -29,7 +29,7 @@ Class Filters {
     }
 
     static function varInt($val, $size = PHP_INT_MAX) {
-        if (!isset($val) || is_array($val)) {
+        if (!isset($val)) {
             return false;
         }
 
