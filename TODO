@@ -1,13 +1,18 @@
 ** HIGH
-* Config parar cronjob, cli  comprueba preferencias stop_cli
-* boton cerrar y demas botones que no haga reload/submit form? utilizar refreshed
-* notes guarda auto o boton? ojo con el autorefresh  al estar en left_side recarga y borra si estamos editando
-* boton config ¿al lado del logout? o ambos floating left en la pagina
-* notes default size más adecuado a las otras pestañas. quizas con scroll.
-* categorias (red,vlan), y filtro o tabs remotos, locales, destacados, 
-* Host totales / online / offlines / Warnings / Critical
-* obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
+* Multiples Redes, guarda en hosts red a la que pertece o simplemente calcularla
+* Automatic DB Updater
+* cache icons/remote images.
+
 ** LOW
+* Filtrar host por vlan
+* Bell options term + onoff pref
+* categories disable, para no mostrar en la barra
 * Señal de nuevo host descubierto
-* opcion buscador switch a iconos
+* Opcion del buscador cambie a buscar elementos en la pagina?
 * tiempo pingeo dependiendo de la categoria
+* SNMP Mac
+* Config parar cronjob, cli  comprueba preferencias stop_cli
+* La bola Online/Offline cambiar la intensidad dependido si cambio su estado en las ultimas X horas 
+
+** Backlog
+* obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
