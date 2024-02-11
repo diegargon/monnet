@@ -41,7 +41,7 @@ function page_index_post(Database $db, User $user, Categories $categories, array
     }
 
     if (Filters::postInt('addNetworkForm')) {
-        post_network($db, $page_data);
+        post_network($db, $lng, $page_data);
     }
 
     return $page_data;
@@ -94,17 +94,46 @@ function post_bookmark(Database $db, array $lng, array &$page_data) {
         $conf = ['url' => $urlip, 'image_type' => $image_type, 'image_resource' => $field_img];
         $set = ['cat_id' => $cat_id, 'type' => 'bookmarks', 'title' => $bookmarkName, 'conf' => json_encode($conf), 'weight' => $weight];
         $db->insert('items', $set);
+        //TODO Check insert;
         $page_data['status_msg'] = 'OK';
-    } else {
-        $page_data['bookmarkName'] = $bookmarkName;
-        $page_data['cat_id'] = $cat_id;
-        $page_data['urlip'] = $urlip;
-        $page_data['image_type'] = $image_type;
-        $page_data['field_img'] = $field_img;
-        $page_data['weight'] = $weight;
     }
 }
 
-function post_network(Database $db, array &$page_data) {
+function post_network(Database $db, array $lng, array &$page_data) {
+    $network_name = Filters::postString('networkName');
+    $network = Filters::postIP('network');
+    $network_cidr = Filters::postInt('networkCIDR');
+    $network_vlan = Filters::postInt('networkVLAN');
+    $network_scan = Filters::postInt('networkScan');
 
+    if (empty($network_vlan)) {
+        $network_vlan = 1;
+    }
+    if (empty($network_scan)) {
+        $network_scan = 0;
+    }
+    //TODO check overlapping networks
+
+    if (empty($network)) {
+        $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_NETOWORK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+    } else if (empty($network_name)) {
+        $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
+    } else if (empty($network_cidr)) {
+        $page_data['error_msg'] = "{$lng['L_FIELD']} .' CIDR '.  {$lng['L_ERROR_EMPTY_INVALID']}";
+    }
+    //TODO check valid CIDR
+
+    $page_data['networkName'] = $network_name;
+    $page_data['network'] = $network;
+    $page_data['network_cidr'] = $network_cidr;
+    $page_data['network_vlan'] = $network_vlan;
+    $page_data['network_scan'] = $network_scan;
+
+    if (empty($page_data['error_msg'])) {
+        $network = $network . '/' . $network_cidr;
+
+        $set = ['name' => $network_name, 'network' => $network, 'vlan' => $network_vlan, 'scan' => $network_scan];
+        $db->insert('networks', $set);
+        $page_data['status_msg'] = 'OK';
+    }
 }

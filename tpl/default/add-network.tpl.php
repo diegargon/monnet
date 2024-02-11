@@ -21,13 +21,17 @@
             <label for="networkName"><?= $lng['L_NAME'] ?>:</label>
             <input type="text" id="networkName" name="networkName"  size="12" maxlength="12" required value="<?= !empty($tdata['networkName']) ? $tdata['networkName'] : null ?>">
 
-            <label for="network_cidr"><?= $lng['L_NETWORK'] ?>(CIDR)</label>
-            <input type="text" id="network_cidr" name="network_cidr" size="32" maxlength="450" required value="<?= !empty($tdata['network_cidr']) ? $tdata['network_cidr'] : null ?>">
+            <label for="network"><?= $lng['L_NETWORK'] ?></label>
+            <input type="text" id="network" name="network" size="12" maxlength="12" required value="<?= !empty($tdata['network']) ? $tdata['network'] : null ?>">
+
+            <label for="network_cidr">CIDR</label>
+            <input type="text" id="network_cidr" name="networkCIDR" size="2" maxlength="2" required value="<?= !empty($tdata['network_cidr']) ? $tdata['network_cidr'] : null ?>">
 
             <label for="network_scan"><?= $lng['L_SCAN'] ?></label>
-            <input type="checkbox" name="network_scan" checked/>
+            <input type="hidden" name="networkScan" value="0" />
+            <input type="checkbox" name="networkScan" value="1" checked/>
             <label for="network_vlan"><?= $lng['L_VLAN'] ?></label>
-            <input type="text" id="network_vlan" name="network_vlan" size="5" maxlength="5" required value="<?= !empty($tdata['network_vlan']) ? $tdata['network_vlan'] : 1 ?>">
+            <input type="text" id="network_vlan" name="networkVLAN" size="5" maxlength="5" required value="<?= !empty($tdata['network_vlan']) ? $tdata['network_vlan'] : 1 ?>">
 
             <!-- Botón para enviar el formulario -->
             <input type="submit" value="<?= $lng['L_ADD'] ?>"/>
