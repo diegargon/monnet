@@ -103,6 +103,7 @@ $lng = [
     'L_SEARCH_ENGINE' => 'Search Engine',
     'L_SERVERS' => 'Servers',
     'L_SHOWED' => 'Mostrando',
+    'L_SCAN' => 'Scan',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',
@@ -114,11 +115,13 @@ $lng = [
     'L_UPTIME' => 'Uptime',
     'L_UNKNOWN' => 'Desconocido',
     'L_URLIP' => 'Url o IP',
+    'L_NETWORK' => 'Red',
     'L_UNCATEGORIZED' => 'Sin Categoria',
     'L_UPDATED' => 'Updated',
     //V
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',
+    'L_VLAN' => 'Vlan',
     //W
     'L_WINDSPEED' => 'Viento',
     'L_WEIGHT' => 'Peso',

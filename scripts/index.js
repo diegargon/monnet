@@ -38,12 +38,21 @@ function changeBookmarksTab(tabId) {
 }
 
 $(document).ready(function () {
+    // add bookmark "Popup"
     $("#addBookmark").on("click", function () {
         $("#add-bookmark-container").css("display", "block");
     });
     $("#close_addbookmark").on("click", function () {
         $("#add-bookmark-container").css("display", "none");
     });
+    // add network "popup"
+    $("#addNetwork").on("click", function () {
+        $("#add-network-container").css("display", "block");
+    });
+    $("#close_addnetwork").on("click", function () {
+        $("#add-network-container").css("display", "none");
+    });
+
     // Dynamic
     $(document).on("click", "#close_host_details", function () {
         $("#host-details").css("display", "none");

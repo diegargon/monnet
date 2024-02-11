@@ -24,7 +24,7 @@
     </fieldset>
     <fieldset class="ctrl_fieldset">
         <div class="services_ctrl">
-            <button id="addBookmark" class="button-ctrl" type="submit"><img class="addlink" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?>"></button>
+            <button id="addNetwork" class="button-ctrl" type="submit"><img class="addlink" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?>"></button>
             <span class="opt_labels"><?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?></span>
         </div>
         <legend class="ctrl_legend"><?= $lng['L_HOSTS'] ?></legend>

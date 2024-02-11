@@ -919,7 +919,7 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
-#add-bookmark-container {
+#add-bookmark-container, #add-network-container {
     display: none;
     position: absolute;
     top: 40%;
@@ -946,7 +946,11 @@ input:checked + .slider:before {
     margin: 0px;
     background-color: #808080;
 }
-#addBookmarkForm label {
+.front-container-bar-title {
+    float:left;
+    margin: 1px 0px 0px 1px;
+}
+#addBookmarkForm label, #addNetworkForm label {
     display: block;
     margin-bottom: 5px;
 }
@@ -954,27 +958,31 @@ input:checked + .slider:before {
 .form_container {
     margin: 10px;
 }
-#addBookmarkForm input[type="text"] {
-    padding: 8px;
-    margin-bottom: 10px;
+#addBookmarkForm input[type="text"], #addNetworkForm input[type="text"] {
+    padding: 2px;
+    margin-bottom: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    width: 80%;
 }
+#close_addbookmark, #close_addnetwork{
+    float:left;
+}
+
+
 
 #weight {
     width: 50px !important;
 }
 
 #cat_id {
-    width: 75px !important;
+    width: 150px !important;
 }
 
-#addBookmarkForm input[type="submit"] {
-    display: block; /* Convertir el botón en un bloque para que ocupe todo el ancho disponible */
-    width: auto; /* Establecer un ancho automático */
-    margin: 10px auto 0; /* Margen superior para separarlo de otros elementos y centrarlo horizontalmente */
+#addBookmarkForm input[type="submit"], #addNetworkForm input[type="submit"] {
+    display: block; 
+    width: auto;
+    margin: 10px auto 0;
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;

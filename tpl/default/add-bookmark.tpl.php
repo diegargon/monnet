@@ -11,6 +11,7 @@
 <div id="add-bookmark-container" style="<?= isset($tdata['show_add_bookmark']) ? 'display:block;' : null ?>">
     <div class="front-container-bar">
         <button id="close_addbookmark" class="button-ctrl" type="submit"><img class="closelink" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>"></button>
+        <div class="front-container-bar-title"><?= $lng['L_ADD'] . ' ' . $lng['L_BOOKMARK'] ?></div>
     </div>
     <div class="form_container">
         <div id="status_msg"><?= isset($tdata['status_msg']) ? $tdata['status_msg'] : null ?></div>
@@ -28,7 +29,7 @@
                 <?php endforeach; ?>
             </select>
 
-            <label for="url">URL/IP:</label>
+            <label for="url"><?= $lng['L_URLIP'] ?>:</label>
             <input type="text" id="urlip" name="urlip" size="32" maxlength="450" required value="<?= !empty($tdata['urlip']) ? $tdata['urlip'] : null ?>">
 
             <label for="image_type"><?= $lng['L_IMAGE_TYPE'] ?>:</label>
