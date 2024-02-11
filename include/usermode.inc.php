@@ -29,7 +29,7 @@ if ($user->getLang() !== 'es') {
 
 require('class/Web.class.php');
 require('include/pages-func.inc.php');
+require('include/pages-post.inc.php');
 require('include/pages.inc.php');
 require('class/Frontend.class.php');
-require('include/post-func.inc.php');
 
