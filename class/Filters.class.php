@@ -427,6 +427,42 @@ Class Filters {
         return $ip !== false ? $ip : false;
     }
 
+    //Network
+
+    static function getNetwork($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varNetwork($_GET[$val], $size);
+    }
+
+    static function postNetwork($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varNetwork($_POST[$val], $size);
+    }
+
+    static function varNetwork($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+
+        if (strpos($val, '/') !== false) {
+            list($ip, $cidr) = explode('/', $val, 2);
+
+            if (self::varIP($ip) !== false && $cidr >= 0 && $cidr <= 32) {
+                return $val;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     // POST PATH
 
     static function getPath($val, $size = null) {
