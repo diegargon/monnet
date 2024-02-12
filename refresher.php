@@ -59,7 +59,7 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $db->toggleField('categories', 'on', ['id' => $command_value]);
     !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
     $tdata['hosts_categories'] = $categories->prepareCats(1);
-    $data['categories_host']['data'] = $frontend->getTpl('categories_host', $tdata);
+    $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
 }
 $highlight_hosts_count = 0;
