@@ -14,7 +14,6 @@ do_initial_usermode_checks($cfg);
 session_name('monent');
 session_start();
 
-require('class/Filters.class.php');
 require('class/User.class.php');
 
 $user = new User($cfg, $db);
