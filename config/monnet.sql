@@ -14,9 +14,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `categories` (
   `id` int NOT NULL,
-  `cat_type` tinyint NOT NULL COMMENT '1 Hosts 2 Links',
+  `cat_type` tinyint NOT NULL COMMENT '1 Hosts 2 Items',
   `cat_name` varchar(32) NOT NULL,
-  `on` tinyint(1) NOT NULL DEFAULT '1'
+  `on` tinyint(1) NOT NULL DEFAULT '1',
+  `disable` tinyint NOT NULL DEFAULT '0',
+  `weight` tinyint NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -97,7 +99,8 @@ CREATE TABLE `items` (
   `type` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `title` char(255) NOT NULL,
   `conf` varchar(4096) NOT NULL,
-  `weight` tinyint NOT NULL DEFAULT '60'
+  `weight` tinyint NOT NULL DEFAULT '60',
+  `highlight` tinyint NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -110,6 +113,21 @@ CREATE TABLE `load_stats` (
   `timestamp` timestamp NOT NULL,
   `host` int NOT NULL,
   `value` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `networks`
+--
+
+CREATE TABLE `networks` (
+  `id` int NOT NULL,
+  `network` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `vlan` smallint DEFAULT '1',
+  `scan` tinyint(1) NOT NULL DEFAULT '1',
+  `disable` tinyint NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -160,9 +178,9 @@ CREATE TABLE `stats` (
 CREATE TABLE `system_logs` (
   `id` int NOT NULL,
   `level` tinyint NOT NULL,
-  `msg` varchar(255) NOT NULL,
+  `msg` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 

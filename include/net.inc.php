@@ -147,14 +147,40 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
 
 //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
 
-function build_iplist(string $net) {
-    $parts = explode('/', $net);
-    $exponent = 32 - $parts[1];
-    $count = pow(2, $exponent);
-    $start = ip2long($parts[0]) + 1;
-    $end = ($start + $count) - 3;
+function build_iplist(array $networks) {
+    global $log;
 
-    return array_map('long2ip', range($start, $end));
+    $ip_list = [];
+
+    foreach ($networks as $net) {
+        if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
+            $log->err("Invalid network " . $net['network']);
+            continue;
+        }
+        $parts = explode('/', $net['network']);
+        $network = $parts[0];
+        $prefix = $parts[1];
+        $count = pow(2, (32 - $prefix));
+
+        // Obtener la dirección de red
+        $network_long = ip2long($network);
+        $network_address = long2ip($network_long & ((-1 << (32 - $prefix))));
+        $network_long = ip2long($network_address);
+        $broadcast_address = long2ip($network_long | ((1 << (32 - $prefix)) - 1));
+
+        //echo "->" . $network_address . "\n";
+        //echo "->" . $broadcast_address . "\n";
+        //echo "->" . $network_long . "\n";
+        // Calcular las direcciones IP restantes dentro de la red
+        for ($i = 0; $i < $count && $i <= 255; $i++) {
+            $ip = long2ip($network_long + $i);
+            if ($ip != $network_address && $ip != $broadcast_address) {
+                $ip_list[] = $ip;
+            }
+        }
+    }
+
+    return $ip_list;
 }
 
 function get_hostname(string $ip) {

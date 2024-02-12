@@ -30,7 +30,6 @@ $cfg['theme'] = 'default';
 $cfg['css'] = 'default';
 $cfg['charset'] = 'utf-8';
 $cfg['graph_charset'] = 'es-ES';
-$cfg['net'] = '192.168.1.0/24';
 $cfg['log_level'] = 'LOG_WARN';
 $cfg['log_file'] = 'logs/monnet.log';
 $cfg['log_to_syslog'] = 0;

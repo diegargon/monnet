@@ -28,7 +28,7 @@ function check_known_hosts(Database $db, Hosts $hosts) {
             $log->debug("Pinging host ports {$host['ip']}");
             $ping_host_result = ping_host_ports($host);
             (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
-        } else { //Ping            
+        } else { //Ping
             $ping_host_result = ping_known_host($host);
             (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
         }
@@ -49,19 +49,19 @@ function check_known_hosts(Database $db, Hosts $hosts) {
     $log->debug('Finish check_known_hosts');
 }
 
-function ping_net(array $cfg, Hosts $hosts) {
+function ping_net(Database $db, Hosts $hosts) {
     global $log;
+
+    $query = $db->selectAll('networks');
+    $networks = $db->fetchAll($query);
 
     $timeout = ['sec' => 0, 'usec' => 100000];
 
-    $log->info('Pinging NET ' . $cfg['net']);
-
     $db_hosts = $hosts->getAll();
 
-    $iplist = build_iplist($cfg['net']);
+    $iplist = build_iplist($networks);
 
-    //We emove known hosts since we checked in other functions
-
+    //We remove known hosts since we checked in other functions
     foreach ($iplist as $kip => $vip) {
         $vip = trim($vip);
         $iplist[$kip] = $vip;
