@@ -1,7 +1,20 @@
-### WARNING: Changing things, no backward compatible
-### I disable the ssh stuff for redo, ping stats still works
+###
 
-# MonNet (NOT READY FOR USE)
+# MonNet
+
+Monnet is a mixture of homepage accessible from your web browser and a preview/summary of your network, with some extra options
+
+<p align="center">
+<img width="400" src="https://github.com/diegargon/monnet/blob/main/monnet.png?raw=true" width="100%">
+</p>
+
+## MonNet Status
+
+Monnet is in an early version, a rudimentary method was added to update but it is likely to break something between versions.
+
+
+
+# MonNet Install
 Install LAMP + Composer
 
 ```

@@ -1,7 +1,7 @@
 ** HIGH
-* Multiples Redes, guarda en hosts red a la que pertece o simplemente calcularla
-* Automatic DB Updater
 * cache icons/remote images.
+* mac set default to check again
+* mac fix \' escape comparation
 
 ** LOW
 * Filtrar host por vlan

@@ -47,9 +47,11 @@ require_once('class/Log.class.php');
 require_once('lang/es/main.lang.php');
 $log = new Log($cfg, $db, $lng);
 
-require('class/Filters.class.php');
+require_once('class/Filters.class.php');
 require_once('include/util.inc.php');
 require_once('include/time.inc.php');
+require_once('include/updater.inc.php');
+
 require_once('include/net.inc.php');
 require_once('class/Hosts.class.php');
 require_once('class/Items.class.php'); // TODO to usermode?

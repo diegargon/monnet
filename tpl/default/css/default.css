@@ -980,7 +980,7 @@ input:checked + .slider:before {
 }
 
 #addBookmarkForm input[type="submit"], #addNetworkForm input[type="submit"] {
-    display: block; 
+    display: block;
     width: auto;
     margin: 10px auto 0;
     background-color: #4CAF50;
@@ -1211,3 +1211,14 @@ input:checked + .slider:before {
 
     }
 }
+
+/* Screenshots Privacy */
+/*
+.term_output {
+color: transparent;
+    text-shadow: 0px 0px 4px rgba(0,0,0,1) !important;    
+}
+.hosts-title, .text_shadow_style1, .text_shadow_style2{
+    display:none !important;
+}
+*/

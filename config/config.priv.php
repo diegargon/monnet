@@ -11,7 +11,7 @@
 
 $DEBUG = 1;
 
-$cfg['monnet_version'] = 0.2;
+$cfg['monnet_version'] = 0.31;
 
 /* OS manufactures */
 $cfg['os_manufacture'] = [
