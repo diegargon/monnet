@@ -10,7 +10,7 @@
 ?>
 <div id="add-network-container" style="<?= isset($tdata['show_add_network']) ? 'display:block;' : null ?>">
     <div class="front-container-bar">
-        <button id="close_addnetwork" class="button-ctrl" type="submit"><img class="closelink" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>"></button>
+        <button id="close_addnetwork" class="button-ctrl" type="submit"><img class="close_link" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>"></button>
         <div class="front-container-bar-title"><?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?></div>
     </div>
     <div class="form_container">

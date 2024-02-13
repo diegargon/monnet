@@ -10,9 +10,12 @@
 ?>
 <div class="options_container">
     <fieldset class="ctrl_fieldset">
-        <legend class="ctrl_legend"><?= $lng['L_ITEMS'] ?></legend>
+        <legend class="ctrl_legend"><?= $lng['L_BOOKMARKS'] ?></legend>
         <div class="services_ctrl">
-            <button id="addBookmark" class="button-ctrl" type="submit"><img class="addlink" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>"></button>
+            <button id="addBookmark" class="button-ctrl" type="submit"><img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>"></button>
+        </div>
+        <div class="services_ctrl">
+            <button id="toggleItemsSettings" class="button-ctrl" type="submit"><img class="settigns_link" src="./tpl/default/img/settings-items.png" title="<?= $lng['L_SETTINGS'] ?>"></button>
         </div>
         <form method="POST" name="links_form">
             <div class="bookmarks_ctrl">
@@ -24,7 +27,7 @@
     </fieldset>
     <fieldset class="ctrl_fieldset">
         <div class="services_ctrl">
-            <button id="addNetwork" class="button-ctrl" type="submit"><img class="addlink" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?>"></button>
+            <button id="addNetwork" class="button-ctrl" type="submit"><img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?>"></button>
             <span class="opt_labels"><?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?></span>
         </div>
         <legend class="ctrl_legend"><?= $lng['L_HOSTS'] ?></legend>

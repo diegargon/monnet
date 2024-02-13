@@ -14,6 +14,7 @@
     });
 
     function confirmRefresh(action, param) {
+        event.stopPropagation();
         var confirmacion = confirm('<?= $lng['L_AREYOUSURE'] ?>');
 
         if (confirmacion) {
@@ -63,6 +64,11 @@
                         $(position).append(jsonData.term_logs.data);
                     }
 
+                    if (jsonData.command_receive === 'removeBookmark') {
+                        var commandValue = jsonData.command_value;
+                        var elementSelector = "#item_num_" + commandValue;
+                        $(elementSelector).hide();
+                    }
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
                             position = jsonData.other_hosts.cfg.place;

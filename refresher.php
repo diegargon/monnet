@@ -43,6 +43,8 @@ if (!empty($command_value)) {
 if (!empty($object_id)) {
     $data['object_id'] = $object_id;
 }
+$data['command_sucess'] = 0;
+$data['command_error_msg'] = '';
 
 /* Remove host */
 if ($command === 'remove_host' && is_numeric($command_value)) {
@@ -51,6 +53,7 @@ if ($command === 'remove_host' && is_numeric($command_value)) {
     $user->setPref('host_details', 0);
     $data['host_details'] = '';
     $command = $command_value = '';
+    $data['command_sucess'] = 1;
 }
 
 /* Host Cat */
@@ -61,6 +64,7 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $tdata['hosts_categories'] = $categories->prepareCats(1);
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
+    $data['command_sucess'] = 1;
 }
 $highlight_hosts_count = 0;
 
@@ -124,6 +128,7 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
     }
+    $data['command_sucess'] = 1;
 }
 
 if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
@@ -131,6 +136,7 @@ if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
     $where = ['id' => $object_id];
 
     $db->update('notes', $set, $where, 'LIMIT 1');
+    $data['command_sucess'] = 1;
 }
 
 if ($command == 'setHighlight' && isset($command_value) && !empty($object_id)) {
@@ -138,6 +144,12 @@ if ($command == 'setHighlight' && isset($command_value) && !empty($object_id)) {
     ($command_value == 0) ? $value = 0 : $value = 1;
 
     $hosts->update($object_id, ['highlight' => $value]);
+    $data['command_sucess'] = 1;
+}
+
+if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value)) {
+    //$db->delete('items', ['id' => $command_value], 'LIMIT 1');
+    $data['command_sucess'] = 1;
 }
 
 /* Power ON/OFF  & Reboot */
@@ -149,6 +161,7 @@ if ($command == 'power_on' && !empty($command_value) && is_numeric($command_valu
     } else {
         $log->warning("Host {$host['ip']} has not mac address");
     }
+    $data['command_sucess'] = 1;
 }
 if ($command == 'power_off' && !empty($command_value) && is_numeric($command_value)) {
     $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 2, 'hid' => $command_value], 'LIMIT 1');
@@ -166,10 +179,12 @@ if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value)
     if (empty($coincidence)) {
         $db->insert('cmd', ['cmd_type' => 1, 'hid' => $command_value]);
     }
+    $data['command_sucess'] = 1;
 }
 
 if ($command == 'change_bookmarks_tab' && !empty($command_value)) {
     $user->setPref('default_bookmarks_tab', $command_value);
+    $data['command_sucess'] = 1;
 }
 /* ALWAYS */
 

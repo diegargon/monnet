@@ -10,7 +10,7 @@
 ?>
 <div id="add-bookmark-container" style="<?= isset($tdata['show_add_bookmark']) ? 'display:block;' : null ?>">
     <div class="front-container-bar">
-        <button id="close_addbookmark" class="button-ctrl" type="submit"><img class="closelink" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>"></button>
+        <button id="close_addbookmark" class="button-ctrl" type="submit"><img class="close_link" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>"></button>
         <div class="front-container-bar-title"><?= $lng['L_ADD'] . ' ' . $lng['L_BOOKMARK'] ?></div>
     </div>
     <div class="form_container">

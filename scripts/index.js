@@ -45,6 +45,10 @@ $(document).ready(function () {
     $("#close_addbookmark").on("click", function () {
         $("#add-bookmark-container").css("display", "none");
     });
+    $("#toggleItemsSettings").on("click", function () {        
+        $(".delete_bookmark").toggle();
+        $(".item-container .item_link").toggleClass("disabled-link");
+    });
     // add network "popup"
     $("#addNetwork").on("click", function () {
         $("#add-network-container").css("display", "block");

@@ -33,6 +33,11 @@ class Items {
         return $this->items;
     }
 
+    function remove(int $id) {
+        $this->db->delete('items', ['id' => $id], 'LIMIT 1');
+        unset($this->item[$id]);
+    }
+
     public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc') {
         $result = [];
         foreach ($this->items as $item) {
