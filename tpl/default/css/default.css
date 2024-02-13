@@ -1037,6 +1037,7 @@ input:checked + .slider:before {
     display: flex;
     text-decoration: none;
     color:white;
+    margin: 5px 0px 5px 0px;
 
 }
 .category a:hover {
