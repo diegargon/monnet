@@ -9,9 +9,9 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-$DEBUG=1;
+$DEBUG = 1;
 
-$cfg['monnet_version'] = 0.1;
+$cfg['monnet_version'] = 0.2;
 
 /* OS manufactures */
 $cfg['os_manufacture'] = [
