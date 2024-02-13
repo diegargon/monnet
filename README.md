@@ -2,7 +2,7 @@
 
 # MonNet
 
-Monnet is a mixture of homepage accessible from your web browser and a preview/summary of your network, with some extra options
+MonNet is a hybrid of a homepage accessible from your web browser and a preview/summary of your network, featuring additional options.
 
 <p align="center">
 <img width="400" src="https://github.com/diegargon/monnet/blob/main/monnet.png?raw=true" width="100%">
@@ -10,9 +10,9 @@ Monnet is a mixture of homepage accessible from your web browser and a preview/s
 
 ## MonNet Status
 
-Monnet is in an early version, a rudimentary method was added to update but it is likely to break something between versions.
+MonNet is currently in an early version. A rudimentary method has been added for updating, but it is possible that it may encounter issues between versions.
 
-
+I haven't added the EN language yet. /lang/*
 
 # MonNet Install
 Install LAMP + Composer
