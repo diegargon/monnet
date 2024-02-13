@@ -12,6 +12,8 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 MonNet is currently in an early version. A rudimentary method has been added for updating, but it is possible that it may encounter issues between versions.
 
+You can add bookmarks, but you can't modify yet.
+
 I haven't added the EN language yet. /lang/*
 
 # MonNet Install
