@@ -24,7 +24,7 @@ function cron(array $cfg, Log $log, Database $db, Hosts $hosts) {
     if (($cron_times['cron_five'] + 300) < $time_now) {
         $cron_task_track .= '[5]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_five']], 'LIMIT 1');
-        fill_hostnames($hosts, 1);
+        fill_hostnames($hosts);
 
 #        host_access($cfg, $hosts);
     }
@@ -39,7 +39,7 @@ function cron(array $cfg, Log $log, Database $db, Hosts $hosts) {
         $cron_task_track .= '[60]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_hourly']], 'LIMIT 1');
         check_macs($hosts);
-        fill_mac_vendors($hosts, 1);
+        fill_mac_vendors($hosts);
     }
 
     if (($cron_times['cron_halfday'] + 21600) < $time_now) {
@@ -54,9 +54,8 @@ function cron(array $cfg, Log $log, Database $db, Hosts $hosts) {
     if (($cron_times['cron_weekly'] + 604800) < $time_now) {
         $cron_task_track .= '[7d]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_weekly']], 'LIMIT 1');
-        $only_missing = 0;
-        fill_hostnames($hosts, $only_missing);
-        fill_mac_vendors($hosts, $only_missing);
+        fill_hostnames($hosts, 1);
+        fill_mac_vendors($hosts, 1);
     }
     if (($cron_times['cron_monthly'] + 2592000) < $time_now) {
         $cron_task_track .= '[30d]';

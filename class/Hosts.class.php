@@ -79,8 +79,6 @@ Class Hosts {
         $fvalues = []; //filter
 
         foreach ($values as $kvalue => $vvalue) {
-            $kvalue = $this->db->escape($kvalue);
-            $vvalue = $this->db->escape($vvalue);
             if (!empty($kvalue) && isset($vvalue)) {
                 //TODO warning sign
                 if (

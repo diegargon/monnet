@@ -99,13 +99,13 @@ function ping_net(Database $db, Hosts $hosts) {
     }
 }
 
-function fill_hostnames(Hosts $hosts, int $only_missing = 0) {
+function fill_hostnames(Hosts $hosts, int $forceall = 0) {
     global $log;
 
     $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
-        if (empty($host['hostname']) || $only_missing === 0) {
+        if (empty($host['hostname']) || $forceall === 1) {
             $log->debug("Getting hostname {$host['ip']}");
             $hostname = get_hostname($host['ip']);
             if ($hostname !== false && $hostname != $host['ip']) {
@@ -116,7 +116,7 @@ function fill_hostnames(Hosts $hosts, int $only_missing = 0) {
     }
 }
 
-function fill_mac_vendors(Hosts $hosts, int $only_missing = 0) {
+function fill_mac_vendors(Hosts $hosts, int $forceall = 0) {
     global $log;
 
     $db_hosts = $hosts->getknownEnabled();
@@ -126,7 +126,7 @@ function fill_mac_vendors(Hosts $hosts, int $only_missing = 0) {
         $update = [];
 
         if ((!empty($host['mac'])) &&
-                (empty($host['mac_vendor']) || $only_missing === 1)
+                (empty($host['mac_vendor']) || $forceall === 1)
         ) {
             $log->debug("Getting mac vendor for {$host['mac']} (local)");
             $vendor = get_mac_vendor_local(trim($host['mac']));
