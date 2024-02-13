@@ -78,3 +78,64 @@ function base_url(string $url) {
 
     return $base_url;
 }
+
+function cached_img(Log $log, User $user, int $id, string $img_url, $renew = 0) {
+    $http_options = [];
+
+    $cache_path = 'cache';
+    $http_options['timeout'] = 5; //seconds
+    $http_options['max_redirects'] = 2;
+    //$http_options['request_fulluri'] = true;
+    $http_options['ssl']['verify_peer'] = false;
+    $http_options['ssl']['verify_peer_name'] = false;
+    $http_options['header'] = "User-agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0";
+
+    if (empty($img_url) || is_dir($img_url) || empty($id) || !is_numeric($id)) {
+        return false;
+    }
+
+    if (!Filters::varImgUrl($img_url)) {
+        $log->warning($img_url . ' invalid image url');
+        return false;
+    }
+
+    if (!is_writeable($cache_path)) {
+        $log->warning($cache_path . ' is not writable');
+        return $img_url;
+    }
+
+
+    $file_name = basename($img_url);
+
+    $cache_img_path = $cache_path . '/' . $id . '_' . $file_name;
+
+    if (file_exists($cache_img_path) && $renew === 0) {
+        $log->debug("image cached path exists returning " . $cache_img_path);
+        return $cache_img_path;
+    } else {
+        $log->debug("image path NOT exists or renew getting content " . $img_url);
+        $img_item_check = $user->getPref($img_url);
+        if ($img_item_check) {
+            $img_item_check = new DateTime($img_item_check);
+            $img_item_check->modify('+48 hours');
+
+            if ($img_item_check > utc_date_now()) {
+                return $img_url;
+            }
+        }
+
+        $ctx = stream_context_create(['http' => $http_options]);
+        $img_file = @file_get_contents($img_url, false, $ctx);
+        if ($img_file !== false) {
+            if (file_put_contents($cache_img_path, $img_file) !== false) {
+                return $cache_img_path;
+            }
+        } else {
+            $user->setPref($img_url, utc_date_now());
+            $error = error_get_last();
+            $log->err('Error getting image error msg ' . $error['message']);
+        }
+    }
+
+    return $img_url;
+}

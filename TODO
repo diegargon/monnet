@@ -1,5 +1,4 @@
 ** HIGH
-* cache icons/remote images.
 * mac set default to check again
 * mac fix \' escape comparation
 
@@ -13,6 +12,6 @@
 * SNMP Mac
 * Config parar cronjob, cli  comprueba preferencias stop_cli
 * La bola Online/Offline cambiar la intensidad dependido si cambio su estado en las ultimas X horas 
-
+* clear cache dir 1week; 
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
