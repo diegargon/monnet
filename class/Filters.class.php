@@ -161,7 +161,7 @@ Class Filters {
     }
 
     static function varImgUrl($val, $size = null) {
-        $exts = array('jpg', 'gif', 'png');
+        $exts = array('jpg', 'gif', 'png', 'ico');
 
         if (empty($val) || (!empty($size) && strlen($val) > $size)) {
             return false;
