@@ -38,6 +38,26 @@ a {
 p {
 }
 
+button {
+    background-color: #007bff; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 4px 4px; /* Espaciado interno */
+    text-align: center; /* Centrar el texto */
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; /* Tamaño del texto */
+    margin: 4px 2px; /* Margen exterior */
+    cursor: pointer; /* Cursor al pasar por encima */
+    border-radius: 5px; /* Bordes redondeados */
+    transition-duration: 0.4s; /* Duración de la transición */
+}
+
+button:hover {
+    background-color: #0056b3; /* Cambiar color de fondo al pasar el mouse */
+}
+
+
 .header {
     display:flex;
     width:100%;
@@ -789,7 +809,6 @@ input:checked + .slider:before {
     background: white;
     border-radius: 8px;
 }
-
 .select_deploy, .deploy_btn {
     border:1px solid black;
     background-color: rgba(0, 0, 0, 0.4);
@@ -797,7 +816,6 @@ input:checked + .slider:before {
 }
 .deploy_btn {
 }
-
 .log_container {
     clear:both;
     display: block;
@@ -805,19 +823,16 @@ input:checked + .slider:before {
     /* max-width: 550px;*/
     overflow: auto;
 }
-
 .log_line {
     border-bottom: 1px solid black;
     font-size: 1em;
 }
-
 #main_status_msg {
     text-align:center;
     color: red;
     font-weight:bold;
     font-size: 15px;
 }
-
 .ctrl_fieldset {
     border: 1px solid white;
     border-radius: 5px;
@@ -827,19 +842,16 @@ input:checked + .slider:before {
     min-height: 25px;
     border:1px solid red;
 }
-
 .ping_graph_container {
-    max-width:400px;
-
+    height: 300px;
+    padding-bottom: 40px;
 }
-
 .profile_box {
     display:block;
     border:0px solid red;
     margin: 0 auto;
     width:300px;
 }
-
 .profile_box input {
     padding: 10px;
     border: 1px solid #4CAF50; /* Borde verde */
@@ -870,14 +882,12 @@ input:checked + .slider:before {
 .login_button:hover {
     background-color: #45a049
 }
-
 .top_container_bar {
     position: absolute;
     float:left;
     top: 10px;
     left: 5px;
 }
-
 .top_container_bar a {
     /* display: flex;*/
     border: 0px solid yellow;
@@ -891,7 +901,6 @@ input:checked + .slider:before {
     margin: 0px;
     border: 0px solid blue;
 }
-
 .bar_item_container {
     float:left;
     margin: 0px;
@@ -905,7 +914,6 @@ input:checked + .slider:before {
     text-align: center;
     vertical-align: middle;
 }
-
 .add_link, .close_link, .settigns_link{
     width: 16px;
     padding-left: 2px;
@@ -933,7 +941,6 @@ input:checked + .slider:before {
     z-index: 1;
     background-color: rgb(55, 50, 37);
 }
-
 .front-container-bar {
     display: inline-block;
     vertical-align: middle;
@@ -952,7 +959,6 @@ input:checked + .slider:before {
     display: block;
     margin-bottom: 5px;
 }
-
 .form_container {
     margin: 10px;
 }
@@ -966,17 +972,12 @@ input:checked + .slider:before {
 #close_addbookmark, #close_addnetwork{
     float:left;
 }
-
-
-
 #weight {
     width: 50px !important;
 }
-
 #cat_id {
     width: 150px !important;
 }
-
 #addBookmarkForm input[type="submit"], #addNetworkForm input[type="submit"] {
     display: block;
     width: auto;
@@ -988,19 +989,15 @@ input:checked + .slider:before {
     border-radius: 4px;
     cursor: pointer;
 }
-
-
 #status_msg,
 #error_msg {
     width: 100%;
     text-align: center;
     margin-top: 10px;
 }
-
 #status_msg {
     color: green;
 }
-
 #error_msg {
     color: red;
 }
@@ -1045,7 +1042,6 @@ input:checked + .slider:before {
     text-transform: uppercase;
     word-break: keep-all;
 }
-
 .hosts_totals {
     display: flex;
     align-items: center;
@@ -1115,7 +1111,6 @@ input:checked + .slider:before {
 .clearfix {
     clear: both; /* Limpiar los flotadores */
 }
-
 .delete_bookmark {
     display: none;
     position: absolute;

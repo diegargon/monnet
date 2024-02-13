@@ -8,7 +8,10 @@
  */
 !defined('IN_WEB') ? exit : true;
 ?>
+
 <canvas id="graficoLatencia" width="400" height="200"></canvas>
+<button id="zoomInButton">Ampliar</button>
+<button id="zoomOutButton">Reducir</button>
 <script>
     var datatime_graph_format = "<?= $cfg['datatime_graph_format'] ?>";
     var timezone = "<?= $cfg['timezone'] ?>";
@@ -19,7 +22,7 @@
     var data = <?php echo json_encode($tdata); ?>;
 
     var fechas = data.map(function (item) {
-        return new Date(item.date).getTime()
+        return new Date(item.date).getTime();
     });
 
     var valores = data.map(function (item) {
@@ -27,7 +30,8 @@
     });
 
     var myChart = new Chart(ctx, {
-        type: 'line',
+        // line, bar,radar doughnut, pie ,polarArea, bubble
+        type: 'bar',
         data: {
             labels: fechas,
             datasets: [{
@@ -81,4 +85,35 @@
             }
         }
     });
-</script>    
+
+
+    var zoomLevel = 0;
+    var removedData = [];
+
+    document.getElementById('zoomOutButton').addEventListener('click', function () {
+        if (zoomLevel < 23) {
+            zoomLevel++;
+
+            for (var i = 0; i < 10; i++) {
+                removedData.push({
+                    label: myChart.data.labels.pop(),
+                    value: myChart.data.datasets[0].data.pop()
+                });
+            }
+            myChart.update();
+        }
+    });
+
+    document.getElementById('zoomInButton').addEventListener('click', function () {
+        if (zoomLevel > 0 && removedData.length > 0) {
+            zoomLevel--;
+
+            for (var i = 0; i < 10; i++) {
+                var dataToAdd = removedData.pop();
+                myChart.data.labels.push(dataToAdd.label);
+                myChart.data.datasets[0].data.push(dataToAdd.value);
+            }
+            myChart.update();
+        }
+    });
+</script>
