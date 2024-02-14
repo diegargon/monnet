@@ -39,7 +39,7 @@
                     data: valores,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 2,
-                    fill: false
+                    fill: true
                 }]
         },
         options: {
