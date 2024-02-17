@@ -50,7 +50,7 @@ function ping_host_ports(array $host) {
             $host_status['ports'][$kport]['online'] = 1;
             fclose($conn);
         } else {
-            $warn_msg = 'Port ' . $port['n'] . ' down' . "\nddd";
+            $warn_msg = 'Port ' . $port['n'] . ' down' . "\n";
             $log->logHost('LOG_ERR', $host['id'], $warn_msg);
 
             $host_status['warn_port'] = 1;
@@ -275,4 +275,32 @@ function sendWOL(string $host_mac) {
     socket_close($socket);
 
     return $result ? true : false;
+}
+
+function validatePortsInput(string $input) {
+    // Split the input by commas
+    $values = explode(',', $input);
+    $valid_values = [];
+
+    foreach ($values as $value) {
+        // Split the value by /
+        $parts = explode('/', $value);
+
+        // Check if there are two parts and if the first part is a number between 1 and 65535
+        if (count($parts) == 2 && is_numeric($parts[0]) && $parts[0] >= 1 && $parts[0] <= 65535) {
+            if ($parts[1] === "tcp" || $parts[1] === "udp") {
+                //$valid_values[] = $value; // If valid, add it to the array of valid values
+                $port_type = $parts[1] === "tcp" ? 1 : 2;
+                $valid_values[] = [
+                    'n' => $parts[0],
+                    'name' => $name,
+                    'port_type' => $port_type,
+                    'online' => 0,
+                    'latency' => 0.0
+                ];
+            }
+        }
+    }
+
+    return $valid_values; // Return the array of valid values
 }
