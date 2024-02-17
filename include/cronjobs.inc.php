@@ -112,7 +112,7 @@ function ping_net(Database $db, Hosts $hosts) {
                 $set['network'] = $idNetwork;
             }
 
-            $set['latency'] = microtime(true) - $latency;
+            $set['latency'] = roumd(microtime(true) - $latency, 2);
             $set['last_seen'] = utc_date_now();
             $hostname = get_hostname($ip);
             $log->notice("Discover host $hostname:$ip:$mac:$mac_vendor");
