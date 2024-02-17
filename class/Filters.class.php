@@ -205,12 +205,6 @@ Class Filters {
         ) {
             return false;
         }
-        /*
-          if (preg_match('/[^A-Za-z]/', $var)) {
-          return false;
-          }
-         * *
-         */
         if (!preg_match('/^[A-Za-z]+$/', $var)) {
             return false;
         }
@@ -534,5 +528,42 @@ Class Filters {
         }
 
         return $filtered_path;
+    }
+
+    //Custom String
+    static function postCustomString(string $val, string $validSpecial, int $max_size = null, int $min_size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varCustomString($_POST[$val], $validSpecial, $max_size, $min_size);
+    }
+
+    static function getCustomString(string $val, string $validSpecial, int $max_size = null, int $min_size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varCustomString($_GET[$val], $validSpecial, $max_size, $min_size);
+    }
+
+    static function varCustomString(string $var, string $validSpecialChars, int $max_size = null, int $min_size = null) {
+        // Define el conjunto predeterminado de caracteres (AZaz y números)
+        $validChars = 'A-Za-z0-9';
+
+        $escapedSpecial = preg_quote($validSpecialChars, '/');
+        $validChars .= $escapedSpecial;
+
+        $regex = '/^[' . $validChars . ']+$/';
+
+        if (empty($var) || (!empty($max_size) && strlen($var) > $max_size) || (!empty($min_size) && strlen($var) < $min_size)) {
+            return false;
+        }
+
+        if (!preg_match($regex, $var)) {
+            return false;
+        }
+
+        return $var;
     }
 }
