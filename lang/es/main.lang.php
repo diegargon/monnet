@@ -67,6 +67,7 @@ $lng = [
     'L_LOCAL_IMAGE' => 'Imagen Local',
     'L_LINK' => 'Enlace',
     'L_LOG' => 'Log',
+    'L_LOGMSG_TOO_LONG' => 'Mensaje log demasiado largo. Cortado!',
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',

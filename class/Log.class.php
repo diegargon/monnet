@@ -11,6 +11,7 @@
 
 Class Log {
 
+    private $max_db_msg = 254;
     private $recursionCount = 0;
     private $console;
     private $cfg;
@@ -56,6 +57,10 @@ Class Log {
             }
             if ($this->cfg['log_to_db']) {
                 $level = $this->getLogLevelId($type);
+                if (mb_strlen($msg) > $this->max_db_msg) {
+                    $this->warning($this->lng['L_LOGMSG_TOO_LONG'], 1);
+                    $msg = substr($msg, 0, 254);
+                }
                 $this->db->insert('system_logs', ['level' => $level, 'msg' => $msg]);
             }
             if ($this->cfg['log_to_file']) {
@@ -104,6 +109,10 @@ Class Log {
 
     public function logHost(string $loglevel, int $host_id, string $msg) {
         $level = $this->getLogLevelID($loglevel);
+        if (mb_strlen($msg) > $this->max_db_msg) {
+            $this->warning($this->lng['L_LOGMSG_TOO_LONG'], 1);
+            $msg = substr($msg, 0, 254);
+        }
         $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg];
         $this->db->insert('hosts_logs', $set);
     }
