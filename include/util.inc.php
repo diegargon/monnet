@@ -79,6 +79,18 @@ function base_url(string $url) {
     return $base_url;
 }
 
+function array2string(array $array) {
+    $result = [];
+    foreach ($array as $subarray) {
+        if (is_array($subarray)) {
+            $result[] = array2string($subarray) . '][';
+        } else {
+            $result[] = $subarray;
+        }
+    }
+    return implode(', ', $result);
+}
+
 function cached_img(Log $log, User $user, int $id, string $img_url, $renew = 0) {
     $http_options = [];
 
