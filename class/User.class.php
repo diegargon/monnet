@@ -98,7 +98,7 @@ Class User {
         if (!$format) {
             $format = $this->cfg['datatime_format'];
         }
-        
+
         return formatted_date_now($this->user['timezone'], $format);
     }
 
@@ -180,7 +180,7 @@ Class User {
     }
 
     public function getPref(string $r_key) {
-        return !empty($this->prefs[$r_key]) ? $this->prefs[$r_key] : false;
+        return isset($this->prefs[$r_key]) ? $this->prefs[$r_key] : false;
     }
 
     public function setPref(string $key, string $value) {
