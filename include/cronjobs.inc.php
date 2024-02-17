@@ -43,6 +43,7 @@ function check_known_hosts(Database $db, Hosts $hosts) {
             $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
             $db->insert('stats', $set_ping_stats);
         } else {
+            $log->warning(array2string($host_status));
             $log->warning("Known host ping status error {$host['id']}:{$host['ip']}");
         }
     }
@@ -52,9 +53,9 @@ function check_known_hosts(Database $db, Hosts $hosts) {
 function ping_net(Database $db, Hosts $hosts) {
     global $log;
 
-    $query = $db->selectAll('networks');
+    $query = $db->selectAll('networks', ['scan' => 1, 'disable' => 0]);
     $networks = $db->fetchAll($query);
-
+    $log->debug("Ping networks " . array2string($networks));
     $timeout = ['sec' => 0, 'usec' => 100000];
 
     $db_hosts = $hosts->getAll();
@@ -68,6 +69,18 @@ function ping_net(Database $db, Hosts $hosts) {
         foreach ($db_hosts as $host) {
             if ($host['ip'] == $vip) {
                 unset($iplist[$kip]);
+                //Temporaly Check network for UPDATE
+                $idNetwork = get_network_id($host['ip'], $networks);
+                if ($idNetwork == false) {
+                    $log->warning('Failed to get id network for ip ' . $host['ip']);
+                    $set['network'] = 1;
+                } else {
+                    $set['network'] = $idNetwork;
+                }
+                if (valid_array($set) && ($idNetwork != $host['network'])) {
+                    $db->update('hosts', $set, ['id' => $host['id']]);
+                    $log->warning('Update host network ' . $host['ip'] . ' from ' . $host['network'] . ' to ' . $idNetwork);
+                }
             }
         }
     }
@@ -88,6 +101,15 @@ function ping_net(Database $db, Hosts $hosts) {
             }
             $set['ip'] = $ip;
             $set['online'] = 1;
+
+            $idNetwork = get_network_id($ip, $networks);
+            if ($idNetwork == false) {
+                $log->warn('Failed to get id network for ip ' . $ip);
+                $set['network'] = 1;
+            } else {
+                $set['network'] = $idNetwork;
+            }
+
             $set['latency'] = microtime(true) - $latency;
             $set['last_seen'] = utc_date_now();
             $hostname = get_hostname($ip);

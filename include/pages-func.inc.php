@@ -48,6 +48,7 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
         return $hostscat;
     }
 
+    //Get Host for each ON category
     foreach ($cats_on as $cat) {
         $hosts_cat = $hosts->getHostsByCat($cat['id']);
         if (valid_array($hosts_cat)) {
@@ -58,10 +59,17 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
     $theme = $user->getTheme();
 
     foreach ($hostscat as $khost => $host) {
+        //Discard highlight host for other hosts
         if ($user->getPref('show_highlight_hosts_status') && $host['highlight']) {
             unset($hostscat[$khost]);
         }
+        //Discard hidden networks
+        $host_network_pref = 'network_select_' . $host['network'];
+        if ($user->getPref($host_network_pref) == 0) {
+            unset($hostscat[$khost]);
+        }
     }
+
     foreach ($hostscat as $khost => $vhost) {
         $hostscat[$khost]['theme'] = $theme;
         $hostscat[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";

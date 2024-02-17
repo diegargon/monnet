@@ -67,6 +67,18 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
 
     $categories = new Categories($cfg, $lng, $db);
 
+    $networks_q = $db->selectAll('networks', ['disable' => 0]);
+    $networks = $db->fetchAll($networks_q);
+
+    $networks_selected = 0;
+    foreach ($networks as &$net) {
+        $net_set = $user->getPref('network_select_' . $net['id']);
+        if (($net_set) || $net_set === false) {
+            $net['selected'] = 1;
+            $networks_selected++;
+        }
+    }
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post_data = page_index_post($db, $user, $categories, $lng);
         $page = array_merge($post_data, $page);
@@ -141,6 +153,9 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
     ];
 
     $page['hosts_categories'] = $categories->prepareCats(1);
+
+    $page['networks'] = $networks;
+    $page['networks_selected'] = $networks_selected; //to prevent unselect all
 
     /* Webs Categories */
     $page['webs_categories'] = $categories->getByType(2);

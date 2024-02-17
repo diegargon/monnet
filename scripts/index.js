@@ -45,7 +45,7 @@ $(document).ready(function () {
     $("#close_addbookmark").on("click", function () {
         $("#add-bookmark-container").css("display", "none");
     });
-    $("#toggleItemsSettings").on("click", function () {        
+    $("#toggleItemsSettings").on("click", function () {
         $(".delete_bookmark").toggle();
         $(".item-container .item_link").toggleClass("disabled-link");
     });
@@ -70,6 +70,41 @@ $(document).ready(function () {
             value = 1;
         }
         refresh('setHighlight', value, host_id);
+    });
+
+    //Checkbox trigger
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            //Network Checkboxes           
+            //Prevent disable all networks
+            const checkedNetworks = document.querySelectorAll('input[type="checkbox"].option_network:checked');
+            if ($(this).hasClass('option_network')) {
+                if (checkedNetworks.length === 1) {
+                    console.log("Lenght es 1");
+                    checkboxes.forEach(cb => {
+                        if (cb.checked) {
+                            cb.disabled = true;
+                        }
+                    });
+                } else if (checkedNetworks.length > 1) {
+                    checkboxes.forEach(cb => {
+                        if (cb !== this) {
+                            cb.disabled = false;
+                        }
+                    });
+                }
+            }
+            //Send event to refresher
+            if ($(this).hasClass('option_network')) {
+                if (this.checked) {
+                    refresh('network_select', this.value);
+                } else {
+                    refresh('network_unselect', this.value);
+                }
+            }
+            //END Netrwork Checkboxes
+        });
     });
 
 });

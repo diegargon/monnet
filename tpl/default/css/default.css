@@ -456,6 +456,7 @@ input:checked + .slider:before {
     padding: 5px 10px 10px 5px;
     overflow: hidden;
     outline: none;
+    position:relative;
 }
 .text_shadow_style1 {
     background-color: #fffafa;
@@ -483,6 +484,7 @@ input:checked + .slider:before {
 .hosts_cat {
     padding: 3px;
     margin: 0px 5px 0px 5px;
+    overflow: visible;
 }
 .hosts-container{
     padding:0px;
@@ -1135,6 +1137,21 @@ input:checked + .slider:before {
 #addBookmark {
     float:left;
 }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color:#595959;
+    min-width: 160px;
+    box-shadow:  0px 8px 16px 0px rgba(255, 0, 0, 0.2);
+    border: 2px solid #000;
+    padding: 4px 6px;
+    top: 20px;
+    z-index: 1;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

@@ -16,6 +16,8 @@ require_once('include/usermode.inc.php');
 $tdata = [];
 $data = [];
 $data['conn'] = 'success';
+$force_host_reload = 0;
+
 if ($user->getId() > 0) {
     $data['login'] = 'success';
 } else {
@@ -56,6 +58,19 @@ if ($command === 'remove_host' && is_numeric($command_value)) {
     $data['command_sucess'] = 1;
 }
 
+if ($command == 'network_select' && !empty($command_value) && is_numeric($command_value)) {
+    $pref_name = 'network_select_' . $command_value;
+    $user->setPref($pref_name, 1);
+    $data['command_sucess'] = 1;
+    $force_host_reload = 1;
+}
+if ($command == 'network_unselect' && !empty($command_value) && is_numeric($command_value)) {
+    $pref_name = 'network_select_' . $command_value;
+    $user->setPref($pref_name, 0);
+    $data['command_sucess'] = 1;
+    $force_host_reload = 1;
+}
+
 /* Host Cat */
 
 if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
@@ -65,10 +80,11 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
     $data['command_sucess'] = 1;
+    $force_host_reload = 1;
 }
 $highlight_hosts_count = 0;
 
-if ((empty($command) && empty($command_value)) || $command == 'show_host_cat') {
+if ((empty($command) && empty($command_value)) || $force_host_reload) {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
         $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);

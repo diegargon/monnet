@@ -1,6 +1,6 @@
 ** HIGH
-* mac set default to check again
-* mac fix \' escape comparation
+* Poder añadir check host ports
+
 
 ** LOW
 * Filtrar host por vlan

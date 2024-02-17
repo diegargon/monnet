@@ -183,6 +183,23 @@ function build_iplist(array $networks) {
     return $ip_list;
 }
 
+function get_network_id($ip, $networks) {
+    $ip_long = ip2long($ip);
+
+    foreach ($networks as $network) {
+        list($network_ip, $cidr) = explode('/', $network['network']);
+        $network_ip_long = ip2long($network_ip);
+        $subnet_mask = -1 << (32 - $cidr);
+        $network_ip_long &= $subnet_mask;
+
+        if (($ip_long & $subnet_mask) == $network_ip_long) {
+            return $network['id'];
+        }
+    }
+
+    return false;
+}
+
 function get_hostname(string $ip) {
     return gethostbyaddr($ip);
 }
