@@ -59,9 +59,9 @@ function ping_host_ports(array $host) {
             $host['ports'][$kport]['err_code'] = $err_code;
             $host['ports'][$kport]['err_msg'] = $err_msg;
         }
-        $host_status['ports'][$kport]['latency'] = microtime(true) - $tim_start;
+        $host_status['ports'][$kport]['latency'] = round(microtime(true) - $tim_start, 2);
         //TODO port average?
-        $host_status['latency'] = microtime(true) - $tim_start;
+        $host_status['latency'] = round(microtime(true) - $tim_start, 2);
     }
 
     if ($host_status['online'] == 0) {
@@ -91,7 +91,7 @@ function ping_known_host(array $host) {
     $set = [];
     $set['online'] = 0;
     $set['warn_port'] = 0;
-    $set['latency'] = $ip_status['latency'];
+    $set['latency'] = round($ip_status['latency'], 2);
     $set['last_check'] = $time_now;
     if ($ip_status['isAlive']) {
         $set['online'] = 1;
@@ -139,7 +139,7 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
 
     if (socket_read($socket, 255)) {
         $status['isAlive'] = 1;
-        $status['latency'] = microtime(true) - $tim_start;
+        $status['latency'] = round(microtime(true) - $tim_start, 2);
     } else {
         $status['error'] = 'timeout';
         $status['latency'] = -0.001;
