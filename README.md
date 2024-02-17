@@ -10,11 +10,11 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 ## MonNet Status
 
-MonNet is currently in an early version. A rudimentary method has been added for updating, but it is possible that it may encounter issues between versions.
+MonNet is currently in an early version. A rudimentary method has been added for updating, but it is possible that issues may arise between versions. The compatibility is not guaranteed.
 
-You can add bookmarks, but you can't modify yet.
+You can add bookmarks, networks, and other elements, but for most features, modification is not yet possible. (Except by directly accessing the database, obviously) 
 
-I haven't added the EN language yet. /lang/*
+The English language (EN) has not been added yet. /lang/*
 
 # MonNet Install
 Install LAMP + Composer
