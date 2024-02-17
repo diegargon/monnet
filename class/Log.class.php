@@ -134,7 +134,10 @@ Class Log {
     }
 
     public function getLogLevelId(string $loglevel) {
-
+        if (!isset($this->LOG_TYPE[$loglevel])) {
+            $this->debug('Wrong Log Level name used');
+            return false;
+        }
         return $this->LOG_TYPE[$loglevel];
     }
 
