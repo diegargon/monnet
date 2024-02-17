@@ -39,7 +39,9 @@ function check_known_hosts(Database $db, Hosts $hosts) {
         if (valid_array($host_status)) {
             defined('DUMP_VARS') ? $log->debug("Dumping host_status: " . print_r($host_status, true)) : null;
             $hosts->update($host['id'], $host_status);
-            $ping_latency = $host_status['latency'];
+            if (!empty($host_status['latency'])) {
+                $ping_latency = $host_status['latency'];
+            }
             $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
             $db->insert('stats', $set_ping_stats);
         } else {

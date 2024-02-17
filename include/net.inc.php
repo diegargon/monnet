@@ -31,6 +31,7 @@ function ping_host_ports(array $host) {
     $host_status = [];
     $host_status['online'] = 0;
     $host_status['warn_port'] = 0;
+    $host_status['warn_msg'] = '';
     $host_status['last_check'] = $time_now;
 
     foreach ($host['ports'] as $kport => $port) {
@@ -49,10 +50,14 @@ function ping_host_ports(array $host) {
             $host_status['ports'][$kport]['online'] = 1;
             fclose($conn);
         } else {
+            $warn_msg = 'Port ' . $port['n'] . ' down' . "\nddd";
+            $log->logHost('LOG_ERR', $host['id'], $warn_msg);
+
             $host_status['warn_port'] = 1;
-            //$host['ports'][$kport]['warn_port_msg'] = $port['port'] . ' port down';
-            //$host['ports'][$kport]['err_code'] = $err_code;
-            //$host['ports'][$kport]['err_msg'] = $err_msg;
+            $host_status['warn_msg'] .= $warn_msg;
+            $host['ports'][$kport]['warn_port_msg'] = $warn_msg;
+            $host['ports'][$kport]['err_code'] = $err_code;
+            $host['ports'][$kport]['err_msg'] = $err_msg;
         }
         $host_status['ports'][$kport]['latency'] = microtime(true) - $tim_start;
         //TODO port average?
