@@ -677,7 +677,7 @@ input:checked + .slider:before {
     border-radius: 5px;
     overflow: hidden;
     min-width: 50%;
-    min-height: 30%;
+    min-height: 35%;
     z-index: 1;
     background-color: rgb(55, 50, 37);
 }
@@ -686,7 +686,7 @@ input:checked + .slider:before {
     vertical-align: middle;
     width: 100%;
     border-bottom: 2px solid #313131;
-    height: 20px;
+    height: 25px;
     padding: 2px 0px 2px 1px;
     margin: 0px;
     background-color: #808080;
@@ -787,16 +787,13 @@ input:checked + .slider:before {
     border-radius: 5px;
 }
 .host-controls-left{
-    display:inline-block;
-    vertical-align: middle;
     float:left;
-    border:0px solid blue;
-
+    border:0px solid blue;    
 }
-.host-controls-right{
-    display:inline-block;
+.host-controls-right{    
     float:right;
     border:0px solid blue;
+    margin: 3px 2px 0px 0px;
 }
 .host-details-close input  {
 }
@@ -1064,7 +1061,7 @@ input:checked + .slider:before {
 .frame {
     background-color: transparent;
     border-radius: 2rem;
-    border: 16px solid #2196F3;
+    border: 12px solid #2196F3;
     border-bottom-color: #121212;
     border-left-color: rgba(20,20,20,1);
     border-right-color: rgba(20,20,20,1);
@@ -1073,7 +1070,6 @@ input:checked + .slider:before {
         inset 0 0 18rem black,
         inset 0 0 3rem black,
         0 0 10rem black;
-    /* height: 96%; */
     height: 200px;
     overflow:auto;
 }
@@ -1150,6 +1146,10 @@ input:checked + .slider:before {
 }
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+#tab9 .frame {
+    height: 145px;
 }
 
 @keyframes crt-glow {
