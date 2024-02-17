@@ -99,6 +99,7 @@ $lng = [
     'L_S_OFFLINE' => 'Off',
     'L_SYSTEM' => 'Sistema',
     'L_SERVICES' => 'Servicios',
+    'L_SEND' => 'Enviar',
     'L_STATUS' => 'Estado',
     'L_SETTINGS' => 'Configuración',
     'L_SEARCH_ENGINE' => 'Search Engine',
