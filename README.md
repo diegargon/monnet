@@ -30,6 +30,7 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 /var/www/html# git clone https://github.com/diegargon/monnet .
 
 /var/www/html# chown -R www-data:www-data *
+/var/www/html# chmod 755 cache
 ```
 Instalamos phpseclib con composer
 
