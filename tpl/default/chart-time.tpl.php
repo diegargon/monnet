@@ -37,15 +37,18 @@
             datasets: [{
                     label: 'Latencia',
                     data: valores,
-                    borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 2,
-                    fill: true
                 }]
         },
         options: {
+            responsive: true,
+            barPercentage: 1.0,
+            categoryPercentage: 1.0,
+
             scales: {
                 x: {
                     type: 'time',
+                    offset: true,
                     ticks: {
                         callback: function (value, index, values) {
                             var date = new Date(value);
@@ -54,6 +57,10 @@
                         }
                     },
                     time: {
+                        stacked: true,
+                        //stepSize: 20,
+                        //unitStepSize: 20,
+                        //round: 'hour',
                         unit: 'minute'
                     },
                     grid: {
@@ -75,14 +82,21 @@
                     }
                 }
             },
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }
+            },
             elements: {
-                point: {
-                    radius: 4, // Points
-                    backgroundColor: 'rgba(75, 192, 192, 1)', // Points color
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2
+                bar: {
+                    borderWidth: 1,
+                    barThickness: 'flex' // 'flex' significa que el ancho se ajustará automáticamente
                 }
             }
+
         }
     });
 
@@ -91,7 +105,7 @@
     var removedData = [];
 
     document.getElementById('zoomOutButton').addEventListener('click', function () {
-        if (zoomLevel < 23) {
+        if (zoomLevel < 50) {
             zoomLevel++;
 
             for (var i = 0; i < 10; i++) {
