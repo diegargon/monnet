@@ -82,7 +82,7 @@ $cfg['os'] = [
     17 => ['id' => 17, 'name' => 'DOS', 'img' => 'dos.png'],
     18 => ['id' => 18, 'name' => 'RTOS', 'img' => 'rtos.png'],
     19 => ['id' => 19, 'name' => 'Plan 9 from Bell Labs', 'img' => 'plan9.png'],
-    20 => ['id' => 21, 'name' => 'Free', 'img' => 'unknown.png'],
+    20 => ['id' => 20, 'name' => 'RouterOS', 'img' => 'mikrotik.png'],
     21 => ['id' => 21, 'name' => 'SwitchOS', 'img' => 'mikrotik.png'],
     22 => ['id' => 22, 'name' => 'FortiOS', 'img' => 'fortinet.png'],
     23 => ['id' => 23, 'name' => 'Truenas', 'img' => 'truenas.png'],
