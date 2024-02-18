@@ -24,9 +24,17 @@ function trigger_update(Log $log, Database $db, float $db_version, float $files_
     if ($db_version < 0.33) {
         $db->query("ALTER TABLE `hosts` CHANGE `warn_msg` `warn_msg` VARCHAR(255) NULL;");
         $db->query("ALTER TABLE `hosts` ADD `token` CHAR(255) NULL AFTER `ports`;");
+        $db->query("ALTER TABLE `hosts` ADD `warn_mail` BOOLEAN NOT NULL DEFAULT FALSE AFTER `warn_msg`;");
         $log->info("Update version to 0.33 success");
         $db->query("UPDATE prefs SET pref_value='0.33' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("ALTER TABLE `hosts` ADD `token` CHAR(255) NULL AFTER `ports`");
+    }
+
+
+    //Template
+    if ($db_version < 0.00) {
+        $db->query("");
+        $log->info("Update version to 0.00 success");
+        $db->query("UPDATE prefs SET pref_value='0.00' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
     }
 }
 
