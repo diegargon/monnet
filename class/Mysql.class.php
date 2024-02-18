@@ -249,6 +249,7 @@ class Database {
      * @param string $query
      */
     private function dbdie(string $query) {
+        $this->log('LOG_CRIT', $this->dblink->error);
         printf('<b>Error: Unable to retrieve information.</b>');
         printf("\n<br>%s", $query);
         printf("\n<br>reported: %s", $this->dblink->error);
