@@ -30,13 +30,13 @@ $tdata['theme'] = $cfg['theme'];
 
 $command = Filters::postString('order');
 if ($command == 'saveNote') {
-    $command_value = Filters::postUTF8('order_value');
+    $command_value = trim(Filters::postUTF8('order_value'));
 } else if ($command == 'submitScanPorts') {
-    $command_value = Filters::postCustomString('order_value', ',/', 255);
+    $command_value = trim(Filters::postCustomString('order_value', ',/', 255));
 } else {
-    $command_value = Filters::postString('order_value');
+    $command_value = trim(Filters::postString('order_value'));
 }
-$object_id = Filters::postInt('object_id');
+$object_id = trim(Filters::postInt('object_id'));
 
 if (!empty($command)) {
     $data['command_receive'] = $command;
