@@ -59,9 +59,11 @@ Class Log {
                 $level = $this->getLogLevelId($type);
                 if (mb_strlen($msg) > $this->max_db_msg) {
                     $this->warning($this->lng['L_LOGMSG_TOO_LONG'], 1);
-                    $msg = substr($msg, 0, 254);
+                    $msg_db = substr($msg, 0, 254);
+                } else {
+                    $msg_db = $msg;
                 }
-                $this->db->insert('system_logs', ['level' => $level, 'msg' => $msg]);
+                $this->db->insert('system_logs', ['level' => $level, 'msg' => $msg_db]);
             }
             if ($this->cfg['log_to_file']) {
                 $log_file = $this->cfg['log_file'];
