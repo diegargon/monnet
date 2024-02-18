@@ -20,7 +20,7 @@ $cfg_db['dbprefix'] = '';
 $cfg_db['dbcharset'] = 'utf8';
 
 /* Config */
-$cfg['app_name'] = 'monnet';
+
 $cfg['web_title'] = 'MonNet';
 $cfg['path'] = '/var/www/html';
 $cfg['rel_path'] = '/';

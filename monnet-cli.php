@@ -44,6 +44,6 @@ cron($cfg, $log, $db, $hosts);
 //$log->debug($db->getQueryHistory();
 
 $db->update('prefs', ['uid' => 0, 'pref_value' => utc_date_now()], ['pref_name' => 'cli_last_run'], 'LIMIT 1');
-$log->debug("Finishing {$cfg['app_name']} CLI " . datetime_machine() . "");
+$log->debug("[Finishing] {$cfg['app_name']} CLI " . datetime_machine() . "");
 
 exit(0);

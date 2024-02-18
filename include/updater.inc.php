@@ -15,6 +15,9 @@ function trigger_update(Log $log, Database $db, float $db_version, float $files_
     if ($db_version < 0.31) {
         $db->query("UPDATE prefs SET pref_value='0.31' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
     }
+    if ($db_version < 0.32) {
+        $db->query("UPDATE prefs SET pref_value='0.32' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+    }
 }
 
 $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
