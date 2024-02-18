@@ -1,5 +1,7 @@
 ** HIGH
 * Poder crear host categories.
+* Host down o host changes on/off lanzar un recheck
+
 ** LOW
 * Bell options term + onoff pref
 * categories disable, para no mostrar en la barra

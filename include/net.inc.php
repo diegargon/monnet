@@ -12,12 +12,6 @@
 /* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
 
 function ping_host_ports(array $host) {
-    global $log, $lng;
-
-    if (empty($host['ports']) || !valid_array($host['ports'])) {
-        $log->warning("No check ports for host {$host['id']}:{$host['ip']}");
-        return false;
-    }
     $time_now = utc_date_now();
 
     $err_code = $err_msg = '';
@@ -41,21 +35,15 @@ function ping_host_ports(array $host) {
         $tim_start = microtime(true);
         $ip = $host['ip'];
         $port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
-        $log->debug("Checking host ip:port {$host['ip']}:{$port['n']}");
         $conn = @fsockopen($ip, $port['n'], $err_code, $err_msg, $timeout);
 
         if (is_resource($conn)) {
-            if (!$host_status['online']) {
-                $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_PORT_BECOME_ON']);
-            }
             $host_status['online'] = 1;
             $host_status['last_seen'] = $time_now;
             $host_status['ports'][$kport]['online'] = 1;
             fclose($conn);
         } else {
             $warn_msg = 'Port ' . $port['n'] . ' down' . "\n";
-            $log->logHost('LOG_ERR', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_PORT_BECOME_OFF'] . '->' . $warn_msg);
-
             $host_status['warn_port'] = 1;
             $host_status['warn_msg'] .= $warn_msg;
             $host['ports'][$kport]['warn_port_msg'] = $warn_msg;
@@ -79,7 +67,6 @@ function ping_host_ports(array $host) {
 }
 
 function ping_known_host(array $host) {
-    global $log, $lng;
 
     $timeout = ['sec' => 0, 'usec' => 500000];
     $time_now = utc_date_now();
@@ -90,7 +77,6 @@ function ping_known_host(array $host) {
 
     $ip_status = ping($host['ip'], $timeout);
 
-    //echo "Pinging {$host['ip']}{$ip_status['isAlive']} ";
     $set = [];
     $set['online'] = 0;
     $set['warn_port'] = 0;
@@ -101,11 +87,6 @@ function ping_known_host(array $host) {
         $set['last_seen'] = $time_now;
     }
 
-    if ($set['online'] == 1 && $host['online'] == 0) {
-        $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
-    } else if ($set['online'] == 0 && $host['online'] == 1) {
-        $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
-    }
     return $set;
 }
 

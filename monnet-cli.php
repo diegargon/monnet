@@ -37,7 +37,7 @@ if (is_locked()) {
 
 register_shutdown_function('unlink', CLI_LOCK);
 
-check_known_hosts($db, $hosts);
+check_known_hosts($log, $db, $hosts);
 #run_cmd_db_tasks($cfg, $db, $hosts);
 cron($cfg, $log, $db, $hosts);
 
