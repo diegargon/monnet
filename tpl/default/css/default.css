@@ -920,7 +920,7 @@ input:checked + .slider:before {
 }
 .add_link, .close_link, .settigns_link{
     width: 16px;
-    padding-left: 2px;
+    padding-left: 0px;
 }
 .button-ctrl {
     border: none;
