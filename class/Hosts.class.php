@@ -102,7 +102,11 @@ Class Hosts {
         $this->db->insert('hosts', $host);
         $host_id = $this->db->insertID();
         $hostlog = $this->getDisplayName($host);
-        !empty($host['mac']) ? $hostlog .= '[' . $host['mac'] . ']' : null;
+        if (!empty($host['mac_vendor']) && $host['mac_vendor'] !== '-') {
+            $hostlog .= ' [' . $host['mac_vendor'] . ']';
+        } else if (!empty($host['mac'])) {
+            $hostlog .= ' [' . $host['mac'] . ']';
+        }
         $this->hosts[$host_id] = $host;
         $this->log->logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $hostlog);
     }
