@@ -127,9 +127,8 @@ function ping_net(Database $db, Hosts $hosts) {
 
         if ($ip_status['isAlive']) {
             $mac = trim(get_mac($ip));
-            $mac_vendor = '';
             if ($mac) {
-                $set['mac'] = trim($mac);
+                $set['mac'] = $mac;
                 $mac_info = get_mac_vendor($mac);
                 (!empty($mac_info['company'])) ? $set['mac_vendor'] = $mac_info['company'] : $set['mac_vendor'] = '-';
             }
@@ -147,7 +146,6 @@ function ping_net(Database $db, Hosts $hosts) {
             $set['latency'] = round(microtime(true) - $latency, 2);
             $set['last_seen'] = utc_date_now();
             $hostname = get_hostname($ip);
-            $log->notice("Discover host $hostname:$ip:$mac:$mac_vendor");
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
 
             $hosts->insert($set);
