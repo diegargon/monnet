@@ -85,7 +85,7 @@ Class Hosts {
                         ($kvalue == 'mac' || $kvalue == 'mac_vendor' || $kvalue == 'hostname') &&
                         ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
-                    $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ' . $this->hosts[$id][$kvalue] . '->' . $vvalue;
+                    $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( ' . $this->hosts[$id]['display_name'] . ' )' . $this->hosts[$id][$kvalue] . '->' . $vvalue;
                     $this->log->logHost('LOG_WARNING', $id, $loghostmsg);
                 }
                 $this->hosts[$id][$kvalue] = $vvalue;
@@ -99,11 +99,11 @@ Class Hosts {
     }
 
     function insert(array $host) {
-        $hostlog = $host['ip'];
-        !empty($host['mac']) ? $hostlog .= '[' . $host['mac'] . ']' : null;
-        !empty($host['hostname']) && ($host['hostname'] != $host['ip']) ? $hostlog .= '[' . $host['hostname'] . ']' : null;
         $this->db->insert('hosts', $host);
         $host_id = $this->db->insertID();
+        $hostlog = $this->getDisplayName($host);
+        !empty($host['mac']) ? $hostlog .= '[' . $host['mac'] . ']' : null;
+        $this->hosts[$host_id] = $host;
         $this->log->logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $hostlog);
     }
 
@@ -153,6 +153,15 @@ Class Hosts {
         return valid_array($hosts_by_cat) ? $hosts_by_cat : false;
     }
 
+    private function getDisplayName($host) {
+        if (!empty($host['title'])) {
+            return $host['title'];
+        } else if (!empty($host['hostname'])) {
+            return ucfirst(explode('.', $host['hostname'])[0]);
+        }
+        return $host['ip'];
+    }
+
     private function getHostsDb() {
         $query_hosts = 'SELECT * FROM hosts';
         $results = $this->db->query($query_hosts);
@@ -167,13 +176,8 @@ Class Hosts {
             $this->hosts[$id] = $host;
             $host['online'] == 1 ? ++$this->on : ++$this->off;
             $host['highlight'] ? $this->highlight_total++ : null;
-            if (!empty($host['title'])) {
-                $this->hosts[$id]['display_name'] = $host['title'];
-            } else if (!empty($host['hostname'])) {
-                $this->hosts[$id]['display_name'] = ucfirst(explode('.', $host['hostname'])[0]);
-            } else {
-                $this->hosts[$id]['display_name'] = $host['ip'];
-            }
+            $this->hosts[$id]['display_name'] = $this->getDisplayName($host);
+
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
             if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
