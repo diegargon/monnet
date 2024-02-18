@@ -7,7 +7,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
+//var_dump($tdata);
 if (empty($tdata['hosts'])) {
     return [];
 }
@@ -28,11 +28,11 @@ if (empty($tdata['hosts'])) {
                     <?php } ?>
                     <?php if (!empty($host['os_distribution_image'])) { ?>
                         <img class="fab" src="<?= $host['os_distribution_image'] ?>" alt="distribution_img" title="<?= $host['os_distribution'] ?>"/>
-                    <?php } ?>              
+                    <?php } ?>
                     <?php if (!empty($host['system_image'])) { ?>
                         <img class="fab" src="<?= $host['system_image'] ?>" alt="system_img" title="<?= $host['system'] ?>"/>
-                    <?php } ?>                                   
-                    <div class="hosts-title text_shadow_style2"><?= $host['title'] ?> </div>
+                    <?php } ?>
+                    <div class="hosts-title text_shadow_style2"><?= $host['display_name'] ?> </div>
                 </div>
             </a>
         </div>

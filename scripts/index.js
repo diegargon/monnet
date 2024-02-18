@@ -72,6 +72,40 @@ $(document).ready(function () {
         refresh('setHighlight', value, host_id);
     });
 
+    $(document).on("change", "#checkports_enabled", function () {
+        var host_id = $('#host_id').val();
+        var value = 0;
+
+        if (this.checked) {
+            value = 1;
+        }
+        refresh('setCheckPorts', value, host_id);
+    });
+
+    $(document).on("click", "#submitPorts", function () {
+        var portsValue = $('#checkports').val();
+        var host_id = $('#host_id').val();
+        if (portsValue && host_id) {
+            refresh('submitScanPorts', portsValue, host_id);
+        }
+    });
+    $(document).on("click", "#submitTitle", function () {
+        var titleValue = $('#host-title').val();
+        var host_id = $('#host_id').val();
+        if (titleValue && host_id) {
+            refresh('submitTitle', titleValue, host_id);
+        }
+    });
+
+    $(document).on("click", "#submitCat", function () {
+        var catValue = $('#hostcat_id').val();
+        var host_id = $('#host_id').val();
+        if (catValue && host_id) {
+            refresh('submitCat', catValue, host_id);
+        }
+    });
+
+
     //Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {

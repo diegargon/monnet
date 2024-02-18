@@ -31,6 +31,8 @@ $tdata['theme'] = $cfg['theme'];
 $command = Filters::postString('order');
 if ($command == 'saveNote') {
     $command_value = Filters::postUTF8('order_value');
+} else if ($command == 'submitScanPorts') {
+    $command_value = Filters::postCustomString('order_value', ',/', 255);
 } else {
     $command_value = Filters::postString('order_value');
 }
@@ -68,6 +70,55 @@ if ($command == 'network_unselect' && !empty($command_value) && is_numeric($comm
     $pref_name = 'network_select_' . $command_value;
     $user->setPref($pref_name, 0);
     $data['command_sucess'] = 1;
+    $force_host_reload = 1;
+}
+
+if ($command == 'setCheckPorts' && isset($command_value) && !empty($object_id)) {
+    // 1 ping 2 TCP/UDP
+    ($command_value == 0) ? $value = 1 : $value = 2;
+
+    $hosts->update($object_id, ['check_method' => $value]);
+    $data['command_sucess'] = 1;
+}
+
+if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id)) {
+    $sucess = 0;
+    if (!empty($command_value)) {
+        $valid_ports = validatePortsInput(trim($command_value));
+        if (valid_array($valid_ports)) {
+            if (($encoded_ports = json_encode($valid_ports))) {
+                $db->update('hosts', ['ports' => $encoded_ports], ['id' => $object_id]);
+                $total_elements = count($valid_ports) - 1;
+                $sucess = '';
+                foreach ($valid_ports as $index => $port) {
+                    $sucess .= $port['n'] . '/';
+                    $sucess .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
+                    $sucess .= '/' . $port['name'];
+                    $sucess .= ($index === $total_elements) ? '' : ',';
+                }
+            }
+        }
+    }
+    $data['command_sucess'] = $sucess;
+}
+
+if ($command == 'submitTitle' && !empty($object_id) && is_numeric($object_id)) {
+    $sucess = 0;
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['title' => $command_value]);
+        $sucess = 1;
+    }
+    $data['command_sucess'] = $sucess;
+    $force_host_reload = 1;
+}
+
+if ($command == 'submitCat' && !empty($object_id) && is_numeric($object_id)) {
+    $sucess = 0;
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['category' => $command_value]);
+        $sucess = 1;
+    }
+    $data['command_sucess'] = $sucess;
     $force_host_reload = 1;
 }
 

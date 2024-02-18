@@ -12,7 +12,7 @@
 /* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
 
 function ping_host_ports(array $host) {
-    global $log;
+    global $log, $lng;
 
     if (empty($host['ports']) || !valid_array($host['ports'])) {
         $log->warning("No check ports for host {$host['id']}:{$host['ip']}");
@@ -45,13 +45,16 @@ function ping_host_ports(array $host) {
         $conn = @fsockopen($ip, $port['n'], $err_code, $err_msg, $timeout);
 
         if (is_resource($conn)) {
+            if (!$host_status['online']) {
+                $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_PORT_BECOME_ON']);
+            }
             $host_status['online'] = 1;
             $host_status['last_seen'] = $time_now;
             $host_status['ports'][$kport]['online'] = 1;
             fclose($conn);
         } else {
             $warn_msg = 'Port ' . $port['n'] . ' down' . "\n";
-            $log->logHost('LOG_ERR', $host['id'], $warn_msg);
+            $log->logHost('LOG_ERR', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_PORT_BECOME_OFF'] . '->' . $warn_msg);
 
             $host_status['warn_port'] = 1;
             $host_status['warn_msg'] .= $warn_msg;
@@ -98,11 +101,10 @@ function ping_known_host(array $host) {
         $set['last_seen'] = $time_now;
     }
 
-    $display_name = !empty($host['hostname']) ? $host['hostname'] : $host['ip'];
     if ($set['online'] == 1 && $host['online'] == 0) {
-        $log->logHost('LOG_NOTICE', $host['id'], $display_name . ': ' . $lng['L_HOST_BECOME_ON']);
+        $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
     } else if ($set['online'] == 0 && $host['online'] == 1) {
-        $log->logHost('LOG_NOTICE', $host['id'], $display_name . ': ' . $lng['L_HOST_BECOME_OFF']);
+        $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
     }
     return $set;
 }
@@ -286,18 +288,23 @@ function validatePortsInput(string $input) {
         // Split the value by /
         $parts = explode('/', $value);
 
-        // Check if there are two parts and if the first part is a number between 1 and 65535
-        if (count($parts) == 2 && is_numeric($parts[0]) && $parts[0] >= 1 && $parts[0] <= 65535) {
-            if ($parts[1] === "tcp" || $parts[1] === "udp") {
-                //$valid_values[] = $value; // If valid, add it to the array of valid values
-                $port_type = $parts[1] === "tcp" ? 1 : 2;
-                $valid_values[] = [
-                    'n' => $parts[0],
-                    'name' => $name,
-                    'port_type' => $port_type,
-                    'online' => 0,
-                    'latency' => 0.0
-                ];
+        // Check if there are three parts
+        if (count($parts) == 3) {
+            // Check if the first part is a number between 1 and 65535
+            if (is_numeric($parts[0]) && $parts[0] >= 1 && $parts[0] <= 65535) {
+                // Check if the second part is either 'tcp' or 'udp'
+                if ($parts[1] === "tcp" || $parts[1] === "udp") {
+                    $port_type = $parts[1] === "tcp" ? 1 : 2;
+                    $name = $parts[2]; // Get the port name
+                    // Add the valid port information to the array
+                    $valid_values[] = [
+                        'n' => $parts[0],
+                        'name' => $name,
+                        'port_type' => $port_type,
+                        'online' => 0,
+                        'latency' => 0.0
+                    ];
+                }
             }
         }
     }

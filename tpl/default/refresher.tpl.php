@@ -69,6 +69,28 @@
                         var elementSelector = "#item_num_" + commandValue;
                         $(elementSelector).hide();
                     }
+                    if (jsonData.command_receive === 'submitScanPorts') {
+                        if (jsonData.command_sucess === 1) {
+                            $('#config_status_msg').html('OK');
+                            $('#host-title').val(jsonData.command_sucess);
+                        } else {
+                            $('#config_status_msg').html('Error');
+                        }
+                    }
+                    if (jsonData.command_receive === 'submitTitle') {
+                        $('#config_status_msg').html('Validated ' + jsonData.command_sucess);
+                        $('#checkports').val(jsonData.command_sucess);
+                    }
+                    if (jsonData.command_receive === 'submitCat') {
+                        if (jsonData.command_sucess === 1) {
+                            $('#config_status_msg').html('Done');
+                            //$('#hostcat_id').find('option').removeAttr('selected');
+                            //$('#hostcat_id').find('option[value="' + jsonData.command_value + '"]').attr('selected', 'selected');
+                            //$('#hostcat_id').val(jsonData.command_value);
+                        } else {
+                            $('#config_status_msg').html('Error');
+                        }
+                    }
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
                             position = jsonData.other_hosts.cfg.place;

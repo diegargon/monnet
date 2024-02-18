@@ -788,9 +788,9 @@ input:checked + .slider:before {
 }
 .host-controls-left{
     float:left;
-    border:0px solid blue;    
+    border:0px solid blue;
 }
-.host-controls-right{    
+.host-controls-right{
     float:right;
     border:0px solid blue;
     margin: 3px 2px 0px 0px;
@@ -1151,7 +1151,14 @@ input:checked + .slider:before {
 #tab9 .frame {
     height: 145px;
 }
-
+#config_status_msg {
+    width:100%;
+    font-size: 12px;
+    font-weight: bold;
+    color: #0E9700;
+    text-align:center;
+    border:0px solid red;
+}
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

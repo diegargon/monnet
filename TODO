@@ -1,17 +1,17 @@
 ** HIGH
-* Poder añadir check host ports
-
-
+* Poder crear host categories.
 ** LOW
-* Filtrar host por vlan
 * Bell options term + onoff pref
 * categories disable, para no mostrar en la barra
 * Señal de nuevo host descubierto
 * Opcion del buscador cambie a buscar elementos en la pagina?
-* tiempo pingeo dependiendo de la categoria
 * SNMP Mac
 * Config parar cronjob, cli  comprueba preferencias stop_cli
-* La bola Online/Offline cambiar la intensidad dependido si cambio su estado en las ultimas X horas 
 * clear cache dir 1week; 
+
+** Undecided
+* tiempo pingeo dependiendo de la categoria?
+* La bola Online/Offline cambiar la intensidad dependido si cambio su estado en las ultimas X horas 
+
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.

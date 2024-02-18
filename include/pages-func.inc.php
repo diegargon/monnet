@@ -204,6 +204,8 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     if (!$host) {
         return false;
     }
+    $categories = new Categories($cfg, $lng, $db);
+    $host['hosts_categories'] = $categories->getByType(1);
 
     $ping_states_query = 'SELECT *
         FROM stats
@@ -277,8 +279,19 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
         unset($host['access_results']);
         //var_dump($host);
     }
+    //formatted ports
+    $host['ports_formated'] = '';
+    if (valid_array($host['ports'])) {
+        $total_elements = count($host['ports']) - 1;
 
-    //Deploy
+        foreach ($host['ports'] as $index => $port) {
+            $host['ports_formated'] .= $port['n'] . '/';
+            $host['ports_formated'] .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
+            $host['ports_formated'] .= '/' . $port['name'];
+            $host['ports_formated'] .= ($index === $total_elements) ? '' : ',';
+        }
+    }
+
     $host['deploy'] = [];
     foreach ($cfg['deploys'] as $deploy) {
         if ($host['os_distribution'] == $deploy['os_distribution']) {

@@ -29,6 +29,7 @@ $lng = [
     'L_DISTRIBUTION' => 'Distribucion',
     'L_DEPLOYS' => 'Deploys',
     'L_DESKTOP' => 'Escritorio',
+    'L_DISPLAY_NAME' => 'Nombre a mostrar',
     //E
     //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
@@ -43,8 +44,10 @@ $lng = [
     'L_HOSTS' => 'Hosts',
     'L_HOST' => 'Host',
     'L_HOST_MSG_DIFF' => 'Host ha cambiado',
-    'L_HOST_BECOME_ON' => 'Host disponible',
-    'L_HOST_BECOME_OFF' => 'Host apagado',
+    'L_HOST_BECOME_ON' => 'Host paso a disponible',
+    'L_HOST_BECOME_OFF' => 'Host se apago',
+    'L_HOST_PORT_BECOME_ON' => 'Host port paso a disponible',
+    'L_HOST_PORT_BECOME_OFF' => 'Host port se apago',
     'L_HOME' => 'Inicio',
     'L_HUMIDITY' => 'Humedad',
     //O
@@ -86,6 +89,8 @@ $lng = [
     'L_PASSWORD' => 'Contraseña',
     'L_PROFILE' => 'Perfil',
     'L_PORT_DOWN' => 'Puerto inacalzable',
+    'L_PORT_LIST' => 'Lista de puertos',
+    'L_PORT_CHECK' => 'Comprobar puertos',
     'L_PWR_ON' => 'Encender',
     'L_PWR_OFF' => 'Apagar',
     'L_PRIVACY' => 'Privacidad',
