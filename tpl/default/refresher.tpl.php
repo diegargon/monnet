@@ -78,8 +78,12 @@
                         }
                     }
                     if (jsonData.command_receive === 'submitTitle') {
-                        $('#config_status_msg').html('Validated ' + jsonData.command_sucess);
-                        $('#checkports').val(jsonData.command_sucess);
+                        if (jsonData.command_sucess) {
+                            $('#config_status_msg').html('Validated:' + jsonData.command_value);
+                        } else {
+                            $('#config_status_msg').html('Error: ' + jsonData.command_value);
+                        }
+                        $('#host-title').val(jsonData.command_value);
                     }
                     if (jsonData.command_receive === 'submitCat') {
                         if (jsonData.command_sucess === 1) {
