@@ -25,6 +25,13 @@ function trigger_update(Log $log, Database $db, float $db_version, float $files_
         $db->query("ALTER TABLE `hosts` CHANGE `warn_msg` `warn_msg` VARCHAR(255) NULL;");
         $db->query("ALTER TABLE `hosts` ADD `token` CHAR(255) NULL AFTER `ports`;");
         $db->query("ALTER TABLE `hosts` ADD `warn_mail` BOOLEAN NOT NULL DEFAULT FALSE AFTER `warn_msg`;");
+        $db->query("UPDATE `hosts` SET `system` = '0' WHERE `system` is NULL;");
+        $db->query("ALTER TABLE `hosts` CHANGE `system` `system` SMALLINT NOT NULL DEFAULT '0';");
+        $db->query("ALTER TABLE `hosts` CHANGE `system` `system_type` SMALLINT NOT NULL DEFAULT '0'; ");
+        $db->query("ALTER TABLE `hosts` CHANGE `os` `os` SMALLINT NOT NULL DEFAULT '0';");
+        $db->query("UPDATE `hosts` SET `os_distribution` = '0' WHERE `os_distribution` is NULL;");
+        $db->query("ALTER TABLE `hosts` CHANGE `os_distribution` `os_distribution` SMALLINT NOT NULL DEFAULT '0';");
+        $db->query("ALTER TABLE `hosts` ADD `manufacture` SMALLINT NOT NULL DEFAULT '0' AFTER `check_method`;");
         $log->info("Update version to 0.33 success");
         $db->query("UPDATE prefs SET pref_value='0.33' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
     }
