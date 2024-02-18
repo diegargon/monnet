@@ -44,7 +44,6 @@ can remove all unnchaged config. Don't rename or modify directly config.defaults
 ## Settting Database
 ```
 /var/www/html# mysql monnet < config/monnet.sql -p
-/var/www/html# mysql monnet < config/monnet-inserts.sql -p
 ```
 
 ## Default user : pwd
