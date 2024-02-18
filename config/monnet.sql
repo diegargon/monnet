@@ -41,9 +41,9 @@ CREATE TABLE `cmd` (
 
 CREATE TABLE `hosts` (
   `id` int NOT NULL,
-  `title` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `title` char(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `hostname` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `ip` char(255) NOT NULL,
+  `ip` char(18) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `category` int NOT NULL DEFAULT '1',
   `mac` char(255) DEFAULT NULL,
   `mac_vendor` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
@@ -64,7 +64,9 @@ CREATE TABLE `hosts` (
   `disable` tinyint NOT NULL DEFAULT '0',
   `warn` tinyint NOT NULL DEFAULT '0',
   `warn_port` tinyint NOT NULL DEFAULT '0',
+  `warn_msg` varchar(255) NOT NULL,
   `fingerprint` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `network` tinyint NOT NULL DEFAULT '1',
   `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ports` varchar(15000) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
@@ -202,7 +204,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES
 (1, 0, 'cli_last_run', '0'),
-(2, 0, 'monnet_version', '0.2'),
+(2, 0, 'monnet_version', '0.32'),
 (3, 0, 'cron_quarter', '0'),
 (4, 0, 'cron_hourly', '0'),
 (5, 0, 'cron_halfday', '0'),
