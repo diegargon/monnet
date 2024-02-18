@@ -222,12 +222,13 @@ if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
     $data['command_sucess'] = 1;
 }
 
-if ($command == 'setHighlight' && isset($command_value) && !empty($object_id)) {
+if ($command == 'setHighlight' && !empty($object_id)) {
 
-    ($command_value == 0) ? $value = 0 : $value = 1;
+    $value = (empty($command_value)) ? 0 : 1;
 
     $hosts->update($object_id, ['highlight' => $value]);
     $data['command_sucess'] = 1;
+    $data['response_msg'] = 'Changed to ' . $value;
 }
 
 if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value)) {

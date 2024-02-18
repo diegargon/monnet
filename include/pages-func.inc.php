@@ -92,32 +92,14 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
             $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
-        if (!empty($vhost['os'])) {
-            $hostscat[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
-            $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
-        } else {
-            $hostscat[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
-            $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
-        }
-        /* Demasiados iconos mejor para details
+        $hostscat[$khost]['manufacture'] = $cfg['manufacture'][$vhost['manufacture']]['name'];
+        $hostscat[$khost]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['manufacture'][$vhost['manufacture']]['img'];
 
-          if (!empty($vhost['os'])) {
-          $hostscat[$khost]['os'] = $cfg['system'][$vhost['os']]['name'];
-          $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
-          } else {
-          $hostscat[$khost]['os'] = $cfg['system'][$vhost['system']]['name'];
-          $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
-          }
-          if (!empty($vhost['os_distribution'])) {
-          $hostscat[$khost]['os_distribution'] = $cfg['system'][$vhost['os_distribution']]['name'];
-          $hostscat[$khost]['os_distribution_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$vhost['os_distribution']]['img'];
-          }
-         */
-        if (!empty($vhost['system'])) {
-            $hostscat[$khost]['system'] = $cfg['system'][$vhost['system']]['name'];
-            $hostscat[$khost]['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
-        }
+        $hostscat[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
+        $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
 
+        $hostscat[$khost]['system_type'] = $cfg['system_type'][$vhost['system_type']]['name'];
+        $hostscat[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system_type'][$vhost['system_type']]['img'];
 
         //Warn icon
         if ($vhost['warn_port']) {
@@ -160,37 +142,23 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
-        if (!empty($vhost['os'])) {
-            $hosts_results[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
-            $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
-        } else {
-            $hosts_results[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
-            $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
-        }
-        /* Demasiados iconos mejor para details
+        $hosts_results[$khost]['manufacture'] = $cfg['manufacture'][$vhost['manufacture']]['name'];
+        $hosts_results[$khost]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['manufacture'][$vhost['manufacture']]['img'];
 
-          if (!empty($vhost['os'])) {
-          $hosts_results[$khost]['os'] = $cfg['system'][$vhost['os']]['name'];
-          $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
-          } else {
-          $hosts_results[$khost]['os'] = $cfg['system'][$vhost['system']]['name'];
-          $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
-          }
-          if (!empty($vhost['os_distribution'])) {
-          $hosts_results[$khost]['os_distribution'] = $cfg['system'][$vhost['os_distribution']]['name'];
-          $hosts_results[$khost]['os_distribution_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$vhost['os_distribution']]['img'];
-          }
-         */
-        if (!empty($vhost['system'])) {
-            $hosts_results[$khost]['system'] = $cfg['system'][$vhost['system']]['name'];
-            $hosts_results[$khost]['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$vhost['system']]['img'];
-        }
+        $hosts_results[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
+        $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
 
+        $hosts_results[$khost]['system_type'] = $cfg['system_type'][$vhost['system_type']]['name'];
+        $hosts_results[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system_type'][$vhost['system_type']]['img'];
 
         //Warn icon
         if ($vhost['warn_port']) {
             $hosts_results[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
-            $hosts_results[$khost]['details'] .= $lng['L_PORT_DOWN'];
+            if (!empty(['warn_msg'])) {
+                $hosts_results[$khost]['details'] .= $vhost['warn_msg'];
+            } else {
+                $hosts_results[$khost]['details'] .= $lng['L_PORT_DOWN'];
+            }
         }
     }
 
@@ -239,20 +207,17 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
         $host['online_image'] = 'tpl/' . $theme . '/img/red2.png';
     }
 
-    if (!empty($host['os'])) {
-        $host['os_name'] = $cfg['os'][$host['os']]['name'];
-        $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$host['os']]['img'];
-    }
+    $host['manufacture_name'] = $cfg['manufacture'][$host['manufacture']]['name'];
+    $host['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['manufacture'][$host['manufacture']]['img'];
 
-    if (!empty($host['system'])) {
-        $host['system_name'] = $cfg['system'][$host['system']]['name'];
-        $host['system_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system'][$host['system']]['img'];
-    }
+    $host['os_name'] = $cfg['os'][$host['os']]['name'];
+    $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$host['os']]['img'];
 
-    if (!empty($host['os_distribution'])) {
-        $host['os_distribution_name'] = $cfg['os_distribution'][$host['os_distribution']]['name'];
-        $host['os_distribution_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$host['os_distribution']]['img'];
-    }
+    $host['system_type_name'] = $cfg['system_type'][$host['system_type']]['name'];
+    $host['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system_type'][$host['system_type']]['img'];
+
+    $host['os_distribution_name'] = $cfg['os_distribution'][$host['os_distribution']]['name'];
+    $host['os_distribution_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$host['os_distribution']]['img'];
 
     if (!empty($host['last_seen'])) {
         $host['f_last_seen'] = utc_to_user_timezone($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);

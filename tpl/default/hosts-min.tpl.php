@@ -23,16 +23,19 @@ if (empty($tdata['hosts'])) {
                     <?php if (!empty($host['warn_mark']) && $host['online'] == 1) { ?>
                         <img class="hosts-online" src="<?= $host['warn_mark'] ?>" alt="online_status" title="<?= $host['warn_msg'] ?>"/>
                     <?php } ?>
-                    <?php if (!empty($host['os_img'])) { ?>
-                        <img class="fab" src="<?= $host['os_image'] ?>" alt="os_img" title="<?= $host['os'] ?>"/>
-                    <?php } ?>
-                    <?php if (!empty($host['os_distribution_image'])) { ?>
-                        <img class="fab" src="<?= $host['os_distribution_image'] ?>" alt="distribution_img" title="<?= $host['os_distribution'] ?>"/>
-                    <?php } ?>
-                    <?php if (!empty($host['system_image'])) { ?>
-                        <img class="fab" src="<?= $host['system_image'] ?>" alt="system_img" title="<?= $host['system'] ?>"/>
+
+                    <?php if (!empty($host['system_type_image'])) { ?>
+                        <img class="fab" src="<?= $host['system_type_image'] ?>" alt="system_img" title="<?= $host['system_type'] ?>"/>
                     <?php } ?>
                     <div class="hosts-title text_shadow_style2"><?= $host['display_name'] ?> </div>
+                    <div class="min-details-hidden">
+                        <?php if (!empty($host['manufacture_image'])) { ?>
+                            <img class="fab" src="<?= $host['manufacture_image'] ?>" alt="os_img" title="<?= $host['manufacture'] ?>"/>
+                        <?php } ?>
+                        <?php if (!empty($host['os_image'])) { ?>
+                            <img class="fab" src="<?= $host['os_image'] ?>" alt="os_img" title="<?= $host['os'] ?>"/>
+                        <?php } ?>
+                    </div>
                 </div>
             </a>
         </div>

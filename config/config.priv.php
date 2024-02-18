@@ -13,8 +13,9 @@ $DEBUG = 1;
 
 $cfg['monnet_version'] = 0.33;
 $cfg['app_name'] = 'monnet';
-/* OS manufactures */
-$cfg['os_manufacture'] = [
+
+/* Manufacture */
+$cfg['manufacture'] = [
     0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
     1 => ['name' => 'Microsoft', 'img' => 'microsoft.png'],
     2 => ['name' => 'Apple Inc.', 'img' => 'apple.png'],
@@ -29,7 +30,19 @@ $cfg['os_manufacture'] = [
     11 => ['name' => 'OpenBSD Project', 'img' => 'openbsd.png'],
     12 => ['name' => 'Samsung Electronics', 'img' => 'samsung.png'],
     13 => ['name' => 'Sony Corporation', 'img' => 'sony.png'],
-    14 => ['name' => 'FreeRTOS', 'img' => 'freertos.png']
+    14 => ['name' => 'FreeRTOS', 'img' => 'freertos.png'],
+    15 => ['name' => 'Meta', 'img' => 'Meta.png'],
+    16 => ['name' => 'Ubuntu', 'img' => 'ubuntu.png'],
+    17 => ['name' => 'Debian', 'img' => 'debian.png'],
+    18 => ['name' => 'CentOS', 'img' => 'centos.png'],
+    19 => ['name' => 'FreeBSD', 'img' => 'freebsd.png'],
+    20 => ['name' => 'OPNSense', 'img' => 'opnsense.png'],
+    21 => ['name' => 'Dlink', 'img' => 'dlink.png'],
+    22 => ['name' => 'Tplink', 'img' => 'tplink.png'],
+    23 => ['name' => 'Mikrotik', 'img' => 'mikrotik.png'],
+    24 => ['name' => 'Supermicro', 'img' => 'supermicro.png'],
+    25 => ['name' => 'VMWare', 'img' => 'wmware.png'],
+    25 => ['name' => 'Proxmox', 'img' => 'proxmox.png'],
 ];
 
 /* OS */
@@ -58,7 +71,8 @@ $cfg['os'] = [
 
 /* Systems */
 
-$cfg['system'] = [
+$cfg['system_type'] = [
+    0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
     1 => ['name' => 'Window Desktop', 'img' => 'windows-desktop.png'],
     2 => ['name' => 'Linux Desktop', 'img' => 'linux-desktop.png'],
     3 => ['name' => 'Iphone', 'img' => 'iphone.png'],
@@ -75,19 +89,13 @@ $cfg['system'] = [
     14 => ['name' => 'Camera', 'img' => 'cam2.png'],
     15 => ['name' => 'FreeBSD', 'img' => 'freebsd.png'],
     16 => ['name' => 'OPNSense', 'img' => 'opnsense.png'],
-    17 => ['name' => 'Proxmox', 'img' => 'linux-server.png'],
+    17 => ['name' => 'Hypevisor', 'img' => 'hypervisor.png'],
 ];
-$cfg['os_distribution'] = [
-    1 => ['name' => 'Microsoft', 'img' => 'microsoft.png'],
-    2 => ['name' => 'Ubuntu', 'img' => 'ubuntu.png'],
-    3 => ['name' => 'Debian', 'img' => 'debian.png'],
-    4 => ['name' => 'CentOS', 'img' => 'centos.png'],
-    5 => ['name' => 'FreeBSD', 'img' => 'freebsd.png'],
-    6 => ['name' => 'OPNSense', 'img' => 'opnsense.png'],
-];
+
 $cfg['versions'] = [
+    0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
     1 => '20.04',
-    1 => '21H1'
+    2 => '21H1'
 ];
 
 $cfg['access_methods'] = [
