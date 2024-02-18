@@ -39,7 +39,7 @@ function check_known_hosts(Database $db, Hosts $hosts) {
         if (valid_array($host_status)) {
             defined('DUMP_VARS') ? $log->debug("Dumping host_status: " . print_r($host_status, true)) : null;
             $hosts->update($host['id'], $host_status);
-            if (!empty($host_status['latency'])) {
+            if (isset($host_status['latency'])) {
                 $ping_latency = $host_status['latency'];
             }
             $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
@@ -97,7 +97,7 @@ function ping_net(Database $db, Hosts $hosts) {
             $mac = trim(get_mac($ip));
             $mac_vendor = '';
             if ($mac) {
-                $set['mac'] = $mac;
+                $set['mac'] = trim($mac);
                 $mac_info = get_mac_vendor($mac);
                 (!empty($mac_info['company'])) ? $set['mac_vendor'] = $mac_info['company'] : $set['mac_vendor'] = '-';
             }
@@ -184,7 +184,7 @@ function check_macs(Hosts $hosts) {
     foreach ($known_hosts as $host) {
         $new_mac = get_mac($host['ip']);
         if (!empty($new_mac) && $host['mac'] != $new_mac) {
-            $update['mac'] = $new_mac;
+            $update['mac'] = trim($new_mac);
             $hosts->update($host['id'], $update);
         }
     }
