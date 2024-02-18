@@ -128,6 +128,22 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $db->toggleField('categories', 'on', ['id' => $command_value]);
     !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
     $tdata['hosts_categories'] = $categories->prepareCats(1);
+    //Networks dropdown
+    $networks_q = $db->selectAll('networks', ['disable' => 0]);
+    $networks = $db->fetchAll($networks_q);
+
+    $networks_selected = 0;
+    foreach ($networks as &$net) {
+        $net_set = $user->getPref('network_select_' . $net['id']);
+        if (($net_set) || $net_set === false) {
+            $net['selected'] = 1;
+            $networks_selected++;
+        }
+    }
+    $tdata['networks'] = $networks;
+    $tdata['networks_selected'] = $networks_selected;
+
+    //
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
     $data['command_sucess'] = 1;
