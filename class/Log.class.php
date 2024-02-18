@@ -28,10 +28,10 @@ Class Log {
         'LOG_DEBUG' => 7, //	debug-level message
     ];
 
-    public function __construct(array $cfg, Database $db, array $lng) {
+    public function __construct(array &$cfg, Database &$db, array $lng) {
         $this->console = false;
-        $this->cfg = $cfg;
-        $this->db = $db;
+        $this->cfg = &$cfg;
+        $this->db = &$db;
         $this->lng = $lng;
     }
 

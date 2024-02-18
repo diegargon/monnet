@@ -16,10 +16,10 @@ Class Web {
     private array $cfg;
     private User $user;
 
-    public function __construct(array $cfg, Database $db, User $user, array $lng) {
-        $this->cfg = $cfg;
-        $this->db = $db;
-        $this->user = $user;
+    public function __construct(array &$cfg, Database &$db, User &$user, array $lng) {
+        $this->cfg = &$cfg;
+        $this->db = &$db;
+        $this->user = &$user;
         $this->lng = $lng;
     }
 

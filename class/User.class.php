@@ -16,9 +16,9 @@ Class User {
     private $user = [];
     private array $prefs = [];
 
-    public function __construct(array $cfg, Database $db) {
-        $this->db = $db;
-        $this->cfg = $cfg;
+    public function __construct(array &$cfg, Database &$db) {
+        $this->db = &$db;
+        $this->cfg = &$cfg;
         if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
             $this->user = $this->getProfile($_SESSION['uid']);
             if (empty($this->user['sid']) || $this->user['sid'] != session_id()) {

@@ -14,8 +14,8 @@ class Frontend {
     private $cfg;
     private $lng;
 
-    public function __construct(array $cfg, array $lng) {
-        $this->cfg = $cfg;
+    public function __construct(array &$cfg, array $lng) {
+        $this->cfg = &$cfg; //& due be order config.priv items in some pages
         $this->lng = $lng;
     }
 

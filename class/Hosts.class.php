@@ -37,10 +37,10 @@ Class Hosts {
     private array $lng;
     private Log $log;
 
-    public function __construct(Log $log, Database $db, array $lng) {
-        $this->db = $db;
+    public function __construct(Log &$log, Database &$db, array $lng) {
+        $this->db = &$db;
         $this->lng = $lng;
-        $this->log = $log;
+        $this->log = &$log;
         $this->getHostsDb();
     }
 

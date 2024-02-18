@@ -17,9 +17,9 @@ class Categories {
     private $cat_types;
     private $lng = [];
 
-    public function __construct(array $cfg, array $lng, Database $db) {
-        $this->cfg = $cfg;
-        $this->db = $db;
+    public function __construct(array &$cfg, array $lng, Database &$db) {
+        $this->cfg = &$cfg;
+        $this->db = &$db;
         $this->lng = $lng;
 
         $results = $db->select('categories', '*');
@@ -64,7 +64,7 @@ class Categories {
 
         $categories_by_type = $this->getByType($type);
 
-         foreach ($categories_by_type as $typecat) {
+        foreach ($categories_by_type as $typecat) {
             if ($typecat['on']) {
                 $by_type_return[] = $typecat;
             }

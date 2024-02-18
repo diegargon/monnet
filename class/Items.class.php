@@ -16,9 +16,9 @@ class Items {
     private $items = [];
     private $categories;
 
-    public function __construct(array $cfg, Database $db, Categories $categories) {
-        $this->cfg = $cfg;
-        $this->db = $db;
+    public function __construct(array &$cfg, Database &$db, Categories $categories) {
+        $this->cfg = &$cfg;
+        $this->db = &$db;
         $this->categories = $categories->getByType(2); //2:items
 
         $results = $db->select('items', '*', null, 'ORDER BY weight');
