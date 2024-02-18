@@ -122,7 +122,6 @@ function cached_img(Log $log, User $user, int $id, string $img_url, $renew = 0) 
     $cache_img_path = $cache_path . '/' . $id . '_' . $file_name;
 
     if (file_exists($cache_img_path) && $renew === 0) {
-        $log->debug("image cached path exists returning " . $cache_img_path);
         return $cache_img_path;
     } else {
         $log->debug("image path NOT exists or renew getting content " . $img_url);
