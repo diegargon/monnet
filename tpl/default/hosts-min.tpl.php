@@ -25,15 +25,15 @@ if (empty($tdata['hosts'])) {
                     <?php } ?>
 
                     <?php if (!empty($host['system_type_image'])) { ?>
-                        <img class="fab" src="<?= $host['system_type_image'] ?>" alt="system_img" title="<?= $host['system_type'] ?>"/>
+                        <img class="fab" src="<?= $host['system_type_image'] ?>" alt="system_img" title="<?= $host['system_type_name'] ?>"/>
                     <?php } ?>
                     <div class="hosts-title text_shadow_style2"><?= $host['display_name'] ?> </div>
                     <div class="min-details-hidden">
                         <?php if (!empty($host['manufacture_image'])) { ?>
-                            <img class="fab" src="<?= $host['manufacture_image'] ?>" alt="os_img" title="<?= $host['manufacture'] ?>"/>
+                            <img class="fab" src="<?= $host['manufacture_image'] ?>" alt="os_img" title="<?= $host['manufacture_name'] ?>"/>
                         <?php } ?>
                         <?php if (!empty($host['os_image'])) { ?>
-                            <img class="fab" src="<?= $host['os_image'] ?>" alt="os_img" title="<?= $host['os'] ?>"/>
+                            <img class="fab" src="<?= $host['os_image'] ?>" alt="os_img" title="<?= $host['os_name'] ?>"/>
                         <?php } ?>
                     </div>
                 </div>

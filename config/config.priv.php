@@ -58,6 +58,8 @@ $cfg['manufacture'] = [
     39 => ['id' => 39, 'name' => 'Check Point Software Technologies', 'img' => 'checkpoint.png'],
     40 => ['id' => 40, 'name' => 'Aruba Networks', 'img' => 'aruba.png'],
     41 => ['id' => 41, 'name' => 'SonicWall', 'img' => 'sonicwall.png'],
+    42 => ['id' => 42, 'name' => 'Truenas', 'img' => 'truenas.png'],
+    43 => ['id' => 43, 'name' => 'Espressif Inc', 'img' => 'espressif.png'],
 ];
 
 /* OS */
@@ -66,7 +68,7 @@ $cfg['os'] = [
     1 => ['id' => 1, 'name' => 'Linux', 'img' => 'linux.png'],
     2 => ['id' => 2, 'name' => 'Windows 10', 'img' => 'windows10.png'],
     3 => ['id' => 3, 'name' => 'FreeBSD', 'img' => 'freebsd.png'],
-    4 => ['id' => 4, 'name' => 'Android', 'img' => '.png'],
+    4 => ['id' => 4, 'name' => 'Android', 'img' => 'android.png'],
     5 => ['id' => 5, 'name' => 'iOS', 'img' => 'ios.png'],
     6 => ['id' => 6, 'name' => 'macOS', 'img' => 'macos.png'],
     7 => ['id' => 7, 'name' => 'Windows 7', 'img' => 'windows7.png'],
@@ -85,8 +87,13 @@ $cfg['os'] = [
     20 => ['id' => 20, 'name' => 'RouterOS', 'img' => 'mikrotik.png'],
     21 => ['id' => 21, 'name' => 'SwitchOS', 'img' => 'mikrotik.png'],
     22 => ['id' => 22, 'name' => 'FortiOS', 'img' => 'fortinet.png'],
-    23 => ['id' => 23, 'name' => 'Truenas', 'img' => 'truenas.png'],
-    24 => ['id' => 24, 'name' => 'Freenas', 'img' => 'freenas.png'],
+    23 => ['id' => 23, 'name' => 'Truenas Core', 'img' => 'truenas.png'],
+    24 => ['id' => 24, 'name' => 'Truenas Scale', 'img' => 'truenas.png'],
+    25 => ['id' => 25, 'name' => 'Freenas', 'img' => 'freenas.png'],
+    26 => ['id' => 26, 'name' => 'Windows 2019', 'img' => 'windows-server.png'],
+    27 => ['id' => 27, 'name' => 'Windows 2016', 'img' => 'windows-server.png'],
+    28 => ['id' => 28, 'name' => 'Windows 2022', 'img' => 'windows-server.png'],
+    29 => ['id' => 29, 'name' => 'Windows 12', 'img' => 'windows-desktop.png'],
 ];
 
 /* Systems */
@@ -106,7 +113,7 @@ $cfg['system_type'] = [
     11 => ['id' => 11, 'name' => 'IOT', 'img' => 'iot.png'],
     12 => ['id' => 12, 'name' => 'Smart Home', 'img' => 'smart-home.png'],
     13 => ['id' => 13, 'name' => 'Wifi AP', 'img' => 'wifi-ap.png'],
-    14 => ['id' => 14, 'name' => 'Camera', 'img' => 'cam2.png'],
+    14 => ['id' => 14, 'name' => 'Security Camera', 'img' => 'cam2.png'],
     15 => ['id' => 15, 'name' => 'NVR', 'img' => 'nvr.png'],
     16 => ['id' => 16, 'name' => 'IPTV/TVBox', 'img' => 'tvbox.png'],
     17 => ['id' => 17, 'name' => 'Hypevisor', 'img' => 'hypervisor.png'],
@@ -114,6 +121,9 @@ $cfg['system_type'] = [
     19 => ['id' => 19, 'name' => 'Switch', 'img' => 'switch.png'],
     20 => ['id' => 20, 'name' => 'Mediacenter', 'img' => 'mediacenter.png'],
     21 => ['id' => 21, 'name' => 'NAS', 'img' => 'nas.png'],
+    22 => ['id' => 22, 'name' => 'IOT Router', 'img' => 'iot-router.png'],
+    23 => ['id' => 23, 'name' => 'P2P', 'img' => 'p2p.png'],
+    24 => ['id' => 24, 'name' => 'Game Console', 'img' => 'gameconsole.png'],
 ];
 
 $cfg['versions'] = [

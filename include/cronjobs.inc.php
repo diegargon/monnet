@@ -49,7 +49,7 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
                     $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
                 }
             } else {
-                $log->warning("No check ports for host {$host['id']}:{$host['ip']}");
+                $log->warning("No check ports for host {$host['id']}:{$host['display_name']}");
             }
         } else { //Ping
             $ping_host_result = ping_known_host($host);
@@ -77,8 +77,7 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
             $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
             $db->insert('stats', $set_ping_stats);
         } else {
-            $log->warning(array2string($host_status));
-            $log->warning("Known host ping status error {$host['id']}:{$host['ip']}");
+            $log->warning("Known host ping status error {$host['id']}:{$host['display_name']}");
         }
     }
     $log->debug('Finish check_known_hosts');
@@ -113,7 +112,7 @@ function ping_net(Database $db, Hosts $hosts) {
                 }
                 if (valid_array($set) && ($idNetwork != $host['network'])) {
                     $db->update('hosts', $set, ['id' => $host['id']]);
-                    $log->warning('Update host network ' . $host['ip'] . ' from ' . $host['network'] . ' to ' . $idNetwork);
+                    $log->warning('Update host network ' . $host['diplay_name'] . ' from ' . $host['network'] . ' to ' . $idNetwork);
                 }
             }
         }
@@ -182,7 +181,7 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0) {
         if ((!empty($host['mac'])) &&
                 (empty($host['mac_vendor']) || $forceall === 1)
         ) {
-            $log->debug("Getting mac vendor for {$host['mac']} (local)");
+            $log->debug("Getting mac vendor for {$host['display_name']}");
             $vendor = get_mac_vendor_local(trim($host['mac']));
             if (empty($vendor)) {
                 $log->debug("Local lookup fail, checking mac online");

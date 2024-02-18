@@ -92,14 +92,18 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
             $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
-        $hostscat[$khost]['manufacture'] = $cfg['manufacture'][$vhost['manufacture']]['name'];
-        $hostscat[$khost]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['manufacture'][$vhost['manufacture']]['img'];
+        $manufacture = get_manufacture_data($cfg, $vhost['manufacture']);
+        $os = get_os_data($cfg, $vhost['os']);
+        $system_type = get_system_type_data($cfg, $vhost['system_type']);
 
-        $hostscat[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
-        $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+        $hostscat[$khost]['manufacture_name'] = $manufacture['name'];
+        $hostscat[$khost]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
 
-        $hostscat[$khost]['system_type'] = $cfg['system_type'][$vhost['system_type']]['name'];
-        $hostscat[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system_type'][$vhost['system_type']]['img'];
+        $hostscat[$khost]['os_name'] = $os['name'];
+        $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+
+        $hostscat[$khost]['system_type_name'] = $system_type['name'];
+        $hostscat[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
         //Warn icon
         if ($vhost['warn_port']) {
@@ -142,14 +146,19 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
             $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
-        $hosts_results[$khost]['manufacture'] = $cfg['manufacture'][$vhost['manufacture']]['name'];
-        $hosts_results[$khost]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['manufacture'][$vhost['manufacture']]['img'];
 
-        $hosts_results[$khost]['os'] = $cfg['os'][$vhost['os']]['name'];
-        $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$vhost['os']]['img'];
+        $manufacture = get_manufacture_data($cfg, $vhost['manufacture']);
+        $os = get_os_data($cfg, $vhost['os']);
+        $system_type = get_system_type_data($cfg, $vhost['system_type']);
 
-        $hosts_results[$khost]['system_type'] = $cfg['system_type'][$vhost['system_type']]['name'];
-        $hosts_results[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system_type'][$vhost['system_type']]['img'];
+        $hosts_results[$khost]['manufacture_name'] = $manufacture['name'];
+        $hosts_results[$khost]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
+
+        $hosts_results[$khost]['os_name'] = $os['name'];
+        $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+
+        $hosts_results[$khost]['system_type_name'] = $system_type['name'];
+        $hosts_results[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
         //Warn icon
         if ($vhost['warn_port']) {
@@ -207,17 +216,19 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
         $host['online_image'] = 'tpl/' . $theme . '/img/red2.png';
     }
 
-    $host['manufacture_name'] = $cfg['manufacture'][$host['manufacture']]['name'];
-    $host['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['manufacture'][$host['manufacture']]['img'];
+    $manufacture = get_manufacture_data($cfg, $host['manufacture']);
+    $os = get_os_data($cfg, $host['os']);
 
-    $host['os_name'] = $cfg['os'][$host['os']]['name'];
-    $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os'][$host['os']]['img'];
+    $system_type = get_system_type_data($cfg, $host['system_type']);
 
-    $host['system_type_name'] = $cfg['system_type'][$host['system_type']]['name'];
-    $host['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['system_type'][$host['system_type']]['img'];
+    $host['manufacture_name'] = $manufacture['name'];
+    $host['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
 
-    $host['os_distribution_name'] = $cfg['os_distribution'][$host['os_distribution']]['name'];
-    $host['os_distribution_image'] = 'tpl/' . $theme . '/img/icons/' . $cfg['os_distribution'][$host['os_distribution']]['img'];
+    $host['os_name'] = $os['name'];
+    $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+
+    $host['system_type_name'] = $system_type['name'];
+    $host['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
     if (!empty($host['last_seen'])) {
         $host['f_last_seen'] = utc_to_user_timezone($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);
@@ -257,12 +268,40 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
         }
     }
 
-    $host['deploy'] = [];
-    foreach ($cfg['deploys'] as $deploy) {
-        if ($host['os_distribution'] == $deploy['os_distribution']) {
-            $host['deploys'][] = $deploy;
+    /*
+      $host['deploy'] = [];
+      foreach ($cfg['deploys'] as $deploy) {
+      if ($host['os_distribution'] == $deploy['os_distribution']) {
+      $host['deploys'][] = $deploy;
+      }
+      }
+     */
+    return $host;
+}
+
+function get_manufacture_data(array $cfg, int $id) {
+    foreach ($cfg['manufacture'] as $manufacture) {
+        if ($manufacture['id'] == $id) {
+            return $manufacture;
         }
     }
+    return false;
+}
 
-    return $host;
+function get_os_data(array $cfg, int $id) {
+    foreach ($cfg['os'] as $os) {
+        if ($os['id'] == $id) {
+            return $os;
+        }
+    }
+    return false;
+}
+
+function get_system_type_data(array $cfg, int $id) {
+    foreach ($cfg['system_type'] as $system_type) {
+        if ($system_type['id'] == $id) {
+            return $system_type;
+        }
+    }
+    return false;
 }

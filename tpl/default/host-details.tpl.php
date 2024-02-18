@@ -239,33 +239,33 @@
                 </div>
                 <div class="">
                     <select id="manufacture">
-                        <?php foreach ($cfg['manufacture'] as $kmanufacture => $manufacture): ?>
+                        <?php foreach ($cfg['manufacture'] as $manufacture): ?>
                             <?php
-                            $selected = ($kmanufacture == $tdata['host_details']['manufacture']) ? ' selected=1 ' : '';
+                            $selected = ($manufacture['id'] == $tdata['host_details']['manufacture']) ? ' selected=1 ' : '';
                             ?>
-                            <option value="<?= $kmanufacture ?>"<?= $selected ?>><?= $manufacture['name'] ?></option>
+                            <option value="<?= $manufacture['id'] ?>"<?= $selected ?>><?= $manufacture['name'] ?></option>
                         <?php endforeach; ?>
                     </select>
                     <button id="submitManufacture"><?= $lng['L_SEND'] ?></button>
                 </div>
                 <div class="">
                     <select id="os">
-                        <?php foreach ($cfg['os'] as $kos => $os): ?>
+                        <?php foreach ($cfg['os'] as $os): ?>
                             <?php
-                            $selected = ($kos == $tdata['host_details']['os']) ? ' selected=1 ' : '';
+                            $selected = ($os['id'] == $tdata['host_details']['os']) ? ' selected=1 ' : '';
                             ?>
-                            <option value="<?= $kos ?>"<?= $selected ?>><?= $os['name'] ?></option>
+                            <option value="<?= $os['id'] ?>"<?= $selected ?>><?= $os['name'] ?></option>
                         <?php endforeach; ?>
                     </select>
                     <button id="submitOS"><?= $lng['L_SEND'] ?></button>
                 </div>
                 <div class="">
                     <select id="system_type">
-                        <?php foreach ($cfg['system_type'] as $ksystem_type => $system_type): ?>
+                        <?php foreach ($cfg['system_type'] as $system_type): ?>
                             <?php
-                            $selected = ($ksystem_type == $tdata['host_details']['system_type']) ? ' selected=1 ' : '';
+                            $selected = ($system_type['id'] == $tdata['host_details']['system_type']) ? ' selected=1 ' : '';
                             ?>
-                            <option value="<?= $ksystem_type ?>"<?= $selected ?>><?= $system_type['name'] ?></option>
+                            <option value="<?= $system_type['id'] ?>"<?= $selected ?>><?= $system_type['name'] ?></option>
                         <?php endforeach; ?>
                     </select>
                     <button id="submitSystemType"><?= $lng['L_SEND'] ?></button>
@@ -278,7 +278,7 @@
         <!-- TODO DISABLED -->
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -286,11 +286,11 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <option value="0"></option>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
@@ -304,10 +304,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="log_line"><?= $log ?></div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
         <?php }
         ?>
         <!-- /TODO DISABLED -->

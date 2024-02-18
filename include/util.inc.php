@@ -59,6 +59,15 @@ function order_date(array &$ary) {
     });
 }
 
+function order_name(array &$ary) {
+    usort($ary, function ($a, $b) {
+        $itemA = $a['name'];
+        $itemB = $b['name'];
+
+        return ($itemA < $itemB) ? -1 : 1;
+    });
+}
+
 function base_url(string $url) {
     $parsed_url = parse_url($url);
 
