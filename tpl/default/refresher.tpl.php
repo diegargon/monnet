@@ -87,10 +87,31 @@
                     }
                     if (jsonData.command_receive === 'submitCat') {
                         if (jsonData.command_sucess === 1) {
-                            $('#config_status_msg').html('Done');
+                            $('#config_status_msg').html(jsonData.response_msg);
                             //$('#hostcat_id').find('option').removeAttr('selected');
                             //$('#hostcat_id').find('option[value="' + jsonData.command_value + '"]').attr('selected', 'selected');
                             //$('#hostcat_id').val(jsonData.command_value);
+                        } else {
+                            $('#config_status_msg').html('Error');
+                        }
+                    }
+                    if (jsonData.command_receive === 'submitManufacture') {
+                        if (jsonData.command_sucess === 1) {
+                            $('#config_status_msg').html(jsonData.response_msg);
+                        } else {
+                            $('#config_status_msg').html('Error');
+                        }
+                    }
+                    if (jsonData.command_receive === 'submitOS') {
+                        if (jsonData.command_sucess === 1) {
+                            $('#config_status_msg').html(jsonData.response_msg);
+                        } else {
+                            $('#config_status_msg').html('Error');
+                        }
+                    }
+                    if (jsonData.command_receive === 'submitSystemType') {
+                        if (jsonData.command_sucess === 1) {
+                            $('#config_status_msg').html(jsonData.response_msg);
                         } else {
                             $('#config_status_msg').html('Error');
                         }

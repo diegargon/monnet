@@ -105,7 +105,27 @@ $(document).ready(function () {
         }
     });
 
-
+    $(document).on("click", "#submitManufacture", function () {
+        var mValue = $('#manufacture').val();
+        var host_id = $('#host_id').val();
+        if (mValue && host_id) {
+            refresh('submitManufacture', mValue, host_id);
+        }
+    });
+    $(document).on("click", "#submitOS", function () {
+        var osValue = $('#os').val();
+        var host_id = $('#host_id').val();
+        if (osValue && host_id) {
+            refresh('submitOS', osValue, host_id);
+        }
+    });
+    $(document).on("click", "#submitSystemType", function () {
+        var stValue = $('#system_type').val();
+        var host_id = $('#host_id').val();
+        if (stValue && host_id) {
+            refresh('submitSystemType', stValue, host_id);
+        }
+    });
     //Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {

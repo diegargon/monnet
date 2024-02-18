@@ -112,6 +112,7 @@ if ($command == 'submitTitle' && !empty($object_id) && is_numeric($object_id)) {
     $force_host_reload = 1;
 }
 
+// Change Host Cat
 if ($command == 'submitCat' && !empty($object_id) && is_numeric($object_id)) {
     $sucess = 0;
     if (!empty($command_value)) {
@@ -119,10 +120,46 @@ if ($command == 'submitCat' && !empty($object_id) && is_numeric($object_id)) {
         $sucess = 1;
     }
     $data['command_sucess'] = $sucess;
+    $data['response_msg'] = 'Category changed to ' . $command_value;
     $force_host_reload = 1;
 }
 
-/* Host Cat */
+
+if ($command == 'submitManufacture' && !empty($object_id) && is_numeric($object_id)) {
+    $sucess = 0;
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['manufacture' => $command_value]);
+        $sucess = 1;
+    }
+    $data['command_sucess'] = $sucess;
+    $data['response_msg'] = 'Manufacture changed to ' . $command_value;
+    $force_host_reload = 1;
+}
+
+if ($command == 'submitOS' && !empty($object_id) && is_numeric($object_id)) {
+    $sucess = 0;
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['os' => $command_value]);
+        $sucess = 1;
+    }
+    $data['command_sucess'] = $sucess;
+    $data['response_msg'] = 'OS changed to ' . $command_value;
+    $force_host_reload = 1;
+}
+
+if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_id)) {
+    $sucess = 0;
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['system_type' => $command_value]);
+        $sucess = 1;
+    }
+    $data['command_sucess'] = $sucess;
+    $data['response_msg'] = 'System Type changed to ' . $command_value;
+    $force_host_reload = 1;
+}
+
+
+/* Show Host Cat */
 
 if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
     $db->toggleField('categories', 'on', ['id' => $command_value]);
