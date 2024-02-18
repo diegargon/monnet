@@ -10,6 +10,7 @@
 * SNMP Mac
 * Config parar cronjob, cli  comprueba preferencias stop_cli
 * clear cache dir 1week; 
+* perhost email warn
 
 ** Undecided
 * tiempo pingeo dependiendo de la categoria?
