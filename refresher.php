@@ -193,7 +193,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
     if ($user->getPref('show_highlight_hosts_status')) {
         $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);
         $highlight_hosts_count = 0;
-        if ($hosts_view) {
+        if (valid_array($hosts_view)) {
             $highlight_hosts_count = count($hosts_view);
             $tdata = [];
             $tdata['hosts'] = $hosts_view;
@@ -207,18 +207,19 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
         //$hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 0);
         !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
         $hosts_view = get_listcat_hosts($cfg, $hosts, $user, $lng, $categories);
-        $shown_hosts_count = count($hosts_view);
-        $hosts_totals_count = $hosts->totals;
-        $shown_hosts_count = $shown_hosts_count + $highlight_hosts_count;
-
-        $host_on = $hosts->on;
-        $host_off = $hosts->off;
-        $tdata = [];
-        $tdata['hosts'] = $hosts_view;
-        $tdata['container-id'] = 'other-hosts';
-        $tdata['head-title'] = $lng['L_OTHERS'];
-        $data['other_hosts']['cfg']['place'] = '#host_place';
-        $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
+        if (valid_array($hosts_view)) {
+            $shown_hosts_count = count($hosts_view);
+            $hosts_totals_count = $hosts->totals;
+            $shown_hosts_count = $shown_hosts_count + $highlight_hosts_count;
+            $host_on = $hosts->on;
+            $host_off = $hosts->off;
+            $tdata = [];
+            $tdata['hosts'] = $hosts_view;
+            $tdata['container-id'] = 'other-hosts';
+            $tdata['head-title'] = $lng['L_OTHERS'];
+            $data['other_hosts']['cfg']['place'] = '#host_place';
+            $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
+        }
     }
 }
 
@@ -226,7 +227,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
 if ($command === 'host-details' && is_numeric($command_value)) {
     $host_id = $command_value;
     $host_details = get_host_detail_view_data($db, $cfg, $hosts, $user, $lng, $host_id);
-    if ($host_details) {
+    if (valid_array($host_details)) {
         $tdata['host_details'] = $host_details;
         if (!empty($host_details['ping_stats'])) {
             $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time', $host_details['ping_stats']);
@@ -250,8 +251,8 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         unset($tdata['host_details']['ping_stats']);
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
+        $data['command_sucess'] = 1;
     }
-    $data['command_sucess'] = 1;
 }
 
 if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
@@ -272,7 +273,7 @@ if ($command == 'setHighlight' && !empty($object_id)) {
 }
 
 if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value)) {
-    //$db->delete('items', ['id' => $command_value], 'LIMIT 1');
+    $db->delete('items', ['id' => $command_value], 'LIMIT 1');
     $data['command_sucess'] = 1;
 }
 
@@ -280,12 +281,14 @@ if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($comman
 if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {
     $host = $hosts->getHostById($command_value);
 
-    if (!empty($host['mac'])) {
+    if (valid_array($host) && !empty($host['mac'])) {
         sendWOL($host['mac']);
+        $data['command_sucess'] = 1;
     } else {
-        $log->warning("Host {$host['ip']} has not mac address");
+        $err_msg = "Host {$host['ip']} has not mac address";
+        $log->warning($err_msg);
+        $data['command_error_msg'] = $err_msg;
     }
-    $data['command_sucess'] = 1;
 }
 if ($command == 'power_off' && !empty($command_value) && is_numeric($command_value)) {
     $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 2, 'hid' => $command_value], 'LIMIT 1');
@@ -296,7 +299,6 @@ if ($command == 'power_off' && !empty($command_value) && is_numeric($command_val
     }
 }
 if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value)) {
-
     $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 1, 'hid' => $command_value], 'LIMIT 1');
     $coincidence = $db->fetchAll($result);
 

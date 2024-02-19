@@ -1,6 +1,7 @@
 ** HIGH
 * Poder crear host categories.
 * Host down o host changes on/off lanzar un recheck
+* Parpadear verde/rojo cuando un host cambie
 
 ** LOW
 * Bell options term + onoff pref

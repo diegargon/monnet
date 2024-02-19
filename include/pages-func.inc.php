@@ -45,15 +45,18 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
 
     $cats_on = $cats->getOnByType(1);
     if ($cats_on === false) {
-        return $hostscat;
+        return false;
     }
-
     //Get Host for each ON category
     foreach ($cats_on as $cat) {
         $hosts_cat = $hosts->getHostsByCat($cat['id']);
         if (valid_array($hosts_cat)) {
             $hostscat = array_merge($hostscat, $hosts_cat);
         }
+    }
+
+    if (!valid_array($hostscat)) {
+        return false;
     }
 
     $theme = $user->getTheme();
@@ -178,10 +181,12 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     global $log;
 
     $host = $hosts->getHostById($hid);
-    if (!$host) {
+    $categories = new Categories($cfg, $lng, $db);
+
+    if (!valid_array($host) || !valid_array($categories)) {
         return false;
     }
-    $categories = new Categories($cfg, $lng, $db);
+
     $host['hosts_categories'] = $categories->getByType(1);
 
     $ping_states_query = 'SELECT *
