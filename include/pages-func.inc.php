@@ -108,6 +108,22 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
         $hostscat[$khost]['system_type_name'] = $system_type['name'];
         $hostscat[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
+        $hostscat[$khost]['glow'] = '';
+        /*
+          $date_now = new DateTime();
+          $update_time = new DateTime($vhost['updated']);
+          $diff = $date_now->diff($update_time);
+          $minutes_diff = $diff->i;
+
+
+          if ($minutes_diff < 15) {
+          if ($vhost['online']) {
+          $hostscat[$khost]['glow'] = 'host-glow-on';
+          } else {
+          $hostscat[$khost]['glow'] = 'host-glow-off';
+          }
+          }
+         */
         //Warn icon
         if ($vhost['warn_port']) {
             $hostscat[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
@@ -163,6 +179,7 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
         $hosts_results[$khost]['system_type_name'] = $system_type['name'];
         $hosts_results[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
+        $hosts_results[$khost]['glow'] = '';
         //Warn icon
         if ($vhost['warn_port']) {
             $hosts_results[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
@@ -183,7 +200,7 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     $host = $hosts->getHostById($hid);
     $categories = new Categories($cfg, $lng, $db);
 
-    if (!valid_array($host) || !valid_array($categories)) {
+    if (!valid_array($host)) {
         return false;
     }
 

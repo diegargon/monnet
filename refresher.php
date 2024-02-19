@@ -252,6 +252,8 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_sucess'] = 1;
+    } else {
+        $data['command_error_msg'] = 'Invalid array';
     }
 }
 

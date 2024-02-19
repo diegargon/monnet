@@ -18,7 +18,7 @@ if (empty($tdata['hosts'])) {
     <?php foreach ($tdata['hosts'] as $host) { ?>
         <div id="hosts-container" class="hosts-container">
             <a onclick="refresh('host-details', <?= $host['id'] ?>)" href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['details'] ?>">
-                <div class="hosts-thumb shadow1">
+                <div class="hosts-thumb shadow1 <?= $host['glow'] ?> ">
                     <img class="hosts-online" src="<?= $host['online_image'] ?>" alt="online_status" title="<?= $host['title_online'] ?>"/>
                     <?php if (!empty($host['warn_mark']) && $host['online'] == 1) { ?>
                         <img class="hosts-online" src="<?= $host['warn_mark'] ?>" alt="online_status" title="<?= $host['warn_msg'] ?>"/>

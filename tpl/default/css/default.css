@@ -529,6 +529,12 @@ input:checked + .slider:before {
     align-items: center;
     padding: 1px;
 }
+.host-glow-off {
+    background-color: rgb(49, 36, 36);
+}
+.host-glow-on {
+    background-color: rgb(26, 38, 31);
+}
 .hosts-title {
     display: inline-block;
     padding: 0;
