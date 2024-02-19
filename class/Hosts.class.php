@@ -101,6 +101,7 @@ Class Hosts {
     function insert(array $host) {
         $this->db->insert('hosts', $host);
         $host_id = $this->db->insertID();
+        $host['id'] = $host_id;
         $hostlog = $this->getDisplayName($host);
         if (!empty($host['mac_vendor']) && $host['mac_vendor'] !== '-') {
             $hostlog .= ' [' . $host['mac_vendor'] . ']';
