@@ -24,7 +24,7 @@ chdir($ROOT_PATH);
 require_once('include/common.inc.php');
 require_once('include/util.inc.php');
 
-isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
+isset($argv[1]) && ($argv[1] == '-console' || $argv[1] == '--console') ? $log->setConsole(true) : null;
 
 $log->debug("Starting {$cfg['app_name']} CLI");
 
