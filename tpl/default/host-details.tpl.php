@@ -238,6 +238,7 @@
                     <button id="submitPorts"><?= $lng['L_SEND'] ?></button>
                 </div>
                 <div class="">
+                    <label for="manufacture"><?= $lng['L_MANUFACTURE'] ?>: </label><br/>
                     <select id="manufacture">
                         <?php foreach ($cfg['manufacture'] as $manufacture): ?>
                             <?php
@@ -249,6 +250,7 @@
                     <button id="submitManufacture"><?= $lng['L_SEND'] ?></button>
                 </div>
                 <div class="">
+                    <label for="os"><?= $lng['L_OS'] ?>: </label><br/>
                     <select id="os">
                         <?php foreach ($cfg['os'] as $os): ?>
                             <?php
@@ -260,6 +262,7 @@
                     <button id="submitOS"><?= $lng['L_SEND'] ?></button>
                 </div>
                 <div class="">
+                    <label for="system_type"><?= $lng['L_SYSTEM_TYPE'] ?>: </label><br/>
                     <select id="system_type">
                         <?php foreach ($cfg['system_type'] as $system_type): ?>
                             <?php

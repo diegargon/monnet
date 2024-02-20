@@ -201,6 +201,8 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
             $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
             $data['highlight_hosts']['cfg']['place'] = '#host_place';
+        } else {
+            $data['command_error_msg'] .= 'Invalid highlight host data';
         }
     }
     if ($user->getPref('show_other_hosts_status')) {
@@ -219,6 +221,8 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $tdata['head-title'] = $lng['L_OTHERS'];
             $data['other_hosts']['cfg']['place'] = '#host_place';
             $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
+        } else {
+            $data['command_error_msg'] .= 'Invalid other host data' . print_r($hosts_view, true);
         }
     }
 }
@@ -253,7 +257,7 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_sucess'] = 1;
     } else {
-        $data['command_error_msg'] = 'Invalid array';
+        $data['command_error_msg'] .= 'Invalid host-details array';
     }
 }
 
@@ -289,7 +293,7 @@ if ($command == 'power_on' && !empty($command_value) && is_numeric($command_valu
     } else {
         $err_msg = "Host {$host['ip']} has not mac address";
         $log->warning($err_msg);
-        $data['command_error_msg'] = $err_msg;
+        $data['command_error_msg'] .= $err_msg;
     }
 }
 if ($command == 'power_off' && !empty($command_value) && is_numeric($command_value)) {

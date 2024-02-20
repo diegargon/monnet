@@ -74,6 +74,7 @@ $lng = [
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',
+    'L_MANUFACTURE' => 'Manufacture',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',
@@ -111,6 +112,7 @@ $lng = [
     'L_SERVERS' => 'Servers',
     'L_SHOWED' => 'Mostrando',
     'L_SCAN' => 'Scan',
+    'L_SYSTEM_TYPE' => 'Tipo sistema',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',

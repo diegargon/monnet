@@ -68,7 +68,7 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
         }
         //Discard hidden networks
         $host_network_pref = 'network_select_' . $host['network'];
-        if ($user->getPref($host_network_pref) == 0) {
+        if ($user->getPref($host_network_pref) === 0) {
             unset($hostscat[$khost]);
         }
     }

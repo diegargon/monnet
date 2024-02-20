@@ -767,7 +767,7 @@ input:checked + .slider:before {
     width:100%;
     border:0px solid #0E9700;
     margin: 0;
-    padding: 0;
+    padding: 5px 0px 5px 5px;
 }
 .bookmarks-tab-content.active {
     display: grid;
