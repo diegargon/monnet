@@ -179,7 +179,7 @@ Class Filters {
             return false;
         }
 
-        return true;
+        return $val;
     }
 
     // AZaz
