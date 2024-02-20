@@ -60,6 +60,14 @@ $cfg['manufacture'] = [
     41 => ['id' => 41, 'name' => 'SonicWall', 'img' => 'sonicwall.png'],
     42 => ['id' => 42, 'name' => 'Truenas', 'img' => 'truenas.png'],
     43 => ['id' => 43, 'name' => 'Espressif Inc', 'img' => 'espressif.png'],
+    44 => ['id' => 44, 'name' => 'Kyocera', 'img' => 'unknown.png'],
+    45 => ['id' => 45, 'name' => 'Canon', 'img' => 'unknown.png'],
+    46 => ['id' => 46, 'name' => 'Brother', 'img' => 'unknown.png'],
+    47 => ['id' => 47, 'name' => 'Epson', 'img' => 'unknown.png'],
+    48 => ['id' => 48, 'name' => 'Xerox', 'img' => 'unknown.png'],
+    49 => ['id' => 49, 'name' => 'Lexmark', 'img' => 'unknown.png'],
+    50 => ['id' => 50, 'name' => 'Ricoh', 'img' => 'unknown.png'],
+    51 => ['id' => 51, 'name' => 'Konica Minolta', 'img' => 'unknown.png'],
 ];
 
 /* OS */
@@ -71,7 +79,7 @@ $cfg['os'] = [
     4 => ['id' => 4, 'name' => 'Android', 'img' => 'android.png'],
     5 => ['id' => 5, 'name' => 'iOS', 'img' => 'ios.png'],
     6 => ['id' => 6, 'name' => 'macOS', 'img' => 'macos.png'],
-    7 => ['id' => 7, 'name' => 'Windows 7', 'img' => 'windows7.png'],
+    7 => ['id' => 7, 'name' => 'Windows 7', 'img' => 'windows10.png'],
     8 => ['id' => 8, 'name' => 'Windows 8/8.1', 'img' => 'windows8.png'],
     9 => ['id' => 9, 'name' => 'Unix', 'img' => 'unix.png'],
     10 => ['id' => 10, 'name' => 'OpenBSD', 'img' => 'openbsd.png'],
@@ -93,7 +101,9 @@ $cfg['os'] = [
     26 => ['id' => 26, 'name' => 'Windows 2019', 'img' => 'windows-server.png'],
     27 => ['id' => 27, 'name' => 'Windows 2016', 'img' => 'windows-server.png'],
     28 => ['id' => 28, 'name' => 'Windows 2022', 'img' => 'windows-server.png'],
-    29 => ['id' => 29, 'name' => 'Windows 12', 'img' => 'windows-desktop.png'],
+    29 => ['id' => 29, 'name' => 'Windows 11', 'img' => 'windows-desktop.png'],
+    30 => ['id' => 30, 'name' => 'DSM', 'img' => 'dsm.png'],
+    31 => ['id' => 31, 'name' => 'ArubaOS', 'img' => 'unknown.png'],
 ];
 
 /* Systems */
@@ -124,6 +134,8 @@ $cfg['system_type'] = [
     22 => ['id' => 22, 'name' => 'IOT Router', 'img' => 'iot-router.png'],
     23 => ['id' => 23, 'name' => 'P2P', 'img' => 'p2p.png'],
     24 => ['id' => 24, 'name' => 'Game Console', 'img' => 'gameconsole.png'],
+    25 => ['id' => 25, 'name' => 'Printer', 'img' => 'printer.png'],
+    26 => ['id' => 26, 'name' => 'Printer Server', 'img' => 'printer-server.png'],
 ];
 
 $cfg['versions'] = [
