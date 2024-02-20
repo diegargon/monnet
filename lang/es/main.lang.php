@@ -96,6 +96,8 @@ $lng = [
     'L_PWR_OFF' => 'Apagar',
     'L_PRIVACY' => 'Privacidad',
     'L_PHONE' => 'Phone',
+    'L_PRINTER' => 'Impresora',
+    'L_PRINTERS' => 'Impresoras',
     //R
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',
