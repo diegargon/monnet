@@ -24,7 +24,7 @@ $cfg['manufacture'] = [
     5 => ['id' => 5, 'name' => 'The Linux Foundation', 'img' => 'linuxfoundation.png'],
     6 => ['id' => 6, 'name' => 'Red Hat', 'img' => 'redhat.png'],
     7 => ['id' => 7, 'name' => 'IBM', 'img' => 'ibm.png'],
-    8 => ['id' => 8, 'name' => 'Hewlett Packard Enterprise', 'img' => 'hpe.png'],
+    8 => ['id' => 8, 'name' => 'Hewlett Packard', 'img' => 'hp.png'],
     9 => ['id' => 9, 'name' => 'FreeBSD Foundation', 'img' => 'freebsd.png'],
     10 => ['id' => 10, 'name' => 'Oracle Corporation', 'img' => 'oracle.png'],
     11 => ['id' => 11, 'name' => 'OpenBSD Project', 'img' => 'openbsd.png'],
@@ -41,7 +41,7 @@ $cfg['manufacture'] = [
     22 => ['id' => 22, 'name' => 'Tplink', 'img' => 'tplink.png'],
     23 => ['id' => 23, 'name' => 'Mikrotik', 'img' => 'mikrotik.png'],
     24 => ['id' => 24, 'name' => 'Supermicro', 'img' => 'supermicro.png'],
-    25 => ['id' => 25, 'name' => 'VMWare', 'img' => 'vmware.png'],
+    //25 => ['id' => 25, 'name' => '', 'img' => 'unknown.png'],
     26 => ['id' => 26, 'name' => 'Proxmox', 'img' => 'proxmox.png'],
     27 => ['id' => 27, 'name' => 'Tenda', 'img' => 'tenda.png'],
     28 => ['id' => 28, 'name' => 'Fortinet', 'img' => 'fortinet.png'],
@@ -104,6 +104,7 @@ $cfg['os'] = [
     29 => ['id' => 29, 'name' => 'Windows 11', 'img' => 'windows-desktop.png'],
     30 => ['id' => 30, 'name' => 'DSM', 'img' => 'dsm.png'],
     31 => ['id' => 31, 'name' => 'ArubaOS', 'img' => 'unknown.png'],
+    32 => ['id' => 31, 'name' => 'VMware', 'img' => 'vmware.png'],
 ];
 
 /* Systems */

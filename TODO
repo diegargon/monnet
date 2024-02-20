@@ -1,8 +1,9 @@
 ** HIGH
+* comprobar image link resource devuelve true
 * Poder crear host categories.
 * Host down o host changes on/off lanzar un recheck
 * Parpadear verde/rojo cuando un host cambie
-
+* host-details configuracion (select) enviar al cambiar 
 ** LOW
 * Bell options term + onoff pref
 * categories disable, para no mostrar en la barra
