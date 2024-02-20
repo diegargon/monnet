@@ -66,6 +66,13 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
         if ($user->getPref('show_highlight_hosts_status') && $host['highlight']) {
             unset($hostscat[$khost]);
         }
+
+        //Filter unslect network
+        $pref_value = $user->getPref('network_select_' . $host['network']);
+        if ($pref_value === '0') { //pref_value is string
+            unset($hostscat[$khost]);
+        }
+
         //Discard hidden networks
         $host_network_pref = 'network_select_' . $host['network'];
         if ($user->getPref($host_network_pref) === 0) {
