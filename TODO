@@ -6,8 +6,7 @@
 * Añadir a detalles vlan basado en network
 * Notas no funciona si borras todo por empty
 * Bastionado / Antivirus / Compliant
-
-
+* Crear Token de equipo
 
 ** LOW
 * Bell options term + onoff pref

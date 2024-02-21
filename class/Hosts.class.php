@@ -169,6 +169,20 @@ Class Hosts {
     }
 
     private function getHostsDb() {
+        $query_nets = 'SELECT * FROM networks';
+        $net_results = $this->db->query($query_nets);
+        $network = [];
+        foreach ($net_results as $net) {
+            $network[$net['id']] = [
+                'id' => (int) $net['id'],
+                'network' => $net['network'],
+                'name' => $net['name'],
+                'vlan' => (int) $net['vlan'],
+                'scan' => (int) $net['scan'],
+                'disable' => (int) $net['disable'],
+            ];
+        }
+
         $query_hosts = 'SELECT * FROM hosts';
         $results = $this->db->query($query_hosts);
         if (!$results) {
@@ -179,10 +193,15 @@ Class Hosts {
 
         foreach ($hosts as $host) {
             $id = $host['id'];
+            $net_id = $host['network'];
+            $host['network'] = $network[$net_id]['network'];
+            $host['network_name'] = $network[$net_id]['name'];
+            $host['network_vlan'] = $network[$net_id]['vlan'];
+            $host['display_name'] = $this->getDisplayName($host);
+
             $this->hosts[$id] = $host;
             $host['online'] == 1 ? ++$this->on : ++$this->off;
             $host['highlight'] ? $this->highlight_total++ : null;
-            $this->hosts[$id]['display_name'] = $this->getDisplayName($host);
 
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
             if (!empty($this->hosts[$id]['ports'])) {

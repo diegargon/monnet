@@ -24,34 +24,33 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
     foreach ($db_hosts as $host) {
         $host_status = [];
 
-        if ($host['check_method'] == 2) { //TCP
+        if ($host['check_method'] == 2 && valid_array($host['ports'])) { //TCP
             $log->debug("Pinging host ports {$host['ip']}");
-            if (!empty($host['ports']) || valid_array($host['ports'])) {
+            $ping_host_result = ping_host_ports($host);
+            if ($ping_host_result['online'] == 0) {
+                //recheck
                 $ping_host_result = ping_host_ports($host);
-                if ($ping_host_result['online'] == 0) {
-                    //recheck
-                    $ping_host_result = ping_host_ports($host);
+            }
+            //Ports are down, check host with ping
+            if ($ping_host_result['online'] == 0) {
+                $host_ping = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
+                if ($host_ping['isAlive']) {
+                    $ping_host_status['online'] = 1;
+                    $ping_host_status = $host_ping['latency'];
+                    $ping_host_status['last_seen'] = utc_date_now();
                 }
-                //Ports are down, check host with ping
-                if ($ping_host_result['online'] == 0) {
-                    $host_ping = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
-                    if ($host_ping['isAlive']) {
-                        $ping_host_status['online'] = 1;
-                        $ping_host_status = $host_ping['latency'];
-                        $ping_host_status['last_seen'] = utc_date_now();
-                    }
-                }
-                (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
+            }
+            (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
 
-                if ($ping_host_result['online'] == 1 && $host['online'] == 0) {
-                    $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
-                } else if ($ping_host_result['online'] == 0 && $host['online'] == 1) {
-                    $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
-                }
-            } else {
-                $log->warning("No check ports for host {$host['id']}:{$host['display_name']}");
+            if ($ping_host_result['online'] == 1 && $host['online'] == 0) {
+                $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
+            } else if ($ping_host_result['online'] == 0 && $host['online'] == 1) {
+                $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
             }
         } else { //Ping
+            if ($host['check_method'] == 2 && !valid_array($host['ports'])) {
+                $log->warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
+            }
             $ping_host_result = ping_known_host($host);
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) {
                 //recheck

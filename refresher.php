@@ -222,7 +222,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $data['other_hosts']['cfg']['place'] = '#host_place';
             $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
         } else {
-            $data['command_error_msg'] .= 'Invalid other host data' . print_r($hosts_view, true);
+            $data['command_error_msg'] .= 'Invalid or empty other host data' . print_r($hosts_view, true);
         }
     }
 }

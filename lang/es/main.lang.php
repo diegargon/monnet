@@ -80,6 +80,7 @@ $lng = [
     'L_NOTES' => 'Notas',
     'L_NAME' => 'Nombre',
     'L_NETWORK' => 'Red',
+    'L_NETWORK_NAME' => 'Nombre de la red',
     //O
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
