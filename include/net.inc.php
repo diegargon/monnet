@@ -72,7 +72,7 @@ function ping_known_host(array $host) {
     $time_now = utc_date_now();
 
     if (is_local_ip($host['ip'])) {
-        $timeout = ['sec' => 0, 'usec' => 200000];
+        $timeout = ['sec' => 0, 'usec' => 300000];
     }
 
     $ip_status = ping($host['ip'], $timeout);
