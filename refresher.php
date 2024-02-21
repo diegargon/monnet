@@ -262,7 +262,13 @@ if ($command === 'host-details' && is_numeric($command_value)) {
 }
 
 if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
-    $set = ['content' => urldecode($command_value)];
+    //For empty note we must write ':clear' to begin to prevent clean the note
+    //if a filter or other return false/empty
+    $content = urldecode($command_value);
+    if (str_starts_with($content, ":clear")) {
+        $content = '';
+    }
+    $set = ['content' => $content];
     $where = ['id' => $object_id];
 
     $db->update('notes', $set, $where, 'LIMIT 1');
