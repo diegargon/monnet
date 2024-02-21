@@ -108,12 +108,13 @@ Class Hosts {
         } else if (!empty($host['mac'])) {
             $hostlog .= ' [' . $host['mac'] . ']';
         }
+        $host['display_name'] = $this->getDisplayName($host);
         $this->hosts[$host_id] = $host;
-        $this->log->logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $hostlog);
+        $this->log->logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $host['display_name'] . " ($hostlog)");
     }
 
     function remove(int $hid) {
-        $this->log->notice('Deleted host: ' . $this->hosts[$hid]['ip']);
+        $this->log->notice('Deleted host: ' . $this->hosts[$hid]['display_name']);
         $this->db->delete('hosts', ['id' => $hid], 'LIMIT 1');
         $this->db->delete('notes', ['host_id' => $hid], 'LIMIT 1');
         $this->db->delete('stats', ['host_id' => $hid], 'LIMIT 1');

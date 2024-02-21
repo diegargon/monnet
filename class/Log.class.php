@@ -58,7 +58,7 @@ Class Log {
             if ($this->cfg['log_to_db']) {
                 $level = $this->getLogLevelId($type);
                 if (mb_strlen($msg) > $this->max_db_msg) {
-                    $this->warning($this->lng['L_LOGMSG_TOO_LONG'], 1);
+                    $this->debug($this->lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
                     $msg_db = substr($msg, 0, 254);
                 } else {
                     $msg_db = $msg;
@@ -112,10 +112,12 @@ Class Log {
     public function logHost(string $loglevel, int $host_id, string $msg) {
         $level = $this->getLogLevelID($loglevel);
         if (mb_strlen($msg) > $this->max_db_msg) {
-            $this->warning($this->lng['L_LOGMSG_TOO_LONG'], 1);
-            $msg = substr($msg, 0, 254);
+            $this->debug($this->lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
+            $msg_db = substr($msg, 0, 254);
+        } else {
+            $msg_db = $msg;
         }
-        $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg];
+        $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg_db];
         $this->db->insert('hosts_logs', $set);
     }
 

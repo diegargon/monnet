@@ -587,7 +587,7 @@ class Database {
      */
     private function insertProcess(array $insert_data) {
         foreach ($insert_data as $field => $value) {
-            $value = $this->escape($value);
+            $value = (is_string($value)) ? $value = $this->escape($value) : $value;
             //TODO FIXME correccion rapida para evitar errores en mysql 8 con groups lead (palabras reservadas)
             $fields_ary[] = '`' . $field . '`';
             $values_ary[] = "'" . $value . "'";
