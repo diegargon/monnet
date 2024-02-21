@@ -4,9 +4,9 @@
 * Parpadear verde/rojo cuando un host cambie?
 * host-details configuracion (select) enviar al cambiar 
 * Añadir a detalles vlan basado en network
-* Notas no funciona si borras todo por empty
 * Bastionado / Antivirus / Compliant
 * Crear Token de equipo
+* cHART barra negativa en rojo
 
 ** LOW
 * Bell options term + onoff pref

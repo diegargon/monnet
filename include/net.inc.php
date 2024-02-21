@@ -42,6 +42,9 @@ function ping_host_ports(array $host) {
             $host_status['last_seen'] = $time_now;
             $host_status['ports'][$kport]['online'] = 1;
             fclose($conn);
+            $latency = round_latency(microtime(true) - $tim_start);
+            $host_status['ports'][$kport]['latency'] = $latency;
+            $host_status['latency'] = $latency;
         } else {
             $warn_msg = 'Port ' . $port['n'] . ' down' . "\n";
             $host_status['warn_port'] = 1;
@@ -50,9 +53,6 @@ function ping_host_ports(array $host) {
             $host['ports'][$kport]['err_code'] = $err_code;
             $host['ports'][$kport]['err_msg'] = $err_msg;
         }
-        $host_status['ports'][$kport]['latency'] = round(microtime(true) - $tim_start, 2);
-        //TODO port average?
-        $host_status['latency'] = round(microtime(true) - $tim_start, 2);
     }
 
     if ($host_status['online'] == 0) {
@@ -67,20 +67,21 @@ function ping_host_ports(array $host) {
 }
 
 function ping_known_host(array $host) {
-
-    $timeout = ['sec' => 0, 'usec' => 500000];
+    $usec = 500000;
     $time_now = utc_date_now();
 
     if (is_local_ip($host['ip'])) {
-        $timeout = ['sec' => 0, 'usec' => 300000];
+        $usec = ($host['online']) ? 400000 : 300000;
     }
+
+    $timeout = ['sec' => 0, 'usec' => $usec];
 
     $ip_status = ping($host['ip'], $timeout);
 
     $set = [];
     $set['online'] = 0;
     $set['warn_port'] = 0;
-    $set['latency'] = round($ip_status['latency'], 2);
+    $set['latency'] = $ip_status['latency'];
     $set['last_check'] = $time_now;
     if ($ip_status['isAlive']) {
         $set['online'] = 1;
@@ -94,13 +95,13 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
 
     $status = [
         'isAlive' => 0,
-        'latency' => -0.003, // Inicializa la latencia a 0.0
+        'latency' => -0.003,
     ];
 
     $tim_start = microtime(true);
 
     if (count($timeout) < 2 || !isset($timeout['sec']) || !isset($timeout['usec'])) {
-        $timeout = ['sec' => 0, 'usec' => 150000];
+        $timeout = ['sec' => 0, 'usec' => 200000];
     }
     $protocolNumber = getprotobyname('icmp');
     $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
@@ -122,7 +123,7 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
 
     if (socket_read($socket, 255)) {
         $status['isAlive'] = 1;
-        $status['latency'] = round(microtime(true) - $tim_start, 2);
+        $status['latency'] = round_latency(microtime(true) - $tim_start);
     } else {
         $status['error'] = 'timeout';
         $status['latency'] = -0.001;
