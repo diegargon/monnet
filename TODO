@@ -1,9 +1,14 @@
 ** HIGH
 * comprobar image link resource devuelve true
 * Poder crear host categories.
-* Host down o host changes on/off lanzar un recheck
-* Parpadear verde/rojo cuando un host cambie
+* Parpadear verde/rojo cuando un host cambie?
 * host-details configuracion (select) enviar al cambiar 
+* Añadir a detalles vlan basado en network
+* Notas no funciona si borras todo por empty
+* Bastionado / Antivirus / Compliant
+
+
+
 ** LOW
 * Bell options term + onoff pref
 * categories disable, para no mostrar en la barra
