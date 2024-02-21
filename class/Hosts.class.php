@@ -194,7 +194,7 @@ Class Hosts {
         foreach ($hosts as $host) {
             $id = $host['id'];
             $net_id = $host['network'];
-            $host['network'] = $network[$net_id]['network'];
+            $host['net_cidr'] = $network[$net_id]['network'];
             $host['network_name'] = $network[$net_id]['name'];
             $host['network_vlan'] = $network[$net_id]['vlan'];
             $host['display_name'] = $this->getDisplayName($host);
