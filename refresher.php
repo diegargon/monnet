@@ -81,6 +81,12 @@ if ($command == 'setCheckPorts' && isset($command_value) && !empty($object_id)) 
     $data['command_sucess'] = 1;
 }
 
+if ($command == 'submitHostToken' && !empty($command_value) && is_numeric($command_value)) {
+    $token = create_token();
+    $hosts->update($command_value, ['token' => $token]);
+    $data['response_msg'] = $token;
+    $data['command_sucess'] = 1;
+}
 if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id)) {
     $sucess = 0;
     if (!empty($command_value)) {

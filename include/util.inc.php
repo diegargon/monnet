@@ -168,3 +168,7 @@ function round_latency(float $latency, int $precision = 3) {
     }
     return $latency;
 }
+
+function create_token() {
+    return bin2hex(openssl_random_pseudo_bytes(16));
+}

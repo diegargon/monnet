@@ -109,6 +109,15 @@
                             $('#config_status_msg').html('Error');
                         }
                     }
+                    if (jsonData.command_receive === 'submitHostToken') {
+                        console.log(2);
+                        if (jsonData.command_sucess === 1) {
+                            $('#host_token').val(jsonData.response_msg);
+                        } else {
+                            console.log(3);
+                            $('#host_token').val('Error');
+                        }
+                    }
                     if (jsonData.command_receive === 'submitSystemType') {
                         if (jsonData.command_sucess === 1) {
                             $('#config_status_msg').html(jsonData.response_msg);

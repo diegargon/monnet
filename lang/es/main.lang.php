@@ -24,6 +24,7 @@ $lng = [
     'L_CAMERAS' => 'Camaras',
     'L_CATEGORY' => 'Categoria',
     'L_CATEGORIES' => 'Categorias',
+    'L_CREATE' => 'Crear',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
@@ -121,6 +122,7 @@ $lng = [
     'L_TYPE' => 'Tipo',
     'L_TV' => 'Tv',
     'L_TOTAL' => 'Total',
+    'L_TOKEN' => 'Token',
     //U
     'L_USERS' => 'Usuarios',
     'L_USERNAME' => 'Usuario',

@@ -157,6 +157,12 @@ $(document).ready(function () {
             refresh('submitSystemType', stValue, host_id);
         }
     });
+    $(document).on("click", "#submitHostToken", function () {        
+        var host_id = $('#host_id').val();
+        if (host_id) {
+            refresh('submitHostToken', host_id);
+        }
+    });    
 //Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
