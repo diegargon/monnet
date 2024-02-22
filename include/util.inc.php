@@ -92,7 +92,7 @@ function array2string(array $array) {
     $result = [];
     foreach ($array as $subarray) {
         if (is_array($subarray)) {
-            $result[] = array2string($subarray) . '][';
+            $result[] = array2string($subarray) . '::';
         } else {
             $result[] = $subarray;
         }
