@@ -87,7 +87,6 @@ function ping_net(Database $db, Hosts $hosts) {
 
     $query = $db->selectAll('networks', ['scan' => 1, 'disable' => 0]);
     $networks = $db->fetchAll($query);
-    $log->debug("Ping networks " . array2string($networks));
     $timeout = ['sec' => 0, 'usec' => 100000];
 
     $db_hosts = $hosts->getAll();

@@ -143,9 +143,14 @@ function build_iplist(array $networks) {
 
     foreach ($networks as $net) {
         if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
-            $log->err("Invalid network " . $net['network']);
+            $log->err("Invalid network detected " . $net['network']);
             continue;
         }
+        //We will use 0.0.0.0 to allow create a INTERNET network category for add external host.
+        if (str_starts_with($net['network'], "0")) {
+            continue;
+        }
+        $log->debug("Ping networks " . array2string($net));
         $parts = explode('/', $net['network']);
         $network = $parts[0];
         $prefix = $parts[1];
