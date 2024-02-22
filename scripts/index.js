@@ -56,8 +56,39 @@ $(document).ready(function () {
     $("#close_addnetwork").on("click", function () {
         $("#add-network-container").css("display", "none");
     });
+    // Show cat
 
-    // Dynamic
+    var clicked = false;
+    var timer;
+    var catID;
+    $(document).on("dblclick", ".show_host_cat", function (event) {
+        event.preventDefault(); // Evitar la acción predeterminada del doble clic
+
+        catID = $(this).data('catid');
+        refresh('show_host_only_cat', catID);
+        // Reiniciar la variable clicked
+        clicked = false;
+        clearTimeout(timer); // Limpiar el temporizador para evitar que se ejecute el clic normal
+    });
+
+    $(document).on("click", ".show_host_cat", function (event) {
+        event.preventDefault();
+
+        if (clicked) {
+            clearTimeout(timer);
+            return false;
+        }
+        catID = $(this).data('catid');
+
+        clicked = true;
+        timer = setTimeout(function () {
+            // Reiniciar clicked después de un intervalo de tiempo
+            clicked = false;
+            refresh('show_host_cat', catID);
+        }, 300);
+
+    });
+
     $(document).on("click", "#close_host_details", function () {
         $("#host-details").css("display", "none");
     });
@@ -126,12 +157,12 @@ $(document).ready(function () {
             refresh('submitSystemType', stValue, host_id);
         }
     });
-    //Checkbox trigger
+//Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
-            //Network Checkboxes           
-            //Prevent disable all networks
+//Network Checkboxes           
+//Prevent disable all networks
             const checkedNetworks = document.querySelectorAll('input[type="checkbox"].option_network:checked');
             if ($(this).hasClass('option_network')) {
                 if (checkedNetworks.length === 1) {
@@ -149,7 +180,7 @@ $(document).ready(function () {
                     });
                 }
             }
-            //Send event to refresher
+//Send event to refresher
             if ($(this).hasClass('option_network')) {
                 if (this.checked) {
                     refresh('network_select', this.value);
@@ -157,8 +188,8 @@ $(document).ready(function () {
                     refresh('network_unselect', this.value);
                 }
             }
-            //END Netrwork Checkboxes
+//END Netrwork Checkboxes
         });
     });
-
-});
+}
+);

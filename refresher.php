@@ -158,6 +158,11 @@ if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_i
     $force_host_reload = 1;
 }
 
+/* Show Only Host Cat */
+if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
+    $db->update('categories', ['on' => 0], ['cat_type' => 1]);
+    $command = 'show_host_cat'; //Trigger show_host_cat
+}
 
 /* Show Host Cat */
 
