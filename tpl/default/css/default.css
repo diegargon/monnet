@@ -528,6 +528,7 @@ input:checked + .slider:before {
     color: rgb(255,255,255);
     align-items: center;
     padding: 1px;
+    overflow: hidden;
 }
 .host-glow-off {
     background-color: rgb(49, 36, 36);
