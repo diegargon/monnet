@@ -38,6 +38,10 @@ function trigger_update(Log $log, Database $db, float $db_version, float $files_
     //NEXT
     /*
       if ($db_version < 0.34) {
+      $db->query("ALTER TABLE `networks` ADD UNIQUE(`network`);";
+      $db->query("ALTER TABLE `networks` ADD UNIQUE(`name`);";
+      $db->query"ALTER TABLE `networks` CHANGE `network` `network` CHAR(18) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;";
+      $db->query("ALTER TABLE `networks` CHANGE `name` `name` CHAR(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;");
       $db->query("INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`, `disable`, `weight`) VALUES ('10', '1', 'L_PRINTERS', '1', '0', '0'); ");
       $log->info("Update version to 0.34 success");
       $db->query("UPDATE prefs SET pref_value='0.34' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
