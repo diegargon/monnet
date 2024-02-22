@@ -156,7 +156,7 @@ footer {
     border: 0px solid red;
     margin-top:5px;
     float:left;
-    overflow:hidden;
+    overflow:visible;
     width:49%;
     margin-left:10px;
 }
