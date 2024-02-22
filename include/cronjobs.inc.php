@@ -70,11 +70,11 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
         if (valid_array($host_status)) {
             defined('DUMP_VARS') ? $log->debug("Dumping host_status: " . print_r($host_status, true)) : null;
             $hosts->update($host['id'], $host_status);
-            if (isset($host_status['latency'])) {
+            if (isset($host_status['latency']) && $host_status['latency'] > 0) {
                 $ping_latency = $host_status['latency'];
+                $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
+                $db->insert('stats', $set_ping_stats);
             }
-            $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
-            $db->insert('stats', $set_ping_stats);
         } else {
             $log->warning("Known host ping status error {$host['id']}:{$host['display_name']}");
         }
