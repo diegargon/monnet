@@ -11,12 +11,12 @@
 
 Class Log {
 
-    private static $max_db_msg = 254;
-    private static $recursionCount = 0;
-    private static $console;
-    private static $cfg;
-    private static $db;
-    private static $lng;
+    private static int $max_db_msg = 254;
+    private static int $recursionCount = 0;
+    private static int $console;
+    private static array $cfg;
+    private static Database $db;
+    private static array $lng;
     private static $LOG_TYPE = [
         'LOG_EMERG' => 0, // 	system is unusable
         'LOG_ALERT' => 1, // 	action must be taken immediately UNUSED
@@ -28,11 +28,11 @@ Class Log {
         'LOG_DEBUG' => 7, //	debug-level message
     ];
 
-    public static function init(array &$cfg, Database &$db, array $lng) {
+    public static function init(array &$cfg, Database &$db, array &$lng) {
         self::$console = false;
         self::$cfg = &$cfg;
         self::$db = &$db;
-        self::$lng = $lng;
+        self::$lng = &$lng;
     }
 
     public static function logged(string $type, mixed $msg, ?int $self_caller = null) {
