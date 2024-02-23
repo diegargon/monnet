@@ -10,12 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 
 function format_items(User $user, array $items_results) {
-    //global $log;
-
     $items = [];
     $theme = $user->getTheme();
     foreach ($items_results as $item) {
-        //global $log; Log::debug('Formatting item '. $item['title'] );
         $item_conf = json_decode($item['conf'], true);
         $item_img = '';
         if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource'])) {
@@ -202,8 +199,6 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
 }
 
 function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User $user, array $lng, $hid) {
-    //global $log;
-
     $host = $hosts->getHostById($hid);
     $categories = new Categories($cfg, $lng, $db);
 

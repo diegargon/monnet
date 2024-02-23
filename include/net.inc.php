@@ -137,7 +137,6 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
 //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
 
 function build_iplist(array $networks) {
-    global $log;
 
     $ip_list = [];
 
@@ -199,7 +198,6 @@ function get_hostname(string $ip) {
 }
 
 function get_mac(string $ip) {
-    global $log;
 
     $comm_path = check_command('arp');
 
@@ -234,7 +232,6 @@ function is_local_ip(string $ip) {
 }
 
 function sendWOL(string $host_mac) {
-    global $log;
 
     Log::debug("checking mac \"{$host_mac}\"");
     $host_mac = str_replace([':', '-'], '', $host_mac);

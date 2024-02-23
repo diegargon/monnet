@@ -10,7 +10,8 @@
 * Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
 * When "Found new host, poner la red en log
 * Network Internet: 0.0.0.0/0 para meter host de internet. class network - get vlan name - get network-name
- 
+* $lang['L_'] to $lang::get['L_']
+
 ** LOW
 * Bell options term + onoff pref
 * categories disable, para no mostrar en la barra

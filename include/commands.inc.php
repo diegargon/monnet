@@ -10,8 +10,6 @@
 !defined('IN_CLI') ? exit : true;
 
 function run_cmd(string $cmd, array $params, string $stdin = null) {
-    //global $log;
-
     $return = [];
     $pipes = [];
     $exec_params = '';

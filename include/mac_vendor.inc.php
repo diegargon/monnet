@@ -29,7 +29,6 @@ function get_mac_vendor(string $mac) {
 }
 
 function get_mac_vendor_local($mac) {
-    //global $log;
 
     $formattedMAC = formatMAC($mac);
 

@@ -83,8 +83,6 @@ function check_known_hosts(Database $db, Hosts $hosts) {
 }
 
 function ping_net(Database $db, Hosts $hosts) {
-    //global $log;
-
     $query = $db->selectAll('networks', ['scan' => 1, 'disable' => 0]);
     $networks = $db->fetchAll($query);
     $timeout = ['sec' => 0, 'usec' => 100000];
@@ -151,8 +149,6 @@ function ping_net(Database $db, Hosts $hosts) {
 }
 
 function fill_hostnames(Hosts $hosts, int $forceall = 0) {
-    global $log;
-
     $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
@@ -168,8 +164,6 @@ function fill_hostnames(Hosts $hosts, int $forceall = 0) {
 }
 
 function fill_mac_vendors(Hosts $hosts, int $forceall = 0) {
-    //global $log;
-
     $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
@@ -203,7 +197,6 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0) {
 }
 
 function check_macs(Hosts $hosts) {
-    //global $log;
 
     $known_hosts = $hosts->getknownEnabled();
 
@@ -218,7 +211,6 @@ function check_macs(Hosts $hosts) {
 }
 
 function host_access(array $cfg, Hosts $hosts) {
-    //global $log;
 
     $db_hosts = $hosts->getknownEnabled();
 

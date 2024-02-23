@@ -16,8 +16,6 @@ use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
 function ssh_connect_host(array $cfg, array &$result, array $host) {
-    //global $log;
-
     $originalConnectionTimeout = ini_get('default_socket_timeout');
     ini_set('default_socket_timeout', 2);
     Log::info('SSH Connection to ' . $host['ip']);
@@ -67,8 +65,6 @@ function ssh_exec(SSH2 $ssh, array &$result, string $cmd) {
 }
 
 function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts) {
-    //global $log;
-
     $result = $db->select('cmd', '*');
     $cmds = $db->fetchAll($result);
 
