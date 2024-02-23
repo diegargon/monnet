@@ -9,14 +9,14 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
+function check_known_hosts(Database $db, Hosts $hosts) {
     global $lng;
 
     if (!is_object($hosts)) {
-        $log->err("hosts is not a object");
+        Log::err("hosts is not a object");
         return false;
     }
-    $log->debug("Pinging known host");
+    Log::debug("Pinging known host");
 
     $db_hosts = $hosts->getknownEnabled();
 
@@ -25,7 +25,7 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
         $host_status = [];
 
         if ($host['check_method'] == 2 && valid_array($host['ports'])) { //TCP
-            $log->debug("Pinging host ports {$host['ip']}");
+            Log::debug("Pinging host ports {$host['ip']}");
             $ping_host_result = ping_host_ports($host);
             if ($ping_host_result['online'] == 0) {
                 //recheck
@@ -43,13 +43,13 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
             (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
 
             if ($ping_host_result['online'] == 1 && $host['online'] == 0) {
-                $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
+                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
             } else if ($ping_host_result['online'] == 0 && $host['online'] == 1) {
-                $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
+                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
             }
         } else { //Ping
             if ($host['check_method'] == 2 && !valid_array($host['ports'])) {
-                $log->warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
+                Log::warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
             }
             $ping_host_result = ping_known_host($host);
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) {
@@ -57,9 +57,9 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
                 $ping_host_result = ping_known_host($host);
             }
             if ($ping_host_result['online'] == 1 && $host['online'] == 0) {
-                $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
+                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
             } else if ($ping_host_result['online'] == 0 && $host['online'] == 1) {
-                $log->logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
+                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
             }
             (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
         }
@@ -68,7 +68,7 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
             $mac ? $host_status['mac'] = $mac : null;
         }
         if (valid_array($host_status)) {
-            defined('DUMP_VARS') ? $log->debug("Dumping host_status: " . print_r($host_status, true)) : null;
+            defined('DUMP_VARS') ? Log::debug("Dumping host_status: " . print_r($host_status, true)) : null;
             $hosts->update($host['id'], $host_status);
             if (isset($host_status['latency']) && $host_status['latency'] > 0) {
                 $ping_latency = $host_status['latency'];
@@ -76,14 +76,14 @@ function check_known_hosts(Log $log, Database $db, Hosts $hosts) {
                 $db->insert('stats', $set_ping_stats);
             }
         } else {
-            $log->warning("Known host ping status error {$host['id']}:{$host['display_name']}");
+            Log::warning("Known host ping status error {$host['id']}:{$host['display_name']}");
         }
     }
-    $log->debug('Finish check_known_hosts');
+    Log::debug('Finish check_known_hosts');
 }
 
 function ping_net(Database $db, Hosts $hosts) {
-    global $log;
+    //global $log;
 
     $query = $db->selectAll('networks', ['scan' => 1, 'disable' => 0]);
     $networks = $db->fetchAll($query);
@@ -103,14 +103,14 @@ function ping_net(Database $db, Hosts $hosts) {
                 //Temporaly Check network for UPDATE
                 $idNetwork = get_network_id($host['ip'], $networks);
                 if ($idNetwork == false) {
-                    $log->warning('Failed to get id network for ip ' . $host['ip']);
+                    Log::warning('Failed to get id network for ip ' . $host['ip']);
                     $set['network'] = 1;
                 } else {
                     $set['network'] = $idNetwork;
                 }
                 if (valid_array($set) && ($idNetwork != $host['network'])) {
                     $db->update('hosts', $set, ['id' => $host['id']]);
-                    $log->warning('Update host network ' . $host['diplay_name'] . ' from ' . $host['network'] . ' to ' . $idNetwork);
+                    Log::warning('Update host network ' . $host['diplay_name'] . ' from ' . $host['network'] . ' to ' . $idNetwork);
                 }
             }
         }
@@ -134,7 +134,7 @@ function ping_net(Database $db, Hosts $hosts) {
 
             $idNetwork = get_network_id($ip, $networks);
             if ($idNetwork == false) {
-                $log->warn('Failed to get id network for ip ' . $ip);
+                Log::warn('Failed to get id network for ip ' . $ip);
                 $set['network'] = 1;
             } else {
                 $set['network'] = $idNetwork;
@@ -157,7 +157,7 @@ function fill_hostnames(Hosts $hosts, int $forceall = 0) {
 
     foreach ($db_hosts as $host) {
         if (empty($host['hostname']) || $forceall === 1) {
-            $log->debug("Getting hostname {$host['ip']}");
+            Log::debug("Getting hostname {$host['ip']}");
             $hostname = get_hostname($host['ip']);
             if ($hostname !== false && $hostname != $host['ip']) {
                 $update['hostname'] = $hostname;
@@ -168,7 +168,7 @@ function fill_hostnames(Hosts $hosts, int $forceall = 0) {
 }
 
 function fill_mac_vendors(Hosts $hosts, int $forceall = 0) {
-    global $log;
+    //global $log;
 
     $db_hosts = $hosts->getknownEnabled();
 
@@ -179,19 +179,19 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0) {
         if ((!empty($host['mac'])) &&
                 (empty($host['mac_vendor']) || $forceall === 1)
         ) {
-            $log->debug("Getting mac vendor for {$host['display_name']}");
+            Log::debug("Getting mac vendor for {$host['display_name']}");
             $vendor = get_mac_vendor_local(trim($host['mac']));
             if (empty($vendor)) {
-                $log->debug("Local lookup fail, checking mac online");
+                Log::debug("Local lookup fail, checking mac online");
                 $vendor = get_mac_vendor(trim($host['mac']));
             }
 
             if (empty($vendor['company'])) {
-                $log->debug("Mac vendor for {$host['mac']} is null");
+                Log::debug("Mac vendor for {$host['mac']} is null");
                 (empty($host['mac_vendor'])) ? $update['mac_vendor'] = '-' : null;
             } else {
                 if ($vendor['company'] != $host['mac_vendor']) {
-                    $log->warning("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
+                    Log::warning("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
                     $update['mac_vendor'] = $vendor['company'];
                 }
             }
@@ -203,11 +203,11 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0) {
 }
 
 function check_macs(Hosts $hosts) {
-    global $log;
+    //global $log;
 
     $known_hosts = $hosts->getknownEnabled();
 
-    $log->info('Checking macs');
+    Log::info('Checking macs');
     foreach ($known_hosts as $host) {
         $new_mac = get_mac($host['ip']);
         if (!empty($new_mac) && $host['mac'] != $new_mac) {
@@ -218,7 +218,7 @@ function check_macs(Hosts $hosts) {
 }
 
 function host_access(array $cfg, Hosts $hosts) {
-    global $log;
+    //global $log;
 
     $db_hosts = $hosts->getknownEnabled();
 
@@ -233,10 +233,10 @@ function host_access(array $cfg, Hosts $hosts) {
 
         $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
         if (!$ssh) {
-            $log->err("SSH host_access: Cant connect host {$host['ip']}");
+            Log::err("SSH host_access: Cant connect host {$host['ip']}");
             continue;
         }
-        $log->info("SSH hosts access: Succesful connect to {$host['ip']}");
+        Log::info("SSH hosts access: Succesful connect to {$host['ip']}");
         $ssh->setKeepAlive(1);
 
         $results = [];

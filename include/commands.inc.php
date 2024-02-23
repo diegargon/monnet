@@ -10,7 +10,7 @@
 !defined('IN_CLI') ? exit : true;
 
 function run_cmd(string $cmd, array $params, string $stdin = null) {
-    global $log;
+    //global $log;
 
     $return = [];
     $pipes = [];
@@ -40,7 +40,7 @@ function run_cmd(string $cmd, array $params, string $stdin = null) {
         $return['stderr'] = trim(stream_get_contents($pipes[2]));
         fclose($pipes[2]);
     } else {
-        $log->err('Error run command ');
+        Log::err('Error run command ');
         $return = false;
     }
     proc_close($proc);

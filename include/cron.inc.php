@@ -9,8 +9,8 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function cron(array $cfg, Log $log, Database $db, Hosts $hosts) {
-    $log->debug("Starting cron...");
+function cron(array $cfg, Database $db, Hosts $hosts) {
+    Log::debug("Starting cron...");
     $results = $db->select('prefs', '*', ['uid' => 0]);
     $system_prefs = $db->fetchAll($results);
     $cron_task_track = '';
@@ -65,6 +65,6 @@ function cron(array $cfg, Log $log, Database $db, Hosts $hosts) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_update']], 'LIMIT 1');
     }
     if (!empty($cron_task_track)) {
-        $log->debug('Cron times :' . $cron_task_track);
+        Log::debug('Cron times :' . $cron_task_track);
     }
 }

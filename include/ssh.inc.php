@@ -16,18 +16,18 @@ use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
 function ssh_connect_host(array $cfg, array &$result, array $host) {
-    global $log;
+    //global $log;
 
     $originalConnectionTimeout = ini_get('default_socket_timeout');
     ini_set('default_socket_timeout', 2);
-    $log->info('SSH Connection to '. $host['ip']);
+    Log::info('SSH Connection to ' . $host['ip']);
     $ssh = new SSH2($host['ip']);
     ini_set('default_socket_timeout', $originalConnectionTimeout);
-       
+
     if (file_exists($cfg['cert'])) {
         $key = PublicKeyLoader::load(file_get_contents($cfg['cert']));
     } else {
-        $log->err('Missing certs');
+        Log::err('Missing certs');
         return false;
     }
 
@@ -67,7 +67,7 @@ function ssh_exec(SSH2 $ssh, array &$result, string $cmd) {
 }
 
 function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts) {
-    global $log;
+    //global $log;
 
     $result = $db->select('cmd', '*');
     $cmds = $db->fetchAll($result);
@@ -75,11 +75,11 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts) {
     foreach ($cmds as $cmd) {
         $run_command = $cfg['commands'][$cmd['cmd_type']];
         $hid = $cmd['hid'];
-        $log->notice("Run command {$cmd['cmd_type']}:$hid");
+        Log::notice("Run command {$cmd['cmd_type']}:$hid");
         $host = $hosts->getHostById($hid);
 
         if (!valid_array($host) || empty($host['ip'])) {
-            $log->warning("Wrong command for non-existent host id ($hid)");
+            Log::warning("Wrong command for non-existent host id ($hid)");
             $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
             continue;
         }

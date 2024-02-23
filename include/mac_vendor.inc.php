@@ -29,19 +29,19 @@ function get_mac_vendor(string $mac) {
 }
 
 function get_mac_vendor_local($mac) {
-    global $log;
+    //global $log;
 
     $formattedMAC = formatMAC($mac);
 
     if (!$formattedMAC) {
-        $log->warning('Invalid mac format: ' . $formattedMAC);
+        Log::warning('Invalid mac format: ' . $formattedMAC);
         return false;
     }
 
     $file = './config/macvendors.txt';
 
     if (!file_exists($file)) {
-        $log->error('File not found: ' . $file);
+        Log::error('File not found: ' . $file);
         return false;
     }
 
@@ -56,7 +56,7 @@ function get_mac_vendor_local($mac) {
 
         $company = isset($details[1]) ? trim($details[1]) : "";
         if (empty($company)) {
-            $log->debug("Mac Lookup fail: Empty mac vendor company");
+            Log::debug("Mac Lookup fail: Empty mac vendor company");
             return false;
         }
 
@@ -68,12 +68,12 @@ function get_mac_vendor_local($mac) {
             $country = '';
         }
         $vendor = trim($company) . " (" . trim($country) . ")";
-        $log->debug("Mac vendor DB result is " . $vendor);
+        Log::debug("Mac vendor DB result is " . $vendor);
 
         return ['company' => $vendor]
         ;
     } else {
-        $log->debug('Mac Vendor Local: Failed preg_match file' . $pattern);
+        Log::debug('Mac Vendor Local: Failed preg_match file' . $pattern);
         return false;
     }
 }

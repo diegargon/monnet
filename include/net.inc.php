@@ -143,14 +143,14 @@ function build_iplist(array $networks) {
 
     foreach ($networks as $net) {
         if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
-            $log->err("Invalid network detected " . $net['network']);
+            Log::err("Invalid network detected " . $net['network']);
             continue;
         }
         //We will use 0.0.0.0 to allow create a INTERNET network category for add external host.
         if (str_starts_with($net['network'], "0")) {
             continue;
         }
-        $log->debug("Ping networks " . array2string($net));
+        Log::debug("Ping networks " . array2string($net));
         $parts = explode('/', $net['network']);
         $network = $parts[0];
         $prefix = $parts[1];
@@ -204,7 +204,7 @@ function get_mac(string $ip) {
     $comm_path = check_command('arp');
 
     if (empty($comm_path)) {
-        $log->warning('arp command not exists please install net-tools');
+        Log::warning('arp command not exists please install net-tools');
         return false;
     }
     $arp = $comm_path;
@@ -236,11 +236,11 @@ function is_local_ip(string $ip) {
 function sendWOL(string $host_mac) {
     global $log;
 
-    $log->debug("checking mac \"{$host_mac}\"");
+    Log::debug("checking mac \"{$host_mac}\"");
     $host_mac = str_replace([':', '-'], '', $host_mac);
 
     if (strlen($host_mac) % 2 !== 0) {
-        $log->err("MAC address must be even \"{$host_mac}\"");
+        Log::err("MAC address must be even \"{$host_mac}\"");
         return false;
     }
 
@@ -248,7 +248,7 @@ function sendWOL(string $host_mac) {
     $magicPacket = str_repeat(chr(255), 6) . str_repeat($macAddressBinary, 16);
     $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     if ($socket === false) {
-        $log->err("Error creating socket " . socket_strerror(socket_last_error()));
+        Log::err("Error creating socket " . socket_strerror(socket_last_error()));
         return false;
     }
 
@@ -256,9 +256,9 @@ function sendWOL(string $host_mac) {
     $result = socket_sendto($socket, $magicPacket, strlen($magicPacket), 0, '255.255.255.255', 9);
 
     if ($result) {
-        $log->debug("Sucessful sending WOL packet to {$host_mac}");
+        Log::debug("Sucessful sending WOL packet to {$host_mac}");
     } else {
-        $log->debug("Failed sending WOL packet to {$host_mac}");
+        Log::debug("Failed sending WOL packet to {$host_mac}");
     }
     // Cerrar el socket
     socket_close($socket);

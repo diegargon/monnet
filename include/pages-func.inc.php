@@ -10,24 +10,24 @@
 !defined('IN_WEB') ? exit : true;
 
 function format_items(User $user, array $items_results) {
-    global $log;
+    //global $log;
 
     $items = [];
     $theme = $user->getTheme();
     foreach ($items_results as $item) {
-        //global $log; $log->debug('Formatting item '. $item['title'] );
+        //global $log; Log::debug('Formatting item '. $item['title'] );
         $item_conf = json_decode($item['conf'], true);
         $item_img = '';
         if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource'])) {
             $item_img = $item_conf['url'] . '/favicon.ico';
-            $item_img = cached_img($log, $user, $item['id'], $item_img);
+            $item_img = cached_img($user, $item['id'], $item_img);
         } else if ($item_conf['image_type'] === 'favicon') {
             $favicon_path = $item_conf['image_resource'];
             $item_img = base_url($item_conf['url']) . '/' . $favicon_path;
-            $item_img = cached_img($log, $user, $item['id'], $item_img);
+            $item_img = cached_img($user, $item['id'], $item_img);
         } elseif ($item_conf['image_type'] === 'url') {
             $item_img = $item_conf['image_resource'];
-            $item_img = cached_img($log, $user, $item['id'], $item_img);
+            $item_img = cached_img($user, $item['id'], $item_img);
         } elseif ($item_conf['image_type'] === 'local_img') {
             $item_img = 'tpl/' . $theme . '/img/icons/' . $item_conf['image_resource'];
         }
@@ -202,7 +202,7 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
 }
 
 function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User $user, array $lng, $hid) {
-    global $log;
+    //global $log;
 
     $host = $hosts->getHostById($hid);
     $categories = new Categories($cfg, $lng, $db);
@@ -231,7 +231,7 @@ function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User 
     }
 
     //HOST LOGS
-    $host['host_logs'] = $log->getLoghost($host['id'], $cfg['term_max_lines']);
+    $host['host_logs'] = Log::getLoghost($host['id'], $cfg['term_max_lines']);
 
     $theme = $user->getTheme();
 

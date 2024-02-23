@@ -252,7 +252,7 @@ if ($command === 'host-details' && is_numeric($command_value)) {
                 $log_lines = [];
                 foreach ($host_details['host_logs'] as $term_log) {
                     $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
-                    $loglevelname = $log->getLogLevelName($term_log['level']);
+                    $loglevelname = Log::getLogLevelName($term_log['level']);
                     $loglevelname = str_replace('LOG_', '', $loglevelname);
                     $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'];
                 }
@@ -309,7 +309,7 @@ if ($command == 'power_on' && !empty($command_value) && is_numeric($command_valu
         $data['command_sucess'] = 1;
     } else {
         $err_msg = "Host {$host['ip']} has not mac address";
-        $log->warning($err_msg);
+        Log::warning($err_msg);
         $data['command_error_msg'] .= $err_msg;
     }
 }
@@ -339,12 +339,12 @@ if ($command == 'change_bookmarks_tab' && !empty($command_value)) {
 
 $logs = [];
 
-$host_logs = $log->getLoghosts($cfg['term_max_lines']);
+$host_logs = Log::getLoghosts($cfg['term_max_lines']);
 if (valid_array($host_logs)) {
     $logs = $host_logs;
 }
 if ($cfg['term_show_system'] && $cfg['log_to_db']) {
-    $system_logs = $log->getSystemDBLogs($cfg['term_max_lines']);
+    $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
     if (valid_array($system_logs)) {
         $logs = array_merge($logs, $system_logs);
     }
@@ -362,7 +362,7 @@ if (valid_array($term_logs)) {
     $log_lines = [];
     foreach ($term_logs as $term_log) {
         $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
-        $loglevelname = $log->getLogLevelName($term_log['level']);
+        $loglevelname = Log::getLogLevelName($term_log['level']);
         $loglevelname = str_replace('LOG_', '', $loglevelname);
         $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'];
     }
@@ -395,6 +395,6 @@ $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $
 
 
 /*  -   */
-//$log->debug(print_r($data,true));
+//Log::debug(print_r($data,true));
 //print json_encode($data);
 print json_encode($data, JSON_UNESCAPED_UNICODE);

@@ -45,7 +45,7 @@ require_once('class/Log.class.php');
 
 /* Get default lang overwrite after with user settings */
 require_once('lang/es/main.lang.php');
-$log = new Log($cfg, $db, $lng);
+Log::init($cfg, $db, $lng);
 
 require_once('class/Filters.class.php');
 require_once('include/util.inc.php');
@@ -57,4 +57,4 @@ require_once('class/Hosts.class.php');
 require_once('class/Items.class.php'); // TODO to usermode?
 require_once('class/Categories.class.php');
 
-$hosts = new Hosts($log, $db, $lng);
+$hosts = new Hosts($db, $lng);

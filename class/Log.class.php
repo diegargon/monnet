@@ -11,13 +11,13 @@
 
 Class Log {
 
-    private $max_db_msg = 254;
-    private $recursionCount = 0;
-    private $console;
-    private $cfg;
-    private $db;
-    private $lng;
-    private $LOG_TYPE = [
+    private static $max_db_msg = 254;
+    private static $recursionCount = 0;
+    private static $console;
+    private static $cfg;
+    private static $db;
+    private static $lng;
+    private static $LOG_TYPE = [
         'LOG_EMERG' => 0, // 	system is unusable
         'LOG_ALERT' => 1, // 	action must be taken immediately UNUSED
         'LOG_CRIT' => 2, //     critical conditions
@@ -28,164 +28,164 @@ Class Log {
         'LOG_DEBUG' => 7, //	debug-level message
     ];
 
-    public function __construct(array &$cfg, Database &$db, array $lng) {
-        $this->console = false;
-        $this->cfg = &$cfg;
-        $this->db = &$db;
-        $this->lng = $lng;
+    public static function init(array &$cfg, Database &$db, array $lng) {
+        self::$console = false;
+        self::$cfg = &$cfg;
+        self::$db = &$db;
+        self::$lng = $lng;
     }
 
-    public function logged(string $type, mixed $msg, ?int $self_caller = null) {
-        $LOG_TYPE = $this->LOG_TYPE;
+    public static function logged(string $type, mixed $msg, ?int $self_caller = null) {
+        $LOG_TYPE = self::$LOG_TYPE;
 
         if ($self_caller === null) {
-            $this->recursionCount = 0;
+            self::$recursionCount = 0;
         } else {
-            $this->recursionCount++;
-            if ($this->recursionCount > 3) {
+            self::$recursionCount++;
+            if (self::$recursionCount > 3) {
                 return;
             }
         }
 
 
-        if (isset($LOG_TYPE[$this->cfg['log_level']]) && $LOG_TYPE[$type] <= $LOG_TYPE[$this->cfg['log_level']]) {
+        if (isset($LOG_TYPE[self::$cfg['log_level']]) && $LOG_TYPE[$type] <= $LOG_TYPE[self::$cfg['log_level']]) {
             if (is_array($msg)) {
                 $msg = print_r($msg, true);
             }
-            if ($this->console) {
-                echo '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . '][' . $type . '] ' . $msg . "\n";
+            if (self::$console) {
+                echo '[' . formatted_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format']) . '][' . self::$cfg['app_name'] . '][' . $type . '] ' . $msg . "\n";
             }
-            if ($this->cfg['log_to_db']) {
-                $level = $this->getLogLevelId($type);
-                if (mb_strlen($msg) > $this->max_db_msg) {
-                    $this->debug($this->lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
+            if (self::$cfg['log_to_db']) {
+                $level = self::getLogLevelId($type);
+                if (mb_strlen($msg) > self::$max_db_msg) {
+                    self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
                     $msg_db = substr($msg, 0, 254);
                 } else {
                     $msg_db = $msg;
                 }
-                $this->db->insert('system_logs', ['level' => $level, 'msg' => $msg_db]);
+                self::$db->insert('system_logs', ['level' => $level, 'msg' => $msg_db]);
             }
-            if ($this->cfg['log_to_file']) {
-                $log_file = $this->cfg['log_file'];
+            if (self::$cfg['log_to_file']) {
+                $log_file = self::$cfg['log_file'];
 
                 $content = '';
-                $content = '[' . formatted_date_now($this->cfg['timezone'], $this->cfg['datetime_log_format']) . '][' . $this->cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
+                $content = '[' . formatted_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format']) . '][' . self::$cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     if (!touch($log_file)) {
-                        $this->err($this->lng['L_ERR_FILE_CREATE'] . ' effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
-                        $this->debug(getcwd(), 1);
+                        self::err(self::$lng['L_ERR_FILE_CREATE'] . ' effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
+                        self::debug(getcwd(), 1);
                     } else {
-                        if (!chown($log_file, $this->cfg['log_file_owner'])) {
-                            $this->err($this->lng['L_ERR_FILE_CHOWN'], 1);
+                        if (!chown($log_file, self::$cfg['log_file_owner'])) {
+                            self::err(self::$lng['L_ERR_FILE_CHOWN'], 1);
                         }
-                        if (!chgrp($log_file, $this->cfg['log_file_owner_group'])) {
-                            $this->err('L_ERR_FILE_CHGRP', 1);
+                        if (!chgrp($log_file, self::$cfg['log_file_owner_group'])) {
+                            self::err('L_ERR_FILE_CHGRP', 1);
                         }
                         if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
-                            $this->err('Error opening/writing log to file ' . 'effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
+                            self::err('Error opening/writing log to file ' . 'effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
                         }
                     }
                 }
                 if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
-                    $this->err('Error opening/writing log to file', 1);
+                    self::err('Error opening/writing log to file', 1);
                 }
             }
-            if ($this->cfg['log_to_syslog']) {
-                if (openlog($this->cfg['app_name'] . ' ' . $this->cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG)) {
-                    isset($this->console) ? $this->cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
+            if (self::$cfg['log_to_syslog']) {
+                if (openlog(self::$cfg['app_name'] . ' ' . self::$cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG)) {
+                    isset(self::$console) ? self::$cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
                     syslog($LOG_TYPE[$type], $msg);
                 } else {
-                    $this->err('Error opening syslog', 1);
+                    self::err('Error opening syslog', 1);
                 }
             }
         }
     }
 
-    public function setConsole(bool $value) {
+    public static function setConsole(bool $value) {
         if ($value === true || $value === false) {
-            $this->console = $value;
+            self::$console = $value;
         } else {
             return false;
         }
     }
 
-    public function logHost(string $loglevel, int $host_id, string $msg) {
-        $level = $this->getLogLevelID($loglevel);
-        if (mb_strlen($msg) > $this->max_db_msg) {
-            $this->debug($this->lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
+    public static function logHost(string $loglevel, int $host_id, string $msg) {
+        $level = self::getLogLevelID($loglevel);
+        if (mb_strlen($msg) > self::$max_db_msg) {
+            self::debug(self::lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
             $msg_db = substr($msg, 0, 254);
         } else {
             $msg_db = $msg;
         }
         $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg_db];
-        $this->db->insert('hosts_logs', $set);
+        self::$db->insert('hosts_logs', $set);
     }
 
-    public function getLoghosts(int $limit) {
-        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . $this->cfg['term_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
-        $result = $this->db->query($query);
-        $lines = $this->db->fetchAll($result);
+    public static function getLoghosts(int $limit) {
+        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . self::$cfg['term_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
+        $result = self::$db->query($query);
+        $lines = self::$db->fetchAll($result);
 
         return valid_array($lines) ? $lines : false;
     }
 
-    public function getLoghost(int $host_id, int $limit) {
-        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . $this->cfg['term_log_level'] . ' AND host_id = ' . $host_id . ' ORDER BY date DESC LIMIT ' . $limit;
-        $result = $this->db->query($query);
-        $lines = $this->db->fetchAll($result);
+    public static function getLoghost(int $host_id, int $limit) {
+        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . self::$cfg['term_log_level'] . ' AND host_id = ' . $host_id . ' ORDER BY date DESC LIMIT ' . $limit;
+        $result = self::$db->query($query);
+        $lines = self::$db->fetchAll($result);
 
         return valid_array($lines) ? $lines : false;
     }
 
-    public function getLogLevelId(string $loglevel) {
-        if (!isset($this->LOG_TYPE[$loglevel])) {
-            $this->debug('Wrong Log Level name used');
+    public static function getLogLevelId(string $loglevel) {
+        if (!isset(self::$LOG_TYPE[$loglevel])) {
+            self::debug('Wrong Log Level name used');
             return false;
         }
-        return $this->LOG_TYPE[$loglevel];
+        return self::$LOG_TYPE[$loglevel];
     }
 
-    public function getLogLevelName(int $logvalue) {
-        foreach ($this->LOG_TYPE as $ktype => $vtype) {
+    public static function getLogLevelName(int $logvalue) {
+        foreach (self::$LOG_TYPE as $ktype => $vtype) {
             if ($vtype == $logvalue) {
                 return $ktype;
             }
         }
     }
 
-    public function getSystemDBLogs(int $limit) {
-        $query = 'SELECT * FROM system_logs WHERE level <= ' . $this->cfg['term_system_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
-        $result = $this->db->query($query);
-        $lines = $this->db->fetchAll($result);
+    public static function getSystemDBLogs(int $limit) {
+        $query = 'SELECT * FROM system_logs WHERE level <= ' . self::$cfg['term_system_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
+        $result = self::$db->query($query);
+        $lines = self::$db->fetchAll($result);
 
         return valid_array($lines) ? $lines : false;
     }
 
-    public function debug(mixed $msg, ?int $self_caller = null) {
-        $this->logged('LOG_DEBUG', $msg, $self_caller);
+    public static function debug(mixed $msg, ?int $self_caller = null) {
+        self::logged('LOG_DEBUG', $msg, $self_caller);
     }
 
-    public function info(mixed $msg, ?int $self_caller = null) {
-        $this->logged('LOG_INFO', $msg, $self_caller);
+    public static function info(mixed $msg, ?int $self_caller = null) {
+        self::logged('LOG_INFO', $msg, $self_caller);
     }
 
-    public function notice(mixed $msg, ?int $self_caller = null) {
-        $this->logged('LOG_NOTICE', $msg, $self_caller);
+    public static function notice(mixed $msg, ?int $self_caller = null) {
+        self::logged('LOG_NOTICE', $msg, $self_caller);
     }
 
-    public function warning(mixed $msg, ?int $self_caller = null) {
-        $this->logged('LOG_WARNING', $msg, $self_caller);
+    public static function warning(mixed $msg, ?int $self_caller = null) {
+        self::logged('LOG_WARNING', $msg, $self_caller);
     }
 
-    public function err(mixed $msg, ?int $self_caller = null) {
-        $this->logged('LOG_ERR', $msg, $self_caller);
+    public static function err(mixed $msg, ?int $self_caller = null) {
+        self::logged('LOG_ERR', $msg, $self_caller);
     }
 
-    public function alert(mixed $msg, ?int $self_caller = null) {
-        $this->logged('LOG_ALERT', $msg, $self_caller);
+    public static function alert(mixed $msg, ?int $self_caller = null) {
+        self::logged('LOG_ALERT', $msg, $self_caller);
     }
 
-    public function emerg(mixed $msg, ?int $self_caller = null) {
-        $this->logged('LOG_EMERG', $msg, $self_caller);
+    public static function emerg(mixed $msg, ?int $self_caller = null) {
+        self::logged('LOG_EMERG', $msg, $self_caller);
     }
 }

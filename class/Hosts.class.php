@@ -35,12 +35,10 @@ Class Hosts {
     private Database $db;
     private $hosts = [];
     private array $lng;
-    private Log $log;
 
-    public function __construct(Log &$log, Database &$db, array $lng) {
+    public function __construct(Database &$db, array $lng) {
         $this->db = &$db;
         $this->lng = $lng;
-        $this->log = &$log;
         $this->getHostsDb();
     }
 
@@ -86,7 +84,7 @@ Class Hosts {
                         ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
                     $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( ' . $this->hosts[$id]['display_name'] . ' )' . $this->hosts[$id][$kvalue] . '->' . $vvalue;
-                    $this->log->logHost('LOG_WARNING', $id, $loghostmsg);
+                    Log::logHost('LOG_WARNING', $id, $loghostmsg);
                 }
                 $this->hosts[$id][$kvalue] = $vvalue;
                 $fvalues[$kvalue] = $vvalue;
@@ -110,11 +108,11 @@ Class Hosts {
         }
         $host['display_name'] = $this->getDisplayName($host);
         $this->hosts[$host_id] = $host;
-        $this->log->logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $host['display_name'] . " ($hostlog)");
+        Log::logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $host['display_name'] . " ($hostlog)");
     }
 
     function remove(int $hid) {
-        $this->log->notice('Deleted host: ' . $this->hosts[$hid]['display_name']);
+        Log::notice('Deleted host: ' . $this->hosts[$hid]['display_name']);
         $this->db->delete('hosts', ['id' => $hid], 'LIMIT 1');
         $this->db->delete('notes', ['host_id' => $hid], 'LIMIT 1');
         $this->db->delete('stats', ['host_id' => $hid], 'LIMIT 1');

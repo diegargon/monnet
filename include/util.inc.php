@@ -100,7 +100,7 @@ function array2string(array $array) {
     return implode(', ', $result);
 }
 
-function cached_img(Log $log, User $user, int $id, string $img_url, $renew = 0) {
+function cached_img(User $user, int $id, string $img_url, $renew = 0) {
     $http_options = [];
 
     $cache_path = 'cache';
@@ -116,12 +116,12 @@ function cached_img(Log $log, User $user, int $id, string $img_url, $renew = 0) 
     }
 
     if (!Filters::varImgUrl($img_url)) {
-        $log->warning($img_url . ' invalid image url');
+        Log::warning($img_url . ' invalid image url');
         return false;
     }
 
     if (!is_writeable($cache_path)) {
-        $log->warning($cache_path . ' is not writable');
+        Log::warning($cache_path . ' is not writable');
         return $img_url;
     }
 
@@ -133,7 +133,7 @@ function cached_img(Log $log, User $user, int $id, string $img_url, $renew = 0) 
     if (file_exists($cache_img_path) && $renew === 0) {
         return $cache_img_path;
     } else {
-        $log->debug("image path NOT exists or renew getting content " . $img_url);
+        Log::debug("image path NOT exists or renew getting content " . $img_url);
         $img_item_check = $user->getPref($img_url);
         if ($img_item_check) {
             $img_item_check = new DateTime($img_item_check);
@@ -153,7 +153,7 @@ function cached_img(Log $log, User $user, int $id, string $img_url, $renew = 0) 
         } else {
             $user->setPref($img_url, utc_date_now());
             $error = error_get_last();
-            $log->err('Error getting image error msg ' . $error['message']);
+            Log::err('Error getting image error msg ' . $error['message']);
         }
     }
 
