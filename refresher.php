@@ -91,24 +91,24 @@ if ($command == 'submitHostToken' && !empty($command_value) && is_numeric($comma
     $data['command_sucess'] = 1;
 }
 if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id)) {
-    $sucess = 0;
+    $sucess_msg = '';
     if (!empty($command_value)) {
         $valid_ports = validatePortsInput(trim($command_value));
         if (valid_array($valid_ports)) {
             if (($encoded_ports = json_encode($valid_ports))) {
                 $db->update('hosts', ['ports' => $encoded_ports], ['id' => $object_id]);
                 $total_elements = count($valid_ports) - 1;
-                $sucess = '';
                 foreach ($valid_ports as $index => $port) {
-                    $sucess .= $port['n'] . '/';
-                    $sucess .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
-                    $sucess .= '/' . $port['name'];
-                    $sucess .= ($index === $total_elements) ? '' : ',';
+                    $sucess_msg .= $port['n'] . '/';
+                    $sucess_msg .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
+                    $sucess_msg .= '/' . $port['name'];
+                    $sucess_msg .= ($index === $total_elements) ? '' : ',';
                 }
             }
         }
     }
-    $data['command_sucess'] = $sucess;
+    $data['command_sucess'] = 1;
+    $data['response_msg'] = $sucess_msg;
 }
 
 if ($command == 'submitTitle' && !empty($object_id) && is_numeric($object_id)) {
