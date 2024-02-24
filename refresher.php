@@ -359,6 +359,7 @@ if ($command == 'change_bookmarks_tab' && !empty($command_value)) {
 /* ALWAYS */
 
 $logs = [];
+$type_mark = '';
 
 $host_logs = Log::getLoghosts($cfg['term_max_lines']);
 if (valid_array($host_logs)) {
@@ -367,6 +368,12 @@ if (valid_array($host_logs)) {
 if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
     $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
     if (valid_array($system_logs)) {
+        foreach ($logs as $key => $log) {
+            $logs[$key]['type_mark'] = '[H]';
+        }
+        foreach ($system_logs as $key => $system_log) {
+            $system_logs[$key]['type_mark'] = '[S]';
+        }
         $logs = array_merge($logs, $system_logs);
     }
 }
@@ -377,15 +384,19 @@ usort($logs, function ($a, $b) {
 
     return ($dateA < $dateB) ? 1 : -1;
 });
-
-$term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
+//If we add systems logs probably we exceed the max
+if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {
+    $term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
+} else {
+    $term_logs = $logs;
+}
 if (valid_array($term_logs)) {
     $log_lines = [];
     foreach ($term_logs as $term_log) {
         $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
         $loglevelname = Log::getLogLevelName($term_log['level']);
         $loglevelname = str_replace('LOG_', '', $loglevelname);
-        $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'];
+        $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['type_mark'] . $term_log['msg'];
     }
     $data['term_logs']['cfg']['place'] = '#center_container';
     $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
