@@ -10,22 +10,6 @@
 ?>
 <div class="options_container">
     <fieldset class="ctrl_fieldset">
-        <legend class="ctrl_legend"><?= $lng['L_BOOKMARKS'] ?></legend>
-        <div class="services_ctrl">
-            <button id="addBookmark" class="button-ctrl" type="submit"><img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>"></button>
-        </div>
-        <div class="services_ctrl">
-            <button id="toggleItemsSettings" class="button-ctrl" type="submit"><img class="settigns_link" src="./tpl/default/img/settings-items.png" title="<?= $lng['L_SETTINGS'] ?>"></button>
-        </div>
-        <form method="POST" name="links_form">
-            <div class="bookmarks_ctrl">
-                <input type="hidden" name="show_bookmarks" value="0" />
-                <input class="check" type="checkbox" value="1" name="show_bookmarks" <?= $tdata['controls']['show_bookmarks_status'] ? ' checked ' : null; ?>  onchange="this.form.submit()" />
-                <span class="opt_labels"><?= $lng['L_BOOKMARKS'] ?></span>
-            </div>
-        </form>
-    </fieldset>
-    <fieldset class="ctrl_fieldset">
         <div class="services_ctrl">
             <button id="addNetwork" class="button-ctrl" type="submit"><img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?>"></button>
             <span class="opt_labels"><?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?></span>
@@ -41,6 +25,22 @@
                 <input type="hidden" name="show_rest_hosts" value="0" />
                 <input class="check" type="checkbox" value="1" name="show_rest_hosts" <?= $tdata['controls']['show_other_hosts_status'] ? ' checked ' : null ?> onchange="this.form.submit()" />
                 <span class="opt_labels"><?= $lng['L_OTHERS'] ?></span>
+            </div>
+        </form>
+    </fieldset>
+    <fieldset class="ctrl_fieldset">
+        <legend class="ctrl_legend"><?= $lng['L_BOOKMARKS'] ?></legend>
+        <div class="services_ctrl">
+            <button id="addBookmark" class="button-ctrl" type="submit"><img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>"></button>
+        </div>
+        <div class="services_ctrl">
+            <button id="toggleItemsSettings" class="button-ctrl" type="submit"><img class="settigns_link" src="./tpl/default/img/settings-items.png" title="<?= $lng['L_SETTINGS'] ?>"></button>
+        </div>
+        <form method="POST" name="links_form">
+            <div class="bookmarks_ctrl">
+                <input type="hidden" name="show_bookmarks" value="0" />
+                <input class="check" type="checkbox" value="1" name="show_bookmarks" <?= $tdata['controls']['show_bookmarks_status'] ? ' checked ' : null; ?>  onchange="this.form.submit()" />
+                <span class="opt_labels"><?= $lng['L_BOOKMARKS'] ?></span>
             </div>
         </form>
     </fieldset>
