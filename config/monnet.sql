@@ -350,7 +350,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `networks`
 --
 ALTER TABLE `networks`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `notes`
