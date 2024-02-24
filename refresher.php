@@ -364,7 +364,7 @@ $host_logs = Log::getLoghosts($cfg['term_max_lines']);
 if (valid_array($host_logs)) {
     $logs = $host_logs;
 }
-if ($cfg['term_show_system'] && $cfg['log_to_db']) {
+if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
     $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
     if (valid_array($system_logs)) {
         $logs = array_merge($logs, $system_logs);
