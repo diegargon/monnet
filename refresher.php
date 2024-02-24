@@ -14,14 +14,23 @@ require_once('include/common.inc.php');
 require_once('include/usermode.inc.php');
 
 $tdata = [];
-$data = [];
-$data['conn'] = 'success';
 $force_host_reload = 0;
+
+//TODO: We pass target id in  command_value and object_id -> change to always use object_id for that
+$data = [
+    'conn' => 'success',
+    'login' => 'fail',
+    'command_receive' => '',
+    'command_value' => '',
+    'object_id' => '',
+    'command_sucess' => 0,
+    'command_error_msg' => '',
+    'response_msg' => '',
+];
 
 if ($user->getId() > 0) {
     $data['login'] = 'success';
 } else {
-    $data['login'] = 'fail';
     print(json_encode($data));
     exit();
 }
@@ -49,8 +58,6 @@ if (!empty($command_value)) {
 if (!empty($object_id)) {
     $data['object_id'] = $object_id;
 }
-$data['command_sucess'] = 0;
-$data['command_error_msg'] = '';
 
 /* Remove host */
 if ($command === 'remove_host' && is_numeric($command_value)) {
@@ -167,17 +174,26 @@ if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_i
     $force_host_reload = 1;
 }
 
-/* Show Only Host Cat */
+/* Show cat Only * */
 if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
-    $db->update('categories', ['on' => 0], ['cat_type' => 1]);
-    $command = 'show_host_cat'; //Trigger show_host_cat
+    !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
+    $caton = $categories->getOnByType(1);
+
+    if (empty($caton) || count($caton) == 1) {
+        $categories->turnAllOn(1);
+    } else {
+        $categories->turnAllOff(1);
+        $categories->toggle($command_value);
+    }
 }
 
-/* Show Host Cat */
-
 if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
-    $db->toggleField('categories', 'on', ['id' => $command_value]);
+    //$db->toggleField('categories', 'on', ['id' => $command_value]);
     !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
+    $categories->toggle($command_value);
+}
+
+if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
     $tdata['hosts_categories'] = $categories->prepareCats(1);
     //Networks dropdown
     $networks_q = $db->selectAll('networks', ['disable' => 0]);
@@ -194,12 +210,14 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $tdata['networks'] = $networks;
     $tdata['networks_selected'] = $networks_selected;
 
-    //
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
     $data['command_sucess'] = 1;
     $force_host_reload = 1;
 }
+
+/* /end Host Cat */
+
 $highlight_hosts_count = 0;
 
 if ((empty($command) && empty($command_value)) || $force_host_reload) {

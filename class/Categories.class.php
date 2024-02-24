@@ -86,4 +86,32 @@ class Categories {
 
         return $categories_by_type;
     }
+
+    public function toggle(int $id) {
+        $this->db->toggleField('categories', 'on', ['id' => $id]);
+        foreach ($this->categories as &$cat) {
+            if ($cat['id'] == $id) {
+                $cat['on'] = !$cat['on'];
+                break;
+            }
+        }
+    }
+
+    public function turnAllOff(int $type) {
+        $this->db->update('categories', ['on' => 0], ['cat_type' => $type]);
+        foreach ($this->categories as &$cat) {
+            if ($cat['cat_type'] == $type) {
+                $cat['on'] = 0;
+            }
+        }
+    }
+
+    public function turnAllOn(int $type) {
+        $this->db->update('categories', ['on' => 1], ['cat_type' => $type]);
+        foreach ($this->categories as &$cat) {
+            if ($cat['cat_type'] == $type) {
+                $cat['on'] = 1;
+            }
+        }
+    }
 }
