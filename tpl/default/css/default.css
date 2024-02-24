@@ -531,10 +531,10 @@ input:checked + .slider:before {
     overflow: hidden;
 }
 .host-glow-off {
-    background-color: rgb(49, 36, 36);
+    background-color: rgb(149, 36, 36);
 }
 .host-glow-on {
-    background-color: rgb(26, 38, 31);
+    background-color: rgb(36, 38, 131);
 }
 .hosts-title {
     display: inline-block;

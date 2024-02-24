@@ -119,8 +119,7 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
           $diff = $date_now->diff($update_time);
           $minutes_diff = $diff->i;
 
-
-          if ($minutes_diff < 15) {
+          if ($minutes_diff < 10) {
           if ($vhost['online']) {
           $hostscat[$khost]['glow'] = 'host-glow-on';
           } else {
