@@ -23,7 +23,7 @@ $data = [
     'command_receive' => '',
     'command_value' => '',
     'object_id' => '',
-    'command_sucess' => 0,
+    'command_success' => 0,
     'command_error_msg' => '',
     'response_msg' => '',
 ];
@@ -66,19 +66,19 @@ if ($command === 'remove_host' && is_numeric($command_value)) {
     $user->setPref('host_details', 0);
     $data['host_details'] = '';
     $command = $command_value = '';
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
 }
 
 if ($command == 'network_select' && !empty($command_value) && is_numeric($command_value)) {
     $pref_name = 'network_select_' . $command_value;
     $user->setPref($pref_name, 1);
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
     $force_host_reload = 1;
 }
 if ($command == 'network_unselect' && !empty($command_value) && is_numeric($command_value)) {
     $pref_name = 'network_select_' . $command_value;
     $user->setPref($pref_name, 0);
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
     $force_host_reload = 1;
 }
 
@@ -87,7 +87,7 @@ if ($command == 'setCheckPorts' && isset($command_value) && !empty($object_id)) 
 //    ($command_value == 0) ? $value = 1 : $value = 2;
 
     $hosts->update($object_id, ['check_method' => $command_value]);
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
     $data['response_msg'] = $command_value;
 }
 
@@ -95,10 +95,10 @@ if ($command == 'submitHostToken' && !empty($command_value) && is_numeric($comma
     $token = create_token();
     $hosts->update($command_value, ['token' => $token]);
     $data['response_msg'] = $token;
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
 }
 if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id)) {
-    $sucess_msg = '';
+    $success_msg = '';
     if (!empty($command_value)) {
         $valid_ports = validatePortsInput(trim($command_value));
         if (valid_array($valid_ports)) {
@@ -106,70 +106,70 @@ if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id
                 $db->update('hosts', ['ports' => $encoded_ports], ['id' => $object_id]);
                 $total_elements = count($valid_ports) - 1;
                 foreach ($valid_ports as $index => $port) {
-                    $sucess_msg .= $port['n'] . '/';
-                    $sucess_msg .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
-                    $sucess_msg .= '/' . $port['name'];
-                    $sucess_msg .= ($index === $total_elements) ? '' : ',';
+                    $success_msg .= $port['n'] . '/';
+                    $success_msg .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
+                    $success_msg .= '/' . $port['name'];
+                    $success_msg .= ($index === $total_elements) ? '' : ',';
                 }
             }
         }
     }
-    $data['command_sucess'] = 1;
-    $data['response_msg'] = $sucess_msg;
+    $data['command_success'] = 1;
+    $data['response_msg'] = $success_msg;
 }
 
 if ($command == 'submitTitle' && !empty($object_id) && is_numeric($object_id)) {
-    $sucess = 0;
+    $success = 0;
     if (!empty($command_value)) {
         $hosts->update($object_id, ['title' => $command_value]);
-        $sucess = 1;
+        $success = 1;
     }
-    $data['command_sucess'] = $sucess;
+    $data['command_success'] = $success;
     $force_host_reload = 1;
 }
 
 // Change Host Cat
 if ($command == 'submitCat' && !empty($object_id) && is_numeric($object_id)) {
-    $sucess = 0;
+    $success = 0;
     if (!empty($command_value)) {
         $hosts->update($object_id, ['category' => $command_value]);
-        $sucess = 1;
+        $success = 1;
     }
-    $data['command_sucess'] = $sucess;
+    $data['command_success'] = $success;
     $data['response_msg'] = 'Category changed to ' . $command_value;
     $force_host_reload = 1;
 }
 
 
 if ($command == 'submitManufacture' && !empty($object_id) && is_numeric($object_id)) {
-    $sucess = 0;
+    $success = 0;
     if (!empty($command_value)) {
         $hosts->update($object_id, ['manufacture' => $command_value]);
-        $sucess = 1;
+        $success = 1;
     }
-    $data['command_sucess'] = $sucess;
+    $data['command_success'] = $success;
     $data['response_msg'] = 'Manufacture changed to ' . $command_value;
     $force_host_reload = 1;
 }
 
 if ($command == 'submitOS' && !empty($object_id) && is_numeric($object_id)) {
-    $sucess = 0;
+    $success = 0;
     if (!empty($command_value)) {
         $hosts->update($object_id, ['os' => $command_value]);
-        $sucess = 1;
+        $success = 1;
     }
-    $data['command_sucess'] = $sucess;
+    $data['command_success'] = $success;
     $data['response_msg'] = 'OS changed to ' . $command_value;
     $force_host_reload = 1;
 }
 
 if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_id)) {
-    $sucess = 0;
+    $success = 0;
     if (!empty($command_value)) {
         $hosts->update($object_id, ['system_type' => $command_value]);
-        $sucess = 1;
+        $success = 1;
     }
-    $data['command_sucess'] = $sucess;
+    $data['command_success'] = $success;
     $data['response_msg'] = 'System Type changed to ' . $command_value;
     $force_host_reload = 1;
 }
@@ -212,7 +212,7 @@ if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($co
 
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
     $force_host_reload = 1;
 }
 
@@ -287,7 +287,7 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         unset($tdata['host_details']['ping_stats']);
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
-        $data['command_sucess'] = 1;
+        $data['command_success'] = 1;
     } else {
         $data['command_error_msg'] .= 'Invalid host-details array';
     }
@@ -304,7 +304,7 @@ if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
     $where = ['id' => $object_id];
 
     $db->update('notes', $set, $where, 'LIMIT 1');
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
 }
 
 if ($command == 'setHighlight' && !empty($object_id)) {
@@ -312,13 +312,13 @@ if ($command == 'setHighlight' && !empty($object_id)) {
     $value = (empty($command_value)) ? 0 : 1;
 
     $hosts->update($object_id, ['highlight' => $value]);
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
     $data['response_msg'] = 'Changed to ' . $value;
 }
 
 if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value)) {
     $db->delete('items', ['id' => $command_value], 'LIMIT 1');
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
 }
 
 /* Power ON/OFF  & Reboot */
@@ -327,7 +327,7 @@ if ($command == 'power_on' && !empty($command_value) && is_numeric($command_valu
 
     if (valid_array($host) && !empty($host['mac'])) {
         sendWOL($host['mac']);
-        $data['command_sucess'] = 1;
+        $data['command_success'] = 1;
     } else {
         $err_msg = "Host {$host['ip']} has not mac address";
         Log::warning($err_msg);
@@ -349,12 +349,12 @@ if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value)
     if (empty($coincidence)) {
         $db->insert('cmd', ['cmd_type' => 1, 'hid' => $command_value]);
     }
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
 }
 
 if ($command == 'change_bookmarks_tab' && !empty($command_value)) {
     $user->setPref('default_bookmarks_tab', $command_value);
-    $data['command_sucess'] = 1;
+    $data['command_success'] = 1;
 }
 /* ALWAYS */
 

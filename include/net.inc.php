@@ -253,7 +253,7 @@ function sendWOL(string $host_mac) {
     $result = socket_sendto($socket, $magicPacket, strlen($magicPacket), 0, '255.255.255.255', 9);
 
     if ($result) {
-        Log::debug("Sucessful sending WOL packet to {$host_mac}");
+        Log::debug("Successful sending WOL packet to {$host_mac}");
     } else {
         Log::debug("Failed sending WOL packet to {$host_mac}");
     }

@@ -70,15 +70,15 @@
                         $(elementSelector).hide();
                     }
                     if (jsonData.command_receive === 'submitScanPorts') {
-                        if (jsonData.command_sucess === 1) {
+                        if (jsonData.command_success === 1) {
                             $('#config_status_msg').html('OK');
-                            $('#host-title').val(jsonData.command_sucess);
+                            $('#host-title').val(jsonData.command_success);
                         } else {
                             $('#config_status_msg').html('Error');
                         }
                     }
                     if (jsonData.command_receive === 'submitTitle') {
-                        if (jsonData.command_sucess) {
+                        if (jsonData.command_success) {
                             $('#config_status_msg').html('Validated:' + jsonData.command_value);
                         } else {
                             $('#config_status_msg').html('Error: ' + jsonData.command_value);
@@ -86,7 +86,7 @@
                         $('#host-title').val(jsonData.command_value);
                     }
                     if (jsonData.command_receive === 'submitCat') {
-                        if (jsonData.command_sucess === 1) {
+                        if (jsonData.command_success === 1) {
                             $('#config_status_msg').html(jsonData.response_msg);
                             //$('#hostcat_id').find('option').removeAttr('selected');
                             //$('#hostcat_id').find('option[value="' + jsonData.command_value + '"]').attr('selected', 'selected');
@@ -96,14 +96,14 @@
                         }
                     }
                     if (jsonData.command_receive === 'submitManufacture') {
-                        if (jsonData.command_sucess === 1) {
+                        if (jsonData.command_success === 1) {
                             $('#config_status_msg').html(jsonData.response_msg);
                         } else {
                             $('#config_status_msg').html('Error');
                         }
                     }
                     if (jsonData.command_receive === 'submitOS') {
-                        if (jsonData.command_sucess === 1) {
+                        if (jsonData.command_success === 1) {
                             $('#config_status_msg').html(jsonData.response_msg);
                         } else {
                             $('#config_status_msg').html('Error');
@@ -111,7 +111,7 @@
                     }
                     if (jsonData.command_receive === 'submitHostToken') {
                         console.log(2);
-                        if (jsonData.command_sucess === 1) {
+                        if (jsonData.command_success === 1) {
                             $('#host_token').val(jsonData.response_msg);
                         } else {
                             console.log(3);
@@ -119,7 +119,7 @@
                         }
                     }
                     if (jsonData.command_receive === 'submitSystemType') {
-                        if (jsonData.command_sucess === 1) {
+                        if (jsonData.command_success === 1) {
                             $('#config_status_msg').html(jsonData.response_msg);
                         } else {
                             $('#config_status_msg').html('Error');
