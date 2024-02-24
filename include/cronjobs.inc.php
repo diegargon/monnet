@@ -141,7 +141,7 @@ function ping_net(Database $db, Hosts $hosts) {
         }
     }
 
-    Log:info('Ping net took ' . (($ping_net_time - microtime(true)) / 1000000) . ' seconds');
+    Log::info('Ping net took ' . (intval(microtime(true) - $ping_net_time)) . ' seconds');
 }
 
 function fill_hostnames(Hosts $hosts, int $forceall = 0) {
