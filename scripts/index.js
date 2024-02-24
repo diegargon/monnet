@@ -105,10 +105,10 @@ $(document).ready(function () {
 
     $(document).on("change", "#checkports_enabled", function () {
         var host_id = $('#host_id').val();
-        var value = 0;
+        var value = 1;
 
         if (this.checked) {
-            value = 1;
+            value = 2;
         }
         refresh('setCheckPorts', value, host_id);
     });

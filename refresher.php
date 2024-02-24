@@ -33,6 +33,8 @@ if ($command == 'saveNote') {
     $command_value = trim(Filters::postUTF8('order_value'));
 } else if ($command == 'submitScanPorts') {
     $command_value = trim(Filters::postCustomString('order_value', ',/', 255));
+} else if ($command == 'setCheckPorts') {
+    $command_value = Filters::postInt('order_value');
 } else {
     $command_value = trim(Filters::postString('order_value'));
 }
@@ -75,10 +77,11 @@ if ($command == 'network_unselect' && !empty($command_value) && is_numeric($comm
 
 if ($command == 'setCheckPorts' && isset($command_value) && !empty($object_id)) {
     // 1 ping 2 TCP/UDP
-    ($command_value == 0) ? $value = 1 : $value = 2;
+//    ($command_value == 0) ? $value = 1 : $value = 2;
 
-    $hosts->update($object_id, ['check_method' => $value]);
+    $hosts->update($object_id, ['check_method' => $command_value]);
     $data['command_sucess'] = 1;
+    $data['response_msg'] = $command_value;
 }
 
 if ($command == 'submitHostToken' && !empty($command_value) && is_numeric($command_value)) {
