@@ -88,6 +88,7 @@ function check_known_hosts(Database $db, Hosts $hosts) {
 }
 
 function ping_net(Database $db, Hosts $hosts) {
+    $ping_net_time = microtime(true);
     $query = $db->selectAll('networks', ['scan' => 1, 'disable' => 0]);
     $networks = $db->fetchAll($query);
     $timeout = ['sec' => 0, 'usec' => 100000];
@@ -103,18 +104,6 @@ function ping_net(Database $db, Hosts $hosts) {
         foreach ($db_hosts as $host) {
             if ($host['ip'] == $vip) {
                 unset($iplist[$kip]);
-                //Temporaly Check network for UPDATE
-                $idNetwork = get_network_id($host['ip'], $networks);
-                if ($idNetwork == false) {
-                    Log::warning('Failed to get id network for ip ' . $host['ip']);
-                    $set['network'] = 1;
-                } else {
-                    $set['network'] = $idNetwork;
-                }
-                if (valid_array($set) && ($idNetwork != $host['network'])) {
-                    $db->update('hosts', $set, ['id' => $host['id']]);
-                    Log::warning('Update host network ' . $host['diplay_name'] . ' from ' . $host['network'] . ' to ' . $idNetwork);
-                }
             }
         }
     }
@@ -130,7 +119,7 @@ function ping_net(Database $db, Hosts $hosts) {
             if ($mac) {
                 $set['mac'] = $mac;
                 $mac_info = get_mac_vendor($mac);
-                (!empty($mac_info['company'])) ? $set['mac_vendor'] = $mac_info['company'] : $set['mac_vendor'] = '-';
+                $set['mac_vendor'] = (!empty($mac_info['company'])) ? $mac_info['company'] : '-';
             }
             $set['ip'] = $ip;
             $set['online'] = 1;
@@ -151,6 +140,8 @@ function ping_net(Database $db, Hosts $hosts) {
             $hosts->insert($set);
         }
     }
+
+    Log:debug('Ping net took ' . (($ping_net_time - microtime(true)) / 1000000) . ' seconds');
 }
 
 function fill_hostnames(Hosts $hosts, int $forceall = 0) {
@@ -158,7 +149,7 @@ function fill_hostnames(Hosts $hosts, int $forceall = 0) {
 
     foreach ($db_hosts as $host) {
         if (empty($host['hostname']) || $forceall === 1) {
-            Log::debug("Getting hostname {$host['ip']}");
+            //Log::debug("Getting hostname {$host['ip']}");
             $hostname = get_hostname($host['ip']);
             if ($hostname !== false && $hostname != $host['ip']) {
                 $update['hostname'] = $hostname;
