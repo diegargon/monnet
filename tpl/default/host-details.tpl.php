@@ -38,6 +38,7 @@
                     <?php if (!empty($tdata['host_details']['ping_graph'])) { ?>
                         <button id="tab10_btn" class="host-details-tabs-head" onclick="changeTab('tab10')"><?= $lng['L_METRICS'] ?></button>
                     <?php } ?>
+                    <button id="tab11_btn" class="host-details-tabs-head" onclick="changeTab('tab11')"><?= $lng['L_ALARMS'] ?></button>
                     <button id="tab12_btn" class="host-details-tabs-head" onclick="changeTab('tab12')"><?= $lng['L_CONFIG'] ?></button>
                     <!--
                     <button id="tabx_btn" class="host-details-tabs-head" onclick="changeTab('tab2')"><?= $lng['L_DEPLOYS'] ?></button>
@@ -208,6 +209,12 @@
             </div>
         <?php } ?>
         <!-- /TAB10 -->
+        <!-- TAB11 -->
+        <div id="tab11" class="host-details-tab-content">
+            <div class="alarms_container">
+            </div>
+        </div>
+        <!-- /TAB11 -->
         <!-- /TAB12 --><!-- Config -->
         <div id="tab12" class="host-details-tab-content">
             <div class="config_container">
@@ -292,7 +299,7 @@
         <!-- TODO DISABLED -->
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -300,11 +307,11 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                            <option value="0"></option>
+                                <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                        <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
@@ -318,10 +325,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                         <div class="log_line"><?= $log ?></div>
+                                                                                 <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                            </div>
+                                </div>
         <?php }
         ?>
         <!-- /TODO DISABLED -->

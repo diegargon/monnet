@@ -14,6 +14,7 @@ $lng = [
     'L_APPLINKS' => 'Web apps',
     'L_AREYOUSURE' => '¿estas seguro?',
     'L_ALL' => 'Todo',
+    'L_ALARMS' => 'Alarmas',
     //B
     'L_BOOKMARKS' => 'Links',
     'L_BOOKMARK' => 'Link',
