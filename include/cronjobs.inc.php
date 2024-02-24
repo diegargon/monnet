@@ -20,34 +20,32 @@ function check_known_hosts(Database $db, Hosts $hosts) {
 
     $db_hosts = $hosts->getknownEnabled();
 
-    //TODO one update/insert
     foreach ($db_hosts as $host) {
-        $host_status = [];
-
+        $new_host_status = [];
+        /*
+         * Port Scan
+         */
         if ($host['check_method'] == 2 && valid_array($host['ports'])) { //TCP
             Log::debug("Pinging host ports {$host['ip']}");
-            $ping_host_result = ping_host_ports($host);
-            if ($ping_host_result['online'] == 0) {
-                //recheck
-                $ping_host_result = ping_host_ports($host);
+            $ping_ports_result = ping_host_ports($host);
+            if ($host['online'] == 1 && $ping_ports_result['online'] == 0) { //recheck
+                $ping_ports_result = ping_host_ports($host);
             }
             //Ports are down, check host with ping
-            if ($ping_host_result['online'] == 0) {
-                $host_ping = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
-                if ($host_ping['isAlive']) {
-                    $ping_host_status['online'] = 1;
-                    $ping_host_status = $host_ping['latency'];
-                    $ping_host_status['last_seen'] = utc_date_now();
+            if ($ping_ports_result['online'] == 0) {
+                $host_ping_result = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
+                if ($host_ping_result['online']) {
+                    $ping_ports_result['online'] = 1;
+                    $ping_ports_result['latency'] = $host_ping_result['latency'];
+                    $ping_ports_result['last_seen'] = utc_date_now();
                 }
             }
-            (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
+            (valid_array($ping_ports_result)) ? $new_host_status = $ping_ports_result : null;
 
-            if ($ping_host_result['online'] == 1 && $host['online'] == 0) {
-                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
-            } else if ($ping_host_result['online'] == 0 && $host['online'] == 1) {
-                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
-            }
-        } else { //Ping
+            /*
+             * Ping Scan
+             */
+        } else {
             if ($host['check_method'] == 2 && !valid_array($host['ports'])) {
                 Log::warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
             }
@@ -56,22 +54,29 @@ function check_known_hosts(Database $db, Hosts $hosts) {
                 //recheck
                 $ping_host_result = ping_known_host($host);
             }
-            if ($ping_host_result['online'] == 1 && $host['online'] == 0) {
+
+            (valid_array($ping_host_result)) ? $new_host_status = $ping_host_result : null;
+        }
+
+        /*
+         *  Update host with scan data
+         */
+
+        if (valid_array($new_host_status) && $new_host_status['online'] && empty($host['mac'])) {
+            $mac = get_mac($host['ip']);
+            $mac = !empty($new_host_status['mac']) ? $mac : null;
+        }
+        if (valid_array($new_host_status)) {
+
+            if ($host['online'] == 0 && $new_host_status['online'] == 1) {
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
-            } else if ($ping_host_result['online'] == 0 && $host['online'] == 1) {
+            } else if ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
             }
-            (valid_array($ping_host_result)) ? $host_status = $ping_host_result : null;
-        }
-        if (valid_array($host_status) && $host_status['online'] && empty($host['mac'])) {
-            $mac = get_mac($host['ip']);
-            $mac ? $host_status['mac'] = $mac : null;
-        }
-        if (valid_array($host_status)) {
-            defined('DUMP_VARS') ? Log::debug("Dumping host_status: " . print_r($host_status, true)) : null;
-            $hosts->update($host['id'], $host_status);
-            if (isset($host_status['latency']) && $host_status['latency'] > 0) {
-                $ping_latency = $host_status['latency'];
+
+            $hosts->update($host['id'], $new_host_status);
+            if ($new_host_status['online'] == 1 && isset($new_host_status['latency']) && $new_host_status['latency'] > 0) {
+                $ping_latency = $new_host_status['latency'];
                 $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
                 $db->insert('stats', $set_ping_stats);
             }
