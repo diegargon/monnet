@@ -9,16 +9,18 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function trigger_update(Database $db, float $db_version, float $files_version) {
-    Log::notice("Triggered updater Files: $files_version DB: $db_version");
+function trigger_update(Database $db, float $db_version, float $monnet_version) {
+    Log::notice("Triggered updater Files: $monnet_version DB: $db_version");
 
     if ($db_version < 0.31) {
         $db->query("UPDATE prefs SET pref_value='0.31' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        Log::info("Update version to 0.31 success");
+        Log::info("Update version to 0.31 successful");
+        $db_version = 0.31;
     }
     if ($db_version < 0.32) {
         $db->query("UPDATE prefs SET pref_value='0.32' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        Log::info("Update version to 0.32 success");
+        Log::info("Update version to 0.32 successful");
+        $db_version = 0.32;
     }
 
     if ($db_version < 0.33) {
@@ -31,27 +33,35 @@ function trigger_update(Database $db, float $db_version, float $files_version) {
         $db->query("ALTER TABLE `hosts` CHANGE `os` `os` SMALLINT NOT NULL DEFAULT '0';");
         $db->query("ALTER TABLE `hosts` DROP `os_distribution`;");
         $db->query("ALTER TABLE `hosts` ADD `manufacture` SMALLINT NOT NULL DEFAULT '0' AFTER `check_method`;");
-        Log::info("Update version to 0.33 success");
+        Log::info("Update version to 0.33 successful");
         $db->query("UPDATE prefs SET pref_value='0.33' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        $db_version = 0.33;
+    }
+
+    if ($db_version < 0.34) {
+        $db->query("ALTER TABLE `networks` ADD UNIQUE(`network`);");
+        $db->query("ALTER TABLE `networks` ADD UNIQUE(`name`);");
+        $db->query("ALTER TABLE `networks` CHANGE `network` `network` CHAR(18) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;");
+        $db->query("ALTER TABLE `networks` CHANGE `name` `name` CHAR(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;");
+        $db->query("INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`, `disable`, `weight`) VALUES ('10', '1', 'L_PRINTERS', '1', '0', '0'); ");
+        $db->query("ALTER TABLE `hosts` ADD `online_change` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `online`;");
+        $db->query("ALTER TABLE `categories` CHANGE `cat_name` `cat_name` CHAR(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;");
+        $db->query("ALTER TABLE `hosts_logs` CHANGE `msg` `msg` CHAR(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL; ");
+        $db->query("ALTER TABLE `system_logs` CHANGE `msg` `msg` CHAR(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL; ");
+        $db->query("ALTER TABLE `users` CHANGE `timezone` `timezone` CHAR(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL; ");
+
+        Log::info("Update version to 0.34 successful");
+        $db->query("UPDATE prefs SET pref_value='0.34' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        $db_version = 0.34;
     }
 
     //NEXT
-    /*
-      if ($db_version < 0.34) {
-      $db->query("ALTER TABLE `networks` ADD UNIQUE(`network`);";
-      $db->query("ALTER TABLE `networks` ADD UNIQUE(`name`);";
-      $db->query"ALTER TABLE `networks` CHANGE `network` `network` CHAR(18) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;";
-      $db->query("ALTER TABLE `networks` CHANGE `name` `name` CHAR(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;");
-      $db->query("INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`, `disable`, `weight`) VALUES ('10', '1', 'L_PRINTERS', '1', '0', '0'); ");
-      Log::info("Update version to 0.34 success");
-      $db->query("UPDATE prefs SET pref_value='0.34' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-      }
-     */
     //Template
     if ($db_version < 0.00) {
         $db->query("");
-        Log::info("Update version to 0.00 success");
+        Log::info("Update version to 0.00 successful");
         $db->query("UPDATE prefs SET pref_value='0.00' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        //$db_version = 0.00;
     }
 }
 
@@ -59,8 +69,8 @@ $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_
 $result = $db->fetchAll($query);
 
 $db_version = (float) $result[0]['pref_value'];
-$files_version = $cfg['monnet_version'];
+$monnet_version = $cfg['monnet_version'];
 
-if ($files_version > $db_version) {
-    trigger_update($db, $db_version, $files_version);
+if ($monnet_version > $db_version) {
+    trigger_update($db, $db_version, $monnet_version);
 }
