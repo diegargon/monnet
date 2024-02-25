@@ -11,20 +11,22 @@
 
 class Categories {
 
+    private $ctx;
     private $cfg;
     private $db;
     private $categories = [];
     private $cat_types;
     private $lng = [];
 
-    public function __construct(array &$cfg, array $lng, Database &$db) {
-        $this->cfg = &$cfg;
-        $this->db = &$db;
-        $this->lng = $lng;
+    public function __construct(AppCtx $ctx) {
+        $this->ctx = $ctx;
+        $this->cfg = $ctx->getAppCfg();
+        $this->db = $ctx->getAppDb();
+        $this->lng = $ctx->getAppLang();
 
-        $results = $db->select('categories', '*');
-        $this->categories = $db->fetchAll($results);
-        $this->cat_types = $cfg['cat_types'];
+        $results = $this->db->select('categories', '*');
+        $this->categories = $this->db->fetchAll($results);
+        $this->cat_types = $this->cfg['cat_types'];
     }
 
     public function getAll() {

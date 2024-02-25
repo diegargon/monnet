@@ -11,16 +11,18 @@
 
 Class Web {
 
+    private AppCtx $ctx;
     private Database $db;
     private array $lng;
     private array $cfg;
     private User $user;
 
-    public function __construct(array &$cfg, Database &$db, User &$user, array $lng) {
-        $this->cfg = &$cfg;
-        $this->db = &$db;
-        $this->user = &$user;
-        $this->lng = $lng;
+    public function __construct(AppCtx $ctx) {
+        $this->ctx = $ctx;
+        $this->cfg = $ctx->getAppCfg();
+        $this->db = $ctx->getAppDb();
+        $this->user = $ctx->getAppUser();
+        $this->lng = $ctx->getAppLang();
     }
 
     public function run() {
@@ -56,18 +58,18 @@ Class Web {
         $page_defaults = [];
         $page_data = [];
 
-        $page_defaults = page_defaults($this->cfg, $this->user);
+        $page_defaults = page_defaults($this->ctx);
         //$page_data = $page_func($this->cfg, $this->lng, $this->user);
         if ($page == 'login') {
-            $page_data = page_login($this->cfg, $this->lng, $this->user);
+            $page_data = page_login($this->ctx);
         } else if ($page == 'logout') {
-            $page_data = page_logout($this->cfg, $this->lng, $this->user);
+            $page_data = page_logout($this->ctx);
         } else if ($page === 'privacy') {
-            $page_data = page_privacy($this->cfg, $this->db, $this->lng, $this->user);
+            $page_data = page_privacy($this->ctx);
         } else if ($page === 'index') {
-            $page_data = page_index($this->cfg, $this->db, $this->lng, $this->user);
+            $page_data = page_index($this->ctx);
         } else if ($page === 'settings') {
-            $page_data = page_settings($this->cfg, $this->db, $this->lng, $this->user);
+            $page_data = page_settings($this->ctx);
         }
 
         return array_merge($page_defaults, $page_data);

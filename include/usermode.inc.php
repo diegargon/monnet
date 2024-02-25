@@ -14,7 +14,7 @@ do_initial_usermode_checks($cfg);
 session_name('monent');
 session_start();
 
-require('class/User.class.php');
+require('class/User.php');
 
 $user = new User($cfg, $db);
 /* Default lang included in common here we overwrite if necessary */
@@ -25,8 +25,10 @@ if ($user->getLang() !== 'es') {
         require_once($main_lang_file);
     }
 }
+$ctx->setAppUser($user);
 
-require('class/Web.class.php');
+require('class/Web.php');
+
 require('include/pages-func.inc.php');
 require('include/pages-post.inc.php');
 require('include/pages.inc.php');

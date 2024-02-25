@@ -10,8 +10,11 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function page_defaults(array $cfg, User $user) {
+function page_defaults(AppCtx $ctx) {
     $page = [];
+
+    $user = $ctx->getAppUser();
+    $cfg = $ctx->getAppCfg();
 
     $_user = $user->getUser();
 
@@ -23,8 +26,13 @@ function page_defaults(array $cfg, User $user) {
     return $page;
 }
 
-function page_common_head(array $cfg, Database $db, array $lng, User $user) {
+function page_common_head(AppCtx $ctx) {
     $page = [];
+
+    $db = $ctx->getAppDb();
+    //$user = $ctx->getAppUser();
+    $cfg = $ctx->getAppCfg();
+    $lng = $ctx->getAppLang();
 
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
@@ -60,12 +68,17 @@ function page_common_head(array $cfg, Database $db, array $lng, User $user) {
     return $page;
 }
 
-function page_index(array $cfg, Database $db, array $lng, User $user) {
+function page_index(AppCtx $ctx) {
     $page = [];
 
-    $page = page_common_head($cfg, $db, $lng, $user);
+    $db = $ctx->getAppDb();
+    $user = $ctx->getAppUser();
+    $cfg = $ctx->getAppCfg();
+    $lng = $ctx->getAppLang();
 
-    $categories = new Categories($cfg, $lng, $db);
+    $page = page_common_head($ctx);
+
+    $categories = new Categories($ctx);
 
     $networks_q = $db->selectAll('networks', ['disable' => 0]);
     $networks = $db->fetchAll($networks_q);
@@ -166,8 +179,13 @@ function page_index(array $cfg, Database $db, array $lng, User $user) {
     return $page;
 }
 
-function page_login(array $cfg, array $lng, User $user) {
+function page_login(AppCtx $ctx) {
     $page = [];
+
+    //$db = $ctx->getAppDb();
+    $user = $ctx->getAppUser();
+    $cfg = $ctx->getAppCfg();
+    $lng = $ctx->getAppLang();
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -212,7 +230,9 @@ function page_login(array $cfg, array $lng, User $user) {
     return $page;
 }
 
-function page_logout(array $cfg, array $lng, User $user) {
+function page_logout(AppCtx $ctx) {
+
+    $cfg = $ctx->getAppCfg();
 
     session_destroy();
     $_SESSION['uid'] = '';
@@ -225,20 +245,24 @@ function page_logout(array $cfg, array $lng, User $user) {
     header("Location: {$cfg['rel_path']}index.php");
 }
 
-function page_settings(array $cfg, Database $db, array $lng, User $user) {
+function page_settings(AppCtx $ctx) {
     $page = [];
 
-    $page = page_common_head($cfg, $db, $lng, $user);
+    $cfg = $ctx->getAppCfg();
+
+    $page = page_common_head($ctx);
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
 
     return $page;
 }
 
-function page_privacy(array $cfg, Database $db, array $lng, User $user) {
+function page_privacy(AppCtx $ctx) {
     $page = [];
 
-    $page = page_common_head($cfg, $db, $lng, $user);
+    $cfg = $ctx->getAppCfg();
+
+    $page = page_common_head($ctx);
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
     $page['web_main']['scriptlink'][] = 'https://code.jquery.com/jquery-2.2.4.min.js';

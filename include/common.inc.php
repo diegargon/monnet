@@ -58,3 +58,9 @@ require_once('class/Items.class.php'); // TODO to usermode?
 require_once('class/Categories.class.php');
 
 $hosts = new Hosts($db, $lng);
+
+require_once('class/AppCtx.php');
+
+$ctx = new AppCtx($cfg, $lng, $db);
+
+$ctx->setAppHosts($hosts);

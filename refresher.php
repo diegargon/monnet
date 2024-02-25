@@ -176,7 +176,7 @@ if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_i
 
 /* Show cat Only * */
 if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
-    !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
+    !isset($categories) ? $categories = new Categories($ctx) : null;
     $caton = $categories->getOnByType(1);
 
     if (empty($caton) || count($caton) == 1) {
@@ -189,7 +189,7 @@ if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($com
 
 if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
     //$db->toggleField('categories', 'on', ['id' => $command_value]);
-    !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
+    !isset($categories) ? $categories = new Categories($ctx) : null;
     $categories->toggle($command_value);
 }
 
@@ -239,7 +239,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
     }
     if ($user->getPref('show_other_hosts_status')) {
         //$hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 0);
-        !isset($categories) ? $categories = new Categories($cfg, $lng, $db) : null;
+        !isset($categories) ? $categories = new Categories($ctx) : null;
         $hosts_view = get_listcat_hosts($cfg, $hosts, $user, $lng, $categories);
         if (valid_array($hosts_view)) {
             $shown_hosts_count = count($hosts_view);
@@ -262,7 +262,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
 /* Set show/hide host-details */
 if ($command === 'host-details' && is_numeric($command_value)) {
     $host_id = $command_value;
-    $host_details = get_host_detail_view_data($db, $cfg, $hosts, $user, $lng, $host_id);
+    $host_details = get_host_detail_view_data($ctx);
     if (valid_array($host_details)) {
         $tdata['host_details'] = $host_details;
         if (!empty($host_details['ping_stats'])) {

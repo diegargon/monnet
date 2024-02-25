@@ -197,9 +197,15 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
     return $hosts_results;
 }
 
-function get_host_detail_view_data(Database $db, array $cfg, Hosts $hosts, User $user, array $lng, $hid) {
+function get_host_detail_view_data(AppCtx $ctx, $hid) {
+    $hosts = $ctx->getAppHosts();
+    $db = $ctx->getAppDb();
+    $cfg = $ctx->getAppCfg();
+    $user = $ctx - getAppUser();
     $host = $hosts->getHostById($hid);
-    $categories = new Categories($cfg, $lng, $db);
+    $lng = $hosts->getAppLang();
+
+    $categories = new Categories($ctx);
 
     if (!valid_array($host)) {
         return false;
