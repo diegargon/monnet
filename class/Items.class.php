@@ -16,13 +16,13 @@ class Items {
     private $items = [];
     private $categories;
 
-    public function __construct(array &$cfg, Database &$db, Categories $categories) {
-        $this->cfg = &$cfg;
-        $this->db = &$db;
+    public function __construct(AppCtx $ctx, Categories $categories) {
+        $this->cfg = $ctx->getAppCfg();
+        $this->db = $ctx->getAppDb();
         $this->categories = $categories->getByType(2); //2:items
 
-        $results = $db->select('items', '*', null, 'ORDER BY weight');
-        $this->items = $db->fetchAll($results);
+        $results = $this->db->select('items', '*', null, 'ORDER BY weight');
+        $this->items = $this->db->fetchAll($results);
     }
 
     public function getAll(?string $key_order = null, ?string $dir = 'asc') {
