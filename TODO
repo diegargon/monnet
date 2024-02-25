@@ -1,16 +1,29 @@
 ** HIGH
+
+* cambiar en ping isAlive por online
+* implementar el retry en ping, con cfg para numero de retrys cuando el host estaba online y el numero de retrys cuando el host estaba offline
+* Al meter un network/cidr comprobar que es correcta
 * comprobar image link resource devuelve true
 * Poder crear/deshabilitar host categories. Para deshabilitar no puede tener algun host 
   asignado esa categoria
 * Parpadear verde/rojo cuando un host cambie?
 * host-details configuracion (select) enviar al cambiar 
-* Bastionado / Antivirus / Compliant en principio meterlos todos en un campo encoded json
-* CHART barra negativa en rojo
-* No se comprueba si se repiten networks
 * Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
-* When "Found new host, poner la red en log
+* When "Found new host, poner la red en log (Class network first)
 * Network Internet: 0.0.0.0/0 para meter host de internet. class network - get vlan name - get network-name
 * $lang['L_'] to $lang::get['L_']
+* Host: filtro para mostrar solo warning, igual un popup con una host list con host de warnings independiente de la 
+    categoria
+* Host: Envio de correos cuando cambia el estado "Alert Tab"
+    email(host) : 
+        id: email_id
+        id: email: host_id: disable
+        id: email_id
+
+    email(table)
+  
+* Host: Aviso si la latency es muy grande?
+* Host: Poder especificar el timeout por host del ping o tcpconn;
 
 ** LOW
 * Bell options term + onoff pref
@@ -21,10 +34,13 @@
 * Config parar cronjob, cli  comprueba preferencias stop_cli
 * clear cache dir 1week; 
 * perhost email warn
-
+* Bastionado / Antivirus / Compliant en principio meterlos todos en un campo encoded json, 
+   en resumen si eso configuracion no es checkboxes
+* Host on/off incluidos en las categorias mostradas
 ** Undecided
 * tiempo pingeo dependiendo de la categoria?
 * La bola Online/Offline cambiar la intensidad dependido si cambio su estado en las ultimas X horas 
-
+* Email Alert Groups: Poder especicar en vez de uno por uno el email un grupo.
+* SNMP get mac
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
