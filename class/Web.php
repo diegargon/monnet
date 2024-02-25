@@ -12,7 +12,6 @@
 Class Web {
 
     private AppCtx $ctx;
-    private Database $db;
     private array $lng;
     private array $cfg;
     private User $user;
@@ -20,9 +19,8 @@ Class Web {
     public function __construct(AppCtx $ctx) {
         $this->ctx = $ctx;
         $this->cfg = $ctx->getAppCfg();
-        $this->db = $ctx->getAppDb();
-        $this->user = $ctx->getAppUser();
         $this->lng = $ctx->getAppLang();
+        $this->user = $ctx->getAppUser();
     }
 
     public function run() {
