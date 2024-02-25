@@ -9,8 +9,10 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function check_known_hosts(Database $db, Hosts $hosts) {
-    global $lng;
+function check_known_hosts(AppCtx $ctx) {
+    $lng = $ctx->getAppLang();
+    $db = $ctx->getAppDb();
+    $hosts = $ctx->getAppHosts();
 
     if (!is_object($hosts)) {
         Log::err("hosts is not a object");
@@ -89,7 +91,10 @@ function check_known_hosts(Database $db, Hosts $hosts) {
     Log::debug('Finish check_known_hosts');
 }
 
-function ping_net(Database $db, Hosts $hosts) {
+function ping_net(AppCtx $ctx) {
+    $db = $ctx->getAppDb();
+    $hosts = $ctx->getAppHosts();
+
     $ping_net_time = microtime(true);
     $query = $db->selectAll('networks', ['scan' => 1, 'disable' => 0]);
     $networks = $db->fetchAll($query);

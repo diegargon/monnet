@@ -9,7 +9,10 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function cron(array $cfg, Database $db, Hosts $hosts) {
+function cron(AppCtx $ctx) {
+    $db = $ctx->getAppDb();
+    $hosts = $ctx->getAppHosts();
+
     Log::debug("Starting cron...");
     $results = $db->select('prefs', '*', ['uid' => 0]);
     $system_prefs = $db->fetchAll($results);
@@ -32,7 +35,7 @@ function cron(array $cfg, Database $db, Hosts $hosts) {
     if (($cron_times['cron_quarter'] + 900) < $time_now) {
         $cron_task_track .= '[15]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_quarter']], 'LIMIT 1');
-        ping_net($db, $hosts);
+        ping_net($ctx);
     }
 
     if (($cron_times['cron_hourly'] + 3600) < $time_now) {

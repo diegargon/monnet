@@ -9,8 +9,9 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function page_index_post(Database $db, User $user, Categories $categories, array $lng) {
+function page_index_post(AppCtx $ctx) {
     $page_data = [];
+    $user = $ctx->getAppUser();
 
     $profile_type = Filters::postString('profile_type');
     $show_bookmarks = Filters::postInt('show_bookmarks');
@@ -37,17 +38,20 @@ function page_index_post(Database $db, User $user, Categories $categories, array
     }
 
     if (Filters::postInt('addBookmarkForm')) {
-        post_bookmark($db, $lng, $page_data);
+        post_bookmark($ctx, $page_data);
     }
 
     if (Filters::postInt('addNetworkForm')) {
-        post_network($db, $lng, $page_data);
+        post_network($ctx, $page_data);
     }
 
     return $page_data;
 }
 
-function post_bookmark(Database $db, array $lng, array &$page_data) {
+function post_bookmark(AppCtx $ctx, array &$page_data) {
+    $lng = $ctx->getAppLang();
+    $db = $ctx->getAppDb();
+
     $bookmarkName = Filters::postString('bookmarkName');
     $cat_id = Filters::postInt('cat_id');
     $urlip = Filters::postUrl('urlip');
@@ -99,7 +103,9 @@ function post_bookmark(Database $db, array $lng, array &$page_data) {
     }
 }
 
-function post_network(Database $db, array $lng, array &$page_data) {
+function post_network(AppCtx $ctx, array &$page_data) {
+    $lng = $ctx->getAppLang();
+    $db = $ctx->getAppDb();
     $network_name = Filters::postString('networkName');
     $network = Filters::postIP('network');
     $network_cidr = Filters::postInt('networkCIDR');

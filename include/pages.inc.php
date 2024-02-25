@@ -93,7 +93,7 @@ function page_index(AppCtx $ctx) {
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $post_data = page_index_post($db, $user, $categories, $lng);
+        $post_data = page_index_post($ctx);
         $page = array_merge($post_data, $page);
     }
 

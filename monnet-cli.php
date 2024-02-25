@@ -37,9 +37,9 @@ if (is_locked()) {
 
 register_shutdown_function('unlink', CLI_LOCK);
 
-check_known_hosts($db, $hosts);
+check_known_hosts($ctx);
 #run_cmd_db_tasks($cfg, $db, $hosts);
-cron($cfg, $db, $hosts);
+cron($ctx);
 
 //Log::debug($db->getQueryHistory();
 
