@@ -34,10 +34,12 @@ function check_known_hosts(Database $db, Hosts $hosts) {
             //Ports are down, check host with ping
             if ($ping_ports_result['online'] == 0) {
                 $host_ping_result = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
-                if ($host_ping_result['online']) {
+                if ($host_ping_result['isAlive']) {
                     $ping_ports_result['online'] = 1;
                     $ping_ports_result['latency'] = $host_ping_result['latency'];
                     $ping_ports_result['last_seen'] = utc_date_now();
+                } else {
+                    $ping_ports_result['online'] = 0;
                 }
             }
             (valid_array($ping_ports_result)) ? $new_host_status = $ping_ports_result : null;
