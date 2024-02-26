@@ -201,9 +201,9 @@ function get_host_detail_view_data(AppCtx $ctx, $hid) {
     $hosts = $ctx->getAppHosts();
     $db = $ctx->getAppDb();
     $cfg = $ctx->getAppCfg();
-    $user = $ctx - getAppUser();
+    $user = $ctx->getAppUser();
+    $lng = $ctx->getAppLang();
     $host = $hosts->getHostById($hid);
-    $lng = $hosts->getAppLang();
 
     $categories = new Categories($ctx);
 

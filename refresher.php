@@ -262,7 +262,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
 /* Set show/hide host-details */
 if ($command === 'host-details' && is_numeric($command_value)) {
     $host_id = $command_value;
-    $host_details = get_host_detail_view_data($ctx);
+    $host_details = get_host_detail_view_data($ctx, $host_id);
     if (valid_array($host_details)) {
         $tdata['host_details'] = $host_details;
         if (!empty($host_details['ping_stats'])) {
