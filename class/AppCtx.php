@@ -7,6 +7,7 @@ class AppCtx {
     private Database $db;
     private Hosts $hosts;
     private User $user;
+    private Categories $categories;
 
     public function __construct(array $cfg, array $lang, Database $db) {
         $this->cfg = $cfg;
@@ -44,5 +45,13 @@ class AppCtx {
 
     public function setAppUser(User $user) {
         $this->user = $user;
+    }
+
+    public function getAppCategories() {
+        if (!isset($this->categories)) {
+            $this->categories = new Categories($this);
+        }
+
+        return $this->categories;
     }
 }

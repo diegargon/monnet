@@ -176,7 +176,8 @@ if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_i
 
 /* Show cat Only * */
 if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
-    !isset($categories) ? $categories = new Categories($ctx) : null;
+    //!isset($categories) ? $categories = new Categories($ctx) : null;
+    $categories = $ctx->getAppCategories();
     $caton = $categories->getOnByType(1);
 
     if (empty($caton) || count($caton) == 1) {
@@ -189,7 +190,8 @@ if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($com
 
 if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
     //$db->toggleField('categories', 'on', ['id' => $command_value]);
-    !isset($categories) ? $categories = new Categories($ctx) : null;
+    //!isset($categories) ? $categories = new Categories($ctx) : null;
+    $categories = $ctx->getAppCategories();
     $categories->toggle($command_value);
 }
 
@@ -238,8 +240,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
         }
     }
     if ($user->getPref('show_other_hosts_status')) {
-        //$hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 0);
-        !isset($categories) ? $categories = new Categories($ctx) : null;
+        $categories = $ctx->getAppCategories();
         $hosts_view = get_listcat_hosts($cfg, $hosts, $user, $lng, $categories);
         if (valid_array($hosts_view)) {
             $shown_hosts_count = count($hosts_view);

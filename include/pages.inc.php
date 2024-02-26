@@ -75,10 +75,9 @@ function page_index(AppCtx $ctx) {
     $user = $ctx->getAppUser();
     $cfg = $ctx->getAppCfg();
     $lng = $ctx->getAppLang();
+    $categories = $ctx->getAppCategories();
 
     $page = page_common_head($ctx);
-
-    $categories = new Categories($ctx);
 
     $networks_q = $db->selectAll('networks', ['disable' => 0]);
     $networks = $db->fetchAll($networks_q);

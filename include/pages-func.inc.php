@@ -205,7 +205,7 @@ function get_host_detail_view_data(AppCtx $ctx, $hid) {
     $lng = $ctx->getAppLang();
     $host = $hosts->getHostById($hid);
 
-    $categories = new Categories($ctx);
+    $categories = $ctx->getAppCategories();
 
     if (!valid_array($host)) {
         return false;
