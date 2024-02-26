@@ -68,7 +68,7 @@ function check_known_hosts(AppCtx $ctx) {
 
         if (valid_array($new_host_status) && $new_host_status['online'] && empty($host['mac'])) {
             $mac = get_mac($host['ip']);
-            $mac = !empty($mac) ? $mac : null;
+            $new_host_status['mac'] = !empty($mac) ? $mac : null;
         }
         if (valid_array($new_host_status)) {
 
