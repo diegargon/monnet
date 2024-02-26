@@ -68,15 +68,15 @@ function check_known_hosts(AppCtx $ctx) {
 
         if (valid_array($new_host_status) && $new_host_status['online'] && empty($host['mac'])) {
             $mac = get_mac($host['ip']);
-            $mac = !empty($new_host_status['mac']) ? $mac : null;
+            $mac = !empty($mac) ? $mac : null;
         }
         if (valid_array($new_host_status)) {
 
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
-                $new_host_status['onlline_change'] = utc_date_now();
+                $new_host_status['online_change'] = utc_date_now();
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
             } else if ($host['online'] == 1 && $new_host_status['online'] == 0) {
-                $new_host_status['onlline_change'] = utc_date_now();
+                $new_host_status['online_change'] = utc_date_now();
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
             }
 
