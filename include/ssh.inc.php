@@ -83,7 +83,7 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts) {
         $result = [];
 
         $host_status = ping($host['ip']);
-        if (empty($host_status['isAlive'])) {
+        if (empty($host_status['online'])) {
             //host down skip
             $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
             continue;

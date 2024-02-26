@@ -36,7 +36,7 @@ function check_known_hosts(AppCtx $ctx) {
             //Ports are down, check host with ping
             if ($ping_ports_result['online'] == 0) {
                 $host_ping_result = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
-                if ($host_ping_result['isAlive']) {
+                if ($host_ping_result['online']) {
                     $ping_ports_result['online'] = 1;
                     $ping_ports_result['latency'] = $host_ping_result['latency'];
                     $ping_ports_result['last_seen'] = utc_date_now();
@@ -121,7 +121,7 @@ function ping_net(AppCtx $ctx) {
         $ip_status = ping($ip, $timeout);
         $set = [];
 
-        if ($ip_status['isAlive']) {
+        if ($ip_status['online']) {
             $mac = trim(get_mac($ip));
             if ($mac) {
                 $set['mac'] = $mac;
