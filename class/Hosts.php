@@ -110,7 +110,8 @@ Class Hosts {
         }
         $host['display_name'] = $this->getDisplayName($host);
         $this->hosts[$host_id] = $host;
-        Log::logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $host['display_name'] . " ($hostlog)");
+        $network_name = $this->ctx->getAppNetworks()->getNetworkNameByID($host_id);
+        Log::logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $host['display_name'] . ' on network ' . $network_name);
     }
 
     function remove(int $hid) {

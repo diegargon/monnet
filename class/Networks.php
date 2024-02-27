@@ -36,7 +36,6 @@ Class Networks {
         }
     }
 
-    //replace get_network_id
     public function getNetworkIDbyIP(string $ip) {
         $ip_long = ip2long($ip);
         $networks = $this->getNetworks();
@@ -53,6 +52,16 @@ Class Networks {
         }
 
         return false;
+    }
+
+    public function getNetworkNameByID(int $id) {
+        $networks = $this->getNetworks();
+
+        foreach ($networks as $network) {
+            if ($network['id'] == $id) {
+                return $network['name'];
+            }
+        }
     }
 
     //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
