@@ -107,7 +107,7 @@ function post_network(AppCtx $ctx, array &$page_data) {
     $lng = $ctx->getAppLang();
     $db = $ctx->getAppDb();
     $network_name = Filters::postString('networkName');
-    $network = Filters::postIP('network');
+    $network_ip = Filters::postIP('network');
     $network_cidr = Filters::postInt('networkCIDR');
     $network_vlan = Filters::postInt('networkVLAN');
     $network_scan = Filters::postInt('networkScan');
@@ -118,26 +118,28 @@ function post_network(AppCtx $ctx, array &$page_data) {
     if (empty($network_scan)) {
         $network_scan = 0;
     }
-    //TODO check overlapping networks
+    //TODO check overlapping networks?
 
-    if (empty($network)) {
-        $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_NETOWORK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+    if (empty($network_ip)) {
+        $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_NETWORK']} {$lng['L_ERROR_EMPTY_INVALID']}";
     } else if (empty($network_name)) {
         $page_data['error_msg'] = "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
     } else if (empty($network_cidr)) {
         $page_data['error_msg'] = "{$lng['L_FIELD']} .' CIDR '.  {$lng['L_ERROR_EMPTY_INVALID']}";
     }
-    //TODO check valid CIDR
+
+    $network = $network_ip . '/' . $network_cidr;
+    if (!Filters::varNetwork($network)) {
+        $page_data['error_msg'] = "{$lng['L_NETWORK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+    }
 
     $page_data['networkName'] = $network_name;
-    $page_data['network'] = $network;
+    $page_data['network'] = $network_ip;
     $page_data['network_cidr'] = $network_cidr;
     $page_data['network_vlan'] = $network_vlan;
     $page_data['network_scan'] = $network_scan;
 
     if (empty($page_data['error_msg'])) {
-        $network = $network . '/' . $network_cidr;
-
         $set = ['name' => $network_name, 'network' => $network, 'vlan' => $network_vlan, 'scan' => $network_scan];
         $db->insert('networks', $set);
         $page_data['status_msg'] = 'OK';
