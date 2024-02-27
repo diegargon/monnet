@@ -10,11 +10,13 @@
 !defined('IN_WEB') ? exit : true;
 
 //TODO this and next rewrite
-function get_listcat_hosts(AppCtx $ctx, Categories $cats) {
+function get_listcat_hosts(AppCtx $ctx) {
     $cfg = $ctx->getAppCfg();
     $hosts = $ctx->getAppHosts();
     $user = $ctx->getAppUser();
     $lng = $ctx->getAppLang();
+    $cats = $ctx->getAppCategories();
+
     $hostscat = [];
 
     $cats_on = $cats->getOnByType(1);
