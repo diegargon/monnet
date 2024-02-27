@@ -1,6 +1,9 @@
 <Files "monnet-cli.php">  
 Require all denied
 </Files>
+<Files "monnet-discovery.php">  
+Require all denied
+</Files>
 <Files "config/config.priv.php">  
 Require all denied
 </Files>

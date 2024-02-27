@@ -38,8 +38,8 @@ Instalamos phpseclib con composer
 /var/www/html# composer require phpseclib/phpseclib:~3.0
 ```
 
-Copy  config/config.defaults.php  to config.inc.php and change whatever you want, you
-can remove all unnchaged config. Don't rename or modify directly config.defaults.php
+Copy  config/config.defaults.php  to  /etc/monnet/config.inc.php and change whatever you want, you
+can remove all unnchaged config. Don't rename or modify directly config.defaults.php 
 
 ## Settting Database
 ```

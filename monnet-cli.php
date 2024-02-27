@@ -11,15 +11,18 @@ define('IN_WEB', true);
 define('IN_CLI', true);
 //define('DUMP_VARS', true);
 
-/* CONFIG */
-$ROOT_PATH = '/var/www/monnet';
-/* END CONFIG */
+$custom_cfg = '/etc/monnet/config.inc.php';
+if (!file_exists($custom_cfg)) {
+    echo 'Missing config file ' . $custom_cfg;
+    exit(1);
+}
+require($custom_cfg);
 
-$APP_NAME = 'Monnet';
+$APP_NAME = 'monnet-cli';
 define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
 $VERSION = 0.1;
 
-chdir($ROOT_PATH);
+chdir($cfg['path']);
 
 require_once('include/common.inc.php');
 require_once('include/util.inc.php');

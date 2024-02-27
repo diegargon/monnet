@@ -9,13 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-if (!empty($DEBUG)) {
-    ini_set("xdebug.var_display_max_children", '-1');
-    ini_set("xdebug.var_display_max_data", '-1');
-    ini_set("xdebug.var_display_max_depth", '-1');
-}
-error_reporting(E_ALL);
-if (!file_exists('config/config.inc.php')) {
+if (!file_exists('/etc/monnet/config.inc.php')) {
     print 'Missing config.inc.php. Leaving';
     exit(1);
 }
@@ -26,7 +20,7 @@ if (!file_exists('config/config.defaults.php')) {
 
 require_once('config/config.priv.php');
 require_once('config/config.defaults.php');
-require_once('config/config.inc.php');
+require('/etc/monnet/config.inc.php');
 
 date_default_timezone_set($cfg['timezone']);
 
