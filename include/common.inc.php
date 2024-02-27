@@ -56,11 +56,11 @@ require_once('include/net.inc.php');
 require_once('class/Hosts.php');
 require_once('class/Items.php'); // TODO to usermode?
 require_once('class/Categories.php');
-
-$hosts = new Hosts($db, $lng);
+require_once('class/Networks.php');
 
 require_once('class/AppCtx.php');
 
 $ctx = new AppCtx($cfg, $lng, $db);
 
+$hosts = new Hosts($ctx);
 $ctx->setAppHosts($hosts);

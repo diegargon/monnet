@@ -35,10 +35,12 @@ Class Hosts {
     private Database $db;
     private $hosts = [];
     private array $lng;
+    private AppCtx $ctx;
 
-    public function __construct(Database &$db, array $lng) {
-        $this->db = &$db;
-        $this->lng = $lng;
+    public function __construct(AppCtx $ctx) {
+        $this->ctx = $ctx;
+        $this->db = $ctx->getAppDb();
+        $this->lng = $ctx->getAppLang();
         $this->getHostsDb();
     }
 
