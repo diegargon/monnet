@@ -94,17 +94,13 @@ function check_known_hosts(AppCtx $ctx) {
 }
 
 function ping_net(AppCtx $ctx) {
-    $db = $ctx->getAppDb();
     $hosts = $ctx->getAppHosts();
-
+    $networks = $ctx->getAppNetworks();
     $ping_net_time = microtime(true);
-    $query = $db->selectAll('networks', ['scan' => 1, 'disable' => 0]);
-    $networks = $db->fetchAll($query);
     $timeout = ['sec' => 0, 'usec' => 100000];
 
     $db_hosts = $hosts->getAll();
-
-    $iplist = build_iplist($networks);
+    $iplist = $networks->buildIpList();
 
     //We remove known hosts since we checked in other functions
     foreach ($iplist as $kip => $vip) {
@@ -133,12 +129,12 @@ function ping_net(AppCtx $ctx) {
             $set['ip'] = $ip;
             $set['online'] = 1;
 
-            $idNetwork = get_network_id($ip, $networks);
-            if ($idNetwork == false) {
+            $network_id = $networks->getNetworkIDbyIP($ip);
+            if ($network_id == false) {
                 Log::warn('Failed to get id network for ip ' . $ip);
                 $set['network'] = 1;
             } else {
-                $set['network'] = $idNetwork;
+                $set['network'] = $network_id;
             }
 
             $set['latency'] = round(microtime(true) - $latency, 2);

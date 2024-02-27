@@ -11,24 +11,37 @@
 
 Class Networks {
 
-    private array $networks = [];
-    private array $networks_disabled = [];
+    private array $networks;
+    private array $networks_disabled;
     private AppCtx $ctx;
 
     public function __construct(AppCtx $ctx) {
         $this->ctx = $ctx;
-        $this->loadNetworks($ctx->getAppDb());
     }
 
     public function getNetworks() {
+        if (!isset($this->networks)) {
+            $this->loadNetworks();
+        }
         return $this->networks;
     }
 
-    //replace get_network_id
-    public function getIpNetwork(string $ip) {
-        $ip_long = ip2long($ip);
+    public function getNetworkByID(int $id) {
+        $networks = $this->getNetworks();
 
-        foreach ($this->networks as $network) {
+        if (isset($networks[$id])) {
+            return $networks[$id];
+        } else {
+            return false;
+        }
+    }
+
+    //replace get_network_id
+    public function getNetworkIDbyIP(string $ip) {
+        $ip_long = ip2long($ip);
+        $networks = $this->getNetworks();
+
+        foreach ($networks as $network) {
             list($network_ip, $cidr) = explode('/', $network['network']);
             $network_ip_long = ip2long($network_ip);
             $subnet_mask = -1 << (32 - $cidr);
@@ -42,12 +55,12 @@ Class Networks {
         return false;
     }
 
-    //replace build_iplist
+    //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
     function buildIpList() {
-
         $ip_list = [];
+        $networks = $this->getNetworks();
 
-        foreach ($this->networks as $net) {
+        foreach ($networks as $net) {
             if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
                 Log::err("Invalid network detected " . $net['network']);
                 continue;
@@ -68,9 +81,6 @@ Class Networks {
             $network_long = ip2long($network_address);
             $broadcast_address = long2ip($network_long | ((1 << (32 - $prefix)) - 1));
 
-            //echo "->" . $network_address . "\n";
-            //echo "->" . $broadcast_address . "\n";
-            //echo "->" . $network_long . "\n";
             // Calcular las direcciones IP restantes dentro de la red
             for ($i = 0; $i < $count && $i <= 255; $i++) {
                 $ip = long2ip($network_long + $i);
@@ -83,7 +93,8 @@ Class Networks {
         return $ip_list;
     }
 
-    private function loadNetworks(Database $db) {
+    private function loadNetworks() {
+        $db = $this->ctx->getAppDb();
         $query = $db->selectAll('networks',);
         $networks = $db->fetchAll($query);
         if (valid_array($networks)) {

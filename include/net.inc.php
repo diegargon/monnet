@@ -134,65 +134,6 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
     return $status;
 }
 
-//Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
-
-function build_iplist(array $networks) {
-
-    $ip_list = [];
-
-    foreach ($networks as $net) {
-        if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
-            Log::err("Invalid network detected " . $net['network']);
-            continue;
-        }
-        //We will use 0.0.0.0 to allow create a INTERNET network category for add external host.
-        if (str_starts_with($net['network'], "0")) {
-            continue;
-        }
-        Log::debug("Ping networks " . array2string($net));
-        $parts = explode('/', $net['network']);
-        $network = $parts[0];
-        $prefix = $parts[1];
-        $count = pow(2, (32 - $prefix));
-
-        // Obtener la dirección de red
-        $network_long = ip2long($network);
-        $network_address = long2ip($network_long & ((-1 << (32 - $prefix))));
-        $network_long = ip2long($network_address);
-        $broadcast_address = long2ip($network_long | ((1 << (32 - $prefix)) - 1));
-
-        //echo "->" . $network_address . "\n";
-        //echo "->" . $broadcast_address . "\n";
-        //echo "->" . $network_long . "\n";
-        // Calcular las direcciones IP restantes dentro de la red
-        for ($i = 0; $i < $count && $i <= 255; $i++) {
-            $ip = long2ip($network_long + $i);
-            if ($ip != $network_address && $ip != $broadcast_address) {
-                $ip_list[] = $ip;
-            }
-        }
-    }
-
-    return $ip_list;
-}
-
-function get_network_id($ip, $networks) {
-    $ip_long = ip2long($ip);
-
-    foreach ($networks as $network) {
-        list($network_ip, $cidr) = explode('/', $network['network']);
-        $network_ip_long = ip2long($network_ip);
-        $subnet_mask = -1 << (32 - $cidr);
-        $network_ip_long &= $subnet_mask;
-
-        if (($ip_long & $subnet_mask) == $network_ip_long) {
-            return $network['id'];
-        }
-    }
-
-    return false;
-}
-
 function get_hostname(string $ip) {
     return gethostbyaddr($ip);
 }

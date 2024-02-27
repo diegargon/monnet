@@ -169,20 +169,7 @@ Class Hosts {
     }
 
     private function getHostsDb() {
-        $query_nets = 'SELECT * FROM networks';
-        $net_results = $this->db->query($query_nets);
-        $network = [];
-        foreach ($net_results as $net) {
-            $network[$net['id']] = [
-                'id' => (int) $net['id'],
-                'network' => $net['network'],
-                'name' => $net['name'],
-                'vlan' => (int) $net['vlan'],
-                'scan' => (int) $net['scan'],
-                'disable' => (int) $net['disable'],
-            ];
-        }
-
+        $networks = $this->ctx->getAppNetworks();
         $query_hosts = 'SELECT * FROM hosts';
         $results = $this->db->query($query_hosts);
         if (!$results) {
@@ -194,9 +181,14 @@ Class Hosts {
         foreach ($hosts as $host) {
             $id = $host['id'];
             $net_id = $host['network'];
-            $host['net_cidr'] = $network[$net_id]['network'];
-            $host['network_name'] = $network[$net_id]['name'];
-            $host['network_vlan'] = $network[$net_id]['vlan'];
+            $network = $networks->getNetworkByID($net_id);
+            if ($network !== false) {
+                $host['net_cidr'] = $network['network'];
+                $host['network_name'] = $network['name'];
+                $host['network_vlan'] = $network['vlan'];
+            } else {
+                Log::warn('Host network seems not exists: ' . "[H: $id][N: $net_id]");
+            }
             $host['display_name'] = $this->getDisplayName($host);
 
             $this->hosts[$id] = $host;

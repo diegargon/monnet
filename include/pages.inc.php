@@ -71,19 +71,14 @@ function page_common_head(AppCtx $ctx) {
 function page_index(AppCtx $ctx) {
     $page = [];
 
-    $db = $ctx->getAppDb();
     $user = $ctx->getAppUser();
     $cfg = $ctx->getAppCfg();
-    $lng = $ctx->getAppLang();
     $categories = $ctx->getAppCategories();
-
+    $networks_list = $ctx->getAppNetworks()->getNetworks();
     $page = page_common_head($ctx);
-
-    $networks_q = $db->selectAll('networks', ['disable' => 0]);
-    $networks = $db->fetchAll($networks_q);
-
     $networks_selected = 0;
-    foreach ($networks as &$net) {
+
+    foreach ($networks_list as &$net) {
         $net_set = $user->getPref('network_select_' . $net['id']);
         if (($net_set) || $net_set === false) {
             $net['selected'] = 1;
@@ -166,7 +161,7 @@ function page_index(AppCtx $ctx) {
 
     $page['hosts_categories'] = $categories->prepareCats(1);
 
-    $page['networks'] = $networks;
+    $page['networks'] = $networks_list;
     $page['networks_selected'] = $networks_selected; //to prevent unselect all
 
     /* Webs Categories */

@@ -56,7 +56,7 @@ class AppCtx {
         return $this->categories;
     }
 
-    public function getAppNetwork() {
+    public function getAppNetworks() {
         if (!isset($this->networks)) {
             $this->networks = new Networks($this);
         }

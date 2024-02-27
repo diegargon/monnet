@@ -189,8 +189,6 @@ if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($com
 }
 
 if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
-    //$db->toggleField('categories', 'on', ['id' => $command_value]);
-    //!isset($categories) ? $categories = new Categories($ctx) : null;
     $categories = $ctx->getAppCategories();
     $categories->toggle($command_value);
 }
@@ -198,18 +196,17 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
 if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
     $tdata['hosts_categories'] = $categories->prepareCats(1);
     //Networks dropdown
-    $networks_q = $db->selectAll('networks', ['disable' => 0]);
-    $networks = $db->fetchAll($networks_q);
+    $networks_list = $ctx->getAppNetworks()->getNetworks();
 
     $networks_selected = 0;
-    foreach ($networks as &$net) {
+    foreach ($networks_list as &$net) {
         $net_set = $user->getPref('network_select_' . $net['id']);
         if (($net_set) || $net_set === false) {
             $net['selected'] = 1;
             $networks_selected++;
         }
     }
-    $tdata['networks'] = $networks;
+    $tdata['networks'] = $networks_list;
     $tdata['networks_selected'] = $networks_selected;
 
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
