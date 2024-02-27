@@ -12,6 +12,7 @@ define('IN_WEB', true);
 header('Content-Type: application/json; charset=UTF-8');
 require_once('include/common.inc.php');
 require_once('include/usermode.inc.php');
+require_once('include/refresher-func.php');
 
 $tdata = [];
 $force_host_reload = 0;
