@@ -54,9 +54,11 @@ monnet : monnetadmin
 
 ## Setting crontab
 
+Times depends of your network
 ```
 $ nano /etc/crontab
 */5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
+*/15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
 
 ## CERTS (disable temporaraly due rewriting)

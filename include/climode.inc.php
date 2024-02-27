@@ -38,3 +38,5 @@ function is_locked() {
 
     return true;
 }
+
+require_once('include/net-cli.inc.php');

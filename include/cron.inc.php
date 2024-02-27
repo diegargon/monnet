@@ -35,7 +35,6 @@ function cron(AppCtx $ctx) {
     if (($cron_times['cron_quarter'] + 900) < $time_now) {
         $cron_task_track .= '[15]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_quarter']], 'LIMIT 1');
-        ping_net($ctx);
     }
 
     if (($cron_times['cron_hourly'] + 3600) < $time_now) {
