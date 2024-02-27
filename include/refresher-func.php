@@ -61,7 +61,7 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0) {
         }
     }
 
-    $date_now = new DateTime();
+    $date_now = new DateTime('now', new DateTimeZone('UTC'));
 
     //Formatting
     foreach ($hosts_view as $key => $vhost) {
@@ -103,15 +103,18 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0) {
 
         // Glow
 
-        $change_time = new DateTime($vhost['online_change']);
+        $change_time = new DateTime($vhost['online_change'], new DateTimeZone('UTC'));
         $diff = $date_now->diff($change_time);
-        $minutes_diff = $diff->i;
+        $minutes_diff = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
 
+        //$id = $vhost['id'];
         if ($minutes_diff > 0 && ($minutes_diff <= $cfg['refresher_time'])) {
             if ($vhost['online']) {
                 $hosts_view[$key]['glow'] = 'host-glow-on';
+                //Log::notice("On: Host $id:{$date_now->format('Y-m-d H:i:s')}:{$change_time->format('Y-m-d H:i:s')}:$minutes_diff");
             } else {
                 $hosts_view[$key]['glow'] = 'host-glow-off';
+                //Log::notice("Off: Host $id:{$date_now->format('Y-m-d H:i:s')}:{$change_time->format('Y-m-d H:i:s')}:$minutes_diff");
             }
         }
         // /glow
