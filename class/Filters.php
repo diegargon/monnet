@@ -447,8 +447,15 @@ Class Filters {
         if (strpos($val, '/') !== false) {
             list($ip, $cidr) = explode('/', $val, 2);
 
-            if (self::varIP($ip) !== false && $cidr >= 0 && $cidr <= 32) {
-                return $val;
+            if (self::varIP($ip) === false || $cidr < 0 || $cidr > 32) {
+                return false;
+            }
+            $numeric_ip = ip2long($ip);
+            $subnet_mask = ~((1 << (32 - $cidr)) - 1);
+            $network_ip = $numeric_ip & $subnet_mask;
+
+            if ($network_ip == $numeric_ip) {
+                return true;
             } else {
                 return false;
             }
