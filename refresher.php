@@ -223,7 +223,7 @@ $highlight_hosts_count = 0;
 if ((empty($command) && empty($command_value)) || $force_host_reload) {
     /* Set show/hide highlight hosts */
     if ($user->getPref('show_highlight_hosts_status')) {
-        $hosts_view = get_hosts_view_data($cfg, $hosts, $user, $lng, 1);
+        $hosts_view = get_hosts_view_data($ctx, 1);
         $highlight_hosts_count = 0;
         if (valid_array($hosts_view)) {
             $highlight_hosts_count = count($hosts_view);
@@ -239,7 +239,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
     }
     if ($user->getPref('show_other_hosts_status')) {
         $categories = $ctx->getAppCategories();
-        $hosts_view = get_listcat_hosts($cfg, $hosts, $user, $lng, $categories);
+        $hosts_view = get_listcat_hosts($ctx, $categories);
         if (valid_array($hosts_view)) {
             $shown_hosts_count = count($hosts_view);
             $hosts_totals_count = $hosts->totals;

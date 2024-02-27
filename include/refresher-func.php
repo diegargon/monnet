@@ -10,7 +10,11 @@
 !defined('IN_WEB') ? exit : true;
 
 //TODO this and next rewrite
-function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Categories $cats) {
+function get_listcat_hosts(AppCtx $ctx, Categories $cats) {
+    $cfg = $ctx->getAppCfg();
+    $hosts = $ctx->getAppHosts();
+    $user = $ctx->getAppUser();
+    $lng = $ctx->getAppLang();
     $hostscat = [];
 
     $cats_on = $cats->getOnByType(1);
@@ -111,7 +115,11 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
     return $hostscat;
 }
 
-function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, int $highlight = 0) {
+function get_hosts_view_data(AppCtx $ctx, int $highlight = 0) {
+    $cfg = $ctx->getAppCfg();
+    $hosts = $ctx->getAppHosts();
+    $user = $ctx->getAppUser();
+    $lng = $ctx->getAppLang();
 
     $hosts_results = $hosts->getHighLight($highlight);
 
