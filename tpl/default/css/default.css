@@ -1301,25 +1301,25 @@ input:checked + .slider:before {
 
 @keyframes GlowOnColor {
     0% {
-        background-color: rgb(16, 32, 16); /* Color oscuro */
+        background-color: rgb(16, 32, 16);
     }
     50% {
-        background-color: rgb(24, 55, 24); /* Color claro */
+        background-color: rgb(24, 55, 24);
     }
     100% {
-        background-color: rgb(16, 32, 16); /* Color oscuro */
+        background-color: rgb(16, 32, 16);
     }
 }
 
 @keyframes GlowOffColor {
     0% {
-        background-color: rgb(66, 22, 22); /* Color oscuro */
+        background-color: rgb(66, 22, 22);
     }
     50% {
-        background-color: rgb(191, 95, 95); /* Color claro */
+        background-color: rgb(85, 44, 44);
     }
     100% {
-        background-color: rgb(66, 22, 22); /* Color oscuro */
+        background-color: rgb(66, 22, 22);
     }
 }
 

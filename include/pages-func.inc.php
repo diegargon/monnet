@@ -120,7 +120,7 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
         $diff = $date_now->diff($change_time);
         $minutes_diff = $diff->i;
 
-        if ($minutes_diff < $cfg['refresher_time']) {
+        if ($minutes_diff <= $cfg['refresher_time']) {
             if ($vhost['online']) {
                 $hostscat[$khost]['glow'] = 'host-glow-on';
             } else {
@@ -191,7 +191,7 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
         $diff = $date_now->diff($change_time);
         $minutes_diff = $diff->i;
 
-        if ($minutes_diff < $cfg['refresher_time']) {
+        if ($minutes_diff <= $cfg['refresher_time']) {
             if ($vhost['online']) {
                 $hosts_results[$khost]['glow'] = 'host-glow-on';
             } else {
