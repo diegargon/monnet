@@ -23,6 +23,7 @@ require_once('include/cronjobs.inc.php');
 require_once('include/cron.inc.php');
 require_once('include/ssh.inc.php');
 require_once('include/host-access-work.inc.php');
+require_once('include/net-cli.inc.php');
 
 Log::debug("Starting $APP_NAME");
 

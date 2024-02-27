@@ -29,8 +29,9 @@ $ctx->setAppUser($user);
 
 require('class/Web.php');
 
-require('include/pages-func.inc.php');
-require('include/pages-post.inc.php');
-require('include/pages.inc.php');
-require('class/Frontend.php');
+require_once('include/pages-func.inc.php');
+require_once('include/pages-post.inc.php');
+require_once('include/pages.inc.php');
+require_once('class/Frontend.php');
+require_once('include/net-user.inc.php');
 
