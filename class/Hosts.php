@@ -85,7 +85,7 @@ Class Hosts {
                         ($kvalue == 'mac' || $kvalue == 'mac_vendor' || $kvalue == 'hostname') &&
                         ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
-                    $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( ' . $this->hosts[$id]['display_name'] . ' )' . $this->hosts[$id][$kvalue] . '->' . $vvalue;
+                    $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( ' . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])' . $this->hosts[$id][$kvalue] . '->' . $vvalue;
                     Log::logHost('LOG_WARNING', $id, $loghostmsg);
                 }
                 $this->hosts[$id][$kvalue] = $vvalue;
