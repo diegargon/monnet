@@ -531,10 +531,12 @@ input:checked + .slider:before {
     overflow: hidden;
 }
 .host-glow-off {
-    background-color: rgb(149, 36, 36);
+    background-color: rgb(66, 22, 22);
+    animation: GlowOffColor 2s linear infinite;
 }
 .host-glow-on {
-    background-color: rgb(36, 38, 131);
+    background-color: rgb(16, 32, 16);
+    animation: GlowOnColor 2s linear infinite;
 }
 .hosts-title {
     display: inline-block;
@@ -1296,6 +1298,31 @@ input:checked + .slider:before {
 
     }
 }
+
+@keyframes GlowOnColor {
+    0% {
+        background-color: rgb(16, 32, 16); /* Color oscuro */
+    }
+    50% {
+        background-color: rgb(24, 55, 24); /* Color claro */
+    }
+    100% {
+        background-color: rgb(16, 32, 16); /* Color oscuro */
+    }
+}
+
+@keyframes GlowOffColor {
+    0% {
+        background-color: rgb(66, 22, 22); /* Color oscuro */
+    }
+    50% {
+        background-color: rgb(191, 95, 95); /* Color claro */
+    }
+    100% {
+        background-color: rgb(66, 22, 22); /* Color oscuro */
+    }
+}
+
 
 /* Screenshots Privacy */
 /*

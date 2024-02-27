@@ -113,20 +113,21 @@ function get_listcat_hosts(array $cfg, Hosts $hosts, User $user, array $lng, Cat
         $hostscat[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
         $hostscat[$khost]['glow'] = '';
-        /*
-          $date_now = new DateTime();
-          $update_time = new DateTime($vhost['updated']);
-          $diff = $date_now->diff($update_time);
-          $minutes_diff = $diff->i;
 
-          if ($minutes_diff < 10) {
-          if ($vhost['online']) {
-          $hostscat[$khost]['glow'] = 'host-glow-on';
-          } else {
-          $hostscat[$khost]['glow'] = 'host-glow-off';
-          }
-          }
-         */
+        // Glow
+        $date_now = new DateTime();
+        $change_time = new DateTime($vhost['online_change']);
+        $diff = $date_now->diff($change_time);
+        $minutes_diff = $diff->i;
+
+        if ($minutes_diff < $cfg['refresher_time']) {
+            if ($vhost['online']) {
+                $hostscat[$khost]['glow'] = 'host-glow-on';
+            } else {
+                $hostscat[$khost]['glow'] = 'host-glow-off';
+            }
+        }
+        // /glow
         //Warn icon
         if ($vhost['warn_port']) {
             $hostscat[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
@@ -183,6 +184,21 @@ function get_hosts_view_data(array $cfg, Hosts $hosts, User $user, array $lng, i
         $hosts_results[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
         $hosts_results[$khost]['glow'] = '';
+
+        // Glow
+        $date_now = new DateTime();
+        $change_time = new DateTime($vhost['online_change']);
+        $diff = $date_now->diff($change_time);
+        $minutes_diff = $diff->i;
+
+        if ($minutes_diff < $cfg['refresher_time']) {
+            if ($vhost['online']) {
+                $hosts_results[$khost]['glow'] = 'host-glow-on';
+            } else {
+                $hosts_results[$khost]['glow'] = 'host-glow-off';
+            }
+        }
+        // /glow
         //Warn icon
         if ($vhost['warn_port']) {
             $hosts_results[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
