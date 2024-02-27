@@ -8,6 +8,7 @@ class AppCtx {
     private Hosts $hosts;
     private User $user;
     private Categories $categories;
+    private Networks $networks;
 
     public function __construct(array $cfg, array $lang, Database $db) {
         $this->cfg = $cfg;
@@ -53,5 +54,13 @@ class AppCtx {
         }
 
         return $this->categories;
+    }
+
+    public function getAppNetwork() {
+        if (!isset($this->networks)) {
+            $this->networks = new Networks($this);
+        }
+
+        return $this->networks;
     }
 }
