@@ -9,191 +9,120 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-//TODO this and next rewrite
-function get_listcat_hosts(AppCtx $ctx) {
+function get_hosts_view(AppCtx $ctx, int $highlight = 0) {
     $cfg = $ctx->getAppCfg();
     $hosts = $ctx->getAppHosts();
     $user = $ctx->getAppUser();
     $lng = $ctx->getAppLang();
     $cats = $ctx->getAppCategories();
 
-    $hostscat = [];
+    $hosts_view = [];
 
-    $cats_on = $cats->getOnByType(1);
-    if ($cats_on === false) {
-        return false;
-    }
-    //Get Host for each ON category
-    foreach ($cats_on as $cat) {
-        $hosts_cat = $hosts->getHostsByCat($cat['id']);
-        if (valid_array($hosts_cat)) {
-            $hostscat = array_merge($hostscat, $hosts_cat);
+    if ($highlight) {
+        $hosts_view = $hosts->getHighLight($highlight);
+    } else {
+        $cats_on = $cats->getOnByType(1);
+        if ($cats_on === false) {
+            return false;
+        }
+        //Get Host for each ON category
+        foreach ($cats_on as $cat) {
+            $hosts_cat = $hosts->getHostsByCat($cat['id']);
+            if (valid_array($hosts_cat)) {
+                $hosts_view = array_merge($hosts_view, $hosts_cat);
+            }
         }
     }
 
-    if (!valid_array($hostscat)) {
+    if (!valid_array($hosts_view)) {
         return false;
     }
 
     $theme = $user->getTheme();
 
-    foreach ($hostscat as $khost => $host) {
-        //Discard highlight host for other hosts
-        if ($user->getPref('show_highlight_hosts_status') && $host['highlight']) {
-            unset($hostscat[$khost]);
-        }
+    if (!$highlight) {
+        foreach ($hosts_view as $key => $host) {
+            //Discard highlight host for other hosts
+            if ($user->getPref('show_highlight_hosts_status') && $host['highlight']) {
+                unset($hosts_view[$key]);
+            }
 
-        //Filter unslect network
-        $pref_value = $user->getPref('network_select_' . $host['network']);
-        if ($pref_value === '0') { //pref_value is string
-            unset($hostscat[$khost]);
-        }
+            //Filter unslect network
+            $pref_value = $user->getPref('network_select_' . $host['network']);
+            if ($pref_value === '0') { //pref_value is string
+                unset($hosts_view[$key]);
+            }
 
-        //Discard hidden networks
-        $host_network_pref = 'network_select_' . $host['network'];
-        if ($user->getPref($host_network_pref) === 0) {
-            unset($hostscat[$khost]);
+            //Discard hidden networks
+            $host_network_pref = 'network_select_' . $host['network'];
+            if ($user->getPref($host_network_pref) === 0) {
+                unset($hosts_view[$key]);
+            }
         }
     }
 
-    foreach ($hostscat as $khost => $vhost) {
-        $hostscat[$khost]['theme'] = $theme;
-        $hostscat[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
+    $date_now = new DateTime();
+
+    //Formatting
+    foreach ($hosts_view as $key => $vhost) {
+        $hosts_view[$key]['theme'] = $theme;
+        $hosts_view[$key]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
         if (empty($vhost['title'])) {
             if (!empty($vhost['hostname'])) {
-                $hostscat[$khost]['title'] = explode('.', $vhost['hostname'])[0];
+                $hosts_view[$key]['title'] = explode('.', $vhost['hostname'])[0];
             } else {
-                $hostscat[$khost]['title'] = $vhost['ip'];
+                $hosts_view[$key]['title'] = $vhost['ip'];
             }
         } else {
             if (!empty($vhost['hostname'])) {
-                $hostscat[$khost]['details'] .= $lng['L_HOSTNAME'] . ': ' . $vhost['hostname'] . "\n";
+                $hosts_view[$key]['details'] .= $lng['L_HOSTNAME'] . ': ' . $vhost['hostname'] . "\n";
             }
         }
         if ($vhost['online']) {
-            $hostscat[$khost]['title_online'] = $lng['L_S_ONLINE'];
-            $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/green2.png';
+            $hosts_view[$key]['title_online'] = $lng['L_S_ONLINE'];
+            $hosts_view[$key]['online_image'] = 'tpl/' . $theme . '/img/green2.png';
         } else {
-            $hostscat[$khost]['title_online'] = $lng['L_S_OFFLINE'];
-            $hostscat[$khost]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
+            $hosts_view[$key]['title_online'] = $lng['L_S_OFFLINE'];
+            $hosts_view[$key]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
         $manufacture = get_manufacture_data($cfg, $vhost['manufacture']);
         $os = get_os_data($cfg, $vhost['os']);
         $system_type = get_system_type_data($cfg, $vhost['system_type']);
 
-        $hostscat[$khost]['manufacture_name'] = $manufacture['name'];
-        $hostscat[$khost]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
+        $hosts_view[$key]['manufacture_name'] = $manufacture['name'];
+        $hosts_view[$key]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
 
-        $hostscat[$khost]['os_name'] = $os['name'];
-        $hostscat[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+        $hosts_view[$key]['os_name'] = $os['name'];
+        $hosts_view[$key]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
 
-        $hostscat[$khost]['system_type_name'] = $system_type['name'];
-        $hostscat[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
+        $hosts_view[$key]['system_type_name'] = $system_type['name'];
+        $hosts_view[$key]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
-        $hostscat[$khost]['glow'] = '';
+        $hosts_view[$key]['glow'] = '';
 
         // Glow
-        $date_now = new DateTime();
+
         $change_time = new DateTime($vhost['online_change']);
         $diff = $date_now->diff($change_time);
         $minutes_diff = $diff->i;
 
         if ($minutes_diff > 0 && ($minutes_diff <= $cfg['refresher_time'])) {
             if ($vhost['online']) {
-                $hostscat[$khost]['glow'] = 'host-glow-on';
+                $hosts_view[$key]['glow'] = 'host-glow-on';
             } else {
-                $hostscat[$khost]['glow'] = 'host-glow-off';
+                $hosts_view[$key]['glow'] = 'host-glow-off';
             }
         }
         // /glow
         //Warn icon
         if ($vhost['warn_port']) {
-            $hostscat[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
-            $hostscat[$khost]['details'] .= $lng['L_PORT_DOWN'];
+            $hosts_view[$key]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
+            $hosts_view[$key]['details'] .= $lng['L_PORT_DOWN'];
         }
     }
 
-    return $hostscat;
-}
-
-function get_hosts_view_data(AppCtx $ctx, int $highlight = 0) {
-    $cfg = $ctx->getAppCfg();
-    $hosts = $ctx->getAppHosts();
-    $user = $ctx->getAppUser();
-    $lng = $ctx->getAppLang();
-
-    $hosts_results = $hosts->getHighLight($highlight);
-
-    if (!valid_array($hosts_results)) {
-        return false;
-    }
-    $theme = $user->getTheme();
-
-    foreach ($hosts_results as $khost => $vhost) {
-        $hosts_results[$khost]['theme'] = $theme;
-        $hosts_results[$khost]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
-        if (empty($vhost['title'])) {
-            if (!empty($vhost['hostname'])) {
-                $hosts_results[$khost]['title'] = explode('.', $vhost['hostname'])[0];
-            } else {
-                $hosts_results[$khost]['title'] = $vhost['ip'];
-            }
-        } else {
-            if (!empty($vhost['hostname'])) {
-                $hosts_results[$khost]['details'] .= $lng['L_HOSTNAME'] . ': ' . $vhost['hostname'] . "\n";
-            }
-        }
-        if ($vhost['online']) {
-            $hosts_results[$khost]['title_online'] = $lng['L_S_ONLINE'];
-            $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/green2.png';
-        } else {
-            $hosts_results[$khost]['title_online'] = $lng['L_S_OFFLINE'];
-            $hosts_results[$khost]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
-        }
-
-
-        $manufacture = get_manufacture_data($cfg, $vhost['manufacture']);
-        $os = get_os_data($cfg, $vhost['os']);
-        $system_type = get_system_type_data($cfg, $vhost['system_type']);
-
-        $hosts_results[$khost]['manufacture_name'] = $manufacture['name'];
-        $hosts_results[$khost]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
-
-        $hosts_results[$khost]['os_name'] = $os['name'];
-        $hosts_results[$khost]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
-
-        $hosts_results[$khost]['system_type_name'] = $system_type['name'];
-        $hosts_results[$khost]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
-
-        $hosts_results[$khost]['glow'] = '';
-
-        // Glow
-        $date_now = new DateTime();
-        $change_time = new DateTime($vhost['online_change']);
-        $diff = $date_now->diff($change_time);
-        $minutes_diff = $diff->i;
-
-        if ($minutes_diff > 0 && ($minutes_diff <= $cfg['refresher_time'])) {
-            if ($vhost['online']) {
-                $hosts_results[$khost]['glow'] = 'host-glow-on';
-            } else {
-                $hosts_results[$khost]['glow'] = 'host-glow-off';
-            }
-        }
-        // /glow
-        //Warn icon
-        if ($vhost['warn_port']) {
-            $hosts_results[$khost]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
-            if (!empty(['warn_msg'])) {
-                $hosts_results[$khost]['details'] .= $vhost['warn_msg'];
-            } else {
-                $hosts_results[$khost]['details'] .= $lng['L_PORT_DOWN'];
-            }
-        }
-    }
-
-    return $hosts_results;
+    return $hosts_view;
 }
 
 function get_host_detail_view_data(AppCtx $ctx, $hid) {
