@@ -57,6 +57,27 @@ button:hover {
     background-color: #0056b3; /* Cambiar color de fondo al pasar el mouse */
 }
 
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table, td {
+    border: 1px solid #827070;
+}
+
+td {
+    padding: 8px;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #403d3d;
+}
+
+tr:hover {
+    background-color: #8a7070;
+}
 
 .header {
     display:flex;
@@ -1002,16 +1023,15 @@ input:checked + .slider:before {
     border-radius: 4px;
     cursor: pointer;
 }
-#status_msg,
-#error_msg {
+#status_msg,#error_msg, #network_status_msg, #network_error_msg {
     width: 100%;
     text-align: center;
     margin-top: 10px;
 }
-#status_msg {
+#status_msg, #network_status_msg {
     color: green;
 }
-#error_msg {
+#error_msg, #network_error_msg {
     color: red;
 }
 #textarea_logs {

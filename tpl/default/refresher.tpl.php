@@ -35,6 +35,7 @@
         if (typeof command_value === 'undefined') {
             command_value = false;
         }
+        //console.log(requestData);
         $.post('refresher.php', requestData)
                 .done(function (data, textStatus, xhr) {
                     var contentType = xhr.getResponseHeader('Content-Type');
@@ -77,6 +78,18 @@
                             $('#config_status_msg').html('Error');
                         }
                     }
+                    if (jsonData.command_receive === 'addNetwork') {
+                        $('#network_status_msg').html('');
+                        $('#network_error_msg').html('');
+                        if (jsonData.command_success && jsonData.response_msg) {
+                            $('#networkName').html('');
+                            $('#network').html('');
+                            $('#networkCIDR').html('');
+                        }
+                        if (jsonData.command_error_msg) {
+                            $('#network_error_msg').html(jsonData.command_error_msg);
+                        }
+                    }
                     if (jsonData.command_receive === 'submitTitle') {
                         if (jsonData.command_success) {
                             $('#config_status_msg').html('Validated:' + jsonData.command_value);
@@ -110,11 +123,9 @@
                         }
                     }
                     if (jsonData.command_receive === 'submitHostToken') {
-                        console.log(2);
                         if (jsonData.command_success === 1) {
                             $('#host_token').val(jsonData.response_msg);
                         } else {
-                            console.log(3);
                             $('#host_token').val('Error');
                         }
                     }

@@ -45,6 +45,8 @@ if ($command == 'saveNote') {
     $command_value = trim(Filters::postCustomString('order_value', ',/', 255));
 } else if ($command == 'setCheckPorts') {
     $command_value = Filters::postInt('order_value');
+} else if ($command == 'addNetwork') {
+    $command_value = Filters::postCustomString('order_value', ',":.{}');
 } else {
     $command_value = trim(Filters::postString('order_value'));
 }
@@ -217,6 +219,48 @@ if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($co
 }
 
 /* /end Host Cat */
+
+if ($command == 'addNetwork' && !empty($command_value)) {
+    $decodedJson = json_decode($command_value, true);
+
+    if ($decodedJson === null) {
+        $data['command_error_msg'] .= 'JSON Invalid<br/>';
+    } else {
+        foreach ($decodedJson as $key => $dJson) {
+            ($key == 'networkVLAN') ? $key = 'vlan' : null;
+            ($key == 'networkScan') ? $key = 'scan' : null;
+            ($key == 'networkName') ? $key = 'name' : null;
+            $new_network[$key] = trim($dJson);
+        }
+        $network_plus_cidr = $new_network['network'] . '/' . $new_network['networkCIDR'];
+        unset($new_network['networkCIDR']);
+        $new_network['network'] = $network_plus_cidr;
+
+        if (!Filters::varNetwork($network_plus_cidr)) {
+            $data['command_error_msg'] .= $lng['L_NETWORK'] . ' ' . $lng['L_INVALID'] . '<br/>';
+        }
+        if (!is_numeric($new_network['vlan'])) {
+            $data['command_error_msg'] .= 'VLAN ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
+        }
+        if (!is_numeric($new_network['scan'])) {
+            $data['command_error_msg'] .= 'Scan ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
+        }
+        $networks_list = $ctx->getAppNetworks()->getNetworks();
+        foreach ($networks_list as $net) {
+            if ($net['name'] == $new_network['name']) {
+                $data['command_error_msg'] = 'Name must be unique<br/>';
+            }
+            if ($net['network'] == $network_plus_cidr) {
+                $data['command_error_msg'] = 'Network must be unique<br/>';
+            }
+        }
+        if (empty($data['command_error_msg'])) {
+            $ctx->getAppNetworks()->addNetwork($new_network);
+            $data['command_success'] = 1;
+            $data['response_msg'] = 'ok';
+        }
+    }
+}
 
 $highlight_hosts_count = 0;
 

@@ -157,12 +157,27 @@ $(document).ready(function () {
             refresh('submitSystemType', stValue, host_id);
         }
     });
-    $(document).on("click", "#submitHostToken", function () {        
+    $(document).on("click", "#submitHostToken", function () {
         var host_id = $('#host_id').val();
         if (host_id) {
             refresh('submitHostToken', host_id);
         }
-    });    
+    });
+
+    $(document).on("click", "#submitNetwork", function () {
+        var fields = {};
+
+        fields.networkName = $('#networkName').val();
+        fields.network = $('#network').val();
+        fields.networkCIDR = parseInt($('#network_cidr').val());
+        fields.networkScan = parseInt($('input[name="networkScan"]:checked').val() || 0);
+        fields.networkVLAN = parseInt($('#network_vlan').val());
+        if (fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {            
+            json_fields = JSON.stringify(fields);
+            refresh('addNetwork', json_fields);
+        }
+
+    });
 //Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {

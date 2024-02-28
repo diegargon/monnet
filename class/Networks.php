@@ -54,6 +54,11 @@ Class Networks {
         return false;
     }
 
+    public function addNetwork(array $set) {
+        $db = $this->ctx->getAppDb();
+        $db->insert('networks', $set);
+    }
+
     public function getNetworkNameByID(int $id) {
         $networks = $this->getNetworks();
 

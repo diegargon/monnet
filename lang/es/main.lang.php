@@ -61,6 +61,7 @@ $lng = [
     'L_IMAGE_TYPE' => 'Tipo Imagen',
     'L_IOT' => 'Iot',
     'L_INTERNAL' => 'Internal',
+    'L_INVALID' => 'invalida',
     //L
     'L_LAST_UPDATE' => 'Actualizado',
     'L_LOGIN' => 'Identificarse',
@@ -77,12 +78,14 @@ $lng = [
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',
     'L_MANUFACTURE' => 'Manufacture',
+    'L_MUST_BE' => 'debe ser',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',
     'L_NAME' => 'Nombre',
     'L_NETWORK' => 'Red',
     'L_NETWORK_NAME' => 'Nombre de la red',
+    'L_NUMERIC' => 'numerico',
     //O
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
