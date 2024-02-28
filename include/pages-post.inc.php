@@ -41,9 +41,11 @@ function page_index_post(AppCtx $ctx) {
         post_bookmark($ctx, $page_data);
     }
 
-    if (Filters::postInt('addNetworkForm')) {
-        post_network($ctx, $page_data);
-    }
+    /* To REMOVE
+      if (Filters::postInt('addNetworkForm')) {
+      post_network($ctx, $page_data);
+      }
+     */
 
     return $page_data;
 }
@@ -103,6 +105,7 @@ function post_bookmark(AppCtx $ctx, array &$page_data) {
     }
 }
 
+/* TO REMOVE
 function post_network(AppCtx $ctx, array &$page_data) {
     $lng = $ctx->getAppLang();
     $db = $ctx->getAppDb();
@@ -145,3 +148,4 @@ function post_network(AppCtx $ctx, array &$page_data) {
         $page_data['status_msg'] = 'OK';
     }
 }
+*/
