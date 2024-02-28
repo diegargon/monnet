@@ -11,15 +11,19 @@
 
 Class User {
 
+    private AppCtx $ctx;
     private array $cfg;
     private Database $db;
+    private array $lng;
     private $user = [];
     private array $prefs = [];
-    private $categories_on = [];
+    private $categories_state = [];
 
     public function __construct(AppCtx $ctx) {
+        $this->ctx = $ctx;
         $this->db = $ctx->getAppDb();
         $this->cfg = $ctx->getAppCfg();
+        $this->lng = $ctx->getAppLang();
 
         if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
             $this->user = $this->getProfile($_SESSION['uid']);
@@ -45,6 +49,7 @@ Class User {
         empty($this->user['timezone']) ? $this->user['timezone'] = $this->cfg['timezone'] : null;
 
         $this->user['id'] > 0 ? $this->loadPrefs() : null;
+        $this->loadUserHostCatsState();
     }
 
     public function getId() {
@@ -108,13 +113,12 @@ Class User {
 
         $result = $this->db->select('users', '*', ['username' => $username], 'LIMIT 1');
         $user_check = $this->db->fetch($result);
-        //echo $username . ':' . $password . "\n";
-        //var_dump($user_check);
+
         if (empty($user_check) || empty($user_check['id'])) {
             return false;
         }
         !empty($password) ? $password_hashed = $this->encryptPassword($password) : $password_hashed = '';
-        //echo $password_hashed . "\n";
+
         if (($user_check['password'] == $password_hashed)) {
             //echo "LLEGO " . $user_check['id'];
             return $user_check['id'];
@@ -131,24 +135,68 @@ Class User {
         return true;
     }
 
-    public function loadHostCats() {
-
+    public function getHostsCatState() {
+        return $this->categories_state;
     }
 
-    public function toggleHostCats(int $id) {
-        $this->categories[$id] = !$this->categories[$id];
-        $this->saveCatsState();
+    private function loadUserHostCatsState() {
+        $prefs_cats = $this->getPref('hosts_cats_state');
+        $h_prefs_cats = json_decode($prefs_cats, true);
+
+        $hosts_categories = $this->ctx->getAppCategories()->getByType(1);
+        foreach ($hosts_categories as $hcats) {
+            $id = $hcats['id'];
+            //if not set to then is set
+            if (isset($h_prefs_cats[$id]) && $h_prefs_cats[$id] == 0) {
+                $this->categories_state[$id] = 0;
+            } else {
+                $this->categories_state[$id] = 1;
+            }
+        }
     }
 
-    public function saveHostCatsState() {
-        $json_cats_state = json_encode($this->categories_on);
+    public function getHostsCats() {
+        $categories = $this->ctx->getAppCategories()->prepareCats(1);
+        foreach ($categories as $key => $cat) {
+            $id = $cat['id'];
+            if (isset($this->categories_state[$id])) {
+                $categories[$key]['on'] = $this->categories_state[$id];
+            } else {
+                $categories[$key]['on'] = 1;
+            }
+        }
+
+        return $categories;
+    }
+
+    public function toggleHostsCat(int $id) {
+        $this->categories_state[$id] = (!$this->categories_state[$id]) ? 1 : 0;
+        $this->saveHostsCatsState();
+    }
+
+    public function saveHostsCatsState() {
+        $json_cats_state = json_encode($this->categories_state);
         if (mb_strlen($json_cats_state, 'UTF-8') > 255) {
             Log::err('Max cats state reached');
             return false;
         }
-        $this->setPref('cats_on', $json_cats_state);
+        $this->setPref('hosts_cats_state', $json_cats_state);
 
         return true;
+    }
+
+    public function turnHostsCatsOff() {
+        foreach ($this->categories_state as $key => $_) {
+            $this->categories_state[$key] = 0;
+        }
+        $this->saveHostsCatsState();
+    }
+
+    public function turnHostsCatsOn() {
+        foreach ($this->categories_state as $key => $_) {
+            $this->categories_state[$key] = 1;
+        }
+        $this->saveHostsCatsState();
     }
 
     private function updateSessionId() {

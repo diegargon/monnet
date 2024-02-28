@@ -14,28 +14,28 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0) {
     $hosts = $ctx->getAppHosts();
     $user = $ctx->getAppUser();
     $lng = $ctx->getAppLang();
-    $cats = $ctx->getAppCategories();
-
     $hosts_view = [];
 
     if ($highlight) {
         $hosts_view = $hosts->getHighLight($highlight);
     } else {
-        $cats_on = $cats->getOnByType(1);
-        if ($cats_on === false) {
-            return false;
+        $user_cats_state = $user->getHostsCatState();
+
+        if (!valid_array($user_cats_state)) {
+            return [];
         }
-        //Get Host for each ON category
-        foreach ($cats_on as $cat) {
-            $hosts_cat = $hosts->getHostsByCat($cat['id']);
-            if (valid_array($hosts_cat)) {
-                $hosts_view = array_merge($hosts_view, $hosts_cat);
+        foreach ($user_cats_state as $cat_id => $cat_state) {
+            if ($cat_state == 1) {
+                $hosts_cat = $hosts->getHostsByCat($cat_id);
+                if (valid_array($hosts_cat)) {
+                    $hosts_view = array_merge($hosts_view, $hosts_cat);
+                }
             }
         }
     }
-
+    //Return empty to avoid keep hosts after last turn off last cat
     if (!valid_array($hosts_view)) {
-        return false;
+        return [];
     }
 
     $theme = $user->getTheme();
@@ -111,10 +111,8 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0) {
         if ($minutes_diff > 0 && ($minutes_diff <= $cfg['refresher_time'])) {
             if ($vhost['online']) {
                 $hosts_view[$key]['glow'] = 'host-glow-on';
-                //Log::notice("On: Host $id:{$date_now->format('Y-m-d H:i:s')}:{$change_time->format('Y-m-d H:i:s')}:$minutes_diff");
             } else {
                 $hosts_view[$key]['glow'] = 'host-glow-off';
-                //Log::notice("Off: Host $id:{$date_now->format('Y-m-d H:i:s')}:{$change_time->format('Y-m-d H:i:s')}:$minutes_diff");
             }
         }
         // /glow

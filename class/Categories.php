@@ -11,12 +11,12 @@
 
 class Categories {
 
-    private $ctx;
-    private $cfg;
-    private $db;
-    private $categories = [];
-    private $cat_types;
-    private $lng = [];
+    private AppCtx $ctx;
+    private array $cfg;
+    private Database $db;
+    private array $categories = [];
+    private array $cat_types;
+    private array $lng = [];
 
     public function __construct(AppCtx $ctx) {
         $this->ctx = $ctx;
@@ -61,20 +61,6 @@ class Categories {
         return false;
     }
 
-    public function getOnByType($type) {
-        $by_type_return = [];
-
-        $categories_by_type = $this->getByType($type);
-
-        foreach ($categories_by_type as $typecat) {
-            if ($typecat['on']) {
-                $by_type_return[] = $typecat;
-            }
-        }
-
-        return valid_array($by_type_return) ? $by_type_return : false;
-    }
-
     public function prepareCats(int $type) {
         $categories_by_type = $this->getByType($type);
         foreach ($categories_by_type as &$typecat) {
@@ -87,33 +73,5 @@ class Categories {
         }
 
         return $categories_by_type;
-    }
-
-    public function toggle(int $id) {
-        $this->db->toggleField('categories', 'on', ['id' => $id]);
-        foreach ($this->categories as &$cat) {
-            if ($cat['id'] == $id) {
-                $cat['on'] = !$cat['on'];
-                break;
-            }
-        }
-    }
-
-    public function turnAllOff(int $type) {
-        $this->db->update('categories', ['on' => 0], ['cat_type' => $type]);
-        foreach ($this->categories as &$cat) {
-            if ($cat['cat_type'] == $type) {
-                $cat['on'] = 0;
-            }
-        }
-    }
-
-    public function turnAllOn(int $type) {
-        $this->db->update('categories', ['on' => 1], ['cat_type' => $type]);
-        foreach ($this->categories as &$cat) {
-            if ($cat['cat_type'] == $type) {
-                $cat['on'] = 1;
-            }
-        }
     }
 }

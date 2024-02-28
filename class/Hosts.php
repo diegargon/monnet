@@ -45,7 +45,7 @@ Class Hosts {
         $this->getHostsDb();
     }
 
-    function getknownEnabled() {
+    public function getknownEnabled() {
         $hosts = [];
 
         foreach ($this->hosts as $host) {
@@ -57,7 +57,7 @@ Class Hosts {
         return $hosts;
     }
 
-    function getHighlight(int $highligth = 1) {
+    public function getHighlight(int $highligth = 1) {
         $hosts = $this->getknownEnabled();
         foreach ($hosts as $khost => $vhost) {
             if ($vhost['highlight'] != $highligth) {
@@ -68,7 +68,7 @@ Class Hosts {
         return $hosts;
     }
 
-    function getAll() {
+    public function getAll() {
         return $this->hosts;
     }
 
@@ -76,7 +76,7 @@ Class Hosts {
     //    $this->hosts[$id]['mac'] = $mac;
     //}
 
-    function update(int $id, array $values) {
+    public function update(int $id, array $values) {
         $fvalues = []; //filter
 
         foreach ($values as $kvalue => $vvalue) {
@@ -104,7 +104,7 @@ Class Hosts {
         }
     }
 
-    function insert(array $host) {
+    public function insert(array $host) {
         $this->db->insert('hosts', $host);
         $host_id = $this->db->insertID();
         $host['id'] = $host_id;
@@ -120,7 +120,7 @@ Class Hosts {
         Log::logHost('LOG_NOTICE', $host_id, 'Found new host: ' . $host['display_name'] . ' on network ' . $network_name);
     }
 
-    function remove(int $hid) {
+    public function remove(int $hid) {
         Log::notice('Deleted host: ' . $this->hosts[$hid]['display_name']);
         $this->db->delete('hosts', ['id' => $hid], 'LIMIT 1');
         $this->db->delete('notes', ['host_id' => $hid], 'LIMIT 1');
@@ -129,7 +129,7 @@ Class Hosts {
         unset($this->hosts[$hid]);
     }
 
-    function getHostById(int $id) {
+    public function getHostById(int $id) {
 
         if (empty($this->hosts[$id])) {
             return false;
@@ -143,7 +143,7 @@ Class Hosts {
         return $host;
     }
 
-    function getHostByIp(string $ip) {
+    public function getHostByIp(string $ip) {
         foreach ($this->hosts as $host) {
             if ($host['ip'] == trim($ip)) {
                 return $host;
@@ -164,6 +164,14 @@ Class Hosts {
         }
 
         return valid_array($hosts_by_cat) ? $hosts_by_cat : false;
+    }
+
+    public function catHaveHosts($id) {
+        if (isset($this->host_cat_track[$id]) && $this->host_cat_track[$id] > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     private function getDisplayName($host) {

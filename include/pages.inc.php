@@ -159,8 +159,7 @@ function page_index(AppCtx $ctx) {
         'place' => 'left_col_post',
     ];
 
-    $page['hosts_categories'] = $categories->prepareCats(1);
-
+    $page['hosts_categories'] = $user->getHostsCats();
     $page['networks'] = $networks_list;
     $page['networks_selected'] = $networks_selected; //to prevent unselect all
 

@@ -179,25 +179,37 @@ if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_i
 
 /* Show cat Only * */
 if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
-    //!isset($categories) ? $categories = new Categories($ctx) : null;
-    $categories = $ctx->getAppCategories();
-    $caton = $categories->getOnByType(1);
+    $categories_state = $user->getHostsCatState();
 
-    if (empty($caton) || count($caton) == 1) {
-        $categories->turnAllOn(1);
+    $ones = 0;
+    foreach ($categories_state as $state) {
+        if ($state == 1) {
+            $ones++;
+        }
+    }
+
+    if (empty($categories_state) || $ones == 1) {
+        $user->turnHostsCatsOn();
     } else {
-        $categories->turnAllOff(1);
-        $categories->toggle($command_value);
+        $user->turnHostsCatsOff();
+        $user->toggleHostsCat($command_value);
     }
 }
 
 if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
-    $categories = $ctx->getAppCategories();
-    $categories->toggle($command_value);
+    $user->toggleHostsCat($command_value);
 }
 
 if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
-    $tdata['hosts_categories'] = $categories->prepareCats(1);
+    $hosts_categories = $user->getHostsCats();
+
+    //Not show empty cats
+    foreach ($hosts_categories as $key => $host_cat) {
+        if (!$hosts->catHaveHosts($host_cat['id'])) {
+            unset($hosts_categories[$key]);
+        }
+    }
+    $tdata['hosts_categories'] = $hosts_categories;
     //Networks dropdown
     $networks_list = $ctx->getAppNetworks()->getNetworks();
 
@@ -269,7 +281,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
     if ($user->getPref('show_highlight_hosts_status')) {
         $hosts_view = get_hosts_view($ctx, 1);
         $highlight_hosts_count = 0;
-        if (valid_array($hosts_view)) {
+        if (is_array($hosts_view)) {
             $highlight_hosts_count = count($hosts_view);
             $tdata = [];
             $tdata['hosts'] = $hosts_view;
@@ -283,7 +295,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
     }
     if ($user->getPref('show_other_hosts_status')) {
         $hosts_view = get_hosts_view($ctx);
-        if (valid_array($hosts_view)) {
+        if (is_array($hosts_view)) {
             $shown_hosts_count = count($hosts_view);
             $hosts_totals_count = $hosts->totals;
             $shown_hosts_count = $shown_hosts_count + $highlight_hosts_count;
@@ -296,7 +308,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $data['other_hosts']['cfg']['place'] = '#host_place';
             $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
         } else {
-            $data['command_error_msg'] .= 'Invalid or empty other host data' . print_r($hosts_view, true);
+            $data['command_error_msg'] .= 'Invalid other host data' . print_r($hosts_view, true);
         }
     }
 }
