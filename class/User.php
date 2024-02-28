@@ -15,10 +15,12 @@ Class User {
     private Database $db;
     private $user = [];
     private array $prefs = [];
+    private $categories_on = [];
 
-    public function __construct(array &$cfg, Database &$db) {
-        $this->db = &$db;
-        $this->cfg = &$cfg;
+    public function __construct(AppCtx $ctx) {
+        $this->db = $ctx->getAppDb();
+        $this->cfg = $ctx->getAppCfg();
+
         if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
             $this->user = $this->getProfile($_SESSION['uid']);
             if (empty($this->user['sid']) || $this->user['sid'] != session_id()) {
@@ -40,7 +42,7 @@ Class User {
         }
         empty($this->user['lang']) ? $this->user['lang'] = $this->cfg['lang'] : null;
         empty($this->user['theme']) ? $this->user['theme'] = $this->cfg['theme'] : null;
-        empty($this->user['timezone']) ? $this->user['timezone'] = $cfg['timezone'] : null;
+        empty($this->user['timezone']) ? $this->user['timezone'] = $this->cfg['timezone'] : null;
 
         $this->user['id'] > 0 ? $this->loadPrefs() : null;
     }
@@ -129,6 +131,26 @@ Class User {
         return true;
     }
 
+    public function loadHostCats() {
+
+    }
+
+    public function toggleHostCats(int $id) {
+        $this->categories[$id] = !$this->categories[$id];
+        $this->saveCatsState();
+    }
+
+    public function saveHostCatsState() {
+        $json_cats_state = json_encode($this->categories_on);
+        if (mb_strlen($json_cats_state, 'UTF-8') > 255) {
+            Log::err('Max cats state reached');
+            return false;
+        }
+        $this->setPref('cats_on', $json_cats_state);
+
+        return true;
+    }
+
     private function updateSessionId() {
         if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
             setcookie('sid', session_id(), [
@@ -157,7 +179,7 @@ Class User {
         $this->user['sid'] = $new_sid;
     }
 
-    function encryptPassword(string $password) {
+    private function encryptPassword(string $password) {
         return sha1($password);
     }
 

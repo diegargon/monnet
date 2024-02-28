@@ -16,7 +16,7 @@ session_start();
 
 require('class/User.php');
 
-$user = new User($cfg, $db);
+$user = new User($ctx);
 /* Default lang included in common here we overwrite if necessary */
 
 if ($user->getLang() !== 'es') {
