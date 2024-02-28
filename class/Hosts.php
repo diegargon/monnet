@@ -36,6 +36,7 @@ Class Hosts {
     private $hosts = [];
     private array $lng;
     private AppCtx $ctx;
+    private array $host_cat_track = [];
 
     public function __construct(AppCtx $ctx) {
         $this->ctx = $ctx;
@@ -87,6 +88,11 @@ Class Hosts {
                 ) {
                     $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( ' . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])' . $this->hosts[$id][$kvalue] . '->' . $vvalue;
                     Log::logHost('LOG_WARNING', $id, $loghostmsg);
+                }
+                if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
+                    Log::logHost('LOG_INFO', $id, 'Host ' . $this->hosts[$id]['display_name'] . ' change category ' . $this->hosts[$id]['category'] . '->' . $vvalue);
+                    $this->host_cat_track[$this->hosts[$id]['category']]--;
+                    $this->host_cat_track[$vvalue]++;
                 }
                 $this->hosts[$id][$kvalue] = $vvalue;
                 $fvalues[$kvalue] = $vvalue;
@@ -197,9 +203,17 @@ Class Hosts {
             $host['highlight'] ? $this->highlight_total++ : null;
 
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
+
+            //Track host categories
+            if (empty($this->host_cat_track[$host['category']])) {
+                $this->host_cat_track[$host['category']] = 1;
+            } else {
+                $this->host_cat_track[$host['category']]++;
+            }
             if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
             }
+
             if (empty($host['notes_id'])) {
                 $this->db->insert('notes', ['host_id' => $host['id']]);
                 $insert_id = $this->db->insertID();
