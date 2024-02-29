@@ -17,8 +17,15 @@ You can add bookmarks, networks, and other elements, but for most features, modi
 The English language (EN) has not been added yet. /lang/*
 
 # MonNet Install
-Install LAMP + Composer
 
+## Deps
+
+LAMP 
+Composer 
+phpseclib (Composer)
+arp - Optional for get mac
+
+## Initial  database settings
 ```
 mysql -u root -p
 mysql> CREATE DATABASE monnet;
@@ -26,22 +33,27 @@ mysql> CREATE USER 'monnet'@'localhost' IDENTIFIED BY 'password';
 mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 ```
 
+## Clone repo
 ```
 /var/www/html# git clone https://github.com/diegargon/monnet .
 
 /var/www/html# chown -R www-data:www-data *
 /var/www/html# chmod 755 cache
 ```
-Instalamos phpseclib con composer
+
+## Composer deeps
 
 ```
 /var/www/html# composer require phpseclib/phpseclib:~3.0
 ```
 
+## Config
+
 Copy  config/config.defaults.php  to  /etc/monnet/config.inc.php and change whatever you want, you
 can remove all unnchaged config. Don't rename or modify directly config.defaults.php 
 
-## Settting Database
+## Load the sql
+
 ```
 /var/www/html# mysql monnet < config/monnet.sql -p
 ```
@@ -55,6 +67,7 @@ monnet : monnetadmin
 ## Setting crontab
 
 Times depends of your network
+
 ```
 $ nano /etc/crontab
 */5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
