@@ -277,6 +277,7 @@ function ping_host_ports(array $host) {
     foreach ($host['ports'] as $kport => $port) {
         $host_status['ports'][$kport] = $port;
         $host_status['ports'][$kport]['online'] = 0;
+        $host_status['ports'][$kport]['user'] = !empty($port['user'] ? 1 : 0);
 
         $tim_start = microtime(true);
         $ip = $host['ip'];

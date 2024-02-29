@@ -63,6 +63,7 @@ function validatePortsInput(string $input) {
                         'n' => $parts[0],
                         'name' => $name,
                         'port_type' => $port_type,
+                        'user' => 1,
                         'online' => 0,
                         'latency' => 0.0
                     ];
