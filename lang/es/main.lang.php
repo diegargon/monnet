@@ -8,7 +8,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 $lng = [
-    //A
+//A
     'L_ADDED' => 'Añadido',
     'L_ADD' => 'Añadir',
     'L_APPLINKS' => 'Web apps',
@@ -33,8 +33,9 @@ $lng = [
     'L_DESKTOP' => 'Escritorio',
     'L_DISPLAY_NAME' => 'Nombre a mostrar',
     //E
-    //ERROR
+//ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
+    'L_ERROR_INVALID' => 'Campo invalido',
     'L_ERR_FILE_CREATE' => 'Error creando archivo',
     'L_ERR_FILE_CHOWN' => 'Error cambiando el propietario del archivo',
     'L_ERR_FILE_CHGRP' => 'Error cambiando el grupo propietario del archivo',
@@ -72,6 +73,7 @@ $lng = [
     'L_LOAD' => 'Carga',
     'L_LOCAL_IMAGE' => 'Imagen Local',
     'L_LINK' => 'Enlace',
+    'L_LINK_HELP' => 'Server image name, favicon path, http link',
     'L_LOG' => 'Log',
     'L_LOGMSG_TOO_LONG' => 'Mensaje log demasiado largo. Cortado!',
     //M

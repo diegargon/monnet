@@ -64,9 +64,12 @@ function post_bookmark(AppCtx $ctx, array &$page_data) {
 
     //TODO check valid image name.
     $image_type = Filters::postString('image_type');
+
     if ($image_type == 'image_resource') { //Remote Image
         $field_img = Filters::postImgUrl('field_img');
-    } else { //favicon, local image
+    } else if ($image_type == 'local_img') { //Only allow file.jpg
+        $field_img = Filters::postCustomString('field_img', '.');
+    } else { //favicon,
         $field_img = Filters::postPathFile('field_img');
     }
 
@@ -89,7 +92,12 @@ function post_bookmark(AppCtx $ctx, array &$page_data) {
     if ($image_type != 'favicon' && empty($field_img)) {
         $page_data['error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
     }
-
+    if ($image_type == 'favicon' && empty($field_img) && !empty($_POST['field_img'])) {
+        $page_data['error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_INVALID']}";
+    }
+    if ($image_type == 'local_img' && empty($field_img)) {
+        $page_data['error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+    }
     $page_data['bookmarkName'] = $bookmarkName;
     $page_data['cat_id'] = $cat_id;
     $page_data['urlip'] = $urlip;
@@ -100,7 +108,6 @@ function post_bookmark(AppCtx $ctx, array &$page_data) {
         $conf = ['url' => $urlip, 'image_type' => $image_type, 'image_resource' => $field_img];
         $set = ['cat_id' => $cat_id, 'type' => 'bookmarks', 'title' => $bookmarkName, 'conf' => json_encode($conf), 'weight' => $weight];
         $db->insert('items', $set);
-        //TODO Check insert;
         $page_data['status_msg'] = 'OK';
     }
 }

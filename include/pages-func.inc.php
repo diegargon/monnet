@@ -26,7 +26,7 @@ function format_items(User $user, array $items_results) {
             $item_img = $item_conf['image_resource'];
             $item_img = cached_img($user, $item['id'], $item_img);
         } elseif ($item_conf['image_type'] === 'local_img') {
-            $item_img = 'tpl/' . $theme . '/img/icons/' . $item_conf['image_resource'];
+            $item_img = '/local_img/' . $item_conf['image_resource'];
         }
 
         $item['img'] = $item_img;

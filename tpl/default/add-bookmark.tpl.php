@@ -40,7 +40,7 @@
             </select>
             <br/>
 
-            <label for="field_img"><?= $lng['L_LINK'] ?>:</label>
+            <label for="field_img"><?= $lng['L_LINK_HELP'] ?>:</label>
             <input type="text" id="field_img" name="field_img" size="32" maxlength="450" value="<?= !empty($tdata['field_img']) ? $tdata['field_img'] : null ?>">
 
             <label for="weight"><?= $lng['L_WEIGHT'] ?>:</label>
