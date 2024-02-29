@@ -30,10 +30,8 @@ function formatBytes(int $size, int $precision = 2) {
     return round($size, $precision) . ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][$i];
 }
 
-function order(array &$ary, $sortKey = 'weight', $order = 'asc') {
-    if (empty($sortKey)) {
-        $sortKey = 'weight';
-    }
+function order(array &$ary, $sortKey, $order = 'asc') {
+
     usort($ary, function ($a, $b) use ($sortKey, $order) {
         if (!isset($a[$sortKey]) || !isset($b[$sortKey])) {
             return false;

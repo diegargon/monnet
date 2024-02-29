@@ -204,7 +204,7 @@ Class Hosts {
             } else {
                 Log::warn('Host network seems not exists: ' . "[H: $id][N: $net_id]");
             }
-            $host['display_name'] = $this->getDisplayName($host);
+            $host['display_name'] = ucfirst($this->getDisplayName($host));
 
             $this->hosts[$id] = $host;
             $host['online'] == 1 ? ++$this->on : ++$this->off;

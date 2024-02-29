@@ -53,11 +53,15 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0) {
                 unset($hosts_view[$key]);
             }
 
+            //DUP TO DELETE
             //Discard hidden networks
-            $host_network_pref = 'network_select_' . $host['network'];
-            if ($user->getPref($host_network_pref) === 0) {
-                unset($hosts_view[$key]);
-            }
+            /*
+              $host_network_pref = 'network_select_' . $host['network'];
+              if ($user->getPref($host_network_pref) === 0) {
+              unset($hosts_view[$key]);
+              }
+             *
+             */
         }
     }
 
@@ -122,6 +126,9 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0) {
             $hosts_view[$key]['details'] .= $lng['L_PORT_DOWN'];
         }
     }
+
+    //Fix why not work for all hosts?
+    order($hosts_view, 'display_name');
 
     return $hosts_view;
 }
