@@ -11,6 +11,8 @@ $lng = [
 //A
     'L_ADDED' => 'Añadido',
     'L_ADD' => 'Añadir',
+    'L_ADD_HOST_CAT' => 'Añadir categoria para hosts',
+    'L_ADD_BOOKMARKS_CAT' => 'Añadir categoria para bookmarks',
     'L_APPLINKS' => 'Web apps',
     'L_AREYOUSURE' => '¿estas seguro?',
     'L_ALL' => 'Todo',
@@ -39,8 +41,11 @@ $lng = [
     'L_ERR_FILE_CREATE' => 'Error creando archivo',
     'L_ERR_FILE_CHOWN' => 'Error cambiando el propietario del archivo',
     'L_ERR_FILE_CHGRP' => 'Error cambiando el grupo propietario del archivo',
+    'L_ERR_CAT_NODELETE' => 'Esta categoria no se puede borrar',
     //F
     'L_FIELD' => 'Campo',
+    //G
+    'L_GENERAL' => 'General',
     //H
     'L_HIGHLIGHT_HOSTS' => 'Destacados',
     'L_HOSTNAME' => 'Hostname',
@@ -89,6 +94,7 @@ $lng = [
     'L_NETWORK_NAME' => 'Nombre de la red',
     'L_NUMERIC' => 'numerico',
     //O
+    'L_OK' => 'Ok',
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
     'L_OS' => 'Os',
@@ -106,6 +112,8 @@ $lng = [
     'L_PHONE' => 'Phone',
     'L_PRINTER' => 'Impresora',
     'L_PRINTERS' => 'Impresoras',
+    //Q
+    'L_QUICK_SETTINGS' => 'Configuración',
     //R
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',
@@ -142,6 +150,7 @@ $lng = [
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',
     'L_VLAN' => 'Vlan',
+    'L_VALUE_EXISTS' => 'El valor ya existe',
     //W
     'L_WINDSPEED' => 'Viento',
     'L_WEIGHT' => 'Peso',

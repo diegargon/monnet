@@ -298,6 +298,39 @@ class Database {
     }
 
     /**
+     * Check if a value exists in a table.
+     *
+     * @param string $table The name of the table to check.
+     * @param string $field The name of the field to check for the value.
+     * @param mixed $value The value to check for existence in the table.
+     * @return bool True if the value exists, false otherwise.
+     */
+    function valueExists(string $table, string $field, $value) {
+        $table = $this->fieldQuote($table);
+        $field = $this->fieldQuote($field);
+        $value = $this->valQuote($value);
+
+        $query = "SELECT $field FROM $table WHERE $field = $value";
+        $result = $this->query($query);
+
+        return $this->numRows($result) > 0;
+    }
+
+    function queryExists(string $query) {
+        $result = $this->query($query);
+
+        return $this->numRows($result) > 0;
+    }
+
+    public function valQuote(mixed $value) {
+        return '\'' . $this->escape($value) . '\'';
+    }
+
+    public function fieldQuote(string $value) {
+        return '`' . $value . '`';
+    }
+
+    /**
      * Calculate next row number
      *
      * @param string $table

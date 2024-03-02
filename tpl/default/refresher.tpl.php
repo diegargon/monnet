@@ -90,6 +90,19 @@
                             $('#network_error_msg').html(jsonData.command_error_msg);
                         }
                     }
+                    //Bookmarks Hosts Config stdbox
+                    if (jsonData.command_receive === 'submitBookmarkCat' || jsonData.command_receive === 'submitHostsCat') {
+                        $('#stdbox-status-msg').html('');
+                        $('#stdbox-error-msg').html('');
+                        if (jsonData.command_success && jsonData.response_msg) {
+                            $('#stdbox-status-msg').html(jsonData.response_msg);
+                            $('#stdbox-content').empty();
+                        }
+                        if (jsonData.command_error_msg) {
+                            $('#stdbox-error-msg').html(jsonData.command_error_msg);
+                        }
+                    }
+
                     if (jsonData.command_receive === 'submitTitle') {
                         if (jsonData.command_success) {
                             $('#config_status_msg').html('Validated:' + jsonData.command_value);

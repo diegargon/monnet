@@ -39,7 +39,7 @@ class Categories {
         return $this->cat_types;
     }
 
-    public function getByType($type) {
+    public function getByType(int $type) {
         $categories_by_type = [];
 
         foreach ($this->categories as $cat) {
@@ -51,7 +51,7 @@ class Categories {
         return !empty($categories_by_type) ? $categories_by_type : false;
     }
 
-    public function getTypeByID($id) {
+    public function getTypeByID(int $id) {
         foreach ($this->categories as $cat) {
             if ($cat['id'] == $id) {
                 return $cat['cat_type'];
@@ -73,5 +73,27 @@ class Categories {
         }
 
         return $categories_by_type;
+    }
+
+    public function create(int $cat_type, $value) {
+        $query_value = $this->db->valQuote($value);
+        $query = "SELECT `cat_name` FROM categories WHERE `cat_type` = $cat_type AND `cat_name` = $query_value";
+
+        if ($this->db->queryExists($query)) {
+            $response['sucess'] = false;
+            $response['msg'] = $this->lng['L_VALUE_EXISTS'];
+        } else {
+            $this->db->insert('categories', ['cat_name' => $value, 'cat_type' => $cat_type]);
+            $response['success'] = true;
+            $response['msg'] = $this->lng['L_OK'];
+        }
+
+        return $response;
+    }
+
+    public function remove(int $id) {
+        $this->db->delete('categories', ['id' => $id], 'LIMIT 1');
+
+        return true;
     }
 }

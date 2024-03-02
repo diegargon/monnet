@@ -70,30 +70,4 @@ class Items {
 
         return $uniq_types;
     }
-
-    private function getCatsIDByType($type) {
-        $cats_id = [];
-
-        foreach ($this->items as $item) {
-            if ($item['type'] == $type) {
-                $cats_id[] = $item['cat_id'];
-            }
-        }
-        return $cats_id;
-    }
-
-    public function getCatsByType($type) {
-
-        $cats = [];
-
-        $cats_id = $this->getCatsIDByType($type);
-
-        foreach ($this->categories as $cat) {
-            if (in_array($cat['id'], $cats_id)) {
-                $cats[] = $cat;
-            }
-        }
-
-        return $cats;
-    }
 }

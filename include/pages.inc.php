@@ -130,12 +130,19 @@ function page_index(AppCtx $ctx) {
         }
         $page['bookmarks_default_tab'] = str_replace('bookmark_content_tab_', '', $default_bookmarks_tab);
         $page['bookmarks'] = $bookmarks;
-        $page['bookmarks_head'] = $items->getCatsByType('bookmarks');
+        $bookmarks_head = $categories->prepareCats(2);
+
+        $page['bookmarks_head'] = $bookmarks_head;
         $page['load_tpl'][] = [
             'file' => 'bookmarks',
             'place' => 'center_col',
         ];
     }
+    /* Add Stdbox */
+    $page['load_tpl'][] = [
+        'file' => 'stdbox',
+        'place' => 'center_col',
+    ];
     /* Add Bookmark Item */
     $page['load_tpl'][] = [
         'file' => 'add-bookmark',

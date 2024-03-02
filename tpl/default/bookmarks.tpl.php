@@ -13,18 +13,16 @@
         <?php
         foreach ($tdata['bookmarks_head'] as $bookmark_head) {
             $id = $bookmark_head['id'];
-            if (
-                    (strpos($bookmark_head['cat_name'], 'L_') === 0 ) &&
-                    isset($this->lng[$bookmark_head['cat_name']])
-            ) {
-                $bookmark_head['cat_name'] = $lng[$bookmark_head['cat_name']];
-            }
             ?>
-            <button id="bookmarks_tab_<?= $id ?>" class="bookmarks-tabs-head" onclick="changeBookmarksTab('bookmark_content_tab_<?= $id ?>')"><?= $bookmark_head['cat_name'] ?></button>
+            <button id="bookmarks_tab_<?= $id ?>" class="bookmarks-tabs-head" onclick="changeBookmarksTab('bookmark_content_tab_<?= $id ?>')">
+                <?= $bookmark_head['cat_name'] ?>
+                <input onclick="confirmRefresh('removeBookmarkCat',<?= $id ?>)" type="image" class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png" alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>">
+            </button>
             <?php
         }
         ?>
         <button id="bookmarks_tab_0" class="bookmarks-tabs-head" onclick="changeBookmarksTab('bookmark_content_tab_0')"><?= $lng['L_ALL'] ?></button>
+        <button id="bookmarks_tab_add" class="bookmarks-tabs-head add_cat_btn" onclick="addBookmarkCat('<?= $lng['L_ADD_BOOKMARKS_CAT'] ?>')">+</button>
     </div>
     <?php
     $default_active_tab = $tdata['bookmarks_default_tab'];
@@ -34,7 +32,7 @@
         $active = '';
     }
 
-    $tdata['bookmarks_head'][] = ['id' => 0]; //To ALL tab
+    $tdata['bookmarks_head'][] = ['id' => 0]; //For ALL tab
     foreach ($tdata['bookmarks_head'] as $bookmark_head) {
         $id = $bookmark_head['id'];
         ($id == $default_active_tab) ? $active = 'active' : null;

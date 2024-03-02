@@ -370,8 +370,45 @@ if ($command == 'setHighlight' && !empty($object_id)) {
     $data['response_msg'] = 'Changed to ' . $value;
 }
 
+/* Bookmarks */
 if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value)) {
     $db->delete('items', ['id' => $command_value], 'LIMIT 1');
+    $data['command_success'] = 1;
+}
+
+/* /END Bookmarks */
+
+/* Host and Bookmarks create category */
+if (
+        ($command == 'submitBookmarkCat' || $command == 'submitHostsCat') &&
+        !empty($command_value)) {
+    $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;
+    $response = $ctx->getAppCategories()->create($cat_type, $command_value);
+    ($response['success']) ? $data['response_msg'] = $response['msg'] : $data['command_error_msg'] = $response['msg'];
+
+    $data['command_success'] = 1;
+}
+
+if (
+        ($command == 'removeBookmarkCat' || $command == 'removeHostsCat') &&
+        !empty($command_value) && is_numeric($command_value)) {
+    $cat_type = ($command == 'removeBookmarkCat') ? 2 : 1;
+    if ($cat_type == 2 && $command_value == 50) {
+        $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
+    } else if ($cat_type == 1 && $command_value == 1) {
+        $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
+    } else if ($ctx->getAppCategories()->remove($command_value)) {
+        //Set to default all elements
+        if ($cat_type == 1) {
+            $db->update('hosts', ['category' => 1], ['category' => $command_value]);
+        } else {
+            $db->update('items', ['cat_id' => 50], ['cat_id' => $command_value]);
+        }
+        $data['command_response_msg'] = $lng['L_OK'];
+    } else {
+        $data['command_error_msg'] = $lng['L_ERROR'];
+    }
+
     $data['command_success'] = 1;
 }
 

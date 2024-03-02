@@ -37,6 +37,58 @@ function changeBookmarksTab(tabId) {
     refresh('change_bookmarks_tab', tabId);
 }
 
+function closeStdContainer() {
+    var std_container = document.getElementById("stdbox-container");
+    var std_content = document.getElementById("stdbox-content");
+    var std_title = document.getElementById("stdbox-title");
+    var std_error_msg = document.getElementById("stdbox-error-msg");
+    var std_status_msg = document.getElementById("stdbox-status-msg");
+
+    if (std_container) {
+        std_container.style.display = "none";
+        if (std_content) {
+            $(std_content).empty();
+        }
+        if (std_title) {
+            $(std_title).empty();
+        }
+        if (std_error_msg) {
+            $(std_error_msg).empty();
+        }
+        if (std_status_msg) {
+            $(std_status_msg).empty();
+        }
+    } else {
+        console.error("Stdbox not found.");
+    }
+}
+
+function addHostsCat(title) {
+    var element = document.getElementById("stdbox-container");
+    var title_element = document.getElementById("stdbox-title");
+    var std_content = document.getElementById("stdbox-content");
+    if (element) {
+        element.style.display = "block";
+        title_element.innerHTML = title;
+        std_content.innerHTML = '<input id="hostsCat" type="text"/><button id="submitHostsCat" type="submit">+</button>';
+    } else {
+        console.error("Stdbox not found.");
+    }
+}
+
+function addBookmarkCat(title) {
+    var element = document.getElementById("stdbox-container");
+    var title_element = document.getElementById("stdbox-title");
+    var std_content = document.getElementById("stdbox-content");
+    if (element) {
+        element.style.display = "block";
+        title_element.innerHTML = title;
+        std_content.innerHTML = '<input id="bookmarkCat" type="text"/><button id="submitBookmarkCat" type="submit">+</button>';
+    } else {
+        console.error("Stdbox not found.");
+    }
+}
+
 $(document).ready(function () {
     // add bookmark "Popup"
     $("#addBookmark").on("click", function () {
@@ -46,8 +98,12 @@ $(document).ready(function () {
         $("#add-bookmark-container").css("display", "none");
     });
     $("#toggleItemsSettings").on("click", function () {
-        $(".delete_bookmark").toggle();
         $(".item-container .item_link").toggleClass("disabled-link");
+        $(".categories_container").toggleClass("disabled-link");
+        $(".delete_bookmark").toggle();
+        $(".delete_cat_btn").toggle();
+        $(".add_cat_btn").toggle();
+
     });
     // add network "popup"
     $("#addNetwork").on("click", function () {
@@ -164,6 +220,20 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", "#submitHostsCat", function () {
+        var value = $('#hostsCat').val();
+        if (value) {
+            refresh('submitHostsCat', value);
+        }
+    });
+
+    $(document).on("click", "#submitBookmarkCat", function () {
+        var value = $('#bookmarkCat').val();
+        if (value) {
+            refresh('submitBookmarkCat', value);
+        }
+    });
+
     $(document).on("click", "#submitNetwork", function () {
         var fields = {};
 
@@ -172,7 +242,7 @@ $(document).ready(function () {
         fields.networkCIDR = parseInt($('#network_cidr').val());
         fields.networkScan = parseInt($('input[name="networkScan"]:checked').val() || 0);
         fields.networkVLAN = parseInt($('#network_vlan').val());
-        if (fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {            
+        if (fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {
             json_fields = JSON.stringify(fields);
             refresh('addNetwork', json_fields);
         }

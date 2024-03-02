@@ -839,6 +839,9 @@ input:checked + .slider:before {
 .action-icon {
     width:20px;
 }
+.action-icon-tab {
+    width:15px;
+}
 .power-off {
     background: white;
     border-radius: 8px;
@@ -959,7 +962,7 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
-#add-bookmark-container, #add-network-container {
+#stdbox-container, #add-bookmark-container, #add-network-container {
     display: none;
     position: absolute;
     top: 40%;
@@ -1225,6 +1228,34 @@ input:checked + .slider:before {
 .min-details-hidden:hover img {
     display: flex;
 }
+
+.general_ctrl, .bookmarks_ctrl {
+    display: flex;
+    align-items: center;
+}
+#stdbox-title {
+    display: inline-flex;
+}
+.stdbox-bar {
+    display: inline-flex;
+    vertical-align: middle;
+    width: 100%;
+    border-bottom: 2px solid #313131;
+    height: 20px;
+    padding: 2px 0px 2px 1px;
+    margin: 0px;
+    background-color: #808080;
+}
+
+#stdbox-content {
+    margin: 5px;
+}
+
+.delete_cat_btn, .add_cat_btn {
+    display: none;
+    pointer-events: all;
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;
