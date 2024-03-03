@@ -1,46 +1,68 @@
 ** HIGH
 
-* cambiar en ping isAlive por online
-* implementar el retry en ping, con cfg para numero de retrys cuando el host estaba online y el numero de retrys cuando el host estaba offline
-* Al meter un network/cidr comprobar que es correcta
-* comprobar image link resource devuelve true
-* Poder crear/deshabilitar host categories. Para deshabilitar no puede tener algun host 
-  asignado esa categoria
-* Parpadear verde/rojo cuando un host cambie?
-* host-details configuracion (select) enviar al cambiar 
-* Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
-* When "Found new host, poner la red en log (Class network first)
 * Network Internet: 0.0.0.0/0 para meter host de internet. class network - get vlan name - get network-name
-* $lang['L_'] to $lang::get['L_']
-* Host: filtro para mostrar solo warning, igual un popup con una host list con host de warnings independiente de la 
-    categoria
 * Host: Envio de correos cuando cambia el estado "Alert Tab"
     email(host) : 
         id: email_id
         id: email: host_id: disable
         id: email_id
+    email
+    (table)
+* [DB 0.35v] items->uid los links no son por usuario FIXIT
+* [DB 0.35v] Timeout->float Host: Poder especificar el timeout por host del ping o tcpconn
+* [DB 0.35v] alert field - Señal de nuevo host descubierto, cambio de mac
+* [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
+* [DB 0.35v] hosts->misc mover, mac_vendor, manufacture, system_type, owner,fingerprint
+* [DB 0.35v] hosts->misc Poder Asociar un nombre a un host Owner
+* [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
+    En el login opcionalmente se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
 
-    email(table)
-  
-* Host: Aviso si la latency es muy grande?
-* Host: Poder especificar el timeout por host del ping o tcpconn;
+    $secure = true; // Configurar para que solo se envíe sobre HTTPS
+    $httpOnly = true; // Configurar la cookie como HTTP Only
+    setcookie("critical_key", "mi_clave_critica", 0, "/", "", $secure, $httpOnly);
+
+    session_start();
+    $_SESSION['critical_key'] = "mi_clave_critica";
+    session_destroy();
+* Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
+
+
+
 
 ** LOW
-* Bell options term + onoff pref
-* categories disable, para no mostrar en la barra
-* Señal de nuevo host descubierto
-* Opcion del buscador cambie a buscar elementos en la pagina?
-* SNMP Mac
-* Config parar cronjob, cli  comprueba preferencias stop_cli
+* El scan ports especificados por el usuario solo debe escaner los user=1
+* [DB 0.35v]hosts->scan identificar servicios  [option nmap [0 noscan  - 1 scan - 2 full scan]] - guardar con ports, los ports metidos con el user tienen user=1
+* cambiar diseño barra logout y demás, ver donde poner y quizas meter ahi stop_cli y username
+* host-details configuracion (select) enviar al cambiar 
 * clear cache dir 1week; 
 * perhost email warn
-* Bastionado / Antivirus / Compliant en principio meterlos todos en un campo encoded json, 
+* Bastionado / Antivirus / Compliant / VM en principio meterlos todos en un campo encoded json, 
    en resumen si eso configuracion no es checkboxes
-* Host on/off incluidos en las categorias mostradas
-** Undecided
-* tiempo pingeo dependiendo de la categoria?
-* La bola Online/Offline cambiar la intensidad dependido si cambio su estado en las ultimas X horas 
-* Email Alert Groups: Poder especicar en vez de uno por uno el email un grupo.
+* Calcula Host on/off incluidos en las categorias mostradas para poner en la barra de abajo de estado
+* Users management
 * SNMP get mac
+* $lang['L_'] to $lang::get['L_'] ? o lang::get['WORD'] and the L_
+* nombre de usuario en alguna parte
+* host user*password encoded
+* SNMP Mac
+* Boton/opcion para Stop_cli via preferencias (ver donde poner)
+* Links comprobacion si funciona y una pequeña on/off señal
+* [DB 0.35v] Items->relate_to_host, la idea es poder añadir un host relacionado con ese link, y ese link se mostrara en host-details
+
+
+
+** Undecided
+* Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
+* Email Alert Groups: Poder especicar en vez de uno por uno el email un grupo.
+* implementar el retry en ping, con cfg para numero de retrys cuando el host estaba online y el numero de retrys cuando el host estaba offline
+* Host: Aviso si la latency es muy grande?
+* Opcion del buscador cambie a buscar elementos en la pagina?
+* Bell options term + onoff pref
+* Config parar cronjob, poder cambiar jobs entre cron_hourly y demás
+
+
+
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
+* registrar por usuario cualquier cambio que se haga.
+* admin user (puede editar) - standard user (solo ver)

@@ -56,7 +56,30 @@ function trigger_update(Database $db, float $db_version, float $monnet_version) 
     }
 
     //NEXT
-    //Template
+    if ($db_version < 0.00) {
+        $db->query("INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES (11, 0, 'discovery_last_run', '0');");
+        $db->query("ALTER TABLE `hosts` CHANGE `timeout` `timeout` FLOAT NULL DEFAULT NULL;");
+        $db->query("ALTER TABLE `hosts` ADD `alert_msg` CHAR(255) NULL DEFAULT NULL AFTER `warn_mail`;");
+        $db->query("ALTER TABLE `hosts` ADD `alert` TINYINT NOT NULL DEFAULT '0' AFTER `warn_mail`;");
+        $db->query("ALTER TABLE `hosts` ADD `misc` JSON NULL DEFAULT NULL");
+        $db->query("ALTER TABLE `hosts` ADD `encrypted` TEXT NULL DEFAULT NULL AFTER `notes_id`;");
+        $db->query("ALTER TABLE `hosts` CHANGE `ports` `ports` JSON NULL DEFAULT NULL; ");
+        $db->query("ALTER TABLE `hosts` CHANGE `warn_msg` `warn_msg` CHAR(255) NULL;");
+        $db->query("ALTER TABLE `users` ADD `lang` CHAR(12) NULL DEFAULT NULL AFTER `timezone`;");
+        $db->query("ALTER TABLE `users` ADD `theme` CHAR(12) NULL DEFAULT NULL AFTER `timezone`;");
+        $db->query("ALTER TABLE `items` ADD `uid` INT NOT NULL DEFAULT '0' AFTER `id`;");
+        $db->query("ALTER TABLE `items` ADD `online` INT NOT NULL DEFAULT '0';");
+        $db->query("ALTER TABLE `items` ADD `relate_to_host` INT NOT NULL DEFAULT '0';");
+        $db->query("ALTER TABLE `notes` ADD `uid` INT NOT NULL DEFAULT '0' AFTER `id`;");
+        $db->query("ALTER TABLE `hosts` ADD `scan` TINYINT NOT NULL DEFAULT '0' AFTER `warn_mail`;");
+        $db->query("ALTER TABLE `categories` DROP `on`;");
+        $db->query("ALTER TABLE `items` CHANGE `cat_id` `cat_id` INT NOT NULL DEFAULT '50';");
+        Log::info("Update version to 0.35 successful");
+        $db->query("UPDATE prefs SET pref_value='0.35' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        $db_version = 0.35;
+    }
+
+    //Next Template
     if ($db_version < 0.00) {
         $db->query("");
         Log::info("Update version to 0.00 successful");
