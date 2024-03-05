@@ -202,7 +202,7 @@ Class Hosts {
                 $host['network_name'] = $network['name'];
                 $host['network_vlan'] = $network['vlan'];
             } else {
-                Log::warn('Host network seems not exists: ' . "[H: $id][N: $net_id]");
+                Log::warning('Host network seems not exists: ' . "[H: $id][N: $net_id]");
             }
             $host['display_name'] = ucfirst($this->getDisplayName($host));
 
