@@ -86,6 +86,7 @@ $lng = [
     'L_METRICS' => 'Metricas',
     'L_MANUFACTURE' => 'Manufacture',
     'L_MUST_BE' => 'debe ser',
+    'L_MASK' => 'Mascara',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',
@@ -93,6 +94,7 @@ $lng = [
     'L_NETWORK' => 'Red',
     'L_NETWORK_NAME' => 'Nombre de la red',
     'L_NUMERIC' => 'numerico',
+    'L_NOT_ALLOWED' => 'no permitida',
     //O
     'L_OK' => 'Ok',
     'L_ONLINE' => 'Online',

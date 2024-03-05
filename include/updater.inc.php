@@ -72,6 +72,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version) 
         $db->query("ALTER TABLE `items` ADD `relate_to_host` INT NOT NULL DEFAULT '0';");
         $db->query("ALTER TABLE `notes` ADD `uid` INT NOT NULL DEFAULT '0' AFTER `id`;");
         $db->query("ALTER TABLE `hosts` ADD `scan` TINYINT NOT NULL DEFAULT '0' AFTER `warn_mail`;");
+        $db->query("ALTER TABLE `networks` ADD `weight` TINYINT NOT NULL DEFAULT '50' AFTER `scan`;");
         $db->query("ALTER TABLE `categories` DROP `on`;");
         $db->query("ALTER TABLE `items` CHANGE `cat_id` `cat_id` INT NOT NULL DEFAULT '50';");
         Log::info("Update version to 0.35 successful");

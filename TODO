@@ -48,7 +48,7 @@
 * Boton/opcion para Stop_cli via preferencias (ver donde poner)
 * Links comprobacion si funciona y una pequeña on/off señal
 * [DB 0.35v] Items->relate_to_host, la idea es poder añadir un host relacionado con ese link, y ese link se mostrara en host-details
-
+* [DB 0.35v] Network weight
 
 
 ** Undecided
