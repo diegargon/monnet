@@ -137,7 +137,7 @@ function ping_net(AppCtx $ctx) {
                 $set['network'] = $network_id;
             }
 
-            $set['latency'] = round(microtime(true) - $latency, 2);
+            $set['latency'] = round_latency($latency);
             $set['last_seen'] = utc_date_now();
             $hostname = get_hostname($ip);
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
