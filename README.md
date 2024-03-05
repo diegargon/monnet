@@ -22,7 +22,7 @@ The English language (EN) has not been added yet. /lang/*
 
 LAMP 
 Composer 
-phpseclib (Composer)
+phpseclib (Composer) (features disable due rewriting but going to be used)
 arp - Optional for get mac
 
 ## Initial  database settings
