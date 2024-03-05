@@ -80,7 +80,7 @@
 
         </div> <!-- host-details-main -->
         <div class="host-details-main">
-            <div class="host-item"><?= $tdata['host_details']['id'] ?></div>
+            <div class="host-item">id <?= $tdata['host_details']['id'] ?></div>
             <div class="host-item"><?= $tdata['host_details']['ip'] ?></div>
             <?php if (!empty($tdata['host_details']['mac'])) { ?>
                 <div class="host-item"><?= $tdata['host_details']['mac'] ?> </div>
@@ -91,8 +91,7 @@
         </div>
         <!-- THIRD HEADED BAR -->
         <?php
-        if ($tdata['host_details']['check_method'] ==
-                2 && !empty($tdata['host_details']['ports'])) {
+        if ($tdata['host_details']['check_method'] == 2 && !empty($tdata['host_details']['ports'])) {
             ?>
             <div class="host_port_container">
                 <?php foreach ($tdata['host_details']['ports'] as $port) { ?>
@@ -112,32 +111,36 @@
         <!-- TAB1  RESUME -->
         <div id="tab1" class="host-details-tab-content">
             <div class="">
+                <div class="">
+                    <label class="display_name_label"><?= $lng['L_DISPLAY_NAME'] ?>:</label>
+                    <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
+                </div>
                 <div class"">
                     <div><?= $lng['L_NETWORK'] ?>: <?= $tdata['host_details']['net_cidr'] ?></div>
                     <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
                     <div><?= $lng['L_VLAN'] ?>: <?= $tdata['host_details']['network_vlan'] ?></div>
                 </div>
                 <div class="">
-                    <label class="created_label"><?= $lng['L_ADDED'] ?></label>
+                    <label class="created_label"><?= $lng['L_ADDED'] ?>:</label>
                     <span class="created"><?= $tdata['host_details']['formated_creation_date'] ?></span>
                 </div>
                 <?php if (!empty($tdata['host_details']['uptime']) && is_array($tdata['host_details']['uptime'])) { ?>
                     <div class="" >
-                        <label class="uptime_label"><?= $lng['L_UPTIME'] ?></label>
-                        <span class="uptime"><?= $tdata['host_details']['uptime']['datetime'] ?></span>
+                            <label class="uptime_label"><?= $lng['L_UPTIME'] ?>:</label>
+                            <span class="uptime"><?= $tdata['host_details']['uptime']['datetime'] ?></span>
                     </div>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
                     <div class="" >
-                        <label class="latency"><?= $lng['L_LATENCY'] ?></label>
-                        <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
+                            <label class="latency"><?= $lng['L_LATENCY'] ?>:</label>
+                            <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
                     </div>
                 <?php } ?>
 
                 <?php if (empty($tdata['host_details']['online']) && !empty($tdata['host_details']['f_last_seen'])) { ?>
                     <div>
-                        <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?></label>
-                        <span class="connected_date"><?= $tdata['host_details']['f_last_seen'] ?> </span>
+                            <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
+                            <span class="connected_date"><?= $tdata['host_details']['f_last_seen'] ?> </span>
                     </div>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['f_last_check'])) { ?>
