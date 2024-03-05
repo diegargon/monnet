@@ -81,7 +81,7 @@ function check_known_hosts(AppCtx $ctx) {
             }
 
             $hosts->update($host['id'], $new_host_status);
-            if ($new_host_status['online'] == 1 && isset($new_host_status['latency']) && $new_host_status['latency'] > 0) {
+            if ($new_host_status['online'] == 1 && isset($new_host_status['latency'])) {
                 $ping_latency = $new_host_status['latency'];
                 $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
                 $db->insert('stats', $set_ping_stats);

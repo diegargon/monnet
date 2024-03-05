@@ -159,8 +159,10 @@ function cached_img(User $user, int $id, string $img_url, $renew = 0) {
 }
 
 function round_latency(float $latency, int $precision = 3) {
-    if ($latency < 0.001 && $latency > 0) {
+    if ($latency > 0 && $latency <= 0.001) {
         $latency = 0.001;
+    } else if ($latency < 0) {
+        $latency = $latency;
     } else {
         $latency = round($latency, $precision);
     }
