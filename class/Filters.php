@@ -573,4 +573,67 @@ Class Filters {
 
         return $var;
     }
+
+    /* Domain */
+
+    static function getDomain($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varDomain($_GET[$val], $size);
+    }
+
+    static function postDomain($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varDomain($_POST[$val], $size);
+    }
+
+    static function varDomain($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+        if (filter_var($val, FILTER_VALIDATE_IP)) {
+            return false;
+        }
+        if (!filter_var($val, FILTER_VALIDATE_DOMAIN)) {
+            return false;
+        }
+
+        return $val;
+    }
+
+    /* Hostname */
+
+    static function getHostname($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varHostname($_GET[$val], $size);
+    }
+
+    static function postHostname($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varHostname($_POST[$val], $size);
+    }
+
+    static function varHostname($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+
+
+        if (!filter_var($val, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
+            return false;
+        }
+
+        return $val;
+    }
 }
