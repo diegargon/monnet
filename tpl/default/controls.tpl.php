@@ -9,6 +9,8 @@
 !defined('IN_WEB') ? exit : true;
 ?>
 <div class="options_container">
+
+    <!-- GENERAL -->
     <fieldset class="ctrl_fieldset">
         <legend class="ctrl_legend"><?= $lng['L_GENERAL'] ?></legend>
 
@@ -22,8 +24,15 @@
         </div>
 
     </fieldset>
+
+    <!-- HOSTS -->
     <fieldset class="ctrl_fieldset">
         <legend class="ctrl_legend"><?= $lng['L_HOSTS'] ?></legend>
+
+        <div class="addhost_ctrl">
+            <button id="addHostBox" class="button-ctrl" type="submit" data-title="<?= $lng['L_ADD_REMOTE_HOST'] ?>"><img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>"></button>
+            <span class="opt_labels"><?= $lng['L_ADD'] . ' R' . $lng['L_HOST'] ?></span>
+        </div>
         <form method="POST" name="host_form">
             <div class="hosts_highlight_ctrl">
                 <input type="hidden" name="show_highlight_hosts" value="0" />
@@ -37,6 +46,8 @@
             </div>
         </form>
     </fieldset>
+
+    <!-- BOOKMARKS -->
     <fieldset class="ctrl_fieldset">
         <legend class="ctrl_legend"><?= $lng['L_BOOKMARKS'] ?></legend>
         <div class="bookmarks_ctrl">

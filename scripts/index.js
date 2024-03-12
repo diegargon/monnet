@@ -97,6 +97,14 @@ $(document).ready(function () {
     $("#close_addbookmark").on("click", function () {
         $("#add-bookmark-container").css("display", "none");
     });
+
+    $("#addHostBox").on("click", function () {
+        var title = $(this).data("title");
+        $("#stdbox-container").css("display", "block");
+        $("#stdbox-title").html(title);
+        $("#stdbox-content").html('<input id="addedHost" type="text"  value=""/><button id="submitHost" type="submit">+</button>');
+    });
+
     $("#toggleItemsSettings").on("click", function () {
         $(".item-container .item_link").toggleClass("disabled-link");
         $(".categories_container").toggleClass("disabled-link");
@@ -231,6 +239,13 @@ $(document).ready(function () {
         var value = $('#bookmarkCat').val();
         if (value) {
             refresh('submitBookmarkCat', value);
+        }
+    });
+
+    $(document).on("click", "#submitHost", function () {
+        var value = $('#addedHost').val();
+        if (value) {
+            refresh('submitHost', value);
         }
     });
 

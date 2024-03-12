@@ -47,6 +47,11 @@ if ($command == 'saveNote') {
     $command_value = Filters::postInt('order_value');
 } else if ($command == 'addNetwork') {
     $command_value = Filters::postCustomString('order_value', ',":.{}');
+} else if ($command == 'submitHost') {
+    $command_value = Filters::postIP('order_value');
+    if (empty($command_value)) {
+        $command_value = Filters::postDomain('order_value');
+    }
 } else {
     $command_value = trim(Filters::postString('order_value'));
 }
@@ -244,7 +249,7 @@ if ($command == 'addNetwork' && !empty($command_value)) {
             ($key == 'networkName') ? $key = 'name' : null;
             $new_network[$key] = trim($dJson);
         }
-        if ($new_network['networkCIDR'] == 0) {
+        if ($new_network['networkCIDR'] == 0 && $new_network['network'] != '0.0.0.0') {
             $data['command_error_msg'] .= $lng['L_MASK'] . ' ' . $new_network['networkCIDR'] . ' ' . $lng['L_NOT_ALLOWED'] . '<br/>';
         }
         $network_plus_cidr = $new_network['network'] . '/' . $new_network['networkCIDR'];
@@ -270,10 +275,11 @@ if ($command == 'addNetwork' && !empty($command_value)) {
                 $data['command_error_msg'] = 'Network must be unique<br/>';
             }
         }
-        if (str_starts_with($new_network['network'], "0")) {
+        if (str_starts_with($new_network['network'], "0") || !$ctx->getAppNetworks()->isLocal($new_network['network'])) {
             $new_network['vlan'] = 0;
             $new_network['scan'] = 0;
         }
+
         if (empty($data['command_error_msg'])) {
             $ctx->getAppNetworks()->addNetwork($new_network);
             $data['command_success'] = 1;
@@ -307,8 +313,8 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $shown_hosts_count = count($hosts_view);
             $hosts_totals_count = $hosts->totals;
             $shown_hosts_count = $shown_hosts_count + $highlight_hosts_count;
-            $host_on = $hosts->on;
-            $host_off = $hosts->off;
+            $total_hosts_on = $hosts->total_on;
+            $total_hosts_off = $hosts->total_off;
             $tdata = [];
             $tdata['hosts'] = $hosts_view;
             $tdata['container-id'] = 'other-hosts';
@@ -420,6 +426,36 @@ if (
     $data['command_success'] = 1;
 }
 
+/* Host External submit */
+if ($command == 'submitHost' && !empty($command_value)) {
+    $host = [];
+    $host['hostname'] = Filters::varDomain($command_value);
+
+    if (!empty($host['hostname'])) {
+        $host['ip'] = $hosts->getHostnameIP($host['hostname']);
+    } else {
+        $host['ip'] = $command_value;
+    }
+
+    if (!empty($host['ip']) && !$ctx->getAppNetworks()->isLocal($new_network['network'])) {
+        $network_match = $ctx->getAppNetworks()->matchNetwork($host['ip']);
+        if (valid_array($network_match)) {
+            if ($hosts->getHostByIP($host['ip'])) {
+                $data['command_error_msg'] = $lng['L_ERR_DUP_IP'];
+            } else {
+                $host['network'] = $network_match['id'];
+                $hosts->addHost($host);
+                $data['response_msg'] = $lng['L_OK'];
+            }
+        } else {
+            $data['command_error_msg'] = $lng['L_ERR_NOT_NET_CONTAINER'];
+        }
+    } else {
+        $data['command_error_msg'] = $lng['L_ERR_NOT_INTERNET_IP'] . $host['ip'];
+    }
+    $data['command_success'] = 1;
+}
+
 /* Power ON/OFF  & Reboot */
 if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {
     $host = $hosts->getHostById($command_value);
@@ -504,8 +540,8 @@ if (valid_array($term_logs)) {
 if (!empty($shown_host_count) || !empty($hosts_totals_count)) {
     $data['misc']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
 }
-if (!empty($host_on) || !empty($host_off)) {
-    $data['misc']['onoff'] = $lng['L_ON'] . ": $host_on | {$lng['L_OFF']}: $host_off | ";
+if (!empty($total_hosts_on) && !empty($total_hosts_off)) {
+    $data['misc']['onoff'] = $lng['L_ON'] . ": $total_hosts_on | {$lng['L_OFF']}: $total_hosts_off | ";
 }
 $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
 

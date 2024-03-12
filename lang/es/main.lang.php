@@ -13,6 +13,7 @@ $lng = [
     'L_ADD' => 'Añadir',
     'L_ADD_HOST_CAT' => 'Añadir categoria para hosts',
     'L_ADD_BOOKMARKS_CAT' => 'Añadir categoria para bookmarks',
+    'L_ADD_REMOTE_HOST' => 'Añadir host remoto',
     'L_APPLINKS' => 'Web apps',
     'L_AREYOUSURE' => '¿estas seguro?',
     'L_ALL' => 'Todo',
@@ -42,7 +43,10 @@ $lng = [
     'L_ERR_FILE_CHOWN' => 'Error cambiando el propietario del archivo',
     'L_ERR_FILE_CHGRP' => 'Error cambiando el grupo propietario del archivo',
     'L_ERR_CAT_NODELETE' => 'Esta categoria no se puede borrar',
-    //F
+    'L_ERR_NOT_INTERNET_IP' => 'Error: Solo IPs publicas',
+    'L_ERR_NOT_NET_CONTAINER' => 'Error: No hay un contenedor/red para dicha ip',
+    'L_ERR_DUP_IP' => 'Error: IP duplicada',
+//F
     'L_FIELD' => 'Campo',
     //G
     'L_GENERAL' => 'General',

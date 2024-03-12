@@ -69,8 +69,39 @@ Class Networks {
         }
     }
 
+    public function matchNetwork($ip) {
+        $ip = ip2long($ip);
+
+        $defaultNetwork = false;
+
+        foreach ($this->networks as $network) {
+            list($networkAddr, $subnetMask) = explode('/', $network['network']);
+
+            $networkAddr = ip2long($networkAddr);
+
+            $broadcastAddr = $networkAddr | ~(pow(2, (32 - $subnetMask)) - 1);
+
+            if (($ip & ~($broadcastAddr)) == ($networkAddr & ~($broadcastAddr))) {
+                return $network;
+            }
+
+            if ($network['network'] == '0.0.0.0/0') {
+                $defaultNetwork = $network;
+            }
+        }
+
+        return $defaultNetwork;
+    }
+
+    public function isLocal(string $ip) {
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return true;
+        }
+        return false;
+    }
+
     //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
-    function buildIpList() {
+    public function buildIpList() {
         $ip_list = [];
         $networks = $this->getNetworks();
 

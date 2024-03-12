@@ -29,9 +29,9 @@ function check_known_hosts(AppCtx $ctx) {
          */
         if ($host['check_method'] == 2 && valid_array($host['ports'])) { //TCP
             Log::debug("Pinging host ports {$host['ip']}");
-            $ping_ports_result = ping_host_ports($host);
+            $ping_ports_result = ping_host_ports($ctx, $host);
             if ($host['online'] == 1 && $ping_ports_result['online'] == 0) { //recheck
-                $ping_ports_result = ping_host_ports($host);
+                $ping_ports_result = ping_host_ports($ctx, $host);
             }
             //Ports are down, check host with ping
             if ($ping_ports_result['online'] == 0) {
@@ -53,10 +53,10 @@ function check_known_hosts(AppCtx $ctx) {
             if ($host['check_method'] == 2 && !valid_array($host['ports'])) {
                 Log::warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
             }
-            $ping_host_result = ping_known_host($host);
+            $ping_host_result = ping_known_host($ctx, $host);
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) {
                 //recheck
-                $ping_host_result = ping_known_host($host);
+                $ping_host_result = ping_known_host($ctx, $host);
             }
 
             (valid_array($ping_host_result)) ? $new_host_status = $ping_host_result : null;
@@ -139,7 +139,7 @@ function ping_net(AppCtx $ctx) {
 
             $set['latency'] = round_latency($latency);
             $set['last_seen'] = utc_date_now();
-            $hostname = get_hostname($ip);
+            $hostname = $hosts->getHostname($ip);
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
 
             $hosts->insert($set);
@@ -155,7 +155,7 @@ function fill_hostnames(Hosts $hosts, int $forceall = 0) {
     foreach ($db_hosts as $host) {
         if (empty($host['hostname']) || $forceall === 1) {
             //Log::debug("Getting hostname {$host['ip']}");
-            $hostname = get_hostname($host['ip']);
+            $hostname = $hosts->getHostname($host['ip']);
             if ($hostname !== false && $hostname != $host['ip']) {
                 $update['hostname'] = $hostname;
                 $hosts->update($host['id'], $update);
@@ -257,11 +257,13 @@ function host_access(array $cfg, Hosts $hosts) {
 
 /* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
 
-function ping_host_ports(array $host) {
+function ping_host_ports(AppCtx $ctx, array $host) {
     $time_now = utc_date_now();
 
+    $networks = $ctx->getAppNetworks();
+
     $err_code = $err_msg = '';
-    $timeout = is_local_ip($host['ip']) ? 0.6 : 1;
+    $timeout = $networks->isLocal($host['ip']) ? 0.6 : 1;
 
     //Custom timeout for host
     if (!empty($host['timeout'])) {
@@ -313,11 +315,12 @@ function ping_host_ports(array $host) {
     return $host_status;
 }
 
-function ping_known_host(array $host) {
+function ping_known_host(AppCtx $ctx, array $host) {
     $usec = 500000;
     $time_now = utc_date_now();
+    $networks = $ctx->getAppNetworks();
 
-    if (is_local_ip($host['ip'])) {
+    if ($networks->isLocal($host['ip'])) {
         $usec = ($host['online']) ? 400000 : 300000;
     }
 
@@ -381,10 +384,6 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]) {
     return $status;
 }
 
-function get_hostname(string $ip) {
-    return gethostbyaddr($ip);
-}
-
 function get_mac(string $ip) {
 
     $comm_path = check_command('arp');
@@ -410,11 +409,4 @@ function get_mac(string $ip) {
     } else {
         return $result;
     }
-}
-
-function is_local_ip(string $ip) {
-    if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-        return true;
-    }
-    return false;
 }

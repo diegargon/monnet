@@ -1015,7 +1015,7 @@ input:checked + .slider:before {
 #cat_id {
     width: 150px !important;
 }
-#addBookmarkForm input[type="submit"], #addNetworkForm input[type="submit"] {
+#addBookmarkForm input[type="submit"], #addNetworkForm input[type="submit"], #addHost input[type="submit"] {
     display: block;
     width: auto;
     margin: 10px auto 0;
@@ -1167,9 +1167,7 @@ input:checked + .slider:before {
 #toggleItemsSettings {
     float:left;
 }
-#addBookmark {
-    float:left;
-}
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -1229,7 +1227,7 @@ input:checked + .slider:before {
     display: flex;
 }
 
-.general_ctrl, .bookmarks_ctrl {
+.general_ctrl, .bookmarks_ctrl, .addhost_ctrl {
     display: flex;
     align-items: center;
 }

@@ -102,7 +102,18 @@
                             $('#stdbox-error-msg').html(jsonData.command_error_msg);
                         }
                     }
-
+                    //Add remote host
+                    if (jsonData.command_receive === 'submitHost') {
+                        $('#stdbox-status-msg').html('');
+                        $('#stdbox-error-msg').html('');
+                        if (jsonData.command_success && jsonData.response_msg) {
+                            $('#stdbox-status-msg').html(jsonData.response_msg);
+                            $('#addedHost').val('');
+                        }
+                        if (jsonData.command_error_msg) {
+                            $('#stdbox-error-msg').html(jsonData.command_error_msg);
+                        }
+                    }
                     if (jsonData.command_receive === 'submitTitle') {
                         if (jsonData.command_success) {
                             $('#config_status_msg').html('Validated:' + jsonData.command_value);

@@ -9,28 +9,11 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-/*
-  ip : string 192.168.1.1
-  name: string custom name
-  mac: string mac
-  mac_vendor: string
-  disable : disable
-  ports:
-  n: number
-  status: 0/1
-  port_type: 1(tcp)/2(ucp)
-  name: string, custom name
-  icon: string, custom path icon.png
-  latency: float
-
-
- */
-
 Class Hosts {
 
     public int $totals = 0;
-    public int $on = 0;
-    public int $off = 0;
+    public int $total_on = 0;
+    public int $total_off = 0;
     public int $highlight_total = 0;
     private Database $db;
     private $hosts = [];
@@ -43,6 +26,22 @@ Class Hosts {
         $this->db = $ctx->getAppDb();
         $this->lng = $ctx->getAppLang();
         $this->getHostsDb();
+    }
+
+    public function addHost(array $host) {
+        if (empty($host['ip']) && !empty($host['hostname'])) {
+            if (!Filters::varDomain($host['hostname'])) {
+                return false;
+            }
+            $host['ip'] = gethostbyname($host['hostname']);
+            if (!$host['ip']) {
+                return false;
+            }
+        }
+
+        $this->insert($host);
+
+        return true;
     }
 
     public function getknownEnabled() {
@@ -105,15 +104,23 @@ Class Hosts {
     }
 
     public function insert(array $host) {
+        if (!isset($host['hostname'])) {
+            $hostname = $this->getHostname($host['ip']);
+            if ($hostname) {
+                $host['hostname'] = $hostname;
+            }
+        }
+
         $this->db->insert('hosts', $host);
+
         $host_id = $this->db->insertID();
-        $host['id'] = $host_id;
         $hostlog = $this->getDisplayName($host);
         if (!empty($host['mac_vendor']) && $host['mac_vendor'] !== '-') {
             $hostlog .= ' [' . $host['mac_vendor'] . ']';
         } else if (!empty($host['mac'])) {
             $hostlog .= ' [' . $host['mac'] . ']';
         }
+        $host['id'] = $host_id;
         $host['display_name'] = $this->getDisplayName($host);
         $this->hosts[$host_id] = $host;
         $network_name = $this->ctx->getAppNetworks()->getNetworkNameByID($host_id);
@@ -183,6 +190,18 @@ Class Hosts {
         return $host['ip'];
     }
 
+    public function getHostname(string $ip) {
+        $hostname = gethostbyaddr($ip);
+        if ($hostname == $ip) {
+            return false;
+        }
+        return $hostname;
+    }
+
+    public function getHostnameIP(string $domain) {
+        return gethostbyname($domain);
+    }
+
     private function getHostsDb() {
         $networks = $this->ctx->getAppNetworks();
         $query_hosts = 'SELECT * FROM hosts';
@@ -207,7 +226,7 @@ Class Hosts {
             $host['display_name'] = ucfirst($this->getDisplayName($host));
 
             $this->hosts[$id] = $host;
-            $host['online'] == 1 ? ++$this->on : ++$this->off;
+            $host['online'] == 1 ? ++$this->total_on : ++$this->total_off;
             $host['highlight'] ? $this->highlight_total++ : null;
 
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
