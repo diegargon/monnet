@@ -1,5 +1,6 @@
-links img must be place in /local_img
-monnet-cli is splitted to monnet-cli y monnet-discovery, you must add to cron
-now config.inc.php must be in /etc/monnet/
-Add but ignore to scan 0.* networks. We will use later for add host and have a category "ex: INTERNET"
-Add double click feature to category bar
+* add possibility to add external networks to add a host manually, you can add/use 0.0.0.0/0 for set default external network
+  or add specific networks, adding a host will match the network
+* links img must be place in /local_img
+* monnet-cli is splitted to monnet-cli y monnet-discovery, you must add to cron
+* now config.inc.php must be in /etc/monnet/
+* Add double click feature to category bar
