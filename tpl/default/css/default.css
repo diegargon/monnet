@@ -1107,7 +1107,7 @@ input:checked + .slider:before {
         inset 0 0 18rem black,
         inset 0 0 3rem black,
         0 0 10rem black;
-    height: 200px;
+    height: 300px;
     overflow:auto;
 }
 
