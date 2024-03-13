@@ -8,8 +8,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 ?>
-<div id="add-network-container" style="<?= isset($tdata['show_add_network']) ? 'display:block;' : null ?>">
-    <div class="front-container-bar">
+<div id="add-network-container" class="draggable" style="<?= isset($tdata['show_add_network']) ? 'display:block;' : null ?>">
+    <div class="front-container-bar dragbar">
         <button id="close_addnetwork" class="button-ctrl" type="submit"><img class="close_link" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>"></button>
         <div class="front-container-bar-title"><?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?></div>
     </div>

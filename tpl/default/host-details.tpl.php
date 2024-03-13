@@ -14,11 +14,11 @@
  *
  */
 ?>
-<div id="host-details" class="host-details" style="display:block;">
+<div id="host-details" class="host-details draggable" style="display:block">
     <div id="host-details-container" class="host-details-container">
         <!-- HOST COMMON BAR -->
         <!-- FIRST HEADED BAR -->
-        <div class="host-details-bar">
+        <div class="host-details-bar dragbar">
             <div class="host-controls-left">
                 <button id="close_host_details" type="submit"  class="button-ctrl">
                     <img src="tpl/<?= $cfg['theme'] ?>/img/close.png" alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
@@ -126,21 +126,21 @@
                 </div>
                 <?php if (!empty($tdata['host_details']['uptime']) && is_array($tdata['host_details']['uptime'])) { ?>
                     <div class="" >
-                            <label class="uptime_label"><?= $lng['L_UPTIME'] ?>:</label>
-                            <span class="uptime"><?= $tdata['host_details']['uptime']['datetime'] ?></span>
+                        <label class="uptime_label"><?= $lng['L_UPTIME'] ?>:</label>
+                        <span class="uptime"><?= $tdata['host_details']['uptime']['datetime'] ?></span>
                     </div>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
                     <div class="" >
-                            <label class="latency"><?= $lng['L_LATENCY'] ?>:</label>
-                            <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
+                        <label class="latency"><?= $lng['L_LATENCY'] ?>:</label>
+                        <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
                     </div>
                 <?php } ?>
 
                 <?php if (empty($tdata['host_details']['online']) && !empty($tdata['host_details']['f_last_seen'])) { ?>
                     <div>
-                            <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
-                            <span class="connected_date"><?= $tdata['host_details']['f_last_seen'] ?> </span>
+                        <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
+                        <span class="connected_date"><?= $tdata['host_details']['f_last_seen'] ?> </span>
                     </div>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['f_last_check'])) { ?>
@@ -303,7 +303,7 @@
         <!-- TODO DISABLED -->
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -311,11 +311,11 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                    <option value="0"></option>
+                                                <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                        <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
@@ -329,10 +329,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                         <div class="log_line"><?= $log ?></div>
+                                                                                                                 <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                    </div>
+                                                </div>
         <?php }
         ?>
         <!-- /TODO DISABLED -->

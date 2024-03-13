@@ -1,6 +1,5 @@
 ** HIGH
 
-* Network Internet: 0.0.0.0/0 para meter host de internet. class network - get vlan name - get network-name
 * Host: Envio de correos cuando cambia el estado "Alert Tab"
     email(host) : 
         id: email_id
@@ -25,8 +24,6 @@
     $_SESSION['critical_key'] = "mi_clave_critica";
     session_destroy();
 * Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
-
-
 
 
 ** LOW

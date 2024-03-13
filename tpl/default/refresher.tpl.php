@@ -188,6 +188,10 @@
                         }
                         position = jsonData.host_details.cfg.place;
                         $(position).prepend(jsonData.host_details.data);
+                        var hostDetails = $(position).find("#host-details");
+                        console.log("Test" + hostDetails);
+                        makeDraggable(hostDetails);
+
                         $('#tab1_btn').addClass('active');
                         $('#tab1').addClass('active');
                         var textNote = document.getElementById('textnotes');
