@@ -1,12 +1,6 @@
 ** HIGH
 
-* Host: Envio de correos cuando cambia el estado "Alert Tab"
-    email(host) : 
-        id: email_id
-        id: email: host_id: disable
-        id: email_id
-    email
-    (table)
+* [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
 * [DB 0.35v] items->uid los links no son por usuario FIXIT
 * [DB 0.35v] Timeout->float Host: Poder especificar el timeout por host del ping o tcpconn
 * [DB 0.35v] alert field - Señal de nuevo host descubierto, cambio de mac
@@ -14,17 +8,6 @@
 * [DB 0.35v] hosts->misc mover, mac_vendor, manufacture, system_type, owner,fingerprint
 * [DB 0.35v] hosts->misc Poder Asociar un nombre a un host Owner
 * [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
-    En el login opcionalmente se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
-
-    $secure = true; // Configurar para que solo se envíe sobre HTTPS
-    $httpOnly = true; // Configurar la cookie como HTTP Only
-    setcookie("critical_key", "mi_clave_critica", 0, "/", "", $secure, $httpOnly);
-
-    session_start();
-    $_SESSION['critical_key'] = "mi_clave_critica";
-    session_destroy();
-* Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
-
 
 ** LOW
 * El scan ports especificados por el usuario solo debe escaner los user=1
@@ -46,6 +29,16 @@
 * Links comprobacion si funciona y una pequeña on/off señal
 * [DB 0.35v] Items->relate_to_host, la idea es poder añadir un host relacionado con ese link, y ese link se mostrara en host-details
 * [DB 0.35v] Network weight
+* En el login opcionalmente que se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
+
+    $secure = true; // Configurar para que solo se envíe sobre HTTPS
+    $httpOnly = true; // Configurar la cookie como HTTP Only
+    setcookie("critical_key", "mi_clave_critica", 0, "/", "", $secure, $httpOnly);
+
+    session_start();
+    $_SESSION['critical_key'] = "mi_clave_critica";
+    session_destroy();
+* Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
 
 
 ** Undecided
