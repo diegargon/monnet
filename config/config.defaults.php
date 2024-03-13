@@ -57,7 +57,17 @@ $cfg['datetime_log_format'] = 'd-m H:i:s';
 $cfg['refresher_time'] = 5; //minutes ideally same minutes than monnet-cli
 $cfg['cert'] = '/var/certs/id_rsa';
 
+/* Mail Config */
+$cfg['mailer_enabled'] = 0; //need compose->phpmailer
+$cfg['mail_host'] = 'localhost';
+$cfg['mail_auth'] = true;
+$cfg['mail_username'] = 'monnet@';
+$cfg['mail_password'] = 'monnet';
+$cfg['mail_security'] = null; // null:false:ssl:tls
+$cfg['mail_auth_type'] = 'LOGIN';
+$cfg['mail_port'] = 25;
+$cfg['mail_from'] = "noreply@";
 /* Modules Config */
-/* TODO: Split load config files */
+
 $cfg['weather_widget']['country'] = 'vigo';
 $cfg['weather_widget']['weather_api'] = '89fe8d3a8486486fc682ba97dc28850f';

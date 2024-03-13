@@ -10,6 +10,7 @@ class AppCtx {
     private Categories $categories;
     private Networks $networks;
     private Items $items;
+    private Mailer $mailer;
 
     public function __construct(array $cfg, array $lang, Database $db) {
         $this->cfg = $cfg;
@@ -71,5 +72,13 @@ class AppCtx {
         }
 
         return $this->items;
+    }
+
+    public function getAppMail() {
+        if (!isset($this->mailer)) {
+            $this->mailer = new Mailer($this);
+        }
+
+        return $this->mailer;
     }
 }
