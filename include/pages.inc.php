@@ -91,7 +91,7 @@ function page_index(AppCtx $ctx) {
         $page = array_merge($post_data, $page);
     }
 
-    $items = new Items($ctx, $categories);
+    $items = $ctx->getAppItems();
 
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];

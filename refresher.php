@@ -386,7 +386,11 @@ if ($command == 'setHighlight' && !empty($object_id)) {
 
 /* Bookmarks */
 if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value)) {
-    $db->delete('items', ['id' => $command_value], 'LIMIT 1');
+    if ($ctx->getAppItems()->remove($command_value)) {
+        $data['response_msg'] = 'ok';
+    } else {
+        $data['response_msg'] = 'fail';
+    }
     $data['command_success'] = 1;
 }
 

@@ -11,17 +11,19 @@
 
 class Items {
 
-    private $cfg;
-    private $db;
-    private $items = [];
-    private $categories;
+    private Database $db;
+    private array $categories;
+    private array $cfg;
+    private array $items = [];
+    private int $uid;
 
-    public function __construct(AppCtx $ctx, Categories $categories) {
+    public function __construct(AppCtx $ctx) {
         $this->cfg = $ctx->getAppCfg();
         $this->db = $ctx->getAppDb();
-        $this->categories = $categories->getByType(2); //2:items
+        $this->uid = $ctx->getAppUser()->getId();
+        $this->categories = $ctx->getAppCategories()->getByType(2); //2:items
 
-        $results = $this->db->select('items', '*', null, 'ORDER BY weight');
+        $results = $this->db->select('items', '*', ['uid' => $this->uid], 'ORDER BY weight');
         $this->items = $this->db->fetchAll($results);
     }
 
@@ -34,8 +36,14 @@ class Items {
     }
 
     function remove(int $id) {
-        $this->db->delete('items', ['id' => $id], 'LIMIT 1');
-        unset($this->item[$id]);
+        foreach ($this->items as $item) {
+            if ($item['id'] == $id && $item['uid'] == $this->uid) {
+                $this->db->delete('items', ['id' => $id], 'LIMIT 1');
+                unset($this->item[$id]);
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc') {

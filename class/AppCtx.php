@@ -9,6 +9,7 @@ class AppCtx {
     private User $user;
     private Categories $categories;
     private Networks $networks;
+    private Items $items;
 
     public function __construct(array $cfg, array $lang, Database $db) {
         $this->cfg = $cfg;
@@ -62,5 +63,13 @@ class AppCtx {
         }
 
         return $this->networks;
+    }
+
+    public function getAppItems() {
+        if (!isset($this->items)) {
+            $this->items = new Items($this);
+        }
+
+        return $this->items;
     }
 }
