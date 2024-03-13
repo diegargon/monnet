@@ -22,7 +22,6 @@
             <button id="toggleItemsSettings" class="button-ctrl" type="submit"><img class="settigns_link" src="./tpl/default/img/settings-items.png" title="<?= $lng['L_SETTINGS'] ?>"></button>
             <span class="opt_labels"><?= $lng['L_QUICK_SETTINGS'] ?></span>
         </div>
-
     </fieldset>
 
     <!-- HOSTS -->

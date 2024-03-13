@@ -28,7 +28,7 @@ if (Filters::getString('page') == $privacy_page) {
 
 <div id="top_container_bar" class="top_container_bar">
     <div class="bar_item_container">
-        <a href="<?= $cfg['rel_path'] ?>?page=logout">            
+        <a href="<?= $cfg['rel_path'] ?>?page=logout">
             <img src="tpl/<?= $cfg['theme'] ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT']; ?>">
         </a>
         <a href="<?= $cfg['rel_path'] ?>?page=index">
@@ -42,7 +42,7 @@ if (Filters::getString('page') == $privacy_page) {
         </a>
     </div>
     <?= !empty($tdata['top_container_bar']) ? $tdata['top_container_bar'] : null; ?>
-</div>        
+</div>
 
 <!-- comment -->
 <div class="main_align_container">
