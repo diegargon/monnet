@@ -11,12 +11,11 @@
 
 do_initial_usermode_checks($cfg);
 
-session_name('monent');
+session_name('monnet');
 session_start();
 
-require('class/User.php');
+$user = $ctx->getAppUser();
 
-$user = new User($ctx);
 /* Default lang included in common here we overwrite if necessary */
 
 if ($user->getLang() !== 'es') {
@@ -25,7 +24,6 @@ if ($user->getLang() !== 'es') {
         require_once($main_lang_file);
     }
 }
-$ctx->setAppUser($user);
 
 require('class/Web.php');
 

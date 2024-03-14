@@ -21,7 +21,6 @@ define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
 chdir($cfg['path']);
 
 require_once('include/common.inc.php');
-require_once('class/Mailer.php');
 
 isset($argv[1]) && ($argv[1] == '-console' || $argv[1] == '--console') ? Log::setConsole(true) : null;
 

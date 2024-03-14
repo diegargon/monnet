@@ -16,11 +16,20 @@ class AppCtx {
         $this->cfg = $cfg;
         $this->db = $db;
         $this->lang = $lang;
+        spl_autoload_register(array($this, 'autoload'));
     }
 
-    /*
-     * Setters/Getters
-     */
+    /* Autoload class files */
+
+    public function autoload($class_name) {
+        $file_path = 'class/' . $class_name . '.php';
+
+        if (file_exists($file_path)) {
+            require_once $file_path;
+        }
+    }
+
+    /* Getters */
 
     public function getAppCfg() {
         return $this->cfg;
@@ -35,19 +44,18 @@ class AppCtx {
     }
 
     public function getAppHosts() {
+        if (!isset($this->hosts)) {
+            $this->hosts = new Hosts($this);
+        }
+
         return $this->hosts;
     }
 
-    public function setAppHosts(Hosts $hosts) {
-        $this->hosts = $hosts;
-    }
-
     public function getAppUser() {
+        if (!isset($this->user)) {
+            $this->user = new User($this);
+        }
         return $this->user;
-    }
-
-    public function setAppUser(User $user) {
-        $this->user = $user;
     }
 
     public function getAppCategories() {

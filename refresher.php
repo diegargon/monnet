@@ -16,6 +16,7 @@ require_once('include/refresher-func.php');
 
 $tdata = [];
 $force_host_reload = 0;
+$hosts = $ctx->getAppHosts();
 
 //TODO: We pass target id in  command_value and object_id -> change to always use object_id for that
 $data = [

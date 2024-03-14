@@ -45,14 +45,7 @@ require_once('class/Filters.php');
 require_once('include/util.inc.php');
 require_once('include/time.inc.php');
 require_once('include/updater.inc.php');
-require_once('class/Hosts.php');
-require_once('class/Items.php'); // TODO to usermode?
-require_once('class/Categories.php');
-require_once('class/Networks.php');
 
 require_once('class/AppCtx.php');
 
 $ctx = new AppCtx($cfg, $lng, $db);
-
-$hosts = new Hosts($ctx);
-$ctx->setAppHosts($hosts);
