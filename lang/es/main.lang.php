@@ -111,6 +111,7 @@ $lng = [
     'L_OS' => 'Os',
     'L_OTHERS' => 'Otros',
     'L_OVERVIEW' => 'Resumen',
+    'L_OWNER' => 'Responsable',
     //P
     'L_PASSWORD' => 'Contraseña',
     'L_PROFILE' => 'Perfil',

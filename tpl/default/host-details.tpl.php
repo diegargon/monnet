@@ -112,7 +112,7 @@
         <div id="tab1" class="host-details-tab-content">
             <div class="">
                 <div class="">
-                    <label class="display_name_label"><?= $lng['L_DISPLAY_NAME'] ?>:</label>
+                    <label class="resume_label"><?= $lng['L_DISPLAY_NAME'] ?>:</label>
                     <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
                 </div>
                 <div class"">
@@ -120,33 +120,41 @@
                     <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
                     <div><?= $lng['L_VLAN'] ?>: <?= $tdata['host_details']['network_vlan'] ?></div>
                 </div>
+                <?php
+                if (!empty($tdata['host_details']['owner'])) {
+                    ?>
+                    <div class="">
+                        <label class="resume_label"><?= $lng['L_OWNER'] ?>:</label>
+                        <span class="resume_field"><?= $tdata['host_details']['owner'] ?></span>
+                    </div>
+                <?php } ?>
                 <div class="">
-                    <label class="created_label"><?= $lng['L_ADDED'] ?>:</label>
-                    <span class="created"><?= $tdata['host_details']['formated_creation_date'] ?></span>
+                    <label class="resume_label"><?= $lng['L_ADDED'] ?>:</label>
+                    <span class="resume_field"><?= $tdata['host_details']['formated_creation_date'] ?></span>
                 </div>
                 <?php if (!empty($tdata['host_details']['uptime']) && is_array($tdata['host_details']['uptime'])) { ?>
                     <div class="" >
-                        <label class="uptime_label"><?= $lng['L_UPTIME'] ?>:</label>
-                        <span class="uptime"><?= $tdata['host_details']['uptime']['datetime'] ?></span>
+                        <label class="resume_label"><?= $lng['L_UPTIME'] ?>:</label>
+                        <span class="resume_field"><?= $tdata['host_details']['uptime']['datetime'] ?></span>
                     </div>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['latency_ms'])) { ?>
                     <div class="" >
-                        <label class="latency"><?= $lng['L_LATENCY'] ?>:</label>
-                        <span class="latency"><?= $tdata['host_details']['latency_ms'] ?></span>
+                        <label class="resume_label"><?= $lng['L_LATENCY'] ?>:</label>
+                        <span class="resume_field"><?= $tdata['host_details']['latency_ms'] ?></span>
                     </div>
                 <?php } ?>
 
                 <?php if (empty($tdata['host_details']['online']) && !empty($tdata['host_details']['f_last_seen'])) { ?>
                     <div>
-                        <label class="last_seen_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
-                        <span class="connected_date"><?= $tdata['host_details']['f_last_seen'] ?> </span>
+                        <label class="resume_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
+                        <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?> </span>
                     </div>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['f_last_check'])) { ?>
                     <div>
-                        <label class="connected_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
-                        <span class="connected_date"><?= $tdata['host_details']['f_last_check'] ?> </span>
+                        <label class="resume_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
+                        <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?> </span>
                     </div>
                 <?php } ?>
             </div>
@@ -221,80 +229,91 @@
         <!-- /TAB11 -->
         <!-- /TAB12 --><!-- Config -->
         <div id="tab12" class="host-details-tab-content">
+            <div id="config_status_msg"></div>
             <div class="config_container">
-                <div id="config_status_msg"></div>
-                <div class="">
-                    <label for="host-title"><?= $lng['L_DISPLAY_NAME'] ?></label><br />
-                    <input type="text" id="host-title" size="32" name="host-title" value="<?= $tdata['host_details']['title'] ?>"/>
-                    <button id="submitTitle"><?= $lng['L_SEND'] ?></button>
+                <div class="left-config-column">
+                    <div class="">
+                        <label for="host-title"><?= $lng['L_DISPLAY_NAME'] ?></label><br />
+                        <input type="text" id="host-title" size="32" name="host-title" value="<?= $tdata['host_details']['title'] ?>"/>
+                        <button id="submitTitle"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="host-cat"><?= $lng['L_CATEGORY'] ?></label><br />
+                        <select id="hostcat_id" name="hostcat_id">
+                            <?php foreach ($tdata['host_details']['hosts_categories'] as $cat): ?>
+                                <?php
+                                $cat_name = isset($lng[$cat['cat_name']]) ? $lng[$cat['cat_name']] : $cat['cat_name'];
+                                $selected = $cat['id'] == $tdata['host_details']['category'] ? ' selected=1 ' : '';
+                                ?>
+                                <option value="<?= $cat['id'] ?>"<?= $selected ?>><?= $cat_name ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="submitCat"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="chkHighlight"><?= $lng['L_HIGHLIGHT_HOSTS'] ?>:</label>
+                        <input type="checkbox" id="chkHighlight" <?= $tdata['host_details']['highlight'] ? 'checked' : null ?>>
+                        <input type="number" id="host_id" name="host_id" style="display:none;" readonly value="<?= $tdata['host_details']['id'] ?>"/>
+                    </div>
+                    <div class="">
+                        <label for="checkport"><?= $lng['L_PORT_CHECK'] ?>: </label>
+                        <input type="checkbox" id="checkports_enabled" <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
+                        <label for="checkports"><?= $lng['L_PORT_LIST'] ?> (ex: 53/udp/name,443/tcp/name): </label><br />
+                        <input type="text" id="checkports" name="checkports" value="<?= $tdata['host_details']['ports_formated'] ?>"/>
+                        <button id="submitPorts"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="host_owner"><?= $lng['L_OWNER'] ?>: </label><br />
+                        <input type="text" id="host_owner" name="host_owner" value="<?= !empty($tdata['host_details']['owner']) ? $tdata['host_details']['owner'] : null ?>"/>
+                        <button id="submitOwner"><?= $lng['L_SEND'] ?></button>
+                    </div>
                 </div>
-                <div class="">
-                    <label for="host-cat"><?= $lng['L_CATEGORY'] ?></label><br />
-                    <select id="hostcat_id" name="hostcat_id">
-                        <?php foreach ($tdata['host_details']['hosts_categories'] as $cat): ?>
-                            <?php
-                            $cat_name = isset($lng[$cat['cat_name']]) ? $lng[$cat['cat_name']] : $cat['cat_name'];
-                            $selected = $cat['id'] == $tdata['host_details']['category'] ? ' selected=1 ' : '';
-                            ?>
-                            <option value="<?= $cat['id'] ?>"<?= $selected ?>><?= $cat_name ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button id="submitCat"><?= $lng['L_SEND'] ?></button>
+                <!-- /left config column -->
+                <!-- right config column -->
+                <div class="right-config-column">
+                    <div class="">
+                        <label for="manufacture"><?= $lng['L_MANUFACTURE'] ?>: </label><br/>
+                        <select id="manufacture">
+                            <?php foreach ($cfg['manufacture'] as $manufacture): ?>
+                                <?php
+                                $selected = ($manufacture['id'] == $tdata['host_details']['manufacture']) ? ' selected=1 ' : '';
+                                ?>
+                                <option value="<?= $manufacture['id'] ?>"<?= $selected ?>><?= $manufacture['name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="submitManufacture"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="os"><?= $lng['L_OS'] ?>: </label><br/>
+                        <select id="os">
+                            <?php foreach ($cfg['os'] as $os): ?>
+                                <?php
+                                $selected = ($os['id'] == $tdata['host_details']['os']) ? ' selected=1 ' : '';
+                                ?>
+                                <option value="<?= $os['id'] ?>"<?= $selected ?>><?= $os['name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="submitOS"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="system_type"><?= $lng['L_SYSTEM_TYPE'] ?>: </label><br/>
+                        <select id="system_type">
+                            <?php foreach ($cfg['system_type'] as $system_type): ?>
+                                <?php
+                                $selected = ($system_type['id'] == $tdata['host_details']['system_type']) ? ' selected=1 ' : '';
+                                ?>
+                                <option value="<?= $system_type['id'] ?>"<?= $selected ?>><?= $system_type['name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="submitSystemType"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
+                        <input type="text" size="32" id="host_token" name="host_token" value="<?= $tdata['host_details']['token'] ?>" readonly/>
+                        <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
+                    </div>
                 </div>
-                <div class="">
-                    <label for="chkHighlight"><?= $lng['L_HIGHLIGHT_HOSTS'] ?>:</label>
-                    <input type="checkbox" id="chkHighlight" <?= $tdata['host_details']['highlight'] ? 'checked' : null ?>>
-                    <input type="number" id="host_id" name="host_id" style="display:none;" readonly value="<?= $tdata['host_details']['id'] ?>"/>
-                </div>
-                <div class="">
-                    <label for="checkport"><?= $lng['L_PORT_CHECK'] ?>: </label>
-                    <input type="checkbox" id="checkports_enabled" <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
-                    <label for="checkports"><?= $lng['L_PORT_LIST'] ?> (ex: 53/udp/name,443/tcp/name): </label><br />
-                    <input type="text" id="checkports" name="checkports" value="<?= $tdata['host_details']['ports_formated'] ?>"/>
-                    <button id="submitPorts"><?= $lng['L_SEND'] ?></button>
-                </div>
-                <div class="">
-                    <label for="manufacture"><?= $lng['L_MANUFACTURE'] ?>: </label><br/>
-                    <select id="manufacture">
-                        <?php foreach ($cfg['manufacture'] as $manufacture): ?>
-                            <?php
-                            $selected = ($manufacture['id'] == $tdata['host_details']['manufacture']) ? ' selected=1 ' : '';
-                            ?>
-                            <option value="<?= $manufacture['id'] ?>"<?= $selected ?>><?= $manufacture['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button id="submitManufacture"><?= $lng['L_SEND'] ?></button>
-                </div>
-                <div class="">
-                    <label for="os"><?= $lng['L_OS'] ?>: </label><br/>
-                    <select id="os">
-                        <?php foreach ($cfg['os'] as $os): ?>
-                            <?php
-                            $selected = ($os['id'] == $tdata['host_details']['os']) ? ' selected=1 ' : '';
-                            ?>
-                            <option value="<?= $os['id'] ?>"<?= $selected ?>><?= $os['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button id="submitOS"><?= $lng['L_SEND'] ?></button>
-                </div>
-                <div class="">
-                    <label for="system_type"><?= $lng['L_SYSTEM_TYPE'] ?>: </label><br/>
-                    <select id="system_type">
-                        <?php foreach ($cfg['system_type'] as $system_type): ?>
-                            <?php
-                            $selected = ($system_type['id'] == $tdata['host_details']['system_type']) ? ' selected=1 ' : '';
-                            ?>
-                            <option value="<?= $system_type['id'] ?>"<?= $selected ?>><?= $system_type['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button id="submitSystemType"><?= $lng['L_SEND'] ?></button>
-                </div>
-                <div class="">
-                    <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
-                    <input type="text" size="32" id="host_token" name="host_token" value="<?= $tdata['host_details']['token'] ?>" readonly/>
-                    <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
-                </div>
-
+                <!-- /right config column -->
 
             </div>
         </div>
@@ -303,7 +322,7 @@
         <!-- TODO DISABLED -->
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -311,11 +330,11 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                <option value="0"></option>
+                                                                                                <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                                                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
@@ -329,10 +348,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                                 <div class="log_line"><?= $log ?></div>
+                                                                                                                                                                                                                 <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                </div>
+                                                                                                </div>
         <?php }
         ?>
         <!-- /TODO DISABLED -->

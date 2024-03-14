@@ -77,6 +77,8 @@ Class Hosts {
 
     public function update(int $id, array $values) {
         $fvalues = []; //filter
+        $misc_container = [];
+        $misc_keys = ['mac_vendor', 'manufacture', 'system_type', 'os', 'owner', 'fingerprint'];
 
         foreach ($values as $kvalue => $vvalue) {
             if (!empty($kvalue) && isset($vvalue)) {
@@ -94,10 +96,16 @@ Class Hosts {
                     $this->host_cat_track[$vvalue]++;
                 }
                 $this->hosts[$id][$kvalue] = $vvalue;
-                $fvalues[$kvalue] = $vvalue;
+                if (in_array($kvalue, $misc_keys)) {
+                    $misc_container[$kvalue] = $vvalue;
+                } else {
+                    $fvalues[$kvalue] = $vvalue;
+                }
             }
         }
-
+        if (valid_array($misc_container)) {
+            $fvalues['misc'] = json_encode($misc_container);
+        }
         if (valid_array($fvalues)) {
             $this->db->update('hosts', $fvalues, ['id' => ['value' => $id]], 'LIMIT 1');
         }
@@ -237,8 +245,16 @@ Class Hosts {
             } else {
                 $this->host_cat_track[$host['category']]++;
             }
+            /* Port Field JSON TODO Need rethink */
             if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
+            }
+            /* Misc field JSON misc fields that not need a db field */
+            if (!empty($this->hosts[$id]['misc'])) {
+                $misc_values = json_decode($this->hosts[$id]['misc'], true);
+                foreach ($misc_values as $key => $value) {
+                    $this->hosts[$id][$key] = $value;
+                }
             }
 
             if (empty($host['notes_id'])) {

@@ -248,7 +248,13 @@ $(document).ready(function () {
             refresh('submitHost', value);
         }
     });
-
+    $(document).on("click", "#submitOwner", function () {
+        var ownerValue = $('#host_owner').val();
+        var host_id = $('#host_id').val();
+        if (ownerValue && host_id) {
+            refresh('submitOwner', ownerValue, host_id);
+        }
+    });
     $(document).on("click", "#submitNetwork", function () {
         var fields = {};
 
@@ -271,7 +277,7 @@ $(document).ready(function () {
 //Prevent disable all networks
             const checkedNetworks = document.querySelectorAll('input[type="checkbox"].option_network:checked');
             if ($(this).hasClass('option_network')) {
-                if (checkedNetworks.length === 1) {                    
+                if (checkedNetworks.length === 1) {
                     checkboxes.forEach(cb => {
                         if (cb.checked) {
                             cb.disabled = true;

@@ -1254,6 +1254,13 @@ input:checked + .slider:before {
     pointer-events: all;
 }
 
+.config_container {
+    display:flex;
+}
+.left-config-column, .right-config-column {
+    width: 49%; 
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

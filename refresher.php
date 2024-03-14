@@ -137,6 +137,15 @@ if ($command == 'submitTitle' && !empty($object_id) && is_numeric($object_id)) {
     $force_host_reload = 1;
 }
 
+if ($command == 'submitOwner' && !empty($object_id) && is_numeric($object_id)) {
+    $success = 0;
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['owner' => $command_value]);
+        $success = 1;
+    }
+    $data['command_success'] = $success;
+}
+
 // Change Host Cat
 if ($command == 'submitCat' && !empty($object_id) && is_numeric($object_id)) {
     $success = 0;
