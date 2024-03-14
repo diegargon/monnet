@@ -271,8 +271,7 @@ $(document).ready(function () {
 //Prevent disable all networks
             const checkedNetworks = document.querySelectorAll('input[type="checkbox"].option_network:checked');
             if ($(this).hasClass('option_network')) {
-                if (checkedNetworks.length === 1) {
-                    console.log("Lenght es 1");
+                if (checkedNetworks.length === 1) {                    
                     checkboxes.forEach(cb => {
                         if (cb.checked) {
                             cb.disabled = true;
