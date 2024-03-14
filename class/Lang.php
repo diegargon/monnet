@@ -18,7 +18,7 @@ class Lng {
     public static function loadLanguage(string $langCode) {
         /*
          * We load es as default language to avoid missing keys
-         * The if != the selected config language
+         * Then if != we load the selected config language
          *
          */
         //Default lang

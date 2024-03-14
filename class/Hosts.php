@@ -78,7 +78,7 @@ Class Hosts {
     public function update(int $id, array $values) {
         $fvalues = []; //filter
         $misc_container = [];
-        $misc_keys = ['mac_vendor', 'manufacture', 'system_type', 'os', 'owner', 'fingerprint'];
+        $misc_keys = ['mac_vendor', 'manufacture', 'system_type', 'os', 'owner', 'timeout'];
 
         foreach ($values as $kvalue => $vvalue) {
             if (!empty($kvalue) && isset($vvalue)) {

@@ -255,6 +255,13 @@ $(document).ready(function () {
             refresh('submitOwner', ownerValue, host_id);
         }
     });
+    $(document).on("click", "#submitHostTimeout", function () {
+        var timeoutValue = $('#host_timeout').val();
+        var host_id = $('#host_id').val();
+        if (timeoutValue && host_id) {
+            refresh('submitHostTimeout', timeoutValue, host_id);
+        }
+    });    
     $(document).on("click", "#submitNetwork", function () {
         var fields = {};
 

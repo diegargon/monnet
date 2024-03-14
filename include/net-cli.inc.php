@@ -263,11 +263,12 @@ function ping_host_ports(AppCtx $ctx, array $host) {
     $networks = $ctx->getAppNetworks();
 
     $err_code = $err_msg = '';
-    $timeout = $networks->isLocal($host['ip']) ? 0.6 : 1;
 
     //Custom timeout for host
     if (!empty($host['timeout'])) {
         $timeout = $host['timeout'];
+    } else {
+        $timeout = $networks->isLocal($host['ip']) ? 0.6 : 1;
     }
 
     $host_status = [];
@@ -305,7 +306,14 @@ function ping_host_ports(AppCtx $ctx, array $host) {
     }
 
     if ($host_status['online'] == 0) {
-        $host_ping = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
+        if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
+            $sec = floor($host['timeout']);
+            $usec = ($host['timeout]'] - $sec) * 1000000;
+        } else {
+            $sec = 0;
+            $usec = 100000;
+        }
+        $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
         if ($host_ping['online']) {
             $host_status['online'] = 1;
         }
@@ -316,15 +324,20 @@ function ping_host_ports(AppCtx $ctx, array $host) {
 }
 
 function ping_known_host(AppCtx $ctx, array $host) {
+    $sec = 0;
     $usec = 500000;
     $time_now = utc_date_now();
     $networks = $ctx->getAppNetworks();
 
-    if ($networks->isLocal($host['ip'])) {
+    if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
+        $sec = floor($host['timeout']);
+        $usec = ($host['timeout]'] - $sec) * 1000000;
+    } else if ($networks->isLocal($host['ip'])) {
+        $sec = 0;
         $usec = ($host['online']) ? 400000 : 300000;
     }
 
-    $timeout = ['sec' => 0, 'usec' => $usec];
+    $timeout = ['sec' => $sec, 'usec' => $usec];
 
     $ip_status = ping($host['ip'], $timeout);
 

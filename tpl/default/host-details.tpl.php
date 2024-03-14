@@ -272,6 +272,11 @@
                 <!-- right config column -->
                 <div class="right-config-column">
                     <div class="">
+                        <label for="host_timeout"><?= $lng['L_TIMEOUT'] ?>(0.0): </label><br />
+                        <input size="12" max-size="12" type="number" id="host_timeout" name="host_timeout" value="<?= !empty($tdata['host_details']['timeout']) ? $tdata['host_details']['timeout'] : null ?>"/>
+                        <button id="submitHostTimeout"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
                         <label for="manufacture"><?= $lng['L_MANUFACTURE'] ?>: </label><br/>
                         <select id="manufacture">
                             <?php foreach ($cfg['manufacture'] as $manufacture): ?>
@@ -322,7 +327,7 @@
         <!-- TODO DISABLED -->
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -330,11 +335,11 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                                                                <option value="0"></option>
+                                                                                                                        <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                                                                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                                                                                                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
@@ -348,10 +353,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                                                                                                                                 <div class="log_line"><?= $log ?></div>
+                                                                                                                                                                                                                                                                 <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                                                                </div>
+                                                                                                                        </div>
         <?php }
         ?>
         <!-- /TODO DISABLED -->

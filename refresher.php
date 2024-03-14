@@ -44,7 +44,7 @@ if ($command == 'saveNote') {
     $command_value = trim(Filters::postUTF8('order_value'));
 } else if ($command == 'submitScanPorts') {
     $command_value = trim(Filters::postCustomString('order_value', ',/', 255));
-} else if ($command == 'setCheckPorts') {
+} else if ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
     $command_value = Filters::postInt('order_value');
 } else if ($command == 'addNetwork') {
     $command_value = Filters::postCustomString('order_value', ',":.{}');
@@ -141,6 +141,15 @@ if ($command == 'submitOwner' && !empty($object_id) && is_numeric($object_id)) {
     $success = 0;
     if (!empty($command_value)) {
         $hosts->update($object_id, ['owner' => $command_value]);
+        $success = 1;
+    }
+    $data['command_success'] = $success;
+}
+
+if ($command == 'submitHostTimeout' && !empty($object_id) && is_numeric($object_id)) {
+    $success = 0;
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['timeout' => $command_value]);
         $success = 1;
     }
     $data['command_success'] = $success;
