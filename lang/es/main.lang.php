@@ -149,6 +149,7 @@ $lng = [
     'L_TV' => 'Tv',
     'L_TOTAL' => 'Total',
     'L_TOKEN' => 'Token',
+    'L_TIMEOUT' => 'Timeout',
     //U
     'L_USERS' => 'Usuarios',
     'L_USERNAME' => 'Usuario',
