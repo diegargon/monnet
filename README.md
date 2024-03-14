@@ -14,7 +14,7 @@ MonNet is currently in an early version. It is possible that issues may arise be
 
 You can add bookmarks, networks, and other elements, but some features, modification is not yet possible. (Except by directly accessing the database, obviously) 
 
-The English language (EN) has not been added yet. /lang/*
+The English language (EN/US) is IA generated.
 
 # MonNet Install
 
@@ -44,7 +44,10 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 ## Composer deeps
 
 ```
-/var/www/html# composer require phpseclib/phpseclib:~3.0
+# 
+/path/to/monnet# composer require phpseclib/phpseclib:~3.0
+#optional for send messsages
+/path/to/monnet# composer require phpmailer/phpmailer
 ```
 
 ## Config
