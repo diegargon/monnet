@@ -307,12 +307,14 @@ function ping_host_ports(AppCtx $ctx, array $host) {
 
     if ($host_status['online'] == 0) {
         if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
-            $sec = floor($host['timeout']);
-            $usec = ($host['timeout]'] - $sec) * 1000000;
+            $sec = intval($host['timeout']);
+            $usec = ($host['timeout'] - $sec);
+            $usec = $usec > 0 ? $usec * 1000000 : 0;
         } else {
             $sec = 0;
             $usec = 100000;
         }
+
         $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
         if ($host_ping['online']) {
             $host_status['online'] = 1;
@@ -330,8 +332,9 @@ function ping_known_host(AppCtx $ctx, array $host) {
     $networks = $ctx->getAppNetworks();
 
     if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
-        $sec = floor($host['timeout']);
-        $usec = ($host['timeout]'] - $sec) * 1000000;
+        $sec = intval($host['timeout']);
+        $usec = ($host['timeout'] - $sec);
+        $usec = $usec > 0 ? $usec * 1000000 : 0;
     } else if ($networks->isLocal($host['ip'])) {
         $sec = 0;
         $usec = ($host['online']) ? 400000 : 300000;
