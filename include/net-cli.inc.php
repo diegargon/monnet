@@ -77,7 +77,8 @@ function check_known_hosts(AppCtx $ctx) {
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
             } else if ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 $new_host_status['online_change'] = utc_date_now();
-                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF']);
+                $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
+                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout);
             }
 
             $hosts->update($host['id'], $new_host_status);
