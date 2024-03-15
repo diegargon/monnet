@@ -27,6 +27,18 @@ class Items {
         $this->items = $this->db->fetchAll($results);
     }
 
+    public function addItem(string $item_type, array $item_data) {
+        if ($item_type == 'bookmarks') {
+            $conf = ['url' => $item_data['urlip'], 'image_type' => $item_data['image_type'], 'image_resource' => $item_data['field_img']];
+            $set = ['uid' => $this->uid, 'cat_id' => $item_data['cat_id'], 'type' => 'bookmarks', 'title' => $item_data['name'], 'conf' => json_encode($conf), 'weight' => $item_data['weight']];
+            if ($this->db->insert('items', $set)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getAll(?string $key_order = null, ?string $dir = 'asc') {
         if (!empty($key_order)) {
             order($this->items, $key_order, $dir);

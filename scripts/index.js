@@ -276,6 +276,25 @@ $(document).ready(function () {
         }
 
     });
+    $(document).on("click", "#submitBookmark", function () {
+        var fields = {};
+        $('#error_msg').html('');
+        $('#status_msg').html('');
+        fields.name = $('#bookmarkName').val();        
+        fields.cat_id = parseInt($('#cat_id').val());        
+        fields.urlip = $('#urlip').val();        
+        fields.image_type = $('#image_type').val();
+        fields.field_img = $('#field_img').val();
+        fields.weight = $('#weight').val();
+        
+        if (fields.bookmarkName !== "" && fields.cat_id !== "" && fields.urlip !== "" && fields.image_type !== "") {
+            json_fields = JSON.stringify(fields);
+            refresh('addBookmark', json_fields);
+        } else {
+            $('#error_msg').html('Empty field');
+        }
+
+    });    
 //Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {

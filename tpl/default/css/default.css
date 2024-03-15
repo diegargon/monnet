@@ -999,6 +999,11 @@ input:checked + .slider:before {
 .form_container {
     margin: 10px;
 }
+.form_container label {
+    display:block;
+    margin-top: 5px;
+    margin-bottom: 4px;
+}
 #addBookmarkForm input[type="text"], #addNetworkForm input[type="text"] {
     padding: 2px;
     margin-bottom: 5px;

@@ -47,7 +47,9 @@ if ($command == 'saveNote') {
 } else if ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
     $command_value = Filters::postInt('order_value');
 } else if ($command == 'addNetwork') {
-    $command_value = Filters::postCustomString('order_value', ',":.{}');
+    $command_value = Filters::postCustomString('order_value', ',":.{}'); //JSON only special chars
+} else if ($command == 'addBookmark') {
+    $command_value = Filters::postCustomString('order_value', ',":.{}/_'); //Json + url chars
 } else if ($command == 'submitHost') {
     $command_value = Filters::postIP('order_value');
     if (empty($command_value)) {
@@ -256,6 +258,7 @@ if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($co
 
 /* /end Host Cat */
 
+/* ADD NETWORK */
 if ($command == 'addNetwork' && !empty($command_value)) {
     $decodedJson = json_decode($command_value, true);
 
@@ -306,6 +309,59 @@ if ($command == 'addNetwork' && !empty($command_value)) {
         }
     }
 }
+
+/* ADD Bookmark */
+
+if ($command == 'addBookmark' && !empty($command_value)) {
+    $decodedJson = json_decode($command_value, true);
+
+    if ($decodedJson === null) {
+        $data['command_error_msg'] .= 'JSON Invalid<br/>';
+    } else {
+        foreach ($decodedJson as $key => $dJson) {
+            $new_bookmark[$key] = trim($dJson);
+        }
+
+        if (!Filters::varString($new_bookmark['name'])) {
+            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+        if (!Filters::varString($new_bookmark['image_type'])) {
+            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_IMAGE_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+        if (!Filters::varInt($new_bookmark['cat_id'])) {
+            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        if (!Filters::varUrl($new_bookmark['urlip']) || Filters::varIP($new_bookmark['urlip'])) {
+            $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        if (!(Filters::varInt($new_bookmark['weight'])) && Filters::varInt($new_bookmark['weight']) != 0) {
+            $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        if ($new_bookmark['image_type'] != 'favicon' && empty($new_bookmark['field_img'])) {
+            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+        if ($new_bookmark['image_type'] == 'favicon' && empty($new_bookmark['field_img'])) {
+            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_INVALID']}";
+        }
+        if ($new_bookmark['image_type'] == 'local_img' && empty($new_bookmark['field_img'])) {
+            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        if (empty($data['command_error_msg'])) {
+
+            if ($ctx->getAppItems()->addItem('bookmarks', $new_bookmark)) {
+                $data['response_msg'] = 'ok';
+            } else {
+                $data['response_msg'] = 'error';
+            }
+        }
+        $data['command_success'] = 1;
+    }
+}
+
 
 $highlight_hosts_count = 0;
 
