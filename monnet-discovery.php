@@ -24,8 +24,7 @@ if (is_locked()) {
 register_shutdown_function('unlink', CLI_LOCK);
 ping_net($ctx);
 
-//waiting to v34
-//$db->update('prefs', ['uid' => 0, 'pref_value' => utc_date_now()], ['pref_name' => 'discovery_last_run'], 'LIMIT 1');
+$db->update('prefs', ['uid' => 0, 'pref_value' => utc_date_now()], ['pref_name' => 'discovery_last_run'], 'LIMIT 1');
 Log::debug("[Finishing] $APP_NAME " . datetime_machine() . "");
 
 exit(0);
