@@ -56,9 +56,9 @@ function trigger_update(Database $db, float $db_version, float $monnet_version) 
     }
 
     //NEXT
-    if ($db_version < 0.00) {
+    if ($db_version < 0.35) {
         $db->query("INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES (11, 0, 'discovery_last_run', '0');");
-        $db->query("ALTER TABLE `hosts` CHANGE `timeout` `timeout` FLOAT NULL DEFAULT NULL;");
+        $db->query("ALTER TABLE `hosts` DROP `timeout`;");
         $db->query("ALTER TABLE `hosts` ADD `alert_msg` CHAR(255) NULL DEFAULT NULL AFTER `warn_mail`;");
         $db->query("ALTER TABLE `hosts` ADD `alert` TINYINT NOT NULL DEFAULT '0' AFTER `warn_mail`;");
         $db->query("ALTER TABLE `hosts` ADD `misc` JSON NULL DEFAULT NULL");
@@ -75,9 +75,23 @@ function trigger_update(Database $db, float $db_version, float $monnet_version) 
         $db->query("ALTER TABLE `networks` ADD `weight` TINYINT NOT NULL DEFAULT '50' AFTER `scan`;");
         $db->query("ALTER TABLE `categories` DROP `on`;");
         $db->query("ALTER TABLE `items` CHANGE `cat_id` `cat_id` INT NOT NULL DEFAULT '50';");
+        $db->query("UPDATE `items` SET `uid` = '1' WHERE `items`.`type` = 'bookmarks';");
+        $db->query("UPDATE `notes` SET `uid` = '1';");
         Log::info("Update version to 0.35 successful");
         $db->query("UPDATE prefs SET pref_value='0.35' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db_version = 0.35;
+    }
+
+    //Next
+    if ($db_version < 0.00) {
+        $db->query("ALTER TABLE `hosts` DROP `mac_vendor`;");
+        $db->query("ALTER TABLE `hosts` DROP `manufacture`;");
+        $db->query("ALTER TABLE `hosts` DROP `system_type`;");
+        $db->query("ALTER TABLE `hosts` DROP `os`;");
+        $db->query("ALTER TABLE `hosts` DROP `codename`;");
+        Log::info("Update version to 0.00 successful");
+        $db->query("UPDATE prefs SET pref_value='0.00' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        //$db_version = 0.00;
     }
 
     //Next Template

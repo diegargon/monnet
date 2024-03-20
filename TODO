@@ -1,13 +1,10 @@
 ** HIGH
 
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
-* [DB 0.35v] items->uid los links no son por usuario FIXIT
-* [DB 0.35v] Timeout->float Host: Poder especificar el timeout por host del ping o tcpconn
 * [DB 0.35v] alert field - Señal de nuevo host descubierto, cambio de mac
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
-* [DB 0.35v] hosts->misc mover, mac_vendor, manufacture, system_type, owner,fingerprint
-* [DB 0.35v] hosts->misc Poder Asociar un nombre a un host Owner
 * [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
+    * Falta borrar fields de la tabla [DB 0.35v] hosts->misc mover, mac_vendor, manufacture, system_type, owner
 
 ** LOW
 * El scan ports especificados por el usuario solo debe escaner los user=1
@@ -39,7 +36,7 @@
     $_SESSION['critical_key'] = "mi_clave_critica";
     session_destroy();
 * Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
-
+* al borrar un bookmark, esconderlo para evitar tener que hacer el  reload
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
@@ -49,8 +46,8 @@
 * Opcion del buscador cambie a buscar elementos en la pagina?
 * Bell options term + onoff pref
 * Config parar cronjob, poder cambiar jobs entre cron_hourly y demás
-
-
+* Notes Private (uid)? Public (!uid)? , option for selected if notes are by user or global?
+* everybody bookmarks items (uid = 0) ?
 
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.

@@ -11,7 +11,7 @@
 
 $DEBUG = 1;
 
-$cfg['monnet_version'] = 0.34;
+$cfg['monnet_version'] = 0.35;
 $cfg['app_name'] = 'monnet';
 
 /* Manufacture */
