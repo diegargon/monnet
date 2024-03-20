@@ -224,6 +224,30 @@
         <!-- TAB11 -->
         <div id="tab11" class="host-details-tab-content">
             <div class="alarms_container">
+                <div class="">
+                    <label for="disableAlarms"><?= $lng['L_DISABLE_ALARMS'] ?>:</label>
+                    <input type="hidden" id="disableAlarms" value="0">
+                    <input type="checkbox" id="disableAlarms" <?= isset($tdata['host_details']['alarms_off']) ? 'checked' : null ?>>
+                    <label for="enableEmailAlarms"><?= $lng['L_ENABLE_EMAIL_ALARMS'] ?>:</label>
+                    <input type="hidden" id="enableMailAlarms" value="0">
+                    <input type="checkbox" id="enableMailAlarms" <?= isset($tdata['host_details']['alarms_email_on']) ? 'checked' : null ?>>
+                    <div>Tipo Alarmas</div>
+                    <label for="">Ping Host Fail:</label>
+                    <input type="hidden" id="alarm_ping_onoff" value="0">
+                    <input type="checkbox" id="alarm_ping_onoff">
+                    <label for="">Ping Port Fail:</label>
+                    <input type="hidden" id="alarm_port_onoff" value="0">
+                    <input type="checkbox" id="alarm_port_onoff">
+                    <label for="">Cambio MAC:</label>
+                    <input type="hidden" id="alarm_mac_change" value="0">
+                    <input type="checkbox" id="alarm_mac_change">
+                    <label for="">Puerto Nuevo:</label>
+                    <input type="hidden" id="alarm_new_port" value="0">
+                    <input type="checkbox" id="alarm_new_port">
+                    <br/>
+                    <label for="">Emails (Comma Separated)</label><br/>
+                    <input type="text" size="50" id="alarm_emails">
+                </div>
             </div>
         </div>
         <!-- /TAB11 -->
@@ -327,7 +351,7 @@
         <!-- TODO DISABLED -->
         <!--
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -335,11 +359,11 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                                                                                        <option value="0"></option>
+                                                                                                                                                                                <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                                                                                                                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                                                                                                                                                                                                                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
@@ -353,10 +377,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                                                                                                                                                                                 <div class="log_line"><?= $log ?></div>
+                                                                                                                                                                                                                                                                                                                                                                                 <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                                                                                        </div>
+                                                                                                                                                                                </div>
         <?php }
         ?>
         <!-- /TODO DISABLED -->

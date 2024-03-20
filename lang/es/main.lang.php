@@ -29,12 +29,14 @@ $lng = [
     'L_CATEGORY' => 'Categoria',
     'L_CATEGORIES' => 'Categorias',
     'L_CREATE' => 'Crear',
+    'L_COMMA_SEPARATED' => '(Separado por coma)',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
     'L_DEPLOYS' => 'Deploys',
     'L_DESKTOP' => 'Escritorio',
     'L_DISPLAY_NAME' => 'Nombre a mostrar',
+    'L_DISABLE_ALARMS' => 'Deshabilitar Alarmas',
     //E
 //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
@@ -51,6 +53,8 @@ $lng = [
     'L_ERR_USERPASS_INVALID' => 'Error: usuario o password invalido',
     'L_ERR_PORT_INVALID' => 'Error: Puerto invalido',
     'L_ERR_SENDING_EMAILS' => 'Error: Enviando correos',
+    'L_ENABLE_EMAIL_ALARMS' => 'Habilitar Mensajes Alarmas',
+    'L_EMAILS' => 'Emails',
 //F
     'L_FIELD' => 'Campo',
     //G
