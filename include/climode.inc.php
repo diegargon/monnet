@@ -39,4 +39,7 @@ function is_locked() {
     return true;
 }
 
+require_once('include/commands.inc.php');
+require_once('include/mac_vendor.inc.php');
+require_once('include/curl.inc.php');
 require_once('include/net-cli.inc.php');
