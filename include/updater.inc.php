@@ -55,7 +55,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version) 
         $db_version = 0.34;
     }
 
-    //NEXT
+    //0.35
     if ($db_version < 0.35) {
         $db->query("INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES (11, 0, 'discovery_last_run', '0');");
         $db->query("ALTER TABLE `hosts` DROP `timeout`;");
@@ -82,15 +82,15 @@ function trigger_update(Database $db, float $db_version, float $monnet_version) 
         $db_version = 0.35;
     }
 
-    //Next
+    //0.36
     if ($db_version < 0.00) {
         $db->query("ALTER TABLE `hosts` DROP `mac_vendor`;");
         $db->query("ALTER TABLE `hosts` DROP `manufacture`;");
         $db->query("ALTER TABLE `hosts` DROP `system_type`;");
         $db->query("ALTER TABLE `hosts` DROP `os`;");
         $db->query("ALTER TABLE `hosts` DROP `codename`;");
-        Log::info("Update version to 0.00 successful");
-        $db->query("UPDATE prefs SET pref_value='0.00' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        Log::info("Update version to 0.36 successful");
+        $db->query("UPDATE prefs SET pref_value='0.36' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         //$db_version = 0.00;
     }
 
