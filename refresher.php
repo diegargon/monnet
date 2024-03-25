@@ -628,14 +628,19 @@ $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow
 $results = $db->select('prefs', '*', ['uid' => 0]);
 $system_prefs = $db->fetchAll($results);
 $cli_last_run = 0;
+$discovery_last_run = 0;
 
 foreach ($system_prefs as $sys_pref) {
     if ($sys_pref['pref_name'] == 'cli_last_run') {
         $cli_last_run = $sys_pref['pref_value'];
         $cli_last_run = utc_to_user_timezone($cli_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+    } else if ($sys_pref['pref_name'] == 'discovery_last_run') {
+        $discovery_last_run = $sys_pref['pref_value'];
+        $discovery_last_run = utc_to_user_timezone($discovery_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
     }
 }
 $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;
+$data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last_run;
 
 /* END ALWAYS */
 

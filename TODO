@@ -5,6 +5,7 @@
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
 * [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
     * Falta borrar fields de la tabla [DB 0.35v] hosts->misc mover, mac_vendor, manufacture, system_type, owner
+* desplegable para extra opciones en host arriba o abajo
 
 ** LOW
 * El scan ports especificados por el usuario solo debe escaner los user=1

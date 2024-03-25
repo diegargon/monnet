@@ -234,6 +234,7 @@
                         $('#host_onoff').html(jsonData.misc.onoff);
                         $('#last_refresher').html(jsonData.misc.last_refresher);
                         $('#cli_last_run').html(jsonData.misc.cli_last_run);
+                        $('#discovery_last_run').html(jsonData.misc.discovery_last_run);
                     }
 
                 })

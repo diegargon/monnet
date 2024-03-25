@@ -16,6 +16,7 @@
         <div id="host_onoff" class="host_onoff text_shadow_style1"></div>
         <div id="last_refresher" class="last_refresher text_shadow_style1"></div>
         <div id="cli_last_run" class="cli_last_run text_shadow_style1"></div>
+        <div id="discovery_last_run" class="discovery_last_run text_shadow_style1"></div>
         <!-- Total On/Off -->
     </div>
 </div>
