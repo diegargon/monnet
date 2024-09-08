@@ -15,7 +15,7 @@ class Lng {
     private static string $defaultLang = 'es';
     private static string $selLangCode = null;
 
-    public static function loadLanguage(string $langCode) {
+    public static function loadLanguage(string $langCode): bool {
         /*
          * We load es as default language to avoid missing keys
          * Then if != we load the selected config language
@@ -39,7 +39,7 @@ class Lng {
         return true;
     }
 
-    public static function loadUserLang(string $langCode) {
+    public static function loadUserLang(string $langCode): bool {
         if ($langCode === self::$defaultLang || $langCode === self::$selLanCode) {
             return false;
         }
@@ -51,10 +51,10 @@ class Lng {
         return true;
     }
 
-    public static function get(string $key) {
+    public static function get(string $key): string|false {
         if (self::$language && isset(self::$language[$key])) {
             return self::$language[$key];
         }
-        return null;
+        return false;
     }
 }

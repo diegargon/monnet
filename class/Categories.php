@@ -12,10 +12,10 @@
 class Categories {
 
     private AppCtx $ctx;
-    private array $cfg;
+    private array $cfg = [];
     private Database $db;
     private array $categories = [];
-    private array $cat_types;
+    private array $cat_types = [];
     private array $lng = [];
 
     public function __construct(AppCtx $ctx) {
@@ -29,17 +29,17 @@ class Categories {
         $this->cat_types = $this->cfg['cat_types'];
     }
 
-    public function getAll() {
+    public function getAll(): array {
 
         return $this->categories;
     }
 
-    public function getTypes() {
+    public function getTypes(): array {
 
         return $this->cat_types;
     }
 
-    public function getByType(int $type) {
+    public function getByType(int $type): array|false {
         $categories_by_type = [];
 
         foreach ($this->categories as $cat) {
@@ -51,7 +51,7 @@ class Categories {
         return !empty($categories_by_type) ? $categories_by_type : false;
     }
 
-    public function getTypeByID(int $id) {
+    public function getTypeByID(int $id): array|false {
         foreach ($this->categories as $cat) {
             if ($cat['id'] == $id) {
                 return $cat['cat_type'];
@@ -61,7 +61,7 @@ class Categories {
         return false;
     }
 
-    public function prepareCats(int $type) {
+    public function prepareCats(int $type): array|false {
         $categories_by_type = $this->getByType($type);
         foreach ($categories_by_type as &$typecat) {
             if (
@@ -75,7 +75,7 @@ class Categories {
         return $categories_by_type;
     }
 
-    public function create(int $cat_type, $value) {
+    public function create(int $cat_type, $value): array {
         $query_value = $this->db->valQuote($value);
         $query = "SELECT `cat_name` FROM categories WHERE `cat_type` = $cat_type AND `cat_name` = $query_value";
 
@@ -91,7 +91,7 @@ class Categories {
         return $response;
     }
 
-    public function remove(int $id) {
+    public function remove(int $id): bool {
         $this->db->delete('categories', ['id' => $id], 'LIMIT 1');
 
         return true;

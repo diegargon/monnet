@@ -2,8 +2,8 @@
 
 class AppCtx {
 
-    private array $cfg;
-    private array $lang;
+    private array $cfg = [];
+    private array $lang = [];
     private Database $db;
     private Hosts $hosts;
     private User $user;
@@ -21,7 +21,7 @@ class AppCtx {
 
     /* Autoload class files */
 
-    public function autoload($class_name) {
+    public function autoload(string $class_name): void {
         $file_path = 'class/' . $class_name . '.php';
 
         if (file_exists($file_path)) {
@@ -31,19 +31,19 @@ class AppCtx {
 
     /* Getters */
 
-    public function getAppCfg() {
+    public function getAppCfg(): array {
         return $this->cfg;
     }
 
-    public function getAppDb() {
+    public function getAppDb(): Database {
         return $this->db;
     }
 
-    public function getAppLang() {
+    public function getAppLang(): array {
         return $this->lang;
     }
 
-    public function getAppHosts() {
+    public function getAppHosts(): Hosts {
         if (!isset($this->hosts)) {
             $this->hosts = new Hosts($this);
         }
@@ -51,14 +51,14 @@ class AppCtx {
         return $this->hosts;
     }
 
-    public function getAppUser() {
+    public function getAppUser(): User {
         if (!isset($this->user)) {
             $this->user = new User($this);
         }
         return $this->user;
     }
 
-    public function getAppCategories() {
+    public function getAppCategories(): Categories {
         if (!isset($this->categories)) {
             $this->categories = new Categories($this);
         }
@@ -66,7 +66,7 @@ class AppCtx {
         return $this->categories;
     }
 
-    public function getAppNetworks() {
+    public function getAppNetworks(): Networks {
         if (!isset($this->networks)) {
             $this->networks = new Networks($this);
         }

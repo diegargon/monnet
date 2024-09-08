@@ -11,15 +11,15 @@
 
 class Frontend {
 
-    private $cfg;
-    private $lng;
+    private array $cfg;
+    private array $lng;
 
     public function __construct(array &$cfg, array $lng) {
         $this->cfg = &$cfg; //& due be order config.priv items in some pages, rething that
         $this->lng = $lng;
     }
 
-    function showPage(array $tdata) {
+    function showPage(array $tdata): void {
         $web['main_head'] = $this->cssLinkFile($this->cfg['theme'], $this->cfg['css']);
         $web['main_footer'] = '';
 
@@ -78,7 +78,7 @@ class Frontend {
         echo $this->getTpl('main', array_merge($tdata, $web));
     }
 
-    function getTpl(string $tpl, array $tdata = []) {
+    function getTpl(string $tpl, array $tdata = []): string {
         $lng = $this->lng;
         $cfg = $this->cfg;
 
@@ -90,7 +90,7 @@ class Frontend {
         return ob_get_clean();
     }
 
-    function cssLinkFile(string $theme, string $css) {
+    function cssLinkFile(string $theme, string $css): string {
         $css_file = 'tpl/' . $theme . '/css/' . $css . '.css';
         !file_exists($css_file) ? $css_file = 'tpl/default/css/default.css' : null;
         $css_file .= '?nocache=' . time(); //TODO: To Remove: avoid cache css while dev
@@ -99,19 +99,20 @@ class Frontend {
         return $css_file;
     }
 
-    function scriptLink(string $scriptlink) {
+    function scriptLink(string $scriptlink): string {
         //TODO SEC
         return '<script src="' . $scriptlink . '"></script>' . "\n";
     }
 
-    function msgBox(array $msg) {
+    function msgBox(array $msg): string {
 
         (substr($msg['title'], 0, 2) == 'L_') ? $msg['title'] = $this->lng[$msg['title']] : null;
         (substr($msg['body'], 0, 2) == 'L_') ? $msg['body'] = $this->lng[$msg['body']] : null;
+
         return $this->getTpl('msgbox', $msg);
     }
 
-    function msgPage(array $msg) {
+    function msgPage(array $msg): void {
 
         $footer = $this->getFooter();
         $menu = $this->getMenu();

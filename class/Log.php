@@ -28,7 +28,7 @@ Class Log {
         'LOG_DEBUG' => 7, //	debug-level message
     ];
 
-    public static function init(array &$cfg, Database &$db, array &$lng) {
+    public static function init(array &$cfg, Database &$db, array &$lng): void {
         self::$console = false;
         self::$cfg = &$cfg;
         self::$db = &$db;

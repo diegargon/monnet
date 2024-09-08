@@ -27,7 +27,7 @@ class Items {
         $this->items = $this->db->fetchAll($results);
     }
 
-    public function addItem(string $item_type, array $item_data) {
+    public function addItem(string $item_type, array $item_data): bool {
         if ($item_type == 'bookmarks') {
             $conf = ['url' => $item_data['urlip'], 'image_type' => $item_data['image_type'], 'image_resource' => $item_data['field_img']];
             $set = ['uid' => $this->uid, 'cat_id' => $item_data['cat_id'], 'type' => 'bookmarks', 'title' => $item_data['name'], 'conf' => json_encode($conf), 'weight' => $item_data['weight']];
@@ -39,7 +39,7 @@ class Items {
         return false;
     }
 
-    public function getAll(?string $key_order = null, ?string $dir = 'asc') {
+    public function getAll(?string $key_order = null, ?string $dir = 'asc'): array {
         if (!empty($key_order)) {
             order($this->items, $key_order, $dir);
         }
@@ -47,7 +47,7 @@ class Items {
         return $this->items;
     }
 
-    function remove(int $id) {
+    function remove(int $id): bool {
         foreach ($this->items as $item) {
             if ($item['id'] == $id && $item['uid'] == $this->uid) {
                 $this->db->delete('items', ['id' => $id], 'LIMIT 1');
@@ -58,7 +58,7 @@ class Items {
         return false;
     }
 
-    public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc') {
+    public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc'): array {
         $result = [];
         foreach ($this->items as $item) {
             if ($item['type'] == $type) {
@@ -70,7 +70,7 @@ class Items {
         return $result;
     }
 
-    public function getByCatID($category_id) {
+    public function getByCatID($category_id): array {
         $result = [];
         foreach ($this->items as $item) {
             if ($item['cat_id'] == $category_id) {
@@ -81,7 +81,7 @@ class Items {
         return $result;
     }
 
-    public function getTypes() {
+    public function getTypes(): array {
         $types = array_column($this->items, 'type');
         //To uniq
         $uniq_types = array_unique($types);
