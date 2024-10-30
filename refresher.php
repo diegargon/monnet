@@ -403,6 +403,7 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
 }
 
 /* Set show/hide host-details */
+
 if ($command === 'host-details' && is_numeric($command_value)) {
     $host_id = $command_value;
     $host_details = get_host_detail_view_data($ctx, $host_id);
@@ -576,28 +577,37 @@ $logs = [];
 $type_mark = '';
 
 $host_logs = Log::getLoghosts($cfg['term_max_lines']);
-if (valid_array($host_logs)) {
+
+if (!empty($host_logs)) {
+    foreach ($host_logs as &$log) {
+        $log['type_mark'] = '[H]';
+    }
     $logs = $host_logs;
 }
+
+
 if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
     $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
-    if (valid_array($system_logs)) {
-        foreach ($logs as $key => $log) {
-            $logs[$key]['type_mark'] = '[H]';
-        }
-        foreach ($system_logs as $key => $system_log) {
-            $system_logs[$key]['type_mark'] = '[S]';
+    if (empty($system_logs)) {
+        foreach ($system_logs as &$system_log) {
+            $system_logs['type_mark'] = '[S]';
         }
         $logs = array_merge($logs, $system_logs);
     }
 }
 
-usort($logs, function ($a, $b) {
-    $dateA = strtotime($a['date']);
-    $dateB = strtotime($b['date']);
+foreach ($logs as &$log) {
+    $log['timestamp'] = strtotime($log['date']);
+}
 
-    return ($dateA < $dateB) ? 1 : -1;
+usort($logs, function ($a, $b) {
+    return $b['timestamp'] <=> $a['timestamp'];
 });
+
+foreach ($logs as &$log) {
+    unset($log['timestamp']);
+}
+
 //If we add systems logs probably we exceed the max
 if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {
     $term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
