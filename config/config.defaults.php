@@ -44,7 +44,7 @@ $cfg['log_file_owner_group'] = 'www-data';
  */
 $cfg['term_log_level'] = 7;
 $cfg['term_system_log_level'] = 5;
-$cfg['term_max_lines'] = 200;
+$cfg['term_max_lines'] = 50;
 $cfg['term_show_system_logs'] = 'LOG_ERR'; // Empty for no or LOG_LEVEL, need log_to_db
 $cfg['term_date_format'] = '[d][H:i]';
 $cfg['timezone'] = 'UTC';
