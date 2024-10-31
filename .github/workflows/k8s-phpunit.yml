@@ -45,7 +45,10 @@ jobs:
             echo 'Waiting for MySQL...'
             sleep 1
           done      
-          
+
+      - name: Check containers
+        run: docker-compose ps          
+
       - name: ls
         run: |
           # Ejecutar las pruebas en el contenedor PHP
