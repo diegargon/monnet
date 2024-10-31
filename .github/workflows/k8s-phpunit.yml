@@ -28,11 +28,10 @@ jobs:
         run: docker-compose --version
 
       - name: Build Docker images
-        run: docker-compose -f ci-docker/docker-compose.yml up --build -d
- #       run: docker-compose -f ci-docker/docker-compose.yml build --no-cache
+        run: docker-compose -f ci-docker/docker-compose.yml build --no-cache
 
-#      - name: Run Docker containers
-#        run: docker-compose -f ci-docker/docker-compose.yml up -d
+      - name: Run Docker containers
+        run: docker-compose -f ci-docker/docker-compose.yml up -d
 
       - name: Check php container logs
         run: docker-compose -f ci-docker/docker-compose.yml logs php
