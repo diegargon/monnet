@@ -44,12 +44,16 @@ jobs:
             echo 'Waiting for MySQL...'
             sleep 1
           done      
+          
+      - name: ls
+        run: |
+          # Ejecutar las pruebas en el contenedor PHP
+          docker-compose exec ls -al
 
       - name: Run PHPUnit tests
         run: |
-          ls -al
           # Ejecutar las pruebas en el contenedor PHP
-          docker-compose exec php ./vendor/bin/phpunit
+          docker-compose exec php ./vendor/bin/phpunit --configuration phpunit.xml
 
       - name: Shutdown Docker containers
         run: |
