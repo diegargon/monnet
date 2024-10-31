@@ -6,11 +6,6 @@ COPY . /myapp
 RUN ls -la /myapp
 WORKDIR /myapp
 
-ARG CACHE_BUSTER=1 
-RUN ls -la  --cache-bust=$CACHE_BUSTER
-
-COPY ../config/config.defaults.php /etc/monnet/config.inc.php
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN composer require --dev phpunit/phpunit ^9
