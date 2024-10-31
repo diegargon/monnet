@@ -14,7 +14,7 @@
 $cfg_db['dbtype'] = 'mysql';
 $cfg_db['dbhost'] = 'mysql';
 $cfg_db['dbname'] = 'monnet';
-$cfg_db['dbuser'] = 'monnet';
+$cfg_db['dbuser'] = 'root';
 $cfg_db['dbpassword'] = 'monnetadmin';
 $cfg_db['dbprefix'] = '';
 $cfg_db['dbcharset'] = 'utf8';
