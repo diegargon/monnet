@@ -12,4 +12,6 @@ RUN composer require --dev phpunit/phpunit ^9
 RUN ls -la
 RUN ls -la vendor/bin
 
+RUN /vendor/bin/phpunit --version
+
 CMD ["./vendor/bin/phpunit"]]
