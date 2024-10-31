@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y curl git unzip
 RUN apt install -y default-mysql-client && docker-php-ext-install mysqli pdo pdo_mysql
 
 COPY . /var/www/html/
+COPY config/config.defaults.php /etc/monnet/config.inc.php
+
 WORKDIR /var/www/html
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

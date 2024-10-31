@@ -21,7 +21,7 @@ jobs:
 
       - name: Start MySQL service
         run: |
-          docker run --name mysql-service -e MYSQL_ROOT_PASSWORD=monnetadmin -e MYSQL_DATABASE=monnet -d mysql:8.0
+          docker run --name mysql-service -e MYSQL_ROOT_PASSWORD=monnetadmin -e MYSQL_DATABASE=monnet -d mysql:8
 
       - name: Wait for MySQL to start
         run: sleep 10  # Espera a que MySQL esté listo
