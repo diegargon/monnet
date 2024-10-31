@@ -55,8 +55,9 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 
 ## Config
 
-Copy  config/config.defaults.php  to  /etc/monnet/config.inc.php and change whatever you want, you
-can remove all unnchaged config. Don't rename or modify directly config.defaults.php 
+Copy  config/config.defaults.php  to  /etc/monnet/config.inc.php and change whatever you want
+It's better remove all unnchaged config or just create the file with only the necessary changes.
+Don't rename or modify directly config.defaults.php 
 
 ## Load the sql
 
