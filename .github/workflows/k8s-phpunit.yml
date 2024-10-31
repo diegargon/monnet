@@ -16,8 +16,20 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image
-        run: docker build -t my-app:latest -f docker/Dockerfile-phpunit .
+      - name: Build and run Docker containers
+        # Iniciar los servicios definidos en docker-compose
+        run: docker-compose up -d --build    
 
-      - name: Run Docker container
-        run: docker run --rm my-app:latest   
+      - name: Wait for MySQL to be ready
+        # TODO check
+        run: sleep 30            
+
+      - name: Run PHPUnit tests
+        run: |
+          # Ejecutar las pruebas en el contenedor PHP
+          docker-compose exec php ./vendor/bin/phpunit
+
+      - name: Shutdown Docker containers
+        run: |
+          # Apagar y eliminar los contenedores
+          docker-compose down
