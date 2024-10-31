@@ -2,7 +2,7 @@ FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y curl git unzip
 
-RUN default-mysql-client && docker-php-ext-install mysqli pdo pdo_mysql
+RUN apt install -y default-mysql-client && docker-php-ext-install mysqli pdo pdo_mysql
 
 COPY . /var/www/html/
 WORKDIR /var/www/html
