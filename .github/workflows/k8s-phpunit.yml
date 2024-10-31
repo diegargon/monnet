@@ -10,8 +10,6 @@ jobs:
     runs-on: arc-runner-set-monnet
     
     steps:    
-      - name: Prune 2
-        run: docker buildx build prune 
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -45,4 +43,5 @@ jobs:
         run: docker-compose -f ci-docker/docker-compose.yml down
 
       - name: Prune
+        if: ${{ always() }}
         run: docker-compose  build prune
