@@ -6,7 +6,9 @@ COPY . /myapp
 RUN ls -la /myapp
 WORKDIR /myapp
 
-COPY config/config.defaults.php /etc/monnet/config.inc.php
+RUN ls -la
+
+COPY ../config/config.defaults.php /etc/monnet/config.inc.php
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
