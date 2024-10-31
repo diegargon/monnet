@@ -20,7 +20,7 @@ jobs:
         run: docker buildx version  
 
       - name: Build Docker image
-        run: docker build -t my-app:latest -f docker/Dockerfile-phpunit .
+        run: docker build -t my-app:latest -f ci-docker/Dockerfile-phpunit .
 
       - name: Run Docker container
         run: docker run --rm my-app:latest        
