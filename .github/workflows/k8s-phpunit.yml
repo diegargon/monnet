@@ -21,7 +21,7 @@ jobs:
 
       - name: Build docker-compose
         # Before the cache, it was "run: docker compose build".
-        run: docker buildx bake --file docker-compose.yml --file docker-compose-cache.json
+        run: docker buildx bake --file docker/docker-compose.yml --file docker-compose-cache.json
 
 
       - name: Wait for MySQL to be ready
