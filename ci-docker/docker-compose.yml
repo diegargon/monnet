@@ -8,8 +8,6 @@ services:
       DB_USER: monnet
       DB_PASSWORD: monnetadmin
       DB_NAME: monnet
-    volumes:
-      - ./myapp:/myapp
     depends_on:
       - mysql
 
