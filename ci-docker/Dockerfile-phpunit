@@ -14,4 +14,4 @@ RUN ls -la vendor/bin
 
 RUN ./vendor/bin/phpunit --version
 
-CMD ["./vendor/bin/phpunit"]]
+CMD ["./vendor/bin/phpunit"]
