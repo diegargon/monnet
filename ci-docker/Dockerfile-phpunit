@@ -9,7 +9,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN composer require --dev phpunit/phpunit ^9
 
-RUN cp config/config.defaults.php etc/config.inc.php
+RUN mkdir -p /etc/monnet
+RUN cp config/config.defaults.php /etc/monnet/config.inc.php
 
 RUN ./vendor/bin/phpunit --version
 
