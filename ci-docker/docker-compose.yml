@@ -1,7 +1,7 @@
 services:
   php:
     build:
-      context: .
+      context: ..
       dockerfile: ci-docker/Dockerfile-phpunit
     environment:
       DB_HOST: mysql
