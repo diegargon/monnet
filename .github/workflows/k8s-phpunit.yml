@@ -27,9 +27,12 @@ jobs:
       - name: Check Docker Compose version
         run: docker-compose --version
 
-      - name: Build and run Docker containers
+      - name: Build Docker images
+        run: docker-compose -f ci-docker/docker-compose.yml build
+
+      - name: Run Docker containers
         run: |
-          docker-compose -f ci-docker/docker-compose.yml up --build -d
+          docker-compose -f ci-docker/docker-compose.yml up -d  # Ejecuta los contenedores
 
       - name: Check php container logs
         run: docker-compose -f ci-docker/docker-compose.yml logs php
