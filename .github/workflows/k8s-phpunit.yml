@@ -36,6 +36,9 @@ jobs:
             docker-compose build
             docker-compose up -d
 
+      - name: Where  we are
+        run: ls -al
+
       - name: Wait for MySQL to be ready
         run: |
           for i in {30..0}; do
