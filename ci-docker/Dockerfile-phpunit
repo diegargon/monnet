@@ -1,6 +1,7 @@
 FROM php:8.2-cli
 
 RUN apt-get update && apt-get install -y curl git unzip
+RUN docker-php-ext-install mysqli
 
 RUN pwd
 COPY . /myapp
