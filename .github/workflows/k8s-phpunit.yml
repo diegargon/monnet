@@ -48,6 +48,7 @@ jobs:
       - name: Run PHPUnit tests
         run: |
           cd ..
+          ls -al
           # Ejecutar las pruebas en el contenedor PHP
           docker-compose exec php ./vendor/bin/phpunit
 
