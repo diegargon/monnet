@@ -13,7 +13,7 @@ RUN composer require --dev phpunit/phpunit ^9
 RUN mkdir -p /etc/monnet
 RUN cp config/config.defaults.php /etc/monnet/config.inc.php
 
-COPY ci-docker/entry.sh /usr/local/bin/entry.sh
+RUN cp ci-docker/entry.sh /usr/local/bin/entry.sh
 RUN chmod +x /usr/local/bin/entry.sh
 
 RUN ./vendor/bin/phpunit --version
