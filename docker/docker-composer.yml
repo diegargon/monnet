@@ -16,7 +16,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: monnet
-      MYSQL_USER: root
+      MYSQL_USER: monnet
       MYSQL_PASSWORD: monnetadmin
       MYSQL_ROOT_PASSWORD: monnetadmin
     ports:
