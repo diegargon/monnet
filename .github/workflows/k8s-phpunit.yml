@@ -41,3 +41,6 @@ jobs:
 
       - name: Shutdown Docker containers
         run: docker-compose -f ci-docker/docker-compose.yml down
+
+      - name: Prune
+        run: docker-compose  build prune
