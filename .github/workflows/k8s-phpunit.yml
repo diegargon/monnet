@@ -10,6 +10,9 @@ jobs:
     runs-on: arc-runner-set-monnet
     
     steps:
+      - name: Prune
+        run: docker-compose  build prune        
+
       - name: Checkout code
         uses: actions/checkout@v3
 
