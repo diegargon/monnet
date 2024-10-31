@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   php:
     build:
       context: .
-      dockerfile: docker/Dockerfile-phpunit
+      dockerfile: ci-docker/Dockerfile-phpunit
     environment:
       DB_HOST: mysql
       DB_USER: monnet
