@@ -1,4 +1,4 @@
 #!/bin/sh
 ls -al
-mysql -uroot -pmonnetadmin monnet < /monnet.sql
+mysql -uroot -pmonnetadmin monnet < /var/www/html/config/monnet.sql
 exec ./vendor/bin/phpunit
