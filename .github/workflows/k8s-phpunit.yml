@@ -27,22 +27,11 @@ jobs:
       - name: Check Docker Compose version        
         run: docker-compose --version
 
-      - name: Check current directory 1
-        if: ${{ always() }}
-        run: pwd
-
       - name: Build Docker images
         run: docker-compose -f ./ci-docker/docker-compose.yml build --no-cache
 
-      - name: Check current directory 2
-        if: ${{ always() }}
-        run: pwd
-
       - name: Run Docker containers
         run: docker-compose -f ./ci-docker/docker-compose.yml up -d
-
-      - name: Check current directory 3
-        run: pwd
 
       - name: Check php container logs
         run: docker-compose -f ci-docker/docker-compose.yml logs php

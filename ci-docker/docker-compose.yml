@@ -1,8 +1,8 @@
 services:
   php:
     build:
-      context: .
-      dockerfile: Dockerfile-phpunit
+      context: ..
+      dockerfile: ci-docker/Dockerfile-phpunit
     environment:
       DB_HOST: mysql
       DB_USER: monnet
