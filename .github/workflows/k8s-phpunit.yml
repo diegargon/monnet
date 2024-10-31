@@ -16,15 +16,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Check Docker version
+      - name: Check Docker BuildX version
         run: docker buildx version  
 
-      - name: Check Docker Composer version
-        run: docker buildx composer version  
-        
-      - name: Build and run Docker containers
-        # Iniciar los servicios definidos en docker-compose
-        run: docker compose up -d --build    
+      - name: Build docker-compose
+        # Before the cache, it was "run: docker compose build".
+        run: docker buildx bake --file docker-compose.yml --file docker-compose-cache.json
+
 
       - name: Wait for MySQL to be ready
         # TODO check
