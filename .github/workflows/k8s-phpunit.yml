@@ -11,8 +11,9 @@ jobs:
     
     steps:
       - name: Prune
-        run: docker-compose  build prune        
-
+        run: docker-compose build prune        
+      - name: Prune 2
+        run: docker buildx build prune 
       - name: Checkout code
         uses: actions/checkout@v3
 
