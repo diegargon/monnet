@@ -38,3 +38,6 @@ jobs:
         
       - name: Check containers
         run: docker-compose -f ci-docker/docker-compose.yml ps          
+
+      - name: Shutdown Docker containers
+        run: docker-compose -f ci-docker/docker-compose.yml down
