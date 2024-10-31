@@ -48,7 +48,7 @@ jobs:
       - name: ls
         run: |
           # Ejecutar las pruebas en el contenedor PHP
-          docker-compose exec ls -al
+          docker-compose exec php ls -al
 
       - name: Run PHPUnit tests
         run: |
