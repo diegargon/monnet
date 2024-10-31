@@ -28,12 +28,14 @@ jobs:
         run: docker-compose --version
 
       - name: Check current directory 1
+        if: ${{ always() }}
         run: pwd
 
       - name: Build Docker images
         run: docker-compose -f ./ci-docker/docker-compose.yml build --no-cache
 
       - name: Check current directory 2
+        if: ${{ always() }}
         run: pwd
 
       - name: Run Docker containers
