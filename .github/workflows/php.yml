@@ -1,4 +1,4 @@
-name: Deploy Testt
+name: Deploy Test
 
 on:
   push:
