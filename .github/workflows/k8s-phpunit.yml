@@ -31,3 +31,8 @@ jobs:
         run: |
           docker-compose -f ci-docker/docker-compose.yml up --build -d
 
+      - name: Check php container logs
+        run: docker-compose -f ci-docker/docker-compose.yml logs php
+
+      - name: Check mysql container logs
+        run: docker-compose -f ci-docker/docker-compose.yml logs php
