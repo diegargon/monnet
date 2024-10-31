@@ -29,7 +29,7 @@ jobs:
         run: docker-compose --version
 
       - name: Build docker-compose
-        run: docker-compose -f docker-compose.yml up --build -d
+        run: docker-compose -f docker/docker-compose.yml up --build -d
 
       - name: Wait for MySQL to be ready
         # TODO check
