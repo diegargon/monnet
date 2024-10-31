@@ -10,7 +10,7 @@ services:
       DB_NAME: monnet
     volumes:
       - .:/myapp
-    working_dir: /myapp      
+    working_dir: .      
     depends_on:
       - mysql
 
