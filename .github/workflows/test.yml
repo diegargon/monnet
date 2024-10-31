@@ -1,4 +1,4 @@
-name: Deploy Simple
+name: Deploy Test
 
 on:
   push:
