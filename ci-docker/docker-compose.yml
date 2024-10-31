@@ -10,6 +10,8 @@ services:
       DB_NAME: monnet
     volumes:
       - .:/myapp # Montar el código de la aplicación
+    depends_on:
+      - mysql
 
   mysql:
     image: mysql:8.0
