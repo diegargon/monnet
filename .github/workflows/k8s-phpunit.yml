@@ -44,4 +44,4 @@ jobs:
 
       - name: Prune
         if: ${{ always() }}
-        run: docker-compose  -f ci-docker/docker-compose.yml build prune
+        run: docker image prune -f
