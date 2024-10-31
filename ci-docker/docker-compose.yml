@@ -10,3 +10,15 @@ services:
       DB_NAME: monnet
     volumes:
       - .:/myapp # Montar el código de la aplicación
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: monnet
+      MYSQL_USER: monnet
+      MYSQL_PASSWORD: monnetadmin
+      MYSQL_ROOT_PASSWORD: monnetadmin
+    ports:
+      - "3306:3306"  # Exponer el puerto para pruebas locales si es necesario
