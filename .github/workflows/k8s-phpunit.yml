@@ -9,9 +9,7 @@ jobs:
   build:
     runs-on: arc-runner-set-monnet
     
-    steps:
-      - name: Prune
-        run: docker-compose build prune        
+    steps:    
       - name: Prune 2
         run: docker buildx build prune 
       - name: Checkout code
