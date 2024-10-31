@@ -33,7 +33,8 @@ jobs:
       - name: Build docker-compose
         run: |
             cd ci-docker
-            docker-compose -f docker-compose.yml up --build -d
+            docker-compose build
+            docker-compose up -d
 
       - name: Wait for MySQL to be ready
         run: |
