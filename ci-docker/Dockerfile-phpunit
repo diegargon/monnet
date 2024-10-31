@@ -13,9 +13,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer require --dev phpunit/phpunit ^9
 
 RUN mkdir -p /myapp/etc/monnet
-COPY config/config.defaults.php /myapp/etc/monnet/config.inc.php
+RUN cp config/config.defaults.php /myapp/etc/monnet/config.inc.php
 
-COPY ci-docker/entry.sh /myapp/usr/local/bin/entry.sh
+RUN ci-docker/entry.sh /myapp/usr/local/bin/entry.sh
 RUN chmod +x /myapp/usr/local/bin/entry.sh
 
 RUN ./vendor/bin/phpunit --version
