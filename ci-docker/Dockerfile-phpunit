@@ -1,21 +1,14 @@
-FROM php:8.2-cli
+FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y curl git unzip
-RUN docker-php-ext-install mysqli
 
-COPY . /myapp
-WORKDIR /myapp
+RUN default-mysql-client && docker-php-ext-install mysqli pdo pdo_mysql
+
+COPY . /var/www/html/
+WORKDIR /var/www/html
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN composer require --dev phpunit/phpunit ^9
 
-COPY config/config.defaults.php /etc/monnet/config.inc.php
-
-COPY ci-docker/entry.sh /usr/local/bin/entry.sh
-RUN chmod +x /usr/local/bin/entry.sh
-
-RUN ./vendor/bin/phpunit --version
-
-#CMD ["./vendor/bin/phpunit"]
-CMD ["/usr/local/bin/entry.sh"]
+CMD ["./vendor/bin/phpunit"]
