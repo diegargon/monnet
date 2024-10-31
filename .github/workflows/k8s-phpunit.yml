@@ -27,8 +27,13 @@ jobs:
       - name: Check Docker Compose version
         run: docker-compose --version
 
+      - name: List files in the ci-docker directory
+        run: ls -la /home/runner/_work/monnet/monnet/ci-docker 
+
       - name: Build docker-compose
-        run: docker-compose -f ci-docker/docker-compose.yml up --build -d
+        run: |
+            cd ci-docker
+            docker-compose -f docker-compose.yml up --build -d
 
       - name: Wait for MySQL to be ready
         # TODO check
