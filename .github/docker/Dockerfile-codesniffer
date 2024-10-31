@@ -1,0 +1,15 @@
+FROM php:8.2-cli
+
+RUN apt-get update && apt-get install -y curl git unzip
+
+COPY . /myapp
+RUN ls -la /myapp
+WORKDIR /myapp
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN composer global require "squizlabs/php_codesniffer=*"
+
+ENV PATH="$PATH:/root/.composer/vendor/bin"
+
+CMD ["phpcs", "--standard=/myapp/misc/phpcs.xml", "."]

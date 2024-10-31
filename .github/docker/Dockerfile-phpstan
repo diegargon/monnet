@@ -1,0 +1,21 @@
+FROM php:8.2-cli
+
+RUN apt-get update && apt-get install -y curl git unzip
+
+RUN echo "memory_limit = 512M" > $PHP_INI_DIR/php.ini
+
+COPY . /myapp
+
+WORKDIR /myapp
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN composer require --dev phpstan/phpstan
+
+RUN ls -la /myapp
+RUN ls -la /myapp/vendor/bin
+
+
+ENV PATH="$PATH:/root/.composer/vendor/bin:/myapp/vendor/bin"
+
+CMD ["phpstan", "analyse", "--configuration=/myapp/misc/phpstan.neon", "."]
