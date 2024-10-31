@@ -14,4 +14,4 @@ RUN cp config/config.defaults.php /etc/monnet/config.inc.php
 
 RUN ./vendor/bin/phpunit --version
 
-CMD ["./vendor/bin/phpunit"]
+#CMD ["./vendor/bin/phpunit"]

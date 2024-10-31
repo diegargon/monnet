@@ -31,8 +31,7 @@ jobs:
         run: docker-compose -f ci-docker/docker-compose.yml build
 
       - name: Run Docker containers
-        run: |
-          docker-compose -f ci-docker/docker-compose.yml up -d  # Ejecuta los contenedores
+        run: docker-compose -f ci-docker/docker-compose.yml up -d
 
       - name: Check php container logs
         run: docker-compose -f ci-docker/docker-compose.yml logs php
