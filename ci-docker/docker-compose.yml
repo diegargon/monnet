@@ -9,7 +9,7 @@ services:
       DB_PASSWORD: monnetadmin
       DB_NAME: monnet
     volumes:
-      - ..:/myapp
+      - ./myapp:/myapp
     depends_on:
       - mysql
 
