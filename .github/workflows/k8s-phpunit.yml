@@ -16,9 +16,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Check Docker Compose version
+        run: docker compose version  
+
       - name: Build and run Docker containers
         # Iniciar los servicios definidos en docker-compose
-        run: docker-compose up -d --build    
+        run: docker compose up -d --build    
 
       - name: Wait for MySQL to be ready
         # TODO check
