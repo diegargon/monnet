@@ -12,7 +12,7 @@
 /* Db Config */
 
 $cfg_db['dbtype'] = 'mysql';
-$cfg_db['dbhost'] = 'localhost';
+$cfg_db['dbhost'] = 'mysql';
 $cfg_db['dbname'] = 'monnet';
 $cfg_db['dbuser'] = 'monnet';
 $cfg_db['dbpassword'] = 'monnetadmin';
