@@ -6,7 +6,8 @@ COPY . /myapp
 RUN ls -la /myapp
 WORKDIR /myapp
 
-RUN ls -la
+ARG CACHE_BUSTER=1 
+RUN ls -la  --cache-bust=$CACHE_BUSTER
 
 COPY ../config/config.defaults.php /etc/monnet/config.inc.php
 
