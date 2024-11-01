@@ -18,4 +18,4 @@ RUN ls -la /myapp/vendor/bin
 
 ENV PATH="$PATH:/root/.composer/vendor/bin:/myapp/vendor/bin"
 
-CMD ["phpstan", "analyse", "--configuration=/myapp/misc/phpstan.neon", "."]
+CMD ["phpstan", "analyse", "--configuration=/myapp/ci-docker/phpstan.neon", "."]

@@ -1,0 +1,6 @@
+parameters:
+    level: max
+    excludePaths:
+        - /myapp/tests
+        - /myapp/vendor
+        - /myapp/misc
