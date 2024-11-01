@@ -7,6 +7,7 @@ RUN apt install -y default-mysql-client && docker-php-ext-install mysqli pdo pdo
 COPY . /var/www/html/
 COPY config/config.defaults.php /etc/monnet/config.inc.php
 COPY ci-docker/entry.sh /usr/local/bin/entry.sh
+RUN chmod +x /usr/local/bin/entry.sh
 
 WORKDIR /var/www/html
 
