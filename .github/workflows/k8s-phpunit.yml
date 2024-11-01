@@ -38,7 +38,7 @@ jobs:
       - name: Wait for MySQL to start
         run: |
           for i in {1..30}; do
-            if mysql -h mysql-service -uroot -pmonnetadmin -e "SELECT 1;" >/dev/null 2>&1; then
+            if mysql -h 127.0.0.1 -uroot -pmonnetadmin -e "SELECT 1;" >/dev/null 2>&1; then
               echo "MySQL is up and running!"
               break
             fi
