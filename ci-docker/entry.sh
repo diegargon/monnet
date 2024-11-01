@@ -1,8 +1,6 @@
 #!/bin/sh
 
-systemctl start mysql
-
-sudo /etc/init.d/mysql start
+/etc/init.d/mysql start
 
 ping -c 1 192.168.1.1
 ping -c 4 mysql-service

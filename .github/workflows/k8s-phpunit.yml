@@ -73,5 +73,10 @@ jobs:
         if: ${{ always() }}
         run: docker ps -a
 
+      - name: Get IP addresses of all containers
+        run: |
+          echo "Container IP Addresses:"
+          docker inspect -f '{{.Name}}: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+
       - name: Run Docker container
         run: docker run --rm my-app:latest   
