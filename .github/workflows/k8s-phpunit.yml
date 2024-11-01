@@ -19,7 +19,7 @@ jobs:
           - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping -h localhost"
-          --health-interval=30s
+          --health-interval=10s
           --health-timeout=5s
           --health-retries=3
 
@@ -32,7 +32,7 @@ jobs:
           mysql --version
           mysql \
             --host 172.17.0.1 \
-            --port ${{ job.services.mysql.ports['3306'] }} \
+            --port 3306 \
             -uroot -psecret -e "SHOW DATABASES;"
 
       - name: Checkout code
@@ -41,7 +41,7 @@ jobs:
       - name: Install MySQL client
         run: |
           sudo apt-get update
-          sudo apt-get install -y default-mysql-client
+          sudo apt-get install -y mysql-client
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
