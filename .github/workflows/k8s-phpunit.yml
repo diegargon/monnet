@@ -38,11 +38,6 @@ jobs:
             --host 127.0.0.1 \
             --port 3306 \
             -uroot -pmonnetadmin -e "SHOW DATABASES;"          
-          ls -al
-          ls -al ..
-          ls -al /home/runner/_work/          
-          pwd
-          ping -c 2 mysql-service
 
       - name: Wait for MySQL to start
         run: |
