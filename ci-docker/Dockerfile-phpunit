@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y curl git unzip
+RUN apt-get update && apt-get install -y curl git unzip  iputils-ping
 
 RUN apt install -y default-mysql-client && docker-php-ext-install mysqli pdo pdo_mysql
 
