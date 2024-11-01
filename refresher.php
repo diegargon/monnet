@@ -233,9 +233,11 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $user->toggleHostsCat($command_value);
 }
 
-if ($command == 'show_host_cat' || $command == 'show_host_only_cat' &&
-        isset($command_value) && is_numeric($command_value)) {
-
+if (
+        $command == 'show_host_cat' ||
+        $command == 'show_host_only_cat' &&
+        isset($command_value) && is_numeric($command_value)
+) {
     $hosts_categories = $user->getHostsCats();
 
     //Not show empty cats
@@ -268,7 +270,10 @@ if ($command == 'show_host_cat' || $command == 'show_host_only_cat' &&
 /* /end Host Cat */
 
 /* ADD NETWORK */
-if ($command == 'addNetwork' && !empty($command_value)) {
+if (
+        $command == 'addNetwork' &&
+        !empty($command_value)
+) {
     $decodedJson = json_decode($command_value, true);
 
     if ($decodedJson === null) {
@@ -324,7 +329,10 @@ if ($command == 'addNetwork' && !empty($command_value)) {
 
 /* ADD Bookmark */
 
-if ($command == 'addBookmark' && !empty($command_value)) {
+if (
+        $command == 'addBookmark' &&
+        !empty($command_value)
+) {
     $decodedJson = json_decode($command_value, true);
 
     if ($decodedJson === null) {
@@ -488,7 +496,8 @@ if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($comman
 /* Host and Bookmarks create category */
 if (
         ($command == 'submitBookmarkCat' || $command == 'submitHostsCat') &&
-        !empty($command_value)) {
+        !empty($command_value)
+) {
     $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;
     $response = $ctx->getAppCategories()->create($cat_type, $command_value);
     ($response['success']) ? $data['response_msg'] = $response['msg'] :
@@ -499,7 +508,8 @@ if (
 
 if (
         ($command == 'removeBookmarkCat' || $command == 'removeHostsCat') &&
-        !empty($command_value) && is_numeric($command_value)) {
+        !empty($command_value) && is_numeric($command_value)
+) {
     $cat_type = ($command == 'removeBookmarkCat') ? 2 : 1;
     if ($cat_type == 2 && $command_value == 50) {
         $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];

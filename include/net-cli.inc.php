@@ -8,7 +8,6 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
 function check_known_hosts(AppCtx $ctx)
 {
     $lng = $ctx->getAppLang();
@@ -178,7 +177,8 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0)
         $vendor = [];
         $update = [];
 
-        if ((!empty($host['mac'])) &&
+        if (
+                (!empty($host['mac'])) &&
                 (empty($host['mac_vendor']) || $forceall === 1)
         ) {
             Log::debug("Getting mac vendor for {$host['display_name']}");
@@ -265,7 +265,6 @@ function host_access(array $cfg, Hosts $hosts)
 }
 
 /* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
-
 function ping_host_ports(AppCtx $ctx, array $host)
 {
     $time_now = utc_date_now();

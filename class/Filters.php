@@ -12,8 +12,6 @@
 // phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Filters
 {
-
-//POST/GET
     public static function getInt($val, $size = PHP_INT_MAX): int|false
     {
         if (!isset($_GET[$val])) {
@@ -221,8 +219,11 @@ class Filters
     public static function varAzChar($var, $max_size = null, $min_size = null): string|false
     {
 
-        if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-                (!empty($min_size) && (strlen($var) < $min_size))) {
+        if (
+                (empty($var) ) ||
+                (!empty($max_size) && (strlen($var) > $max_size) ) ||
+                (!empty($min_size) && (strlen($var) < $min_size))
+        ) {
             return false;
         }
         if (!preg_match('/^[A-Za-z]+$/', $var)) {
@@ -255,7 +256,9 @@ class Filters
     {
         $length = strlen($var);
 
-        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
+        if (
+                empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
+        ) {
             return false;
         }
         /*
@@ -302,7 +305,9 @@ class Filters
         //Filter name, only az, no special chars, no spaces
         $length = strlen($var);
 
-        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
+        if (
+                empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
+        ) {
             return false;
         }
         /*
@@ -345,7 +350,9 @@ class Filters
         $length = strlen($var);
 
         // Validar longitud y formato de correo electrónico
-        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
+        if (
+                empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
+        ) {
             return false;
         }
 
@@ -391,7 +398,9 @@ class Filters
         //TODO allow only alphanumerics and _
         $length = strlen($var);
 
-        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
+        if (
+                empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
+        ) {
             return false;
         }
 
@@ -424,7 +433,8 @@ class Filters
     public static function varPassword($var, $max_size = null, $min_size = null): string|false
     {
         //Password validate safe password
-        if ((!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
+        if (
+                (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
         ) {
             return false;
         }
@@ -588,9 +598,12 @@ class Filters
     }
 
     //Custom String
-    public static
-            function postCustomString(string $val, string $validSpecial, int $max_size = null, int $min_size = null)
-    : string|false
+    public static function postCustomString(
+            string $val,
+            string $validSpecial,
+            int $max_size = null,
+            int $min_size = null
+    ): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -599,9 +612,12 @@ class Filters
         return self::varCustomString($_POST[$val], $validSpecial, $max_size, $min_size);
     }
 
-    public static
-            function getCustomString(string $val, string $validSpecial, int $max_size = null, int $min_size = null)
-    : string|false
+    public static function getCustomString(
+            string $val,
+            string $validSpecial,
+            int $max_size = null,
+            int $min_size = null
+    ): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -610,9 +626,12 @@ class Filters
         return self::varCustomString($_GET[$val], $validSpecial, $max_size, $min_size);
     }
 
-    public static
-            function varCustomString(string $var, string $validSpecialChars, int $max_size = null, int $min_size = null)
-    : string|false
+    public static function varCustomString(
+            string $var,
+            string $validSpecialChars,
+            int $max_size = null,
+            int $min_size = null
+    ): string|false
     {
         // Define el conjunto predeterminado de caracteres (AZaz y números)
         $validChars = 'A-Za-z0-9';
@@ -635,7 +654,6 @@ class Filters
     }
 
     /* Domain */
-
     public static function getDomain($val, $size = null): string|false
     {
         if (empty($_GET[$val])) {
@@ -670,7 +688,6 @@ class Filters
     }
 
     /* Hostname */
-
     public static function getHostname($val, $size = null): string|false
     {
         if (empty($_GET[$val])) {

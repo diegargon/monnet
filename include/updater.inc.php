@@ -8,8 +8,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
-function trigger_update(Database $db, float $db_version, float $monnet_version)
+function trigger_update(Database $db, float $db_version, float $monnet_version): void
 {
     Log::notice("Triggered updater Files: $monnet_version DB: $db_version");
 
@@ -113,12 +112,14 @@ function trigger_update(Database $db, float $db_version, float $monnet_version)
     }
 }
 
-$query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
-$result = $db->fetchAll($query);
+if ($db) {
+    $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
+    $result = $db->fetchAll($query);
 
-$db_version = (float) $result[0]['pref_value'];
-$monnet_version = $cfg['monnet_version'];
+    $db_version = (float) $result[0]['pref_value'];
+    $monnet_version = $cfg['monnet_version'];
 
-if ($monnet_version > $db_version) {
-    trigger_update($db, $db_version, $monnet_version);
+    if ($monnet_version > $db_version) {
+        trigger_update($db, $db_version, $monnet_version);
+    }
 }

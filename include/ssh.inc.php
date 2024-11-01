@@ -71,8 +71,7 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts)
     $result = $db->select('cmd', '*');
     $cmds = $db->fetchAll($result);
 
-    foreach ($cmds as $cmd)
-    {
+    foreach ($cmds as $cmd) {
         $run_command = $cfg['commands'][$cmd['cmd_type']];
         $hid = $cmd['hid'];
         Log::notice("Run command {$cmd['cmd_type']}:$hid");
@@ -96,11 +95,9 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts)
         if (!$ssh) {
             continue;
         }
-        try
-        {
+        try {
             ssh_exec($ssh, $result, $run_command);
-        } catch (Exception $e)
-        {
+        } catch (Exception $e) {
             //avoid error on shutdown and reboot catch it for ignore
             if ($cmd['cmd_type'] == 1 || $cmd['cmd_type'] == 2) {
                 //echo $e;

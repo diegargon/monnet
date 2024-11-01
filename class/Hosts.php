@@ -188,7 +188,6 @@ class Hosts
         $hosts_by_cat = [];
 
         foreach ($this->hosts as $host) {
-
             if ($host['category'] == $cat_id) {
                 $hosts_by_cat[] = $host;
             }

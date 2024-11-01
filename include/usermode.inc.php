@@ -8,7 +8,11 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
+/**
+ *
+ * @var Config|null $cfg An instance of Config or null if not defined
+ * @var AppCtx|null ctx An instance of AppCtx or null if not defined
+ */
 do_initial_usermode_checks($cfg);
 
 session_name('monnet');

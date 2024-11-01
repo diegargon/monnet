@@ -19,14 +19,14 @@ class Log
     private static Database $db;
     private static array $lng;
     private static $LOG_TYPE = [
-        'LOG_EMERG' => 0, // 	system is unusable
-        'LOG_ALERT' => 1, // 	action must be taken immediately UNUSED
-        'LOG_CRIT' => 2, //     critical conditions
-        'LOG_ERR' => 3, //      error conditions
-        'LOG_WARNING' => 4, // 	warning conditions
-        'LOG_NOTICE' => 5, //	normal, but significant, condition
-        'LOG_INFO' => 6, // 	informational message
-        'LOG_DEBUG' => 7, //	debug-level message
+        'LOG_EMERG' => 0, // system is unusable
+        'LOG_ALERT' => 1, // action must be taken immediately UNUSED
+        'LOG_CRIT' => 2, // critical conditions
+        'LOG_ERR' => 3, // error conditions
+        'LOG_WARNING' => 4, // warning conditions
+        'LOG_NOTICE' => 5, // normal, but significant, condition
+        'LOG_INFO' => 6, // informational message
+        'LOG_DEBUG' => 7, // debug-level message
     ];
 
     public static function init(array &$cfg, Database &$db, array &$lng): void

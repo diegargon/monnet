@@ -378,7 +378,6 @@ class Database
      * $query = $db->selectAll("news", ["frontpage" => ["value"=> 1, "op" => "="], "moderation" => 0, "disabled" => 0]);
      * extra not array
      */
-
     /**
      * Select all fields
      *
@@ -459,7 +458,13 @@ class Database
      * @param string $extra
      * @return array|boolean
      */
-    public function search(string $table, string $s_fields, string $searchText, array $where = null, string $extra = null)
+    public function search(
+            string $table,
+            string $s_fields,
+            string $searchText,
+            array $where = null,
+            string $extra = null
+    )
     {
 
         $s_words_ary = explode(' ', $searchText);
@@ -507,9 +512,14 @@ class Database
      * @param string $logic
      * @return array|boolean
      */
-    public function update(string $table, array $set, array $where = null, string $extra = null, string $logic = 'AND')
+    public function update(
+            string $table,
+            array $set,
+            array $where = null,
+            string $extra = null,
+            string $logic = 'AND'
+    )
     {
-
         if (empty($set) || empty($table)) {
             return false;
         }

@@ -8,10 +8,8 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
-function page_index_post(AppCtx $ctx)
+function page_index_post(AppCtx $ctx): bool
 {
-    $page_data = [];
     $user = $ctx->getAppUser();
 
     $profile_type = Filters::postString('profile_type');
@@ -38,5 +36,5 @@ function page_index_post(AppCtx $ctx)
         $user->setPref('show_other_hosts_status', $show_other_hosts);
     }
 
-    return $page_data;
+    return true;
 }

@@ -9,7 +9,6 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
 function page_defaults(AppCtx $ctx)
 {
     $page = [];
@@ -90,8 +89,7 @@ function page_index(AppCtx $ctx)
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $post_data = page_index_post($ctx);
-        $page = array_merge($post_data, $page);
+        page_index_post($ctx);
     }
 
     $items = $ctx->getAppItems();
@@ -186,7 +184,7 @@ function page_index(AppCtx $ctx)
     return $page;
 }
 
-function page_login(AppCtx $ctx)
+function page_login(AppCtx $ctx): array
 {
     $page = [];
 
@@ -238,7 +236,7 @@ function page_login(AppCtx $ctx)
     return $page;
 }
 
-function page_logout(AppCtx $ctx)
+function page_logout(AppCtx $ctx): void
 {
 
     $cfg = $ctx->getAppCfg();
@@ -254,7 +252,7 @@ function page_logout(AppCtx $ctx)
     header("Location: {$cfg['rel_path']}index.php");
 }
 
-function page_settings(AppCtx $ctx)
+function page_settings(AppCtx $ctx): array
 {
     $page = [];
 
@@ -267,7 +265,7 @@ function page_settings(AppCtx $ctx)
     return $page;
 }
 
-function page_privacy(AppCtx $ctx)
+function page_privacy(AppCtx $ctx): array
 {
     $page = [];
 

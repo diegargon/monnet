@@ -8,8 +8,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
-function valid_timezone(string $timezone)
+function valid_timezone(string $timezone): bool
 {
     if (empty($timezone)) {
         return false;
@@ -19,7 +18,7 @@ function valid_timezone(string $timezone)
     return in_array($timezone, $valid_time_zones);
 }
 
-function date_now(string $timezone = 'UTC')
+function date_now(string $timezone = 'UTC'): string
 {
     if (!valid_timezone($timezone)) {
         return false;
@@ -30,12 +29,12 @@ function date_now(string $timezone = 'UTC')
     return $date_now->format('Y-m-d H:i:s');
 }
 
-function utc_date_now()
+function utc_date_now(): string
 {
     return date_now();
 }
 
-function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s')
+function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s'): string
 {
     $date = new DateTime($utc_date, new DateTimeZone('UTC'));
     $date->setTimezone(new DateTimeZone($timezone));
@@ -43,7 +42,7 @@ function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s'
     return $date->format($time_format);
 }
 
-function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s')
+function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s'): string
 {
     if (!valid_timezone($timezone)) {
         return false;
@@ -54,14 +53,14 @@ function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m
     return $date_now->format($time_format);
 }
 
-function datetime_string_format(string $date, string $time_format = 'Y-m-d H:i:s')
+function datetime_string_format(string $date, string $time_format = 'Y-m-d H:i:s'): string
 {
     $timestamp = strtotime($date);
 
     return ($timestamp) ? date($time_format, $timestamp) : false;
 }
 
-function datetime_machine()
+function datetime_machine(): string
 {
     $now = new DateTime();
     return $now->format('Y-m-d H:i:s');

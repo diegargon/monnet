@@ -8,7 +8,6 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
 function valid_array($array)
 {
     if (!empty($array) && is_array($array) && count($array) > 0) {
@@ -116,7 +115,8 @@ function cached_img(User $user, int $id, string $img_url, $renew = 0)
     //$http_options['request_fulluri'] = true;
     $http_options['ssl']['verify_peer'] = false;
     $http_options['ssl']['verify_peer_name'] = false;
-    $http_options['header'] = "User-agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0";
+    $http_options['header'] = "User-agent: Mozilla/5.0 (X11; Fedora;" .
+            "Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0";
 
     if (empty($img_url) || is_dir($img_url) || empty($id) || !is_numeric($id)) {
         return false;
