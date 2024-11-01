@@ -10,7 +10,7 @@ jobs:
     runs-on: arc-runner-set-monnet
     
     services:
-      mysql:
+      mysql-service:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: monnetadmin
