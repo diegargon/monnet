@@ -53,6 +53,7 @@ jobs:
           mysql -h mysql -uroot -pmonnetadmin -e "FLUSH PRIVILEGES;"
 
       - name: Check containers
+        if: ${{ always() }}
         run: docker ps -a
 
       - name: Run Docker container
