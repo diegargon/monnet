@@ -18,8 +18,10 @@ jobs:
 
       - name: Start MySQL service
         run: |
-          docker run --name mysql --env='MYSQL_ROOT_PASSWORD=monnetadmin' -d mysql:8
-
+          docker run --name mysql \
+              -v $(pwd)/my.cnf:/etc/mysql/conf.d/my.cnf \
+              --env='MYSQL_ROOT_PASSWORD=monnetadmin' \
+              -d mysql:8
       - name: Build Docker image
         run: docker build -t my-app:latest -f ci-docker/Dockerfile-phpunit .
 
