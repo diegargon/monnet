@@ -11,7 +11,6 @@
 
 class Categories
 {
-
     private AppCtx $ctx;
     private array $cfg = [];
     private Database $db;
@@ -49,8 +48,7 @@ class Categories
 
         foreach ($this->categories as $cat)
         {
-            if ($cat['cat_type'] == $type)
-            {
+            if ($cat['cat_type'] == $type) {
                 $categories_by_type[] = $cat;
             }
         }
@@ -62,8 +60,7 @@ class Categories
     {
         foreach ($this->categories as $cat)
         {
-            if ($cat['id'] == $id)
-            {
+            if ($cat['id'] == $id) {
                 return $cat['cat_type'];
             }
         }
@@ -79,8 +76,7 @@ class Categories
             if (
                     (strpos($typecat['cat_name'], 'L_') === 0 ) &&
                     isset($this->lng[$typecat['cat_name']])
-            )
-            {
+            ) {
                 $typecat['cat_name'] = $this->lng[$typecat['cat_name']];
             }
         }
@@ -93,12 +89,10 @@ class Categories
         $query_value = $this->db->valQuote($value);
         $query = "SELECT `cat_name` FROM categories WHERE `cat_type` = $cat_type AND `cat_name` = $query_value";
 
-        if ($this->db->queryExists($query))
-        {
+        if ($this->db->queryExists($query)) {
             $response['sucess'] = false;
             $response['msg'] = $this->lng['L_VALUE_EXISTS'];
-        } else
-        {
+        } else {
             $this->db->insert('categories', ['cat_name' => $value, 'cat_type' => $cat_type]);
             $response['success'] = true;
             $response['msg'] = $this->lng['L_OK'];
@@ -113,5 +107,4 @@ class Categories
 
         return true;
     }
-
 }

@@ -11,7 +11,6 @@
 
 class Log
 {
-
     private static int $max_db_msg = 254;
     private static int $recursionCount = 0;
     private static int $console;
@@ -41,88 +40,67 @@ class Log
     {
         $LOG_TYPE = self::$LOG_TYPE;
 
-        if ($self_caller === null)
-        {
+        if ($self_caller === null) {
             self::$recursionCount = 0;
-        } else
-        {
+        } else {
             self::$recursionCount++;
-            if (self::$recursionCount > 3)
-            {
+            if (self::$recursionCount > 3) {
                 return;
             }
         }
 
-
-        if (isset($LOG_TYPE[self::$cfg['log_level']]) && $LOG_TYPE[$type] <= $LOG_TYPE[self::$cfg['log_level']])
-        {
-            if (is_array($msg))
-            {
+        if (isset($LOG_TYPE[self::$cfg['log_level']]) && $LOG_TYPE[$type] <= $LOG_TYPE[self::$cfg['log_level']]) {
+            if (is_array($msg)) {
                 $msg = print_r($msg, true);
             }
-            if (self::$console)
-            {
+            if (self::$console) {
                 echo '[' .
                 formatted_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format']) .
                 '][' . self::$cfg['app_name'] . '][' . $type . '] ' . $msg . "\n";
             }
-            if (self::$cfg['log_to_db'])
-            {
+            if (self::$cfg['log_to_db']) {
                 $level = self::getLogLevelId($type);
-                if (mb_strlen($msg) > self::$max_db_msg)
-                {
+                if (mb_strlen($msg) > self::$max_db_msg) {
                     self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
                     $msg_db = substr($msg, 0, 254);
-                } else
-                {
+                } else {
                     $msg_db = $msg;
                 }
                 self::$db->insert('system_logs', ['level' => $level, 'msg' => $msg_db]);
             }
-            if (self::$cfg['log_to_file'])
-            {
+            if (self::$cfg['log_to_file']) {
                 $log_file = self::$cfg['log_file'];
 
                 $content = '['
                         . formatted_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
                         . '][' . self::$cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
-                if (!file_exists($log_file))
-                {
-                    if (!touch($log_file))
-                    {
+                if (!file_exists($log_file)) {
+                    if (!touch($log_file)) {
                         self::err(self::$lng['L_ERR_FILE_CREATE']
                                 . ' effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
                         self::debug(getcwd(), 1);
-                    } else
-                    {
-                        if (!chown($log_file, self::$cfg['log_file_owner']))
-                        {
+                    } else {
+                        if (!chown($log_file, self::$cfg['log_file_owner'])) {
                             self::err(self::$lng['L_ERR_FILE_CHOWN'], 1);
                         }
-                        if (!chgrp($log_file, self::$cfg['log_file_owner_group']))
-                        {
+                        if (!chgrp($log_file, self::$cfg['log_file_owner_group'])) {
                             self::err('L_ERR_FILE_CHGRP', 1);
                         }
-                        if ((file_put_contents($log_file, $content, FILE_APPEND)) === false)
-                        {
+                        if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
                             self::err('Error opening/writing log to file '
                                     . 'effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
                         }
                     }
                 }
-                if ((file_put_contents($log_file, $content, FILE_APPEND)) === false)
-                {
+                if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
                     self::err('Error opening/writing log to file', 1);
                 }
             }
-            if (self::$cfg['log_to_syslog'])
-            {
-                if (openlog(self::$cfg['app_name'] . ' ' . self::$cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG))
-                {
+            if (self::$cfg['log_to_syslog']) {
+                if (openlog(self::$cfg['app_name'] . ' ' . self::$cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG)) {
                     isset(self::$console) ? self::$cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
                     syslog($LOG_TYPE[$type], $msg);
-                } else
-                {
+                } else {
                     self::err('Error opening syslog', 1);
                 }
             }
@@ -131,11 +109,9 @@ class Log
 
     public static function setConsole(bool $value)
     {
-        if ($value === true || $value === false)
-        {
+        if ($value === true || $value === false) {
             self::$console = $value;
-        } else
-        {
+        } else {
             return false;
         }
     }
@@ -143,12 +119,10 @@ class Log
     public static function logHost(string $loglevel, int $host_id, string $msg)
     {
         $level = self::getLogLevelID($loglevel);
-        if (mb_strlen($msg) > self::$max_db_msg)
-        {
+        if (mb_strlen($msg) > self::$max_db_msg) {
             self::debug(self::lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
             $msg_db = substr($msg, 0, 254);
-        } else
-        {
+        } else {
             $msg_db = $msg;
         }
         $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg_db];
@@ -177,8 +151,7 @@ class Log
 
     public static function getLogLevelId(string $loglevel)
     {
-        if (!isset(self::$LOG_TYPE[$loglevel]))
-        {
+        if (!isset(self::$LOG_TYPE[$loglevel])) {
             self::debug('Wrong Log Level name used');
             return false;
         }
@@ -189,8 +162,7 @@ class Log
     {
         foreach (self::$LOG_TYPE as $ktype => $vtype)
         {
-            if ($vtype == $logvalue)
-            {
+            if ($vtype == $logvalue) {
                 return $ktype;
             }
         }
@@ -240,5 +212,4 @@ class Log
     {
         self::logged('LOG_EMERG', $msg, $self_caller);
     }
-
 }

@@ -10,8 +10,7 @@
 !defined('IN_CLI') ? exit : true;
 
 $custom_cfg = '/etc/monnet/config.inc.php';
-if (!file_exists($custom_cfg))
-{
+if (!file_exists($custom_cfg)) {
     echo 'Missing config file ' . $custom_cfg;
     exit(1);
 }
@@ -28,13 +27,11 @@ isset($argv[1]) && ($argv[1] == '-console' || $argv[1] == '--console') ? Log::se
 function is_locked()
 {
 
-    if (@symlink("/proc/" . getmypid(), CLI_LOCK) !== FALSE)
-    {
+    if (@symlink("/proc/" . getmypid(), CLI_LOCK) !== FALSE) {
         return false;
     }
 
-    if (is_link(CLI_LOCK) && !is_dir(CLI_LOCK))
-    {
+    if (is_link(CLI_LOCK) && !is_dir(CLI_LOCK)) {
         unlink(CLI_LOCK);
 
         return is_locked();

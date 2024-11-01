@@ -23,11 +23,9 @@ function ssh_connect_host(array $cfg, array &$result, array $host)
     $ssh = new SSH2($host['ip']);
     ini_set('default_socket_timeout', $originalConnectionTimeout);
 
-    if (file_exists($cfg['cert']))
-    {
+    if (file_exists($cfg['cert'])) {
         $key = PublicKeyLoader::load(file_get_contents($cfg['cert']));
-    } else
-    {
+    } else {
         Log::err('Missing certs');
         return false;
     }
@@ -43,8 +41,7 @@ function ssh_connect_host(array $cfg, array &$result, array $host)
       return false;
       }
      */
-    if (!$ssh->login('monnet', $key))
-    {
+    if (!$ssh->login('monnet', $key)) {
         $result['conn'] = 'fail';
         $result['login'] = 'fail';
         $result['err_msg'] = 'login fail';
@@ -59,8 +56,7 @@ function ssh_connect_host(array $cfg, array &$result, array $host)
 
 function ssh_exec(SSH2 $ssh, array &$result, string $cmd)
 {
-    if (empty($result['motd']))
-    {
+    if (empty($result['motd'])) {
         $result['motd'] = $ssh->read('$');
     }
     $cmd = $cmd . ';echo @EOC';
@@ -82,8 +78,7 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts)
         Log::notice("Run command {$cmd['cmd_type']}:$hid");
         $host = $hosts->getHostById($hid);
 
-        if (!valid_array($host) || empty($host['ip']))
-        {
+        if (!valid_array($host) || empty($host['ip'])) {
             Log::warning("Wrong command for non-existent host id ($hid)");
             $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
             continue;
@@ -92,15 +87,13 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts)
         $result = [];
 
         $host_status = ping($host['ip']);
-        if (empty($host_status['online']))
-        {
+        if (empty($host_status['online'])) {
             //host down skip
             $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
             continue;
         }
         $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
-        if (!$ssh)
-        {
+        if (!$ssh) {
             continue;
         }
         try
@@ -109,11 +102,9 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts)
         } catch (Exception $e)
         {
             //avoid error on shutdown and reboot catch it for ignore
-            if ($cmd['cmd_type'] == 1 || $cmd['cmd_type'] == 2)
-            {
+            if ($cmd['cmd_type'] == 1 || $cmd['cmd_type'] == 2) {
                 //echo $e;
-            } else
-            {
+            } else {
                 echo $e;
             }
         }

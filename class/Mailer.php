@@ -16,7 +16,6 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mailer
 {
-
     private $phpMailer;
     private AppCtx $ctx;
     private array $cfg;
@@ -26,35 +25,28 @@ class Mailer
         $this->cfg = $ctx->getAppCfg();
         $this->ctx = $ctx;
 
-        if (!$this->cfg['mailer_enabled'])
-        {
+        if (!$this->cfg['mailer_enabled']) {
             return false;
         }
         // Verify  PHPMailer install
-        if (\Composer\InstalledVersions::isInstalled('phpmailer/phpmailer'))
-        {
+        if (\Composer\InstalledVersions::isInstalled('phpmailer/phpmailer')) {
             $this->phpMailer = new PHPMailer(true);
             $this->phpMailer->setLanguage($this->cfg['lang']);
-        } else
-        {
+        } else {
             Log::err($ctx->getAppLang()->get('L_ERR_MAILER'));
             return false;
         }
-        if (!Filters::varIp($this->cfg['mail_host']))
-        {
-            if (!Filters::varHostname($this->cfg['mail_host']))
-            {
+        if (!Filters::varIp($this->cfg['mail_host'])) {
+            if (!Filters::varHostname($this->cfg['mail_host'])) {
                 Log::err($ctx->getAppLang()->get('L_ERR_MAIL_HOST'));
                 return false;
             }
         }
-        if ($this->cfg['mail_auth'] && empty($this->cfg['mail_username']) || empty($this->cfg['mail_password']))
-        {
+        if ($this->cfg['mail_auth'] && empty($this->cfg['mail_username']) || empty($this->cfg['mail_password'])) {
             Log::err($ctx->getAppLang()->get('L_ERR_USERPASS_INVALID'));
             return false;
         }
-        if (!empty($this->cfg['mail_port']) && !is_numeric($this->cfg['mail_port']))
-        {
+        if (!empty($this->cfg['mail_port']) && !is_numeric($this->cfg['mail_port'])) {
             Log::err($ctx->getAppLang()->get('L_ERR_PORT_INVALID'));
             return false;
         }
@@ -65,8 +57,7 @@ class Mailer
     {
         foreach ($emails as $email)
         {
-            if (!$this->sendEmail($email, $subject, $body))
-            {
+            if (!$this->sendEmail($email, $subject, $body)) {
                 Log::err('L_ERR_SENDING_EMAILS ' . $email);
                 break;
             }
@@ -75,8 +66,7 @@ class Mailer
 
     public function sendEmail(string $to, string $subject, string $body)
     {
-        if (!$this->phpMailer)
-        {
+        if (!$this->phpMailer) {
             return false;
         }
 
@@ -99,19 +89,16 @@ class Mailer
     private function configure()
     {
 
-        if ($this->phpMailer)
-        {
+        if ($this->phpMailer) {
             $this->phpMailer->isSMTP();
             //$this->phpMailer->SMTPDebug = 4;
             $this->phpMailer->Host = $this->cfg['mail_host'];
             $this->phpMailer->SMTPAuth = $this->cfg['mail_auth'];
-            if ($this->cfg['mail_auth'])
-            {
+            if ($this->cfg['mail_auth']) {
                 $this->phpMailer->Username = $this->cfg['mail_username'];
                 $this->phpMailer->Password = $this->cfg['mail_password'];
             }
-            if ($this->cfg['mail_auth_type'])
-            {
+            if ($this->cfg['mail_auth_type']) {
                 $this->phpMailer->AuthType = $this->cfg['mail_auth_type'];
             }
             $this->phpMailer->SMTPSecure = $this->cfg['mail_security'];
@@ -119,5 +106,4 @@ class Mailer
             $this->phpMailer->Port = $this->cfg['mail_port'];
         }
     }
-
 }

@@ -11,7 +11,6 @@
 
 class Networks
 {
-
     private array $networks;
     private array $networks_disabled;
     private AppCtx $ctx;
@@ -23,8 +22,7 @@ class Networks
 
     public function getNetworks()
     {
-        if (!isset($this->networks))
-        {
+        if (!isset($this->networks)) {
             $this->loadNetworks();
         }
         return $this->networks;
@@ -34,11 +32,9 @@ class Networks
     {
         $networks = $this->getNetworks();
 
-        if (isset($networks[$id]))
-        {
+        if (isset($networks[$id])) {
             return $networks[$id];
-        } else
-        {
+        } else {
             return false;
         }
     }
@@ -55,8 +51,7 @@ class Networks
             $subnet_mask = -1 << (32 - $cidr);
             $network_ip_long &= $subnet_mask;
 
-            if (($ip_long & $subnet_mask) == $network_ip_long)
-            {
+            if (($ip_long & $subnet_mask) == $network_ip_long) {
                 return $network['id'];
             }
         }
@@ -76,8 +71,7 @@ class Networks
 
         foreach ($networks as $network)
         {
-            if ($network['id'] == $id)
-            {
+            if ($network['id'] == $id) {
                 return $network['name'];
             }
         }
@@ -97,13 +91,11 @@ class Networks
 
             $broadcastAddr = $networkAddr | ~(pow(2, (32 - $subnetMask)) - 1);
 
-            if (($ip & ~($broadcastAddr)) == ($networkAddr & ~($broadcastAddr)))
-            {
+            if (($ip & ~($broadcastAddr)) == ($networkAddr & ~($broadcastAddr))) {
                 return $network;
             }
 
-            if ($network['network'] == '0.0.0.0/0')
-            {
+            if ($network['network'] == '0.0.0.0/0') {
                 $defaultNetwork = $network;
             }
         }
@@ -113,8 +105,7 @@ class Networks
 
     public function isLocal(string $ip)
     {
-        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE))
-        {
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
             return true;
         }
         return false;
@@ -128,14 +119,12 @@ class Networks
 
         foreach ($networks as $net)
         {
-            if (empty($net['network']) || Filters::varNetwork($net['network']) === false)
-            {
+            if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
                 Log::err("Invalid network detected " . $net['network']);
                 continue;
             }
             //We will use 0.0.0.0 to allow create a INTERNET network category for add external host.
-            if (str_starts_with($net['network'], "0"))
-            {
+            if (str_starts_with($net['network'], "0")) {
                 continue;
             }
             Log::debug("Ping networks " . array2string($net));
@@ -154,8 +143,7 @@ class Networks
             for ($i = 0; $i < $count && $i <= 255; $i++)
             {
                 $ip = long2ip($network_long + $i);
-                if ($ip != $network_address && $ip != $broadcast_address)
-                {
+                if ($ip != $network_address && $ip != $broadcast_address) {
                     $ip_list[] = $ip;
                 }
             }
@@ -169,8 +157,7 @@ class Networks
         $db = $this->ctx->getAppDb();
         $query = $db->selectAll('networks',);
         $networks = $db->fetchAll($query);
-        if (valid_array($networks))
-        {
+        if (valid_array($networks)) {
             foreach ($networks as $net)
             {
                 $id = (int) $net['id'];
@@ -182,15 +169,12 @@ class Networks
                     'scan' => (int) $net['scan'],
                     'disable' => (int) $net['disable'],
                 ];
-                if ($fnet['disable'] === 0)
-                {
+                if ($fnet['disable'] === 0) {
                     $this->networks[$id] = $fnet;
-                } else
-                {
+                } else {
                     $this->networks_disabled[$id] = $fnet;
                 }
             }
         }
     }
-
 }

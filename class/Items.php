@@ -11,7 +11,6 @@
  */
 class Items
 {
-
     private Database $db;
     private array $categories;
     private array $cfg;
@@ -31,15 +30,13 @@ class Items
 
     public function addItem(string $item_type, array $item_data): bool
     {
-        if ($item_type == 'bookmarks')
-        {
+        if ($item_type == 'bookmarks') {
             $conf = ['url' => $item_data['urlip'], 'image_type' => $item_data['image_type'],
                 'image_resource' => $item_data['field_img']];
             $set = ['uid' => $this->uid, 'cat_id' => $item_data['cat_id'],
                 'type' => 'bookmarks', 'title' => $item_data['name'],
                 'conf' => json_encode($conf), 'weight' => $item_data['weight']];
-            if ($this->db->insert('items', $set))
-            {
+            if ($this->db->insert('items', $set)) {
                 return true;
             }
         }
@@ -49,8 +46,7 @@ class Items
 
     public function getAll(?string $key_order = null, ?string $dir = 'asc'): array
     {
-        if (!empty($key_order))
-        {
+        if (!empty($key_order)) {
             order($this->items, $key_order, $dir);
         }
 
@@ -61,8 +57,7 @@ class Items
     {
         foreach ($this->items as $item)
         {
-            if ($item['id'] == $id && $item['uid'] == $this->uid)
-            {
+            if ($item['id'] == $id && $item['uid'] == $this->uid) {
                 $this->db->delete('items', ['id' => $id], 'LIMIT 1');
                 unset($this->item[$id]);
                 return true;
@@ -76,8 +71,7 @@ class Items
         $result = [];
         foreach ($this->items as $item)
         {
-            if ($item['type'] == $type)
-            {
+            if ($item['type'] == $type) {
                 $result[] = $item;
             }
         }
@@ -91,8 +85,7 @@ class Items
         $result = [];
         foreach ($this->items as $item)
         {
-            if ($item['cat_id'] == $category_id)
-            {
+            if ($item['cat_id'] == $category_id) {
                 $result[] = $item;
             }
         }
@@ -110,5 +103,4 @@ class Items
 
         return $uniq_types;
     }
-
 }

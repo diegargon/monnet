@@ -13,21 +13,18 @@ function trigger_update(Database $db, float $db_version, float $monnet_version)
 {
     Log::notice("Triggered updater Files: $monnet_version DB: $db_version");
 
-    if ($db_version < 0.31)
-    {
+    if ($db_version < 0.31) {
         $db->query("UPDATE prefs SET pref_value='0.31' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         Log::info("Update version to 0.31 successful");
         $db_version = 0.31;
     }
-    if ($db_version < 0.32)
-    {
+    if ($db_version < 0.32) {
         $db->query("UPDATE prefs SET pref_value='0.32' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         Log::info("Update version to 0.32 successful");
         $db_version = 0.32;
     }
 
-    if ($db_version < 0.33)
-    {
+    if ($db_version < 0.33) {
         $db->query("ALTER TABLE `hosts` CHANGE `warn_msg` `warn_msg` VARCHAR(255) NULL;");
         $db->query("ALTER TABLE `hosts` ADD `token` CHAR(255) NULL AFTER `ports`;");
         $db->query("ALTER TABLE `hosts` ADD `warn_mail` BOOLEAN NOT NULL DEFAULT FALSE AFTER `warn_msg`;");
@@ -42,8 +39,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version)
         $db_version = 0.33;
     }
 
-    if ($db_version < 0.34)
-    {
+    if ($db_version < 0.34) {
         $db->query("ALTER TABLE `networks` ADD UNIQUE(`network`);");
         $db->query("ALTER TABLE `networks` ADD UNIQUE(`name`);");
         $db->query("ALTER TABLE `networks` CHANGE `network` `network` CHAR(18) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;");
@@ -61,8 +57,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version)
     }
 
     //0.35
-    if ($db_version < 0.35)
-    {
+    if ($db_version < 0.35) {
         $db->query("INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES (11, 0, 'discovery_last_run', '0');");
         $db->query("ALTER TABLE `hosts` DROP `timeout`;");
         $db->query("ALTER TABLE `hosts` ADD `alert_msg` CHAR(255) NULL DEFAULT NULL AFTER `warn_mail`;");
@@ -89,8 +84,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version)
     }
 
     //0.36
-    if ($db_version < 0.00)
-    {
+    if ($db_version < 0.00) {
         $db->query("ALTER TABLE `hosts` DROP `mac_vendor`;");
         $db->query("ALTER TABLE `hosts` DROP `manufacture`;");
         $db->query("ALTER TABLE `hosts` DROP `system_type`;");
@@ -102,8 +96,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version)
     }
 
     //Next Template
-    if ($db_version < 0.00)
-    {
+    if ($db_version < 0.00) {
         $db->query("");
         Log::info("Update version to 0.00 successful");
         $db->query("UPDATE prefs SET pref_value='0.00' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
@@ -117,7 +110,6 @@ $result = $db->fetchAll($query);
 $db_version = (float) $result[0]['pref_value'];
 $monnet_version = $cfg['monnet_version'];
 
-if ($monnet_version > $db_version)
-{
+if ($monnet_version > $db_version) {
     trigger_update($db, $db_version, $monnet_version);
 }

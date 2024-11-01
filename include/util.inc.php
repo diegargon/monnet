@@ -11,8 +11,7 @@
 
 function valid_array($array)
 {
-    if (!empty($array) && is_array($array) && count($array) > 0)
-    {
+    if (!empty($array) && is_array($array) && count($array) > 0) {
         return true;
     }
 
@@ -39,19 +38,16 @@ function order(array &$ary, $sortKey, $order = 'asc')
 {
 
     usort($ary, function ($a, $b) use ($sortKey, $order) {
-        if (!isset($a[$sortKey]) || !isset($b[$sortKey]))
-        {
+        if (!isset($a[$sortKey]) || !isset($b[$sortKey])) {
             return false;
         }
 
         $itemA = $a[$sortKey];
         $itemB = $b[$sortKey];
 
-        if ($order === 'desc')
-        {
+        if ($order === 'desc') {
             return ($itemA < $itemB) ? 1 : -1;
-        } else
-        {
+        } else {
             return ($itemA < $itemB) ? -1 : 1;
         }
     });
@@ -81,20 +77,17 @@ function base_url(string $url)
 {
     $parsed_url = parse_url($url);
 
-    if ($parsed_url === false)
-    {
+    if ($parsed_url === false) {
         return false; // Si no se pudo parsear, retornamos false
     }
 
-    if (isset($parsed_url['fragment']))
-    {
+    if (isset($parsed_url['fragment'])) {
         unset($parsed_url['fragment']);
     }
 
     $base_url = $parsed_url['scheme'] . '://' . $parsed_url['host'];
 
-    if (isset($parsed_url['port']))
-    {
+    if (isset($parsed_url['port'])) {
         $base_url .= ':' . $parsed_url['port'];
     }
 
@@ -106,11 +99,9 @@ function array2string(array $array)
     $result = [];
     foreach ($array as $subarray)
     {
-        if (is_array($subarray))
-        {
+        if (is_array($subarray)) {
             $result[] = array2string($subarray) . '::';
-        } else
-        {
+        } else {
             $result[] = $subarray;
         }
     }
@@ -129,19 +120,16 @@ function cached_img(User $user, int $id, string $img_url, $renew = 0)
     $http_options['ssl']['verify_peer_name'] = false;
     $http_options['header'] = "User-agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0";
 
-    if (empty($img_url) || is_dir($img_url) || empty($id) || !is_numeric($id))
-    {
+    if (empty($img_url) || is_dir($img_url) || empty($id) || !is_numeric($id)) {
         return false;
     }
 
-    if (!Filters::varImgUrl($img_url))
-    {
+    if (!Filters::varImgUrl($img_url)) {
         Log::warning($img_url . ' invalid image url');
         return false;
     }
 
-    if (!is_writeable($cache_path))
-    {
+    if (!is_writeable($cache_path)) {
         Log::warning($cache_path . ' is not writable');
         return $img_url;
     }
@@ -151,34 +139,27 @@ function cached_img(User $user, int $id, string $img_url, $renew = 0)
 
     $cache_img_path = $cache_path . '/' . $id . '_' . $file_name;
 
-    if (file_exists($cache_img_path) && $renew === 0)
-    {
+    if (file_exists($cache_img_path) && $renew === 0) {
         return $cache_img_path;
-    } else
-    {
+    } else {
         Log::debug("image path NOT exists or renew getting content " . $img_url);
         $img_item_check = $user->getPref($img_url);
-        if ($img_item_check)
-        {
+        if ($img_item_check) {
             $img_item_check = new DateTime($img_item_check);
             $img_item_check->modify('+48 hours');
 
-            if ($img_item_check > utc_date_now())
-            {
+            if ($img_item_check > utc_date_now()) {
                 return $img_url;
             }
         }
 
         $ctx = stream_context_create(['http' => $http_options]);
         $img_file = @file_get_contents($img_url, false, $ctx);
-        if ($img_file !== false)
-        {
-            if (file_put_contents($cache_img_path, $img_file) !== false)
-            {
+        if ($img_file !== false) {
+            if (file_put_contents($cache_img_path, $img_file) !== false) {
                 return $cache_img_path;
             }
-        } else
-        {
+        } else {
             $user->setPref($img_url, utc_date_now());
             $error = error_get_last();
             Log::err('Error getting image error msg ' . $error['message']);
@@ -190,14 +171,11 @@ function cached_img(User $user, int $id, string $img_url, $renew = 0)
 
 function round_latency(float $latency, int $precision = 3)
 {
-    if ($latency > 0 && $latency <= 0.001)
-    {
+    if ($latency > 0 && $latency <= 0.001) {
         $latency = 0.001;
-    } else if ($latency < 0)
-    {
+    } else if ($latency < 0) {
         $latency = $latency;
-    } else
-    {
+    } else {
         $latency = round($latency, $precision);
     }
     return $latency;

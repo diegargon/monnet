@@ -11,7 +11,6 @@
 
 class Web
 {
-
     private AppCtx $ctx;
     private array $lng;
     private array $cfg;
@@ -28,8 +27,7 @@ class Web
     public function run()
     {
         $page = $this->ValidateRequestPage();
-        if (!$page)
-        {
+        if (!$page) {
             exit('Fail: Validate requested page');
         }
         $page_data = $this->getPageData($page);
@@ -48,8 +46,7 @@ class Web
 
         (!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
 
-        if (in_array($req_page, $valid_pages))
-        {
+        if (in_array($req_page, $valid_pages)) {
             return $req_page;
         }
 
@@ -65,20 +62,15 @@ class Web
 
         $page_defaults = page_defaults($this->ctx);
         //$page_data = $page_func($this->cfg, $this->lng, $this->user);
-        if ($page == 'login')
-        {
+        if ($page == 'login') {
             $page_data = page_login($this->ctx);
-        } else if ($page == 'logout')
-        {
+        } else if ($page == 'logout') {
             $page_data = page_logout($this->ctx);
-        } else if ($page === 'privacy')
-        {
+        } else if ($page === 'privacy') {
             $page_data = page_privacy($this->ctx);
-        } else if ($page === 'index')
-        {
+        } else if ($page === 'index') {
             $page_data = page_index($this->ctx);
-        } else if ($page === 'settings')
-        {
+        } else if ($page === 'settings') {
             $page_data = page_settings($this->ctx);
         }
 
@@ -90,5 +82,4 @@ class Web
         $frontend = new Frontend($this->cfg, $this->lng);
         $frontend->showPage($page_data);
     }
-
 }

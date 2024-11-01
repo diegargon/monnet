@@ -85,15 +85,13 @@ function page_index(AppCtx $ctx)
     foreach ($networks_list as &$net)
     {
         $net_set = $user->getPref('network_select_' . $net['id']);
-        if (($net_set) || $net_set === false)
-        {
+        if (($net_set) || $net_set === false) {
             $net['selected'] = 1;
             $networks_selected++;
         }
     }
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST')
-    {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post_data = page_index_post($ctx);
         $page = array_merge($post_data, $page);
     }
@@ -133,12 +131,10 @@ function page_index(AppCtx $ctx)
 
     /* Bookmarks */
 
-    if ($user->getPref('show_bookmarks_status'))
-    {
+    if ($user->getPref('show_bookmarks_status')) {
         $bookmarks = format_items($user, $items->getByType('bookmarks'));
         $default_bookmarks_tab = $user->getPref('default_bookmarks_tab');
-        if ($default_bookmarks_tab == null)
-        {
+        if ($default_bookmarks_tab == null) {
             $default_bookmarks_tab = 0;
         }
         $page['bookmarks_default_tab'] = str_replace('bookmark_content_tab_', '', $default_bookmarks_tab);
@@ -201,20 +197,16 @@ function page_login(AppCtx $ctx)
     $cfg = $ctx->getAppCfg();
     $lng = $ctx->getAppLang();
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST')
-    {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $username = Filters::postUsername('username');
         $password = Filters::postPassword('password');
-        if (!empty($username) && !empty($password))
-        {
+        if (!empty($username) && !empty($password)) {
 
             $userid = $user->checkUser($username, $password);
-            if (!empty($userid) && $userid > 0)
-            {
+            if (!empty($userid) && $userid > 0) {
                 $user->setUser($userid);
-                if (empty($cfg['rel_path']))
-                {
+                if (empty($cfg['rel_path'])) {
                     $cfg['rel_path'] = '/';
                 }
                 header("Location: {$cfg['rel_path']} ");
@@ -231,21 +223,17 @@ function page_login(AppCtx $ctx)
     $page['tpl'] = 'login';
     $page['log_in'] = $lng['L_LOGIN'];
 
-    if (isset($_COOKIE['username']))
-    {
+    if (isset($_COOKIE['username'])) {
         $page['username'] = htmlspecialchars($_COOKIE['username']);
-    } else
-    {
+    } else {
         $page['username'] = '';
     }
 
     $page['username_placeholder'] = $lng['L_USERNAME'];
     $page['password_placeholder'] = $lng['L_PASSWORD'];
-    if (!empty($page['username']))
-    {
+    if (!empty($page['username'])) {
         $page['set_pass_focus'] = 1;
-    } else
-    {
+    } else {
         $page['set_username_focus'] = 1;
     }
 

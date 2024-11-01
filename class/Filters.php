@@ -15,8 +15,7 @@ class Filters
 //POST/GET
     static function getInt($val, $size = PHP_INT_MAX)
     {
-        if (!isset($_GET[$val]))
-        {
+        if (!isset($_GET[$val])) {
             return false;
         }
 
@@ -25,8 +24,7 @@ class Filters
 
     static function postInt($val, $size = PHP_INT_MAX)
     {
-        if (!isset($_POST[$val]))
-        {
+        if (!isset($_POST[$val])) {
             return false;
         }
 
@@ -35,32 +33,26 @@ class Filters
 
     static function varInt($val, $size = PHP_INT_MAX)
     {
-        if (!isset($val))
-        {
+        if (!isset($val)) {
             return false;
         }
 
         $values = is_array($val) ? $val : trim($val);
 
-        if (!is_array($val))
-        {
-            if (!is_numeric($values) || $values > $size)
-            {
+        if (!is_array($val)) {
+            if (!is_numeric($values) || $values > $size) {
                 return false;
             }
             $values = trim($val);
-        } else
-        {
+        } else {
             $values = $val;
-            if (count($values) <= 0)
-            {
+            if (count($values) <= 0) {
                 return false;
             }
             foreach ($values as $key => $value)
             {
                 $values[$key] = trim($value);
-                if (!is_numeric($value) || $value > $size || !is_numeric($key))
-                {
+                if (!is_numeric($value) || $value > $size || !is_numeric($key)) {
                     return false;
                 }
             }
@@ -72,8 +64,7 @@ class Filters
 //Simple String words without accents or special characters
     static function getString($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -82,8 +73,7 @@ class Filters
 
     static function postString($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -93,17 +83,14 @@ class Filters
     static function varString($val, $size = null)
     {
         //Valida un string simple
-        if (empty($val))
-        {
+        if (empty($val)) {
             return false;
         }
 
-        if (!empty($size) && strlen($val) > $size)
-        {
+        if (!empty($size) && strlen($val) > $size) {
             return false;
         }
-        if (preg_match('/[!@#$%^&*(),.?":{}|<>]/', $val))
-        {
+        if (preg_match('/[!@#$%^&*(),.?":{}|<>]/', $val)) {
             return false;
         }
 
@@ -113,8 +100,7 @@ class Filters
 //UTF8
     static function getUtf8($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -123,8 +109,7 @@ class Filters
 
     static function postUtf8($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -133,12 +118,10 @@ class Filters
 
     static function varUtf8($val, $size = null)
     {
-        if (empty($val) || (!empty($size) && mb_strlen($val, 'UTF-8') > $size))
-        {
+        if (empty($val) || (!empty($size) && mb_strlen($val, 'UTF-8') > $size)) {
             return false;
         }
-        if (!mb_check_encoding($val, 'UTF-8'))
-        {
+        if (!mb_check_encoding($val, 'UTF-8')) {
             return false;
         }
         return $val;
@@ -147,8 +130,7 @@ class Filters
 //URL
     static function getUrl($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -157,8 +139,7 @@ class Filters
 
     static function postUrl($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -167,8 +148,7 @@ class Filters
 
     static function varUrl($val, $size = null)
     {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size)))
-        {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
 
@@ -180,8 +160,7 @@ class Filters
 
     static function getImgUrl($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -190,8 +169,7 @@ class Filters
 
     static function postImgUrl($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -202,22 +180,19 @@ class Filters
     {
         $exts = array('jpg', 'gif', 'png', 'ico');
 
-        if (empty($val) || (!empty($size) && strlen($val) > $size))
-        {
+        if (empty($val) || (!empty($size) && strlen($val) > $size)) {
             return false;
         }
 
         // Validar que la URL tenga un esquema válido (http o https)
         $urlParts = parse_url($val);
-        if (!isset($urlParts['scheme']) || !in_array($urlParts['scheme'], ['http', 'https']))
-        {
+        if (!isset($urlParts['scheme']) || !in_array($urlParts['scheme'], ['http', 'https'])) {
             return false;
         }
 
         // Validar que la extensión del archivo esté en la lista permitida
         $extension = strtolower(pathinfo($urlParts['path'], PATHINFO_EXTENSION));
-        if (!in_array($extension, $exts))
-        {
+        if (!in_array($extension, $exts)) {
             return false;
         }
 
@@ -227,8 +202,7 @@ class Filters
     // AZaz
     static function postAzChar($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -237,8 +211,7 @@ class Filters
 
     static function getAzChar($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -249,12 +222,10 @@ class Filters
     {
 
         if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-                (!empty($min_size) && (strlen($var) < $min_size)))
-        {
+                (!empty($min_size) && (strlen($var) < $min_size))) {
             return false;
         }
-        if (!preg_match('/^[A-Za-z]+$/', $var))
-        {
+        if (!preg_match('/^[A-Za-z]+$/', $var)) {
             return false;
         }
 
@@ -264,8 +235,7 @@ class Filters
     //[0-9][A-Za-z]
     static function postAlphanum($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -274,8 +244,7 @@ class Filters
 
     static function getAlphanum($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -286,8 +255,7 @@ class Filters
     {
         $length = strlen($var);
 
-        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size))
-        {
+        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
         /*
@@ -302,8 +270,7 @@ class Filters
           }
          *
          */
-        if (!ctype_alnum($var))
-        {
+        if (!ctype_alnum($var)) {
             return false;
         }
 
@@ -314,8 +281,7 @@ class Filters
     //USERNAME
     static function postUsername($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -324,8 +290,7 @@ class Filters
 
     static function getUsername($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -337,8 +302,7 @@ class Filters
         //Filter name, only az, no special chars, no spaces
         $length = strlen($var);
 
-        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size))
-        {
+        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
         /*
@@ -351,8 +315,7 @@ class Filters
          *
          */
 
-        if (!preg_match('/^[A-Za-z]+$/', $var))
-        {
+        if (!preg_match('/^[A-Za-z]+$/', $var)) {
             return false;
         }
         return $var;
@@ -361,8 +324,7 @@ class Filters
     //EMAIL
     static function postEmail($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -371,8 +333,7 @@ class Filters
 
     static function getEmail($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -384,14 +345,12 @@ class Filters
         $length = strlen($var);
 
         // Validar longitud y formato de correo electrónico
-        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size))
-        {
+        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
 
         // Mejora: Utilizar filter_var para verificar el formato de correo electrónico
-        if (!filter_var($var, FILTER_VALIDATE_EMAIL))
-        {
+        if (!filter_var($var, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
@@ -411,8 +370,7 @@ class Filters
 
     static function postStrict($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -421,8 +379,7 @@ class Filters
 
     static function getStrict($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -434,13 +391,11 @@ class Filters
         //TODO allow only alphanumerics and _
         $length = strlen($var);
 
-        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size))
-        {
+        if (empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)) {
             return false;
         }
 
-        if (!preg_match('/^[A-Za-z0-9_.]+$/', $var))
-        {
+        if (!preg_match('/^[A-Za-z0-9_.]+$/', $var)) {
             return false;
         }
 
@@ -450,8 +405,7 @@ class Filters
     // PASSWORD
     static function postPassword($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -460,8 +414,7 @@ class Filters
 
     static function getPassword($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -472,8 +425,7 @@ class Filters
     {
         //Password validate safe password
         if ((!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
-        )
-        {
+        ) {
             return false;
         }
         //TODO
@@ -484,8 +436,7 @@ class Filters
 
     static function getIP($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -494,8 +445,7 @@ class Filters
 
     static function postIP($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -504,8 +454,7 @@ class Filters
 
     static function varIP($val, $size = null)
     {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size)))
-        {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
         $ip = filter_var($val, FILTER_VALIDATE_IP);
@@ -517,8 +466,7 @@ class Filters
 
     static function getNetwork($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -527,8 +475,7 @@ class Filters
 
     static function postNetwork($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -537,32 +484,26 @@ class Filters
 
     static function varNetwork($val, $size = null)
     {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size)))
-        {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
 
-        if (strpos($val, '/') !== false)
-        {
+        if (strpos($val, '/') !== false) {
             list($ip, $cidr) = explode('/', $val, 2);
 
-            if (self::varIP($ip) === false || $cidr < 0 || $cidr > 32)
-            {
+            if (self::varIP($ip) === false || $cidr < 0 || $cidr > 32) {
                 return false;
             }
             $numeric_ip = ip2long($ip);
             $subnet_mask = ~((1 << (32 - $cidr)) - 1);
             $network_ip = $numeric_ip & $subnet_mask;
 
-            if ($network_ip == $numeric_ip)
-            {
+            if ($network_ip == $numeric_ip) {
                 return true;
-            } else
-            {
+            } else {
                 return false;
             }
-        } else
-        {
+        } else {
             return false;
         }
     }
@@ -571,8 +512,7 @@ class Filters
 
     static function getPath($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -581,8 +521,7 @@ class Filters
 
     static function postPath($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -591,16 +530,14 @@ class Filters
 
     static function varPath($val, $size = null)
     {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size)))
-        {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
 
         // Filtrar el path para permitir solo caracteres alfanuméricos, guiones bajos (_) y barras diagonales (/)
         $filtered_path = preg_replace('/[^a-zA-Z0-9_\/]/', '', $val);
 
-        if ($filtered_path !== $val)
-        {
+        if ($filtered_path !== $val) {
             return false;
         }
         return $filtered_path;
@@ -611,8 +548,7 @@ class Filters
 
     static function getPathFile($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -621,8 +557,7 @@ class Filters
 
     static function postPathFile($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -631,24 +566,21 @@ class Filters
 
     static function varPathFile($val, $size = null)
     {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size)))
-        {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
 
         // Filtrar el path para permitir solo caracteres alfanuméricos, guiones bajos (_) y barras diagonales (/)
         $filtered_path = preg_replace('/[^a-zA-Z0-9_\/.-]/', '', $val);
 
-        if ($filtered_path !== $val)
-        {
+        if ($filtered_path !== $val) {
             return false;
         }
 
         $path_parts = pathinfo($filtered_path);
         $filename = $path_parts['basename'];
 
-        if (!$filename)
-        {
+        if (!$filename) {
             return false;
         }
 
@@ -658,8 +590,7 @@ class Filters
     //Custom String
     static function postCustomString(string $val, string $validSpecial, int $max_size = null, int $min_size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -668,8 +599,7 @@ class Filters
 
     static function getCustomString(string $val, string $validSpecial, int $max_size = null, int $min_size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -687,13 +617,11 @@ class Filters
         $regex = '/^[' . $validChars . ']+$/';
 
         if (empty($var) || (!empty($max_size) && strlen($var) > $max_size) ||
-                (!empty($min_size) && strlen($var) < $min_size))
-        {
+                (!empty($min_size) && strlen($var) < $min_size)) {
             return false;
         }
 
-        if (!preg_match($regex, $var))
-        {
+        if (!preg_match($regex, $var)) {
             return false;
         }
 
@@ -704,8 +632,7 @@ class Filters
 
     static function getDomain($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -714,8 +641,7 @@ class Filters
 
     static function postDomain($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -724,16 +650,13 @@ class Filters
 
     static function varDomain($val, $size = null)
     {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size)))
-        {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
-        if (filter_var($val, FILTER_VALIDATE_IP))
-        {
+        if (filter_var($val, FILTER_VALIDATE_IP)) {
             return false;
         }
-        if (!filter_var($val, FILTER_VALIDATE_DOMAIN))
-        {
+        if (!filter_var($val, FILTER_VALIDATE_DOMAIN)) {
             return false;
         }
 
@@ -744,8 +667,7 @@ class Filters
 
     static function getHostname($val, $size = null)
     {
-        if (empty($_GET[$val]))
-        {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -754,8 +676,7 @@ class Filters
 
     static function postHostname($val, $size = null)
     {
-        if (empty($_POST[$val]))
-        {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -764,18 +685,15 @@ class Filters
 
     static function varHostname($val, $size = null)
     {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size)))
-        {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
 
 
-        if (!filter_var($val, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME))
-        {
+        if (!filter_var($val, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
             return false;
         }
 
         return $val;
     }
-
 }

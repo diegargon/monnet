@@ -15,8 +15,7 @@ function check_known_hosts(AppCtx $ctx)
     $db = $ctx->getAppDb();
     $hosts = $ctx->getAppHosts();
 
-    if (!is_object($hosts))
-    {
+    if (!is_object($hosts)) {
         Log::err("hosts is not a object");
         return false;
     }
@@ -30,25 +29,20 @@ function check_known_hosts(AppCtx $ctx)
         /*
          * Port Scan
          */
-        if ($host['check_method'] == 2 && valid_array($host['ports']))
-        { //TCP
+        if ($host['check_method'] == 2 && valid_array($host['ports'])) { //TCP
             Log::debug("Pinging host ports {$host['ip']}");
             $ping_ports_result = ping_host_ports($ctx, $host);
-            if ($host['online'] == 1 && $ping_ports_result['online'] == 0)
-            { //recheck
+            if ($host['online'] == 1 && $ping_ports_result['online'] == 0) { //recheck
                 $ping_ports_result = ping_host_ports($ctx, $host);
             }
             //Ports are down, check host with ping
-            if ($ping_ports_result['online'] == 0)
-            {
+            if ($ping_ports_result['online'] == 0) {
                 $host_ping_result = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
-                if ($host_ping_result['online'])
-                {
+                if ($host_ping_result['online']) {
                     $ping_ports_result['online'] = 1;
                     $ping_ports_result['latency'] = $host_ping_result['latency'];
                     $ping_ports_result['last_seen'] = utc_date_now();
-                } else
-                {
+                } else {
                     $ping_ports_result['online'] = 0;
                 }
             }
@@ -57,15 +51,12 @@ function check_known_hosts(AppCtx $ctx)
             /*
              * Ping Scan
              */
-        } else
-        {
-            if ($host['check_method'] == 2 && !valid_array($host['ports']))
-            {
+        } else {
+            if ($host['check_method'] == 2 && !valid_array($host['ports'])) {
                 Log::warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
             }
             $ping_host_result = ping_known_host($ctx, $host);
-            if ($host['online'] == 1 && $ping_host_result['online'] == 0)
-            {
+            if ($host['online'] == 1 && $ping_host_result['online'] == 0) {
                 //recheck
                 $ping_host_result = ping_known_host($ctx, $host);
             }
@@ -77,34 +68,28 @@ function check_known_hosts(AppCtx $ctx)
          *  Update host with scan data
          */
 
-        if (valid_array($new_host_status) && $new_host_status['online'] && empty($host['mac']))
-        {
+        if (valid_array($new_host_status) && $new_host_status['online'] && empty($host['mac'])) {
             $mac = get_mac($host['ip']);
             $new_host_status['mac'] = !empty($mac) ? $mac : null;
         }
-        if (valid_array($new_host_status))
-        {
+        if (valid_array($new_host_status)) {
 
-            if ($host['online'] == 0 && $new_host_status['online'] == 1)
-            {
+            if ($host['online'] == 0 && $new_host_status['online'] == 1) {
                 $new_host_status['online_change'] = utc_date_now();
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
-            } else if ($host['online'] == 1 && $new_host_status['online'] == 0)
-            {
+            } else if ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 $new_host_status['online_change'] = utc_date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout);
             }
 
             $hosts->update($host['id'], $new_host_status);
-            if ($new_host_status['online'] == 1 && isset($new_host_status['latency']))
-            {
+            if ($new_host_status['online'] == 1 && isset($new_host_status['latency'])) {
                 $ping_latency = $new_host_status['latency'];
                 $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
                 $db->insert('stats', $set_ping_stats);
             }
-        } else
-        {
+        } else {
             Log::warning("Known host ping status error {$host['id']}:{$host['display_name']}");
         }
     }
@@ -128,8 +113,7 @@ function ping_net(AppCtx $ctx)
         $iplist[$kip] = $vip;
         foreach ($db_hosts as $host)
         {
-            if ($host['ip'] == $vip)
-            {
+            if ($host['ip'] == $vip) {
                 unset($iplist[$kip]);
             }
         }
@@ -142,11 +126,9 @@ function ping_net(AppCtx $ctx)
         $ip_status = ping($ip, $timeout);
         $set = [];
 
-        if ($ip_status['online'])
-        {
+        if ($ip_status['online']) {
             $mac = trim(get_mac($ip));
-            if ($mac)
-            {
+            if ($mac) {
                 $set['mac'] = $mac;
                 $mac_info = get_mac_vendor($mac);
                 $set['mac_vendor'] = (!empty($mac_info['company'])) ? $mac_info['company'] : '-';
@@ -155,12 +137,10 @@ function ping_net(AppCtx $ctx)
             $set['online'] = 1;
 
             $network_id = $networks->getNetworkIDbyIP($ip);
-            if ($network_id == false)
-            {
+            if ($network_id == false) {
                 Log::warning('Failed to get id network for ip ' . $ip);
                 $set['network'] = 1;
-            } else
-            {
+            } else {
                 $set['network'] = $network_id;
             }
 
@@ -182,12 +162,10 @@ function fill_hostnames(Hosts $hosts, int $forceall = 0)
 
     foreach ($db_hosts as $host)
     {
-        if (empty($host['hostname']) || $forceall === 1)
-        {
+        if (empty($host['hostname']) || $forceall === 1) {
             //Log::debug("Getting hostname {$host['ip']}");
             $hostname = $hosts->getHostname($host['ip']);
-            if ($hostname !== false && $hostname != $host['ip'])
-            {
+            if ($hostname !== false && $hostname != $host['ip']) {
                 $update['hostname'] = $hostname;
                 $hosts->update($host['id'], $update);
             }
@@ -206,30 +184,24 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0)
 
         if ((!empty($host['mac'])) &&
                 (empty($host['mac_vendor']) || $forceall === 1)
-        )
-        {
+        ) {
             Log::debug("Getting mac vendor for {$host['display_name']}");
             $vendor = get_mac_vendor_local(trim($host['mac']));
-            if (empty($vendor))
-            {
+            if (empty($vendor)) {
                 Log::debug("Local lookup fail, checking mac online");
                 $vendor = get_mac_vendor(trim($host['mac']));
             }
 
-            if (empty($vendor['company']))
-            {
+            if (empty($vendor['company'])) {
                 Log::debug("Mac vendor for {$host['mac']} is null");
                 (empty($host['mac_vendor'])) ? $update['mac_vendor'] = '-' : null;
-            } else
-            {
-                if ($vendor['company'] != $host['mac_vendor'])
-                {
+            } else {
+                if ($vendor['company'] != $host['mac_vendor']) {
                     Log::warning("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
                     $update['mac_vendor'] = $vendor['company'];
                 }
             }
-            if (!empty($update) && ($host['mac_vendor'] != $update['mac_vendor']))
-            {
+            if (!empty($update) && ($host['mac_vendor'] != $update['mac_vendor'])) {
                 $hosts->update($host['id'], $update);
             }
         }
@@ -245,8 +217,7 @@ function check_macs(Hosts $hosts)
     foreach ($known_hosts as $host)
     {
         $new_mac = get_mac($host['ip']);
-        if (!empty($new_mac) && $host['mac'] != $new_mac)
-        {
+        if (!empty($new_mac) && $host['mac'] != $new_mac) {
             $update['mac'] = trim($new_mac);
             $hosts->update($host['id'], $update);
         }
@@ -260,8 +231,7 @@ function host_access(array $cfg, Hosts $hosts)
 
     foreach ($db_hosts as $host)
     {
-        if ($host['access_method'] < 1 || empty($host['online']))
-        {
+        if ($host['access_method'] < 1 || empty($host['online'])) {
             continue;
         }
 
@@ -270,8 +240,7 @@ function host_access(array $cfg, Hosts $hosts)
         $set['access_results'] = [];
 
         $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
-        if (!$ssh)
-        {
+        if (!$ssh) {
             Log::err("SSH host_access: Cant connect host {$host['ip']}");
             continue;
         }
@@ -280,8 +249,7 @@ function host_access(array $cfg, Hosts $hosts)
 
         $results = [];
 
-        if (empty($host['hostname']))
-        {
+        if (empty($host['hostname'])) {
             h_get_hostname($ssh, $results);
         }
         h_get_ncpus($ssh, $results);
@@ -291,8 +259,7 @@ function host_access(array $cfg, Hosts $hosts)
         h_get_load_average($ssh, $results);
         h_get_tail_syslog($ssh, $results);
 
-        if (!empty($results['hostname']))
-        {
+        if (!empty($results['hostname'])) {
             $set['hostname'] = $results['hostname'];
             unset($results['hostname']);
         }
@@ -314,11 +281,9 @@ function ping_host_ports(AppCtx $ctx, array $host)
     $err_code = $err_msg = '';
 
     //Custom timeout for host
-    if (!empty($host['timeout']))
-    {
+    if (!empty($host['timeout'])) {
         $timeout = $host['timeout'];
-    } else
-    {
+    } else {
         $timeout = $networks->isLocal($host['ip']) ? 0.6 : 1;
     }
 
@@ -339,8 +304,7 @@ function ping_host_ports(AppCtx $ctx, array $host)
         $port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
         $conn = @fsockopen($ip, $port['n'], $err_code, $err_msg, $timeout);
 
-        if (is_resource($conn))
-        {
+        if (is_resource($conn)) {
             $host_status['online'] = 1;
             $host_status['last_seen'] = $time_now;
             $host_status['ports'][$kport]['online'] = 1;
@@ -348,8 +312,7 @@ function ping_host_ports(AppCtx $ctx, array $host)
             $latency = round_latency(microtime(true) - $tim_start);
             $host_status['ports'][$kport]['latency'] = $latency;
             $host_status['latency'] = $latency;
-        } else
-        {
+        } else {
             $warn_msg = 'Port ' . $port['n'] . ' down' . "\n";
             $host_status['warn_port'] = 1;
             $host_status['warn_msg'] .= $warn_msg;
@@ -359,22 +322,18 @@ function ping_host_ports(AppCtx $ctx, array $host)
         }
     }
 
-    if ($host_status['online'] == 0)
-    {
-        if (!empty($host['timeout']) && $host['timeout'] > 0.0)
-        {
+    if ($host_status['online'] == 0) {
+        if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
             $sec = intval($host['timeout']);
             $usec = ($host['timeout'] - $sec);
             $usec = $usec > 0 ? $usec * 1000000 : 0;
-        } else
-        {
+        } else {
             $sec = 0;
             $usec = 100000;
         }
 
         $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
-        if ($host_ping['online'])
-        {
+        if ($host_ping['online']) {
             $host_status['online'] = 1;
         }
     }
@@ -390,13 +349,11 @@ function ping_known_host(AppCtx $ctx, array $host)
     $time_now = utc_date_now();
     $networks = $ctx->getAppNetworks();
 
-    if (!empty($host['timeout']) && $host['timeout'] > 0.0)
-    {
+    if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
         $sec = intval($host['timeout']);
         $usec = ($host['timeout'] - $sec);
         $usec = $usec > 0 ? $usec * 1000000 : 0;
-    } else if ($networks->isLocal($host['ip']))
-    {
+    } else if ($networks->isLocal($host['ip'])) {
         $sec = 0;
         $usec = ($host['online']) ? 400000 : 300000;
     }
@@ -410,8 +367,7 @@ function ping_known_host(AppCtx $ctx, array $host)
     $set['warn_port'] = 0;
     $set['latency'] = $ip_status['latency'];
     $set['last_check'] = $time_now;
-    if ($ip_status['online'])
-    {
+    if ($ip_status['online']) {
         $set['online'] = 1;
         $set['last_seen'] = $time_now;
     }
@@ -429,21 +385,18 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0])
 
     $tim_start = microtime(true);
 
-    if (count($timeout) < 2 || !isset($timeout['sec']) || !isset($timeout['usec']))
-    {
+    if (count($timeout) < 2 || !isset($timeout['sec']) || !isset($timeout['usec'])) {
         $timeout = ['sec' => 0, 'usec' => 200000];
     }
     $protocolNumber = getprotobyname('icmp');
     $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
-    if (!$socket)
-    {
+    if (!$socket) {
         $status['error'] = 'socket_create';
         $status['latency'] = -0.003;
     }
 
     socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
-    if (!socket_connect($socket, $ip, 0))
-    {
+    if (!socket_connect($socket, $ip, 0)) {
         $status['error'] = 'socket_connect';
         $status['latency'] = -0.002;
         socket_close($socket);
@@ -453,12 +406,10 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0])
     $package = "\x08\x00\x19\x2f\x00\x00\x00\x00\x70\x69\x6e\x67";
     socket_send($socket, $package, strlen($package), 0);
 
-    if (socket_read($socket, 255))
-    {
+    if (socket_read($socket, 255)) {
         $status['online'] = 1;
         $status['latency'] = round_latency(microtime(true) - $tim_start);
-    } else
-    {
+    } else {
         $status['error'] = 'timeout';
         $status['latency'] = -0.001;
     }
@@ -473,8 +424,7 @@ function get_mac(string $ip)
 
     $comm_path = check_command('arp');
 
-    if (empty($comm_path))
-    {
+    if (empty($comm_path)) {
         Log::warning('arp command not exists please install net-tools');
         return false;
     }
@@ -482,8 +432,7 @@ function get_mac(string $ip)
 
     $ip = trim($ip);
 
-    if (!filter_var($ip, FILTER_VALIDATE_IP))
-    {
+    if (!filter_var($ip, FILTER_VALIDATE_IP)) {
         return false;
     }
 
@@ -491,11 +440,9 @@ function get_mac(string $ip)
     $explode_result = explode(' ', $result['stdout']);
     $result = trim($explode_result[3]);
 
-    if (filter_var($result, FILTER_VALIDATE_MAC) === false)
-    {
+    if (filter_var($result, FILTER_VALIDATE_MAC) === false) {
         return false;
-    } else
-    {
+    } else {
         return $result;
     }
 }

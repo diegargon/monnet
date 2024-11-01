@@ -11,8 +11,7 @@
 
 function valid_timezone(string $timezone)
 {
-    if (empty($timezone))
-    {
+    if (empty($timezone)) {
         return false;
     }
     $valid_time_zones = timezone_identifiers_list();
@@ -22,8 +21,7 @@ function valid_timezone(string $timezone)
 
 function date_now(string $timezone = 'UTC')
 {
-    if (!valid_timezone($timezone))
-    {
+    if (!valid_timezone($timezone)) {
         return false;
     }
     $date_timezone = new DatetimeZone($timezone);
@@ -47,8 +45,7 @@ function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s'
 
 function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s')
 {
-    if (!valid_timezone($timezone))
-    {
+    if (!valid_timezone($timezone)) {
         return false;
     }
     $date_timezone = new DatetimeZone($timezone);

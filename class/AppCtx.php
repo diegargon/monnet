@@ -2,7 +2,6 @@
 
 class AppCtx
 {
-
     private array $cfg = [];
     private array $lang = [];
     private Database $db;
@@ -27,8 +26,7 @@ class AppCtx
     {
         $file_path = 'class/' . $class_name . '.php';
 
-        if (file_exists($file_path))
-        {
+        if (file_exists($file_path)) {
             require_once $file_path;
         }
     }
@@ -52,8 +50,7 @@ class AppCtx
 
     public function getAppHosts(): Hosts
     {
-        if (!isset($this->hosts))
-        {
+        if (!isset($this->hosts)) {
             $this->hosts = new Hosts($this);
         }
 
@@ -62,8 +59,7 @@ class AppCtx
 
     public function getAppUser(): User
     {
-        if (!isset($this->user))
-        {
+        if (!isset($this->user)) {
             $this->user = new User($this);
         }
         return $this->user;
@@ -71,8 +67,7 @@ class AppCtx
 
     public function getAppCategories(): Categories
     {
-        if (!isset($this->categories))
-        {
+        if (!isset($this->categories)) {
             $this->categories = new Categories($this);
         }
 
@@ -81,8 +76,7 @@ class AppCtx
 
     public function getAppNetworks(): Networks
     {
-        if (!isset($this->networks))
-        {
+        if (!isset($this->networks)) {
             $this->networks = new Networks($this);
         }
 
@@ -91,8 +85,7 @@ class AppCtx
 
     public function getAppItems()
     {
-        if (!isset($this->items))
-        {
+        if (!isset($this->items)) {
             $this->items = new Items($this);
         }
 
@@ -101,12 +94,10 @@ class AppCtx
 
     public function getAppMail()
     {
-        if (!isset($this->mailer))
-        {
+        if (!isset($this->mailer)) {
             $this->mailer = new Mailer($this);
         }
 
         return $this->mailer;
     }
-
 }

@@ -12,7 +12,6 @@
  */
 class Frontend
 {
-
     private array $cfg;
     private array $lng;
 
@@ -28,65 +27,54 @@ class Frontend
         $web['main_footer'] = '';
 
         /* Add custom css files */
-        if (!empty($tdata['web_main']['cssfile']) && is_array($tdata['web_main']['cssfile']))
-        {
+        if (!empty($tdata['web_main']['cssfile']) && is_array($tdata['web_main']['cssfile'])) {
             foreach ($tdata['web_main']['cssfile'] as $cssfile)
             {
                 $web['main_head'] .= $this->cssLinkFile($this->cfg['theme'], $cssfile);
             }
         }
         /* Add script link */
-        if (!empty($tdata['web_main']['scriptlink']) && is_array($tdata['web_main']['scriptlink']))
-        {
+        if (!empty($tdata['web_main']['scriptlink']) && is_array($tdata['web_main']['scriptlink'])) {
             foreach ($tdata['web_main']['scriptlink'] as $scriptlink)
             {
                 if (
                         (strpos($scriptlink, 'http') === 0) ||
                         (file_exists($scriptlink))
-                )
-                {
+                ) {
                     $web['main_head'] .= $this->scriptLink($scriptlink);
                 }
             }
         }
 
-        if (!empty($tdata['web_main']['main_head']))
-        {
+        if (!empty($tdata['web_main']['main_head'])) {
             $web['main_head'] .= $tdata['web_main']['main_head'];
         }
-        if (!empty($tdata['web_main']['main_head_tpl']) && is_array($tdata['web_main']['main_head_tpl']))
-        {
+        if (!empty($tdata['web_main']['main_head_tpl']) && is_array($tdata['web_main']['main_head_tpl'])) {
             foreach ($tdata['web_main']['main_head_tpl'] as $head_tpl)
             {
                 $web['main_head'] .= $this->getTpl($head_tpl, $tdata);
             }
         }
 
-        if (!empty($tdata['web_main']['main_footer_tpl']) && is_array($tdata['web_main']['main_footer_tpl']))
-        {
+        if (!empty($tdata['web_main']['main_footer_tpl']) && is_array($tdata['web_main']['main_footer_tpl'])) {
             foreach ($tdata['web_main']['main_footer_tpl'] as $footer_tpl)
             {
                 $web['main_footer'] .= $this->getTpl($footer_tpl, $tdata);
             }
         }
 
-        if (!empty($tdata['web_main']['main_footer']))
-        {
+        if (!empty($tdata['web_main']['main_footer'])) {
             $web['main_footer'] .= $tdata['web_main']['main_footer'];
         }
 
         /* Load Templates in tdata/tpl */
-        if (!empty($tdata['load_tpl']) and is_array($tdata['load_tpl']) && count($tdata['load_tpl']) > 0)
-        {
+        if (!empty($tdata['load_tpl']) and is_array($tdata['load_tpl']) && count($tdata['load_tpl']) > 0) {
             foreach ($tdata['load_tpl'] as $tpl)
             {
-                if (!empty($tpl['file']) && !empty($tpl['place']))
-                {
-                    if (empty($tdata[$tpl['place']]))
-                    {
+                if (!empty($tpl['file']) && !empty($tpl['place'])) {
+                    if (empty($tdata[$tpl['place']])) {
                         $tdata[$tpl['place']] = $this->getTpl($tpl['file'], $tdata);
-                    } else
-                    {
+                    } else {
                         $tdata[$tpl['place']] .= $this->getTpl($tpl['file'], $tdata);
                     }
                 }
@@ -164,5 +152,4 @@ class Frontend
          *
          */
     }
-
 }

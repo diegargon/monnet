@@ -17,21 +17,17 @@ function format_items(User $user, array $items_results)
     {
         $item_conf = json_decode($item['conf'], true);
         $item_img = '';
-        if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource']))
-        {
+        if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource'])) {
             $item_img = $item_conf['url'] . '/favicon.ico';
             $item_img = cached_img($user, $item['id'], $item_img);
-        } else if ($item_conf['image_type'] === 'favicon')
-        {
+        } else if ($item_conf['image_type'] === 'favicon') {
             $favicon_path = $item_conf['image_resource'];
             $item_img = base_url($item_conf['url']) . '/' . $favicon_path;
             $item_img = cached_img($user, $item['id'], $item_img);
-        } elseif ($item_conf['image_type'] === 'url')
-        {
+        } elseif ($item_conf['image_type'] === 'url') {
             $item_img = $item_conf['image_resource'];
             $item_img = cached_img($user, $item['id'], $item_img);
-        } elseif ($item_conf['image_type'] === 'local_img')
-        {
+        } elseif ($item_conf['image_type'] === 'local_img') {
             $item_img = '/local_img/' . $item_conf['image_resource'];
         }
 

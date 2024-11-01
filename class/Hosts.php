@@ -11,7 +11,6 @@
 
 class Hosts
 {
-
     public int $totals = 0;
     public int $total_on = 0;
     public int $total_off = 0;
@@ -32,15 +31,12 @@ class Hosts
 
     public function addHost(array $host): bool
     {
-        if (empty($host['ip']) && !empty($host['hostname']))
-        {
-            if (!Filters::varDomain($host['hostname']))
-            {
+        if (empty($host['ip']) && !empty($host['hostname'])) {
+            if (!Filters::varDomain($host['hostname'])) {
                 return false;
             }
             $host['ip'] = gethostbyname($host['hostname']);
-            if (!$host['ip'])
-            {
+            if (!$host['ip']) {
                 return false;
             }
         }
@@ -56,8 +52,7 @@ class Hosts
 
         foreach ($this->hosts as $host)
         {
-            if (empty($host['disable']))
-            {
+            if (empty($host['disable'])) {
                 $hosts[] = $host;
             }
         }
@@ -70,8 +65,7 @@ class Hosts
         $hosts = $this->getknownEnabled();
         foreach ($hosts as $khost => $vhost)
         {
-            if ($vhost['highlight'] != $highligth)
-            {
+            if ($vhost['highlight'] != $highligth) {
                 unset($hosts[$khost]);
             }
         }
@@ -96,53 +90,44 @@ class Hosts
 
         foreach ($values as $kvalue => $vvalue)
         {
-            if (!empty($kvalue) && isset($vvalue))
-            {
+            if (!empty($kvalue) && isset($vvalue)) {
                 //TODO warning sign
                 if (
                         ($kvalue == 'mac' || $kvalue == 'mac_vendor' || $kvalue == 'hostname') &&
                         ($this->hosts[$id][$kvalue] != $vvalue)
-                )
-                {
+                ) {
                     $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( '
                             . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])'
                             . $this->hosts[$id][$kvalue] . '->' . $vvalue;
                     Log::logHost('LOG_WARNING', $id, $loghostmsg);
                 }
-                if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category'])
-                {
+                if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
                     Log::logHost('LOG_INFO', $id, 'Host ' . $this->hosts[$id]['display_name']
                             . ' change category ' . $this->hosts[$id]['category'] . '->' . $vvalue);
                     $this->host_cat_track[$this->hosts[$id]['category']]--;
                     $this->host_cat_track[$vvalue]++;
                 }
                 $this->hosts[$id][$kvalue] = $vvalue;
-                if (in_array($kvalue, $misc_keys))
-                {
+                if (in_array($kvalue, $misc_keys)) {
                     $misc_container[$kvalue] = $vvalue;
-                } else
-                {
+                } else {
                     $fvalues[$kvalue] = $vvalue;
                 }
             }
         }
-        if (valid_array($misc_container))
-        {
+        if (valid_array($misc_container)) {
             $fvalues['misc'] = json_encode($misc_container);
         }
-        if (valid_array($fvalues))
-        {
+        if (valid_array($fvalues)) {
             $this->db->update('hosts', $fvalues, ['id' => ['value' => $id]], 'LIMIT 1');
         }
     }
 
     public function insert(array $host): void
     {
-        if (!isset($host['hostname']))
-        {
+        if (!isset($host['hostname'])) {
             $hostname = $this->getHostname($host['ip']);
-            if ($hostname)
-            {
+            if ($hostname) {
                 $host['hostname'] = $hostname;
             }
         }
@@ -151,11 +136,9 @@ class Hosts
 
         $host_id = $this->db->insertID();
         $hostlog = $this->getDisplayName($host);
-        if (!empty($host['mac_vendor']) && $host['mac_vendor'] !== '-')
-        {
+        if (!empty($host['mac_vendor']) && $host['mac_vendor'] !== '-') {
             $hostlog .= ' [' . $host['mac_vendor'] . ']';
-        } else if (!empty($host['mac']))
-        {
+        } else if (!empty($host['mac'])) {
             $hostlog .= ' [' . $host['mac'] . ']';
         }
         $host['id'] = $host_id;
@@ -179,8 +162,7 @@ class Hosts
     public function getHostById(int $id): array|false
     {
 
-        if (empty($this->hosts[$id]))
-        {
+        if (empty($this->hosts[$id])) {
             return false;
         }
         $host = $this->hosts[$id];
@@ -196,8 +178,7 @@ class Hosts
     {
         foreach ($this->hosts as $host)
         {
-            if ($host['ip'] == trim($ip))
-            {
+            if ($host['ip'] == trim($ip)) {
                 return $host;
             }
         }
@@ -212,8 +193,7 @@ class Hosts
         foreach ($this->hosts as $host)
         {
 
-            if ($host['category'] == $cat_id)
-            {
+            if ($host['category'] == $cat_id) {
                 $hosts_by_cat[] = $host;
             }
         }
@@ -223,8 +203,7 @@ class Hosts
 
     public function catHaveHosts($id): bool
     {
-        if (isset($this->host_cat_track[$id]) && $this->host_cat_track[$id] > 0)
-        {
+        if (isset($this->host_cat_track[$id]) && $this->host_cat_track[$id] > 0) {
             return true;
         }
 
@@ -233,11 +212,9 @@ class Hosts
 
     private function getDisplayName($host): string
     {
-        if (!empty($host['title']))
-        {
+        if (!empty($host['title'])) {
             return $host['title'];
-        } else if (!empty($host['hostname']))
-        {
+        } else if (!empty($host['hostname'])) {
             return ucfirst(explode('.', $host['hostname'])[0]);
         }
         return $host['ip'];
@@ -246,8 +223,7 @@ class Hosts
     public function getHostname(string $ip): string|false
     {
         $hostname = gethostbyaddr($ip);
-        if ($hostname == $ip)
-        {
+        if ($hostname == $ip) {
             return false;
         }
         return $hostname;
@@ -263,8 +239,7 @@ class Hosts
         $networks = $this->ctx->getAppNetworks();
         $query_hosts = 'SELECT * FROM hosts';
         $results = $this->db->query($query_hosts);
-        if (!$results)
-        {
+        if (!$results) {
             return false;
         }
         $hosts = $this->db->fetchAll($results);
@@ -275,13 +250,11 @@ class Hosts
             $id = $host['id'];
             $net_id = $host['network'];
             $network = $networks->getNetworkByID($net_id);
-            if ($network !== false)
-            {
+            if ($network !== false) {
                 $host['net_cidr'] = $network['network'];
                 $host['network_name'] = $network['name'];
                 $host['network_vlan'] = $network['vlan'];
-            } else
-            {
+            } else {
                 Log::warning('Host network seems not exists: ' . "[H: $id][N: $net_id]");
             }
             $host['display_name'] = ucfirst($this->getDisplayName($host));
@@ -293,21 +266,17 @@ class Hosts
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
 
             //Track host categories
-            if (empty($this->host_cat_track[$host['category']]))
-            {
+            if (empty($this->host_cat_track[$host['category']])) {
                 $this->host_cat_track[$host['category']] = 1;
-            } else
-            {
+            } else {
                 $this->host_cat_track[$host['category']]++;
             }
             /* Port Field JSON TODO Need rethink */
-            if (!empty($this->hosts[$id]['ports']))
-            {
+            if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
             }
             /* Misc field JSON misc fields that not need a db field */
-            if (!empty($this->hosts[$id]['misc']))
-            {
+            if (!empty($this->hosts[$id]['misc'])) {
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
                 foreach ($misc_values as $key => $value)
                 {
@@ -315,8 +284,7 @@ class Hosts
                 }
             }
 
-            if (empty($host['notes_id']))
-            {
+            if (empty($host['notes_id'])) {
                 $this->db->insert('notes', ['host_id' => $host['id']]);
                 $insert_id = $this->db->insertID();
                 $this->db->update('hosts', ['notes_id' => $insert_id], ['id' => $host['id']]);
@@ -326,5 +294,4 @@ class Hosts
 
         return true;
     }
-
 }
