@@ -24,6 +24,18 @@ jobs:
           --health-retries=3
 
     steps:
+
+      - name: Verify MySQL connection
+        run: |
+          sudo apt update
+          sudo apt install -y mysql-client
+          mysql --version
+          mysql \
+            --host 172.17.0.1 \
+            --port ${{ job.services.mysql.ports['3306'] }} \
+            -uroot
+            -psecret -e "SHOW DATABASES;"
+
       - name: Checkout code
         uses: actions/checkout@v3
 
