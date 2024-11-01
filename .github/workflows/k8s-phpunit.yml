@@ -18,7 +18,7 @@ jobs:
 
       - name: Start MySQL service
         run: |
-          docker run --name mysql \
+          docker run --name mysql-docker \
               -v $(pwd)/ci-docker/my.cnf:/etc/mysql/conf.d/my.cnf \
               --env='MYSQL_ROOT_PASSWORD=monnetadmin' \
               -d mysql:8
@@ -28,7 +28,7 @@ jobs:
       - name: Wait for MySQL to start
         run: |
           for i in {1..30}; do
-            if docker exec mysql mysqladmin ping -uroot -pmonnetadmin --silent; then
+            if docker exec mysql-docker mysqladmin ping -uroot -pmonnetadmin --silent; then
               echo "MySQL is up and running!"
               break
             fi
@@ -37,18 +37,18 @@ jobs:
           done
       - name: Verify my.cnf in MySQL
         run: |
-          docker exec mysql cat /etc/mysql/conf.d/my.cnf
+          docker exec mysql-docker cat /etc/mysql/conf.d/my.cnf
       - name: Configure MySQL root user permissions
         run: |
-          docker exec -i mysql mysql -uroot -pmonnetadmin -e "ALTER USER 'root'@'%' IDENTIFIED BY 'monnetadmin';"
-          docker exec -i mysql mysql -uroot -pmonnetadmin -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-          docker exec -i mysql mysql -uroot -pmonnetadmin -e "FLUSH PRIVILEGES;"
+          docker exec -i mysql-docker mysql -uroot -pmonnetadmin -e "ALTER USER 'root'@'%' IDENTIFIED BY 'monnetadmin';"
+          docker exec -i mysql-docker mysql -uroot -pmonnetadmin -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
+          docker exec -i mysql-docker mysql -uroot -pmonnetadmin -e "FLUSH PRIVILEGES;"
 
       - name: Check containers
         run: docker ps -a
 
       - name: Check Mysql User
-        run: docker exec -i mysql mysql -uroot -pmonnetadmin -e "SELECT User, Host FROM mysql.user;"
+        run: docker exec -i mysql-docker mysql -uroot -pmonnetadmin -e "SELECT User, Host FROM mysql.user;"
 
       - name: Run Docker container
         run: docker run --rm my-app:latest   

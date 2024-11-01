@@ -12,7 +12,7 @@
 /* Db Config */
 
 $cfg_db['dbtype'] = 'mysql';
-$cfg_db['dbhost'] = 'mysql';
+$cfg_db['dbhost'] = 'mysql-docker';
 $cfg_db['dbname'] = 'monnet';
 $cfg_db['dbuser'] = 'root';
 $cfg_db['dbpassword'] = 'monnetadmin';
