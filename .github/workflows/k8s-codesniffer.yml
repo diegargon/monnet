@@ -1,0 +1,24 @@
+name: CodeSniffer
+#
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: arc-runner-set
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: docker build -t my-app:latest -f docker/Dockerfile-codesniffer .
+
+      - name: Run Docker container
+        run: docker run --rm my-app:latest
+        timeout-minutes: 5

@@ -1,4 +1,4 @@
-name: Deploy phpunit
+name: PhpUnit
 #
 on:
   push:
@@ -79,18 +79,4 @@ jobs:
 
       - name: Run Docker Phpunit container
         run: docker run --rm my-app:latest
-        timeout-minutes: 5
-
-      - name: Build PhpStan Docker image
-        run: docker build -t my-app-phpstan:latest -f ci-docker/Dockerfile-phpstan .
-        
-      - name: Run Docker PhpStan container
-        run: docker run --rm my-app-phpstan:latest
-        timeout-minutes: 5
-        
-      - name: Build CodeSniffer Docker image
-        run: docker build -t my-app-codesniffer:latest -f ci-docker/Dockerfile-codesniffer .
-        
-      - name: Run Docker codeSniffer container
-        run: docker run --rm my-app-codesniffer:latest
         timeout-minutes: 5
