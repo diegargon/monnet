@@ -37,7 +37,7 @@ jobs:
           mysql \
             --host 127.0.0.1 \
             --port 3306 \
-            -uroot -psecret -e "SHOW DATABASES;"
+            -uroot -pmonnetadmin -e "SHOW DATABASES;"
 
       - name: Checkout code
         uses: actions/checkout@v3
