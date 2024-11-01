@@ -48,9 +48,9 @@ jobs:
 
       - name: Configure MySQL root user permissions
         run: |
-          mysql -h mysql-service -uroot -pmonnetadmin -e "ALTER USER 'root'@'%' IDENTIFIED BY 'monnetadmin';"
-          mysql -h mysql-service -uroot -pmonnetadmin -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-          mysql -h mysql-service -uroot -pmonnetadmin -e "FLUSH PRIVILEGES;"
+          mysql -h 127.0.0.1 -uroot -pmonnetadmin -e "ALTER USER 'root'@'%' IDENTIFIED BY 'monnetadmin';"
+          mysql -h 127.0.0.1 -uroot -pmonnetadmin -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
+          mysql -h 127.0.0.1 -uroot -pmonnetadmin -e "FLUSH PRIVILEGES;"
 
       - name: Check containers
         if: ${{ always() }}
