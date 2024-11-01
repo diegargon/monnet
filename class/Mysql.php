@@ -12,7 +12,6 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Database
 {
     /**
@@ -459,11 +458,11 @@ class Database
      * @return array|boolean
      */
     public function search(
-            string $table,
-            string $s_fields,
-            string $searchText,
-            array $where = null,
-            string $extra = null
+        string $table,
+        string $s_fields,
+        string $searchText,
+        array $where = null,
+        string $extra = null
     )
     {
 
@@ -513,11 +512,11 @@ class Database
      * @return array|boolean
      */
     public function update(
-            string $table,
-            array $set,
-            array $where = null,
-            string $extra = null,
-            string $logic = 'AND'
+        string $table,
+        array $set,
+        array $where = null,
+        string $extra = null,
+        string $logic = 'AND'
     )
     {
         if (empty($set) || empty($table)) {
@@ -595,8 +594,8 @@ class Database
         }
         $insert_ary = $this->insertProcess($insert_data);
         $query = "INSERT INTO " .
-                $this->db_prefix . $table
-                . " ( {$insert_ary['fields']} ) VALUES ( {$insert_ary['values']} ) $extra";
+            $this->db_prefix . $table
+            . " ( {$insert_ary['fields']} ) VALUES ( {$insert_ary['values']} ) $extra";
 
         return $this->query($query);
     }

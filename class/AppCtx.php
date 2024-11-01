@@ -1,6 +1,5 @@
 <?php
 
-// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class AppCtx
 {
     private array $cfg = [];
@@ -22,7 +21,6 @@ class AppCtx
     }
 
     /* Autoload class files */
-
     public function autoload(string $class_name): void
     {
         $file_path = 'class/' . $class_name . '.php';
@@ -33,7 +31,6 @@ class AppCtx
     }
 
     /* Getters */
-
     public function getAppCfg(): array
     {
         return $this->cfg;

@@ -234,9 +234,9 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
 }
 
 if (
-        $command == 'show_host_cat' ||
-        $command == 'show_host_only_cat' &&
-        isset($command_value) && is_numeric($command_value)
+    $command == 'show_host_cat' ||
+    $command == 'show_host_only_cat' &&
+    isset($command_value) && is_numeric($command_value)
 ) {
     $hosts_categories = $user->getHostsCats();
 
@@ -271,8 +271,8 @@ if (
 
 /* ADD NETWORK */
 if (
-        $command == 'addNetwork' &&
-        !empty($command_value)
+    $command == 'addNetwork' &&
+    !empty($command_value)
 ) {
     $decodedJson = json_decode($command_value, true);
 
@@ -287,8 +287,8 @@ if (
         }
         if ($new_network['networkCIDR'] == 0 && $new_network['network'] != '0.0.0.0') {
             $data['command_error_msg'] .= $lng['L_MASK'] .
-                    ' ' . $new_network['networkCIDR'] .
-                    ' ' . $lng['L_NOT_ALLOWED'] . '<br/>';
+                ' ' . $new_network['networkCIDR'] .
+                ' ' . $lng['L_NOT_ALLOWED'] . '<br/>';
         }
         $network_plus_cidr = $new_network['network'] . '/' . $new_network['networkCIDR'];
         unset($new_network['networkCIDR']);
@@ -313,8 +313,10 @@ if (
                 $data['command_error_msg'] = 'Network must be unique<br/>';
             }
         }
-        if (str_starts_with($new_network['network'], "0") ||
-                !$ctx->getAppNetworks()->isLocal($new_network['network'])) {
+        if (
+            str_starts_with($new_network['network'], "0") ||
+            !$ctx->getAppNetworks()->isLocal($new_network['network'])
+        ) {
             $new_network['vlan'] = 0;
             $new_network['scan'] = 0;
         }
@@ -330,8 +332,8 @@ if (
 /* ADD Bookmark */
 
 if (
-        $command == 'addBookmark' &&
-        !empty($command_value)
+    $command == 'addBookmark' &&
+    !empty($command_value)
 ) {
     $decodedJson = json_decode($command_value, true);
 
@@ -371,7 +373,6 @@ if (
         }
 
         if (empty($data['command_error_msg'])) {
-
             if ($ctx->getAppItems()->addItem('bookmarks', $new_bookmark)) {
                 $data['response_msg'] = 'ok';
             } else {
@@ -443,7 +444,7 @@ if ($command === 'host-details' && is_numeric($command_value)) {
                 }
 
                 $tdata['host_details']
-                        ['host_logs'] = $frontend->getTpl('term', ['term_logs' => $log_lines, 'host_id' => $host_id]);
+                    ['host_logs'] = $frontend->getTpl('term', ['term_logs' => $log_lines, 'host_id' => $host_id]);
             }
         }
         order_name($cfg['os']);
@@ -495,20 +496,20 @@ if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($comman
 
 /* Host and Bookmarks create category */
 if (
-        ($command == 'submitBookmarkCat' || $command == 'submitHostsCat') &&
-        !empty($command_value)
+    ($command == 'submitBookmarkCat' || $command == 'submitHostsCat') &&
+    !empty($command_value)
 ) {
     $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;
     $response = $ctx->getAppCategories()->create($cat_type, $command_value);
     ($response['success']) ? $data['response_msg'] = $response['msg'] :
-                    $data['command_error_msg'] = $response['msg'];
+            $data['command_error_msg'] = $response['msg'];
 
     $data['command_success'] = 1;
 }
 
 if (
-        ($command == 'removeBookmarkCat' || $command == 'removeHostsCat') &&
-        !empty($command_value) && is_numeric($command_value)
+    ($command == 'removeBookmarkCat' || $command == 'removeHostsCat') &&
+    !empty($command_value) && is_numeric($command_value)
 ) {
     $cat_type = ($command == 'removeBookmarkCat') ? 2 : 1;
     if ($cat_type == 2 && $command_value == 50) {
@@ -661,19 +662,14 @@ $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow
 //Todo instance system_prefs
 $results = $db->select('prefs', '*', ['uid' => 0]);
 $system_prefs = $db->fetchAll($results);
-$cli_last_run = 0;
-$discovery_last_run = 0;
+$cli_last = 0;
+$discovery_last = 0;
 
 foreach ($system_prefs as $sys_pref) {
     if ($sys_pref['pref_name'] == 'cli_last_run') {
-        $cli_last_run = $sys_pref['pref_value'];
-        $cli_last_run = utc_to_user_timezone($cli_last_run, $user->getTimezone(),
-                $cfg['datetime_format_min']);
+        $cli_last = utc_to_user_tz($sys_pref['pref_value'], $user->getTimezone(), $cfg['datetime_format_min']);
     } elseif ($sys_pref['pref_name'] == 'discovery_last_run') {
-        $discovery_last_run = $sys_pref['pref_value'];
-        $discovery_last_run = utc_to_user_timezone($discovery_last_run, $user->getTimezone(),
-                $cfg['datetime_format_min']
-        );
+        $discovery_last = utc_to_user_tz($sys_pref['pref_value'], $user->getTimezone(), $cfg['datetime_format_min']);
     }
 }
 $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;

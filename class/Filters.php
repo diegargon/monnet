@@ -9,7 +9,6 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Filters
 {
     public static function getInt($val, $size = PHP_INT_MAX): int|false
@@ -220,9 +219,9 @@ class Filters
     {
 
         if (
-                (empty($var) ) ||
-                (!empty($max_size) && (strlen($var) > $max_size) ) ||
-                (!empty($min_size) && (strlen($var) < $min_size))
+            (empty($var) ) ||
+            (!empty($max_size) && (strlen($var) > $max_size) ) ||
+            (!empty($min_size) && (strlen($var) < $min_size))
         ) {
             return false;
         }
@@ -257,7 +256,7 @@ class Filters
         $length = strlen($var);
 
         if (
-                empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
+            empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
         ) {
             return false;
         }
@@ -306,7 +305,7 @@ class Filters
         $length = strlen($var);
 
         if (
-                empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
+            empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
         ) {
             return false;
         }
@@ -351,7 +350,7 @@ class Filters
 
         // Validar longitud y formato de correo electrónico
         if (
-                empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
+            empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
         ) {
             return false;
         }
@@ -399,7 +398,7 @@ class Filters
         $length = strlen($var);
 
         if (
-                empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
+            empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
         ) {
             return false;
         }
@@ -434,7 +433,7 @@ class Filters
     {
         //Password validate safe password
         if (
-                (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
+            (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
         ) {
             return false;
         }
@@ -599,10 +598,10 @@ class Filters
 
     //Custom String
     public static function postCustomString(
-            string $val,
-            string $validSpecial,
-            int $max_size = null,
-            int $min_size = null
+        string $val,
+        string $validSpecial,
+        int $max_size = null,
+        int $min_size = null
     ): string|false
     {
         if (empty($_POST[$val])) {
@@ -613,10 +612,10 @@ class Filters
     }
 
     public static function getCustomString(
-            string $val,
-            string $validSpecial,
-            int $max_size = null,
-            int $min_size = null
+        string $val,
+        string $validSpecial,
+        int $max_size = null,
+        int $min_size = null
     ): string|false
     {
         if (empty($_GET[$val])) {
@@ -627,10 +626,10 @@ class Filters
     }
 
     public static function varCustomString(
-            string $var,
-            string $validSpecialChars,
-            int $max_size = null,
-            int $min_size = null
+        string $var,
+        string $validSpecialChars,
+        int $max_size = null,
+        int $min_size = null
     ): string|false
     {
         // Define el conjunto predeterminado de caracteres (AZaz y números)
@@ -642,7 +641,7 @@ class Filters
         $regex = '/^[' . $validChars . ']+$/';
 
         if (empty($var) || (!empty($max_size) && strlen($var) > $max_size) ||
-                (!empty($min_size) && strlen($var) < $min_size)) {
+            (!empty($min_size) && strlen($var) < $min_size)) {
             return false;
         }
 

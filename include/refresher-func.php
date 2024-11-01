@@ -8,7 +8,6 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
 function get_hosts_view(AppCtx $ctx, int $highlight = 0)
 {
     $cfg = $ctx->getAppCfg();
@@ -161,9 +160,8 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
     $result = $db->query($ping_states_query);
     $ping_stats = $db->fetchAll($result);
     if (valid_array($ping_stats)) {
-
         foreach ($ping_stats as &$ping) {
-            $ping['date'] = utc_to_user_timezone($ping['date'], $cfg['timezone']);
+            $ping['date'] = utc_to_user_tz($ping['date'], $cfg['timezone']);
         }
         $host['ping_stats'] = $ping_stats;
     }
@@ -198,12 +196,12 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
     $host['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
 
     if (!empty($host['last_seen'])) {
-        $host['f_last_seen'] = utc_to_user_timezone($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);
+        $host['f_last_seen'] = utc_to_user_tz($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);
     }
     if (!empty($host['last_check'])) {
-        $host['f_last_check'] = utc_to_user_timezone($host['last_check'], $cfg['timezone'], $cfg['datetime_format']);
+        $host['f_last_check'] = utc_to_user_tz($host['last_check'], $cfg['timezone'], $cfg['datetime_format']);
     }
-    $host['formated_creation_date'] = utc_to_user_timezone($host['created'], $cfg['timezone'], $cfg['datetime_format']);
+    $host['formated_creation_date'] = utc_to_user_tz($host['created'], $cfg['timezone'], $cfg['datetime_format']);
 
     if ($host['online'] && !empty($host['latency'])) {
         $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
@@ -212,7 +210,6 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
         $host_details = json_decode($host['access_results'], true);
 
         if (!empty($host_details) && is_array($host_details)) {
-
             foreach ($host_details as $k_host_details => $v_host_details) {
                 if (!empty($v_host_details)) {
                     $host[$k_host_details] = $v_host_details;

@@ -9,7 +9,6 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Networks
 {
     private array $networks;

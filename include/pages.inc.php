@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -112,13 +111,13 @@ function page_index(AppCtx $ctx)
     $show_highlight_hosts_status = $user->getPref('show_highlight_hosts_status');
     $show_other_hosts_status = $user->getPref('show_other_hosts_status');
     $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 :
-                    $page['controls']['show_bookmarks_status'] = 0;
+            $page['controls']['show_bookmarks_status'] = 0;
     $show_highlight_hosts_status ? $page['controls']['show_highlight_hosts_status'] = 1 :
-                    $page['controls']['show_highlight_hosts_status'] = 0;
+            $page['controls']['show_highlight_hosts_status'] = 0;
     $show_other_hosts_status ? $page['controls']['show_other_hosts_status'] = 1 :
-                    $page['controls']['show_other_hosts_status'] = 0;
+            $page['controls']['show_other_hosts_status'] = 0;
     $show_this_system ? $page['controls']['show_this_system_status'] = 1 :
-                    $page['controls']['show_this_system_status'] = 0;
+            $page['controls']['show_this_system_status'] = 0;
 
     $page['load_tpl'][] = [
         'file' => 'controls',
@@ -194,11 +193,9 @@ function page_login(AppCtx $ctx): array
     $lng = $ctx->getAppLang();
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
         $username = Filters::postUsername('username');
         $password = Filters::postPassword('password');
         if (!empty($username) && !empty($password)) {
-
             $userid = $user->checkUser($username, $password);
             if (!empty($userid) && $userid > 0) {
                 $user->setUser($userid);
