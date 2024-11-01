@@ -19,7 +19,7 @@ jobs:
       - name: Start MySQL service
         run: |
           docker run --name mysql \
-              -v $(pwd)/my.cnf:/etc/mysql/conf.d/my.cnf \
+              -v $(pwd)/ci-docker/my.cnf:/etc/mysql/conf.d/my.cnf \
               --env='MYSQL_ROOT_PASSWORD=monnetadmin' \
               -d mysql:8
       - name: Build Docker image
