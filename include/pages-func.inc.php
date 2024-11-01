@@ -20,7 +20,7 @@ function format_items(User $user, array $items_results)
         if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource'])) {
             $item_img = $item_conf['url'] . '/favicon.ico';
             $item_img = cached_img($user, $item['id'], $item_img);
-        } else if ($item_conf['image_type'] === 'favicon') {
+        } elseif ($item_conf['image_type'] === 'favicon') {
             $favicon_path = $item_conf['image_resource'];
             $item_img = base_url($item_conf['url']) . '/' . $favicon_path;
             $item_img = cached_img($user, $item['id'], $item_img);

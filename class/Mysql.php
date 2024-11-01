@@ -88,7 +88,7 @@ class Database
      * @param string $dbuser
      * @param string $dbpassword
      */
-    function __construct(array $cfg_db)
+    public function __construct(array $cfg_db)
     {
         $this->db_prefix = $cfg_db['dbprefix'];
         $this->charset = $cfg_db['dbcharset'];
@@ -101,7 +101,7 @@ class Database
     /**
      * Destruct
      */
-    function __destruct()
+    public function __destruct(): void
     {
         $this->close();
     }
@@ -110,7 +110,7 @@ class Database
      * Init connection
      * @return boolean
      */
-    function connect()
+    public function connect(): bool
     {
         $this->dblink = new mysqli($this->dbhost, $this->dbuser, $this->dbpassword, $this->dbname);
         if ($this->dblink->connect_errno) {
@@ -125,7 +125,7 @@ class Database
      * prefix setter
      * @param string $prefix
      */
-    function setPrefix(string $prefix)
+    public function setPrefix(string $prefix): void
     {
         $this->db_prefix = $prefix;
     }
@@ -134,7 +134,7 @@ class Database
      * charset setter
      * @param string $charset
      */
-    function setCharset(string $charset)
+    public function setCharset(string $charset): void
     {
         $this->charset = $charset;
         $this->dblink->set_charset($this->charset);
@@ -144,7 +144,7 @@ class Database
      * collate setter
      * @param string $collate
      */
-    function setCollate(string $collate)
+    public function setCollate(string $collate): void
     {
         $this->collate = $collate;
     }
@@ -153,7 +153,7 @@ class Database
      * Min char setter
      * @param int $value
      */
-    function setMinCharSearch(string $value)
+    public function setMinCharSearch(string $value): void
     {
         $this->min_search_char = $value;
     }
@@ -162,7 +162,7 @@ class Database
      * Silent errors
      * @param boolean $value
      */
-    function silent(bool $value = true)
+    public function silent(bool $value = true): void
     {
         $this->silent = $value;
     }
@@ -175,7 +175,7 @@ class Database
      * @param string $query
      * @return array
      */
-    function query(string $query)
+    public function query(string $query)
     {
         $this->query_stats++;
         $this->query_history[] = $query;
@@ -192,7 +192,7 @@ class Database
      * @param object $result
      * @return array
      */
-    function fetch(object $result)
+    public function fetch(object $result)
     {
         return $row = $result->fetch_assoc();
     }
@@ -203,7 +203,7 @@ class Database
      * @param object $result
      * @return array
      */
-    function fetchAll($result)
+    public function fetchAll($result)
     {
         $return_ary = [];
         if ($this->numRows($result) > 0) {
@@ -221,7 +221,7 @@ class Database
      * @param string $var
      * @return string
      */
-    function escape(string $var)
+    public function escape(string $var)
     {
         return $this->dblink->real_escape_string($var);
     }
@@ -232,7 +232,7 @@ class Database
      * @param string $var
      * @return string
      */
-    function escapeStrip(string $var)
+    public function escapeStrip(string $var)
     {
         return $this->dblink->real_escape_string(strip_tags($var));
     }
@@ -243,7 +243,7 @@ class Database
      * @param object $result
      * @return int
      */
-    function numRows(object $result)
+    public function numRows(object $result)
     {
         return $result->num_rows;
     }
@@ -251,7 +251,7 @@ class Database
     /**
      *  Close dblink
      */
-    function close()
+    public function close()
     {
         $this->dblink ? $this->dblink->close() : null;
     }
@@ -276,7 +276,7 @@ class Database
      *
      * @return int
      */
-    function insertID()
+    public function insertID()
     {
         if (!($id = $this->dblink->insert_id)) {
             die('Could not connect: ' . $this->dblink->error);
@@ -292,7 +292,7 @@ class Database
      *
      * @param object $query
      */
-    function free(object & $query)
+    public function free(object & $query)
     {
         $query->free();
     }
@@ -303,7 +303,7 @@ class Database
      * @param string $table
      * @return boolean
      */
-    function tableExists(string $table)
+    public function tableExists(string $table)
     {
         $query = 'SHOW TABLES LIKE \'' . $table . '\'';
         $result = $this->query($query);
@@ -322,7 +322,7 @@ class Database
      * @param mixed $value The value to check for existence in the table.
      * @return bool True if the value exists, false otherwise.
      */
-    function valueExists(string $table, string $field, $value)
+    public function valueExists(string $table, string $field, $value)
     {
         $table = $this->fieldQuote($table);
         $field = $this->fieldQuote($field);
@@ -334,7 +334,7 @@ class Database
         return $this->numRows($result) > 0;
     }
 
-    function queryExists(string $query)
+    public function queryExists(string $query)
     {
         $result = $this->query($query);
 
@@ -358,7 +358,7 @@ class Database
      * @param string $field
      * @return int|boolean
      */
-    function getNextNum(string $table, string $field)
+    public function getNextNum(string $table, string $field)
     {
 
         if (empty($table) || empty($field)) {
@@ -388,7 +388,7 @@ class Database
      * @param string $logic
      * @return array|boolean
      */
-    function selectAll(string $table, array $where = null, string $extra = null, string $logic = 'AND')
+    public function selectAll(string $table, array $where = null, string $extra = null, string $logic = 'AND')
     {
 
         if (empty($table)) {
@@ -415,7 +415,7 @@ class Database
      * @param string $logic
      * @return array|boolean
      */
-    function select(string $table, $what = '*', array $where = null, $extra = null, $logic = 'AND')
+    public function select(string $table, $what = '*', array $where = null, $extra = null, $logic = 'AND')
     {
         if (empty($table) || empty($what)) {
             return false;
@@ -428,8 +428,7 @@ class Database
             $what_ary = explode(",", $what);
             $end_what = end($what_ary);
 
-            foreach ($what_ary as $_what)
-            {
+            foreach ($what_ary as $_what) {
                 $what_filtered .= "`" . trim($_what) . "`";
                 if ($_what != $end_what) {
                     $what_filtered .= ",";
@@ -460,7 +459,7 @@ class Database
      * @param string $extra
      * @return array|boolean
      */
-    function search(string $table, string $s_fields, string $searchText, array $where = null, string $extra = null)
+    public function search(string $table, string $s_fields, string $searchText, array $where = null, string $extra = null)
     {
 
         $s_words_ary = explode(' ', $searchText);
@@ -475,12 +474,10 @@ class Database
             $query .= ' AND ';
         }
 
-        foreach ($fields_ary as $field)
-        {
+        foreach ($fields_ary as $field) {
             !empty($where_s_fields) ? $where_s_fields .= ' OR ' : null;
 
-            foreach ($s_words_ary as $s_word)
-            {
+            foreach ($s_words_ary as $s_word) {
                 if (mb_strlen($s_word, $this->charset) > $this->min_search_char) {
                     !empty($where_s_tmp) ? $where_s_tmp .= ' AND ' : null;
                     $where_s_tmp .= " $field LIKE '%$s_word%' ";
@@ -510,7 +507,7 @@ class Database
      * @param string $logic
      * @return array|boolean
      */
-    function update(string $table, array $set, array $where = null, string $extra = null, string $logic = 'AND')
+    public function update(string $table, array $set, array $where = null, string $extra = null, string $logic = 'AND')
     {
 
         if (empty($set) || empty($table)) {
@@ -534,7 +531,7 @@ class Database
      * @param string $logic
      * @return array|boolean
      */
-    function plusOne(string $table, string $field, array $where = null, string $extra = null, string $logic = 'AND')
+    public function plusOne(string $table, string $field, array $where = null, string $extra = null, string $logic = 'AND')
     {
 
         if (empty($field) || empty($table)) {
@@ -558,7 +555,7 @@ class Database
      * @param string $logic
      * @return array|boolean
      */
-    function toggleField(string $table, string $field, array $where = null, string $logic = 'AND')
+    public function toggleField(string $table, string $field, array $where = null, string $logic = 'AND')
     {
 
         if (empty($field) || empty($table)) {
@@ -580,7 +577,7 @@ class Database
      * @param string $extra
      * @return arrray|boolean
      */
-    function insert(string $table, array $insert_data, string $extra = null)
+    public function insert(string $table, array $insert_data, string $extra = null)
     {
 
         if (empty($table) || empty($insert_data)) {
@@ -603,7 +600,7 @@ class Database
      * @param string $logic
      * @return array|boolean
      */
-    function delete(string $table, array $where, string $extra = null, string $logic = 'AND')
+    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND')
     {
 
         if (empty($table) || empty($where)) {
@@ -623,7 +620,7 @@ class Database
      * @param array $set_ary
      * @param array $where_ary
      */
-    function upsert(string $table, array $set_ary, array $where_ary)
+    public function upsert(string $table, array $set_ary, array $where_ary)
     {
         $insert_data = array_merge($where_ary, $set_ary);
         $set_data = $this->setProcess($set_ary);
@@ -635,7 +632,7 @@ class Database
      *
      * @return int
      */
-    function numQuerys()
+    public function numQuerys()
     {
         return $this->query_stats;
     }
@@ -645,7 +642,7 @@ class Database
      *
      * @return array
      */
-    function getQueryHistory()
+    public function getQueryHistory()
     {
         return $this->query_history;
     }
@@ -658,8 +655,7 @@ class Database
      */
     private function insertProcess(array $insert_data)
     {
-        foreach ($insert_data as $field => $value)
-        {
+        foreach ($insert_data as $field => $value) {
             $value = (is_string($value)) ? $value = $this->escape($value) : $value;
             //TODO FIXME correccion rapida para evitar errores en mysql 8 con groups lead (palabras reservadas)
             $fields_ary[] = '`' . $field . '`';
@@ -679,8 +675,7 @@ class Database
      */
     private function setProcess(array $set)
     {
-        foreach ($set as $field => $value)
-        {
+        foreach ($set as $field => $value) {
             $value = $this->escape($value);
             $newset[] = "`$field` = " . "'" . $value . "'";
         }
@@ -698,8 +693,7 @@ class Database
     private function whereProcess(array $where, string $logic)
     {
 
-        foreach ($where as $field => $value)
-        {
+        foreach ($where as $field => $value) {
             if (!is_array($value)) {
                 $q_where_fields[] = "`$field` = " . "'" . $value . "'";
             } else {

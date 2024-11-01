@@ -1,8 +1,8 @@
 /**
- * 
+ *
  *  @author diego/@/envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -219,7 +219,7 @@ footer {
     border: 2px;
     grid-template-columns: repeat( auto-fit, minmax(86px, 0fr) );
     /*
-    grid-template-columns: repeat(6, 80px);    
+    grid-template-columns: repeat(6, 80px);
     grid-template-rows: 80px;
     grid-template-rows: repeat(3, 75px); */
 }
@@ -1263,7 +1263,7 @@ input:checked + .slider:before {
     display:flex;
 }
 .left-config-column, .right-config-column {
-    width: 49%; 
+    width: 49%;
 }
 
 @keyframes crt-glow {
@@ -1335,8 +1335,8 @@ input:checked + .slider:before {
 
 @media only screen and (max-width: 645px) {
     .bookmarks {
-        /*        
-                grid-template-columns: repeat(5, 75px);    
+        /*
+                grid-template-columns: repeat(5, 75px);
                 grid-template-rows: 75px;
         */
     }
@@ -1389,7 +1389,7 @@ input:checked + .slider:before {
 /*
 .term_output {
 color: transparent;
-    text-shadow: 0px 0px 4px rgba(0,0,0,1) !important;    
+    text-shadow: 0px 0px 4px rgba(0,0,0,1) !important;
 }
 .hosts-title, .text_shadow_style1, .text_shadow_style2{
     display:none !important;

@@ -14,10 +14,8 @@
         <div id="term_frame" class="frame glow">
             <div  id="term_output" class="term_output">
                 <?php
-                if (valid_array($tdata['term_logs']))
-                {
-                    foreach ($tdata['term_logs'] as $term_log)
-                    {
+                if (valid_array($tdata['term_logs'])) {
+                    foreach ($tdata['term_logs'] as $term_log) {
                         echo $term_log . '<br />';
                     }
                 }

@@ -21,22 +21,20 @@ class Frontend
         $this->lng = $lng;
     }
 
-    function showPage(array $tdata): void
+    public function showPage(array $tdata): void
     {
         $web['main_head'] = $this->cssLinkFile($this->cfg['theme'], $this->cfg['css']);
         $web['main_footer'] = '';
 
         /* Add custom css files */
         if (!empty($tdata['web_main']['cssfile']) && is_array($tdata['web_main']['cssfile'])) {
-            foreach ($tdata['web_main']['cssfile'] as $cssfile)
-            {
+            foreach ($tdata['web_main']['cssfile'] as $cssfile) {
                 $web['main_head'] .= $this->cssLinkFile($this->cfg['theme'], $cssfile);
             }
         }
         /* Add script link */
         if (!empty($tdata['web_main']['scriptlink']) && is_array($tdata['web_main']['scriptlink'])) {
-            foreach ($tdata['web_main']['scriptlink'] as $scriptlink)
-            {
+            foreach ($tdata['web_main']['scriptlink'] as $scriptlink) {
                 if (
                         (strpos($scriptlink, 'http') === 0) ||
                         (file_exists($scriptlink))
@@ -50,15 +48,13 @@ class Frontend
             $web['main_head'] .= $tdata['web_main']['main_head'];
         }
         if (!empty($tdata['web_main']['main_head_tpl']) && is_array($tdata['web_main']['main_head_tpl'])) {
-            foreach ($tdata['web_main']['main_head_tpl'] as $head_tpl)
-            {
+            foreach ($tdata['web_main']['main_head_tpl'] as $head_tpl) {
                 $web['main_head'] .= $this->getTpl($head_tpl, $tdata);
             }
         }
 
         if (!empty($tdata['web_main']['main_footer_tpl']) && is_array($tdata['web_main']['main_footer_tpl'])) {
-            foreach ($tdata['web_main']['main_footer_tpl'] as $footer_tpl)
-            {
+            foreach ($tdata['web_main']['main_footer_tpl'] as $footer_tpl) {
                 $web['main_footer'] .= $this->getTpl($footer_tpl, $tdata);
             }
         }
@@ -69,8 +65,7 @@ class Frontend
 
         /* Load Templates in tdata/tpl */
         if (!empty($tdata['load_tpl']) and is_array($tdata['load_tpl']) && count($tdata['load_tpl']) > 0) {
-            foreach ($tdata['load_tpl'] as $tpl)
-            {
+            foreach ($tdata['load_tpl'] as $tpl) {
                 if (!empty($tpl['file']) && !empty($tpl['place'])) {
                     if (empty($tdata[$tpl['place']])) {
                         $tdata[$tpl['place']] = $this->getTpl($tpl['file'], $tdata);
@@ -86,7 +81,7 @@ class Frontend
         echo $this->getTpl('main', array_merge($tdata, $web));
     }
 
-    function getTpl(string $tpl, array $tdata = []): string
+    public function getTpl(string $tpl, array $tdata = []): string
     {
         $lng = $this->lng;
         $cfg = $this->cfg;
@@ -99,7 +94,7 @@ class Frontend
         return ob_get_clean();
     }
 
-    function cssLinkFile(string $theme, string $css): string
+    public function cssLinkFile(string $theme, string $css): string
     {
         $css_file = 'tpl/' . $theme . '/css/' . $css . '.css';
         !file_exists($css_file) ? $css_file = 'tpl/default/css/default.css' : null;
@@ -109,13 +104,13 @@ class Frontend
         return $css_file;
     }
 
-    function scriptLink(string $scriptlink): string
+    public function scriptLink(string $scriptlink): string
     {
         //TODO SEC
         return '<script src="' . $scriptlink . '"></script>' . "\n";
     }
 
-    function msgBox(array $msg): string
+    public function msgBox(array $msg): string
     {
 
         (substr($msg['title'], 0, 2) == 'L_') ? $msg['title'] = $this->lng[$msg['title']] : null;
@@ -124,7 +119,7 @@ class Frontend
         return $this->getTpl('msgbox', $msg);
     }
 
-    function msgPage(array $msg): void
+    public function msgPage(array $msg): void
     {
 
         $footer = $this->getFooter();
@@ -137,7 +132,7 @@ class Frontend
         exit();
     }
 
-    function getFooter()
+    public function getFooter()
     {
         /* TODO
           global $db, $cfg;

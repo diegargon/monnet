@@ -32,7 +32,7 @@ class User
                 $this->user = [];
                 $this->user['id'] = -1;
             }
-        } else if (!empty($_COOKIE['uid']) && !empty($_COOKIE['sid'])) {
+        } elseif (!empty($_COOKIE['uid']) && !empty($_COOKIE['sid'])) {
             $this->user = $this->getProfile($_COOKIE['uid']);
             if (!empty($this->user['sid']) && $this->user['sid'] == $_COOKIE['sid']) {
                 $_SESSION['uid'] = $_COOKIE['uid'];
@@ -272,7 +272,7 @@ class User
             {
                 if (!empty($pref['pref_name']) && $pref['uid'] == 0) {
                     $this->prefs[$pref['pref_name']] = $pref['pref_value'];
-                } else if (!empty($pref['pref_name'])) {
+                } elseif (!empty($pref['pref_name'])) {
                     $this->prefs[$pref['pref_name']] = $pref['pref_value'];
                 }
             }

@@ -160,8 +160,7 @@ class Log
 
     public static function getLogLevelName(int $logvalue)
     {
-        foreach (self::$LOG_TYPE as $ktype => $vtype)
-        {
+        foreach (self::$LOG_TYPE as $ktype => $vtype) {
             if ($vtype == $logvalue) {
                 return $ktype;
             }

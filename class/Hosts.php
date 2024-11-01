@@ -138,7 +138,7 @@ class Hosts
         $hostlog = $this->getDisplayName($host);
         if (!empty($host['mac_vendor']) && $host['mac_vendor'] !== '-') {
             $hostlog .= ' [' . $host['mac_vendor'] . ']';
-        } else if (!empty($host['mac'])) {
+        } elseif (!empty($host['mac'])) {
             $hostlog .= ' [' . $host['mac'] . ']';
         }
         $host['id'] = $host_id;
@@ -214,7 +214,7 @@ class Hosts
     {
         if (!empty($host['title'])) {
             return $host['title'];
-        } else if (!empty($host['hostname'])) {
+        } elseif (!empty($host['hostname'])) {
             return ucfirst(explode('.', $host['hostname'])[0]);
         }
         return $host['ip'];

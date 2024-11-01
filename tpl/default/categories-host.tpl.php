@@ -15,17 +15,13 @@
             <img src="/tpl/<?= $cfg['theme'] ?>/img/network.png"/>
             <div class="dropdown-content" id="myDropdown">
                 <?php
-                if (!empty($tdata['networks']) && valid_array($tdata['networks']))
-                {
+                if (!empty($tdata['networks']) && valid_array($tdata['networks'])) {
                     ($tdata['networks_selected']) === 1 ? $disabled = ' disabled ' : $disabled = '';
-                    foreach ($tdata['networks'] as $net)
-                    {
+                    foreach ($tdata['networks'] as $net) {
                         $netid = $net['id'];
-                        if (!empty($net['selected']))
-                        {
+                        if (!empty($net['selected'])) {
                             $check_opt = ' checked ' . $disabled;
-                        } else
-                        {
+                        } else {
                             $check_opt = '';
                         }
                         ?>
@@ -39,8 +35,7 @@
             </div>
         </div>
         <?php
-        foreach ($tdata['hosts_categories'] as $cat)
-        {
+        foreach ($tdata['hosts_categories'] as $cat) {
             ?>
 
             <div class="category">

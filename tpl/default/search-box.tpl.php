@@ -9,8 +9,7 @@
 ?>
 
 <?php
-if (valid_array($tdata['search_engines']))
-{
+if (valid_array($tdata['search_engines'])) {
     ?>
     <div class="search_container">
         <h1 class="title gradiant"><a href=""><?= $tdata['head_name'] ?></a></h1>

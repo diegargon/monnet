@@ -173,7 +173,7 @@ function round_latency(float $latency, int $precision = 3)
 {
     if ($latency > 0 && $latency <= 0.001) {
         $latency = 0.001;
-    } else if ($latency < 0) {
+    } elseif ($latency < 0) {
         $latency = $latency;
     } else {
         $latency = round($latency, $precision);

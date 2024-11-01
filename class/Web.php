@@ -24,7 +24,7 @@ class Web
         $this->user = $ctx->getAppUser();
     }
 
-    public function run()
+    public function run(): void
     {
         $page = $this->ValidateRequestPage();
         if (!$page) {
@@ -53,7 +53,7 @@ class Web
         return false;
     }
 
-    function getPageData(string $page)
+    public function getPageData(string $page): array
     {
         $page_func = 'page_' . $page;
 
@@ -64,20 +64,20 @@ class Web
         //$page_data = $page_func($this->cfg, $this->lng, $this->user);
         if ($page == 'login') {
             $page_data = page_login($this->ctx);
-        } else if ($page == 'logout') {
+        } elseif ($page == 'logout') {
             $page_data = page_logout($this->ctx);
-        } else if ($page === 'privacy') {
+        } elseif ($page === 'privacy') {
             $page_data = page_privacy($this->ctx);
-        } else if ($page === 'index') {
+        } elseif ($page === 'index') {
             $page_data = page_index($this->ctx);
-        } else if ($page === 'settings') {
+        } elseif ($page === 'settings') {
             $page_data = page_settings($this->ctx);
         }
 
         return array_merge($page_defaults, $page_data);
     }
 
-    function render(array $page_data)
+    public function render(array $page_data): void
     {
         $frontend = new Frontend($this->cfg, $this->lng);
         $frontend->showPage($page_data);

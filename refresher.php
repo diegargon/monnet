@@ -42,15 +42,15 @@ $tdata['theme'] = $cfg['theme'];
 $command = Filters::postString('order');
 if ($command == 'saveNote') {
     $command_value = trim(Filters::postUTF8('order_value'));
-} else if ($command == 'submitScanPorts') {
+} elseif ($command == 'submitScanPorts') {
     $command_value = trim(Filters::postCustomString('order_value', ',/', 255));
-} else if ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
+} elseif ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
     $command_value = Filters::postInt('order_value');
-} else if ($command == 'addNetwork') {
+} elseif ($command == 'addNetwork') {
     $command_value = Filters::postCustomString('order_value', ',":.{}'); //JSON only special chars
-} else if ($command == 'addBookmark') {
+} elseif ($command == 'addBookmark') {
     $command_value = Filters::postCustomString('order_value', ',":.{}/_'); //Json + url chars
-} else if ($command == 'submitHost') {
+} elseif ($command == 'submitHost') {
     $command_value = Filters::postIP('order_value');
     if (empty($command_value)) {
         $command_value = Filters::postDomain('order_value');
@@ -116,8 +116,7 @@ if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id
             if (($encoded_ports = json_encode($valid_ports))) {
                 $db->update('hosts', ['ports' => $encoded_ports], ['id' => $object_id]);
                 $total_elements = count($valid_ports) - 1;
-                foreach ($valid_ports as $index => $port)
-                {
+                foreach ($valid_ports as $index => $port) {
                     $success_msg .= $port['n'] . '/';
                     $success_msg .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
                     $success_msg .= '/' . $port['name'];
@@ -209,8 +208,7 @@ if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($com
     $categories_state = $user->getHostsCatState();
 
     $ones = 0;
-    foreach ($categories_state as $state)
-    {
+    foreach ($categories_state as $state) {
         if ($state == 1) {
             $ones++;
         }
@@ -228,12 +226,12 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $user->toggleHostsCat($command_value);
 }
 
-if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
+if ($command == 'show_host_cat' ||
+        $command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
     $hosts_categories = $user->getHostsCats();
 
     //Not show empty cats
-    foreach ($hosts_categories as $key => $host_cat)
-    {
+    foreach ($hosts_categories as $key => $host_cat) {
         if (!$hosts->catHaveHosts($host_cat['id'])) {
             unset($hosts_categories[$key]);
         }
@@ -243,8 +241,7 @@ if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($co
     $networks_list = $ctx->getAppNetworks()->getNetworks();
 
     $networks_selected = 0;
-    foreach ($networks_list as &$net)
-    {
+    foreach ($networks_list as &$net) {
         $net_set = $user->getPref('network_select_' . $net['id']);
         if (($net_set) || $net_set === false) {
             $net['selected'] = 1;
@@ -269,8 +266,7 @@ if ($command == 'addNetwork' && !empty($command_value)) {
     if ($decodedJson === null) {
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
     } else {
-        foreach ($decodedJson as $key => $dJson)
-        {
+        foreach ($decodedJson as $key => $dJson) {
             ($key == 'networkVLAN') ? $key = 'vlan' : null;
             ($key == 'networkScan') ? $key = 'scan' : null;
             ($key == 'networkName') ? $key = 'name' : null;
@@ -296,8 +292,7 @@ if ($command == 'addNetwork' && !empty($command_value)) {
         }
 
         $networks_list = $ctx->getAppNetworks()->getNetworks();
-        foreach ($networks_list as $net)
-        {
+        foreach ($networks_list as $net) {
             if ($net['name'] == $new_network['name']) {
                 $data['command_error_msg'] = 'Name must be unique<br/>';
             }
@@ -305,7 +300,8 @@ if ($command == 'addNetwork' && !empty($command_value)) {
                 $data['command_error_msg'] = 'Network must be unique<br/>';
             }
         }
-        if (str_starts_with($new_network['network'], "0") || !$ctx->getAppNetworks()->isLocal($new_network['network'])) {
+        if (str_starts_with($new_network['network'], "0") ||
+                !$ctx->getAppNetworks()->isLocal($new_network['network'])) {
             $new_network['vlan'] = 0;
             $new_network['scan'] = 0;
         }
@@ -326,8 +322,7 @@ if ($command == 'addBookmark' && !empty($command_value)) {
     if ($decodedJson === null) {
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
     } else {
-        foreach ($decodedJson as $key => $dJson)
-        {
+        foreach ($decodedJson as $key => $dJson) {
             $new_bookmark[$key] = trim($dJson);
         }
 
@@ -424,15 +419,15 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         if (!empty($host_details['host_logs'])) {
             if (valid_array($host_details['host_logs'])) {
                 $log_lines = [];
-                foreach ($host_details['host_logs'] as $term_log)
-                {
+                foreach ($host_details['host_logs'] as $term_log) {
                     $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
                     $loglevelname = Log::getLogLevelName($term_log['level']);
                     $loglevelname = str_replace('LOG_', '', $loglevelname);
                     $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'];
                 }
 
-                $tdata['host_details']['host_logs'] = $frontend->getTpl('term', ['term_logs' => $log_lines, 'host_id' => $host_id]);
+                $tdata['host_details']['host_logs'] = $frontend->getTpl('term',
+                        ['term_logs' => $log_lines, 'host_id' => $host_id]);
             }
         }
         order_name($cfg['os']);
@@ -488,7 +483,8 @@ if (
         !empty($command_value)) {
     $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;
     $response = $ctx->getAppCategories()->create($cat_type, $command_value);
-    ($response['success']) ? $data['response_msg'] = $response['msg'] : $data['command_error_msg'] = $response['msg'];
+    ($response['success']) ? $data['response_msg'] = $response['msg'] :
+                    $data['command_error_msg'] = $response['msg'];
 
     $data['command_success'] = 1;
 }
@@ -499,9 +495,9 @@ if (
     $cat_type = ($command == 'removeBookmarkCat') ? 2 : 1;
     if ($cat_type == 2 && $command_value == 50) {
         $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
-    } else if ($cat_type == 1 && $command_value == 1) {
+    } elseif ($cat_type == 1 && $command_value == 1) {
         $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
-    } else if ($ctx->getAppCategories()->remove($command_value)) {
+    } elseif ($ctx->getAppCategories()->remove($command_value)) {
         //Set to default all elements
         if ($cat_type == 1) {
             $db->update('hosts', ['category' => 1], ['category' => $command_value]);
@@ -589,8 +585,7 @@ $type_mark = '';
 $host_logs = Log::getLoghosts($cfg['term_max_lines']);
 
 if (!empty($host_logs)) {
-    foreach ($host_logs as &$log)
-    {
+    foreach ($host_logs as &$log) {
         $log['type_mark'] = '[H]';
     }
     $logs = $host_logs;
@@ -600,16 +595,14 @@ if (!empty($host_logs)) {
 if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
     $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
     if (empty($system_logs)) {
-        foreach ($system_logs as &$system_log)
-        {
+        foreach ($system_logs as &$system_log) {
             $system_logs['type_mark'] = '[S]';
         }
         $logs = array_merge($logs, $system_logs);
     }
 }
 
-foreach ($logs as &$log)
-{
+foreach ($logs as &$log) {
     $log['timestamp'] = strtotime($log['date']);
 }
 
@@ -617,8 +610,7 @@ usort($logs, function ($a, $b) {
     return $b['timestamp'] <=> $a['timestamp'];
 });
 
-foreach ($logs as &$log)
-{
+foreach ($logs as &$log) {
     unset($log['timestamp']);
 }
 
@@ -630,8 +622,7 @@ if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {
 }
 if (valid_array($term_logs)) {
     $log_lines = [];
-    foreach ($term_logs as $term_log)
-    {
+    foreach ($term_logs as $term_log) {
         $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
         $loglevelname = Log::getLogLevelName($term_log['level']);
         $loglevelname = str_replace('LOG_', '', $loglevelname);
@@ -655,13 +646,12 @@ $system_prefs = $db->fetchAll($results);
 $cli_last_run = 0;
 $discovery_last_run = 0;
 
-foreach ($system_prefs as $sys_pref)
-{
+foreach ($system_prefs as $sys_pref) {
     if ($sys_pref['pref_name'] == 'cli_last_run') {
         $cli_last_run = $sys_pref['pref_value'];
         $cli_last_run = utc_to_user_timezone($cli_last_run, $user->getTimezone(),
                 $cfg['datetime_format_min']);
-    } else if ($sys_pref['pref_name'] == 'discovery_last_run') {
+    } elseif ($sys_pref['pref_name'] == 'discovery_last_run') {
         $discovery_last_run = $sys_pref['pref_value'];
         $discovery_last_run = utc_to_user_timezone($discovery_last_run, $user->getTimezone(),
                 $cfg['datetime_format_min']);

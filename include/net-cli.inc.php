@@ -77,7 +77,7 @@ function check_known_hosts(AppCtx $ctx)
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
                 $new_host_status['online_change'] = utc_date_now();
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
-            } else if ($host['online'] == 1 && $new_host_status['online'] == 0) {
+            } elseif ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 $new_host_status['online_change'] = utc_date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout);
@@ -353,7 +353,7 @@ function ping_known_host(AppCtx $ctx, array $host)
         $sec = intval($host['timeout']);
         $usec = ($host['timeout'] - $sec);
         $usec = $usec > 0 ? $usec * 1000000 : 0;
-    } else if ($networks->isLocal($host['ip'])) {
+    } elseif ($networks->isLocal($host['ip'])) {
         $sec = 0;
         $usec = ($host['online']) ? 400000 : 300000;
     }

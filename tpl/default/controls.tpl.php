@@ -16,13 +16,15 @@
 
         <div class="general_ctrl">
             <button id="addNetwork" class="button-ctrl" type="submit">
-                <img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?>">
+                <img class="add_link"
+                     src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?></span>
         </div>
         <div class="general_ctrl">
             <button id="toggleItemsSettings" class="button-ctrl" type="submit">
-                <img class="settigns_link" src="./tpl/default/img/settings-items.png" title="<?= $lng['L_SETTINGS'] ?>">
+                <img class="settigns_link"
+                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_SETTINGS'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_QUICK_SETTINGS'] ?></span>
         </div>
@@ -79,7 +81,7 @@
             <div class="system_ctrl">
                 <input type="hidden" name="show_this_system" value="0" />
                 <input class="check" type="checkbox" value="1" name="show_this_system"
-                         $tdata['controls']['show_this_system_status'] ? ' checked ' : null 
+                         $tdata['controls']['show_this_system_status'] ? ' checked ' : null
                 onchange="this.form.submit()" />
                 <span class="opt_labels">This</span>
             </div>
