@@ -16,12 +16,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
-        run: docker build -t my-app:latest -f ci-docker/Dockerfile-phpunit .
-
       - name: Start MySQL service
         run: |
           docker run --name mysql --env='MYSQL_ROOT_PASSWORD=monnetadmin' -d mysql:8
+
+      - name: Build Docker image
+        run: docker build -t my-app:latest -f ci-docker/Dockerfile-phpunit .
 
       - name: Wait for MySQL to start
         run: |
