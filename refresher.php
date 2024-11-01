@@ -672,8 +672,8 @@ foreach ($system_prefs as $sys_pref) {
         $discovery_last = utc_to_user_tz($sys_pref['pref_value'], $user->getTimezone(), $cfg['datetime_format_min']);
     }
 }
-$data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;
-$data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last_run;
+$data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last;
+$data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last;
 
 /* END ALWAYS */
 

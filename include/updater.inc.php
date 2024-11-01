@@ -42,21 +42,21 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db->query("ALTER TABLE `networks` ADD UNIQUE(`network`);");
         $db->query("ALTER TABLE `networks` ADD UNIQUE(`name`);");
         $db->query("ALTER TABLE `networks` CHANGE `network` `network` CHAR(18) CHARACTER "
-                . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;");
+            . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;");
         $db->query("ALTER TABLE `networks` CHANGE `name` `name` CHAR(255) CHARACTER "
-                . "SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;");
+            . "SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL;");
         $db->query("INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`, `disable`, `weight`)"
-                . " VALUES ('10', '1', 'L_PRINTERS', '1', '0', '0'); ");
+            . " VALUES ('10', '1', 'L_PRINTERS', '1', '0', '0'); ");
         $db->query("ALTER TABLE `hosts` ADD `online_change` "
-                . "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `online`;");
+            . "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `online`;");
         $db->query("ALTER TABLE `categories` CHANGE `cat_name` `cat_name` CHAR(32) CHARACTER "
-                . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;");
+            . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;");
         $db->query("ALTER TABLE `hosts_logs` CHANGE `msg` `msg` CHAR(255) CHARACTER "
-                . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL; ");
+            . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL; ");
         $db->query("ALTER TABLE `system_logs` CHANGE `msg` `msg` CHAR(255) CHARACTER "
-                . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL; ");
+            . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL; ");
         $db->query("ALTER TABLE `users` CHANGE `timezone` `timezone` CHAR(32) CHARACTER "
-                . "SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL; ");
+            . "SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL; ");
 
         Log::info("Update version to 0.34 successful");
         $db->query("UPDATE prefs SET pref_value='0.34' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
@@ -66,7 +66,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
     //0.35
     if ($db_version < 0.35) {
         $db->query("INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) "
-                . "VALUES (11, 0, 'discovery_last_run', '0');");
+            . "VALUES (11, 0, 'discovery_last_run', '0');");
         $db->query("ALTER TABLE `hosts` DROP `timeout`;");
         $db->query("ALTER TABLE `hosts` ADD `alert_msg` CHAR(255) NULL DEFAULT NULL AFTER `warn_mail`;");
         $db->query("ALTER TABLE `hosts` ADD `alert` TINYINT NOT NULL DEFAULT '0' AFTER `warn_mail`;");
@@ -115,11 +115,12 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
 if ($db) {
     $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
     $result = $db->fetchAll($query);
+    if ($result) {
+        $db_version = (float) $result[0]['pref_value'];
+        $monnet_version = $cfg['monnet_version'];
 
-    $db_version = (float) $result[0]['pref_value'];
-    $monnet_version = $cfg['monnet_version'];
-
-    if ($monnet_version > $db_version) {
-        trigger_update($db, $db_version, $monnet_version);
+        if ($monnet_version > $db_version) {
+            trigger_update($db, $db_version, $monnet_version);
+        }
     }
 }

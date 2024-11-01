@@ -11,9 +11,12 @@
 
 class Lng
 {
-    private static array $language = null;
+    /**
+     * @var array<string> $language
+     */
+    private static array $language = [];
     private static string $defaultLang = 'es';
-    private static string $selLangCode = null;
+    private static string $selLangCode;
 
     public static function loadLanguage(string $langCode): bool
     {

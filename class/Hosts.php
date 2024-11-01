@@ -16,8 +16,16 @@ class Hosts
     public int $total_off = 0;
     public int $highlight_total = 0;
     private Database $db;
+
+    /**
+     * @var array<int, array<string, mixed>> $hosts
+     */
     private $hosts = [];
-    private array $lng;
+
+    /**
+     * @var array<string> $lng
+     */
+    private array $lng = [];
     private AppCtx $ctx;
     private array $host_cat_track = [];
 
@@ -48,6 +56,9 @@ class Hosts
 
     public function getknownEnabled(): array
     {
+        /**
+         * @var array<int, array<string, mixed>> $hosts
+         */
         $hosts = [];
 
         foreach ($this->hosts as $host) {
@@ -82,7 +93,13 @@ class Hosts
 
     public function update(int $id, array $values): void
     {
+        /**
+         * @var array<int, array<string, mixed>> $fvalues
+         */
         $fvalues = []; //filter
+        /**
+         * @var array<int, array<string, mixed>> $misc_container
+         */
         $misc_container = [];
         $misc_keys = ['mac_vendor', 'manufacture', 'system_type', 'os', 'owner', 'timeout'];
 
@@ -90,17 +107,17 @@ class Hosts
             if (!empty($kvalue) && isset($vvalue)) {
                 //TODO warning sign
                 if (
-                        ($kvalue == 'mac' || $kvalue == 'mac_vendor' || $kvalue == 'hostname') &&
-                        ($this->hosts[$id][$kvalue] != $vvalue)
+                    ($kvalue == 'mac' || $kvalue == 'mac_vendor' || $kvalue == 'hostname') &&
+                    ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
                     $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( '
-                            . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])'
-                            . $this->hosts[$id][$kvalue] . '->' . $vvalue;
+                        . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])'
+                        . $this->hosts[$id][$kvalue] . '->' . $vvalue;
                     Log::logHost('LOG_WARNING', $id, $loghostmsg);
                 }
                 if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
                     Log::logHost('LOG_INFO', $id, 'Host ' . $this->hosts[$id]['display_name']
-                            . ' change category ' . $this->hosts[$id]['category'] . '->' . $vvalue);
+                        . ' change category ' . $this->hosts[$id]['category'] . '->' . $vvalue);
                     $this->host_cat_track[$this->hosts[$id]['category']]--;
                     $this->host_cat_track[$vvalue]++;
                 }
@@ -143,7 +160,7 @@ class Hosts
         $this->hosts[$host_id] = $host;
         $network_name = $this->ctx->getAppNetworks()->getNetworkNameByID($host_id);
         Log::logHost('LOG_NOTICE', $host_id, 'Found new host: '
-                . $host['display_name'] . ' on network ' . $network_name);
+            . $host['display_name'] . ' on network ' . $network_name);
     }
 
     public function remove(int $hid): void
@@ -184,6 +201,9 @@ class Hosts
 
     public function getHostsByCat(int $cat_id): array|false
     {
+        /**
+         * @var array<int, array<string, mixed>> $hosts_by_cat
+         */
         $hosts_by_cat = [];
 
         foreach ($this->hosts as $host) {

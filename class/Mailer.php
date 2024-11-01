@@ -16,8 +16,12 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mailer
 {
-    private $phpMailer;
+    private PHPMailer $phpMailer;
     private AppCtx $ctx;
+
+    /**
+     * @var array<string> $cfg
+     */
     private array $cfg;
 
     public function __construct(AppCtx $ctx)
@@ -26,7 +30,7 @@ class Mailer
         $this->ctx = $ctx;
 
         if (!$this->cfg['mailer_enabled']) {
-            return false;
+            return;
         }
         // Verify  PHPMailer install
         if (\Composer\InstalledVersions::isInstalled('phpmailer/phpmailer')) {
@@ -34,21 +38,21 @@ class Mailer
             $this->phpMailer->setLanguage($this->cfg['lang']);
         } else {
             Log::err($ctx->getAppLang()->get('L_ERR_MAILER'));
-            return false;
+            return;
         }
         if (!Filters::varIp($this->cfg['mail_host'])) {
             if (!Filters::varHostname($this->cfg['mail_host'])) {
                 Log::err($ctx->getAppLang()->get('L_ERR_MAIL_HOST'));
-                return false;
+                return;
             }
         }
         if ($this->cfg['mail_auth'] && empty($this->cfg['mail_username']) || empty($this->cfg['mail_password'])) {
             Log::err($ctx->getAppLang()->get('L_ERR_USERPASS_INVALID'));
-            return false;
+            return;
         }
         if (!empty($this->cfg['mail_port']) && !is_numeric($this->cfg['mail_port'])) {
             Log::err($ctx->getAppLang()->get('L_ERR_PORT_INVALID'));
-            return false;
+            return;
         }
         $this->configure();
     }
@@ -63,7 +67,7 @@ class Mailer
         }
     }
 
-    public function sendEmail(string $to, string $subject, string $body)
+    public function sendEmail(string $to, string $subject, string $body): bool
     {
         if (!$this->phpMailer) {
             return false;
@@ -83,7 +87,7 @@ class Mailer
         }
     }
 
-    private function configure()
+    private function configure(): void
     {
 
         if ($this->phpMailer) {

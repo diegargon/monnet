@@ -6,11 +6,19 @@
  *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
+/**
+ * @var array<string> $cfg
+ */
+/**
+ * @var array<string> $lng
+ */
+/**
+ * @var array<string> $tdata
+ */
 !defined('IN_WEB') ? exit : true;
 
 $privacy_page = 'privacy';
-if (Filters::getString('page') == $privacy_page)
-{
+if (Filters::getString('page') == $privacy_page) {
     $privacy_page = 'index';
 }
 ?>

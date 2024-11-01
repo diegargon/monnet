@@ -2,7 +2,14 @@
 
 class AppCtx
 {
+    /**
+     * @var array<string> $cfg
+     */
     private array $cfg = [];
+
+    /**
+     * @var array<string> $lang
+     */
     private array $lang = [];
     private Database $db;
     private Hosts $hosts;

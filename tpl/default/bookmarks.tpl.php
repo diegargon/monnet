@@ -6,13 +6,21 @@
  *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
+/**
+ * @var array<string> $cfg
+ */
+/**
+ * @var array<string> $lng
+ */
+/**
+ * @var array<string> $tdata
+ */
 !defined('IN_WEB') ? exit : true;
 ?>
 <div class="bookmarks_container" id="bookmarks_container">
     <div class="bookmarks-tabs-head-container">
         <?php
-        foreach ($tdata['bookmarks_head'] as $bookmark_head)
-        {
+        foreach ($tdata['bookmarks_head'] as $bookmark_head) {
             $id = $bookmark_head['id'];
             ?>
             <button id="bookmarks_tab_<?= $id ?>" class="bookmarks-tabs-head"
@@ -32,27 +40,22 @@
     </div>
     <?php
     $default_active_tab = $tdata['bookmarks_default_tab'];
-    if (!isset($tdata['bookmarks_default_tab']))
-    {
+    if (!isset($tdata['bookmarks_default_tab'])) {
         $active = 'active';
-    } else
-    {
+    } else {
         $active = '';
     }
 
     $tdata['bookmarks_head'][] = ['id' => 0]; //For ALL tab
-    foreach ($tdata['bookmarks_head'] as $bookmark_head)
-    {
+    foreach ($tdata['bookmarks_head'] as $bookmark_head) {
         $id = $bookmark_head['id'];
         ($id == $default_active_tab) ? $active = 'active' : null;
         ?>
         <div id="bookmark_content_tab_<?= $id ?>" class="bookmarks-tab-content bookmarks <?= $active ?>">
-            <?php
-            foreach ($tdata['bookmarks'] as $bookmark)
-            {
-                if ($id == 0 || $bookmark['cat_id'] == $id)
-                {
-                    ?>
+        <?php
+        foreach ($tdata['bookmarks'] as $bookmark) {
+            if ($id == 0 || $bookmark['cat_id'] == $id) {
+                ?>
                     <div id="item_num_<?= $bookmark['id'] ?>" class="item-container">
                         <div class="delete_bookmark">
                             <input onclick="confirmRefresh('removeBookmark',<?= $bookmark['id'] ?>)" type="image"
@@ -64,21 +67,21 @@
                             <div class="item-thumb shadow1">
                                 <img class="fab" src="<?= $bookmark['img'] ?>" alt=""
                                      style="<?=
-                                     !empty($bookmark['icon_bg']) ? 'background-color: ' .
-                                             $bookmark['icon_bg'] : null
-                                     ?>"/>
+            !empty($bookmark['icon_bg']) ? 'background-color: ' .
+                $bookmark['icon_bg'] : null
+            ?>"/>
                                 <div class="item-title text_shadow_style1"><?= $bookmark['title'] ?></div>
                             </div>
                         </a>
                     </div>
-                    <?php
-                }
-            }
-            ?>
+                                     <?php
+                                 }
+                             }
+                             ?>
         </div>
-        <?php
-        $active = '';
-    }
-    ?>
+            <?php
+            $active = '';
+        }
+        ?>
 
 </div>

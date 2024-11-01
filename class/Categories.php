@@ -14,20 +14,17 @@ class Categories
     private AppCtx $ctx;
 
     /**
-     * @var array<string|int>
+     * @var array<string> $cfg
      */
     private array $cfg = [];
     private Database $db;
 
-    /**
-     * @var array<string|int>
-     */
-    private array $categories = [];
+    //private array $categories = [];
+    //private array $cat_types = [];
 
     /**
-     * @var array<string|int>
+     * @var array<string> $lng
      */
-    private array $cat_types = [];
     private array $lng = [];
 
     public function __construct(AppCtx $ctx)
@@ -56,6 +53,9 @@ class Categories
 
     public function getByType(int $type): array|false
     {
+        /**
+         * @var array<string> $categories_by_type
+         */
         $categories_by_type = [];
 
         foreach ($this->categories as $cat) {
@@ -83,8 +83,8 @@ class Categories
         $categories_by_type = $this->getByType($type);
         foreach ($categories_by_type as &$typecat) {
             if (
-                    (strpos($typecat['cat_name'], 'L_') === 0 ) &&
-                    isset($this->lng[$typecat['cat_name']])
+                (strpos($typecat['cat_name'], 'L_') === 0 ) &&
+                isset($this->lng[$typecat['cat_name']])
             ) {
                 $typecat['cat_name'] = $this->lng[$typecat['cat_name']];
             }

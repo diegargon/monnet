@@ -11,8 +11,11 @@
 
 class Networks
 {
+    /**
+     * @var array<int, array<string, mixed>> $hosts
+     */
     private array $networks;
-    private array $networks_disabled;
+    //private array $networks_disabled;
     private AppCtx $ctx;
 
     public function __construct(AppCtx $ctx)
@@ -20,7 +23,7 @@ class Networks
         $this->ctx = $ctx;
     }
 
-    public function getNetworks()
+    public function getNetworks(): array
     {
         if (!isset($this->networks)) {
             $this->loadNetworks();
@@ -28,7 +31,7 @@ class Networks
         return $this->networks;
     }
 
-    public function getNetworkByID(int $id)
+    public function getNetworkByID(int $id): array|false
     {
         $networks = $this->getNetworks();
 
@@ -39,7 +42,7 @@ class Networks
         }
     }
 
-    public function getNetworkIDbyIP(string $ip)
+    public function getNetworkIDbyIP(string $ip): int|false
     {
         $ip_long = ip2long($ip);
         $networks = $this->getNetworks();
@@ -58,13 +61,13 @@ class Networks
         return false;
     }
 
-    public function addNetwork(array $set)
+    public function addNetwork(array $set): void
     {
         $db = $this->ctx->getAppDb();
         $db->insert('networks', $set);
     }
 
-    public function getNetworkNameByID(int $id)
+    public function getNetworkNameByID(int $id): string|false
     {
         $networks = $this->getNetworks();
 
@@ -73,9 +76,10 @@ class Networks
                 return $network['name'];
             }
         }
+        return false;
     }
 
-    public function matchNetwork($ip)
+    public function matchNetwork($ip): array|false
     {
         $ip = ip2long($ip);
 
@@ -100,7 +104,7 @@ class Networks
         return $defaultNetwork;
     }
 
-    public function isLocal(string $ip)
+    public function isLocal(string $ip): bool
     {
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
             return true;
@@ -109,7 +113,7 @@ class Networks
     }
 
     //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
-    public function buildIpList()
+    public function buildIpList(): array
     {
         $ip_list = [];
         $networks = $this->getNetworks();
@@ -147,7 +151,7 @@ class Networks
         return $ip_list;
     }
 
-    private function loadNetworks()
+    private function loadNetworks(): void
     {
         $db = $this->ctx->getAppDb();
         $query = $db->selectAll('networks',);

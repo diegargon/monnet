@@ -14,6 +14,10 @@ class Items
     private Database $db;
     private array $categories;
     private array $cfg;
+
+    /**
+     * @var array<int, array<string, mixed>> $items
+     */
     private array $items = [];
     private int $uid;
 
@@ -67,6 +71,9 @@ class Items
 
     public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc'): array
     {
+        /**
+         * @var array<int, array<string, mixed>> $result
+         */
         $result = [];
         foreach ($this->items as $item) {
             if ($item['type'] == $type) {
@@ -78,8 +85,11 @@ class Items
         return $result;
     }
 
-    public function getByCatID($category_id): array
+    public function getByCatID(int $category_id): array
     {
+        /**
+         * @var array<int, array<string, mixed>> $result
+         */
         $result = [];
         foreach ($this->items as $item) {
             if ($item['cat_id'] == $category_id) {

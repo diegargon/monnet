@@ -8,7 +8,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function valid_array($array)
+function valid_array(?array $array): bool
 {
     if (!empty($array) && is_array($array) && count($array) > 0) {
         return true;
@@ -17,13 +17,13 @@ function valid_array($array)
     return false;
 }
 
-function micro_to_ms(float $microseconds)
+function micro_to_ms(float $microseconds): int
 {
 
     return round($microseconds * 1000, 3);
 }
 
-function formatBytes(int $size, int $precision = 2)
+function formatBytes(int $size, int $precision = 2): string
 {
     for ($i = 0; ($size / 1024) > 0.9; $i++, $size /= 1024) {
 
@@ -32,7 +32,7 @@ function formatBytes(int $size, int $precision = 2)
     return round($size, $precision) . ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][$i];
 }
 
-function order(array &$ary, $sortKey, $order = 'asc')
+function order(array &$ary, string $sortKey, string $order = 'asc'): void
 {
 
     usort($ary, function ($a, $b) use ($sortKey, $order) {
@@ -51,7 +51,7 @@ function order(array &$ary, $sortKey, $order = 'asc')
     });
 }
 
-function order_date(array &$ary)
+function order_date(array &$ary): void
 {
     usort($ary, function ($a, $b) {
         $itemA = strtotime($a['date']);
@@ -71,7 +71,7 @@ function order_name(array &$ary)
     });
 }
 
-function base_url(string $url)
+function base_url(string $url): string
 {
     $parsed_url = parse_url($url);
 
@@ -92,8 +92,11 @@ function base_url(string $url)
     return $base_url;
 }
 
-function array2string(array $array)
+function array2string(array $array): string
 {
+    /**
+     * @var array<string> $result
+     */
     $result = [];
     foreach ($array as $subarray) {
         if (is_array($subarray)) {
@@ -105,7 +108,7 @@ function array2string(array $array)
     return implode(', ', $result);
 }
 
-function cached_img(User $user, int $id, string $img_url, $renew = 0)
+function cached_img(User $user, int $id, string $img_url, int $renew = 0): string|bool
 {
     $http_options = [];
 
@@ -116,7 +119,7 @@ function cached_img(User $user, int $id, string $img_url, $renew = 0)
     $http_options['ssl']['verify_peer'] = false;
     $http_options['ssl']['verify_peer_name'] = false;
     $http_options['header'] = "User-agent: Mozilla/5.0 (X11; Fedora;" .
-            "Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0";
+        "Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0";
 
     if (empty($img_url) || is_dir($img_url) || empty($id) || !is_numeric($id)) {
         return false;
@@ -167,7 +170,7 @@ function cached_img(User $user, int $id, string $img_url, $renew = 0)
     return $img_url;
 }
 
-function round_latency(float $latency, int $precision = 3)
+function round_latency(float $latency, int $precision = 3): int|float
 {
     if ($latency > 0 && $latency <= 0.001) {
         $latency = 0.001;
@@ -179,7 +182,7 @@ function round_latency(float $latency, int $precision = 3)
     return $latency;
 }
 
-function create_token()
+function create_token(): string
 {
     return bin2hex(openssl_random_pseudo_bytes(16));
 }

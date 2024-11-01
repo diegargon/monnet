@@ -11,7 +11,7 @@
 
 class Filters
 {
-    public static function getInt($val, $size = PHP_INT_MAX): int|false
+    public static function getInt(string $val, int $size = PHP_INT_MAX): int|false
     {
         if (!isset($_GET[$val])) {
             return false;
@@ -20,7 +20,7 @@ class Filters
         return self::varInt($_GET[$val], $size);
     }
 
-    public static function postInt($val, $size = PHP_INT_MAX): int|false
+    public static function postInt(string $val, int $size = PHP_INT_MAX): int|false
     {
         if (!isset($_POST[$val])) {
             return false;
@@ -29,7 +29,7 @@ class Filters
         return self::varInt($_POST[$val], $size);
     }
 
-    public static function varInt($val, $size = PHP_INT_MAX): int|false
+    public static function varInt(string $val, int $size = PHP_INT_MAX): int|false
     {
         if (!isset($val)) {
             return false;
@@ -59,7 +59,7 @@ class Filters
     }
 
 //Simple String words without accents or special characters
-    public static function getString($val, $size = null): string|false
+    public static function getString(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -68,7 +68,7 @@ class Filters
         return self::varString($_GET[$val], $size);
     }
 
-    public static function postString($val, $size = null)
+    public static function postString(string $val, int $size = PHP_INT_MAX)
     {
         if (empty($_POST[$val])) {
             return false;
@@ -77,7 +77,7 @@ class Filters
         return self::varString($_POST[$val], $size);
     }
 
-    public static function varString($val, $size = null)
+    public static function varString(string $val, int $size = PHP_INT_MAX)
     {
         //Valida un string simple
         if (empty($val)) {
@@ -95,7 +95,7 @@ class Filters
     }
 
 //UTF8
-    public static function getUtf8($val, $size = null): string|false
+    public static function getUtf8(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -104,7 +104,7 @@ class Filters
         return self::varUtf8($_GET[$val], $size);
     }
 
-    public static function postUtf8($val, $size = null): string|false
+    public static function postUtf8(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -113,7 +113,7 @@ class Filters
         return self::varUtf8($_POST[$val], $size);
     }
 
-    public static function varUtf8($val, $size = null): string|false
+    public static function varUtf8(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && mb_strlen($val, 'UTF-8') > $size)) {
             return false;
@@ -125,7 +125,7 @@ class Filters
     }
 
 //URL
-    public static function getUrl($val, $size = null): string|false
+    public static function getUrl(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -134,7 +134,7 @@ class Filters
         return self::varUrl($_GET[$val], $size);
     }
 
-    public static function postUrl($val, $size = null): string|false
+    public static function postUrl(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -143,7 +143,7 @@ class Filters
         return self::varUrl($_POST[$val], $size);
     }
 
-    public static function varUrl($val, $size = null): string|false
+    public static function varUrl(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -155,7 +155,7 @@ class Filters
         return $url !== false ? $url : false;
     }
 
-    public static function getImgUrl($val, $size = null): string|false
+    public static function getImgUrl(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -164,7 +164,7 @@ class Filters
         return self::varImgUrl($_GET[$val], $size);
     }
 
-    public static function postImgUrl($val, $size = null): string|false
+    public static function postImgUrl(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -173,7 +173,7 @@ class Filters
         return self::varImgUrl($_POST[$val], $size);
     }
 
-    public static function varImgUrl($val, $size = null): string|false
+    public static function varImgUrl(string $val, int $size = PHP_INT_MAX): string|false
     {
         $exts = array('jpg', 'gif', 'png', 'ico');
 
@@ -197,7 +197,7 @@ class Filters
     }
 
     // AZaz
-    public static function postAzChar($val, $size = null): string|false
+    public static function postAzChar(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -206,7 +206,7 @@ class Filters
         return self::varAzChar($_POST[$val], $size);
     }
 
-    public static function getAzChar($val, $size = null): string|false
+    public static function getAzChar(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -233,7 +233,7 @@ class Filters
     }
 
     //[0-9][A-Za-z]
-    public static function postAlphanum($val, $size = null): string|false
+    public static function postAlphanum(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -242,7 +242,7 @@ class Filters
         return self::varAlphanum($_POST[$val], $size);
     }
 
-    public static function getAlphanum($val, $size = null): string|false
+    public static function getAlphanum(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -281,7 +281,7 @@ class Filters
     }
 
     //USERNAME
-    public static function postUsername($val, $size = null): string|false
+    public static function postUsername(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -290,7 +290,7 @@ class Filters
         return self::varUsername($_POST[$val], $size);
     }
 
-    public static function getUsername($val, $size = null): string|false
+    public static function getUsername(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -326,7 +326,7 @@ class Filters
     }
 
     //EMAIL
-    public static function postEmail($val, $size = null): string|false
+    public static function postEmail(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -335,7 +335,7 @@ class Filters
         return self::varEmail($_POST[$val], $size);
     }
 
-    public static function getEmail($val, $size = null): string|false
+    public static function getEmail(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -374,7 +374,7 @@ class Filters
 
     //Strict Chars: at least [A-z][0-9] _
 
-    public static function postStrict($val, $size = null): string|false
+    public static function postStrict(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -383,7 +383,7 @@ class Filters
         return self::varStrict($_POST[$val], $size);
     }
 
-    public static function getStrict($val, $size = null): string|false
+    public static function getStrict(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -411,7 +411,7 @@ class Filters
     }
 
     // PASSWORD
-    public static function postPassword($val, $size = null): string|false
+    public static function postPassword(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -420,7 +420,7 @@ class Filters
         return self::varPassword($_POST[$val], $size);
     }
 
-    public static function getPassword($val, $size = null): string|false
+    public static function getPassword(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -443,7 +443,7 @@ class Filters
 
     //IP
 
-    public static function getIP($val, $size = null): string|false
+    public static function getIP(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -452,7 +452,7 @@ class Filters
         return self::varIP($_GET[$val], $size);
     }
 
-    public static function postIP($val, $size = null): string|false
+    public static function postIP(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -461,7 +461,7 @@ class Filters
         return self::varIP($_POST[$val], $size);
     }
 
-    public static function varIP($val, $size = null): string|false
+    public static function varIP(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -473,7 +473,7 @@ class Filters
 
     //Network
 
-    public static function getNetwork($val, $size = null): string|false
+    public static function getNetwork(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -482,7 +482,7 @@ class Filters
         return self::varNetwork($_GET[$val], $size);
     }
 
-    public static function postNetwork($val, $size = null): string|false
+    public static function postNetwork(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -491,7 +491,7 @@ class Filters
         return self::varNetwork($_POST[$val], $size);
     }
 
-    public static function varNetwork($val, $size = null): string|false
+    public static function varNetwork(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -519,7 +519,7 @@ class Filters
 
     // POST PATH
 
-    public static function getPath($val, $size = null): string|false
+    public static function getPath(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -528,7 +528,7 @@ class Filters
         return self::varPath($_GET[$val], $size);
     }
 
-    public static function postPath($val, $size = null): string|false
+    public static function postPath(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -537,7 +537,7 @@ class Filters
         return self::varPath($_POST[$val], $size);
     }
 
-    public static function varPath($val, $size = null): string|false
+    public static function varPath(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -555,7 +555,7 @@ class Filters
     // FilePath
     // POST PATH
 
-    public static function getPathFile($val, $size = null): string|false
+    public static function getPathFile(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -564,7 +564,7 @@ class Filters
         return self::varPathFile($_GET[$val], $size);
     }
 
-    public static function postPathFile($val, $size = null): string|false
+    public static function postPathFile(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -573,7 +573,7 @@ class Filters
         return self::varPathFile($_POST[$val], $size);
     }
 
-    public static function varPathFile($val, $size = null): string|false
+    public static function varPathFile(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -653,7 +653,7 @@ class Filters
     }
 
     /* Domain */
-    public static function getDomain($val, $size = null): string|false
+    public static function getDomain(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -662,7 +662,7 @@ class Filters
         return self::varDomain($_GET[$val], $size);
     }
 
-    public static function postDomain($val, $size = null): string|false
+    public static function postDomain(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -671,7 +671,7 @@ class Filters
         return self::varDomain($_POST[$val], $size);
     }
 
-    public static function varDomain($val, $size = null): string|false
+    public static function varDomain(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -687,7 +687,7 @@ class Filters
     }
 
     /* Hostname */
-    public static function getHostname($val, $size = null): string|false
+    public static function getHostname(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -696,7 +696,7 @@ class Filters
         return self::varHostname($_GET[$val], $size);
     }
 
-    public static function postHostname($val, $size = null): string|false
+    public static function postHostname(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -705,7 +705,7 @@ class Filters
         return self::varHostname($_POST[$val], $size);
     }
 
-    public static function varHostname($val, $size = null): string|false
+    public static function varHostname(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;

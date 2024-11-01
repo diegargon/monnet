@@ -14,9 +14,21 @@ class Log
     private static int $max_db_msg = 254;
     private static int $recursionCount = 0;
     private static int $console;
+
+    /**
+     * @var array<string> $cfg
+     */
     private static array $cfg;
     private static Database $db;
+
+    /**
+     * @var array<string> $lng
+     */
     private static array $lng;
+
+    /**
+     * @var array<string, int> $LOG_TYPE
+     */
     private static $LOG_TYPE = [
         'LOG_EMERG' => 0, // system is unusable
         'LOG_ALERT' => 1, // action must be taken immediately UNUSED
@@ -36,7 +48,7 @@ class Log
         self::$lng = &$lng;
     }
 
-    public static function logged(string $type, mixed $msg, ?int $self_caller = null)
+    public static function logged(string $type, mixed $msg, ?int $self_caller = null): void
     {
         $LOG_TYPE = self::$LOG_TYPE;
 
@@ -72,12 +84,12 @@ class Log
                 $log_file = self::$cfg['log_file'];
 
                 $content = '['
-                        . formatted_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
-                        . '][' . self::$cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
+                    . formatted_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
+                    . '][' . self::$cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     if (!touch($log_file)) {
                         self::err(self::$lng['L_ERR_FILE_CREATE']
-                                . ' effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
+                            . ' effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
                         self::debug(getcwd(), 1);
                     } else {
                         if (!chown($log_file, self::$cfg['log_file_owner'])) {
@@ -88,7 +100,7 @@ class Log
                         }
                         if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
                             self::err('Error opening/writing log to file '
-                                    . 'effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
+                                . 'effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
                         }
                     }
                 }
@@ -107,7 +119,7 @@ class Log
         }
     }
 
-    public static function setConsole(bool $value)
+    public static function setConsole(bool $value): bool
     {
         if ($value === true || $value === false) {
             self::$console = $value;
@@ -116,7 +128,7 @@ class Log
         }
     }
 
-    public static function logHost(string $loglevel, int $host_id, string $msg)
+    public static function logHost(string $loglevel, int $host_id, string $msg): void
     {
         $level = self::getLogLevelID($loglevel);
         if (mb_strlen($msg) > self::$max_db_msg) {
@@ -129,27 +141,27 @@ class Log
         self::$db->insert('hosts_logs', $set);
     }
 
-    public static function getLoghosts(int $limit)
+    public static function getLoghosts(int $limit): array
     {
         $query = 'SELECT * FROM hosts_logs WHERE level <= ' .
-                self::$cfg['term_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
+            self::$cfg['term_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 
         return valid_array($lines) ? $lines : false;
     }
 
-    public static function getLoghost(int $host_id, int $limit)
+    public static function getLoghost(int $host_id, int $limit): array
     {
         $query = 'SELECT * FROM hosts_logs WHERE level <= ' . self::$cfg['term_log_level'] .
-                ' AND host_id = ' . $host_id . ' ORDER BY date DESC LIMIT ' . $limit;
+            ' AND host_id = ' . $host_id . ' ORDER BY date DESC LIMIT ' . $limit;
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 
         return valid_array($lines) ? $lines : false;
     }
 
-    public static function getLogLevelId(string $loglevel)
+    public static function getLogLevelId(string $loglevel): int
     {
         if (!isset(self::$LOG_TYPE[$loglevel])) {
             self::debug('Wrong Log Level name used');
@@ -158,7 +170,7 @@ class Log
         return self::$LOG_TYPE[$loglevel];
     }
 
-    public static function getLogLevelName(int $logvalue)
+    public static function getLogLevelName(int $logvalue): string
     {
         foreach (self::$LOG_TYPE as $ktype => $vtype) {
             if ($vtype == $logvalue) {
@@ -167,47 +179,47 @@ class Log
         }
     }
 
-    public static function getSystemDBLogs(int $limit)
+    public static function getSystemDBLogs(int $limit): array
     {
         $query = 'SELECT * FROM system_logs WHERE level <= ' .
-                self::$cfg['term_system_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
+            self::$cfg['term_system_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 
         return valid_array($lines) ? $lines : false;
     }
 
-    public static function debug(mixed $msg, ?int $self_caller = null)
+    public static function debug(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_DEBUG', $msg, $self_caller);
     }
 
-    public static function info(mixed $msg, ?int $self_caller = null)
+    public static function info(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_INFO', $msg, $self_caller);
     }
 
-    public static function notice(mixed $msg, ?int $self_caller = null)
+    public static function notice(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_NOTICE', $msg, $self_caller);
     }
 
-    public static function warning(mixed $msg, ?int $self_caller = null)
+    public static function warning(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_WARNING', $msg, $self_caller);
     }
 
-    public static function err(mixed $msg, ?int $self_caller = null)
+    public static function err(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_ERR', $msg, $self_caller);
     }
 
-    public static function alert(mixed $msg, ?int $self_caller = null)
+    public static function alert(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_ALERT', $msg, $self_caller);
     }
 
-    public static function emerg(mixed $msg, ?int $self_caller = null)
+    public static function emerg(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_EMERG', $msg, $self_caller);
     }
