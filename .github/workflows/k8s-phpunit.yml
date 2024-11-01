@@ -35,6 +35,9 @@ jobs:
             echo "Waiting for MySQL to start..."
             sleep 3
           done
+      - name: Verify my.cnf in MySQL
+        run: |
+          docker exec mysql cat /etc/mysql/conf.d/my.cnf
       - name: Configure MySQL root user permissions
         run: |
           docker exec -i mysql mysql -uroot -pmonnetadmin -e "ALTER USER 'root'@'%' IDENTIFIED BY 'monnetadmin';"
