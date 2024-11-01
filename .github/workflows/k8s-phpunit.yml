@@ -45,7 +45,9 @@ jobs:
             echo "Waiting for MySQL to start..."
             sleep 2
           done
-
+      - name: Build Docker image
+        run: docker build -t my-app:latest -f ci-docker/Dockerfile-phpunit .
+        
       - name: Configure MySQL root user permissions
         run: |
           mysql -h 127.0.0.1 -uroot -pmonnetadmin -e "ALTER USER 'root'@'%' IDENTIFIED BY 'monnetadmin';"
