@@ -6,6 +6,8 @@
         <exclude name="Generic.Files.GlobalNamespace.Declaration"/>
         <exclude name="PSR12.Namespaces.CompoundNamespaceDepth"/>
         <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+
     </rule>
     <exclude-pattern>tests/*</exclude-pattern>
     <exclude-pattern>ci-docker/*</exclude-pattern>

@@ -474,7 +474,6 @@ if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
 }
 
 if ($command == 'setHighlight' && !empty($object_id)) {
-
     $value = (empty($command_value)) ? 0 : 1;
 
     $hosts->update($object_id, ['highlight' => $value]);

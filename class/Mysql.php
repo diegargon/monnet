@@ -395,7 +395,6 @@ class Database
         string $logic = 'AND'
     ): mysqli_result|false
     {
-
         if (empty($table)) {
             return false;
         }
@@ -421,8 +420,11 @@ class Database
      * @return mysqli_result|bool
      */
     public function select(
-        string $table, $what = '*', array $where = null,
-        $extra = null, $logic = 'AND'
+        string $table,
+        $what = '*',
+        array $where = null,
+        $extra = null,
+        $logic = 'AND'
     ): mysqli_result|bool
     {
         if (empty($table) || empty($what)) {
@@ -475,7 +477,6 @@ class Database
         string $extra = null
     ): mysqli_result|bool
     {
-
         $s_words_ary = explode(' ', $searchText);
         $fields_ary = explode(' ', $s_fields);
 
@@ -522,8 +523,10 @@ class Database
      * @return mysqli_result|boolean
      */
     public function update(
-        string $table, array $set,
-        array $where = null, string $extra = null,
+        string $table,
+        array $set,
+        array $where = null,
+        string $extra = null,
         string $logic = 'AND'
     ): mysqli_result|bool
     {
@@ -579,7 +582,9 @@ class Database
      * @return array|false
      */
     public function toggleField(
-        string $table, string $field, array $where = null,
+        string $table,
+        string $field,
+        array $where = null,
         string $logic = 'AND'
     ): array|false
     {

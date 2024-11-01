@@ -25,12 +25,10 @@ function h_get_hostname(SSH2 $ssh, array &$result)
 
 function h_get_ncpus(SSH2 $ssh, array &$result)
 {
-
     $ncpu = 0;
 
     ssh_exec($ssh, $result, 'grep --color=never processor /proc/cpuinfo|wc -l');
     if (!empty($result['result'])) {
-
         //Remove ANSI Term codes.
         $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
 
@@ -90,12 +88,11 @@ function h_get_sys_space(SSH2 $ssh, array &$result)
     $result['result'] = '';
     if (count($mount_points) > 0) {
         ssh_exec($ssh, $result, 'df');
-        if (!emptY($result['result'])) {
+        if (!empty($result['result'])) {
             //Remove ANSI Term codes.
             $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
             $lines = explode("\n", $result['result']);
             foreach ($lines as $line) {
-
                 $dev = [];
                 //remove all extra spaces
                 $line = preg_replace('/\s+/', ' ', $line);

@@ -640,8 +640,11 @@ class Filters
 
         $regex = '/^[' . $validChars . ']+$/';
 
-        if (empty($var) || (!empty($max_size) && strlen($var) > $max_size) ||
-            (!empty($min_size) && strlen($var) < $min_size)) {
+        if (
+            empty($var) ||
+            (!empty($max_size) && strlen($var) > $max_size) ||
+            (!empty($min_size) && strlen($var) < $min_size)
+        ) {
             return false;
         }
 
