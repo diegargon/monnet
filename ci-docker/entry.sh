@@ -1,6 +1,9 @@
 #!/bin/sh
 
-mysql_start
+systemctl start mysql
+
+sudo /etc/init.d/mysql start
+
 ping -c 1 192.168.1.1
 ping -c 4 mysql-service
 mysql -h mysql-service -uroot -pmonnetadmin monnet < /var/www/html/config/monnet.sql
