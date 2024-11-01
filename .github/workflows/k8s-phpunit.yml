@@ -24,8 +24,15 @@ jobs:
           docker run --name mysql -e MYSQL_ROOT_PASSWORD=monnetadmin -e MYSQL_DATABASE=monnet -d mysql:8
 
       - name: Wait for MySQL to start
-        run: sleep 30  # Espera a que MySQL esté listo
-
+        run: |
+          for i in {1..30}; do
+            if docker exec mysql mysqladmin ping -uroot -pmonnetadmin --silent; then
+              echo "MySQL is up and running!"
+              break
+            fi
+            echo "Waiting for MySQL to start..."
+            sleep 3
+          done
       - name: Configure MySQL root user permissions
         run: |
           docker exec -i mysql mysql -uroot -pmonnetadmin -e "ALTER USER 'root'@'%' IDENTIFIED BY 'monnetadmin';"
