@@ -38,7 +38,7 @@ jobs:
             --host 127.0.0.1 \
             --port 3306 \
             -uroot -pmonnetadmin -e "SHOW DATABASES;"
-
+          cp /ci-docker/my.cnf:/etc/mysql/conf.d/my.cnf
       - name: Checkout code
         uses: actions/checkout@v3
 
