@@ -2,5 +2,5 @@
 <ruleset name="MyProject">
     <rule ref="PSR12"/>
     <exclude-pattern>tests/*</exclude-pattern>
-    <exclude-pattern>misc/*</exclude-pattern>
+    <exclude-pattern>ci-docker/*</exclude-pattern>
 </ruleset>

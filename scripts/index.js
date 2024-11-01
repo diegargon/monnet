@@ -1,8 +1,8 @@
 /**
- * 
+ *
  *  @author diego/@/envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -261,7 +261,7 @@ $(document).ready(function () {
         if (timeoutValue && host_id) {
             refresh('submitHostTimeout', timeoutValue, host_id);
         }
-    });    
+    });
     $(document).on("click", "#submitNetwork", function () {
         var fields = {};
 
@@ -280,13 +280,13 @@ $(document).ready(function () {
         var fields = {};
         $('#error_msg').html('');
         $('#status_msg').html('');
-        fields.name = $('#bookmarkName').val();        
-        fields.cat_id = parseInt($('#cat_id').val());        
-        fields.urlip = $('#urlip').val();        
+        fields.name = $('#bookmarkName').val();
+        fields.cat_id = parseInt($('#cat_id').val());
+        fields.urlip = $('#urlip').val();
         fields.image_type = $('#image_type').val();
         fields.field_img = $('#field_img').val();
         fields.weight = $('#weight').val();
-        
+
         if (fields.bookmarkName !== "" && fields.cat_id !== "" && fields.urlip !== "" && fields.image_type !== "") {
             json_fields = JSON.stringify(fields);
             refresh('addBookmark', json_fields);
@@ -294,12 +294,12 @@ $(document).ready(function () {
             $('#error_msg').html('Empty field');
         }
 
-    });    
+    });
 //Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
-//Network Checkboxes           
+//Network Checkboxes
 //Prevent disable all networks
             const checkedNetworks = document.querySelectorAll('input[type="checkbox"].option_network:checked');
             if ($(this).hasClass('option_network')) {

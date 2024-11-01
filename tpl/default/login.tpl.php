@@ -31,10 +31,15 @@
     <div class="profile_box">
         <form  method="POST" action="?page=login">
             <div class="profile_name">
-                <input size="18"  onfocus="this.value = ''" placeholder="<?= $tdata['username_placeholder'] ?>" class="login_username" type="text" name="username" value="<?= $tdata['username'] ?>" <?= isset($tdata['set_username_focus']) ? 'autofocus' : null ?>/>
+                <input size="18"  onfocus="this.value = ''" placeholder="<?= $tdata['username_placeholder'] ?>"
+                       class="login_username" type="text" name="username"
+                       value="<?= $tdata['username'] ?>"
+                       <?= isset($tdata['set_username_focus']) ? 'autofocus' : null ?>/>
             </div>
             <div class="profile_password">
-                <input size="18"  onfocus="this.value = ''" placeholder="<?= $tdata['password_placeholder'] ?>" class="login_password" type="password" name="password" value="" <?= isset($tdata['set_pass_focus']) ? 'autofocus' : null ?>/>
+                <input size="18"  onfocus="this.value = ''" placeholder="<?= $tdata['password_placeholder'] ?>"
+                       class="login_password" type="password" name="password"
+                       value="" <?= isset($tdata['set_pass_focus']) ? 'autofocus' : null ?>/>
             </div>
             <input type="submit" class="login_button" name="submit" value="<?= $tdata['log_in'] ?>"/>
         </form>

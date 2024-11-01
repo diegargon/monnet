@@ -15,17 +15,22 @@
             <img src="/tpl/<?= $cfg['theme'] ?>/img/network.png"/>
             <div class="dropdown-content" id="myDropdown">
                 <?php
-                if (!empty($tdata['networks']) && valid_array($tdata['networks'])) {
+                if (!empty($tdata['networks']) && valid_array($tdata['networks']))
+                {
                     ($tdata['networks_selected']) === 1 ? $disabled = ' disabled ' : $disabled = '';
-                    foreach ($tdata['networks'] as $net) {
+                    foreach ($tdata['networks'] as $net)
+                    {
                         $netid = $net['id'];
-                        if (!empty($net['selected'])) {
+                        if (!empty($net['selected']))
+                        {
                             $check_opt = ' checked ' . $disabled;
-                        } else {
+                        } else
+                        {
                             $check_opt = '';
                         }
                         ?>
-                        <input type="checkbox" id="option_network_<?= $netid ?>" class="option_network" name="option1" value="<?= $netid ?>" <?= $check_opt ?>/>
+                        <input type="checkbox" id="option_network_<?= $netid ?>" class="option_network"
+                               name="option1" value="<?= $netid ?>" <?= $check_opt ?>/>
                         <label for="option_network_<?= $netid ?>"><?= $net['name'] ?></label><br>
                         <?php
                     }
@@ -34,18 +39,23 @@
             </div>
         </div>
         <?php
-        foreach ($tdata['hosts_categories'] as $cat) {
+        foreach ($tdata['hosts_categories'] as $cat)
+        {
             ?>
 
             <div class="category">
-                <a class="show_host_cat"  data-catid="<?= $cat['id'] ?>" href="#"><img src="/tpl/<?= $cfg['theme'] ?>/img/<?= $cat['on'] ? 'green.png' : 'red.png' ?>"/>
-                    <input onclick="confirmRefresh('removeHostsCat',<?= $cat['id'] ?>)" type="image" class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png" alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>">
+                <a class="show_host_cat"  data-catid="<?= $cat['id'] ?>" href="#">
+                    <img src="/tpl/<?= $cfg['theme'] ?>/img/<?= $cat['on'] ? 'green.png' : 'red.png' ?>"/>
+                    <input onclick="confirmRefresh('removeHostsCat',<?= $cat['id'] ?>)" type="image"
+                           class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png"
+                           alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>">
                     <span class="text_shadow_style1 cat_name"><?= $cat['cat_name'] ?></span>
                 </a>
             </div>
             <?php
         }
         ?>
-        <input onclick="addHostsCat('<?= $lng['L_ADD_HOST_CAT'] ?>')" type="image" class="add_cat_btn action-icon-tab" src="tpl/default/img/add.png" alt="<?= $lng['L_ADD'] ?>" title="<?= $lng['L_ADD'] ?>">
+        <input onclick="addHostsCat('<?= $lng['L_ADD_HOST_CAT'] ?>')" type="image" class="add_cat_btn action-icon-tab"
+               src="tpl/default/img/add.png" alt="<?= $lng['L_ADD'] ?>" title="<?= $lng['L_ADD'] ?>">
     </div>
 </div>

@@ -1,15 +1,17 @@
 /**
- * 
+ *
  *  @author diego/@/envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ *
  */
 
 
 window.addEventListener('load', startTime);
 
-function startTime() {
+function startTime()
+{
     const today = new Date();
     let h = today.getHours();
     let m = today.getMinutes();
@@ -20,7 +22,8 @@ function startTime() {
     setTimeout(startTime, 1000);
 }
 
-function checkTime(i) {
+function checkTime(i)
+{
     if (i < 10) {
         i = "0" + i;
     }

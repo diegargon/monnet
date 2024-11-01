@@ -9,11 +9,13 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-if (!file_exists('/etc/monnet/config.inc.php')) {
+if (!file_exists('/etc/monnet/config.inc.php'))
+{
     print 'Missing config.inc.php. Leaving';
     exit(1);
 }
-if (!file_exists('config/config.defaults.php')) {
+if (!file_exists('config/config.defaults.php'))
+{
     print 'Missing config.defaults.php. Leaving';
     exit(1);
 }
@@ -28,7 +30,8 @@ require_once('include/initial_checks.inc.php');
 do_initial_db_check($cfg_db);
 do_initial_main_vars_checks($cfg);
 
-if ($cfg_db['dbtype'] == 'mysql') {
+if ($cfg_db['dbtype'] == 'mysql')
+{
     require_once('class/Mysql.php');
 }
 

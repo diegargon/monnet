@@ -9,7 +9,8 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function run_cmd(string $cmd, array $params, string $stdin = null) {
+function run_cmd(string $cmd, array $params, string $stdin = null)
+{
     $return = [];
     $pipes = [];
     $exec_params = '';
@@ -21,15 +22,18 @@ function run_cmd(string $cmd, array $params, string $stdin = null) {
             /* 2 => array("file", "/tmp/error-output.txt", "a") */
     ];
 
-    foreach ($params as $param) {
+    foreach ($params as $param)
+    {
         $exec_params .= ' ' . $param;
     }
     $exec_cmd = $cmd . $exec_params;
 
     $proc = proc_open($exec_cmd, $descriptorspec, $pipes);
 
-    if (is_resource($proc)) {
-        if (!empty($stdin)) {
+    if (is_resource($proc))
+    {
+        if (!empty($stdin))
+        {
             fwrite($pipes[0], $stdin);
             fclose($pipes[0]);
         }
@@ -37,7 +41,8 @@ function run_cmd(string $cmd, array $params, string $stdin = null) {
         fclose($pipes[1]);
         $return['stderr'] = trim(stream_get_contents($pipes[2]));
         fclose($pipes[2]);
-    } else {
+    } else
+    {
         Log::err('Error run command ');
         $return = false;
     }
@@ -46,7 +51,8 @@ function run_cmd(string $cmd, array $params, string $stdin = null) {
     return $return;
 }
 
-function check_command(string $cmd) {
+function check_command(string $cmd)
+{
     $result = run_cmd('command', ['-v', $cmd]);
 
     return empty($result['stdout']) ? false : $result['stdout'];

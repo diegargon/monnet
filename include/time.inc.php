@@ -9,8 +9,10 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function valid_timezone(string $timezone) {
-    if (empty($timezone)) {
+function valid_timezone(string $timezone)
+{
+    if (empty($timezone))
+    {
         return false;
     }
     $valid_time_zones = timezone_identifiers_list();
@@ -18,8 +20,10 @@ function valid_timezone(string $timezone) {
     return in_array($timezone, $valid_time_zones);
 }
 
-function date_now(string $timezone = 'UTC') {
-    if (!valid_timezone($timezone)) {
+function date_now(string $timezone = 'UTC')
+{
+    if (!valid_timezone($timezone))
+    {
         return false;
     }
     $date_timezone = new DatetimeZone($timezone);
@@ -28,19 +32,23 @@ function date_now(string $timezone = 'UTC') {
     return $date_now->format('Y-m-d H:i:s');
 }
 
-function utc_date_now() {
+function utc_date_now()
+{
     return date_now();
 }
 
-function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s') {
+function utc_to_user_timezone($utc_date, $timezone, $time_format = 'Y-m-d H:i:s')
+{
     $date = new DateTime($utc_date, new DateTimeZone('UTC'));
     $date->setTimezone(new DateTimeZone($timezone));
 
     return $date->format($time_format);
 }
 
-function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s') {
-    if (!valid_timezone($timezone)) {
+function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s')
+{
+    if (!valid_timezone($timezone))
+    {
         return false;
     }
     $date_timezone = new DatetimeZone($timezone);
@@ -49,13 +57,15 @@ function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m
     return $date_now->format($time_format);
 }
 
-function datetime_string_format(string $date, string $time_format = 'Y-m-d H:i:s') {
+function datetime_string_format(string $date, string $time_format = 'Y-m-d H:i:s')
+{
     $timestamp = strtotime($date);
 
     return ($timestamp) ? date($time_format, $timestamp) : false;
 }
 
-function datetime_machine() {
+function datetime_machine()
+{
     $now = new DateTime();
     return $now->format('Y-m-d H:i:s');
 }

@@ -30,9 +30,11 @@ $data = [
     'response_msg' => '',
 ];
 
-if ($user->getId() > 0) {
+if ($user->getId() > 0)
+{
     $data['login'] = 'success';
-} else {
+} else
+{
     print(json_encode($data));
     exit();
 }
@@ -40,38 +42,50 @@ $frontend = new Frontend($cfg, $lng);
 $tdata['theme'] = $cfg['theme'];
 
 $command = Filters::postString('order');
-if ($command == 'saveNote') {
+if ($command == 'saveNote')
+{
     $command_value = trim(Filters::postUTF8('order_value'));
-} else if ($command == 'submitScanPorts') {
+} else if ($command == 'submitScanPorts')
+{
     $command_value = trim(Filters::postCustomString('order_value', ',/', 255));
-} else if ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
+} else if ($command == 'setCheckPorts' || $command == 'submitHostTimeout')
+{
     $command_value = Filters::postInt('order_value');
-} else if ($command == 'addNetwork') {
+} else if ($command == 'addNetwork')
+{
     $command_value = Filters::postCustomString('order_value', ',":.{}'); //JSON only special chars
-} else if ($command == 'addBookmark') {
+} else if ($command == 'addBookmark')
+{
     $command_value = Filters::postCustomString('order_value', ',":.{}/_'); //Json + url chars
-} else if ($command == 'submitHost') {
+} else if ($command == 'submitHost')
+{
     $command_value = Filters::postIP('order_value');
-    if (empty($command_value)) {
+    if (empty($command_value))
+    {
         $command_value = Filters::postDomain('order_value');
     }
-} else {
+} else
+{
     $command_value = trim(Filters::postString('order_value'));
 }
 $object_id = trim(Filters::postInt('object_id'));
 
-if (!empty($command)) {
+if (!empty($command))
+{
     $data['command_receive'] = $command;
 }
-if (!empty($command_value)) {
+if (!empty($command_value))
+{
     $data['command_value'] = $command_value;
 }
-if (!empty($object_id)) {
+if (!empty($object_id))
+{
     $data['object_id'] = $object_id;
 }
 
 /* Remove host */
-if ($command === 'remove_host' && is_numeric($command_value)) {
+if ($command === 'remove_host' && is_numeric($command_value))
+{
     $hosts->remove($command_value);
     //no host_details
     $user->setPref('host_details', 0);
@@ -80,20 +94,23 @@ if ($command === 'remove_host' && is_numeric($command_value)) {
     $data['command_success'] = 1;
 }
 
-if ($command == 'network_select' && !empty($command_value) && is_numeric($command_value)) {
+if ($command == 'network_select' && !empty($command_value) && is_numeric($command_value))
+{
     $pref_name = 'network_select_' . $command_value;
     $user->setPref($pref_name, 1);
     $data['command_success'] = 1;
     $force_host_reload = 1;
 }
-if ($command == 'network_unselect' && !empty($command_value) && is_numeric($command_value)) {
+if ($command == 'network_unselect' && !empty($command_value) && is_numeric($command_value))
+{
     $pref_name = 'network_select_' . $command_value;
     $user->setPref($pref_name, 0);
     $data['command_success'] = 1;
     $force_host_reload = 1;
 }
 
-if ($command == 'setCheckPorts' && isset($command_value) && !empty($object_id)) {
+if ($command == 'setCheckPorts' && isset($command_value) && !empty($object_id))
+{
     // 1 ping 2 TCP/UDP
 //    ($command_value == 0) ? $value = 1 : $value = 2;
 
@@ -102,21 +119,27 @@ if ($command == 'setCheckPorts' && isset($command_value) && !empty($object_id)) 
     $data['response_msg'] = $command_value;
 }
 
-if ($command == 'submitHostToken' && !empty($command_value) && is_numeric($command_value)) {
+if ($command == 'submitHostToken' && !empty($command_value) && is_numeric($command_value))
+{
     $token = create_token();
     $hosts->update($command_value, ['token' => $token]);
     $data['response_msg'] = $token;
     $data['command_success'] = 1;
 }
-if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id)) {
+if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id))
+{
     $success_msg = '';
-    if (!empty($command_value)) {
+    if (!empty($command_value))
+    {
         $valid_ports = validatePortsInput(trim($command_value));
-        if (valid_array($valid_ports)) {
-            if (($encoded_ports = json_encode($valid_ports))) {
+        if (valid_array($valid_ports))
+        {
+            if (($encoded_ports = json_encode($valid_ports)))
+            {
                 $db->update('hosts', ['ports' => $encoded_ports], ['id' => $object_id]);
                 $total_elements = count($valid_ports) - 1;
-                foreach ($valid_ports as $index => $port) {
+                foreach ($valid_ports as $index => $port)
+                {
                     $success_msg .= $port['n'] . '/';
                     $success_msg .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
                     $success_msg .= '/' . $port['name'];
@@ -129,9 +152,11 @@ if ($command == 'submitScanPorts' && !empty($object_id) && is_numeric($object_id
     $data['response_msg'] = $success_msg;
 }
 
-if ($command == 'submitTitle' && !empty($object_id) && is_numeric($object_id)) {
+if ($command == 'submitTitle' && !empty($object_id) && is_numeric($object_id))
+{
     $success = 0;
-    if (!empty($command_value)) {
+    if (!empty($command_value))
+    {
         $hosts->update($object_id, ['title' => $command_value]);
         $success = 1;
     }
@@ -139,18 +164,22 @@ if ($command == 'submitTitle' && !empty($object_id) && is_numeric($object_id)) {
     $force_host_reload = 1;
 }
 
-if ($command == 'submitOwner' && !empty($object_id) && is_numeric($object_id)) {
+if ($command == 'submitOwner' && !empty($object_id) && is_numeric($object_id))
+{
     $success = 0;
-    if (!empty($command_value)) {
+    if (!empty($command_value))
+    {
         $hosts->update($object_id, ['owner' => $command_value]);
         $success = 1;
     }
     $data['command_success'] = $success;
 }
 
-if ($command == 'submitHostTimeout' && !empty($object_id) && is_numeric($object_id)) {
+if ($command == 'submitHostTimeout' && !empty($object_id) && is_numeric($object_id))
+{
     $success = 0;
-    if (!empty($command_value)) {
+    if (!empty($command_value))
+    {
         $hosts->update($object_id, ['timeout' => $command_value]);
         $success = 1;
     }
@@ -158,9 +187,11 @@ if ($command == 'submitHostTimeout' && !empty($object_id) && is_numeric($object_
 }
 
 // Change Host Cat
-if ($command == 'submitCat' && !empty($object_id) && is_numeric($object_id)) {
+if ($command == 'submitCat' && !empty($object_id) && is_numeric($object_id))
+{
     $success = 0;
-    if (!empty($command_value)) {
+    if (!empty($command_value))
+    {
         $hosts->update($object_id, ['category' => $command_value]);
         $success = 1;
     }
@@ -170,9 +201,11 @@ if ($command == 'submitCat' && !empty($object_id) && is_numeric($object_id)) {
 }
 
 
-if ($command == 'submitManufacture' && !empty($object_id) && is_numeric($object_id)) {
+if ($command == 'submitManufacture' && !empty($object_id) && is_numeric($object_id))
+{
     $success = 0;
-    if (!empty($command_value)) {
+    if (!empty($command_value))
+    {
         $hosts->update($object_id, ['manufacture' => $command_value]);
         $success = 1;
     }
@@ -181,9 +214,11 @@ if ($command == 'submitManufacture' && !empty($object_id) && is_numeric($object_
     $force_host_reload = 1;
 }
 
-if ($command == 'submitOS' && !empty($object_id) && is_numeric($object_id)) {
+if ($command == 'submitOS' && !empty($object_id) && is_numeric($object_id))
+{
     $success = 0;
-    if (!empty($command_value)) {
+    if (!empty($command_value))
+    {
         $hosts->update($object_id, ['os' => $command_value]);
         $success = 1;
     }
@@ -192,9 +227,11 @@ if ($command == 'submitOS' && !empty($object_id) && is_numeric($object_id)) {
     $force_host_reload = 1;
 }
 
-if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_id)) {
+if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_id))
+{
     $success = 0;
-    if (!empty($command_value)) {
+    if (!empty($command_value))
+    {
         $hosts->update($object_id, ['system_type' => $command_value]);
         $success = 1;
     }
@@ -204,34 +241,43 @@ if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_i
 }
 
 /* Show cat Only * */
-if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
+if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value))
+{
     $categories_state = $user->getHostsCatState();
 
     $ones = 0;
-    foreach ($categories_state as $state) {
-        if ($state == 1) {
+    foreach ($categories_state as $state)
+    {
+        if ($state == 1)
+        {
             $ones++;
         }
     }
 
-    if (empty($categories_state) || $ones == 1) {
+    if (empty($categories_state) || $ones == 1)
+    {
         $user->turnHostsCatsOn();
-    } else {
+    } else
+    {
         $user->turnHostsCatsOff();
         $user->toggleHostsCat($command_value);
     }
 }
 
-if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
+if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value))
+{
     $user->toggleHostsCat($command_value);
 }
 
-if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
+if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value))
+{
     $hosts_categories = $user->getHostsCats();
 
     //Not show empty cats
-    foreach ($hosts_categories as $key => $host_cat) {
-        if (!$hosts->catHaveHosts($host_cat['id'])) {
+    foreach ($hosts_categories as $key => $host_cat)
+    {
+        if (!$hosts->catHaveHosts($host_cat['id']))
+        {
             unset($hosts_categories[$key]);
         }
     }
@@ -240,9 +286,11 @@ if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($co
     $networks_list = $ctx->getAppNetworks()->getNetworks();
 
     $networks_selected = 0;
-    foreach ($networks_list as &$net) {
+    foreach ($networks_list as &$net)
+    {
         $net_set = $user->getPref('network_select_' . $net['id']);
-        if (($net_set) || $net_set === false) {
+        if (($net_set) || $net_set === false)
+        {
             $net['selected'] = 1;
             $networks_selected++;
         }
@@ -259,50 +307,65 @@ if ($command == 'show_host_cat' || $command == 'show_host_only_cat' && isset($co
 /* /end Host Cat */
 
 /* ADD NETWORK */
-if ($command == 'addNetwork' && !empty($command_value)) {
+if ($command == 'addNetwork' && !empty($command_value))
+{
     $decodedJson = json_decode($command_value, true);
 
-    if ($decodedJson === null) {
+    if ($decodedJson === null)
+    {
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
-    } else {
-        foreach ($decodedJson as $key => $dJson) {
+    } else
+    {
+        foreach ($decodedJson as $key => $dJson)
+        {
             ($key == 'networkVLAN') ? $key = 'vlan' : null;
             ($key == 'networkScan') ? $key = 'scan' : null;
             ($key == 'networkName') ? $key = 'name' : null;
             $new_network[$key] = trim($dJson);
         }
-        if ($new_network['networkCIDR'] == 0 && $new_network['network'] != '0.0.0.0') {
-            $data['command_error_msg'] .= $lng['L_MASK'] . ' ' . $new_network['networkCIDR'] . ' ' . $lng['L_NOT_ALLOWED'] . '<br/>';
+        if ($new_network['networkCIDR'] == 0 && $new_network['network'] != '0.0.0.0')
+        {
+            $data['command_error_msg'] .= $lng['L_MASK'] .
+                    ' ' . $new_network['networkCIDR'] .
+                    ' ' . $lng['L_NOT_ALLOWED'] . '<br/>';
         }
         $network_plus_cidr = $new_network['network'] . '/' . $new_network['networkCIDR'];
         unset($new_network['networkCIDR']);
         $new_network['network'] = $network_plus_cidr;
 
-        if (!Filters::varNetwork($network_plus_cidr)) {
+        if (!Filters::varNetwork($network_plus_cidr))
+        {
             $data['command_error_msg'] .= $lng['L_NETWORK'] . ' ' . $lng['L_INVALID'] . '<br/>';
         }
-        if (!is_numeric($new_network['vlan'])) {
+        if (!is_numeric($new_network['vlan']))
+        {
             $data['command_error_msg'] .= 'VLAN ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
         }
-        if (!is_numeric($new_network['scan'])) {
+        if (!is_numeric($new_network['scan']))
+        {
             $data['command_error_msg'] .= 'Scan ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
         }
 
         $networks_list = $ctx->getAppNetworks()->getNetworks();
-        foreach ($networks_list as $net) {
-            if ($net['name'] == $new_network['name']) {
+        foreach ($networks_list as $net)
+        {
+            if ($net['name'] == $new_network['name'])
+            {
                 $data['command_error_msg'] = 'Name must be unique<br/>';
             }
-            if ($net['network'] == $network_plus_cidr) {
+            if ($net['network'] == $network_plus_cidr)
+            {
                 $data['command_error_msg'] = 'Network must be unique<br/>';
             }
         }
-        if (str_starts_with($new_network['network'], "0") || !$ctx->getAppNetworks()->isLocal($new_network['network'])) {
+        if (str_starts_with($new_network['network'], "0") || !$ctx->getAppNetworks()->isLocal($new_network['network']))
+        {
             $new_network['vlan'] = 0;
             $new_network['scan'] = 0;
         }
 
-        if (empty($data['command_error_msg'])) {
+        if (empty($data['command_error_msg']))
+        {
             $ctx->getAppNetworks()->addNetwork($new_network);
             $data['command_success'] = 1;
             $data['response_msg'] = 'ok';
@@ -312,49 +375,64 @@ if ($command == 'addNetwork' && !empty($command_value)) {
 
 /* ADD Bookmark */
 
-if ($command == 'addBookmark' && !empty($command_value)) {
+if ($command == 'addBookmark' && !empty($command_value))
+{
     $decodedJson = json_decode($command_value, true);
 
-    if ($decodedJson === null) {
+    if ($decodedJson === null)
+    {
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
-    } else {
-        foreach ($decodedJson as $key => $dJson) {
+    } else
+    {
+        foreach ($decodedJson as $key => $dJson)
+        {
             $new_bookmark[$key] = trim($dJson);
         }
 
-        if (!Filters::varString($new_bookmark['name'])) {
+        if (!Filters::varString($new_bookmark['name']))
+        {
             $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
-        if (!Filters::varString($new_bookmark['image_type'])) {
+        if (!Filters::varString($new_bookmark['image_type']))
+        {
             $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_IMAGE_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
-        if (!Filters::varInt($new_bookmark['cat_id'])) {
+        if (!Filters::varInt($new_bookmark['cat_id']))
+        {
             $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if (!Filters::varUrl($new_bookmark['urlip']) || Filters::varIP($new_bookmark['urlip'])) {
+        if (!Filters::varUrl($new_bookmark['urlip']) || Filters::varIP($new_bookmark['urlip']))
+        {
             $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if (!(Filters::varInt($new_bookmark['weight'])) && Filters::varInt($new_bookmark['weight']) != 0) {
+        if (!(Filters::varInt($new_bookmark['weight'])) && Filters::varInt($new_bookmark['weight']) != 0)
+        {
             $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if ($new_bookmark['image_type'] != 'favicon' && empty($new_bookmark['field_img'])) {
+        if ($new_bookmark['image_type'] != 'favicon' && empty($new_bookmark['field_img']))
+        {
             $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
-        if ($new_bookmark['image_type'] == 'favicon' && empty($new_bookmark['field_img'])) {
+        if ($new_bookmark['image_type'] == 'favicon' && empty($new_bookmark['field_img']))
+        {
             $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_INVALID']}";
         }
-        if ($new_bookmark['image_type'] == 'local_img' && empty($new_bookmark['field_img'])) {
+        if ($new_bookmark['image_type'] == 'local_img' && empty($new_bookmark['field_img']))
+        {
             $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if (empty($data['command_error_msg'])) {
+        if (empty($data['command_error_msg']))
+        {
 
-            if ($ctx->getAppItems()->addItem('bookmarks', $new_bookmark)) {
+            if ($ctx->getAppItems()->addItem('bookmarks', $new_bookmark))
+            {
                 $data['response_msg'] = 'ok';
-            } else {
+            } else
+            {
                 $data['response_msg'] = 'error';
             }
         }
@@ -365,12 +443,15 @@ if ($command == 'addBookmark' && !empty($command_value)) {
 
 $highlight_hosts_count = 0;
 
-if ((empty($command) && empty($command_value)) || $force_host_reload) {
+if ((empty($command) && empty($command_value)) || $force_host_reload)
+{
     /* Set show/hide highlight hosts */
-    if ($user->getPref('show_highlight_hosts_status')) {
+    if ($user->getPref('show_highlight_hosts_status'))
+    {
         $hosts_view = get_hosts_view($ctx, 1);
         $highlight_hosts_count = 0;
-        if (is_array($hosts_view)) {
+        if (is_array($hosts_view))
+        {
             $highlight_hosts_count = count($hosts_view);
             $tdata = [];
             $tdata['hosts'] = $hosts_view;
@@ -378,13 +459,16 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
             $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
             $data['highlight_hosts']['cfg']['place'] = '#host_place';
-        } else {
+        } else
+        {
             $data['command_error_msg'] .= 'Invalid highlight host data';
         }
     }
-    if ($user->getPref('show_other_hosts_status')) {
+    if ($user->getPref('show_other_hosts_status'))
+    {
         $hosts_view = get_hosts_view($ctx);
-        if (is_array($hosts_view)) {
+        if (is_array($hosts_view))
+        {
             $shown_hosts_count = count($hosts_view);
             $hosts_totals_count = $hosts->totals;
             $shown_hosts_count = $shown_hosts_count + $highlight_hosts_count;
@@ -396,7 +480,8 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $tdata['head-title'] = $lng['L_OTHERS'];
             $data['other_hosts']['cfg']['place'] = '#host_place';
             $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
-        } else {
+        } else
+        {
             $data['command_error_msg'] .= 'Invalid other host data' . print_r($hosts_view, true);
         }
     }
@@ -404,18 +489,24 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
 
 /* Set show/hide host-details */
 
-if ($command === 'host-details' && is_numeric($command_value)) {
+if ($command === 'host-details' && is_numeric($command_value))
+{
     $host_id = $command_value;
     $host_details = get_host_detail_view_data($ctx, $host_id);
-    if (valid_array($host_details)) {
+    if (valid_array($host_details))
+    {
         $tdata['host_details'] = $host_details;
-        if (!empty($host_details['ping_stats'])) {
+        if (!empty($host_details['ping_stats']))
+        {
             $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time', $host_details['ping_stats']);
         }
-        if (!empty($host_details['host_logs'])) {
-            if (valid_array($host_details['host_logs'])) {
+        if (!empty($host_details['host_logs']))
+        {
+            if (valid_array($host_details['host_logs']))
+            {
                 $log_lines = [];
-                foreach ($host_details['host_logs'] as $term_log) {
+                foreach ($host_details['host_logs'] as $term_log)
+                {
                     $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
                     $loglevelname = Log::getLogLevelName($term_log['level']);
                     $loglevelname = str_replace('LOG_', '', $loglevelname);
@@ -432,16 +523,19 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_success'] = 1;
-    } else {
+    } else
+    {
         $data['command_error_msg'] .= 'Invalid host-details array';
     }
 }
 
-if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
+if ($command == 'saveNote' && !empty($command_value) && !empty($object_id))
+{
     //For empty note we must write ':clear' to begin to prevent clean the note
     //if a filter or other return false/empty
     $content = urldecode($command_value);
-    if (str_starts_with($content, ":clear")) {
+    if (str_starts_with($content, ":clear"))
+    {
         $content = '';
     }
     $set = ['content' => $content];
@@ -451,7 +545,8 @@ if ($command == 'saveNote' && !empty($command_value) && !empty($object_id)) {
     $data['command_success'] = 1;
 }
 
-if ($command == 'setHighlight' && !empty($object_id)) {
+if ($command == 'setHighlight' && !empty($object_id))
+{
 
     $value = (empty($command_value)) ? 0 : 1;
 
@@ -461,10 +556,13 @@ if ($command == 'setHighlight' && !empty($object_id)) {
 }
 
 /* Bookmarks */
-if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value)) {
-    if ($ctx->getAppItems()->remove($command_value)) {
+if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value))
+{
+    if ($ctx->getAppItems()->remove($command_value))
+    {
         $data['response_msg'] = 'ok';
-    } else {
+    } else
+    {
         $data['response_msg'] = 'fail';
     }
     $data['command_success'] = 1;
@@ -475,7 +573,8 @@ if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($comman
 /* Host and Bookmarks create category */
 if (
         ($command == 'submitBookmarkCat' || $command == 'submitHostsCat') &&
-        !empty($command_value)) {
+        !empty($command_value))
+{
     $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;
     $response = $ctx->getAppCategories()->create($cat_type, $command_value);
     ($response['success']) ? $data['response_msg'] = $response['msg'] : $data['command_error_msg'] = $response['msg'];
@@ -485,21 +584,28 @@ if (
 
 if (
         ($command == 'removeBookmarkCat' || $command == 'removeHostsCat') &&
-        !empty($command_value) && is_numeric($command_value)) {
+        !empty($command_value) && is_numeric($command_value))
+{
     $cat_type = ($command == 'removeBookmarkCat') ? 2 : 1;
-    if ($cat_type == 2 && $command_value == 50) {
+    if ($cat_type == 2 && $command_value == 50)
+    {
         $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
-    } else if ($cat_type == 1 && $command_value == 1) {
+    } else if ($cat_type == 1 && $command_value == 1)
+    {
         $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
-    } else if ($ctx->getAppCategories()->remove($command_value)) {
+    } else if ($ctx->getAppCategories()->remove($command_value))
+    {
         //Set to default all elements
-        if ($cat_type == 1) {
+        if ($cat_type == 1)
+        {
             $db->update('hosts', ['category' => 1], ['category' => $command_value]);
-        } else {
+        } else
+        {
             $db->update('items', ['cat_id' => 50], ['cat_id' => $command_value]);
         }
         $data['command_response_msg'] = $lng['L_OK'];
-    } else {
+    } else
+    {
         $data['command_error_msg'] = $lng['L_ERROR'];
     }
 
@@ -507,67 +613,84 @@ if (
 }
 
 /* Host External submit */
-if ($command == 'submitHost' && !empty($command_value)) {
+if ($command == 'submitHost' && !empty($command_value))
+{
     $host = [];
     $host['hostname'] = Filters::varDomain($command_value);
 
-    if (!empty($host['hostname'])) {
+    if (!empty($host['hostname']))
+    {
         $host['ip'] = $hosts->getHostnameIP($host['hostname']);
-    } else {
+    } else
+    {
         $host['ip'] = $command_value;
     }
 
-    if (!empty($host['ip']) && !$ctx->getAppNetworks()->isLocal($new_network['network'])) {
+    if (!empty($host['ip']) && !$ctx->getAppNetworks()->isLocal($new_network['network']))
+    {
         $network_match = $ctx->getAppNetworks()->matchNetwork($host['ip']);
-        if (valid_array($network_match)) {
-            if ($hosts->getHostByIP($host['ip'])) {
+        if (valid_array($network_match))
+        {
+            if ($hosts->getHostByIP($host['ip']))
+            {
                 $data['command_error_msg'] = $lng['L_ERR_DUP_IP'];
-            } else {
+            } else
+            {
                 $host['network'] = $network_match['id'];
                 $hosts->addHost($host);
                 $data['response_msg'] = $lng['L_OK'];
             }
-        } else {
+        } else
+        {
             $data['command_error_msg'] = $lng['L_ERR_NOT_NET_CONTAINER'];
         }
-    } else {
+    } else
+    {
         $data['command_error_msg'] = $lng['L_ERR_NOT_INTERNET_IP'] . $host['ip'];
     }
     $data['command_success'] = 1;
 }
 
 /* Power ON/OFF  & Reboot */
-if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value)) {
+if ($command == 'power_on' && !empty($command_value) && is_numeric($command_value))
+{
     $host = $hosts->getHostById($command_value);
 
-    if (valid_array($host) && !empty($host['mac'])) {
+    if (valid_array($host) && !empty($host['mac']))
+    {
         sendWOL($host['mac']);
         $data['command_success'] = 1;
-    } else {
+    } else
+    {
         $err_msg = "Host {$host['ip']} has not mac address";
         Log::warning($err_msg);
         $data['command_error_msg'] .= $err_msg;
     }
 }
-if ($command == 'power_off' && !empty($command_value) && is_numeric($command_value)) {
+if ($command == 'power_off' && !empty($command_value) && is_numeric($command_value))
+{
     $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 2, 'hid' => $command_value], 'LIMIT 1');
     $coincidence = $db->fetchAll($result);
 
-    if (empty($coincidence)) {
+    if (empty($coincidence))
+    {
         $db->insert('cmd', ['cmd_type' => 2, 'hid' => $command_value]);
     }
 }
-if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value)) {
+if ($command == 'reboot' && !empty($command_value) && is_numeric($command_value))
+{
     $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 1, 'hid' => $command_value], 'LIMIT 1');
     $coincidence = $db->fetchAll($result);
 
-    if (empty($coincidence)) {
+    if (empty($coincidence))
+    {
         $db->insert('cmd', ['cmd_type' => 1, 'hid' => $command_value]);
     }
     $data['command_success'] = 1;
 }
 
-if ($command == 'change_bookmarks_tab' && !empty($command_value)) {
+if ($command == 'change_bookmarks_tab' && !empty($command_value))
+{
     $user->setPref('default_bookmarks_tab', $command_value);
     $data['command_success'] = 1;
 }
@@ -578,25 +701,31 @@ $type_mark = '';
 
 $host_logs = Log::getLoghosts($cfg['term_max_lines']);
 
-if (!empty($host_logs)) {
-    foreach ($host_logs as &$log) {
+if (!empty($host_logs))
+{
+    foreach ($host_logs as &$log)
+    {
         $log['type_mark'] = '[H]';
     }
     $logs = $host_logs;
 }
 
 
-if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
+if ($cfg['term_show_system_logs'] && $cfg['log_to_db'])
+{
     $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
-    if (empty($system_logs)) {
-        foreach ($system_logs as &$system_log) {
+    if (empty($system_logs))
+    {
+        foreach ($system_logs as &$system_log)
+        {
             $system_logs['type_mark'] = '[S]';
         }
         $logs = array_merge($logs, $system_logs);
     }
 }
 
-foreach ($logs as &$log) {
+foreach ($logs as &$log)
+{
     $log['timestamp'] = strtotime($log['date']);
 }
 
@@ -604,19 +733,24 @@ usort($logs, function ($a, $b) {
     return $b['timestamp'] <=> $a['timestamp'];
 });
 
-foreach ($logs as &$log) {
+foreach ($logs as &$log)
+{
     unset($log['timestamp']);
 }
 
 //If we add systems logs probably we exceed the max
-if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {
+if (valid_array($logs) && count($logs) > $cfg['term_max_lines'])
+{
     $term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
-} else {
+} else
+{
     $term_logs = $logs;
 }
-if (valid_array($term_logs)) {
+if (valid_array($term_logs))
+{
     $log_lines = [];
-    foreach ($term_logs as $term_log) {
+    foreach ($term_logs as $term_log)
+    {
         $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
         $loglevelname = Log::getLogLevelName($term_log['level']);
         $loglevelname = str_replace('LOG_', '', $loglevelname);
@@ -626,10 +760,12 @@ if (valid_array($term_logs)) {
     $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
 }
 
-if (!empty($shown_host_count) || !empty($hosts_totals_count)) {
+if (!empty($shown_host_count) || !empty($hosts_totals_count))
+{
     $data['misc']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
 }
-if (!empty($total_hosts_on) && !empty($total_hosts_off)) {
+if (!empty($total_hosts_on) && !empty($total_hosts_off))
+{
     $data['misc']['onoff'] = $lng['L_ON'] . ": $total_hosts_on | {$lng['L_OFF']}: $total_hosts_off | ";
 }
 $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
@@ -640,13 +776,18 @@ $system_prefs = $db->fetchAll($results);
 $cli_last_run = 0;
 $discovery_last_run = 0;
 
-foreach ($system_prefs as $sys_pref) {
-    if ($sys_pref['pref_name'] == 'cli_last_run') {
+foreach ($system_prefs as $sys_pref)
+{
+    if ($sys_pref['pref_name'] == 'cli_last_run')
+    {
         $cli_last_run = $sys_pref['pref_value'];
-        $cli_last_run = utc_to_user_timezone($cli_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
-    } else if ($sys_pref['pref_name'] == 'discovery_last_run') {
+        $cli_last_run = utc_to_user_timezone($cli_last_run, $user->getTimezone(),
+                $cfg['datetime_format_min']);
+    } else if ($sys_pref['pref_name'] == 'discovery_last_run')
+    {
         $discovery_last_run = $sys_pref['pref_value'];
-        $discovery_last_run = utc_to_user_timezone($discovery_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+        $discovery_last_run = utc_to_user_timezone($discovery_last_run, $user->getTimezone(),
+                $cfg['datetime_format_min']);
     }
 }
 $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;

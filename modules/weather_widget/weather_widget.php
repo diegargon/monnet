@@ -29,7 +29,10 @@ function weather_widget(array $cfg, array $lng) {
 
 function request_weather(array $cfg) {
 
-    $ApiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' . $cfg['weather_widget']['country'] . '&appid=' . $cfg['weather_widget']['weather_api'] . '&lang=es&units=metric';
+    $ApiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' .
+            $cfg['weather_widget']['country']
+            . '&appid=' . $cfg['weather_widget']['weather_api']
+            . '&lang=es&units=metric';
 
     $ch = curl_init();
 

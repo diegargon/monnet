@@ -10,7 +10,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function page_defaults(AppCtx $ctx) {
+function page_defaults(AppCtx $ctx)
+{
     $page = [];
 
     $user = $ctx->getAppUser();
@@ -26,7 +27,8 @@ function page_defaults(AppCtx $ctx) {
     return $page;
 }
 
-function page_common_head(AppCtx $ctx) {
+function page_common_head(AppCtx $ctx)
+{
     $page = [];
 
     $db = $ctx->getAppDb();
@@ -37,7 +39,8 @@ function page_common_head(AppCtx $ctx) {
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
 
-    foreach ($search_engines as $search_engine) {
+    foreach ($search_engines as $search_engine)
+    {
         $conf = json_decode($search_engine['conf'], true);
         $page['search_engines'][] = [
             'url' => $conf['url'],
@@ -68,7 +71,8 @@ function page_common_head(AppCtx $ctx) {
     return $page;
 }
 
-function page_index(AppCtx $ctx) {
+function page_index(AppCtx $ctx)
+{
     $page = [];
 
     $user = $ctx->getAppUser();
@@ -78,15 +82,18 @@ function page_index(AppCtx $ctx) {
     $page = page_common_head($ctx);
     $networks_selected = 0;
 
-    foreach ($networks_list as &$net) {
+    foreach ($networks_list as &$net)
+    {
         $net_set = $user->getPref('network_select_' . $net['id']);
-        if (($net_set) || $net_set === false) {
+        if (($net_set) || $net_set === false)
+        {
             $net['selected'] = 1;
             $networks_selected++;
         }
     }
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST')
+    {
         $post_data = page_index_post($ctx);
         $page = array_merge($post_data, $page);
     }
@@ -110,10 +117,14 @@ function page_index(AppCtx $ctx) {
     $show_this_system = $user->getPref('show_this_system_status');
     $show_highlight_hosts_status = $user->getPref('show_highlight_hosts_status');
     $show_other_hosts_status = $user->getPref('show_other_hosts_status');
-    $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 : $page['controls']['show_bookmarks_status'] = 0;
-    $show_highlight_hosts_status ? $page['controls']['show_highlight_hosts_status'] = 1 : $page['controls']['show_highlight_hosts_status'] = 0;
-    $show_other_hosts_status ? $page['controls']['show_other_hosts_status'] = 1 : $page['controls']['show_other_hosts_status'] = 0;
-    $show_this_system ? $page['controls']['show_this_system_status'] = 1 : $page['controls']['show_this_system_status'] = 0;
+    $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 :
+                    $page['controls']['show_bookmarks_status'] = 0;
+    $show_highlight_hosts_status ? $page['controls']['show_highlight_hosts_status'] = 1 :
+                    $page['controls']['show_highlight_hosts_status'] = 0;
+    $show_other_hosts_status ? $page['controls']['show_other_hosts_status'] = 1 :
+                    $page['controls']['show_other_hosts_status'] = 0;
+    $show_this_system ? $page['controls']['show_this_system_status'] = 1 :
+                    $page['controls']['show_this_system_status'] = 0;
 
     $page['load_tpl'][] = [
         'file' => 'controls',
@@ -122,10 +133,12 @@ function page_index(AppCtx $ctx) {
 
     /* Bookmarks */
 
-    if ($user->getPref('show_bookmarks_status')) {
+    if ($user->getPref('show_bookmarks_status'))
+    {
         $bookmarks = format_items($user, $items->getByType('bookmarks'));
         $default_bookmarks_tab = $user->getPref('default_bookmarks_tab');
-        if ($default_bookmarks_tab == null) {
+        if ($default_bookmarks_tab == null)
+        {
             $default_bookmarks_tab = 0;
         }
         $page['bookmarks_default_tab'] = str_replace('bookmark_content_tab_', '', $default_bookmarks_tab);
@@ -179,7 +192,8 @@ function page_index(AppCtx $ctx) {
     return $page;
 }
 
-function page_login(AppCtx $ctx) {
+function page_login(AppCtx $ctx)
+{
     $page = [];
 
     //$db = $ctx->getAppDb();
@@ -187,16 +201,20 @@ function page_login(AppCtx $ctx) {
     $cfg = $ctx->getAppCfg();
     $lng = $ctx->getAppLang();
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
+    {
 
         $username = Filters::postUsername('username');
         $password = Filters::postPassword('password');
-        if (!empty($username) && !empty($password)) {
+        if (!empty($username) && !empty($password))
+        {
 
             $userid = $user->checkUser($username, $password);
-            if (!empty($userid) && $userid > 0) {
+            if (!empty($userid) && $userid > 0)
+            {
                 $user->setUser($userid);
-                if (empty($cfg['rel_path'])) {
+                if (empty($cfg['rel_path']))
+                {
                     $cfg['rel_path'] = '/';
                 }
                 header("Location: {$cfg['rel_path']} ");
@@ -213,24 +231,29 @@ function page_login(AppCtx $ctx) {
     $page['tpl'] = 'login';
     $page['log_in'] = $lng['L_LOGIN'];
 
-    if (isset($_COOKIE['username'])) {
+    if (isset($_COOKIE['username']))
+    {
         $page['username'] = htmlspecialchars($_COOKIE['username']);
-    } else {
+    } else
+    {
         $page['username'] = '';
     }
 
     $page['username_placeholder'] = $lng['L_USERNAME'];
     $page['password_placeholder'] = $lng['L_PASSWORD'];
-    if (!empty($page['username'])) {
+    if (!empty($page['username']))
+    {
         $page['set_pass_focus'] = 1;
-    } else {
+    } else
+    {
         $page['set_username_focus'] = 1;
     }
 
     return $page;
 }
 
-function page_logout(AppCtx $ctx) {
+function page_logout(AppCtx $ctx)
+{
 
     $cfg = $ctx->getAppCfg();
 
@@ -245,7 +268,8 @@ function page_logout(AppCtx $ctx) {
     header("Location: {$cfg['rel_path']}index.php");
 }
 
-function page_settings(AppCtx $ctx) {
+function page_settings(AppCtx $ctx)
+{
     $page = [];
 
     $cfg = $ctx->getAppCfg();
@@ -257,7 +281,8 @@ function page_settings(AppCtx $ctx) {
     return $page;
 }
 
-function page_privacy(AppCtx $ctx) {
+function page_privacy(AppCtx $ctx)
+{
     $page = [];
 
     $cfg = $ctx->getAppCfg();

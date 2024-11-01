@@ -9,7 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-class Categories {
+class Categories
+{
 
     private AppCtx $ctx;
     private array $cfg = [];
@@ -18,7 +19,8 @@ class Categories {
     private array $cat_types = [];
     private array $lng = [];
 
-    public function __construct(AppCtx $ctx) {
+    public function __construct(AppCtx $ctx)
+    {
         $this->ctx = $ctx;
         $this->cfg = $ctx->getAppCfg();
         $this->db = $ctx->getAppDb();
@@ -29,21 +31,26 @@ class Categories {
         $this->cat_types = $this->cfg['cat_types'];
     }
 
-    public function getAll(): array {
+    public function getAll(): array
+    {
 
         return $this->categories;
     }
 
-    public function getTypes(): array {
+    public function getTypes(): array
+    {
 
         return $this->cat_types;
     }
 
-    public function getByType(int $type): array|false {
+    public function getByType(int $type): array|false
+    {
         $categories_by_type = [];
 
-        foreach ($this->categories as $cat) {
-            if ($cat['cat_type'] == $type) {
+        foreach ($this->categories as $cat)
+        {
+            if ($cat['cat_type'] == $type)
+            {
                 $categories_by_type[] = $cat;
             }
         }
@@ -51,9 +58,12 @@ class Categories {
         return !empty($categories_by_type) ? $categories_by_type : false;
     }
 
-    public function getTypeByID(int $id): array|false {
-        foreach ($this->categories as $cat) {
-            if ($cat['id'] == $id) {
+    public function getTypeByID(int $id): array|false
+    {
+        foreach ($this->categories as $cat)
+        {
+            if ($cat['id'] == $id)
+            {
                 return $cat['cat_type'];
             }
         }
@@ -61,13 +71,16 @@ class Categories {
         return false;
     }
 
-    public function prepareCats(int $type): array|false {
+    public function prepareCats(int $type): array|false
+    {
         $categories_by_type = $this->getByType($type);
-        foreach ($categories_by_type as &$typecat) {
+        foreach ($categories_by_type as &$typecat)
+        {
             if (
                     (strpos($typecat['cat_name'], 'L_') === 0 ) &&
                     isset($this->lng[$typecat['cat_name']])
-            ) {
+            )
+            {
                 $typecat['cat_name'] = $this->lng[$typecat['cat_name']];
             }
         }
@@ -75,14 +88,17 @@ class Categories {
         return $categories_by_type;
     }
 
-    public function create(int $cat_type, $value): array {
+    public function create(int $cat_type, $value): array
+    {
         $query_value = $this->db->valQuote($value);
         $query = "SELECT `cat_name` FROM categories WHERE `cat_type` = $cat_type AND `cat_name` = $query_value";
 
-        if ($this->db->queryExists($query)) {
+        if ($this->db->queryExists($query))
+        {
             $response['sucess'] = false;
             $response['msg'] = $this->lng['L_VALUE_EXISTS'];
-        } else {
+        } else
+        {
             $this->db->insert('categories', ['cat_name' => $value, 'cat_type' => $cat_type]);
             $response['success'] = true;
             $response['msg'] = $this->lng['L_OK'];
@@ -91,9 +107,11 @@ class Categories {
         return $response;
     }
 
-    public function remove(int $id): bool {
+    public function remove(int $id): bool
+    {
         $this->db->delete('categories', ['id' => $id], 'LIMIT 1');
 
         return true;
     }
+
 }

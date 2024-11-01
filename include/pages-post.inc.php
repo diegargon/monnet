@@ -9,7 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function page_index_post(AppCtx $ctx) {
+function page_index_post(AppCtx $ctx)
+{
     $page_data = [];
     $user = $ctx->getAppUser();
 
@@ -21,19 +22,24 @@ function page_index_post(AppCtx $ctx) {
     //add Item
 
 
-    if ($profile_type !== false) {
+    if ($profile_type !== false)
+    {
         $user->setPref('profile_type', $profile_type);
     }
-    if ($show_bookmarks !== false) {
+    if ($show_bookmarks !== false)
+    {
         $user->setPref('show_bookmarks_status', $show_bookmarks);
     }
-    if ($show_this_system !== false) {
+    if ($show_this_system !== false)
+    {
         $user->setPref('show_this_system_status', $show_this_system);
     }
-    if ($show_highlight_hosts !== false) {
+    if ($show_highlight_hosts !== false)
+    {
         $user->setPref('show_highlight_hosts_status', $show_highlight_hosts);
     }
-    if ($show_other_hosts !== false) {
+    if ($show_other_hosts !== false)
+    {
         $user->setPref('show_other_hosts_status', $show_other_hosts);
     }
 

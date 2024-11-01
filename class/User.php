@@ -9,7 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-Class User {
+class User
+{
 
     private AppCtx $ctx;
     private array $cfg;
@@ -19,28 +20,35 @@ Class User {
     private array $prefs = [];
     private $categories_state = [];
 
-    public function __construct(AppCtx $ctx) {
+    public function __construct(AppCtx $ctx)
+    {
         $this->ctx = $ctx;
         $this->db = $ctx->getAppDb();
         $this->cfg = $ctx->getAppCfg();
         $this->lng = $ctx->getAppLang();
 
-        if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
+        if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0)
+        {
             $this->user = $this->getProfile($_SESSION['uid']);
-            if (empty($this->user['sid']) || $this->user['sid'] != session_id()) {
+            if (empty($this->user['sid']) || $this->user['sid'] != session_id())
+            {
                 $this->user = [];
                 $this->user['id'] = -1;
             }
-        } else if (!empty($_COOKIE['uid']) && !empty($_COOKIE['sid'])) {
+        } else if (!empty($_COOKIE['uid']) && !empty($_COOKIE['sid']))
+        {
             $this->user = $this->getProfile($_COOKIE['uid']);
-            if (!empty($this->user['sid']) && $this->user['sid'] == $_COOKIE['sid']) {
+            if (!empty($this->user['sid']) && $this->user['sid'] == $_COOKIE['sid'])
+            {
                 $_SESSION['uid'] = $_COOKIE['uid'];
                 $this->updateSessionId();
-            } else {
+            } else
+            {
                 $this->user = [];
                 $this->user['id'] = -1;
             }
-        } else {
+        } else
+        {
             $this->user = [];
             $this->user['id'] = -1;
         }
@@ -52,74 +60,90 @@ Class User {
         $this->loadUserHostCatsState();
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->user['id'];
     }
 
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
 
-    public function getLang() {
+    public function getLang()
+    {
         return $this->user['lang'];
     }
 
-    public function getTheme() {
+    public function getTheme()
+    {
         return $this->user['theme'];
     }
 
-    public function getEmail() {
+    public function getEmail()
+    {
         return $this->user['email'] ? $this->user['email'] : false;
     }
 
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->user['username'] ? $this->user['username'] : false;
     }
 
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->user['password'] ? $this->user['password'] : false;
     }
 
-    public function isAdmin() {
+    public function isAdmin()
+    {
         return empty($this->user['isAdmin']) ? false : true;
     }
 
-    public function getProfiles() {
+    public function getProfiles()
+    {
         $results = $this->select('users');
 
         return $this->fetchAll($results);
     }
 
-    public function getProfile(int $uid) {
+    public function getProfile(int $uid)
+    {
         $result = $this->db->select('users', '*', ['id' => $uid], 'LIMIT 1');
         $user = $this->db->fetch($result);
 
         return $user ? $user : false;
     }
 
-    public function getTimezone() {
+    public function getTimezone()
+    {
         return $this->user['timezone'];
     }
 
-    public function getDateNow(string $format = null) {
-        if (!$format) {
+    public function getDateNow(string $format = null)
+    {
+        if (!$format)
+        {
             $format = $this->cfg['datatime_format'];
         }
 
         return formatted_date_now($this->user['timezone'], $format);
     }
 
-    public function checkUser(string $username, string $password) {
+    public function checkUser(string $username, string $password)
+    {
 
         $result = $this->db->select('users', '*', ['username' => $username], 'LIMIT 1');
         $user_check = $this->db->fetch($result);
 
-        if (empty($user_check) || empty($user_check['id'])) {
+        if (empty($user_check) || empty($user_check['id']))
+        {
             return false;
         }
         !empty($password) ? $password_hashed = $this->encryptPassword($password) : $password_hashed = '';
 
-        if (($user_check['password'] == $password_hashed)) {
+        if (($user_check['password'] == $password_hashed))
+        {
             //echo "LLEGO " . $user_check['id'];
             return $user_check['id'];
         }
@@ -127,7 +151,8 @@ Class User {
         return false;
     }
 
-    public function setUser(int $user_id) {
+    public function setUser(int $user_id)
+    {
         $_SESSION['uid'] = $user_id;
         $this->user = $this->getProfile($user_id);
         $this->updateSessionId();
@@ -135,33 +160,42 @@ Class User {
         return true;
     }
 
-    public function getHostsCatState() {
+    public function getHostsCatState()
+    {
         return $this->categories_state;
     }
 
-    private function loadUserHostCatsState() {
+    private function loadUserHostCatsState()
+    {
         $prefs_cats = $this->getPref('hosts_cats_state');
         $h_prefs_cats = json_decode($prefs_cats, true);
 
         $hosts_categories = $this->ctx->getAppCategories()->getByType(1);
-        foreach ($hosts_categories as $hcats) {
+        foreach ($hosts_categories as $hcats)
+        {
             $id = $hcats['id'];
             //if not set to then is set
-            if (isset($h_prefs_cats[$id]) && $h_prefs_cats[$id] == 0) {
+            if (isset($h_prefs_cats[$id]) && $h_prefs_cats[$id] == 0)
+            {
                 $this->categories_state[$id] = 0;
-            } else {
+            } else
+            {
                 $this->categories_state[$id] = 1;
             }
         }
     }
 
-    public function getHostsCats() {
+    public function getHostsCats()
+    {
         $categories = $this->ctx->getAppCategories()->prepareCats(1);
-        foreach ($categories as $key => $cat) {
+        foreach ($categories as $key => $cat)
+        {
             $id = $cat['id'];
-            if (isset($this->categories_state[$id])) {
+            if (isset($this->categories_state[$id]))
+            {
                 $categories[$key]['on'] = $this->categories_state[$id];
-            } else {
+            } else
+            {
                 $categories[$key]['on'] = 1;
             }
         }
@@ -169,14 +203,17 @@ Class User {
         return $categories;
     }
 
-    public function toggleHostsCat(int $id) {
+    public function toggleHostsCat(int $id)
+    {
         $this->categories_state[$id] = (!$this->categories_state[$id]) ? 1 : 0;
         $this->saveHostsCatsState();
     }
 
-    public function saveHostsCatsState() {
+    public function saveHostsCatsState()
+    {
         $json_cats_state = json_encode($this->categories_state);
-        if (mb_strlen($json_cats_state, 'UTF-8') > 255) {
+        if (mb_strlen($json_cats_state, 'UTF-8') > 255)
+        {
             Log::err('Max cats state reached');
             return false;
         }
@@ -185,22 +222,28 @@ Class User {
         return true;
     }
 
-    public function turnHostsCatsOff() {
-        foreach ($this->categories_state as $key => $_) {
+    public function turnHostsCatsOff()
+    {
+        foreach ($this->categories_state as $key => $_)
+        {
             $this->categories_state[$key] = 0;
         }
         $this->saveHostsCatsState();
     }
 
-    public function turnHostsCatsOn() {
-        foreach ($this->categories_state as $key => $_) {
+    public function turnHostsCatsOn()
+    {
+        foreach ($this->categories_state as $key => $_)
+        {
             $this->categories_state[$key] = 1;
         }
         $this->saveHostsCatsState();
     }
 
-    private function updateSessionId() {
-        if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
+    private function updateSessionId()
+    {
+        if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300)
+        {
             setcookie('sid', session_id(), [
                 'expires' => time() + $this->cfg['sid_expire'],
                 'secure' => true,
@@ -216,7 +259,8 @@ Class User {
                 'secure' => true,
                 'samesite' => 'lax',
             ]);
-        } else {
+        } else
+        {
             setcookie("sid", session_id(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
             setcookie("uid", $this->getId(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
             setcookie("username", $this->getUsername, time() + (10 * 365 * 24 * 120), $this->cfg['rel_path']);
@@ -227,42 +271,53 @@ Class User {
         $this->user['sid'] = $new_sid;
     }
 
-    private function encryptPassword(string $password) {
+    private function encryptPassword(string $password)
+    {
         return sha1($password);
     }
 
-    private function loadPrefs() {
+    private function loadPrefs()
+    {
 
         $prefs = [];
         $query = 'SELECT * FROM prefs WHERE uid = ' . $this->getId();
         $results = $this->db->query($query);
 
         $prefs = $this->db->fetchAll($results);
-        if ($prefs && is_array($prefs)) {
-            foreach ($prefs as $pref) {
-                if (!empty($pref['pref_name']) && $pref['uid'] == 0) {
+        if ($prefs && is_array($prefs))
+        {
+            foreach ($prefs as $pref)
+            {
+                if (!empty($pref['pref_name']) && $pref['uid'] == 0)
+                {
                     $this->prefs[$pref['pref_name']] = $pref['pref_value'];
-                } else if (!empty($pref['pref_name'])) {
+                } else if (!empty($pref['pref_name']))
+                {
                     $this->prefs[$pref['pref_name']] = $pref['pref_value'];
                 }
             }
         }
     }
 
-    public function getPref(string $r_key) {
+    public function getPref(string $r_key)
+    {
         return isset($this->prefs[$r_key]) ? $this->prefs[$r_key] : false;
     }
 
-    public function setPref(string $key, string $value) {
+    public function setPref(string $key, string $value)
+    {
 
-        if (isset($this->prefs[$key])) {
-            if ($this->prefs[$key] !== $value) {
+        if (isset($this->prefs[$key]))
+        {
+            if ($this->prefs[$key] !== $value)
+            {
                 $where['uid'] = ['value' => $this->getId()];
                 $where['pref_name'] = ['value' => $key];
                 $set['pref_value'] = $value;
                 $this->db->update('prefs', $set, $where, 'LIMIT 1');
             }
-        } else {
+        } else
+        {
             $new_item = [
                 'uid' => $this->getId(),
                 'pref_name' => $key,
@@ -272,4 +327,5 @@ Class User {
         }
         $this->prefs[$key] = $value;
     }
+
 }

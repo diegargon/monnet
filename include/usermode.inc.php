@@ -18,9 +18,11 @@ $user = $ctx->getAppUser();
 
 /* Default lang included in common here we overwrite if necessary */
 
-if ($user->getLang() !== 'es') {
+if ($user->getLang() !== 'es')
+{
     $main_lang_file = 'lang/' . $user->getLang() . '/main.lang.php';
-    if (file_exists($main_lang_file)) {
+    if (file_exists($main_lang_file))
+    {
         require_once($main_lang_file);
     }
 }

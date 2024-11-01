@@ -22,7 +22,9 @@
         </div>
     </div>
 
-    <div><?= $tdata['weather_widget']['weather_l_humidity'] ?>:<?= $tdata['weather_widget']['weather_humidity'] ?></div>
-    <div><?= $tdata['weather_widget']['weather_l_wind'] ?>:<?= $tdata['weather_widget']['weather_wind'] ?></div>
+    <div><?= $tdata['weather_widget']['weather_l_humidity'] ?>:
+        <?= $tdata['weather_widget']['weather_humidity'] ?></div>
+    <div><?= $tdata['weather_widget']['weather_l_wind'] ?>:
+        <?= $tdata['weather_widget']['weather_wind'] ?></div>
 
 </div>

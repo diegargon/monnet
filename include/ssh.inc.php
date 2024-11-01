@@ -15,16 +15,19 @@ require_once 'vendor/autoload.php';
 use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
-function ssh_connect_host(array $cfg, array &$result, array $host) {
+function ssh_connect_host(array $cfg, array &$result, array $host)
+{
     $originalConnectionTimeout = ini_get('default_socket_timeout');
     ini_set('default_socket_timeout', 2);
     Log::info('SSH Connection to ' . $host['ip']);
     $ssh = new SSH2($host['ip']);
     ini_set('default_socket_timeout', $originalConnectionTimeout);
 
-    if (file_exists($cfg['cert'])) {
+    if (file_exists($cfg['cert']))
+    {
         $key = PublicKeyLoader::load(file_get_contents($cfg['cert']));
-    } else {
+    } else
+    {
         Log::err('Missing certs');
         return false;
     }
@@ -40,7 +43,8 @@ function ssh_connect_host(array $cfg, array &$result, array $host) {
       return false;
       }
      */
-    if (!$ssh->login('monnet', $key)) {
+    if (!$ssh->login('monnet', $key))
+    {
         $result['conn'] = 'fail';
         $result['login'] = 'fail';
         $result['err_msg'] = 'login fail';
@@ -53,8 +57,10 @@ function ssh_connect_host(array $cfg, array &$result, array $host) {
     return $ssh;
 }
 
-function ssh_exec(SSH2 $ssh, array &$result, string $cmd) {
-    if (empty($result['motd'])) {
+function ssh_exec(SSH2 $ssh, array &$result, string $cmd)
+{
+    if (empty($result['motd']))
+    {
         $result['motd'] = $ssh->read('$');
     }
     $cmd = $cmd . ';echo @EOC';
@@ -64,17 +70,20 @@ function ssh_exec(SSH2 $ssh, array &$result, string $cmd) {
     $result['result'] = mb_substr($ssh_result, 0, -5);
 }
 
-function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts) {
+function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts)
+{
     $result = $db->select('cmd', '*');
     $cmds = $db->fetchAll($result);
 
-    foreach ($cmds as $cmd) {
+    foreach ($cmds as $cmd)
+    {
         $run_command = $cfg['commands'][$cmd['cmd_type']];
         $hid = $cmd['hid'];
         Log::notice("Run command {$cmd['cmd_type']}:$hid");
         $host = $hosts->getHostById($hid);
 
-        if (!valid_array($host) || empty($host['ip'])) {
+        if (!valid_array($host) || empty($host['ip']))
+        {
             Log::warning("Wrong command for non-existent host id ($hid)");
             $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
             continue;
@@ -83,22 +92,28 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts) {
         $result = [];
 
         $host_status = ping($host['ip']);
-        if (empty($host_status['online'])) {
+        if (empty($host_status['online']))
+        {
             //host down skip
             $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
             continue;
         }
         $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
-        if (!$ssh) {
+        if (!$ssh)
+        {
             continue;
         }
-        try {
+        try
+        {
             ssh_exec($ssh, $result, $run_command);
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             //avoid error on shutdown and reboot catch it for ignore
-            if ($cmd['cmd_type'] == 1 || $cmd['cmd_type'] == 2) {
+            if ($cmd['cmd_type'] == 1 || $cmd['cmd_type'] == 2)
+            {
                 //echo $e;
-            } else {
+            } else
+            {
                 echo $e;
             }
         }
@@ -106,13 +121,15 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts) {
     }
 }
 
-function ssh_exec_test(SSH2 $ssh, array &$result, string $cmd) {
+function ssh_exec_test(SSH2 $ssh, array &$result, string $cmd)
+{
     //Add Motd
     //empty($result['data']) ? $result['data'] = [] : null;
     $result['data']['motd'] = $ssh->read('$');
     //Add exec command
     $result['data']['cmd'] = $cmd;
-    #$cmd = 'isvalid=true;count=1;while [ $isvalid ]; do echo $count; if [ $count -eq 5 ]; then break; fi; ((count++)); done;echo @EOC';
+    // $cmd = 'isvalid=true;count=1;while [ $isvalid ]; do echo $count; '
+    //        . 'if [ $count -eq 5 ]; then break; fi; ((count++)); done;echo @EOC';
     $cmd = $cmd . ';echo @EOC';
     $ssh->write($cmd . "\n");
     $ssh->read('@EOC'); //this is the $cmd echo
@@ -140,7 +157,6 @@ function ssh_exec_test(SSH2 $ssh, array &$result, string $cmd) {
       echo $ssh->read('@EOC');
       $ssh->setTimeout(1);
       echo "---\n";
-     *
      */
     //$ssh_result .= $ssh->read('@EOC');
 
