@@ -15,6 +15,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: monnetadmin
           MYSQL_DATABASE: monnet
+          MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
         ports:
           - 3306:3306
         options: >-
@@ -22,7 +23,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-
+          --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
     steps:
 
       - name: Verify MySQL connection
@@ -31,17 +32,12 @@ jobs:
           sudo apt install -y mysql-client
           mysql --version
           mysql \
-            --host 172.17.0.1 \
+            --host 127.0.0.1 \
             --port 3306 \
             -uroot -psecret -e "SHOW DATABASES;"
 
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Install MySQL client
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mysql-client
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
