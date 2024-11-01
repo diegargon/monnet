@@ -25,8 +25,7 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0)
         if (!valid_array($user_cats_state)) {
             return [];
         }
-        foreach ($user_cats_state as $cat_id => $cat_state)
-        {
+        foreach ($user_cats_state as $cat_id => $cat_state) {
             if ($cat_state == 1) {
                 $hosts_cat = $hosts->getHostsByCat($cat_id);
                 if (valid_array($hosts_cat)) {
@@ -43,8 +42,7 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0)
     $theme = $user->getTheme();
 
     if (!$highlight) {
-        foreach ($hosts_view as $key => $host)
-        {
+        foreach ($hosts_view as $key => $host) {
             //Discard highlight host for other hosts
             if ($user->getPref('show_highlight_hosts_status') && $host['highlight']) {
                 unset($hosts_view[$key]);
@@ -71,8 +69,7 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0)
     $date_now = new DateTime('now', new DateTimeZone('UTC'));
 
     //Formatting
-    foreach ($hosts_view as $key => $vhost)
-    {
+    foreach ($hosts_view as $key => $vhost) {
         $hosts_view[$key]['theme'] = $theme;
         $hosts_view[$key]['details'] = $lng['L_IP'] . ': ' . $vhost['ip'] . "\n";
         if (empty($vhost['title'])) {
@@ -165,8 +162,7 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
     $ping_stats = $db->fetchAll($result);
     if (valid_array($ping_stats)) {
 
-        foreach ($ping_stats as &$ping)
-        {
+        foreach ($ping_stats as &$ping) {
             $ping['date'] = utc_to_user_timezone($ping['date'], $cfg['timezone']);
         }
         $host['ping_stats'] = $ping_stats;
@@ -217,8 +213,7 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
 
         if (!empty($host_details) && is_array($host_details)) {
 
-            foreach ($host_details as $k_host_details => $v_host_details)
-            {
+            foreach ($host_details as $k_host_details => $v_host_details) {
                 if (!empty($v_host_details)) {
                     $host[$k_host_details] = $v_host_details;
                 }
@@ -232,8 +227,7 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
     if (valid_array($host['ports'])) {
         $total_elements = count($host['ports']) - 1;
 
-        foreach ($host['ports'] as $index => $port)
-        {
+        foreach ($host['ports'] as $index => $port) {
             $host['ports_formated'] .= $port['n'] . '/';
             $host['ports_formated'] .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
             $host['ports_formated'] .= '/' . $port['name'];
@@ -254,8 +248,7 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
 
 function get_manufacture_data(array $cfg, int $id)
 {
-    foreach ($cfg['manufacture'] as $manufacture)
-    {
+    foreach ($cfg['manufacture'] as $manufacture) {
         if ($manufacture['id'] == $id) {
             return $manufacture;
         }
@@ -265,8 +258,7 @@ function get_manufacture_data(array $cfg, int $id)
 
 function get_os_data(array $cfg, int $id)
 {
-    foreach ($cfg['os'] as $os)
-    {
+    foreach ($cfg['os'] as $os) {
         if ($os['id'] == $id) {
             return $os;
         }
@@ -276,8 +268,7 @@ function get_os_data(array $cfg, int $id)
 
 function get_system_type_data(array $cfg, int $id)
 {
-    foreach ($cfg['system_type'] as $system_type)
-    {
+    foreach ($cfg['system_type'] as $system_type) {
         if ($system_type['id'] == $id) {
             return $system_type;
         }

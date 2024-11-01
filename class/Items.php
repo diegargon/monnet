@@ -1,7 +1,5 @@
 <?php
 
-!defined('IN_WEB') ? exit : true;
-
 /**
  *
  *  @author diego/@/envigo.net
@@ -9,6 +7,9 @@
  *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
+!defined('IN_WEB') ? exit : true;
+
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Items
 {
     private Database $db;
@@ -53,10 +54,9 @@ class Items
         return $this->items;
     }
 
-    function remove(int $id): bool
+    public function remove(int $id): bool
     {
-        foreach ($this->items as $item)
-        {
+        foreach ($this->items as $item) {
             if ($item['id'] == $id && $item['uid'] == $this->uid) {
                 $this->db->delete('items', ['id' => $id], 'LIMIT 1');
                 unset($this->item[$id]);
@@ -69,8 +69,7 @@ class Items
     public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc'): array
     {
         $result = [];
-        foreach ($this->items as $item)
-        {
+        foreach ($this->items as $item) {
             if ($item['type'] == $type) {
                 $result[] = $item;
             }
@@ -83,8 +82,7 @@ class Items
     public function getByCatID($category_id): array
     {
         $result = [];
-        foreach ($this->items as $item)
-        {
+        foreach ($this->items as $item) {
             if ($item['cat_id'] == $category_id) {
                 $result[] = $item;
             }

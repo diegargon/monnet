@@ -22,8 +22,7 @@ function run_cmd(string $cmd, array $params, string $stdin = null)
             /* 2 => array("file", "/tmp/error-output.txt", "a") */
     ];
 
-    foreach ($params as $param)
-    {
+    foreach ($params as $param) {
         $exec_params .= ' ' . $param;
     }
     $exec_cmd = $cmd . $exec_params;

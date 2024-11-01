@@ -13,8 +13,7 @@ function format_items(User $user, array $items_results)
 {
     $items = [];
     $theme = $user->getTheme();
-    foreach ($items_results as $item)
-    {
+    foreach ($items_results as $item) {
         $item_conf = json_decode($item['conf'], true);
         $item_img = '';
         if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource'])) {

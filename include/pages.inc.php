@@ -39,8 +39,7 @@ function page_common_head(AppCtx $ctx)
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
 
-    foreach ($search_engines as $search_engine)
-    {
+    foreach ($search_engines as $search_engine) {
         $conf = json_decode($search_engine['conf'], true);
         $page['search_engines'][] = [
             'url' => $conf['url'],
@@ -82,8 +81,7 @@ function page_index(AppCtx $ctx)
     $page = page_common_head($ctx);
     $networks_selected = 0;
 
-    foreach ($networks_list as &$net)
-    {
+    foreach ($networks_list as &$net) {
         $net_set = $user->getPref('network_select_' . $net['id']);
         if (($net_set) || $net_set === false) {
             $net['selected'] = 1;

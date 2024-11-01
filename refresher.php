@@ -10,6 +10,13 @@
 define('IN_WEB', true);
 //header('Content-Type: application/json; charset='. $cfg['charset'].'');
 header('Content-Type: application/json; charset=UTF-8');
+
+/**
+ * @var User|null $user An instance of User or null if not defined
+ * @var AppCtx|null $ctx An instance of Context or null if not defined
+ * @var Lng|null $lng An instance of Lng or null if not defined
+ * @var Database|null $db An instance of Database or null if not defined
+ */
 require_once('include/common.inc.php');
 require_once('include/usermode.inc.php');
 require_once('include/refresher-func.php');
@@ -226,8 +233,9 @@ if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_
     $user->toggleHostsCat($command_value);
 }
 
-if ($command == 'show_host_cat' ||
-        $command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
+if ($command == 'show_host_cat' || $command == 'show_host_only_cat' &&
+        isset($command_value) && is_numeric($command_value)) {
+
     $hosts_categories = $user->getHostsCats();
 
     //Not show empty cats
@@ -426,8 +434,8 @@ if ($command === 'host-details' && is_numeric($command_value)) {
                     $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'];
                 }
 
-                $tdata['host_details']['host_logs'] = $frontend->getTpl('term',
-                        ['term_logs' => $log_lines, 'host_id' => $host_id]);
+                $tdata['host_details']
+                        ['host_logs'] = $frontend->getTpl('term', ['term_logs' => $log_lines, 'host_id' => $host_id]);
             }
         }
         order_name($cfg['os']);
@@ -594,9 +602,9 @@ if (!empty($host_logs)) {
 
 if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
     $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
-    if (empty($system_logs)) {
+    if (!empty($system_logs)) {
         foreach ($system_logs as &$system_log) {
-            $system_logs['type_mark'] = '[S]';
+            $system_log['type_mark'] = '[S]';
         }
         $logs = array_merge($logs, $system_logs);
     }
@@ -654,7 +662,8 @@ foreach ($system_prefs as $sys_pref) {
     } elseif ($sys_pref['pref_name'] == 'discovery_last_run') {
         $discovery_last_run = $sys_pref['pref_value'];
         $discovery_last_run = utc_to_user_timezone($discovery_last_run, $user->getTimezone(),
-                $cfg['datetime_format_min']);
+                $cfg['datetime_format_min']
+        );
     }
 }
 $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;

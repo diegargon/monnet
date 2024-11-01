@@ -27,7 +27,7 @@ isset($argv[1]) && ($argv[1] == '-console' || $argv[1] == '--console') ? Log::se
 function is_locked()
 {
 
-    if (@symlink("/proc/" . getmypid(), CLI_LOCK) !== FALSE) {
+    if (@symlink("/proc/" . getmypid(), CLI_LOCK) !== false) {
         return false;
     }
 

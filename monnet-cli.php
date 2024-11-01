@@ -22,21 +22,22 @@ require_once('include/host-access-work.inc.php');
 
 Log::debug("Starting $APP_NAME");
 
-if (is_locked())
-{
+if (is_locked()) {
     Log::debug("CLI Locked skipping");
     die();
 }
 
 register_shutdown_function('unlink', CLI_LOCK);
-
-check_known_hosts($ctx);
+if ($ctx) {
+    check_known_hosts($ctx);
 #run_cmd_db_tasks($cfg, $db, $hosts);
-cron($ctx);
-
+    cron($ctx);
+}
 //Log::debug($db->getQueryHistory();
 
-$db->update('prefs', ['uid' => 0, 'pref_value' => utc_date_now()], ['pref_name' => 'cli_last_run'], 'LIMIT 1');
+if ($db) {
+    $db->update('prefs', ['uid' => 0, 'pref_value' => utc_date_now()], ['pref_name' => 'cli_last_run'], 'LIMIT 1');
+}
 Log::debug("[Finishing] $APP_NAME " . datetime_machine() . "");
 
 exit(0);

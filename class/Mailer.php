@@ -9,6 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 require 'vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -55,8 +56,7 @@ class Mailer
 
     public function sendEmailMultiple(array $emails, string $subject, string $body)
     {
-        foreach ($emails as $email)
-        {
+        foreach ($emails as $email) {
             if (!$this->sendEmail($email, $subject, $body)) {
                 Log::err('L_ERR_SENDING_EMAILS ' . $email);
                 break;
@@ -70,8 +70,7 @@ class Mailer
             return false;
         }
 
-        try
-        {
+        try {
             $this->phpMailer->setFrom($this->phpMailer->Username);
             $this->phpMailer->addAddress($to);
             $this->phpMailer->Subject = $subject;
@@ -79,8 +78,7 @@ class Mailer
 
             $this->phpMailer->send();
             return true;
-        } catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Log::err('Mail: ' . $e->getMessage());
             return false;
         }

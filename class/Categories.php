@@ -9,12 +9,25 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Categories
 {
     private AppCtx $ctx;
+
+    /**
+     * @var array<string|int>
+     */
     private array $cfg = [];
     private Database $db;
+
+    /**
+     * @var array<string|int>
+     */
     private array $categories = [];
+
+    /**
+     * @var array<string|int>
+     */
     private array $cat_types = [];
     private array $lng = [];
 
@@ -46,8 +59,7 @@ class Categories
     {
         $categories_by_type = [];
 
-        foreach ($this->categories as $cat)
-        {
+        foreach ($this->categories as $cat) {
             if ($cat['cat_type'] == $type) {
                 $categories_by_type[] = $cat;
             }
@@ -58,8 +70,7 @@ class Categories
 
     public function getTypeByID(int $id): array|false
     {
-        foreach ($this->categories as $cat)
-        {
+        foreach ($this->categories as $cat) {
             if ($cat['id'] == $id) {
                 return $cat['cat_type'];
             }
@@ -71,8 +82,7 @@ class Categories
     public function prepareCats(int $type): array|false
     {
         $categories_by_type = $this->getByType($type);
-        foreach ($categories_by_type as &$typecat)
-        {
+        foreach ($categories_by_type as &$typecat) {
             if (
                     (strpos($typecat['cat_name'], 'L_') === 0 ) &&
                     isset($this->lng[$typecat['cat_name']])

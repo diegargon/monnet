@@ -12,6 +12,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Database
 {
     /**
@@ -101,7 +102,7 @@ class Database
     /**
      * Destruct
      */
-    public function __destruct(): void
+    public function __destruct()
     {
         $this->close();
     }
@@ -207,8 +208,7 @@ class Database
     {
         $return_ary = [];
         if ($this->numRows($result) > 0) {
-            while ($row = $this->fetch($result))
-            {
+            while ($row = $this->fetch($result)) {
                 $return_ary[] = $row;
             }
         }

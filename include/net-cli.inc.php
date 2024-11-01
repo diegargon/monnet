@@ -23,8 +23,7 @@ function check_known_hosts(AppCtx $ctx)
 
     $db_hosts = $hosts->getknownEnabled();
 
-    foreach ($db_hosts as $host)
-    {
+    foreach ($db_hosts as $host) {
         $new_host_status = [];
         /*
          * Port Scan
@@ -80,13 +79,15 @@ function check_known_hosts(AppCtx $ctx)
             } elseif ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 $new_host_status['online_change'] = utc_date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
-                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout);
+                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] .
+                        ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout);
             }
 
             $hosts->update($host['id'], $new_host_status);
             if ($new_host_status['online'] == 1 && isset($new_host_status['latency'])) {
                 $ping_latency = $new_host_status['latency'];
-                $set_ping_stats = ['date' => utc_date_now(), 'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
+                $set_ping_stats = ['date' => utc_date_now(),
+                    'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
                 $db->insert('stats', $set_ping_stats);
             }
         } else {
@@ -107,20 +108,17 @@ function ping_net(AppCtx $ctx)
     $iplist = $networks->buildIpList();
 
     //We remove known hosts since we checked in other functions
-    foreach ($iplist as $kip => $vip)
-    {
+    foreach ($iplist as $kip => $vip) {
         $vip = trim($vip);
         $iplist[$kip] = $vip;
-        foreach ($db_hosts as $host)
-        {
+        foreach ($db_hosts as $host) {
             if ($host['ip'] == $vip) {
                 unset($iplist[$kip]);
             }
         }
     }
 
-    foreach ($iplist as $ip)
-    {
+    foreach ($iplist as $ip) {
         $latency = microtime(true);
 
         $ip_status = ping($ip, $timeout);
@@ -160,8 +158,7 @@ function fill_hostnames(Hosts $hosts, int $forceall = 0)
 {
     $db_hosts = $hosts->getknownEnabled();
 
-    foreach ($db_hosts as $host)
-    {
+    foreach ($db_hosts as $host) {
         if (empty($host['hostname']) || $forceall === 1) {
             //Log::debug("Getting hostname {$host['ip']}");
             $hostname = $hosts->getHostname($host['ip']);
@@ -177,8 +174,7 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0)
 {
     $db_hosts = $hosts->getknownEnabled();
 
-    foreach ($db_hosts as $host)
-    {
+    foreach ($db_hosts as $host) {
         $vendor = [];
         $update = [];
 
@@ -214,8 +210,7 @@ function check_macs(Hosts $hosts)
     $known_hosts = $hosts->getknownEnabled();
 
     Log::info('Checking macs');
-    foreach ($known_hosts as $host)
-    {
+    foreach ($known_hosts as $host) {
         $new_mac = get_mac($host['ip']);
         if (!empty($new_mac) && $host['mac'] != $new_mac) {
             $update['mac'] = trim($new_mac);
@@ -229,8 +224,7 @@ function host_access(array $cfg, Hosts $hosts)
 
     $db_hosts = $hosts->getknownEnabled();
 
-    foreach ($db_hosts as $host)
-    {
+    foreach ($db_hosts as $host) {
         if ($host['access_method'] < 1 || empty($host['online'])) {
             continue;
         }
@@ -293,8 +287,7 @@ function ping_host_ports(AppCtx $ctx, array $host)
     $host_status['warn_msg'] = '';
     $host_status['last_check'] = $time_now;
 
-    foreach ($host['ports'] as $kport => $port)
-    {
+    foreach ($host['ports'] as $kport => $port) {
         $host_status['ports'][$kport] = $port;
         $host_status['ports'][$kport]['online'] = 0;
         $host_status['ports'][$kport]['user'] = !empty($port['user'] ? 1 : 0);

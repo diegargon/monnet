@@ -9,6 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Hosts
 {
     public int $totals = 0;
@@ -50,8 +51,7 @@ class Hosts
     {
         $hosts = [];
 
-        foreach ($this->hosts as $host)
-        {
+        foreach ($this->hosts as $host) {
             if (empty($host['disable'])) {
                 $hosts[] = $host;
             }
@@ -63,8 +63,7 @@ class Hosts
     public function getHighlight(int $highligth = 1): array
     {
         $hosts = $this->getknownEnabled();
-        foreach ($hosts as $khost => $vhost)
-        {
+        foreach ($hosts as $khost => $vhost) {
             if ($vhost['highlight'] != $highligth) {
                 unset($hosts[$khost]);
             }
@@ -88,8 +87,7 @@ class Hosts
         $misc_container = [];
         $misc_keys = ['mac_vendor', 'manufacture', 'system_type', 'os', 'owner', 'timeout'];
 
-        foreach ($values as $kvalue => $vvalue)
-        {
+        foreach ($values as $kvalue => $vvalue) {
             if (!empty($kvalue) && isset($vvalue)) {
                 //TODO warning sign
                 if (
@@ -176,8 +174,7 @@ class Hosts
 
     public function getHostByIp(string $ip): array|false
     {
-        foreach ($this->hosts as $host)
-        {
+        foreach ($this->hosts as $host) {
             if ($host['ip'] == trim($ip)) {
                 return $host;
             }
@@ -190,8 +187,7 @@ class Hosts
     {
         $hosts_by_cat = [];
 
-        foreach ($this->hosts as $host)
-        {
+        foreach ($this->hosts as $host) {
 
             if ($host['category'] == $cat_id) {
                 $hosts_by_cat[] = $host;
@@ -245,8 +241,7 @@ class Hosts
         $hosts = $this->db->fetchAll($results);
         $this->totals = count($hosts);
 
-        foreach ($hosts as $host)
-        {
+        foreach ($hosts as $host) {
             $id = $host['id'];
             $net_id = $host['network'];
             $network = $networks->getNetworkByID($net_id);
@@ -278,8 +273,7 @@ class Hosts
             /* Misc field JSON misc fields that not need a db field */
             if (!empty($this->hosts[$id]['misc'])) {
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
-                foreach ($misc_values as $key => $value)
-                {
+                foreach ($misc_values as $key => $value) {
                     $this->hosts[$id][$key] = $value;
                 }
             }

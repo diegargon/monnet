@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class AppCtx
 {
     private array $cfg = [];

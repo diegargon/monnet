@@ -26,8 +26,7 @@ function micro_to_ms(float $microseconds)
 
 function formatBytes(int $size, int $precision = 2)
 {
-    for ($i = 0; ($size / 1024) > 0.9; $i++, $size /= 1024)
-    {
+    for ($i = 0; ($size / 1024) > 0.9; $i++, $size /= 1024) {
 
     }
 
@@ -97,8 +96,7 @@ function base_url(string $url)
 function array2string(array $array)
 {
     $result = [];
-    foreach ($array as $subarray)
-    {
+    foreach ($array as $subarray) {
         if (is_array($subarray)) {
             $result[] = array2string($subarray) . '::';
         } else {

@@ -9,7 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function weather_widget(array $cfg, array $lng) {
+function weather_widget(array $cfg, array $lng): array
+{
 
     $page_data = [];
 
@@ -27,7 +28,8 @@ function weather_widget(array $cfg, array $lng) {
     return $page_data;
 }
 
-function request_weather(array $cfg) {
+function request_weather(array $cfg): stdClass
+{
 
     $ApiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' .
             $cfg['weather_widget']['country']

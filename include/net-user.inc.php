@@ -48,8 +48,7 @@ function validatePortsInput(string $input)
     $values = explode(',', $input);
     $valid_values = [];
 
-    foreach ($values as $value)
-    {
+    foreach ($values as $value) {
         // Split the value by /
         $parts = explode('/', $value);
 

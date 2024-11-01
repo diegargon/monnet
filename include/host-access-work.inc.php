@@ -49,8 +49,7 @@ function h_get_sys_mem(SSH2 $ssh, array &$result)
         //Remove ANSI Term codes.
         $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
         $lines = explode("\n", $result['result']);
-        foreach ($lines as $line)
-        {
+        foreach ($lines as $line) {
             $pieces = [];
             if (preg_match('/^MemTotal:\s+(\d+)\skB/', $line, $pieces)) {
                 $mem_total = str_replace("\r\n", '', $pieces[1]);
@@ -83,8 +82,7 @@ function h_get_sys_space(SSH2 $ssh, array &$result)
         //Remove ANSI Term codes.
         $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
         $lines = explode("\n", $result['result']);
-        foreach ($lines as $line)
-        {
+        foreach ($lines as $line) {
             $line = str_replace("\r\n", '', $line);
             $mount_points[] = trim((explode(" ", $line))[0]);
         }
@@ -96,8 +94,7 @@ function h_get_sys_space(SSH2 $ssh, array &$result)
             //Remove ANSI Term codes.
             $result['result'] = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $result['result']);
             $lines = explode("\n", $result['result']);
-            foreach ($lines as $line)
-            {
+            foreach ($lines as $line) {
 
                 $dev = [];
                 //remove all extra spaces
@@ -113,8 +110,7 @@ function h_get_sys_space(SSH2 $ssh, array &$result)
                 $dev['available'] = $split[3];
                 $dev['used_percent'] = str_replace('%', '', $split[4]);
                 $dev['mounted'] = $split[5];
-                foreach ($mount_points as $mount_point)
-                {
+                foreach ($mount_points as $mount_point) {
                     if (!empty($mount_point) && $mount_point == $dev['dev']) {
                         $result['disks'][] = $dev;
                     }

@@ -9,6 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Web
 {
     private AppCtx $ctx;
@@ -26,7 +27,7 @@ class Web
 
     public function run(): void
     {
-        $page = $this->ValidateRequestPage();
+        $page = $this->validateRequestPage();
         if (!$page) {
             exit('Fail: Validate requested page');
         }
@@ -34,7 +35,7 @@ class Web
         $this->render($page_data);
     }
 
-    private function ValidateRequestPage()
+    private function validateRequestPage()
     {
         $req_page = Filters::getString('page');
         empty($req_page) ? $req_page = 'index' : null;

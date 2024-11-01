@@ -9,6 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class User
 {
     private AppCtx $ctx;
@@ -161,8 +162,7 @@ class User
         $h_prefs_cats = json_decode($prefs_cats, true);
 
         $hosts_categories = $this->ctx->getAppCategories()->getByType(1);
-        foreach ($hosts_categories as $hcats)
-        {
+        foreach ($hosts_categories as $hcats) {
             $id = $hcats['id'];
             //if not set to then is set
             if (isset($h_prefs_cats[$id]) && $h_prefs_cats[$id] == 0) {
@@ -176,8 +176,7 @@ class User
     public function getHostsCats()
     {
         $categories = $this->ctx->getAppCategories()->prepareCats(1);
-        foreach ($categories as $key => $cat)
-        {
+        foreach ($categories as $key => $cat) {
             $id = $cat['id'];
             if (isset($this->categories_state[$id])) {
                 $categories[$key]['on'] = $this->categories_state[$id];
@@ -209,8 +208,7 @@ class User
 
     public function turnHostsCatsOff()
     {
-        foreach ($this->categories_state as $key => $_)
-        {
+        foreach ($this->categories_state as $key => $_) {
             $this->categories_state[$key] = 0;
         }
         $this->saveHostsCatsState();
@@ -218,8 +216,7 @@ class User
 
     public function turnHostsCatsOn()
     {
-        foreach ($this->categories_state as $key => $_)
-        {
+        foreach ($this->categories_state as $key => $_) {
             $this->categories_state[$key] = 1;
         }
         $this->saveHostsCatsState();
@@ -268,8 +265,7 @@ class User
 
         $prefs = $this->db->fetchAll($results);
         if ($prefs && is_array($prefs)) {
-            foreach ($prefs as $pref)
-            {
+            foreach ($prefs as $pref) {
                 if (!empty($pref['pref_name']) && $pref['uid'] == 0) {
                     $this->prefs[$pref['pref_name']] = $pref['pref_value'];
                 } elseif (!empty($pref['pref_name'])) {

@@ -9,6 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Log
 {
     private static int $max_db_msg = 254;

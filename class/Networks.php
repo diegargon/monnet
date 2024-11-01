@@ -9,6 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+// phpcs:ignore Generic.Files.GlobalNamespace.Declaration
 class Networks
 {
     private array $networks;
@@ -44,8 +45,7 @@ class Networks
         $ip_long = ip2long($ip);
         $networks = $this->getNetworks();
 
-        foreach ($networks as $network)
-        {
+        foreach ($networks as $network) {
             list($network_ip, $cidr) = explode('/', $network['network']);
             $network_ip_long = ip2long($network_ip);
             $subnet_mask = -1 << (32 - $cidr);
@@ -69,8 +69,7 @@ class Networks
     {
         $networks = $this->getNetworks();
 
-        foreach ($networks as $network)
-        {
+        foreach ($networks as $network) {
             if ($network['id'] == $id) {
                 return $network['name'];
             }
@@ -83,8 +82,7 @@ class Networks
 
         $defaultNetwork = false;
 
-        foreach ($this->networks as $network)
-        {
+        foreach ($this->networks as $network) {
             list($networkAddr, $subnetMask) = explode('/', $network['network']);
 
             $networkAddr = ip2long($networkAddr);
@@ -117,8 +115,7 @@ class Networks
         $ip_list = [];
         $networks = $this->getNetworks();
 
-        foreach ($networks as $net)
-        {
+        foreach ($networks as $net) {
             if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
                 Log::err("Invalid network detected " . $net['network']);
                 continue;
@@ -140,8 +137,7 @@ class Networks
             $broadcast_address = long2ip($network_long | ((1 << (32 - $prefix)) - 1));
 
             // Calcular las direcciones IP restantes dentro de la red
-            for ($i = 0; $i < $count && $i <= 255; $i++)
-            {
+            for ($i = 0; $i < $count && $i <= 255; $i++) {
                 $ip = long2ip($network_long + $i);
                 if ($ip != $network_address && $ip != $broadcast_address) {
                     $ip_list[] = $ip;
@@ -158,8 +154,7 @@ class Networks
         $query = $db->selectAll('networks',);
         $networks = $db->fetchAll($query);
         if (valid_array($networks)) {
-            foreach ($networks as $net)
-            {
+            foreach ($networks as $net) {
                 $id = (int) $net['id'];
                 $fnet = [
                     'id' => $id,

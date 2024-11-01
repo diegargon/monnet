@@ -19,8 +19,7 @@ function cron(AppCtx $ctx)
     $system_prefs = $db->fetchAll($results);
     $cron_task_track = '';
 
-    foreach ($system_prefs as $vpref)
-    {
+    foreach ($system_prefs as $vpref) {
         $cron_times[$vpref['pref_name']] = $vpref['pref_value'];
     }
 

@@ -160,7 +160,6 @@ $lng = [
     'L_UPTIME' => 'Uptime',
     'L_UNKNOWN' => 'Desconocido',
     'L_URLIP' => 'Url o IP',
-    'L_NETWORK' => 'Red',
     'L_UNCATEGORIZED' => 'Sin Categoria',
     'L_UPDATED' => 'Updated',
     //V
