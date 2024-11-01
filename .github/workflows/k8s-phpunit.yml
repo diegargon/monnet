@@ -33,8 +33,7 @@ jobs:
           mysql \
             --host 172.17.0.1 \
             --port ${{ job.services.mysql.ports['3306'] }} \
-            -uroot
-            -psecret -e "SHOW DATABASES;"
+            -uroot -psecret -e "SHOW DATABASES;"
 
       - name: Checkout code
         uses: actions/checkout@v3
