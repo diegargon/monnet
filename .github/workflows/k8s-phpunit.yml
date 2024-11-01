@@ -37,9 +37,8 @@ jobs:
           mysql \
             --host 127.0.0.1 \
             --port 3306 \
-            -uroot -pmonnetadmin -e "SHOW DATABASES;"
-          ls -al
-          ls -al ..
+            -uroot -pmonnetadmin -e "SHOW DATABASES;"          
+          ls -al /home/runner/_work/
           pwd
           # cp ci-docker/my.cnf:/etc/mysql/conf.d/my.cnf
       - name: Checkout code
