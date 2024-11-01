@@ -27,7 +27,6 @@ jobs:
           -e MYSQL_USER=monnet 
           -e MYSQL_PASSWORD=monnetadmin 
           -e MYSQL_DATABASE=monnet
-          --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
     steps:
 
       - name: Verify MySQL connection
