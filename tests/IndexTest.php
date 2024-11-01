@@ -9,8 +9,8 @@ class IndexTest extends TestCase {
     public function testHomePage() {
         $url = 'http://127.0.0.1/index.php';
         $response = $this->makeRequest($url);
-        $this->assertEquals(200, $response['http_code']);
-        $this->assertStringContainsString('Bienvenido', $response['body']);
+        $this->assertEquals(200, $response['http_code'], 'HTTP code not 200');
+        $this->assertStringContainsString('Bienvenido', $response['body'], 'Wrong body');
     }
 
     private function makeRequest($url) {
