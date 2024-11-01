@@ -45,7 +45,6 @@ jobs:
           ls -al ..
           ls -al /home/runner/_work/
           pwd
-          cp ci-docker/my.cnf /etc/mysql/conf.d/my.cnf
 
 #      - name: Set up Docker Buildx
 #        uses: docker/setup-buildx-action@v3
