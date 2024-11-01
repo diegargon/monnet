@@ -29,6 +29,9 @@ jobs:
           -e MYSQL_DATABASE=monnet
     steps:
 
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Verify MySQL connection
         run: |
           sudo apt update
@@ -38,11 +41,11 @@ jobs:
             --host 127.0.0.1 \
             --port 3306 \
             -uroot -pmonnetadmin -e "SHOW DATABASES;"          
+          ls -al
+          ls -al ..
           ls -al /home/runner/_work/
           pwd
           # cp ci-docker/my.cnf:/etc/mysql/conf.d/my.cnf
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
