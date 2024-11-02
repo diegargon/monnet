@@ -19,7 +19,7 @@ class AppCtx
     private Networks $networks;
     private Items $items;
     private Mailer $mailer;
-    private AppCtx $ctx;
+
     /**
      * @param array<string> $cfg
      * @param array<string> $lng

@@ -15,6 +15,7 @@ class Lang
     private static array $language = [];
     private static string $defaultLang = 'es';
     private static string $selLangCode;
+    private AppCtx $ctx;
 
     public function __construct(AppCtx $ctx)
     {
