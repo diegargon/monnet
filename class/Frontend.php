@@ -138,7 +138,7 @@ class Frontend
 
         return $this->getTpl('msgbox', $msg);
     }
-    
+
     /**
      * @var array<string> $msg
      */

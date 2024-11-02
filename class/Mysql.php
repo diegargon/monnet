@@ -574,14 +574,14 @@ class Database
      * @param string $field
      * @param array $where
      * @param string $logic
-     * @return array|false
+     * @return array|bool
      */
     public function toggleField(
         string $table,
         string $field,
         array $where = null,
         string $logic = 'AND'
-    ): array|false {
+    ): array|bool {
 
         if (empty($field) || empty($table)) {
             return false;
@@ -623,9 +623,9 @@ class Database
      * @param array $where
      * @param string $extra
      * @param string $logic
-     * @return array|false
+     * @return array|bool
      */
-    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): array|false
+    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): array|bool
     {
 
         if (empty($table) || empty($where)) {
