@@ -113,7 +113,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
 }
 
 /**
- * @var array<string $cfg
+ * @var array $cfg
  * @var Database $db
  */
 if ($db) {

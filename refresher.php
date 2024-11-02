@@ -270,6 +270,8 @@ if (
 
 /* /end Host Cat */
 
+/** @var array<string> $new_network */
+$new_network = [];
 /* ADD NETWORK */
 if (
     $command == 'addNetwork' &&
@@ -331,7 +333,8 @@ if (
 }
 
 /* ADD Bookmark */
-
+/** @var array<string> $new_bookmark */
+$new_bookmark = [];
 if (
     $command == 'addBookmark' &&
     !empty($command_value)
@@ -386,6 +389,7 @@ if (
 
 
 $highlight_hosts_count = 0;
+$hosts_totals_count = 0;
 
 if ((empty($command) && empty($command_value)) || $force_host_reload) {
     /* Set show/hide highlight hosts */
@@ -651,7 +655,7 @@ if (valid_array($term_logs)) {
     $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
 }
 
-if (!empty($shown_host_count) || !empty($hosts_totals_count)) {
+if (!empty($hosts_totals_count)) {
     $data['misc']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
 }
 if (!empty($total_hosts_on) && !empty($total_hosts_off)) {

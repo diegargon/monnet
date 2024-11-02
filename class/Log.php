@@ -39,7 +39,10 @@ class Log
         'LOG_INFO' => 6, // informational message
         'LOG_DEBUG' => 7, // debug-level message
     ];
-
+    /**
+     * @param array $lng
+     * @param array $cfg
+     */
     public static function init(array &$cfg, Database &$db, array &$lng): void
     {
         self::$console = false;
