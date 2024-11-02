@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
-
+global $cfg_db;
 /* Db Config */
 
 $cfg_db['dbtype'] = 'mysqli';

@@ -8,8 +8,8 @@ class DatabaseTest extends TestCase
 
     protected function setUp(): void
     {
+        global $cfg_db;
         require_once 'config/config.defaults.php';
-        var_dump($cfg_db);
         if (empty($cfg_db['dbtype'])) {
             throw new \RuntimeException("Error: 'dbtype' no está definida en \$cfg_db, verifica config.defaults.php.");
         }
