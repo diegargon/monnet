@@ -215,7 +215,7 @@ class Filters
         return self::varAzChar($_GET[$val], $size);
     }
 
-    public static function varAzChar($var, $max_size = null, $min_size = null): string|false
+    public static function varAzChar(string $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
 
         if (
@@ -251,7 +251,7 @@ class Filters
         return self::varAlphanum($_GET[$val], $size);
     }
 
-    public static function varAlphanum($var, $max_size = null, $min_size = null): string|false
+    public static function varAlphanum(string $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         $length = strlen($var);
 
@@ -299,7 +299,7 @@ class Filters
         return self::varUsername($_GET[$val], $size);
     }
 
-    public static function varUsername($var, $max_size = null, $min_size = null): string|false
+    public static function varUsername(string $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         //Filter name, only az, no special chars, no spaces
         $length = strlen($var);
@@ -344,7 +344,7 @@ class Filters
         return self::varEmail($_GET[$val], $size);
     }
 
-    public static function varEmail($var, $max_size = null, $min_size = null): string|false
+    public static function varEmail(string $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         $length = strlen($var);
 
@@ -392,7 +392,7 @@ class Filters
         return self::varStrict($_GET[$val], $size);
     }
 
-    public static function varStrict($var, $max_size = null, $min_size = null): string|false
+    public static function varStrict(string $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         //TODO allow only alphanumerics and _
         $length = strlen($var);
@@ -429,7 +429,7 @@ class Filters
         return self::varPassword($_GET[$val], $size);
     }
 
-    public static function varPassword($var, $max_size = null, $min_size = null): string|false
+    public static function varPassword(string $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         //Password validate safe password
         if (
@@ -491,7 +491,7 @@ class Filters
         return self::varNetwork($_POST[$val], $size);
     }
 
-    public static function varNetwork(string $val, int $size = PHP_INT_MAX): string|false
+    public static function varNetwork(string $val, int $size = PHP_INT_MAX): string|bool
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;

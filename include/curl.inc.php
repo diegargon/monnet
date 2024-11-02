@@ -9,7 +9,7 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function curl_get(string $url)
+function curl_get(string $url): mixed
 {
     $agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; Monnet)';
     $ch = curl_init();

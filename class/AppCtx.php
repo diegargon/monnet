@@ -19,6 +19,11 @@ class AppCtx
     private Items $items;
     private Mailer $mailer;
 
+    /**
+     * @param array<string> $cfg
+     * @param array<string> $lang
+     * @param Database $db
+     */
     public function __construct(array $cfg, array $lang, Database $db)
     {
         $this->cfg = $cfg;
@@ -38,6 +43,10 @@ class AppCtx
     }
 
     /* Getters */
+
+    /**
+     * @param array<string> $cfg
+     */
     public function getAppCfg(): array
     {
         return $this->cfg;
@@ -48,6 +57,9 @@ class AppCtx
         return $this->db;
     }
 
+    /**
+     * @param array<string> $lang
+     */
     public function getAppLang(): array
     {
         return $this->lang;

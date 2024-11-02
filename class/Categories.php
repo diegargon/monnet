@@ -11,6 +11,9 @@
 
 class Categories
 {
+    /**
+     * @phpstan-ignore-next-line
+     */
     private AppCtx $ctx;
 
     /**
@@ -18,9 +21,15 @@ class Categories
      */
     private array $cfg = [];
     private Database $db;
+    /**
+     * @var array<int, array<string, mixed>> $categories
+     */
+    private array $categories = [];
 
-    //private array $categories = [];
-    //private array $cat_types = [];
+    /**
+     * @var array<string> $cat_types
+     */
+    private array $cat_types = [];
 
     /**
      * @var array<string> $lng
@@ -51,7 +60,7 @@ class Categories
         return $this->cat_types;
     }
 
-    public function getByType(int $type): array|false
+    public function getByType(int $type): array|bool
     {
         /**
          * @var array<string> $categories_by_type
@@ -67,7 +76,7 @@ class Categories
         return !empty($categories_by_type) ? $categories_by_type : false;
     }
 
-    public function getTypeByID(int $id): array|false
+    public function getTypeByID(int $id): int|bool
     {
         foreach ($this->categories as $cat) {
             if ($cat['id'] == $id) {
@@ -78,7 +87,7 @@ class Categories
         return false;
     }
 
-    public function prepareCats(int $type): array|false
+    public function prepareCats(int $type): array|bool
     {
         $categories_by_type = $this->getByType($type);
         foreach ($categories_by_type as &$typecat) {
@@ -93,7 +102,7 @@ class Categories
         return $categories_by_type;
     }
 
-    public function create(int $cat_type, $value): array
+    public function create(int $cat_type, string $value): array
     {
         $query_value = $this->db->valQuote($value);
         $query = "SELECT `cat_name` FROM categories WHERE `cat_type` = $cat_type AND `cat_name` = $query_value";

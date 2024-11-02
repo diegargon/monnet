@@ -9,6 +9,12 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+/**
+ * @var array<string> $cfg
+ */
+/**
+ * @var array<string> $cfg_db
+ */
 if (!file_exists('/etc/monnet/config.inc.php')) {
     print 'Missing config.inc.php. Leaving';
     exit(1);
@@ -37,6 +43,9 @@ $db->connect();
 
 require_once('class/Log.php');
 
+/**
+ * @var array<string> $lng
+ */
 /* Get default lang overwrite after with user settings */
 require_once('lang/es/main.lang.php');
 Log::init($cfg, $db, $lng);

@@ -189,10 +189,10 @@ class Database
     /**
      * fetch wrap
      *
-     * @param object $result
+     * @param mysqli_result $result
      * @return array|bool
      */
-    public function fetch(object $result): array|bool
+    public function fetch(mysqli_result $result): array|bool
     {
         $row = $result->fetch_assoc();
 
@@ -202,10 +202,10 @@ class Database
     /**
      * fetch all
      *
-     * @param object $result
+     * @param mysqli_result $result
      * @return array
      */
-    public function fetchAll($result): array
+    public function fetchAll(mysqli_result $result): array
     {
         $return_ary = [];
         if ($this->numRows($result) > 0) {

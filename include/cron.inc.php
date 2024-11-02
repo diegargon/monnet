@@ -9,7 +9,7 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function cron(AppCtx $ctx)
+function cron(AppCtx $ctx):void
 {
     $db = $ctx->getAppDb();
     $hosts = $ctx->getAppHosts();
@@ -18,6 +18,10 @@ function cron(AppCtx $ctx)
     $results = $db->select('prefs', '*', ['uid' => 0]);
     $system_prefs = $db->fetchAll($results);
     $cron_task_track = '';
+
+    /**
+     * @var array<string> cron_times
+     */
 
     foreach ($system_prefs as $vpref) {
         $cron_times[$vpref['pref_name']] = $vpref['pref_value'];
