@@ -8,7 +8,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_CLI') ? exit : true;
-function get_mac_vendor(string $mac): array|false
+function get_mac_vendor(string $mac): array|bool
 {
     $link = 'https://www.macvendorlookup.com/api/v2/';
 
@@ -28,7 +28,7 @@ function get_mac_vendor(string $mac): array|false
     return $response;
 }
 
-function get_mac_vendor_local(string $mac): array|false
+function get_mac_vendor_local(string $mac): array|bool
 {
 
     $formattedMAC = formatMAC($mac);
@@ -40,10 +40,12 @@ function get_mac_vendor_local(string $mac): array|false
 
     $file = './config/macvendors.txt';
 
-    if (!file_exists($file)) {
-        Log::error('File not found: ' . $file);
-        return false;
-    }
+    /* TODO PASS CTX
+      if (!file_exists($file)) {
+      Log::error('File not found: ' . $file);
+      return false;
+      }
+     */
 
     $content = file_get_contents($file);
 
@@ -77,7 +79,7 @@ function get_mac_vendor_local(string $mac): array|false
     }
 }
 
-function formatMAC(string $mac): string|false
+function formatMAC(string $mac): string|bool
 {
     // Remove any non-alphanumeric characters
     $mac = preg_replace('/[^a-fA-F0-9]/', '', $mac);

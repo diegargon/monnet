@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @var AppCtx|null $ctx An instance of AppCtx or null if not defined
+ */
 define('IN_WEB', true);
 
 require('include/common.inc.php');

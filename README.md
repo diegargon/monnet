@@ -1,6 +1,6 @@
 ![GithubTest](https://img.shields.io/badge/Github-TestSelfK8s-blue)
 [![PhpUnit](https://github.com/diegargon/monnet/actions/workflows/k8s-phpunit.yml/badge.svg)](https://github.com/diegargon/monnet/actions/workflows/k8s-phpunit.yml)
-[![PhpStan](https://github.com/diegargon/monnet/actions/workflows/k8s-phpstan.yml/badge.svg)](https://github.com/diegargon/monnet/actions/workflows/k8s-phpstan.yml)
+[![PhpStan lvl1](https://github.com/diegargon/monnet/actions/workflows/k8s-phpstan.yml/badge.svg)](https://github.com/diegargon/monnet/actions/workflows/k8s-phpstan.yml)
 [![CodeSniffer](https://github.com/diegargon/monnet/actions/workflows/k8s-codesniffer.yml/badge.svg)](https://github.com/diegargon/monnet/actions/workflows/k8s-codesniffer.yml)
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC_BY--NC--ND_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 ###
@@ -17,7 +17,7 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 MonNet is currently in an early version. It is possible that issues may arise between versions. The compatibility is not guaranteed.
 
-You can add bookmarks, networks, and other elements, but some features, modification is not yet possible. (Except by directly accessing the database, obviously) 
+You can add bookmarks, networks, and other elements, but some features, modification is not yet possible. (Except by directly accessing the database, obviously)
 
 The English language (EN/US) is IA generated.
 
@@ -25,8 +25,8 @@ The English language (EN/US) is IA generated.
 
 ## Deps
 
-LAMP 
-Composer 
+LAMP
+Composer
 phpseclib (Composer) (features disable due rewriting but going to be used)
 arp - Optional for get mac
 
@@ -49,7 +49,7 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 ## Composer deeps
 
 ```
-# 
+#
 /path/to/monnet# composer require phpseclib/phpseclib:~3.0
 #optional for send messsages
 /path/to/monnet# composer require phpmailer/phpmailer
@@ -59,7 +59,7 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 
 Copy  config/config.defaults.php  to  /etc/monnet/config.inc.php and change whatever you want
 It's better remove all unnchaged config or just create the file with only the necessary changes.
-Don't rename or modify directly config.defaults.php 
+Don't rename or modify directly config.defaults.php
 
 ## Load the sql
 
@@ -87,13 +87,13 @@ $ nano /etc/crontab
 
 (without password)
 ```
-$ mkdir /var/certs && cd /var/certs 
+$ mkdir /var/certs && cd /var/certs
 $ ssh-keygen -m PEM -t rsa -b 4096
 ```
 
 
 
-add /var/certs/id_rsa to cfg[‘certs’] 
+add /var/certs/id_rsa to cfg[‘certs’]
 
 ## Server to monitor (disable temporaraly due rewriting)
 

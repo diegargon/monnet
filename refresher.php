@@ -14,8 +14,9 @@ header('Content-Type: application/json; charset=UTF-8');
 /**
  * @var User|null $user An instance of User or null if not defined
  * @var AppCtx|null $ctx An instance of Context or null if not defined
- * @var Lng|null $lng An instance of Lng or null if not defined
+ * @var array $lng
  * @var Database|null $db An instance of Database or null if not defined
+ * @var array $cfg
  */
 require_once('include/common.inc.php');
 require_once('include/usermode.inc.php');
@@ -100,7 +101,7 @@ if ($command == 'network_unselect' && !empty($command_value) && is_numeric($comm
     $force_host_reload = 1;
 }
 
-if ($command == 'setCheckPorts' && isset($command_value) && !empty($object_id)) {
+if ($command == 'setCheckPorts' && !empty($command_value) && !empty($object_id)) {
     // 1 ping 2 TCP/UDP
 //    ($command_value == 0) ? $value = 1 : $value = 2;
 
@@ -211,7 +212,7 @@ if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_i
 }
 
 /* Show cat Only * */
-if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($command_value)) {
+if ($command == 'show_host_only_cat' && !empty($command_value) && is_numeric($command_value)) {
     $categories_state = $user->getHostsCatState();
 
     $ones = 0;
@@ -229,14 +230,14 @@ if ($command == 'show_host_only_cat' && isset($command_value) && is_numeric($com
     }
 }
 
-if ($command == 'show_host_cat' && isset($command_value) && is_numeric($command_value)) {
+if ($command == 'show_host_cat' && !empty($command_value) && is_numeric($command_value)) {
     $user->toggleHostsCat($command_value);
 }
 
 if (
     $command == 'show_host_cat' ||
     $command == 'show_host_only_cat' &&
-    isset($command_value) && is_numeric($command_value)
+    !empty($command_value) && is_numeric($command_value)
 ) {
     $hosts_categories = $user->getHostsCats();
 

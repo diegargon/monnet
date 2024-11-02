@@ -143,6 +143,7 @@ class Frontend
 
         $footer = $this->getFooter();
         //$menu = $this->getMenu();
+        $menu = '';
         $body = $this->msgBox(['title' => $msg['title'], 'body' => $msg['body']]);
         $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
         //$tdata['css_file'] = $this->getCssFile($this->cfg['theme'], $this->cfg['css']);

@@ -12,6 +12,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN composer require --dev phpstan/phpstan
 RUN composer require phpmailer/phpmailer
+RUN composer require phpseclib/phpseclib
 
 RUN ls -la /myapp
 RUN ls -la /myapp/vendor/bin

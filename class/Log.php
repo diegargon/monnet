@@ -171,13 +171,14 @@ class Log
         return self::$LOG_TYPE[$loglevel];
     }
 
-    public static function getLogLevelName(int $logvalue): string
+    public static function getLogLevelName(int $logvalue): string|bool
     {
         foreach (self::$LOG_TYPE as $ktype => $vtype) {
             if ($vtype == $logvalue) {
                 return $ktype;
             }
         }
+        return false;
     }
 
     public static function getSystemDBLogs(int $limit): array

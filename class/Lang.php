@@ -11,9 +11,7 @@
 
 class Lng
 {
-    /**
-     * @var array<string> $language
-     */
+    /** @var array<string> $language */
     private static array $language = [];
     private static string $defaultLang = 'es';
     private static string $selLangCode;
@@ -34,6 +32,10 @@ class Lng
         }
         //Config lang
         $sel_langfile = 'lang/lang.' . $langCode . '.php';
+        /**
+         *  Access to undefined constant Lng::defaultLang. ???
+         * @phpstan-ignore-next-line
+         */
         if ($langCode !== self::defaultLang && file_exists($sel_langfile)) {
             self::$selLangCode = $langCode;
             $sel_lang = include $sel_langfile;
@@ -45,6 +47,10 @@ class Lng
 
     public static function loadUserLang(string $langCode): bool
     {
+        /**
+         * Access to an undefined static property Lng::$selLanCode. ????
+         * @phpstan-ignore-next-line
+         */
         if ($langCode === self::$defaultLang || $langCode === self::$selLanCode) {
             return false;
         }

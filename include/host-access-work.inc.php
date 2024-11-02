@@ -9,9 +9,11 @@
  */
 !defined('IN_CLI') ? exit : true;
 
+require 'vendor/autoload.php';
+
 use phpseclib3\Net\SSH2;
 
-function h_get_hostname(SSH2 $ssh, array &$result)
+function h_get_hostname(SSH2 $ssh, array &$result): void
 {
     ssh_exec($ssh, $result, 'hostname');
     if (!empty($result['result'])) {
@@ -23,7 +25,7 @@ function h_get_hostname(SSH2 $ssh, array &$result)
     unset($result['result']);
 }
 
-function h_get_ncpus(SSH2 $ssh, array &$result)
+function h_get_ncpus(SSH2 $ssh, array &$result): void
 {
     $ncpu = 0;
 
@@ -39,7 +41,7 @@ function h_get_ncpus(SSH2 $ssh, array &$result)
     unset($result['result']);
 }
 
-function h_get_sys_mem(SSH2 $ssh, array &$result)
+function h_get_sys_mem(SSH2 $ssh, array &$result): void
 {
 
     ssh_exec($ssh, $result, 'cat /proc/meminfo');
@@ -70,7 +72,7 @@ function h_get_sys_mem(SSH2 $ssh, array &$result)
     unset($result['result']);
 }
 
-function h_get_sys_space(SSH2 $ssh, array &$result)
+function h_get_sys_space(SSH2 $ssh, array &$result): void
 {
     $mount_points = [];
 
@@ -119,7 +121,7 @@ function h_get_sys_space(SSH2 $ssh, array &$result)
     unset($result['result']);
 }
 
-function h_get_uptime(SSH2 $ssh, array &$result)
+function h_get_uptime(SSH2 $ssh, array &$result): void
 {
 
     ssh_exec($ssh, $result, 'uptime -s');
@@ -154,7 +156,7 @@ function h_get_load_average(SSH2 $ssh, array &$result)
     unset($result['result']);
 }
 
-function h_get_tail_syslog(SSH2 $ssh, array &$result)
+function h_get_tail_syslog(SSH2 $ssh, array &$result): void
 {
     ssh_exec($ssh, $result, 'tail -50 /var/log/syslog');
 

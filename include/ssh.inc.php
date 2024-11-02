@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 /* phpseclib deps */
-require_once 'vendor/autoload.php';
+require 'vendor/autoload.php';
 
 use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;

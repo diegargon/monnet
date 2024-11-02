@@ -139,15 +139,6 @@ class Database
     }
 
     /**
-     * collate setter
-     * @param string $collate
-     */
-    public function setCollate(string $collate): void
-    {
-        $this->collate = $collate;
-    }
-
-    /**
      * Min char setter
      * @param int $value
      */
@@ -264,7 +255,6 @@ class Database
      */
     private function dbdie(string $query): void
     {
-        $this->log('LOG_CRIT', $this->dblink->error);
         printf('<b>Error: Unable to retrieve information.</b>');
         printf("\n<br>%s", $query);
         printf("\n<br>reported: %s", $this->dblink->error);
@@ -680,6 +670,9 @@ class Database
      */
     private function insertProcess(array $insert_data): array
     {
+        $values_ary = [];
+        $fields_ary = [];
+
         foreach ($insert_data as $field => $value) {
             $value = (is_string($value)) ? $value = $this->escape($value) : $value;
             //TODO FIXME correccion rapida para evitar errores en mysql 8 con groups lead (palabras reservadas)
@@ -700,6 +693,7 @@ class Database
      */
     private function setProcess(array $set): string
     {
+        $newset = [];
         foreach ($set as $field => $value) {
             $value = $this->escape($value);
             $newset[] = "`$field` = " . "'" . $value . "'";
@@ -717,6 +711,7 @@ class Database
      */
     private function whereProcess(array $where, string $logic): string
     {
+        $q_where_fields = [];
 
         foreach ($where as $field => $value) {
             if (!is_array($value)) {

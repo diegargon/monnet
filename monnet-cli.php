@@ -12,7 +12,10 @@ define('IN_CLI', true);
 //define('DUMP_VARS', true);
 
 $APP_NAME = 'monnet-cli';
-
+/**
+ * @var Database $db
+ * @var AppCtx|null $ctx An instance of AppCtx or null if not defined
+ */
 require_once('include/climode.inc.php');
 
 require_once('include/phpsec_helper.inc.php');

@@ -14,15 +14,13 @@ if (!file_exists($custom_cfg)) {
     echo 'Missing config file ' . $custom_cfg;
     exit(1);
 }
-require($custom_cfg);
+require_once($custom_cfg);
 
-/*
- *  @var string $APP_NAME defined in monnet-cli or monnet-discovery
- */
+/**  @var string $APP_NAME defined in monnet-cli or monnet-discovery */
 
 define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
 
-/*
+/**
  *  @var array<string> $cfg load in config.inc.php
  */
 chdir($cfg['path']);

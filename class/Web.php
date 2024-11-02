@@ -44,8 +44,6 @@ class Web
 
         $valid_pages = ['index', 'login', 'logout', 'privacy', 'settings'];
 
-        empty($req_page) ? $req_page = 'index' : null;
-
         if (in_array($req_page, $valid_pages)) {
             return $req_page;
         }

@@ -12,10 +12,14 @@
 class Networks
 {
     /**
-     * @var array<int, array<string, mixed>> $hosts
+     * @var array<int, array<string, mixed>> $networks
      */
     private array $networks;
-    //private array $networks_disabled;
+
+    /**
+     * @var array<int, array<string, mixed>> $networks_disabled
+     */
+    private array $networks_disabled;
     private AppCtx $ctx;
 
     public function __construct(AppCtx $ctx)
