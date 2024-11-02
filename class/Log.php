@@ -24,7 +24,7 @@ class Log
     /**
      * @var array<string> $lng
      */
-    private static array $lng;
+    private static array $lng = [];
 
     /**
      * @var array<string, int> $LOG_TYPE
