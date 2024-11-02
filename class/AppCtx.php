@@ -54,7 +54,7 @@ class AppCtx
         return $this->db;
     }
 
-    public function getAppLang(): array
+    public function getAppLang(): Lang
     {
         if (!isset($this->lang)) {
             $this->lang = new Lang($this);
