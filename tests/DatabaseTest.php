@@ -20,6 +20,7 @@ class DatabaseTest extends TestCase
     {
         $this->db->connect();
         $this->assertNotNull($this->db->getConnection(), "Connection should not be null");
+        echo "DONE1";
     }
 
     /**
@@ -30,6 +31,7 @@ class DatabaseTest extends TestCase
         $this->db->connect();
         $result = $this->db->query("CREATE TABLE IF NOT EXISTS test_table (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL)");
         $this->assertTrue($result, "Query should execute successfully");
+        echo "DONE2";
     }
 
     /**
@@ -43,6 +45,7 @@ class DatabaseTest extends TestCase
         $user = $this->db->fetchOne("SELECT * FROM test_table WHERE name = :name", [':name' => 'John Doe']);
         $this->assertNotNull($user, "User should be found");
         $this->assertEquals('John Doe', $user['name'], "User name should match");
+        echo "DONE3";
     }
 
     protected function tearDown(): void
@@ -50,5 +53,6 @@ class DatabaseTest extends TestCase
         // Limpiamos la base de datos después de las pruebas
         $this->db->query("DROP TABLE IF EXISTS test_table");
         $this->db->disconnect();
+        echo "DONE4";
     }
 }
