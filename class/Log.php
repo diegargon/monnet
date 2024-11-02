@@ -165,7 +165,7 @@ class Log
         return valid_array($lines) ? $lines : false;
     }
 
-    public static function getLogLevelId(string $loglevel): int
+    public static function getLogLevelId(string $loglevel): int|bool
     {
         if (!isset(self::$LOG_TYPE[$loglevel])) {
             self::debug('Wrong Log Level name used');

@@ -17,7 +17,7 @@ function valid_array(?array $array): bool
     return false;
 }
 
-function micro_to_ms(float $microseconds): int
+function micro_to_ms(float $microseconds): flaot
 {
 
     return round($microseconds * 1000, 3);
@@ -70,7 +70,7 @@ function order_name(array &$ary)
     });
 }
 
-function base_url(string $url): string
+function base_url(string $url): string|bool
 {
     $parsed_url = parse_url($url);
 
