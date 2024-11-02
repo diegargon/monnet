@@ -4,7 +4,7 @@
  * replacement class
  */
 
-class Database
+class NewDatabase
 {
     private ?\PDO $connection = null;
     private string $dsn;

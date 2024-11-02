@@ -11,4 +11,6 @@ else
     echo "Base de datos subida con exito"
 fi
 
+echo "Ejecutando phpunit"
 exec ./vendor/bin/phpunit
+echo "Fin"
