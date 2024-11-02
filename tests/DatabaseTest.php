@@ -8,7 +8,6 @@ class DatabaseTest extends TestCase
 
     protected function setUp(): void
     {
-        define('IN_WEB', true);
         require_once 'config/config.defaults.php';
         var_dump($cfg_db);
         if (empty($cfg_db['dbtype'])) {
