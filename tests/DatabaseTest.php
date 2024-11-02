@@ -9,7 +9,7 @@ class DatabaseTest extends TestCase
     protected function setUp(): void
     {
         $cfg_db = [];
-        include '../config/config.defaults.php';
+        include 'config/config.defaults.php';
 
         $this->db = new Database($cfg_db);
     }
