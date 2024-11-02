@@ -16,7 +16,12 @@ class Lang
     private static string $defaultLang = 'es';
     private static string $selLangCode;
 
-    public static function loadLanguage(string $langCode): bool
+    public function __construct()
+    {
+        self::loadLanguage();
+    }
+
+    private static function loadLanguage(?string $langCode = null): bool
     {
         /*
          * We load es as default language to avoid missing keys
@@ -30,16 +35,22 @@ class Lang
         } else {
             throw new Exception("Lang file '$langFile' not found");
         }
+        if (!$langCode) {
+            return true;
+        }
         //Config lang
-        $sel_langfile = 'lang/lang.' . $langCode . '.php';
+
         /**
          *  Access to undefined constant Lng::defaultLang. ???
          * @phpstan-ignore-next-line
          */
-        if ($langCode !== self::defaultLang && file_exists($sel_langfile)) {
-            self::$selLangCode = $langCode;
-            $sel_lang = include $sel_langfile;
-            self::$language = array_merge(self::$language, $sel_lang);
+        if ($langCode !== self::defaultLang) {
+            $sel_langfile = 'lang/lang.' . $langCode . '.php';
+            if (file_exists($sel_langfile)) {
+                self::$selLangCode = $langCode;
+                $sel_lang = include $sel_langfile;
+                self::$language = array_merge(self::$language, $sel_lang);
+            }
         }
 
         return true;
