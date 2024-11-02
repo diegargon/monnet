@@ -1,4 +1,5 @@
 <?php
+define('IN_WEB', true);
 
 require_once 'class/Database.php';
 
