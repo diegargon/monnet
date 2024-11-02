@@ -16,8 +16,9 @@ class Lang
     private static string $defaultLang = 'es';
     private static string $selLangCode;
 
-    public function __construct()
+    public function __construct(AppCtx $ctx)
     {
+        $this->ctx = $ctx;
         self::loadLanguage();
     }
 
