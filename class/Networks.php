@@ -49,6 +49,7 @@ class Networks
 
         foreach ($networks as $network) {
             list($network_ip, $cidr) = explode('/', $network['network']);
+            $cidr = (int) $cidr;
             $network_ip_long = ip2long($network_ip);
             $subnet_mask = -1 << (32 - $cidr);
             $network_ip_long &= $subnet_mask;
@@ -87,7 +88,7 @@ class Networks
 
         foreach ($this->networks as $network) {
             list($networkAddr, $subnetMask) = explode('/', $network['network']);
-
+            $subnetMask = (int) $subnetMask;
             $networkAddr = ip2long($networkAddr);
 
             $broadcastAddr = $networkAddr | ~(pow(2, (32 - $subnetMask)) - 1);
@@ -130,7 +131,7 @@ class Networks
             Log::debug("Ping networks " . array2string($net));
             $parts = explode('/', $net['network']);
             $network = $parts[0];
-            $prefix = $parts[1];
+            $prefix = (int) $parts[1];
             $count = pow(2, (32 - $prefix));
 
             // Obtener la dirección de red

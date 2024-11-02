@@ -123,9 +123,10 @@ class Log
     {
         if ($value === true || $value === false) {
             self::$console = $value;
-        } else {
-            return false;
+            return true;
         }
+
+        return false;
     }
 
     public static function logHost(string $loglevel, int $host_id, string $msg): void

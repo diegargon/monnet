@@ -22,13 +22,9 @@ class Frontend
      */
     private array $lng;
 
-    /**
-     * @var array<string> $cfg
-     * @var array<string> $lang
-     */
     public function __construct(array &$cfg, array $lng)
     {
-        $this->cfg = &$cfg; //& due be order config.priv items in some pages, rething that
+        $this->cfg = &$cfg; //& due be order config.priv items in some pages, rethink that
         $this->lng = $lng;
     }
 
@@ -146,10 +142,10 @@ class Frontend
     {
 
         $footer = $this->getFooter();
-        $menu = $this->getMenu();
+        //$menu = $this->getMenu();
         $body = $this->msgBox(['title' => $msg['title'], 'body' => $msg['body']]);
         $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
-        $tdata['css_file'] = $this->getCssFile($this->cfg['theme'], $this->cfg['css']);
+        //$tdata['css_file'] = $this->getCssFile($this->cfg['theme'], $this->cfg['css']);
         echo $this->getTpl('html_mstruct', $tdata);
 
         exit();

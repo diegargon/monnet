@@ -43,10 +43,6 @@ class AppCtx
     }
 
     /* Getters */
-
-    /**
-     * @param array<string> $cfg
-     */
     public function getAppCfg(): array
     {
         return $this->cfg;
@@ -57,14 +53,14 @@ class AppCtx
         return $this->db;
     }
 
-    /**
-     * @param array<string> $lang
-     */
     public function getAppLang(): array
     {
         return $this->lang;
     }
 
+    /**
+     * @return Hosts
+     */
     public function getAppHosts(): Hosts
     {
         if (!isset($this->hosts)) {
@@ -74,6 +70,9 @@ class AppCtx
         return $this->hosts;
     }
 
+    /**
+     * @return User
+     */
     public function getAppUser(): User
     {
         if (!isset($this->user)) {
@@ -82,6 +81,9 @@ class AppCtx
         return $this->user;
     }
 
+    /**
+     * @return Categories
+     */
     public function getAppCategories(): Categories
     {
         if (!isset($this->categories)) {
@@ -91,6 +93,9 @@ class AppCtx
         return $this->categories;
     }
 
+    /**
+     * @return Networks
+     */
     public function getAppNetworks(): Networks
     {
         if (!isset($this->networks)) {
@@ -100,6 +105,9 @@ class AppCtx
         return $this->networks;
     }
 
+    /**
+     * @return Items
+     */
     public function getAppItems()
     {
         if (!isset($this->items)) {
@@ -109,6 +117,9 @@ class AppCtx
         return $this->items;
     }
 
+    /**
+     * @return Mailer
+     */
     public function getAppMail()
     {
         if (!isset($this->mailer)) {

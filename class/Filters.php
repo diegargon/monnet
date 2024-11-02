@@ -13,7 +13,7 @@ class Filters
 {
     public static function getInt(string $val, int $size = PHP_INT_MAX): int|false
     {
-        if (!isset($_GET[$val])) {
+        if (empty($_GET[$val])) {
             return false;
         }
 
@@ -22,7 +22,7 @@ class Filters
 
     public static function postInt(string $val, int $size = PHP_INT_MAX): int|false
     {
-        if (!isset($_POST[$val])) {
+        if (empty($_POST[$val])) {
             return false;
         }
 
@@ -31,7 +31,7 @@ class Filters
 
     public static function varInt(string $val, int $size = PHP_INT_MAX): int|false
     {
-        if (!isset($val)) {
+        if (empty($val)) {
             return false;
         }
 
@@ -499,7 +499,7 @@ class Filters
 
         if (strpos($val, '/') !== false) {
             list($ip, $cidr) = explode('/', $val, 2);
-
+            $cidr = (int) $cidr;
             if (self::varIP($ip) === false || $cidr < 0 || $cidr > 32) {
                 return false;
             }

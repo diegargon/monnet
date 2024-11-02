@@ -61,8 +61,8 @@ class Items
     {
         foreach ($this->items as $item) {
             if ($item['id'] == $id && $item['uid'] == $this->uid) {
-                $this->db->delete('items', ['id' => $id], 'LIMIT 1');
-                unset($this->item[$id]);
+                $this->db->delete('items', ['id' => $id]);
+                unset($this->items[$id]);
                 return true;
             }
         }

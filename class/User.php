@@ -93,13 +93,6 @@ class User
         return empty($this->user['isAdmin']) ? false : true;
     }
 
-    public function getProfiles()
-    {
-        $results = $this->select('users');
-
-        return $this->fetchAll($results);
-    }
-
     public function getProfile(int $uid)
     {
         $result = $this->db->select('users', '*', ['id' => $uid], 'LIMIT 1');
@@ -242,7 +235,7 @@ class User
         } else {
             setcookie("sid", session_id(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
             setcookie("uid", $this->getId(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
-            setcookie("username", $this->getUsername, time() + (10 * 365 * 24 * 120), $this->cfg['rel_path']);
+            setcookie("username", $this->getUsername(), time() + (10 * 365 * 24 * 120), $this->cfg['rel_path']);
         }
         $new_sid = session_id();
 

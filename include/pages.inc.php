@@ -238,9 +238,8 @@ function page_logout(AppCtx $ctx): void
 
     $cfg = $ctx->getAppCfg();
 
+    $_SESSION = [];
     session_destroy();
-    $_SESSION['uid'] = '';
-    $_SESSION['gid'] = '';
 
     setcookie('sid', '', time() - 3600, '/');
     setcookie('uid', '', time() - 3600, '/');

@@ -19,10 +19,14 @@ function cron(AppCtx $ctx): void
     $cron_task_track = '';
 
     /**
-     * @var array<string> cron_times
+     * @var array<string, int> $cron_times
      */
+    $cron_times = [];
+
     foreach ($system_prefs as $vpref) {
-        $cron_times[$vpref['pref_name']] = $vpref['pref_value'];
+        if (strpos($vpref['pref_name'], 'cron_') === 0) {
+            $cron_times[$vpref['pref_name']] = (int) $vpref['pref_value'];
+        }
     }
 
     $time_now = time();

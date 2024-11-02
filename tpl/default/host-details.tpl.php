@@ -7,12 +7,9 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
+ * In frontend->getTpl()
  * @var array<string> $cfg
- */
-/**
  * @var array<string> $lng
- */
-/**
  * @var array<mixed> $tdata
  */
 //var_dump($tdata['host_details']);

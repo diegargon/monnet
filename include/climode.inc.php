@@ -16,8 +16,15 @@ if (!file_exists($custom_cfg)) {
 }
 require($custom_cfg);
 
+/*
+ *  @var string $APP_NAME defined in monnet-cli or monnet-discovery
+ */
+
 define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
 
+/*
+ *  @var array<string> $cfg load in config.inc.php
+ */
 chdir($cfg['path']);
 
 require_once('include/common.inc.php');

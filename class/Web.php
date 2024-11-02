@@ -44,7 +44,7 @@ class Web
 
         $valid_pages = ['index', 'login', 'logout', 'privacy', 'settings'];
 
-        (!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
+        empty($req_page) ? $req_page = 'index' : null;
 
         if (in_array($req_page, $valid_pages)) {
             return $req_page;
@@ -65,7 +65,8 @@ class Web
         if ($page == 'login') {
             $page_data = page_login($this->ctx);
         } elseif ($page == 'logout') {
-            $page_data = page_logout($this->ctx);
+            page_logout($this->ctx); //http redirect
+            exit();
         } elseif ($page === 'privacy') {
             $page_data = page_privacy($this->ctx);
         } elseif ($page === 'index') {
