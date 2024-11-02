@@ -3,7 +3,7 @@
 class AppCtx
 {
     /**
-     * @var array<string> $cfg
+     * @var array<string|int> $cfg
      */
     private array $cfg = [];
 

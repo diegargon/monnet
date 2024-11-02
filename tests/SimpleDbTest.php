@@ -1,7 +1,5 @@
 <?php
-define('IN_WEB', true);
 
-// Incluye solo una vez
 require_once 'class/Database.php';
 
 use PHPUnit\Framework\TestCase;

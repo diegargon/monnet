@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 /**
- * @var Config|null $cfg An instance of Config or null if not defined
+ * @var array<string|int> $cfg An instance of Config or null if not defined
  * @var AppCtx|null $ctx An instance of AppCtx or null if not defined
  */
 do_initial_usermode_checks($cfg);

@@ -10,10 +10,10 @@
 !defined('IN_WEB') ? exit : true;
 
 /**
- * @var array<string> $cfg
+ * @var array<string|int> $cfg
  */
 /**
- * @var array<string> $cfg_db
+ * @var array<string|int> $cfg_db
  */
 if (!file_exists('/etc/monnet/config.inc.php')) {
     print 'Missing config.inc.php. Leaving';

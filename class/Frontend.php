@@ -13,7 +13,7 @@
 class Frontend
 {
     /**
-     * @var array<string> $cfg
+     * @var array<string|int> $cfg
      */
     private array $cfg;
 
@@ -29,7 +29,7 @@ class Frontend
     }
 
     /**
-     * @var array<mixed> $tdata
+     * @param array<mixed> $tdata
      */
     public function showPage(array $tdata): void
     {

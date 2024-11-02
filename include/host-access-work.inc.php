@@ -64,7 +64,7 @@ function h_get_sys_mem(SSH2 $ssh, array &$result): void
                 $result['mem']['mem_available'] = trim($mem_available);
             }
             if (!empty($mem_available) && !empty($mem_free)) {
-                $result['mem']['mem_used'] = $mem_available - $mem_free;
+                $result['mem']['mem_used'] = (float) $mem_available - (float) $mem_free;
             }
         }
     }

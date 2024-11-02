@@ -142,7 +142,7 @@ class Database
      * Min char setter
      * @param int $value
      */
-    public function setMinCharSearch(string $value): void
+    public function setMinCharSearch(int $value): void
     {
         $this->min_search_char = $value;
     }
@@ -162,7 +162,7 @@ class Database
      * Std query wrap, add history and stats
      *
      * @param string $query
-     * @return array
+     * @return mysqli_result|bool
      */
     public function query(string $query): mysqli_result|bool
     {
@@ -349,7 +349,7 @@ class Database
      * @param string $field
      * @return int|boolean
      */
-    public function getNextNum(string $table, string $field): int|false
+    public function getNextNum(string $table, string $field): int|bool
     {
 
         if (empty($table) || empty($field)) {
@@ -376,14 +376,14 @@ class Database
      * @param array $where
      * @param string $extra
      * @param string $logic
-     * @return mysqli_result|bool|boolean
+     * @return mysqli_result|bool
      */
     public function selectAll(
         string $table,
         array $where = null,
         string $extra = null,
         string $logic = 'AND'
-    ): mysqli_result|false {
+    ): mysqli_result|bool {
         if (empty($table)) {
             return false;
         }

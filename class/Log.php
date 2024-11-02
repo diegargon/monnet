@@ -16,7 +16,7 @@ class Log
     private static int $console;
 
     /**
-     * @var array<string> $cfg
+     * @var array<string|int> $cfg
      */
     private static array $cfg;
     private static Database $db;

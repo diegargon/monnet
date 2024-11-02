@@ -10,12 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 
 /**
- * @var array<string> $cfg
+ * @param array<string> $cfg
+ * @param array<string> $lng
  */
-/**
- * @var array<string> $lng
- */
-
 function weather_widget(array $cfg, array $lng): array
 {
 

@@ -17,7 +17,7 @@ class Categories
     private AppCtx $ctx;
 
     /**
-     * @var array<string> $cfg
+     * @var array<string|int> $cfg
      */
     private array $cfg = [];
     private Database $db;
