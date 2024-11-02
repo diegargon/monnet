@@ -390,6 +390,7 @@ if (
 
 $highlight_hosts_count = 0;
 $hosts_totals_count = 0;
+$show_hosts_count = 0;
 
 if ((empty($command) && empty($command_value)) || $force_host_reload) {
     /* Set show/hide highlight hosts */
@@ -411,9 +412,9 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
     if ($user->getPref('show_other_hosts_status')) {
         $hosts_view = get_hosts_view($ctx);
         if (is_array($hosts_view)) {
-            $shown_hosts_count = count($hosts_view);
+            $show_hosts_count = count($hosts_view);
             $hosts_totals_count = $hosts->totals;
-            $shown_hosts_count = $shown_hosts_count + $highlight_hosts_count;
+            $show_hosts_count = $show_hosts_count + $highlight_hosts_count;
             $total_hosts_on = $hosts->total_on;
             $total_hosts_off = $hosts->total_off;
             $tdata = [];
@@ -656,7 +657,7 @@ if (valid_array($term_logs)) {
 }
 
 if (!empty($hosts_totals_count)) {
-    $data['misc']['totals'] = $lng['L_SHOWED'] . ": $shown_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
+    $data['misc']['totals'] = $lng['L_SHOWED'] . ": $show_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
 }
 if (!empty($total_hosts_on) && !empty($total_hosts_off)) {
     $data['misc']['onoff'] = $lng['L_ON'] . ": $total_hosts_on | {$lng['L_OFF']}: $total_hosts_off | ";

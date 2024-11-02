@@ -136,7 +136,7 @@ class Log
     {
         $level = self::getLogLevelID($loglevel);
         if (mb_strlen($msg) > self::$max_db_msg) {
-            self::debug(self::lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
+            self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
             $msg_db = substr($msg, 0, 254);
         } else {
             $msg_db = $msg;

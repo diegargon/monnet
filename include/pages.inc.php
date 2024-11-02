@@ -192,7 +192,10 @@ function page_login(AppCtx $ctx): array
     $cfg = $ctx->getAppCfg();
     $lng = $ctx->getAppLang();
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (
+        !empty($_SERVER['REQUEST_METHOD']) &&
+        $_SERVER['REQUEST_METHOD'] == 'POST'
+    ) {
         $username = Filters::postUsername('username');
         $password = Filters::postPassword('password');
         if (!empty($username) && !empty($password)) {
