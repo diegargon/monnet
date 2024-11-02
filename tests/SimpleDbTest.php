@@ -1,6 +1,6 @@
 <?php
 
-require_once 'class/Database.php';
+# require_once 'class/Database.php';
 
 use PHPUnit\Framework\TestCase;
 

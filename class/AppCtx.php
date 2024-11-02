@@ -22,7 +22,7 @@ class AppCtx
 
     /**
      * @param array<string> $cfg
-     * @param array<string> $lang
+     * @param array<string> $lng
      * @param Database $db
      */
     public function __construct(array $cfg, array $lng, Database $db)
