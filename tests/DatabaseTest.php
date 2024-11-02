@@ -1,5 +1,4 @@
 <?php
-define('IN_WEB', true);
 
 use PHPUnit\Framework\TestCase;
 
@@ -9,7 +8,6 @@ class DatabaseTest extends TestCase
 
     protected function setUp(): void
     {
-        $cfg_db = [];
         require_once 'config/config.defaults.php';
 
         $this->db = new NewDatabase($cfg_db);

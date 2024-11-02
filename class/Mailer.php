@@ -28,7 +28,7 @@ class Mailer
     {
         $this->cfg = $ctx->getAppCfg();
         $this->ctx = $ctx;
-        $lng = $ctx->getAppLang();
+        $lang = $ctx->getAppLang();
 
         if (!$this->cfg['mailer_enabled']) {
             return;
@@ -38,7 +38,7 @@ class Mailer
             $this->phpMailer = new PHPMailer(true);
             $this->phpMailer->setLanguage($this->cfg['lang']);
         } else {
-            Log::err($lng->get('L_ERR_MAILER'));
+            Log::err($lang->get('L_ERR_MAILER'));
             return;
         }
         if (!Filters::varIp($this->cfg['mail_host'])) {
