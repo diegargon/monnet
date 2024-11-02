@@ -8,7 +8,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function get_hosts_view(AppCtx $ctx, int $highlight = 0)
+function get_hosts_view(AppCtx $ctx, int $highlight = 0): array|bool
 {
     $cfg = $ctx->getAppCfg();
     $hosts = $ctx->getAppHosts();
@@ -133,7 +133,7 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0)
     return $hosts_view;
 }
 
-function get_host_detail_view_data(AppCtx $ctx, $hid)
+function get_host_detail_view_data(AppCtx $ctx, $hid): array|bool
 {
     $hosts = $ctx->getAppHosts();
     $db = $ctx->getAppDb();
@@ -243,7 +243,7 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
     return $host;
 }
 
-function get_manufacture_data(array $cfg, int $id)
+function get_manufacture_data(array $cfg, int $id): array|bool
 {
     foreach ($cfg['manufacture'] as $manufacture) {
         if ($manufacture['id'] == $id) {
@@ -253,7 +253,7 @@ function get_manufacture_data(array $cfg, int $id)
     return false;
 }
 
-function get_os_data(array $cfg, int $id)
+function get_os_data(array $cfg, int $id): array|bool
 {
     foreach ($cfg['os'] as $os) {
         if ($os['id'] == $id) {
@@ -263,7 +263,7 @@ function get_os_data(array $cfg, int $id)
     return false;
 }
 
-function get_system_type_data(array $cfg, int $id)
+function get_system_type_data(array $cfg, int $id): array|bool
 {
     foreach ($cfg['system_type'] as $system_type) {
         if ($system_type['id'] == $id) {

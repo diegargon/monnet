@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function sendWOL(string $host_mac)
+function sendWOL(string $host_mac): bool
 {
 
     Log::debug("checking mac \"{$host_mac}\"");
@@ -42,7 +42,7 @@ function sendWOL(string $host_mac)
     return $result ? true : false;
 }
 
-function validatePortsInput(string $input)
+function validatePortsInput(string $input): array
 {
     // Split the input by commas
     $values = explode(',', $input);

@@ -263,7 +263,6 @@ if (
     $tdata['networks_selected'] = $networks_selected;
 
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
-    $data['categories_host']['cfg'] = [];
     $data['categories_host']['cfg']['place'] = '#left_container';
     $data['command_success'] = 1;
     $force_host_reload = 1;
@@ -405,7 +404,6 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $tdata['container-id'] = 'highlight-hosts';
             $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
             $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
-            $data['highlight_hosts']['cfg'] = [];
             $data['highlight_hosts']['cfg']['place'] = '#host_place';
         } else {
             $data['command_error_msg'] .= 'Invalid highlight host data';
@@ -423,7 +421,6 @@ if ((empty($command) && empty($command_value)) || $force_host_reload) {
             $tdata['hosts'] = $hosts_view;
             $tdata['container-id'] = 'other-hosts';
             $tdata['head-title'] = $lng['L_OTHERS'];
-            $data['other_hosts']['cfg'] = [];
             $data['other_hosts']['cfg']['place'] = '#host_place';
             $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
         } else {
@@ -460,7 +457,6 @@ if ($command === 'host-details' && is_numeric($command_value)) {
         order_name($cfg['manufacture']);
         order_name($cfg['system_type']);
         unset($tdata['host_details']['ping_stats']);
-        $data['host_details']['cfg'] = [];
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_success'] = 1;
@@ -656,7 +652,6 @@ if (valid_array($term_logs)) {
         $loglevelname = str_replace('LOG_', '', $loglevelname);
         $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg'];
     }
-    $data['term_logs']['cfg'] = [];
     $data['term_logs']['cfg']['place'] = '#center_container';
     $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
 }

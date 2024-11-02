@@ -8,8 +8,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
-function format_items(User $user, array $items_results)
+function format_items(User $user, array $items_results): array|bool
 {
     $items = [];
     $theme = $user->getTheme();

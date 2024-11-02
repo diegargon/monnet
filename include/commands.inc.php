@@ -9,7 +9,7 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-function run_cmd(string $cmd, array $params, string $stdin = null)
+function run_cmd(string $cmd, array $params, string $stdin = null): array
 {
     $return = [];
     $pipes = [];
@@ -47,7 +47,7 @@ function run_cmd(string $cmd, array $params, string $stdin = null)
     return $return;
 }
 
-function check_command(string $cmd)
+function check_command(string $cmd): array|bool
 {
     $result = run_cmd('command', ['-v', $cmd]);
 
