@@ -8,8 +8,7 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_CLI') ? exit : true;
-
-function cron(AppCtx $ctx):void
+function cron(AppCtx $ctx): void
 {
     $db = $ctx->getAppDb();
     $hosts = $ctx->getAppHosts();
@@ -22,7 +21,6 @@ function cron(AppCtx $ctx):void
     /**
      * @var array<string> cron_times
      */
-
     foreach ($system_prefs as $vpref) {
         $cron_times[$vpref['pref_name']] = $vpref['pref_value'];
     }

@@ -14,7 +14,7 @@
  * @var array<string> $lng
  */
 /**
- * @var array<string> $tdata
+ * @var array<mixed> $tdata
  */
 <script>
     $(document).ready(function () {

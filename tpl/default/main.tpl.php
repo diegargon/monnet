@@ -13,7 +13,7 @@
  * @var array<string> $lng
  */
 /**
- * @var array<string> $tdata
+ * @var array<mixed> $tdata
  */
 ?>
 <!DOCTYPE html>

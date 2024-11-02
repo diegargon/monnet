@@ -12,15 +12,29 @@
  */
 class Frontend
 {
+    /**
+     * @var array<string> $cfg
+     */
     private array $cfg;
+
+    /**
+     * @var array<string> $lang
+     */
     private array $lng;
 
+    /**
+     * @var array<string> $cfg
+     * @var array<string> $lang
+     */
     public function __construct(array &$cfg, array $lng)
     {
         $this->cfg = &$cfg; //& due be order config.priv items in some pages, rething that
         $this->lng = $lng;
     }
 
+    /**
+     * @var array<mixed> $tdata
+     */
     public function showPage(array $tdata): void
     {
         $web['main_head'] = $this->cssLinkFile($this->cfg['theme'], $this->cfg['css']);
@@ -36,8 +50,8 @@ class Frontend
         if (!empty($tdata['web_main']['scriptlink']) && is_array($tdata['web_main']['scriptlink'])) {
             foreach ($tdata['web_main']['scriptlink'] as $scriptlink) {
                 if (
-                        (strpos($scriptlink, 'http') === 0) ||
-                        (file_exists($scriptlink))
+                    (strpos($scriptlink, 'http') === 0) ||
+                    (file_exists($scriptlink))
                 ) {
                     $web['main_head'] .= $this->scriptLink($scriptlink);
                 }
@@ -81,7 +95,10 @@ class Frontend
         echo $this->getTpl('main', array_merge($tdata, $web));
     }
 
-    public function getTpl(string $tpl, array $tdata = []): string
+    /**
+     * @var array<mixed> $tdata
+     */
+    public function getTpl(string $tpl, array $tdata = []): string|bool
     {
         $lng = $this->lng;
         $cfg = $this->cfg;
@@ -110,6 +127,9 @@ class Frontend
         return '<script src="' . $scriptlink . '"></script>' . "\n";
     }
 
+    /**
+     * @var array<string> $msg
+     */
     public function msgBox(array $msg): string
     {
 
@@ -118,7 +138,10 @@ class Frontend
 
         return $this->getTpl('msgbox', $msg);
     }
-
+    
+    /**
+     * @var array<string> $msg
+     */
     public function msgPage(array $msg): void
     {
 

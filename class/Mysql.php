@@ -293,7 +293,7 @@ class Database
      *
      * @param object $query
      */
-    public function free(object & $query): void
+    public function free(object &$query): void
     {
         $query->free();
     }
@@ -393,8 +393,7 @@ class Database
         array $where = null,
         string $extra = null,
         string $logic = 'AND'
-    ): mysqli_result|false
-    {
+    ): mysqli_result|false {
         if (empty($table)) {
             return false;
         }
@@ -425,8 +424,7 @@ class Database
         array $where = null,
         $extra = null,
         $logic = 'AND'
-    ): mysqli_result|bool
-    {
+    ): mysqli_result|bool {
         if (empty($table) || empty($what)) {
             return false;
         }
@@ -475,8 +473,7 @@ class Database
         string $searchText,
         array $where = null,
         string $extra = null
-    ): mysqli_result|bool
-    {
+    ): mysqli_result|bool {
         $s_words_ary = explode(' ', $searchText);
         $fields_ary = explode(' ', $s_fields);
 
@@ -528,8 +525,7 @@ class Database
         array $where = null,
         string $extra = null,
         string $logic = 'AND'
-    ): mysqli_result|bool
-    {
+    ): mysqli_result|bool {
         if (empty($set) || empty($table)) {
             return false;
         }
@@ -557,8 +553,7 @@ class Database
         array $where = null,
         string $extra = null,
         string $logic = 'AND'
-    ): mysqli_result|bool
-    {
+    ): mysqli_result|bool {
 
         if (empty($field) || empty($table)) {
             return false;
@@ -586,8 +581,7 @@ class Database
         string $field,
         array $where = null,
         string $logic = 'AND'
-    ): array|false
-    {
+    ): array|false {
 
         if (empty($field) || empty($table)) {
             return false;

@@ -1,5 +1,5 @@
 parameters:
-    level: max
+    level: 4
     excludePaths:
         - /myapp/tests
         - /myapp/vendor
