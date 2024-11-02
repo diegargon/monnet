@@ -34,7 +34,7 @@ require_once('include/initial_checks.inc.php');
 do_initial_db_check($cfg_db);
 do_initial_main_vars_checks($cfg);
 
-if ($cfg_db['dbtype'] == 'mysql') {
+if ($cfg_db['dbtype'] == 'mysqli') {
     require_once('class/Mysql.php');
 }
 
