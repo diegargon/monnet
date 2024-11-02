@@ -17,7 +17,7 @@ function valid_array(?array $array): bool
     return false;
 }
 
-function micro_to_ms(float $microseconds): flaot
+function micro_to_ms(float $microseconds): float
 {
 
     return round($microseconds * 1000, 3);

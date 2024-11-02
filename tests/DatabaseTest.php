@@ -22,6 +22,9 @@ class DatabaseTest extends TestCase
         $this->assertNotNull($this->db->getConnection(), "Connection should not be null");
     }
 
+    /**
+     * @depends testConnection
+     */
     public function testQueryExecution()
     {
         $this->db->connect();
@@ -29,6 +32,9 @@ class DatabaseTest extends TestCase
         $this->assertTrue($result, "Query should execute successfully");
     }
 
+    /**
+     * @depends testQueryExecution
+     */
     public function testInsertAndFetch()
     {
         $this->db->connect();
