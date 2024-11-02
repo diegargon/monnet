@@ -24,7 +24,7 @@ class User
         $this->ctx = $ctx;
         $this->db = $ctx->getAppDb();
         $this->cfg = $ctx->getAppCfg();
-        $this->lng = $ctx->getAppLang();
+        $this->lng = $ctx->getAppLng();
 
         if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
             $this->user = $this->getProfile($_SESSION['uid']);

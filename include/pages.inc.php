@@ -32,7 +32,7 @@ function page_common_head(AppCtx $ctx)
     $db = $ctx->getAppDb();
     //$user = $ctx->getAppUser();
     $cfg = $ctx->getAppCfg();
-    $lng = $ctx->getAppLang();
+    $lng = $ctx->getAppLng();
 
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
@@ -190,7 +190,7 @@ function page_login(AppCtx $ctx): array
     //$db = $ctx->getAppDb();
     $user = $ctx->getAppUser();
     $cfg = $ctx->getAppCfg();
-    $lng = $ctx->getAppLang();
+    $lng = $ctx->getAppLng();
 
     if (
         !empty($_SERVER['REQUEST_METHOD']) &&

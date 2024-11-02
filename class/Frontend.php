@@ -92,7 +92,7 @@ class Frontend
     }
 
     /**
-     * @var array<mixed> $tdata
+     * @param array<mixed> $tdata
      */
     public function getTpl(string $tpl, array $tdata = []): string|bool
     {
@@ -124,7 +124,7 @@ class Frontend
     }
 
     /**
-     * @var array<string> $msg
+     * @param array<string> $msg
      */
     public function msgBox(array $msg): string
     {
@@ -136,7 +136,7 @@ class Frontend
     }
 
     /**
-     * @var array<string> $msg
+     * @param array<string> $msg
      */
     public function msgPage(array $msg): void
     {

@@ -33,7 +33,7 @@ class Hosts
     {
         $this->ctx = $ctx;
         $this->db = $ctx->getAppDb();
-        $this->lng = $ctx->getAppLang();
+        $this->lng = $ctx->getAppLng();
         $this->setHostsDb();
     }
 

@@ -41,7 +41,7 @@ class Categories
         $this->ctx = $ctx;
         $this->cfg = $ctx->getAppCfg();
         $this->db = $ctx->getAppDb();
-        $this->lng = $ctx->getAppLang();
+        $this->lng = $ctx->getAppLng();
 
         $results = $this->db->select('categories', '*');
         $this->categories = $this->db->fetchAll($results);

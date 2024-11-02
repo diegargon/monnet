@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-class Lng
+class Lang
 {
     /** @var array<string> $language */
     private static array $language = [];

@@ -10,7 +10,8 @@ class AppCtx
     /**
      * @var array<string> $lang
      */
-    private array $lang = [];
+    private array $lng = [];
+    private Lang $lang;
     private Database $db;
     private Hosts $hosts;
     private User $user;
@@ -24,11 +25,11 @@ class AppCtx
      * @param array<string> $lang
      * @param Database $db
      */
-    public function __construct(array $cfg, array $lang, Database $db)
+    public function __construct(array $cfg, array $lng, Database $db)
     {
         $this->cfg = $cfg;
         $this->db = $db;
-        $this->lang = $lang;
+        $this->lng = $lng;
         spl_autoload_register(array($this, 'autoload'));
     }
 
@@ -55,9 +56,15 @@ class AppCtx
 
     public function getAppLang(): array
     {
+        if (!isset($this->lang)) {
+            $this->lang = new Lang($this);
+        }
         return $this->lang;
     }
-
+    public function getAppLng(): array
+    {
+        return $this->lng;
+    }
     /**
      * @return Hosts
      */

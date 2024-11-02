@@ -20,7 +20,7 @@ class Web
     {
         $this->ctx = $ctx;
         $this->cfg = $ctx->getAppCfg();
-        $this->lng = $ctx->getAppLang();
+        $this->lng = $ctx->getAppLng();
         $this->user = $ctx->getAppUser();
     }
 

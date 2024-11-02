@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 function check_known_hosts(AppCtx $ctx)
 {
-    $lng = $ctx->getAppLang();
+    $lng = $ctx->getAppLng();
     $db = $ctx->getAppDb();
     $hosts = $ctx->getAppHosts();
 

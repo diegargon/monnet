@@ -48,6 +48,7 @@ require_once('class/Log.php');
  */
 /* Get default lang overwrite after with user settings */
 require_once('lang/es/main.lang.php');
+require_once('class/Lang.php');
 Log::init($cfg, $db, $lng);
 
 require_once('class/Filters.php');

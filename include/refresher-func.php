@@ -13,7 +13,7 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0)
     $cfg = $ctx->getAppCfg();
     $hosts = $ctx->getAppHosts();
     $user = $ctx->getAppUser();
-    $lng = $ctx->getAppLang();
+    $lng = $ctx->getAppLng();
     $hosts_view = [];
 
     if ($highlight) {
@@ -139,7 +139,7 @@ function get_host_detail_view_data(AppCtx $ctx, $hid)
     $db = $ctx->getAppDb();
     $cfg = $ctx->getAppCfg();
     $user = $ctx->getAppUser();
-    $lng = $ctx->getAppLang();
+    $lng = $ctx->getAppLng();
     $host = $hosts->getHostById($hid);
 
     $categories = $ctx->getAppCategories();
