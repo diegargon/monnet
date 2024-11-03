@@ -13,7 +13,7 @@ header('Content-Type: application/json; charset=UTF-8');
 
 /**
  * @var User|null $user An instance of User or null if not defined
- * @var AppCtx|null $ctx An instance of Context or null if not defined
+ * @var AppContext|null $ctx An instance of Context or null if not defined
  * @var array $lng
  * @var Database|null $db An instance of Database or null if not defined
  * @var array $cfg

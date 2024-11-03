@@ -13,7 +13,7 @@ define('IN_CLI', true);
 $APP_NAME = 'monnet-discovery';
 /**
  * @var Database $db
- * @var AppCtx|null $ctx An instance of AppCtx or null if not defined
+ * @var AppContext|null $ctx An instance of AppCtx or null if not defined
  */
 require_once('include/climode.inc.php');
 
