@@ -52,7 +52,7 @@ function page_common_head(AppContext $ctx)
     /* Time Widget */
     require('modules/weather_widget/weather_widget.php');
 
-    $page['web_main']['scriptlink'][] = 'https://code.jquery.com/jquery-2.2.4.min.js';
+    $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     $page['web_main']['scriptlink'][] = './scripts/common.js';
     $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
 
@@ -98,9 +98,14 @@ function page_index(AppContext $ctx)
 
     //Index scripts
     $page['web_main']['scriptlink'][] = './scripts/index.js';
-    //Graph scripts
-    $page['web_main']['scriptlink'][] = 'https://cdn.jsdelivr.net/npm/chart.js';
-    $page['web_main']['scriptlink'][] = 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns';
+
+    /* Graph scripts
+     * https://cdn.jsdelivr.net/npm/chart.js
+     * https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js
+     */
+
+    $page['web_main']['scriptlink'][] = './scripts/chart.js';
+    $page['web_main']['scriptlink'][] = './scripts/chartjs-adapter-date-fns.bundle.min.js';
 
     /* Include refresher script tpl */
     $page['web_main']['main_head_tpl'][] = 'refresher';
@@ -212,7 +217,7 @@ function page_login(AppContext $ctx): array
         }
     }
     $page['head_name'] = $cfg['web_title'];
-    $page['web_main']['scriptlink'][] = 'https://code.jquery.com/jquery-2.2.4.min.js';
+    $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     $page['web_main']['scriptlink'][] = './scripts/background.js';
 
     $page['page'] = 'login';
@@ -273,7 +278,7 @@ function page_privacy(AppContext $ctx): array
     $page = page_common_head($ctx);
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
-    $page['web_main']['scriptlink'][] = 'https://code.jquery.com/jquery-2.2.4.min.js';
+    $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     $page['web_main']['scriptlink'][] = './scripts/background.js';
     return $page;
 }
