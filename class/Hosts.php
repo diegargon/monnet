@@ -26,14 +26,14 @@ class Hosts
      * @var array<string> $lng
      */
     private array $lng = [];
-    private AppCtx $ctx;
+    private AppContext $ctx;
     private array $host_cat_track = [];
 
-    public function __construct(AppCtx $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->db = $ctx->getAppDb();
-        $this->lng = $ctx->getAppLng();
+        $this->db = $ctx->get('Mysql');
+        $this->lng = $ctx->get('lng');
         $this->setHostsDb();
     }
 
@@ -158,7 +158,7 @@ class Hosts
         $host['id'] = $host_id;
         $host['display_name'] = $this->getDisplayName($host);
         $this->hosts[$host_id] = $host;
-        $network_name = $this->ctx->getAppNetworks()->getNetworkNameByID($host_id);
+        $network_name = $this->ctx->get('Networks')->getNetworkNameByID($host_id);
         Log::logHost('LOG_NOTICE', $host_id, 'Found new host: '
             . $host['display_name'] . ' on network ' . $network_name);
     }
@@ -250,7 +250,7 @@ class Hosts
 
     private function setHostsDb(): bool
     {
-        $networks = $this->ctx->getAppNetworks();
+        $networks = $this->ctx->get('Networks');
         $query_hosts = 'SELECT * FROM hosts';
         $results = $this->db->query($query_hosts);
         if (!$results) {

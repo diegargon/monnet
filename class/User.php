@@ -11,7 +11,7 @@
 
 class User
 {
-    private AppCtx $ctx;
+    private AppContext $ctx;
     private array $cfg;
     private Database $db;
     private array $lng;
@@ -19,12 +19,12 @@ class User
     private array $prefs = [];
     private $categories_state = [];
 
-    public function __construct(AppCtx $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->db = $ctx->getAppDb();
-        $this->cfg = $ctx->getAppCfg();
-        $this->lng = $ctx->getAppLng();
+        $this->db = $ctx->get('Mysql');
+        $this->cfg = $ctx->get('cfg');
+        $this->lng = $ctx->get('lng');
 
         if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
             $this->user = $this->getProfile($_SESSION['uid']);
@@ -153,7 +153,7 @@ class User
         $prefs_cats = $this->getPref('hosts_cats_state');
         $h_prefs_cats = json_decode($prefs_cats, true);
 
-        $hosts_categories = $this->ctx->getAppCategories()->getByType(1);
+        $hosts_categories = $this->ctx->get('Categories')->getByType(1);
         foreach ($hosts_categories as $hcats) {
             $id = $hcats['id'];
             //if not set to then is set
@@ -167,7 +167,7 @@ class User
 
     public function getHostsCats()
     {
-        $categories = $this->ctx->getAppCategories()->prepareCats(1);
+        $categories = $this->ctx->get('Categories')->prepareCats(1);
         foreach ($categories as $key => $cat) {
             $id = $cat['id'];
             if (isset($this->categories_state[$id])) {

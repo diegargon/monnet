@@ -8,9 +8,9 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function page_index_post(AppCtx $ctx): bool
+function page_index_post(AppContext $ctx): bool
 {
-    $user = $ctx->getAppUser();
+    $user = $ctx->get('User');
 
     $profile_type = Filters::postString('profile_type');
     $show_bookmarks = Filters::postInt('show_bookmarks');

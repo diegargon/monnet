@@ -8,10 +8,10 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_CLI') ? exit : true;
-function cron(AppCtx $ctx): void
+function cron(AppContext $ctx): void
 {
-    $db = $ctx->getAppDb();
-    $hosts = $ctx->getAppHosts();
+    $db = $ctx->get('Mysql');
+    $hosts = $ctx->get('Hosts');
 
     Log::debug("Starting cron...");
     $results = $db->select('prefs', '*', ['uid' => 0]);

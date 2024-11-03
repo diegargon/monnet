@@ -24,7 +24,7 @@ require_once('include/refresher-func.php');
 
 $tdata = [];
 $force_host_reload = 0;
-$hosts = $ctx->getAppHosts();
+$hosts = $ctx->get('Hosts');
 
 //TODO: We pass target id in  command_value and object_id -> change to always use object_id for that
 $data = [
@@ -249,7 +249,7 @@ if (
     }
     $tdata['hosts_categories'] = $hosts_categories;
     //Networks dropdown
-    $networks_list = $ctx->getAppNetworks()->getNetworks();
+    $networks_list = $ctx->get('Networks')->getNetworks();
 
     $networks_selected = 0;
     foreach ($networks_list as &$net) {
@@ -307,7 +307,7 @@ if (
             $data['command_error_msg'] .= 'Scan ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
         }
 
-        $networks_list = $ctx->getAppNetworks()->getNetworks();
+        $networks_list = $ctx->get('Networks')->getNetworks();
         foreach ($networks_list as $net) {
             if ($net['name'] == $new_network['name']) {
                 $data['command_error_msg'] = 'Name must be unique<br/>';
@@ -318,14 +318,14 @@ if (
         }
         if (
             str_starts_with($new_network['network'], "0") ||
-            !$ctx->getAppNetworks()->isLocal($new_network['network'])
+            !$ctx->get('Networks')->isLocal($new_network['network'])
         ) {
             $new_network['vlan'] = 0;
             $new_network['scan'] = 0;
         }
 
         if (empty($data['command_error_msg'])) {
-            $ctx->getAppNetworks()->addNetwork($new_network);
+            $ctx->get('Networks')->addNetwork($new_network);
             $data['command_success'] = 1;
             $data['response_msg'] = 'ok';
         }
@@ -377,7 +377,7 @@ if (
         }
 
         if (empty($data['command_error_msg'])) {
-            if ($ctx->getAppItems()->addItem('bookmarks', $new_bookmark)) {
+            if ($ctx->get('Items')->addItem('bookmarks', $new_bookmark)) {
                 $data['response_msg'] = 'ok';
             } else {
                 $data['response_msg'] = 'error';
@@ -489,7 +489,7 @@ if ($command == 'setHighlight' && !empty($object_id)) {
 
 /* Bookmarks */
 if ($command == 'removeBookmark' && !empty($command_value) && is_numeric($command_value)) {
-    if ($ctx->getAppItems()->remove($command_value)) {
+    if ($ctx->get('Items')->remove($command_value)) {
         $data['response_msg'] = 'ok';
     } else {
         $data['response_msg'] = 'fail';
@@ -505,7 +505,7 @@ if (
     !empty($command_value)
 ) {
     $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;
-    $response = $ctx->getAppCategories()->create($cat_type, $command_value);
+    $response = $ctx->get('Categories')->create($cat_type, $command_value);
     ($response['success']) ? $data['response_msg'] = $response['msg'] :
             $data['command_error_msg'] = $response['msg'];
 
@@ -521,7 +521,7 @@ if (
         $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
     } elseif ($cat_type == 1 && $command_value == 1) {
         $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
-    } elseif ($ctx->getAppCategories()->remove($command_value)) {
+    } elseif ($ctx->get('Categories')->remove($command_value)) {
         //Set to default all elements
         if ($cat_type == 1) {
             $db->update('hosts', ['category' => 1], ['category' => $command_value]);
@@ -547,8 +547,8 @@ if ($command == 'submitHost' && !empty($command_value)) {
         $host['ip'] = $command_value;
     }
 
-    if (!empty($host['ip']) && !$ctx->getAppNetworks()->isLocal($new_network['network'])) {
-        $network_match = $ctx->getAppNetworks()->matchNetwork($host['ip']);
+    if (!empty($host['ip']) && !$ctx->get('Networks')->isLocal($new_network['network'])) {
+        $network_match = $ctx->get('Networks')->matchNetwork($host['ip']);
         if (valid_array($network_match)) {
             if ($hosts->getHostByIP($host['ip'])) {
                 $data['command_error_msg'] = $lng['L_ERR_DUP_IP'];

@@ -21,12 +21,12 @@ class Items
     private array $items = [];
     private int $uid;
 
-    public function __construct(AppCtx $ctx)
+    public function __construct(AppContext $ctx)
     {
-        $this->cfg = $ctx->getAppCfg();
-        $this->db = $ctx->getAppDb();
-        $this->uid = $ctx->getAppUser()->getId();
-        $this->categories = $ctx->getAppCategories()->getByType(2); //2:items
+        $this->cfg = $ctx->get('cfg');
+        $this->db = $ctx->get('Mysql');
+        $this->uid = $ctx->get('User')->getId();
+        $this->categories = $ctx->get('Categories')->getByType(2); //2:items
 
         $results = $this->db->select('items', '*', ['uid' => $this->uid], 'ORDER BY weight');
         $this->items = $this->db->fetchAll($results);

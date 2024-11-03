@@ -17,16 +17,16 @@ use PHPMailer\PHPMailer\Exception;
 class Mailer
 {
     private PHPMailer $phpMailer;
-    private AppCtx $ctx;
+    private AppContext $ctx;
 
     /**
      * @var array<string|int> $cfg
      */
     private array $cfg;
 
-    public function __construct(AppCtx $ctx)
+    public function __construct(AppContext $ctx)
     {
-        $this->cfg = $ctx->getAppCfg();
+        $this->cfg = $ctx->get('cfg');
         $this->ctx = $ctx;
         $lang = $ctx->getAppLang();
 

@@ -34,11 +34,16 @@ require_once('include/initial_checks.inc.php');
 do_initial_db_check($cfg_db);
 do_initial_main_vars_checks($cfg);
 
+require_once('class/AppContext.php');
+
 if ($cfg_db['dbtype'] == 'mysqli') {
     require_once('class/Mysql.php');
 }
 
-$db = new Database($cfg_db);
+$ctx = new AppContext($cfg);
+
+$db = $ctx->set('Mysql',  new Database($cfg_db));
+
 $db->connect();
 
 require_once('class/Log.php');
@@ -48,6 +53,8 @@ require_once('class/Log.php');
  */
 /* Get default lang overwrite after with user settings */
 require_once('lang/es/main.lang.php');
+$ctx->setLang($lng);
+
 require_once('class/Lang.php');
 Log::init($cfg, $db, $lng);
 
@@ -55,7 +62,3 @@ require_once('class/Filters.php');
 require_once('include/util.inc.php');
 require_once('include/time.inc.php');
 require_once('include/updater.inc.php');
-
-require_once('class/AppCtx.php');
-
-$ctx = new AppCtx($cfg, $lng, $db);

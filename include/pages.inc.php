@@ -8,12 +8,12 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function page_defaults(AppCtx $ctx)
+function page_defaults(AppContext $ctx)
 {
     $page = [];
 
-    $user = $ctx->getAppUser();
-    $cfg = $ctx->getAppCfg();
+    $user = $ctx->get('User');
+    $cfg = $ctx->get('cfg');
 
     $_user = $user->getUser();
 
@@ -25,14 +25,14 @@ function page_defaults(AppCtx $ctx)
     return $page;
 }
 
-function page_common_head(AppCtx $ctx)
+function page_common_head(AppContext $ctx)
 {
     $page = [];
 
-    $db = $ctx->getAppDb();
-    //$user = $ctx->getAppUser();
-    $cfg = $ctx->getAppCfg();
-    $lng = $ctx->getAppLng();
+    $db = $ctx->get('Mysql');
+    //$user = $ctx->get('User');
+    $cfg = $ctx->get('cfg');
+    $lng = $ctx->get('lng');
 
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
@@ -68,14 +68,14 @@ function page_common_head(AppCtx $ctx)
     return $page;
 }
 
-function page_index(AppCtx $ctx)
+function page_index(AppContext $ctx)
 {
     $page = [];
 
-    $user = $ctx->getAppUser();
-    $cfg = $ctx->getAppCfg();
-    $categories = $ctx->getAppCategories();
-    $networks_list = $ctx->getAppNetworks()->getNetworks();
+    $user = $ctx->get('User');
+    $cfg = $ctx->get('cfg');
+    $categories = $ctx->get('Categories');
+    $networks_list = $ctx->get('Networks')->getNetworks();
     $page = page_common_head($ctx);
     $networks_selected = 0;
 
@@ -91,7 +91,7 @@ function page_index(AppCtx $ctx)
         page_index_post($ctx);
     }
 
-    $items = $ctx->getAppItems();
+    $items = $ctx->get('Items');
 
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
@@ -183,14 +183,14 @@ function page_index(AppCtx $ctx)
     return $page;
 }
 
-function page_login(AppCtx $ctx): array
+function page_login(AppContext $ctx): array
 {
     $page = [];
 
-    //$db = $ctx->getAppDb();
-    $user = $ctx->getAppUser();
-    $cfg = $ctx->getAppCfg();
-    $lng = $ctx->getAppLng();
+    //$db = $ctx->get('Mysql');
+    $user = $ctx->get('User');
+    $cfg = $ctx->get('cfg');
+    $lng = $ctx->get('lng');
 
     if (
         !empty($_SERVER['REQUEST_METHOD']) &&
@@ -236,10 +236,10 @@ function page_login(AppCtx $ctx): array
     return $page;
 }
 
-function page_logout(AppCtx $ctx): void
+function page_logout(AppContext $ctx): void
 {
 
-    $cfg = $ctx->getAppCfg();
+    $cfg = $ctx->get('cfg');
 
     $_SESSION = [];
     session_destroy();
@@ -251,11 +251,11 @@ function page_logout(AppCtx $ctx): void
     header("Location: {$cfg['rel_path']}index.php");
 }
 
-function page_settings(AppCtx $ctx): array
+function page_settings(AppContext $ctx): array
 {
     $page = [];
 
-    $cfg = $ctx->getAppCfg();
+    $cfg = $ctx->get('cfg');
 
     $page = page_common_head($ctx);
     $page['page'] = 'index';
@@ -264,11 +264,11 @@ function page_settings(AppCtx $ctx): array
     return $page;
 }
 
-function page_privacy(AppCtx $ctx): array
+function page_privacy(AppContext $ctx): array
 {
     $page = [];
 
-    $cfg = $ctx->getAppCfg();
+    $cfg = $ctx->get('cfg');
 
     $page = page_common_head($ctx);
     $page['page'] = 'index';

@@ -20,9 +20,9 @@ class Networks
      * @var array<int, array<string, mixed>> $networks_disabled
      */
     private array $networks_disabled;
-    private AppCtx $ctx;
+    private AppContext $ctx;
 
-    public function __construct(AppCtx $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
     }
@@ -68,7 +68,7 @@ class Networks
 
     public function addNetwork(array $set): void
     {
-        $db = $this->ctx->getAppDb();
+        $db = $this->ctx->get('Mysql');
         $db->insert('networks', $set);
     }
 
@@ -158,7 +158,7 @@ class Networks
 
     private function loadNetworks(): void
     {
-        $db = $this->ctx->getAppDb();
+        $db = $this->ctx->get('Mysql');
         $query = $db->selectAll('networks',);
         $networks = $db->fetchAll($query);
         if (valid_array($networks)) {

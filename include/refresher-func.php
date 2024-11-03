@@ -8,12 +8,12 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function get_hosts_view(AppCtx $ctx, int $highlight = 0): array|bool
+function get_hosts_view(AppContext $ctx, int $highlight = 0): array|bool
 {
-    $cfg = $ctx->getAppCfg();
-    $hosts = $ctx->getAppHosts();
-    $user = $ctx->getAppUser();
-    $lng = $ctx->getAppLng();
+    $cfg = $ctx->get('cfg');
+    $hosts = $ctx->get('Hosts');
+    $user = $ctx->get('User');
+    $lng = $ctx->get('lng');
     $hosts_view = [];
 
     if ($highlight) {
@@ -133,16 +133,16 @@ function get_hosts_view(AppCtx $ctx, int $highlight = 0): array|bool
     return $hosts_view;
 }
 
-function get_host_detail_view_data(AppCtx $ctx, $hid): array|bool
+function get_host_detail_view_data(AppContext $ctx, $hid): array|bool
 {
-    $hosts = $ctx->getAppHosts();
-    $db = $ctx->getAppDb();
-    $cfg = $ctx->getAppCfg();
-    $user = $ctx->getAppUser();
-    $lng = $ctx->getAppLng();
+    $hosts = $ctx->get('Hosts');
+    $db = $ctx->get('Mysql');
+    $cfg = $ctx->get('cfg');
+    $user = $ctx->get('User');
+    $lng = $ctx->get('lng');
     $host = $hosts->getHostById($hid);
 
-    $categories = $ctx->getAppCategories();
+    $categories = $ctx->get('Categories');
 
     if (!valid_array($host)) {
         return false;

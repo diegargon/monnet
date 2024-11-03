@@ -14,7 +14,7 @@ class Categories
     /**
      * @phpstan-ignore-next-line
      */
-    private AppCtx $ctx;
+    private AppContext $ctx;
 
     /**
      * @var array<string|int> $cfg
@@ -36,12 +36,12 @@ class Categories
      */
     private array $lng = [];
 
-    public function __construct(AppCtx $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->cfg = $ctx->getAppCfg();
-        $this->db = $ctx->getAppDb();
-        $this->lng = $ctx->getAppLng();
+        $this->cfg = $ctx->get('cfg');
+        $this->db = $ctx->get('Mysql');
+        $this->lng = $ctx->get('lng');
 
         $results = $this->db->select('categories', '*');
         $this->categories = $this->db->fetchAll($results);

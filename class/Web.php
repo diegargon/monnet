@@ -11,17 +11,17 @@
 
 class Web
 {
-    private AppCtx $ctx;
+    private AppContext $ctx;
     private array $lng;
     private array $cfg;
     private User $user;
 
-    public function __construct(AppCtx $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->cfg = $ctx->getAppCfg();
-        $this->lng = $ctx->getAppLng();
-        $this->user = $ctx->getAppUser();
+        $this->cfg = $ctx->get('cfg');
+        $this->lng = $ctx->get('lng');
+        $this->user = $ctx->get('User');
     }
 
     public function run(): void

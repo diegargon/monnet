@@ -17,14 +17,14 @@ do_initial_usermode_checks($cfg);
 session_name('monnet');
 session_start();
 
-$user = $ctx->getAppUser();
-
+$user = $ctx->get('User');
 /* Default lang included in common here we overwrite if necessary */
 
 if ($user->getLang() !== 'es') {
     $main_lang_file = 'lang/' . $user->getLang() . '/main.lang.php';
     if (file_exists($main_lang_file)) {
         require_once($main_lang_file);
+        $ctx->setLang($lng);
     }
 }
 

@@ -8,11 +8,11 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function check_known_hosts(AppCtx $ctx)
+function check_known_hosts(AppContext $ctx)
 {
-    $lng = $ctx->getAppLng();
-    $db = $ctx->getAppDb();
-    $hosts = $ctx->getAppHosts();
+    $lng = $ctx->get('lng');
+    $db = $ctx->get('Mysql');
+    $hosts = $ctx->get('Hosts');
 
     if (!is_object($hosts)) {
         Log::err("hosts is not a object");
@@ -95,10 +95,10 @@ function check_known_hosts(AppCtx $ctx)
     Log::debug('Finish check_known_hosts');
 }
 
-function ping_net(AppCtx $ctx)
+function ping_net(AppContext $ctx)
 {
-    $hosts = $ctx->getAppHosts();
-    $networks = $ctx->getAppNetworks();
+    $hosts = $ctx->get('Hosts');
+    $networks = $ctx->get('Networks');
     $ping_net_time = microtime(true);
     $timeout = ['sec' => 0, 'usec' => 100000];
 
@@ -264,11 +264,11 @@ function host_access(array $cfg, Hosts $hosts)
 }
 
 /* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
-function ping_host_ports(AppCtx $ctx, array $host)
+function ping_host_ports(AppContext $ctx, array $host)
 {
     $time_now = utc_date_now();
 
-    $networks = $ctx->getAppNetworks();
+    $networks = $ctx->get('Networks');
 
     $err_code = $err_msg = '';
 
@@ -333,12 +333,12 @@ function ping_host_ports(AppCtx $ctx, array $host)
     return $host_status;
 }
 
-function ping_known_host(AppCtx $ctx, array $host)
+function ping_known_host(AppContext $ctx, array $host)
 {
     $sec = 0;
     $usec = 500000;
     $time_now = utc_date_now();
-    $networks = $ctx->getAppNetworks();
+    $networks = $ctx->get('Networks');
 
     if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
         $sec = intval($host['timeout']);
