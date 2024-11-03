@@ -11,12 +11,45 @@
 
 class User
 {
+    /**
+     * @var AppContext
+     */
     private AppContext $ctx;
+
+    /**
+     *
+     * @var array<string|int>
+     */
     private array $cfg;
+
+    /**
+     *
+     * @var Database
+     */
     private Database $db;
+
+    /**
+     *
+     * @var array<string>
+     */
     private array $lng;
+
+    /**
+     *
+     * @var array
+     */
     private $user = [];
+
+    /**
+     *
+     * @var array
+     */
     private array $prefs = [];
+
+    /**
+
+     * @var type
+     */
     private $categories_state = [];
 
     public function __construct(AppContext $ctx)
@@ -45,9 +78,10 @@ class User
             $this->user = [];
             $this->user['id'] = -1;
         }
-        empty($this->user['lang']) ? $this->user['lang'] = $this->cfg['lang'] : null;
-        empty($this->user['theme']) ? $this->user['theme'] = $this->cfg['theme'] : null;
-        empty($this->user['timezone']) ? $this->user['timezone'] = $this->cfg['timezone'] : null;
+
+        $this->user['lang'] ??= $this->cfg['lang'];
+        $this->user['theme'] ??= $this->cfg['theme'];
+        $this->user['timezone'] ??= $this->cfg['timezone'];
 
         $this->user['id'] > 0 ? $this->loadPrefs() : null;
         $this->loadUserHostCatsState();
@@ -93,12 +127,17 @@ class User
         return empty($this->user['isAdmin']) ? false : true;
     }
 
+    /**
+     *
+     * @param int $uid
+     * @return array
+     */
     public function getProfile(int $uid)
     {
         $result = $this->db->select('users', '*', ['id' => $uid], 'LIMIT 1');
         $user = $this->db->fetch($result);
 
-        return $user ? $user : false;
+        return $user ?: [];
     }
 
     public function getTimezone()
