@@ -11,74 +11,106 @@
 
 class Web
 {
+    /**
+     *
+     * @var AppContext
+     */
     private AppContext $ctx;
-    private array $lng;
-    private array $cfg;
+
+    /**
+     *
+     * @var User
+     */
     private User $user;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->cfg = $ctx->get('cfg');
-        $this->lng = $ctx->get('lng');
         $this->user = $ctx->get('User');
     }
-
+    /**
+     *
+     * @return void
+     */
     public function run(): void
     {
-        $page = $this->validateRequestPage();
-        if (!$page) {
-            exit('Fail: Validate requested page');
-        }
-        $page_data = $this->getPageData($page);
-        $this->render($page_data);
-    }
-
-    private function validateRequestPage()
-    {
+        $pageData = [];
         $req_page = Filters::getString('page');
         empty($req_page) ? $req_page = 'index' : null;
-        empty($this->user) || $this->user->getId() < 1 ? $req_page = 'login' : null;
 
-        //echo $this->user->getId();
-
-        $valid_pages = ['index', 'login', 'logout', 'privacy', 'settings'];
-
-        if (in_array($req_page, $valid_pages)) {
-            return $req_page;
+        if (!$this->hasAccess()) {
+            $pageData = $this->get('login');
+        } else {
+            $pageData = $this->get($req_page);
         }
 
-        return false;
+        $this->render($pageData);
     }
 
-    public function getPageData(string $page): array
-    {
-        $page_func = 'page_' . $page;
-
-        $page_defaults = [];
-        $page_data = [];
-
-        $page_defaults = page_defaults($this->ctx);
-        //$page_data = $page_func($this->cfg, $this->lng, $this->user);
-        if ($page == 'login') {
-            $page_data = page_login($this->ctx);
-        } elseif ($page == 'logout') {
-            page_logout($this->ctx); //http redirect
-            exit();
-        } elseif ($page === 'privacy') {
-            $page_data = page_privacy($this->ctx);
-        } elseif ($page === 'index') {
-            $page_data = page_index($this->ctx);
-        } elseif ($page === 'settings') {
-            $page_data = page_settings($this->ctx);
-        }
-
-        return array_merge($page_defaults, $page_data);
-    }
-
+    /**
+     *
+     * @param array $page_data
+     * @return void
+     */
     public function render(array $page_data): void
     {
-        $frontend = new Frontend($this->cfg, $this->lng);
+        $frontend = new Frontend($this->ctx);
         $frontend->showPage($page_data);
+    }
+
+    /**
+     * Check Access
+     * @return bool
+     */
+    private function hasAccess(): bool
+    {
+        if (empty($this->user) || $this->user->getId() < 1) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Obtiene los datos de la página solicitada.
+     *
+     * @param string $page Nombre de la página a obtener.
+     * @return array Datos de la página, combinando datos por defecto y específicos.
+     */
+    private function get(string $page): array
+    {
+        $pageDefaults = page_defaults($this->ctx);
+        $pageData = [];
+
+        $pageFunctions = $this->getPageFunctions();
+        if (array_key_exists($page, $pageFunctions)) {
+            $pageFunc = $pageFunctions[$page];
+            if ($page === 'logout') {
+                $pageFunc($this->ctx);
+                exit();
+            }
+            $pageData = $pageFunc($this->ctx);
+        } else {
+            return false;
+        }
+
+
+        return array_merge($pageDefaults, $pageData);
+    }
+
+    /**
+     * Paginas internas.
+     *
+     * @return array Array de funciones de páginas internas.
+     */
+    private function getPageFunctions(): array
+    {
+        return [
+            'login' => 'page_login',
+            'logout' => 'page_logout',
+            'privacy' => 'page_privacy',
+            'index' => 'page_index',
+            'settings' => 'page_settings',
+        ];
     }
 }

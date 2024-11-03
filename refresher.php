@@ -44,7 +44,7 @@ if ($user->getId() > 0) {
     print(json_encode($data));
     exit();
 }
-$frontend = new Frontend($cfg, $lng);
+$frontend = new Frontend($ctx);
 $tdata['theme'] = $cfg['theme'];
 
 $command = Filters::postString('order');

@@ -13,6 +13,12 @@
 class Frontend
 {
     /**
+     *
+     * @var AppContext $ctx
+     */
+    private AppContext $ctx;
+
+    /**
      * @var array<string|int> $cfg
      */
     private array $cfg;
@@ -22,10 +28,11 @@ class Frontend
      */
     private array $lng;
 
-    public function __construct(array &$cfg, array $lng)
+    public function __construct(AppContext $ctx)
     {
-        $this->cfg = &$cfg; //& due be order config.priv items in some pages, rethink that
-        $this->lng = $lng;
+        $this->ctx = $ctx;
+        $this->lng = $ctx->get('lng');
+        $this->cfg = $ctx->get('cfg');
     }
 
     /**
