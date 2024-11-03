@@ -18,8 +18,9 @@ session_name('monnet');
 session_start();
 
 $user = $ctx->get('User');
-/* Default lang included in common here we overwrite if necessary */
-
+/**
+ * @var array $lng - Default included in common, we overwrite user lang here
+ */
 if ($user->getLang() !== 'es') {
     $main_lang_file = 'lang/' . $user->getLang() . '/main.lang.php';
     if (file_exists($main_lang_file)) {

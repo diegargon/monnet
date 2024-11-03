@@ -13,7 +13,7 @@ class Log
 {
     private static int $max_db_msg = 254;
     private static int $recursionCount = 0;
-    private static int $console;
+    private static bool $console = false;
 
     /**
      * @var array<string|int> $cfg
@@ -45,7 +45,6 @@ class Log
      */
     public static function init(array &$cfg, Database &$db, array &$lng): void
     {
-        self::$console = false;
         self::$cfg = &$cfg;
         self::$db = &$db;
         self::$lng = &$lng;

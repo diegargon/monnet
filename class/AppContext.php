@@ -25,7 +25,6 @@ class AppContext
      * AppContext constructor.
      *
      * @param array $cfg configuracion
-     * @param array $lng language
      */
     public function __construct(array $cfg)
     {

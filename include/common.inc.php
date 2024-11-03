@@ -42,7 +42,7 @@ if ($cfg_db['dbtype'] == 'mysqli') {
 
 $ctx = new AppContext($cfg);
 
-$db = $ctx->set('Mysql',  new Database($cfg_db));
+$db = $ctx->set('Mysql', new Database($cfg_db));
 
 $db->connect();
 
