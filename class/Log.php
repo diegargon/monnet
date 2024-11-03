@@ -11,8 +11,22 @@
 
 class Log
 {
+    /**
+     *
+     * @var int
+     */
     private static int $max_db_msg = 254;
+
+    /**
+     *
+     * @var int
+     */
     private static int $recursionCount = 0;
+
+    /**
+     *
+     * @var bool
+     */
     private static bool $console = false;
 
     /**
@@ -39,6 +53,7 @@ class Log
         'LOG_INFO' => 6, // informational message
         'LOG_DEBUG' => 7, // debug-level message
     ];
+
     /**
      * @param array $lng
      * @param array $cfg
@@ -50,6 +65,13 @@ class Log
         self::$lng = &$lng;
     }
 
+    /**
+     *
+     * @param string $type
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public static function logged(string $type, mixed $msg, ?int $self_caller = null): void
     {
         $LOG_TYPE = self::$LOG_TYPE;
@@ -121,6 +143,11 @@ class Log
         }
     }
 
+    /**
+     *
+     * @param bool $value
+     * @return bool
+     */
     public static function setConsole(bool $value): bool
     {
         if ($value === true || $value === false) {
@@ -131,6 +158,13 @@ class Log
         return false;
     }
 
+    /**
+     *
+     * @param string $loglevel
+     * @param int $host_id
+     * @param string $msg
+     * @return void
+     */
     public static function logHost(string $loglevel, int $host_id, string $msg): void
     {
         $level = self::getLogLevelID($loglevel);
@@ -144,6 +178,11 @@ class Log
         self::$db->insert('hosts_logs', $set);
     }
 
+    /**
+     *
+     * @param int $limit
+     * @return array
+     */
     public static function getLoghosts(int $limit): array
     {
         $query = 'SELECT * FROM hosts_logs WHERE level <= ' .
@@ -154,6 +193,12 @@ class Log
         return valid_array($lines) ? $lines : false;
     }
 
+    /**
+     *
+     * @param int $host_id
+     * @param int $limit
+     * @return array
+     */
     public static function getLoghost(int $host_id, int $limit): array
     {
         $query = 'SELECT * FROM hosts_logs WHERE level <= ' . self::$cfg['term_log_level'] .
@@ -173,6 +218,11 @@ class Log
         return self::$LOG_TYPE[$loglevel];
     }
 
+    /**
+     *
+     * @param int $logvalue
+     * @return string|bool
+     */
     public static function getLogLevelName(int $logvalue): string|bool
     {
         foreach (self::$LOG_TYPE as $ktype => $vtype) {
@@ -183,7 +233,12 @@ class Log
         return false;
     }
 
-    public static function getSystemDBLogs(int $limit): array
+    /**
+     *
+     * @param int $limit
+     * @return array|bool
+     */
+    public static function getSystemDBLogs(int $limit): array|bool
     {
         $query = 'SELECT * FROM system_logs WHERE level <= ' .
             self::$cfg['term_system_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
@@ -193,36 +248,78 @@ class Log
         return valid_array($lines) ? $lines : false;
     }
 
+    /**
+     *
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public static function debug(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_DEBUG', $msg, $self_caller);
     }
 
+    /**
+     *
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public static function info(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_INFO', $msg, $self_caller);
     }
 
+    /**
+     *
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public static function notice(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_NOTICE', $msg, $self_caller);
     }
 
+    /**
+     *
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public static function warning(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_WARNING', $msg, $self_caller);
     }
 
+    /**
+     *
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public static function err(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_ERR', $msg, $self_caller);
     }
 
+    /**
+     *
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public static function alert(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_ALERT', $msg, $self_caller);
     }
 
+    /**
+     *
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public static function emerg(mixed $msg, ?int $self_caller = null): void
     {
         self::logged('LOG_EMERG', $msg, $self_caller);
