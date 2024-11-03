@@ -63,6 +63,8 @@ if ($command == 'saveNote') {
     if (empty($command_value)) {
         $command_value = Filters::postDomain('order_value');
     }
+} elseif ($command == 'submitAccessLink') {
+    $command_value = Filters::postUrl('order_value');
 } else {
     $command_value = trim(Filters::postString('order_value'));
 }
@@ -209,6 +211,25 @@ if ($command == 'submitSystemType' && !empty($object_id) && is_numeric($object_i
     $data['command_success'] = $success;
     $data['response_msg'] = 'System Type changed to ' . $command_value;
     $force_host_reload = 1;
+}
+
+if ($command == 'submitAccessLink' && !empty($object_id) && is_numeric($object_id)) {
+    $success = 0;
+
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['access_link' => $command_value]);
+        $success = 1;
+    }
+    $data['command_success'] = $success;
+}
+
+if ($command == 'submitAccessType' && !empty($object_id) && is_numeric($object_id)) {
+    $success = 0;
+    if (!empty($command_value)) {
+        $hosts->update($object_id, ['access_type' => $command_value]);
+        $success = 1;
+    }
+    $data['command_success'] = $success;
 }
 
 /* Show cat Only * */

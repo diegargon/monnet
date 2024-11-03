@@ -18,6 +18,7 @@ $lng = [
     'L_AREYOUSURE' => '¿estas seguro?',
     'L_ALL' => 'Todo',
     'L_ALARMS' => 'Alarmas',
+    'L_ACCESS' => 'Acceso',
     //B
     'L_BOOKMARKS' => 'Links',
     'L_BOOKMARK' => 'Link',

@@ -101,7 +101,16 @@ class Hosts
          * @var array<int, array<string, mixed>> $misc_container
          */
         $misc_container = [];
-        $misc_keys = ['mac_vendor', 'manufacture', 'system_type', 'os', 'owner', 'timeout'];
+        $misc_keys = [
+            'mac_vendor',
+            'manufacture',
+            'system_type',
+            'os',
+            'owner',
+            'access_type',
+            'access_link',
+            'timeout'
+        ];
 
         foreach ($values as $kvalue => $vvalue) {
             if (!empty($kvalue) && isset($vvalue)) {

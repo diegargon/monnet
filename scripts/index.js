@@ -255,6 +255,13 @@ $(document).ready(function () {
             refresh('submitOwner', ownerValue, host_id);
         }
     });
+    $(document).on("click", "#submitAccessLink", function () {
+        var accessLinkValue = $('#access_link').val();
+        var host_id = $('#host_id').val();
+        if (accessLinkValue && host_id) {
+            refresh('submitAccessLink', accessLinkValue, host_id);
+        }
+    });
     $(document).on("click", "#submitHostTimeout", function () {
         var timeoutValue = $('#host_timeout').val();
         var host_id = $('#host_id').val();

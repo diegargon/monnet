@@ -212,6 +212,11 @@
                         <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?> </span>
                     </div>
                 <?php } ?>
+                <?php if (!empty($tdata['host_details']['access_link'])): ?>
+                    <div>
+                        <a href="<?= $tdata['host_details']['access_link'] ?>" target="_blank"><?= $tdata['host_details']['access_link'] ?></a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         <!-- /TAB1 -->
@@ -367,6 +372,20 @@
                                    $tdata['host_details']['owner'] : null
                                ?>"/>
                         <button id="submitOwner"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="access_link"><?= $lng['L_ACCESS'] ?>: </label><br />
+                        <input type="text" id="access_link" name="access_link"
+                               value="<?=
+                               !empty($tdata['host_details']['access_link']) ?
+                                   $tdata['host_details']['access_link'] : null
+                               ?>"/>
+                        <select id="access_link_type" name="access_link_type">
+                            <?php foreach ($cfg['access_link_types'] as $key => $access_type): ?>
+                                <option value="<?= $key ?>" selected="1"><?= $access_type ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="submitAccessLink"><?= $lng['L_SEND'] ?></button>
                     </div>
                 </div>
                 <!-- /left config column -->

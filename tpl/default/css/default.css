@@ -32,7 +32,16 @@ body {
 }
 
 a {
+    color: #00bfff;
     text-decoration: none;
+}
+a:hover {
+    color: #1e90ff;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #ff69b4;
 }
 
 p {

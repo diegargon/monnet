@@ -188,3 +188,7 @@ $cfg['cat_types'] = [
     2 => 'L_LINKS',
     3 => 'L_SEARCH_ENGINE',
 ];
+
+$cfg['access_link_types'] = [
+    1 => 'www',
+];
