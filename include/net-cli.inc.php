@@ -78,7 +78,7 @@ function check_known_hosts(AppContext $ctx)
                 $new_host_status['online_change'] = utc_date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] .
-                        ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout);
+                    ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout);
             }
 
             $hosts->update($host['id'], $new_host_status);
@@ -177,8 +177,8 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0)
         $update = [];
 
         if (
-                (!empty($host['mac'])) &&
-                (empty($host['mac_vendor']) || $forceall === 1)
+            (!empty($host['mac'])) &&
+            (empty($host['mac_vendor']) || $forceall === 1)
         ) {
             Log::debug("Getting mac vendor for {$host['display_name']}");
             $vendor = get_mac_vendor_local(trim($host['mac']));
@@ -366,12 +366,27 @@ function ping_known_host(AppContext $ctx, array $host)
     return $set;
 }
 
-function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0])
+/**
+ *
+ * @param string $ip
+ * @param array $timeout
+ * @return array
+ */
+function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
 {
+    /**
+     * Track errors for graph
+     */
+    $ERROR_SOCKET_CREATE = -0.003;
+    $ERROR_SOCKET_CONNECT = -0.002;
+    $ERROR_TIMEOUT = -0.001;
+
+    $retries = 2;
+    $attempts = 0;
 
     $status = [
         'online' => 0,
-        'latency' => -0.003,
+        'latency' => null,
     ];
 
     $tim_start = microtime(true);
@@ -380,32 +395,43 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0])
         $timeout = ['sec' => 0, 'usec' => 200000];
     }
     $protocolNumber = getprotobyname('icmp');
-    $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
-    if (!$socket) {
-        $status['error'] = 'socket_create';
-        $status['latency'] = -0.003;
-    }
 
-    socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
-    if (!socket_connect($socket, $ip, 0)) {
-        $status['error'] = 'socket_connect';
-        $status['latency'] = -0.002;
+    while ($attempts < $retries) {
+        $attempts++;
+        $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
+        if (!$socket) {
+            $status['error'] = 'socket_create';
+            $status['latency'] = $ERROR_SOCKET_CREATE;
+            return $status;
+        }
+
+        socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
+
+
+        if (!socket_connect($socket, $ip, 0)) {
+            $status['error'] = 'socket_connect';
+            $status['latency'] = $ERROR_SOCKET_CONNECT;
+            socket_close($socket);
+            usleep(200000);
+            continue;
+        }
+
+        $package = "\x08\x00\x19\x2f\x00\x00\x00\x00\x70\x69\x6e\x67";
+        socket_send($socket, $package, strlen($package), 0);
+
+        if (socket_read($socket, 255)) {
+            $status['online'] = 1;
+            $status['latency'] = round_latency(microtime(true) - $tim_start);
+            socket_close($socket);
+            return $status;
+        } else {
+            $status['error'] = 'timeout';
+            $status['latency'] = $ERROR_TIMEOUT;
+        }
+
         socket_close($socket);
-        return $status;
+        usleep(200000);
     }
-
-    $package = "\x08\x00\x19\x2f\x00\x00\x00\x00\x70\x69\x6e\x67";
-    socket_send($socket, $package, strlen($package), 0);
-
-    if (socket_read($socket, 255)) {
-        $status['online'] = 1;
-        $status['latency'] = round_latency(microtime(true) - $tim_start);
-    } else {
-        $status['error'] = 'timeout';
-        $status['latency'] = -0.001;
-    }
-
-    socket_close($socket);
 
     return $status;
 }
