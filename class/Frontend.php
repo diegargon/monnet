@@ -37,6 +37,7 @@ class Frontend
 
     /**
      * @param array<mixed> $tdata
+     * @return void
      */
     public function showPage(array $tdata): void
     {
@@ -100,6 +101,7 @@ class Frontend
 
     /**
      * @param array<mixed> $tdata
+     * @return string|bool
      */
     public function getTpl(string $tpl, array $tdata = []): string|bool
     {
@@ -114,6 +116,12 @@ class Frontend
         return ob_get_clean();
     }
 
+    /**
+     *
+     * @param string $theme
+     * @param string $css
+     * @return string
+     */
     public function cssLinkFile(string $theme, string $css): string
     {
         $css_file = 'tpl/' . $theme . '/css/' . $css . '.css';
@@ -124,6 +132,11 @@ class Frontend
         return $css_file;
     }
 
+    /**
+     *
+     * @param string $scriptlink
+     * @return string
+     */
     public function scriptLink(string $scriptlink): string
     {
         //TODO SEC
@@ -131,7 +144,9 @@ class Frontend
     }
 
     /**
+     *
      * @param array<string> $msg
+     * @return string
      */
     public function msgBox(array $msg): string
     {
@@ -144,6 +159,7 @@ class Frontend
 
     /**
      * @param array<string> $msg
+     * @return void
      */
     public function msgPage(array $msg): void
     {
@@ -159,7 +175,11 @@ class Frontend
         exit();
     }
 
-    public function getFooter()
+    /**
+     *
+     * @return string
+     */
+    public function getFooter(): string
     {
         /* TODO
           global $db, $cfg;
@@ -173,5 +193,6 @@ class Frontend
           return $this->getTpl('footer', $tdata);
          *
          */
+        return '';
     }
 }
