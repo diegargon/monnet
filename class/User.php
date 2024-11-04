@@ -130,6 +130,7 @@ class User
     /**
      *
      * @param int $uid
+     *
      * @return array
      */
     public function getProfile(int $uid)

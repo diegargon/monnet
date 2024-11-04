@@ -37,6 +37,7 @@ class Frontend
 
     /**
      * @param array<mixed> $tdata
+     *
      * @return void
      */
     public function showPage(array $tdata): void
@@ -135,6 +136,7 @@ class Frontend
     /**
      *
      * @param string $scriptlink
+     *
      * @return string
      */
     public function scriptLink(string $scriptlink): string
@@ -159,6 +161,7 @@ class Frontend
 
     /**
      * @param array<string> $msg
+     *
      * @return void
      */
     public function msgPage(array $msg): void

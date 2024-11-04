@@ -44,6 +44,7 @@ class AppContext
      * autoload class method TODO: Change autoload
      *
      * @param string $class_name
+     *
      * @return void
      */
     public function autoload(string $class_name): void
@@ -60,6 +61,7 @@ class AppContext
      *
      * @param string $name Nombre del servicio.
      * @param mixed $service Instancia del servicio a registrar.
+     *
      * @return mixed devuelve la classe instanciada
      */
     public function set(string $name, mixed $service = null): mixed
@@ -82,6 +84,7 @@ class AppContext
      * Obtiene un servicio por nombre.
      *
      * @param string $name Nombre del servicio.
+     *
      * @return mixed La instancia del servicio registrado.
 
      */
@@ -114,6 +117,7 @@ class AppContext
      * Verifica si un servicio está registrado en el contexto.
      *
      * @param string $name Nombre del servicio.
+     *
      * @return bool True si el servicio está registrado, false en caso contrario.
      */
     public function has(string $name): bool

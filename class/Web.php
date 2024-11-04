@@ -28,6 +28,7 @@ class Web
         $this->ctx = $ctx;
         $this->user = $ctx->get('User');
     }
+
     /**
      *
      * @return void
@@ -50,6 +51,7 @@ class Web
     /**
      *
      * @param array $page_data
+     *
      * @return void
      */
     public function render(array $page_data): void
@@ -60,6 +62,7 @@ class Web
 
     /**
      * Check Access
+     *
      * @return bool
      */
     private function hasAccess(): bool
@@ -74,7 +77,8 @@ class Web
     /**
      * Obtiene los datos de la página solicitada.
      *
-     * @param string $page Nombre de la página a obtener.
+     * @param string $page Nombre de la página a obtener
+     *
      * @return array Datos de la página, combinando datos por defecto y específicos.
      */
     private function get(string $page): array

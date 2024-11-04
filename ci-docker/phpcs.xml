@@ -16,19 +16,19 @@
         <!-- <exclude name="Generic.Files.LineLength.TooLong"/> -->
 
         <!-- Ignoring a number of whitespace issues around blank lines. -->
-        <!--
+
         <exclude name="Squiz.WhiteSpace.FunctionSpacing.After"/>
         <exclude name="Squiz.WhiteSpace.FunctionSpacing.Before"/>
         <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen"/>
         <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose"/>
         <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace"/>
-        -->
+
         <!-- Allow for the file docblock on the line directly following the PHP open tag.
              As the sniff in PHPCS does not use modular error codes (yet - see upstream PR #2729),
              the complete error code needs to be disabled, not just the bit involving
              the file docblocks.
         -->
-        <!-- <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/> -->
+        <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/>
 
         <!-- All nice and good, but too much of a fuss for the outer array of nested arrays. -->
         <!-- <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned"/> -->

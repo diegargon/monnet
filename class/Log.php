@@ -70,6 +70,7 @@ class Log
      * @param string $type
      * @param mixed $msg
      * @param int|null $self_caller
+     *
      * @return void
      */
     public static function logged(string $type, mixed $msg, ?int $self_caller = null): void
@@ -163,6 +164,7 @@ class Log
      * @param string $loglevel
      * @param int $host_id
      * @param string $msg
+     *
      * @return void
      */
     public static function logHost(string $loglevel, int $host_id, string $msg): void
@@ -197,6 +199,7 @@ class Log
      *
      * @param int $host_id
      * @param int $limit
+     *
      * @return array
      */
     public static function getLoghost(int $host_id, int $limit): array
@@ -221,6 +224,7 @@ class Log
     /**
      *
      * @param int $logvalue
+     *
      * @return string|bool
      */
     public static function getLogLevelName(int $logvalue): string|bool
@@ -236,6 +240,7 @@ class Log
     /**
      *
      * @param int $limit
+     *
      * @return array|bool
      */
     public static function getSystemDBLogs(int $limit): array|bool
@@ -252,6 +257,7 @@ class Log
      *
      * @param mixed $msg
      * @param int|null $self_caller
+     *
      * @return void
      */
     public static function debug(mixed $msg, ?int $self_caller = null): void
@@ -263,6 +269,7 @@ class Log
      *
      * @param mixed $msg
      * @param int|null $self_caller
+     *
      * @return void
      */
     public static function info(mixed $msg, ?int $self_caller = null): void
@@ -274,6 +281,7 @@ class Log
      *
      * @param mixed $msg
      * @param int|null $self_caller
+     *
      * @return void
      */
     public static function notice(mixed $msg, ?int $self_caller = null): void
@@ -296,6 +304,7 @@ class Log
      *
      * @param mixed $msg
      * @param int|null $self_caller
+     *
      * @return void
      */
     public static function err(mixed $msg, ?int $self_caller = null): void
@@ -307,6 +316,7 @@ class Log
      *
      * @param mixed $msg
      * @param int|null $self_caller
+     *
      * @return void
      */
     public static function alert(mixed $msg, ?int $self_caller = null): void
@@ -318,6 +328,7 @@ class Log
      *
      * @param mixed $msg
      * @param int|null $self_caller
+     *
      * @return void
      */
     public static function emerg(mixed $msg, ?int $self_caller = null): void

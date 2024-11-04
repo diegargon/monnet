@@ -105,6 +105,7 @@ class Database
 
     /**
      * Init connection
+     *
      * @return boolean
      */
     public function connect(): bool
@@ -162,6 +163,7 @@ class Database
      * Std query wrap, add history and stats
      *
      * @param string $query
+     *
      * @return mysqli_result|bool
      */
     public function query(string $query): mysqli_result|bool
@@ -181,6 +183,7 @@ class Database
      * fetch wrap
      *
      * @param mysqli_result $result
+     *
      * @return array|bool
      */
     public function fetch(mysqli_result $result): array|bool
@@ -194,6 +197,7 @@ class Database
      * fetch all
      *
      * @param mysqli_result $result
+     *
      * @return array
      */
     public function fetchAll(mysqli_result $result): array
@@ -211,6 +215,7 @@ class Database
      * Escape string
      *
      * @param string $var
+     *
      * @return string
      */
     public function escape(string $var): string
@@ -233,6 +238,7 @@ class Database
      * Return num rows
      *
      * @param object $result
+     *
      * @return int
      */
     public function numRows(object $result): int

@@ -13,6 +13,7 @@ class NewDatabase
 
     /**
      * @param array $config Arreglo de configuración de la base de datos
+     *
      * @throws InvalidArgumentException Si el tipo de base de datos no es soportado
      */
     public function __construct(array $config)
@@ -75,6 +76,7 @@ class NewDatabase
      *
      * @param string $sql Consulta SQL a ejecutar
      * @param array $params Parámetros de consulta
+     *
      * @return bool Verdadero si la consulta se ejecutó con éxito
      */
     public function query(string $sql, array $params = []): bool
@@ -88,6 +90,7 @@ class NewDatabase
      *
      * @param string $sql Consulta SQL para obtener datos
      * @param array $params Parámetros de consulta
+     *
      * @return array|null Un arreglo asociativo con los datos obtenidos o null si no hay resultados
      */
     public function fetchOne(string $sql, array $params = []): ?array
@@ -102,6 +105,7 @@ class NewDatabase
      *
      * @param string $sql Consulta SQL para obtener datos
      * @param array $params Parámetros de consulta
+     *
      * @return array Un arreglo de arreglos asociativos con los datos obtenidos
      */
     public function fetchAll(string $sql, array $params = []): array
