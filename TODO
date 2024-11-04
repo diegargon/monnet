@@ -39,6 +39,7 @@
 * al borrar un bookmark, esconderlo para evitar tener que hacer el  reload
 
 ** Undecided
+* Poner barra estrecha bookmarks con desplegables arriba?
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
 * Email Alert Groups: Poder especicar en vez de uno por uno el email un grupo.
 * implementar el retry en ping, con cfg para numero de retrys cuando el host estaba online y el numero de retrys cuando el host estaba offline
