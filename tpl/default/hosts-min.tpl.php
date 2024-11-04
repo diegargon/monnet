@@ -39,15 +39,15 @@ if (empty($tdata['hosts'])) {
                 <?php endif; ?>
                     <div class="hosts-title text_shadow_style2"><?= $host['display_name'] ?> </div>
                     <div class="min-details-hidden">
-                    <?php if (!empty($host['manufacture_image'])): ?>
+                    <?php if (!empty($host['manufacture_image'])) : ?>
                         <img class="fab" src="<?= $host['manufacture_image'] ?>"
                             alt="os_img" title="<?= $host['manufacture_name'] ?>"/>
                     <?php endif; ?>
-                    <?php if (!empty($host['os_image'])): ?>
+                    <?php if (!empty($host['os_image'])) : ?>
                         <img class="fab" src="<?= $host['os_image'] ?>"
                             alt="os_img" title="<?= $host['os_name'] ?>"/>
                     <?php endif; ?>
-                    <?php if (!empty($host['access_link'])): ?>
+                    <?php if (!empty($host['access_link'])) : ?>
                         <a href="<?= $host['access_link'] ?>">
                         <img class="fab" src="tpl/<?= $cfg['theme']?>/img/icons/link.png"
                             alt="access_link" title="<?= $host['access_link'] ?>"/>

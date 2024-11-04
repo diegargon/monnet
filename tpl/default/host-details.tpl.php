@@ -28,7 +28,7 @@
                     <button id="tab1_btn" class="host-details-tabs-head"
                             onclick="changeTab('tab1')"><?= $lng['L_OVERVIEW'] ?>
                     </button>
-                    <?php if (!empty($tdata['host_details']['access_method'])): ?>
+                    <?php if (!empty($tdata['host_details']['access_method'])) : ?>
                         <button id="tab2_btn" class="host-details-tabs-head"
                                 onclick="changeTab('tab2')"><?= $lng['L_STATUS'] ?>
                         </button>
@@ -36,7 +36,7 @@
                     <button id="tab3_btn" class="host-details-tabs-head"
                             onclick="changeTab('tab3')"><?= $lng['L_NOTES'] ?>
                     </button>
-                    <?php if (!empty($tdata['host_details']['host_logs'])): ?>
+                    <?php if (!empty($tdata['host_details']['host_logs'])) : ?>
                         <button id="tab9_btn" class="host-details-tabs-head"
                                 onclick="changeTab('tab9')"><?= $lng['L_LOG'] ?>
                         </button>
@@ -96,7 +96,7 @@
                      title="<?= $tdata['host_details']['manufacture_name'] ?>"/>
             <?php endif; ?>
 
-            <?php if (!empty($tdata['host_details']['os_image'])): ?>
+            <?php if (!empty($tdata['host_details']['os_image'])) : ?>
                 <img class="fab" src="<?= $tdata['host_details']['os_image'] ?>"
                      alt="<?= $tdata['host_details']['os_name'] ?>"
                      title="<?= $tdata['host_details']['os_name'] ?>"/>
@@ -108,7 +108,7 @@
                      title="<?= $tdata['host_details']['system_type_name'] ?>"/>
             <?php endif; ?>
             <div class="host-item"><?= $tdata['host_details']['title'] ?> </div>
-            <?php if (!empty($tdata['host_details']['hostname'])): ?>
+            <?php if (!empty($tdata['host_details']['hostname'])) : ?>
                 <div class="host-item"><?= $tdata['host_details']['hostname'] ?> </div>
             <?php endif; ?>
 
@@ -135,7 +135,7 @@
                 foreach ($tdata['host_details']['ports'] as $port) {
                     ?>
                     <div class="port_container">
-                        <?php if ($port['online']): ?>
+                        <?php if ($port['online']) : ?>
                             <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
                         <?php else: ?>
                             <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
@@ -159,7 +159,7 @@
                     <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
                     <div><?= $lng['L_VLAN'] ?>: <?= $tdata['host_details']['network_vlan'] ?></div>
                 </div>
-                <?php if (!empty($tdata['host_details']['owner'])): ?>
+                <?php if (!empty($tdata['host_details']['owner'])) : ?>
                     <div class="">
                         <label class="resume_label"><?= $lng['L_OWNER'] ?>:</label>
                         <span class="resume_field"><?= $tdata['host_details']['owner'] ?></span>
@@ -190,22 +190,22 @@
                 <?php endif; ?>
 
                 <?php if (
-                    empty($tdata['host_details']['online']) &&
-                    !empty($tdata['host_details']['f_last_seen'])
-                    ): ?>
+                        empty($tdata['host_details']['online']) &&
+                        !empty($tdata['host_details']['f_last_seen'])
+                    ) : ?>
                     <div>
                         <label class="resume_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
                         <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
                     </div>
                 <?php endif; ?>
 
-                <?php if (!empty($tdata['host_details']['f_last_check'])): ?>
+                <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
                     <div>
                         <label class="resume_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
                         <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
                     </div>
                 <?php endif; ?>
-                <?php if (!empty($tdata['host_details']['access_link'])): ?>
+                <?php if (!empty($tdata['host_details']['access_link'])) : ?>
                     <div>
                         <a href="<?= $tdata['host_details']['access_link'] ?>"
                            target="_blank"><?= $tdata['host_details']['access_link'] ?>
@@ -219,20 +219,20 @@
         <?php if (!empty($tdata['host_details']['access_method'])) { ?>
             <div id="tab2" class="host-details-tab-content">
                 <div id="progress_bars">
-                    <?php if (!empty($tdata['host_details']['f_loadavg'])): ?>
+                    <?php if (!empty($tdata['host_details']['f_loadavg'])) : ?>
                         <label for="load_avg"><?= $lng['L_LOAD'] ?>:</label>
                         <progress id="load_avg" value="<?= $tdata['host_details']['f_loadavg'] ?>"
                                   max="<?= $tdata['host_details']['f_maxload'] ?>"  data-label="<?= $tdata['host_details']['f_loadavg'] ?>">
                         </progress>
                     <?php endif; ?>
-                    <?php if (!empty($tdata['host_details']['mem'])):
+                    <?php if (!empty($tdata['host_details']['mem'])) :
                         $mem = $tdata['host_details']['mem'];
                         ?>
                         <label for="mem"><?= $lng['L_MEM'] ?>:</label>
                         <progress id="mem" value="<?= $mem['mem_used'] ?>" max="<?= $mem['mem_available'] ?>"></progress>
                     <?php endif; ?>
                     <?php if (!empty($tdata['host_details']['disks']) && count($tdata['host_details']['disks']) > 0): ?>
-                        <?php foreach ($tdata['host_details']['disks'] as $disk): ?>
+                        <?php foreach ($tdata['host_details']['disks'] as $disk) : ?>
                             <label class="disk"><?= $disk['mounted'] ?>:</label>
                             <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
                         <?php endforeach; ?>
@@ -349,8 +349,8 @@
                         <label for="host_owner"><?= $lng['L_OWNER'] ?>: </label><br />
                         <input type="text" id="host_owner" name="host_owner"
                                value="<?=
-                               !empty($tdata['host_details']['owner']) ?
-                                   $tdata['host_details']['owner'] : null
+                                    !empty($tdata['host_details']['owner']) ?
+                                    $tdata['host_details']['owner'] : null
                                ?>"/>
                         <button id="submitOwner"><?= $lng['L_SEND'] ?></button>
                     </div>
@@ -358,7 +358,7 @@
                         <label for="access_link"><?= $lng['L_ACCESS'] ?>: </label><br />
                         <input type="text" id="access_link" name="access_link"
                                value="<?=
-                               !empty($tdata['host_details']['access_link']) ?
+                                   !empty($tdata['host_details']['access_link']) ?
                                    $tdata['host_details']['access_link'] : null
                                ?>"/>
                         <select id="access_link_type" name="access_link_type">
@@ -376,7 +376,7 @@
                         <label for="host_timeout"><?= $lng['L_TIMEOUT'] ?>(0.0): </label><br />
                         <input size="12" max-size="12" type="number" id="host_timeout" name="host_timeout"
                                value="<?=
-                               !empty($tdata['host_details']['timeout']) ?
+                                   !empty($tdata['host_details']['timeout']) ?
                                    $tdata['host_details']['timeout'] : null
                                ?>"/>
                         <button id="submitHostTimeout"><?= $lng['L_SEND'] ?></button>
@@ -384,7 +384,7 @@
                     <div class="">
                         <label for="manufacture"><?= $lng['L_MANUFACTURE'] ?>: </label><br/>
                         <select id="manufacture">
-                            <?php foreach ($cfg['manufacture'] as $manufacture): ?>
+                            <?php foreach ($cfg['manufacture'] as $manufacture) : ?>
                                 <?php
                                 $selected = '';
                                 if (
@@ -408,7 +408,7 @@
                                 if (
                                     !empty($tdata['host_details']['os']) &&
                                     ($os['id'] == $tdata['host_details']['os'])
-                                    ):
+                                ) :
                                     $selected = ' selected=1 ';
                                 endif;
                                 ?>
@@ -420,7 +420,7 @@
                     <div class="">
                         <label for="system_type"><?= $lng['L_SYSTEM_TYPE'] ?>: </label><br/>
                         <select id="system_type">
-                            <?php foreach ($cfg['system_type'] as $system_type): ?>
+                            <?php foreach ($cfg['system_type'] as $system_type) : ?>
                                 <?php
                                 $selected = '';
                                 if (
@@ -483,7 +483,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                                                                                                                                                                                                                                                                        </div>
+        </div>
         <?php }
         ?>
         <!-- /TODO DISABLED -->

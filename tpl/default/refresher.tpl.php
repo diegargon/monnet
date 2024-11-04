@@ -109,7 +109,10 @@
                         }
                     }
                     //Bookmarks Hosts Config stdbox
-                    if (jsonData.command_receive === 'submitBookmarkCat' || jsonData.command_receive === 'submitHostsCat') {
+                    if (
+                            jsonData.command_receive === 'submitBookmarkCat' ||
+                            jsonData.command_receive === 'submitHostsCat'
+                    ) {
                         $('#stdbox-status-msg').html('');
                         $('#stdbox-error-msg').html('');
                         if (jsonData.command_success && jsonData.response_msg) {
@@ -143,9 +146,6 @@
                     if (jsonData.command_receive === 'submitCat') {
                         if (jsonData.command_success === 1) {
                             $('#config_status_msg').html(jsonData.response_msg);
-                            //$('#hostcat_id').find('option').removeAttr('selected');
-                            //$('#hostcat_id').find('option[value="' + jsonData.command_value + '"]').attr('selected', 'selected');
-                            //$('#hostcat_id').val(jsonData.command_value);
                         } else {
                             $('#config_status_msg').html('Error');
                         }
