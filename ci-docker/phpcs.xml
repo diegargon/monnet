@@ -10,7 +10,7 @@
 
     </rule>
 
-    <rule ref="PHPCS">
+    <rule ref="Squiz">
 
         <!-- To address at a later point in time. -->
         <!-- <exclude name="Generic.Files.LineLength.TooLong"/> -->

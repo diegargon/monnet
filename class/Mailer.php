@@ -43,7 +43,7 @@ class Mailer
         }
         if (!Filters::varIp($this->cfg['mail_host'])) {
             if (!Filters::varHostname($this->cfg['mail_host'])) {
-                Log::err($ctx->getAppLang()->get('L_ERR_MAIL_HOST'));
+                Log::err($lang->get('L_ERR_MAIL_HOST'));
                 return;
             }
         }
@@ -95,7 +95,7 @@ class Mailer
             $this->phpMailer->isSMTP();
             //$this->phpMailer->SMTPDebug = 4;
             $this->phpMailer->Host = $this->cfg['mail_host'];
-            $this->phpMailer->SMTPAuth = $this->cfg['mail_auth'];
+            $this->phpMailer->SMTPAuth = (bool) $this->cfg['mail_auth'];
             if ($this->cfg['mail_auth']) {
                 $this->phpMailer->Username = $this->cfg['mail_username'];
                 $this->phpMailer->Password = $this->cfg['mail_password'];
