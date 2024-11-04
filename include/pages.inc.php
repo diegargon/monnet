@@ -109,6 +109,8 @@ function page_index(AppContext $ctx)
 
     /* Include refresher script tpl */
     $page['web_main']['main_head_tpl'][] = 'refresher';
+    /* Include submmitter script tpl */
+    $page['web_main']['main_head_tpl'][] = 'submitter';
 
     /* Controls */
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
