@@ -105,8 +105,15 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db->query("UPDATE prefs SET pref_value='0.36' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db_version = 0.36;
     }
+    // 0.37
+    if ($db_version < 0.00) {
+        $db->query("ALTER TABLE `hosts` DROP `alert_msg`;");
+        Log::info("Update version to 0.00 successful");
+        $db->query("UPDATE prefs SET pref_value='0.37' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        $db_version = 0.37;
+    }
 
-    //Next Template
+    // Template
     if ($db_version < 0.00) {
         $db->query("");
         Log::info("Update version to 0.00 successful");

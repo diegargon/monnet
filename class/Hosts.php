@@ -97,10 +97,10 @@ class Hosts
          * @var array<int, array<string, mixed>> $fvalues
          */
         $fvalues = []; //filter
-        /**
-         * @var array<int, array<string, mixed>> $misc_container
-         */
+        /** @var array<int, array<string, mixed>> $misc_container misc json field key/values */
         $misc_container = [];
+
+        /** @var array<string> $misc_keys This host[keys] are save in misc field with json format */
         $misc_keys = [
             'mac_vendor',
             'manufacture',
@@ -123,11 +123,12 @@ class Hosts
                     $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( '
                         . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])'
                         . $this->hosts[$id][$kvalue] . '->' . $vvalue;
-                    Log::logHost('LOG_WARNING', $id, $loghostmsg);
+                    Log::logHost('LOG_ALERT', $id, $loghostmsg);
+                    $this->hosts[$id]['alert'] = 1;
                 }
                 //Log category change
                 if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
-                    Log::logHost('LOG_INFO', $id, 'Host ' . $this->hosts[$id]['display_name']
+                    Log::logHost('LOG_NOTICE', $id, 'Host ' . $this->hosts[$id]['display_name']
                         . ' change category ' . $this->hosts[$id]['category'] . '->' . $vvalue);
                     $this->host_cat_track[$this->hosts[$id]['category']]--;
                     $this->host_cat_track[$vvalue]++;
