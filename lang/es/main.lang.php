@@ -161,7 +161,7 @@ $lng = [
     'L_UPTIME' => 'Uptime',
     'L_UNKNOWN' => 'Desconocido',
     'L_URLIP' => 'Url o IP',
-    'L_UNCATEGORIZED' => 'Sin Categoria',
+    'L_UNCATEGORIZED' => 'NoCat',
     'L_UPDATED' => 'Updated',
     //V
     'L_VENDOR' => 'Vendor',
