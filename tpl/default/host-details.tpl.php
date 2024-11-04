@@ -13,12 +13,6 @@
  * @var array<mixed> $tdata
  */
 //var_dump($tdata['host_details']);
-/*
-  foreach ($cfg['manufacture'] as $km => $m) {
-  echo $km . ':' . $m['name'] . '<br/>';
-  }
- *
- */
 ?>
 <div id="host-details" class="host-details draggable" style="display:block">
     <div id="host-details-container" class="host-details-container">
