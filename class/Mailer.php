@@ -28,7 +28,7 @@ class Mailer
     {
         $this->cfg = $ctx->get('cfg');
         $this->ctx = $ctx;
-        $lang = $ctx->getAppLang();
+        $lang = $ctx->get('Lang');
 
         if (!$this->cfg['mailer_enabled']) {
             return;
@@ -48,11 +48,11 @@ class Mailer
             }
         }
         if ($this->cfg['mail_auth'] && empty($this->cfg['mail_username']) || empty($this->cfg['mail_password'])) {
-            Log::err($ctx->getAppLang()->get('L_ERR_USERPASS_INVALID'));
+            Log::err($lang->get('L_ERR_USERPASS_INVALID'));
             return;
         }
         if (!empty($this->cfg['mail_port']) && !is_numeric($this->cfg['mail_port'])) {
-            Log::err($ctx->getAppLang()->get('L_ERR_PORT_INVALID'));
+            Log::err($lang->get('L_ERR_PORT_INVALID'));
             return;
         }
         $this->configure();

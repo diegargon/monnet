@@ -1,6 +1,14 @@
+includes:
+    - phpstan-baseline.neon
+
 parameters:
     level: 3
+    fileExtensions:
+        - php
+
     excludePaths:
         - /myapp/tests
         - /myapp/vendor
         - /myapp/misc
+        - /myapp/ci-docker
+        - /myapp/scripts

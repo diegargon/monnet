@@ -48,7 +48,7 @@ class User
 
     /**
 
-     * @var type
+     * @var array
      */
     private $categories_state = [];
 

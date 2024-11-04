@@ -91,7 +91,7 @@ class Web
             }
             $pageData = $pageFunc($this->ctx);
         } else {
-            return false;
+            return [];
         }
 
 
