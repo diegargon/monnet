@@ -98,6 +98,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db->query("ALTER TABLE `hosts` DROP `system_type`;");
         $db->query("ALTER TABLE `hosts` DROP `os`;");
         $db->query("ALTER TABLE `hosts` DROP `codename`;");
+        $db->query("ALTER TABLE `hosts` DROP `relate_to_host`;");
         Log::info("Update version to 0.36 successful");
         $db->query("UPDATE prefs SET pref_value='0.36' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         //$db_version = 0.00;

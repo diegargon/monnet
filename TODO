@@ -11,10 +11,10 @@
 * El scan ports especificados por el usuario solo debe escaner los user=1
 * [DB 0.35v]hosts->scan identificar servicios  [option nmap [0 noscan  - 1 scan - 2 full scan]] - guardar con ports, los ports metidos con el user tienen user=1
 * cambiar diseño barra logout y demás, ver donde poner y quizas meter ahi stop_cli y username
-* host-details configuracion (select) enviar al cambiar 
-* clear cache dir 1week; 
+* host-details configuracion (select) enviar al cambiar
+* clear cache dir 1week;
 * perhost email warn
-* Bastionado / Antivirus / Compliant / VM en principio meterlos todos en un campo encoded json, 
+* Bastionado / Antivirus / Compliant / VM en principio meterlos todos en un campo encoded json,
    en resumen si eso configuracion no es checkboxes
 * Calcula Host on/off incluidos en las categorias mostradas para poner en la barra de abajo de estado
 * Users management
@@ -25,7 +25,6 @@
 * SNMP Mac
 * Boton/opcion para Stop_cli via preferencias (ver donde poner)
 * Links comprobacion si funciona y una pequeña on/off señal
-* [DB 0.35v] Items->relate_to_host, la idea es poder añadir un host relacionado con ese link, y ese link se mostrara en host-details
 * [DB 0.35v] Network weight
 * En el login opcionalmente que se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
 
