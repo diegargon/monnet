@@ -24,7 +24,7 @@ class Filters
             return false;
         }
 
-        return self::validateIntOrArray($_GET[$val], $size);
+        return self::varInt($_GET[$val], $size);
     }
 
     /**
@@ -40,7 +40,7 @@ class Filters
             return false;
         }
 
-        return self::validateIntOrArray($_POST[$val], $size);
+        return self::varInt($_POST[$val], $size);
     }
 
     /**
