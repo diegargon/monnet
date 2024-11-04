@@ -90,18 +90,21 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array|bool
             $hosts_view[$key]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
-        $manufacture = get_manufacture_data($cfg, $vhost['manufacture']);
-        $os = get_os_data($cfg, $vhost['os']);
-        $system_type = get_system_type_data($cfg, $vhost['system_type']);
-
-        $hosts_view[$key]['manufacture_name'] = $manufacture['name'];
-        $hosts_view[$key]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
-
-        $hosts_view[$key]['os_name'] = $os['name'];
-        $hosts_view[$key]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
-
-        $hosts_view[$key]['system_type_name'] = $system_type['name'];
-        $hosts_view[$key]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
+        if (!empty($vhost['manufacture'])) {
+            $manufacture = get_manufacture_data($cfg, $vhost['manufacture']);
+            $hosts_view[$key]['manufacture_name'] = $manufacture['name'];
+            $hosts_view[$key]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
+        }
+        if (!empty($vhost['os'])) {
+            $os = get_os_data($cfg, $vhost['os']);
+            $hosts_view[$key]['os_name'] = $os['name'];
+            $hosts_view[$key]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+        }
+        if (!empty($vhost['system_type'])) {
+            $system_type = get_system_type_data($cfg, $vhost['system_type']);
+            $hosts_view[$key]['system_type_name'] = $system_type['name'];
+            $hosts_view[$key]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
+        }
 
         $hosts_view[$key]['glow'] = '';
 
@@ -181,19 +184,21 @@ function get_host_detail_view_data(AppContext $ctx, $hid): array|bool
         $host['online_image'] = 'tpl/' . $theme . '/img/red2.png';
     }
 
-    $manufacture = get_manufacture_data($cfg, $host['manufacture']);
-    $os = get_os_data($cfg, $host['os']);
-
-    $system_type = get_system_type_data($cfg, $host['system_type']);
-
-    $host['manufacture_name'] = $manufacture['name'];
-    $host['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
-
-    $host['os_name'] = $os['name'];
-    $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
-
-    $host['system_type_name'] = $system_type['name'];
-    $host['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
+    if (!empty($host['manufacture'])) {
+        $manufacture = get_manufacture_data($cfg, $host['manufacture']);
+        $host['manufacture_name'] = $manufacture['name'];
+        $host['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
+    }
+    if (!empty($host['os'])) {
+        $os = get_os_data($cfg, $host['os']);
+        $host['os_name'] = $os['name'];
+        $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+    }
+    if (!empty($host['system_type'])) {
+        $system_type = get_system_type_data($cfg, $host['system_type']);
+        $host['system_type_name'] = $system_type['name'];
+        $host['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
+    }
 
     if (!empty($host['last_seen'])) {
         $host['f_last_seen'] = utc_to_user_tz($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);

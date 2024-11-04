@@ -11,7 +11,7 @@
 
 $DEBUG = 1;
 
-$cfg['monnet_version'] = 0.35;
+$cfg['monnet_version'] = 0.36;
 $cfg['app_name'] = 'monnet';
 
 /* Manufacture */
@@ -68,6 +68,8 @@ $cfg['manufacture'] = [
     49 => ['id' => 49, 'name' => 'Lexmark', 'img' => 'unknown.png'],
     50 => ['id' => 50, 'name' => 'Ricoh', 'img' => 'unknown.png'],
     51 => ['id' => 51, 'name' => 'Konica Minolta', 'img' => 'unknown.png'],
+    52 => ['id' => 52, 'name' => 'Chinese', 'img' => 'unknown.png'],
+    53 => ['id' => 53, 'name' => 'OpenWrt', 'img' => 'openwrt.png'],
 ];
 
 /* OS */
@@ -104,7 +106,10 @@ $cfg['os'] = [
     29 => ['id' => 29, 'name' => 'Windows 11', 'img' => 'windows-desktop.png'],
     30 => ['id' => 30, 'name' => 'DSM', 'img' => 'dsm.png'],
     31 => ['id' => 31, 'name' => 'ArubaOS', 'img' => 'unknown.png'],
-    32 => ['id' => 31, 'name' => 'VMware', 'img' => 'vmware.png'],
+    32 => ['id' => 32, 'name' => 'VMware', 'img' => 'vmware.png'],
+    33 => ['id' => 33, 'name' => 'Propietary', 'img' => 'unknown.png'],
+    34 => ['id' => 34, 'name' => 'Linux Embebbed', 'img' => 'embedded.png'],
+    35 => ['id' => 35, 'name' => 'Tasmota', 'img' => 'embedded.png'],
 ];
 
 /* Systems */
@@ -115,7 +120,7 @@ $cfg['system_type'] = [
     2 => ['id' => 2, 'name' => 'Linux Desktop', 'img' => 'linux-desktop.png'],
     3 => ['id' => 3, 'name' => 'Iphone', 'img' => 'iphone.png'],
     4 => ['id' => 4, 'name' => 'Android Phone', 'img' => 'android-phone.png'],
-    5 => ['id' => 5, 'name' => 'Ipad', 'img' => 'ipad.png'],
+    5 => ['id' => 5, 'name' => 'Apple Tablet', 'img' => 'ipad.png'],
     6 => ['id' => 6, 'name' => 'Android Tablet', 'img' => 'android-tablet.png'],
     7 => ['id' => 7, 'name' => 'TV', 'img' => 'tv.png'],
     8 => ['id' => 8, 'name' => 'Windows Server', 'img' => 'windows-server.png'],
@@ -127,7 +132,7 @@ $cfg['system_type'] = [
     14 => ['id' => 14, 'name' => 'Security Camera', 'img' => 'cam2.png'],
     15 => ['id' => 15, 'name' => 'NVR', 'img' => 'nvr.png'],
     16 => ['id' => 16, 'name' => 'IPTV/TVBox', 'img' => 'tvbox.png'],
-    17 => ['id' => 17, 'name' => 'Hypevisor', 'img' => 'hypervisor.png'],
+    17 => ['id' => 17, 'name' => 'Hypervisor', 'img' => 'hypervisor.png'],
     18 => ['id' => 18, 'name' => 'Router', 'img' => 'router.png'],
     19 => ['id' => 19, 'name' => 'Switch', 'img' => 'switch.png'],
     20 => ['id' => 20, 'name' => 'Mediacenter', 'img' => 'mediacenter.png'],

@@ -114,7 +114,8 @@ class Hosts
 
         foreach ($values as $kvalue => $vvalue) {
             if (!empty($kvalue) && isset($vvalue)) {
-                //TODO warning sign
+                //TODO warning signs
+                //Log change
                 if (
                     ($kvalue == 'mac' || $kvalue == 'mac_vendor' || $kvalue == 'hostname') &&
                     ($this->hosts[$id][$kvalue] != $vvalue)
@@ -124,13 +125,16 @@ class Hosts
                         . $this->hosts[$id][$kvalue] . '->' . $vvalue;
                     Log::logHost('LOG_WARNING', $id, $loghostmsg);
                 }
+                //Log category change
                 if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
                     Log::logHost('LOG_INFO', $id, 'Host ' . $this->hosts[$id]['display_name']
                         . ' change category ' . $this->hosts[$id]['category'] . '->' . $vvalue);
                     $this->host_cat_track[$this->hosts[$id]['category']]--;
                     $this->host_cat_track[$vvalue]++;
                 }
+
                 $this->hosts[$id][$kvalue] = $vvalue;
+                //misc is json field deal with it
                 if (in_array($kvalue, $misc_keys)) {
                     $misc_container[$kvalue] = $vvalue;
                 } else {
@@ -138,7 +142,22 @@ class Hosts
                 }
             }
         }
+
+        /*
+         * To update the field misc (json) we add to the array the other fields
+         * encode it and update all.
+         */
         if (valid_array($misc_container)) {
+            $host = $this->hosts[$id];
+            foreach ($host as $h_key => $h_value) {
+                if (
+                    in_array($h_key, $misc_keys) &&
+                    !in_array($h_key, $misc_container)
+                    ) {
+                    $misc_container[$h_key] = $h_value;
+                }
+            }
+
             $fvalues['misc'] = json_encode($misc_container);
         }
         if (valid_array($fvalues)) {
