@@ -10,10 +10,10 @@
 !defined('IN_WEB') ? exit : true;
 /**
  * Check if is array and is not empty
- * @param array|null $array
+ * @param mixed $array
  * @return bool
  */
-function valid_array(?array $array): bool
+function valid_array(mixed $array): bool
 {
     return is_array($array) && !empty($array);
 }
