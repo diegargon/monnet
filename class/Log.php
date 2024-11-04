@@ -30,7 +30,7 @@ class Log
     private static bool $console = false;
 
     /**
-     * @var array<string|int> $cfg
+     * @var array<int|string, mixed> $cfg
      */
     private static array $cfg;
     private static Database $db;

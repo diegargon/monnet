@@ -20,7 +20,7 @@ require_once $custom_cfg;
 define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');
 
 /**
- *  @var array<string|int> $cfg load in config.inc.php
+ *  @var array<int|string, mixed> $cfg load in config.inc.php
  */
 chdir($cfg['path']);
 

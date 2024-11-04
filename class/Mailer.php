@@ -20,7 +20,7 @@ class Mailer
     private AppContext $ctx;
 
     /**
-     * @var array<string|int> $cfg
+     * @var array<int|string, mixed> $cfg
      */
     private array $cfg;
 
