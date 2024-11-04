@@ -8,21 +8,33 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+/**
+ * Check if is array and is not empty
+ * @param array|null $array
+ * @return bool
+ */
 function valid_array(?array $array): bool
 {
-    if (!empty($array) && is_array($array) && count($array) > 0) {
-        return true;
-    }
-
-    return false;
+    return is_array($array) && !empty($array);
 }
 
+/**
+ * micro to ms
+ * @param float $microseconds
+ * @return float
+ */
 function micro_to_ms(float $microseconds): float
 {
 
     return round($microseconds * 1000, 3);
 }
 
+/**
+ * Format Bytes
+ * @param int $size
+ * @param int $precision
+ * @return string
+ */
 function formatBytes(int $size, int $precision = 2): string
 {
     for ($i = 0; ($size / 1024) > 0.9; $i++, $size /= 1024) {
