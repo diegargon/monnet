@@ -15,8 +15,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `categories` (
   `id` int NOT NULL,
   `cat_type` tinyint NOT NULL COMMENT '1 Hosts 2 Items',
-  `cat_name` varchar(32) NOT NULL,
-  `on` tinyint(1) NOT NULL DEFAULT '1',
+  `cat_name` char(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `disable` tinyint NOT NULL DEFAULT '0',
   `weight` tinyint NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -46,33 +45,35 @@ CREATE TABLE `hosts` (
   `ip` char(18) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `category` int NOT NULL DEFAULT '1',
   `mac` char(255) DEFAULT NULL,
-  `mac_vendor` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `highlight` tinyint(1) NOT NULL DEFAULT '0',
   `check_method` tinyint NOT NULL DEFAULT '1' COMMENT '1:ping 2:tcp ports',
-  `system` int DEFAULT NULL,
-  `os` int NOT NULL DEFAULT '0',
-  `os_distribution` int DEFAULT NULL,
-  `codename` char(255) DEFAULT NULL,
   `version` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `weight` tinyint NOT NULL DEFAULT '60',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '0:ok;1:warn;3:danger',
   `online` tinyint NOT NULL DEFAULT '0',
+  `online_change` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `access_method` tinyint NOT NULL DEFAULT '0' COMMENT '0:no;1:ssh..',
   `access_results` json DEFAULT NULL,
-  `timeout` tinyint DEFAULT NULL,
   `latency` float DEFAULT NULL,
   `disable` tinyint NOT NULL DEFAULT '0',
   `warn` tinyint NOT NULL DEFAULT '0',
   `warn_port` tinyint NOT NULL DEFAULT '0',
-  `warn_msg` varchar(255) NOT NULL,
+  `warn_msg` char(255) DEFAULT NULL,
+  `warn_mail` tinyint(1) NOT NULL DEFAULT '0',
+  `alert_msg` varchar(255) DEFAULT NULL,
+  `scan` tinyint NOT NULL DEFAULT '0',
+  `alert` tinyint NOT NULL DEFAULT '0',
   `fingerprint` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `network` tinyint NOT NULL DEFAULT '1',
   `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ports` varchar(15000) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
+  `ports` json DEFAULT NULL,
+  `token` char(255) DEFAULT NULL,
   `notes_id` int DEFAULT NULL,
+  `encrypted` text,
   `last_check` datetime DEFAULT NULL,
-  `last_seen` datetime DEFAULT NULL
+  `last_seen` datetime DEFAULT NULL,
+  `misc` json DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -85,7 +86,7 @@ CREATE TABLE `hosts_logs` (
   `id` int NOT NULL,
   `host_id` int NOT NULL,
   `level` tinyint NOT NULL DEFAULT '7',
-  `msg` varchar(255) NOT NULL,
+  `msg` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -97,12 +98,14 @@ CREATE TABLE `hosts_logs` (
 
 CREATE TABLE `items` (
   `id` int NOT NULL,
-  `cat_id` int NOT NULL,
+  `uid` int NOT NULL DEFAULT '0',
+  `cat_id` int NOT NULL DEFAULT '50',
   `type` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `title` char(255) NOT NULL,
   `conf` varchar(4096) NOT NULL,
   `weight` tinyint NOT NULL DEFAULT '60',
-  `highlight` tinyint NOT NULL DEFAULT '0'
+  `highlight` tinyint NOT NULL DEFAULT '0',
+  `online` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -125,10 +128,11 @@ CREATE TABLE `load_stats` (
 
 CREATE TABLE `networks` (
   `id` int NOT NULL,
-  `network` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `network` char(18) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `name` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `vlan` smallint DEFAULT '1',
   `scan` tinyint(1) NOT NULL DEFAULT '1',
+  `weight` tinyint NOT NULL DEFAULT '50',
   `disable` tinyint NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -140,6 +144,7 @@ CREATE TABLE `networks` (
 
 CREATE TABLE `notes` (
   `id` int NOT NULL,
+  `uid` int NOT NULL DEFAULT '0',
   `host_id` int NOT NULL,
   `update` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci
@@ -179,8 +184,8 @@ CREATE TABLE `stats` (
 
 CREATE TABLE `system_logs` (
   `id` int NOT NULL,
-  `level` tinyint NOT NULL,
-  `msg` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `level` tinyint UNSIGNED NOT NULL,
+  `msg` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -196,7 +201,9 @@ CREATE TABLE `users` (
   `email` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `password` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
   `sid` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `timezone` varchar(32) DEFAULT NULL,
+  `timezone` char(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `theme` char(12) DEFAULT NULL,
+  `lang` char(12) DEFAULT NULL,
   `isAdmin` tinyint NOT NULL DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -204,7 +211,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES
 (1, 0, 'cli_last_run', '0'),
-(2, 0, 'monnet_version', '0.32'),
+(2, 0, 'monnet_version', '0.36'),
 (3, 0, 'cron_quarter', '0'),
 (4, 0, 'cron_hourly', '0'),
 (5, 0, 'cron_halfday', '0'),
@@ -214,20 +221,22 @@ INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES
 (9, 0, 'cron_five', '0'),
 (10, 0, 'cron_daily', '0');
 
-INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `on`, `disable`, `weight`) VALUES
-(1, 1, 'L_UNCATEGORIZED', 1, 0, 0),
-(2, 1, 'L_NETWORK', 1, 0, 0),
-(3, 1, 'L_SERVERS', 1, 0, 0),
-(4, 1, 'L_VM', 1, 0, 0),
-(5, 1, 'L_DESKTOP', 1, 0, 0),
-(6, 1, 'L_IOT', 1, 0, 0),
-(7, 1, 'L_CAMERAS', 1, 0, 0),
-(8, 1, 'L_TV', 1, 0, 0),
-(9, 1, 'L_PHONE', 1, 0, 0),
-(50, 2, 'L_OTHERS', 1, 0, 0),
-(51, 2, 'L_WEBS', 1, 0, 0),
-(52, 2, 'L_INTERNAL', 1, 0, 0),
-(100, 3, 'L_SEARCH_ENGINE', 1, 0, 0);
+INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `disable`, `weight`) VALUES
+(1, 1, 'L_UNCATEGORIZED', 0, 0),
+(2, 1, 'L_NETWORK', 0, 0),
+(3, 1, 'L_SERVERS', 0, 0),
+(4, 1, 'L_VM', 0, 0),
+(5, 1, 'L_DESKTOP', 0, 0),
+(6, 1, 'L_IOT', 0, 0),
+(7, 1, 'L_CAMERAS', 0, 0),
+(8, 1, 'L_TV', 0, 0),
+(9, 1, 'L_PHONE', 0, 0),
+(10, 1, 'L_PRINTERS', 0, 0),
+(50, 2, 'L_OTHERS', 0, 0),
+(51, 2, 'L_WEBS', 0, 0),
+(52, 2, 'L_INTERNAL', 0, 0),
+(100, 3, 'L_SEARCH_ENGINE', 0, 0),
+(108, 1, 'test', 0, 0);
 
 INSERT INTO `items` (`id`, `cat_id`, `type`, `title`, `conf`, `weight`, `highlight`) VALUES
 (1, 20, 'search_engine', 'Google', '{\"url\":\"https:\\/\\/google.com\\/search\",\"name\":\"q\"}', 60, 0),
@@ -259,7 +268,8 @@ ALTER TABLE `hosts`
 -- Indexes for table `hosts_logs`
 --
 ALTER TABLE `hosts_logs`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_level_host_date` (`level`,`host_id`,`date`);
 
 --
 -- Indexes for table `items`
@@ -278,7 +288,9 @@ ALTER TABLE `load_stats`
 -- Indexes for table `networks`
 --
 ALTER TABLE `networks`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `network` (`network`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `notes`
@@ -303,7 +315,8 @@ ALTER TABLE `stats`
 -- Indexes for table `system_logs`
 --
 ALTER TABLE `system_logs`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_level_host_date` (`level`,`date`);
 
 --
 -- Indexes for table `users`
@@ -320,7 +333,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `cmd`
@@ -344,13 +357,13 @@ ALTER TABLE `hosts_logs`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `networks`
 --
 ALTER TABLE `networks`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `notes`
@@ -362,7 +375,7 @@ ALTER TABLE `notes`
 -- AUTO_INCREMENT for table `prefs`
 --
 ALTER TABLE `prefs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `system_logs`
