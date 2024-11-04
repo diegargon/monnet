@@ -1,9 +1,9 @@
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 
 function changeTab(tabId) {
@@ -34,7 +34,7 @@ function changeBookmarksTab(tabId) {
     // Resaltar el botón de la pestaña seleccionada
     const selectedTab = document.querySelector(`button[onclick="changeBookmarksTab('${tabId}')"]`);
     selectedTab.classList.add('active');
-    refresh('change_bookmarks_tab', tabId);
+    submitCommand('change_bookmarks_tab', tabId);
 }
 
 function closeStdContainer() {
@@ -129,7 +129,7 @@ $(document).ready(function () {
         event.preventDefault(); // Evitar la acción predeterminada del doble clic
 
         catID = $(this).data('catid');
-        refresh('show_host_only_cat', catID);
+        submitCommand('show_host_only_cat', catID);
         // Reiniciar la variable clicked
         clicked = false;
         clearTimeout(timer); // Limpiar el temporizador para evitar que se ejecute el clic normal
@@ -148,7 +148,7 @@ $(document).ready(function () {
         timer = setTimeout(function () {
             // Reiniciar clicked después de un intervalo de tiempo
             clicked = false;
-            refresh('show_host_cat', catID);
+            submitCommand('show_host_cat', catID);
         }, 300);
 
     });
@@ -164,7 +164,7 @@ $(document).ready(function () {
         if (this.checked) {
             value = 1;
         }
-        refresh('setHighlight', value, host_id);
+        submitCommand('setHighlight', value, host_id);
     });
 
     $(document).on("change", "#checkports_enabled", function () {
@@ -174,21 +174,21 @@ $(document).ready(function () {
         if (this.checked) {
             value = 2;
         }
-        refresh('setCheckPorts', value, host_id);
+        submitCommand('setCheckPorts', value, host_id);
     });
 
     $(document).on("click", "#submitPorts", function () {
         var portsValue = $('#checkports').val();
         var host_id = $('#host_id').val();
         if (portsValue && host_id) {
-            refresh('submitScanPorts', portsValue, host_id);
+            submitCommand('submitScanPorts', portsValue, host_id);
         }
     });
     $(document).on("click", "#submitTitle", function () {
         var titleValue = $('#host-title').val();
         var host_id = $('#host_id').val();
         if (titleValue && host_id) {
-            refresh('submitTitle', titleValue, host_id);
+            submitCommand('submitTitle', titleValue, host_id);
         }
     });
 
@@ -196,7 +196,7 @@ $(document).ready(function () {
         var catValue = $('#hostcat_id').val();
         var host_id = $('#host_id').val();
         if (catValue && host_id) {
-            refresh('submitCat', catValue, host_id);
+            submitCommand('submitCat', catValue, host_id);
         }
     });
 
@@ -204,69 +204,69 @@ $(document).ready(function () {
         var mValue = $('#manufacture').val();
         var host_id = $('#host_id').val();
         if (mValue && host_id) {
-            refresh('submitManufacture', mValue, host_id);
+            submitCommand('submitManufacture', mValue, host_id);
         }
     });
     $(document).on("click", "#submitOS", function () {
         var osValue = $('#os').val();
         var host_id = $('#host_id').val();
         if (osValue && host_id) {
-            refresh('submitOS', osValue, host_id);
+            submitCommand('submitOS', osValue, host_id);
         }
     });
     $(document).on("click", "#submitSystemType", function () {
         var stValue = $('#system_type').val();
         var host_id = $('#host_id').val();
         if (stValue && host_id) {
-            refresh('submitSystemType', stValue, host_id);
+            submitCommand('submitSystemType', stValue, host_id);
         }
     });
     $(document).on("click", "#submitHostToken", function () {
         var host_id = $('#host_id').val();
         if (host_id) {
-            refresh('submitHostToken', host_id);
+            submitCommand('submitHostToken', host_id);
         }
     });
 
     $(document).on("click", "#submitHostsCat", function () {
         var value = $('#hostsCat').val();
         if (value) {
-            refresh('submitHostsCat', value);
+            submitCommand('submitHostsCat', value);
         }
     });
 
     $(document).on("click", "#submitBookmarkCat", function () {
         var value = $('#bookmarkCat').val();
         if (value) {
-            refresh('submitBookmarkCat', value);
+            submitCommand('submitBookmarkCat', value);
         }
     });
 
     $(document).on("click", "#submitHost", function () {
         var value = $('#addedHost').val();
         if (value) {
-            refresh('submitHost', value);
+            submitCommand('submitHost', value);
         }
     });
     $(document).on("click", "#submitOwner", function () {
         var ownerValue = $('#host_owner').val();
         var host_id = $('#host_id').val();
         if (ownerValue && host_id) {
-            refresh('submitOwner', ownerValue, host_id);
+            submitCommand('submitOwner', ownerValue, host_id);
         }
     });
     $(document).on("click", "#submitAccessLink", function () {
         var accessLinkValue = $('#access_link').val();
         var host_id = $('#host_id').val();
         if (accessLinkValue && host_id) {
-            refresh('submitAccessLink', accessLinkValue, host_id);
+            submitCommand('submitAccessLink', accessLinkValue, host_id);
         }
     });
     $(document).on("click", "#submitHostTimeout", function () {
         var timeoutValue = $('#host_timeout').val();
         var host_id = $('#host_id').val();
         if (timeoutValue && host_id) {
-            refresh('submitHostTimeout', timeoutValue, host_id);
+            submitCommand('submitHostTimeout', timeoutValue, host_id);
         }
     });
     $(document).on("click", "#submitNetwork", function () {
@@ -279,7 +279,7 @@ $(document).ready(function () {
         fields.networkVLAN = parseInt($('#network_vlan').val());
         if (fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {
             json_fields = JSON.stringify(fields);
-            refresh('addNetwork', json_fields);
+            submitCommand('addNetwork', json_fields);
         }
 
     });
@@ -296,7 +296,7 @@ $(document).ready(function () {
 
         if (fields.bookmarkName !== "" && fields.cat_id !== "" && fields.urlip !== "" && fields.image_type !== "") {
             json_fields = JSON.stringify(fields);
-            refresh('addBookmark', json_fields);
+            submitCommand('addBookmark', json_fields);
         } else {
             $('#error_msg').html('Empty field');
         }
@@ -327,9 +327,9 @@ $(document).ready(function () {
 //Send event to refresher
             if ($(this).hasClass('option_network')) {
                 if (this.checked) {
-                    refresh('network_select', this.value);
+                    submitCommand('network_select', this.value);
                 } else {
-                    refresh('network_unselect', this.value);
+                    submitCommand('network_unselect', this.value);
                 }
             }
 //END Netrwork Checkboxes

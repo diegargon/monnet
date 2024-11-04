@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -62,7 +62,7 @@
             </div> <!--host-controls-right -->
             <div class="host-controls-right">
                 <?php if (!empty($tdata['host_details']['mac']) && empty($tdata['host_details']['online'])): ?>
-                    <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image"
+                    <input onClick="submitCommand('power_on', <?= $tdata['host_details']['id'] ?>)" type="image"
                            class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png"
                            alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
                 <?php endif; ?>
@@ -70,16 +70,16 @@
                     !empty($tdata['host_details']['access_method']) &&
                     !empty($tdata['host_details']['online'])
                     ): ?>
-                    <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image"
+                    <input onClick="submitCommand('power_off', <?= $tdata['host_details']['id'] ?>)" type="image"
                            class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png"
                            alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
                 <?php endif; ?>
                 <?php if (!empty($tdata['host_details']['access_method'])): ?>
-                    <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image"
+                    <input onClick="submitCommand('reboot', <?= $tdata['host_details']['id'] ?>)" type="image"
                            class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png"
                            alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
                 <?php endif; ?>
-                <input onClick="confirmRefresh('remove_host',<?= $tdata['host_details']['id'] ?>)" type="image"
+                <input onClick="confirmSubmit('remove_host',<?= $tdata['host_details']['id'] ?>)" type="image"
                        class="action-icon remove" src="tpl/<?= $cfg['theme'] ?>/img/remove.png"
                        alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>"/>
             </div> <!--host-controls-right -->

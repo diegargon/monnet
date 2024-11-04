@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -23,7 +23,7 @@
         }
     }
 
-    function submit(command, command_value, object_id = null) {
+    function submitCommand(command, command_value, object_id = null) {
         var requestData = {order: command, order_value: command_value};
 
         if (object_id !== null) {
@@ -37,7 +37,7 @@
             command_value = false;
         }
         //console.log(requestData);
-        $.post('refresher.php', requestData)
+        $.post('submitter.php', requestData)
                 .done(function (data, textStatus, xhr) {
                     var contentType = xhr.getResponseHeader('Content-Type');
                     //console.log(requestData);
@@ -242,11 +242,5 @@
                 .fail(function (xhr, status, error) {
                     console.error('Error en la solicitud AJAX:', status, error);
                 });
-
-        //Prevent launch another timeout on command
-        if (command === false) {
-            setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);
-    }
-
     }
 </script>
