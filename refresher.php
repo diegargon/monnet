@@ -18,9 +18,9 @@ header('Content-Type: application/json; charset=UTF-8');
  * @var Database|null $db An instance of Database or null if not defined
  * @var array $cfg
  */
-require_once('include/common.inc.php');
-require_once('include/usermode.inc.php');
-require_once('include/refresher-func.php');
+require_once 'include/common.inc.php';
+require_once 'include/usermode.inc.php';
+require_once 'include/refresher-func.php';
 
 $tdata = [];
 $force_host_reload = 0;

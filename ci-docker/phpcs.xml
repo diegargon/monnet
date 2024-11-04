@@ -9,30 +9,20 @@
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
 
     </rule>
-
-    <rule ref="Squiz">
-
-        <!-- To address at a later point in time. -->
-        <!-- <exclude name="Generic.Files.LineLength.TooLong"/> -->
-
-        <!-- Ignoring a number of whitespace issues around blank lines. -->
-
-        <exclude name="Squiz.WhiteSpace.FunctionSpacing.After"/>
-        <exclude name="Squiz.WhiteSpace.FunctionSpacing.Before"/>
-        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen"/>
-        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose"/>
-        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace"/>
-
-        <!-- Allow for the file docblock on the line directly following the PHP open tag.
-             As the sniff in PHPCS does not use modular error codes (yet - see upstream PR #2729),
-             the complete error code needs to be disabled, not just the bit involving
-             the file docblocks.
-        -->
-        <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/>
-
-        <!-- All nice and good, but too much of a fuss for the outer array of nested arrays. -->
-        <!-- <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned"/> -->
-    </rule>
+    <!--
+        <rule ref="Squiz">
+            <exclude name="Squiz.WhiteSpace.FunctionSpacing.After"/>
+            <exclude name="Squiz.WhiteSpace.FunctionSpacing.Before"/>
+            <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen"/>
+            <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose"/>
+            <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace"/>
+            <exclude name="Squiz.Sniffs.Commenting.FileCommentSniff"/>
+            <exclude name="Squiz.Arrays.ArrayDeclaration.MultipleValues"/>
+            <exclude name=""/>
+            <exclude name=""/>
+            <exclude name=""/>
+        </rule>
+    -->
     <arg name="extensions" value="php"/>
     <arg name="parallel" value="6"/>
     <arg name="colors"/>
