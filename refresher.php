@@ -379,11 +379,17 @@ if (
             $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if (!Filters::varUrl($new_bookmark['urlip']) || Filters::varIP($new_bookmark['urlip'])) {
+        if (
+            !Filters::varUrl($new_bookmark['urlip']) ||
+            Filters::varIP($new_bookmark['urlip'])
+        ) {
             $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if (!(Filters::varInt($new_bookmark['weight'])) && (Filters::varInt($new_bookmark['weight']) != 0)) {
+        if (
+            (!Filters::varInt($new_bookmark['weight'])) &&
+            (Filters::varInt($new_bookmark['weight']) != 0)
+        ) {
             $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
