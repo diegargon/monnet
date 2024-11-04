@@ -236,6 +236,15 @@ function get_host_detail_view_data(AppContext $ctx, $hid): array|bool
             $host['ports_formated'] .= ($index === $total_elements) ? '' : ',';
         }
     }
+    // Load Average Cacl
+    if (
+        !empty($host['loadavg'][1]) &&
+        !empty($host['ncpu']) &&
+        is_numeric($host['loadavg'][1])
+    ) {
+        $host['f_loadavg'] = 100 * $host['loadavg'][1];
+        $host['f_maxload'] = 100 * $host['ncpu'];
+    }
 
     /*
       $host['deploy'] = [];

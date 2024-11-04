@@ -13,5 +13,5 @@ RUN composer global require "squizlabs/php_codesniffer=*"
 ENV PATH="$PATH:/root/.composer/vendor/bin"
 
 #CMD ["phpcs", "--standard=/myapp/ci-docker/phpcs.xml", "."]
-#CMD ["phpcs", "--standard=/myapp/ci-docker/phpcs.xml", "--extensions=php", "."]
-CMD ["phpcs", "--standard=/myapp/ci-docker/phpcs.xml", "--extensions=php", "--ignore=*.tpl.php", "."]
+CMD ["phpcs", "--standard=/myapp/ci-docker/phpcs.xml", "--extensions=php", "."]
+#CMD ["phpcs", "--standard=/myapp/ci-docker/phpcs.xml", "--extensions=php", "--ignore=*.tpl.php", "."]

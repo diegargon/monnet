@@ -623,8 +623,7 @@ class Filters
         string $validSpecial,
         int $max_size = null,
         int $min_size = null
-    ): string|bool
-    {
+    ): string|bool {
         if (empty($_POST[$val])) {
             return false;
         }
@@ -637,8 +636,7 @@ class Filters
         string $validSpecial,
         int $max_size = null,
         int $min_size = null
-    ): string|bool
-    {
+    ): string|bool {
         if (empty($_GET[$val])) {
             return false;
         }
@@ -651,8 +649,7 @@ class Filters
         string $validSpecialChars,
         int $max_size = null,
         int $min_size = null
-    ): string|bool
-    {
+    ): string|bool {
         // Define el conjunto predeterminado de caracteres (AZaz y números)
         $validChars = 'A-Za-z0-9';
 

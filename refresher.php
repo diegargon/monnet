@@ -383,7 +383,7 @@ if (
             $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if (!(Filters::varInt($new_bookmark['weight'])) && Filters::varInt($new_bookmark['weight']) != 0) {
+        if (!(Filters::varInt($new_bookmark['weight'])) && (Filters::varInt($new_bookmark['weight']) != 0)) {
             $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 

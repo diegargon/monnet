@@ -153,7 +153,7 @@ class Hosts
                 if (
                     in_array($h_key, $misc_keys) &&
                     !in_array($h_key, $misc_container)
-                    ) {
+                ) {
                     $misc_container[$h_key] = $h_value;
                 }
             }

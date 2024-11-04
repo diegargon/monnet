@@ -216,43 +216,27 @@
         </div>
         <!-- /TAB1 -->
         <!-- TAB2 DETAILS -->
-        <?php
-        if (!empty($tdata['host_details']['access_method'])) {
-            ?>
+        <?php if (!empty($tdata['host_details']['access_method'])) { ?>
             <div id="tab2" class="host-details-tab-content">
                 <div id="progress_bars">
-                    <?php
-                    if (
-                        !empty($tdata['host_details']['loadavg'][1]) &&
-                        is_numeric($tdata['host_details']['loadavg'][1])
-                        ) {
-                            $loadavg = 100 * $tdata['host_details']['loadavg'][1];
-                            $max_load = 100 * $tdata['host_details']['ncpu'];
-                        ?>
+                    <?php if (!empty($tdata['host_details']['f_loadavg'])): ?>
                         <label for="load_avg"><?= $lng['L_LOAD'] ?>:</label>
-                        <progress id="load_avg" value="<?= $loadavg ?>"
-                                  max="<?= $max_load ?>"  data-label="<?= $loadavg ?>">
+                        <progress id="load_avg" value="<?= $tdata['host_details']['f_loadavg'] ?>"
+                                  max="<?= $tdata['host_details']['f_maxload'] ?>"  data-label="<?= $tdata['host_details']['f_loadavg'] ?>">
                         </progress>
-                    <?php } ?>
-                    <?php
-                    if (!empty($tdata['host_details']['mem'])) {
+                    <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['mem'])):
                         $mem = $tdata['host_details']['mem'];
                         ?>
                         <label for="mem"><?= $lng['L_MEM'] ?>:</label>
-                        <progress id="mem" value="<?= $mem['mem_used'] ?>"
-                                  max="<?= $mem['mem_available'] ?>">
-                        </progress>
-                    <?php } ?>
-                    <?php
-                    if (!empty($tdata['host_details']['disks']) && count($tdata['host_details']['disks']) > 0) {
-                        foreach ($tdata['host_details']['disks'] as $disk) {
-                            ?>
+                        <progress id="mem" value="<?= $mem['mem_used'] ?>" max="<?= $mem['mem_available'] ?>"></progress>
+                    <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['disks']) && count($tdata['host_details']['disks']) > 0): ?>
+                        <?php foreach ($tdata['host_details']['disks'] as $disk): ?>
                             <label class="disk"><?= $disk['mounted'] ?>:</label>
                             <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
-                            <?php
-                        }
-                    }
-                    ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div> <!-- progress container -->
             </div>
         <?php } ?>
