@@ -28,100 +28,103 @@
                     <button id="tab1_btn" class="host-details-tabs-head"
                             onclick="changeTab('tab1')"><?= $lng['L_OVERVIEW'] ?>
                     </button>
-                    <?php
-                    if (!empty($tdata['host_details']['access_method'])) {
-                        ?>
+                    <?php if (!empty($tdata['host_details']['access_method'])): ?>
                         <button id="tab2_btn" class="host-details-tabs-head"
                                 onclick="changeTab('tab2')"><?= $lng['L_STATUS'] ?>
                         </button>
-                    <?php } ?>
+                    <?php endif; ?>
                     <button id="tab3_btn" class="host-details-tabs-head"
                             onclick="changeTab('tab3')"><?= $lng['L_NOTES'] ?>
                     </button>
-                    <?php
-                    if (!empty($tdata['host_details']['host_logs'])) {
-                        ?>
+                    <?php if (!empty($tdata['host_details']['host_logs'])): ?>
                         <button id="tab9_btn" class="host-details-tabs-head"
                                 onclick="changeTab('tab9')"><?= $lng['L_LOG'] ?>
                         </button>
-                    <?php } ?>
+                    <?php endif; ?>
 
-                    <?php
-                    if (!empty($tdata['host_details']['ping_graph'])) {
-                        ?>
+                    <?php if (!empty($tdata['host_details']['ping_graph'])): ?>
                         <button id="tab10_btn" class="host-details-tabs-head"
                                 onclick="changeTab('tab10')"><?= $lng['L_METRICS'] ?>
                         </button>
-                    <?php } ?>
-                    <button id="tab11_btn" class="host-details-tabs-head" onclick="changeTab('tab11')"><?= $lng['L_ALARMS'] ?>
+                    <?php endif; ?>
+                    <button id="tab11_btn" class="host-details-tabs-head" onclick="changeTab('tab11')">
+                        <?= $lng['L_ALARMS'] ?>
                     </button>
-                    <button id="tab12_btn" class="host-details-tabs-head" onclick="changeTab('tab12')"><?= $lng['L_CONFIG'] ?></button>
+                    <button id="tab12_btn" class="host-details-tabs-head" onclick="changeTab('tab12')">
+                        <?= $lng['L_CONFIG'] ?>
+                    </button>
                     <!--
-                    <button id="tabx_btn" class="host-details-tabs-head" onclick="changeTab('tab2')"><?= $lng['L_DEPLOYS'] ?></button>
+                    <button id="tabx_btn" class="host-details-tabs-head" onclick="changeTab('tab2')">
+                        <?= $lng['L_DEPLOYS'] ?>
+                    </button>
                     -->
                 </div>
             </div> <!--host-controls-right -->
             <div class="host-controls-right">
-                <?php
-                if (!empty($tdata['host_details']['mac']) && empty($tdata['host_details']['online'])) {
-                    ?>
-                    <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png" alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
-                <?php } ?>
-                <?php
-                if (!empty($tdata['host_details']['access_method']) && !empty($tdata['host_details']['online'])) {
-                    ?>
-                    <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png" alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
-                <?php } ?>
-                <?php
-                if (!empty($tdata['host_details']['access_method'])) {
-                    ?>
-                    <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image" class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png" alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
-                <?php } ?>
-                <input onClick="confirmRefresh('remove_host',<?= $tdata['host_details']['id'] ?>)" type="image"  class="action-icon remove" src="tpl/<?= $cfg['theme'] ?>/img/remove.png" alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>"/>
+                <?php if (!empty($tdata['host_details']['mac']) && empty($tdata['host_details']['online'])): ?>
+                    <input onClick="refresh('power_on', <?= $tdata['host_details']['id'] ?>)" type="image"
+                           class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png"
+                           alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
+                <?php endif; ?>
+                <?php if (
+                    !empty($tdata['host_details']['access_method']) &&
+                    !empty($tdata['host_details']['online'])
+                    ): ?>
+                    <input onClick="refresh('power_off', <?= $tdata['host_details']['id'] ?>)" type="image"
+                           class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png"
+                           alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
+                <?php endif; ?>
+                <?php if (!empty($tdata['host_details']['access_method'])): ?>
+                    <input onClick="refresh('reboot', <?= $tdata['host_details']['id'] ?>)" type="image"
+                           class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png"
+                           alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
+                <?php endif; ?>
+                <input onClick="confirmRefresh('remove_host',<?= $tdata['host_details']['id'] ?>)" type="image"
+                       class="action-icon remove" src="tpl/<?= $cfg['theme'] ?>/img/remove.png"
+                       alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>"/>
             </div> <!--host-controls-right -->
 
         </div>
         <!-- SECOND HEADED BAR -->
         <div class="host-details-main">
-            <img class="hosts-item" src="<?= $tdata['host_details']['online_image'] ?>" alt=="<?= $tdata['host_details']['title_online'] ?>" title="<?= $tdata['host_details']['title_online'] ?>"/>
-            <?php
-            if (!empty($tdata['host_details']['manufacture_image'])) {
-                ?>
-                <img class="fab" src="<?= $tdata['host_details']['manufacture_image'] ?>" alt="<?= $tdata['host_details']['manufacture_name'] ?>" title="<?= $tdata['host_details']['manufacture_name'] ?>"/>
-            <?php } ?>
+            <img class="hosts-item" src="<?= $tdata['host_details']['online_image'] ?>"
+                 alt=="<?= $tdata['host_details']['title_online'] ?>"
+                 title="<?= $tdata['host_details']['title_online'] ?>"/>
+            <?php if (!empty($tdata['host_details']['manufacture_image'])) : ?>
+                <img class="fab" src="<?= $tdata['host_details']['manufacture_image'] ?>"
+                     alt="<?= $tdata['host_details']['manufacture_name'] ?>"
+                     title="<?= $tdata['host_details']['manufacture_name'] ?>"/>
+            <?php endif; ?>
 
-            <?php
-            if (!empty($tdata['host_details']['os_image'])) {
-                ?>
-                <img class="fab" src="<?= $tdata['host_details']['os_image'] ?>" alt="<?= $tdata['host_details']['os_name'] ?>" title="<?= $tdata['host_details']['os_name'] ?>"/>
-            <?php } ?>
+            <?php if (!empty($tdata['host_details']['os_image'])): ?>
+                <img class="fab" src="<?= $tdata['host_details']['os_image'] ?>"
+                     alt="<?= $tdata['host_details']['os_name'] ?>"
+                     title="<?= $tdata['host_details']['os_name'] ?>"/>
+            <?php endif; ?>
 
-            <?php
-            if (!empty($tdata['host_details']['system_type_image'])) {
-                ?>
-                <img class="fab" src="<?= $tdata['host_details']['system_type_image'] ?>" alt="<?= $tdata['host_details']['system_type_name'] ?>" title="<?= $tdata['host_details']['system_type_name'] ?>"/>
-            <?php } ?>
+            <?php if (!empty($tdata['host_details']['system_type_image'])): ?>
+                <img class="fab" src="<?= $tdata['host_details']['system_type_image'] ?>"
+                     alt="<?= $tdata['host_details']['system_type_name'] ?>"
+                     title="<?= $tdata['host_details']['system_type_name'] ?>"/>
+            <?php endif; ?>
             <div class="host-item"><?= $tdata['host_details']['title'] ?> </div>
-            <?php
-            if (!empty($tdata['host_details']['hostname'])) {
-                ?>
+            <?php if (!empty($tdata['host_details']['hostname'])): ?>
                 <div class="host-item"><?= $tdata['host_details']['hostname'] ?> </div>
-            <?php } ?>
+            <?php endif; ?>
 
         </div> <!-- host-details-main -->
         <div class="host-details-main">
             <div class="host-item">id <?= $tdata['host_details']['id'] ?></div>
             <div class="host-item"><?= $tdata['host_details']['ip'] ?></div>
-            <?php
-            if (!empty($tdata['host_details']['mac'])) {
-                ?>
+            <?php if (!empty($tdata['host_details']['mac'])): ?>
                 <div class="host-item"><?= $tdata['host_details']['mac'] ?> </div>
-            <?php } ?>
-            <?php
-            if (!empty($tdata['host_details']['mac_vendor']) && $tdata['host_details']['mac_vendor'] != '-') {
-                ?>
+            <?php endif; ?>
+            <?php if (
+                !empty($tdata['host_details']['mac_vendor']) &&
+                $tdata['host_details']['mac_vendor'] != '-'
+                ): ?>
                 <div class="host-item"><?= $tdata['host_details']['mac_vendor'] ?> </div>
-            <?php } ?>
+            <?php endif; ?>
         </div>
         <!-- THIRD HEADED BAR -->
         <?php
@@ -132,15 +135,11 @@
                 foreach ($tdata['host_details']['ports'] as $port) {
                     ?>
                     <div class="port_container">
-                        <?php
-                        if ($port['online']) {
-                            ?>
+                        <?php if ($port['online']): ?>
                             <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
-                            <?php
-                        } else {
-                            ?>
+                        <?php else: ?>
                             <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
-                        <?php } ?>
+                        <?php endif; ?>
                         <div class="host_port_name"><?= $port['name'] ?></div>
                         <div class="host_port">(<?= $port['n'] ?>)</div>
                     </div> <!-- port container -->
@@ -152,63 +151,65 @@
         <div id="tab1" class="host-details-tab-content">
             <div class="">
                 <div class="">
-                    <label class="resume_label"><?= $lng['L_DISPLAY_NAME'] ?>:</label>
+                    <label class="resume_label"><?= $lng['L_NAME'] ?>:</label>
                     <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
                 </div>
-                )
                 <div class"">
                     <div><?= $lng['L_NETWORK'] ?>: <?= $tdata['host_details']['net_cidr'] ?></div>
                     <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
                     <div><?= $lng['L_VLAN'] ?>: <?= $tdata['host_details']['network_vlan'] ?></div>
                 </div>
-                <?php
-                if (!empty($tdata['host_details']['owner'])) {
-                    ?>
+                <?php if (!empty($tdata['host_details']['owner'])): ?>
                     <div class="">
                         <label class="resume_label"><?= $lng['L_OWNER'] ?>:</label>
                         <span class="resume_field"><?= $tdata['host_details']['owner'] ?></span>
                     </div>
-                <?php } ?>
+                <?php endif; ?>
                 <div class="">
                     <label class="resume_label"><?= $lng['L_ADDED'] ?>:</label>
-                    <span class="resume_field"><?= $tdata['host_details']['formated_creation_date'] ?></span>
+                    <span class="resume_field">
+                        <?= $tdata['host_details']['formated_creation_date'] ?>
+                    </span>
                 </div>
-                <?php
-                if (!empty($tdata['host_details']['uptime']) && is_array($tdata['host_details']['uptime'])) {
-                    ?>
+                <?php if (
+                    !empty($tdata['host_details']['uptime']) &&
+                    is_array($tdata['host_details']['uptime'])
+                    ): ?>
                     <div class="" >
                         <label class="resume_label"><?= $lng['L_UPTIME'] ?>:</label>
-                        <span class="resume_field"><?= $tdata['host_details']['uptime']['datetime'] ?></span>
+                        <span class="resume_field">
+                            <?= $tdata['host_details']['uptime']['datetime'] ?>
+                        </span>
                     </div>
-                <?php } ?>
-                <?php
-                if (!empty($tdata['host_details']['latency_ms'])) {
-                    ?>
+                <?php endif; ?>
+                <?php if (!empty($tdata['host_details']['latency_ms'])): ?>
                     <div class="" >
                         <label class="resume_label"><?= $lng['L_LATENCY'] ?>:</label>
                         <span class="resume_field"><?= $tdata['host_details']['latency_ms'] ?></span>
                     </div>
-                <?php } ?>
+                <?php endif; ?>
 
-                <?php
-                if (empty($tdata['host_details']['online']) && !empty($tdata['host_details']['f_last_seen'])) {
-                    ?>
+                <?php if (
+                    empty($tdata['host_details']['online']) &&
+                    !empty($tdata['host_details']['f_last_seen'])
+                    ): ?>
                     <div>
                         <label class="resume_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
-                        <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?> </span>
+                        <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
                     </div>
-                <?php } ?>
-                <?php
-                if (!empty($tdata['host_details']['f_last_check'])) {
-                    ?>
+                <?php endif; ?>
+
+                <?php if (!empty($tdata['host_details']['f_last_check'])): ?>
                     <div>
                         <label class="resume_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
-                        <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?> </span>
+                        <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
                     </div>
-                <?php } ?>
+                <?php endif; ?>
                 <?php if (!empty($tdata['host_details']['access_link'])): ?>
                     <div>
-                        <a href="<?= $tdata['host_details']['access_link'] ?>" target="_blank"><?= $tdata['host_details']['access_link'] ?></a>
+                        <a href="<?= $tdata['host_details']['access_link'] ?>"
+                           target="_blank"><?= $tdata['host_details']['access_link'] ?>
+                        </a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -221,10 +222,12 @@
             <div id="tab2" class="host-details-tab-content">
                 <div id="progress_bars">
                     <?php
-                    if (!empty($tdata['host_details']['loadavg'][1]) &&
-                        is_numeric($tdata['host_details']['loadavg'][1])) {
-                        $loadavg = 100 * $tdata['host_details']['loadavg'][1];
-                        $max_load = 100 * $tdata['host_details']['ncpu'];
+                    if (
+                        !empty($tdata['host_details']['loadavg'][1]) &&
+                        is_numeric($tdata['host_details']['loadavg'][1])
+                        ) {
+                            $loadavg = 100 * $tdata['host_details']['loadavg'][1];
+                            $max_load = 100 * $tdata['host_details']['ncpu'];
                         ?>
                         <label for="load_avg"><?= $lng['L_LOAD'] ?>:</label>
                         <progress id="load_avg" value="<?= $loadavg ?>"
@@ -400,10 +403,12 @@
                             <?php foreach ($cfg['manufacture'] as $manufacture): ?>
                                 <?php
                                 $selected = '';
-                                if (!empty($tdata['host_details']['manufacture']) && ($manufacture['id'] == $tdata['host_details']['manufacture'])) {
+                                if (
+                                    !empty($tdata['host_details']['manufacture']) &&
+                                    ($manufacture['id'] == $tdata['host_details']['manufacture'])
+                                    ):
                                     $selected = ' selected=1 ';
-                                }
-                                ?>
+                                endif; ?>
                                 <option value="<?= $manufacture['id'] ?>"<?= $selected ?>><?= $manufacture['name'] ?>
                                 </option>
                             <?php endforeach; ?>
@@ -416,9 +421,12 @@
                             <?php foreach ($cfg['os'] as $os): ?>
                                 <?php
                                 $selected = '';
-                                if (!empty($tdata['host_details']['os']) && ($os['id'] == $tdata['host_details']['os'])) {
+                                if (
+                                    !empty($tdata['host_details']['os']) &&
+                                    ($os['id'] == $tdata['host_details']['os'])
+                                    ):
                                     $selected = ' selected=1 ';
-                                }
+                                endif;
                                 ?>
                                 <option value="<?= $os['id'] ?>"<?= $selected ?>><?= $os['name'] ?></option>
                             <?php endforeach; ?>
@@ -431,9 +439,12 @@
                             <?php foreach ($cfg['system_type'] as $system_type): ?>
                                 <?php
                                 $selected = '';
-                                if (!empty($tdata['host_details']['system_type']) && ($system_type['id'] == $tdata['host_details']['system_type'])) {
+                                if (
+                                    !empty($tdata['host_details']['system_type']) &&
+                                    ($system_type['id'] == $tdata['host_details']['system_type'])
+                                    ):
                                     $selected = ' selected=1 ';
-                                }
+                                endif;
                                 ?>
                                 <option value="<?= $system_type['id'] ?>"<?= $selected ?>><?= $system_type['name'] ?>
                                 </option>
@@ -459,7 +470,7 @@
         <?php
         if (!empty($tdata['host_details']['access_method'])) {
             ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </div>
         <?php } ?>
         -->
         <!-- DEPLOYS -->
@@ -467,11 +478,11 @@
         <?php
         if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
             ?>
-                                                                                                                                                                                                                                                            <option value="0"></option>
+                                                                                                                                                                                                                                                                                                        <option value="0"></option>
             <?php
             foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
                 ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
                 <?php
             }
             ?>
@@ -485,10 +496,10 @@
             $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
             foreach ($logs as $log) {
                 ?>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <div class="log_line"><?= $log ?></div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <div class="log_line"><?= $log ?></div>
             <?php }
             ?>
-                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                        </div>
         <?php }
         ?>
         <!-- /TODO DISABLED -->
