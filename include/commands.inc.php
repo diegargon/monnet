@@ -2,15 +2,21 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_CLI') ? exit : true;
 
-function run_cmd(string $cmd, array $params, string $stdin = null): array
-{
+/**
+ *
+ * @param string $cmd
+ * @param array $params
+ * @param string $stdin
+ * @return array
+ */
+function run_cmd(string $cmd, array $params, string $stdin = null): array {
     $return = [];
     $pipes = [];
     $exec_params = '';
@@ -47,9 +53,17 @@ function run_cmd(string $cmd, array $params, string $stdin = null): array
     return $return;
 }
 
-function check_command(string $cmd): array|bool
-{
+/**
+ *
+ * @param string $cmd
+ * @return string|bool
+ */
+function check_command(string $cmd): string|bool {
     $result = run_cmd('command', ['-v', $cmd]);
 
-    return empty($result['stdout']) ? false : $result['stdout'];
+    if (empty($result['stdout'])) {
+        return false;
+    } else {
+        return $result['stdout'];
+    }
 }

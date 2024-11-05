@@ -1,5 +1,6 @@
 ** HIGH
-.
+
+* Comprobar log to console
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
 * [DB 0.35v] alert field - Señal de nuevo host descubierto, cambio de mac
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria

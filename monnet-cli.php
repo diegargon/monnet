@@ -39,7 +39,10 @@ if ($ctx) {
 
 if ($db) {
     $db->update('prefs', ['uid' => 0, 'pref_value' => utc_date_now()], ['pref_name' => 'cli_last_run'], 'LIMIT 1');
+} else {
+    Log::err("Error updateing cli last run timestamp");
 }
+
 Log::debug("[Finishing] $APP_NAME " . datetime_machine() . "");
 
 exit(0);

@@ -191,10 +191,10 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0)
                 Log::debug("Mac vendor for {$host['mac']} is null");
                 (empty($host['mac_vendor'])) ? $update['mac_vendor'] = '-' : null;
             } else {
-                if ($vendor['company'] != $host['mac_vendor']) {
+                if (!empty($host['mac_vendor']) && ($vendor['company'] != $host['mac_vendor'])) {
                     Log::warning("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
-                    $update['mac_vendor'] = $vendor['company'];
                 }
+                $update['mac_vendor'] = $vendor['company'];
             }
             if (!empty($update) && ($host['mac_vendor'] != $update['mac_vendor'])) {
                 $hosts->update($host['id'], $update);
