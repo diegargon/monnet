@@ -53,7 +53,7 @@
         <?php
         foreach ($tdata['bookmarks'] as $bookmark) {
             if ($id == 0 || $bookmark['cat_id'] == $id) {
-        ?>
+                ?>
                 <div id="item_num_<?= $bookmark['id'] ?>" class="item-container">
                     <div class="delete_bookmark">
                         <input onclick="confirmRefresh('removeBookmark',<?= $bookmark['id'] ?>)" type="image"
@@ -67,7 +67,7 @@
                                  style="<?=
                                             !empty($bookmark['icon_bg']) ? 'background-color: ' .
                                             $bookmark['icon_bg'] : null
-                                        ?>"/>
+                                    ?>"/>
                             <div class="item-title text_shadow_style1"><?= $bookmark['title'] ?></div>
                         </div>
                     </a>
@@ -76,7 +76,7 @@
             }
         }?>
         </div>
-    <?php
+        <?php
     }
-    ?>
+        ?>
 </div>
