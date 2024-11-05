@@ -19,7 +19,7 @@
         var confirmacion = confirm('<?= $lng['L_AREYOUSURE'] ?>');
 
         if (confirmacion) {
-            refresh(action, param);
+            submitCommand(action, param);
         }
     }
 
