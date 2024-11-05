@@ -14,6 +14,7 @@
  */
 //var_dump($tdata['host_details']);
 ?>
+
 <div id="host-details" class="host-details draggable" style="display:block">
     <div id="host-details-container" class="host-details-container">
         <!-- HOST COMMON BAR -->
@@ -25,32 +26,34 @@
                          alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
                 </button>
                 <div class="host-details-tabs-head-container">
-                    <button id="tab1_btn" class="host-details-tabs-head"
+                    <button id="tab1_btn" class="host-details-tabs-head" data-tab="1"
                             onclick="changeTab('tab1')"><?= $lng['L_OVERVIEW'] ?>
                     </button>
                     <?php if (!empty($tdata['host_details']['access_method'])) : ?>
-                        <button id="tab2_btn" class="host-details-tabs-head"
+                        <button id="tab2_btn" class="host-details-tabs-head" data-tab="2"
                                 onclick="changeTab('tab2')"><?= $lng['L_STATUS'] ?>
                         </button>
                     <?php endif; ?>
-                    <button id="tab3_btn" class="host-details-tabs-head"
+                    <button id="tab3_btn" class="host-details-tabs-head" data-tab="3"
                             onclick="changeTab('tab3')"><?= $lng['L_NOTES'] ?>
                     </button>
                     <?php if (!empty($tdata['host_details']['host_logs'])) : ?>
-                        <button id="tab9_btn" class="host-details-tabs-head"
+                        <button id="tab9_btn" class="host-details-tabs-head" data-tab="9"
                                 onclick="changeTab('tab9')"><?= $lng['L_LOG'] ?>
                         </button>
                     <?php endif; ?>
 
                     <?php if (!empty($tdata['host_details']['ping_graph'])) : ?>
-                        <button id="tab10_btn" class="host-details-tabs-head"
+                        <button id="tab10_btn" class="host-details-tabs-head" data-tab="10"
                                 onclick="changeTab('tab10')"><?= $lng['L_METRICS'] ?>
                         </button>
                     <?php endif; ?>
-                    <button id="tab11_btn" class="host-details-tabs-head" onclick="changeTab('tab11')">
+                    <button id="tab11_btn" class="host-details-tabs-head" data-tab="11"
+                            onclick="changeTab('tab11')">
                         <?= $lng['L_ALARMS'] ?>
                     </button>
-                    <button id="tab12_btn" class="host-details-tabs-head" onclick="changeTab('tab12')">
+                    <button id="tab12_btn" class="host-details-tabs-head" data-tab="12"
+                            onclick="changeTab('tab12')">
                         <?= $lng['L_CONFIG'] ?>
                     </button>
                     <!--

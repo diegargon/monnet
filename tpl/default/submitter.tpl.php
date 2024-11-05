@@ -214,7 +214,7 @@
                         textNote.addEventListener('input', function () {
                             clearTimeout(debounceTimeout);
                             debounceTimeout = setTimeout(function () {
-                                $.post('refresher.php', {
+                                $.post('submitter.php', {
                                     order: 'saveNote',
                                     order_value: encodeURIComponent(textNote.value.replace(/[']/g, '"')),
                                     object_id: object_id
@@ -227,7 +227,10 @@
                                         });
                             }, 600);
                         });
-
+                        //Agregamos el script que detecta los cambios de tabs dinamicamente
+                        const script = document.createElement("script");
+                        script.src = "scripts/tabsfetch.js";
+                        document.body.appendChild(script);
                     }
 
                     if ("misc" in jsonData) {
