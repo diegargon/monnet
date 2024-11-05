@@ -16,7 +16,8 @@
  * @param string $stdin
  * @return array
  */
-function run_cmd(string $cmd, array $params, string $stdin = null): array {
+function run_cmd(string $cmd, array $params, string $stdin = null): array
+{
     $return = [];
     $pipes = [];
     $exec_params = '';
@@ -58,7 +59,8 @@ function run_cmd(string $cmd, array $params, string $stdin = null): array {
  * @param string $cmd
  * @return string|bool
  */
-function check_command(string $cmd): string|bool {
+function check_command(string $cmd): string|bool
+{
     $result = run_cmd('command', ['-v', $cmd]);
 
     if (empty($result['stdout'])) {

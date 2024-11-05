@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -58,7 +58,13 @@
                     ticks: {
                         callback: function (value, index, values) {
                             var date = new Date(value);
-                            var options = {timeZone: timezone, hour12: false, hour: 'numeric', minute: 'numeric', hourCycle: 'h23'};
+                            var options = {
+                                timeZone: timezone,
+                                hour12: false,
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hourCycle: 'h23'
+                            };
                             return date.toLocaleString(charset, options);
                         }
                     },
