@@ -159,9 +159,17 @@ $discovery_last = 0;
 
 foreach ($system_prefs as $sys_pref) {
     if ($sys_pref['pref_name'] == 'cli_last_run') {
+        if (empty($sys_pref['pref_value'])) {
+            $cli_last = 'Never';
+        } else {
         $cli_last = utc_to_user_tz($sys_pref['pref_value'], $user->getTimezone(), $cfg['datetime_format_min']);
+        }
     } elseif ($sys_pref['pref_name'] == 'discovery_last_run') {
+        if (empty($sys_pref['pref_value'])) {
+            $discovery_last = 'Never';
+        } else {
         $discovery_last = utc_to_user_tz($sys_pref['pref_value'], $user->getTimezone(), $cfg['datetime_format_min']);
+        }
     }
 }
 $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last;
