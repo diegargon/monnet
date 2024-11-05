@@ -142,6 +142,7 @@ $cfg['system_type'] = [
     24 => ['id' => 24, 'name' => 'Game Console', 'img' => 'gameconsole.png'],
     25 => ['id' => 25, 'name' => 'Printer', 'img' => 'printer.png'],
     26 => ['id' => 26, 'name' => 'Printer Server', 'img' => 'printer-server.png'],
+    27 => ['id' => 27, 'name' => 'Log Server', 'img' => 'printer-server.png'],
 ];
 
 $cfg['versions'] = [
