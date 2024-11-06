@@ -1275,6 +1275,9 @@ input:checked + .slider:before {
     width: 49%;
 }
 
+.logs_header {
+    display: inline-flex;
+}
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

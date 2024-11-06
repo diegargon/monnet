@@ -264,9 +264,25 @@
         if (!empty($tdata['host_details']['host_logs'])) {
             ?>
             <!-- HOST LOGS -->
-            <div id="tab9" class="host-details-tab-content">
-                <?= $tdata['host_details']['host_logs'] ?>
-            </div>
+                <div id="tab9" class="host-details-tab-content">
+                    <div class="logs_header">
+                        <div><button id="logs_reload_btn">Reload</button></div>
+                        <div>
+                            <select id="logType" name="logType">
+                                <option value="-1">LOG_ALL</option>
+                                <option value="0">LOG_EMERG</option>
+                                <option value="1">LOG_ALERT</option>
+                                <option value="2">LOG_CRIT</option>
+                                <option value="3">LOG_ERR</option>
+                                <option value="4">LOG_WARNING</option>
+                                <option value="5">LOG_NOTICE</option>
+                                <option value="6">LOG_INFO</option>
+                                <option value="7">LOG_DEBUG</option>
+                            </select>
+                        </div>
+                    </div>
+                    <?= $tdata['host_details']['host_logs'] ?>
+                </div>
         <?php } ?>
         <!-- /TAB9 -->
         <!-- TAB10 --><!-- Graphs / PING -->
@@ -497,4 +513,5 @@
         <!-- /TODO DISABLED -->
     </div> <!-- host-details-container -->
     <!-- host-details -->
+    <script src="scripts/host-details.js"></script>
 </div>
