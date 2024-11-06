@@ -18,15 +18,6 @@
         refresh();
     });
 
-    function confirmRefresh(action, param) {
-        event.stopPropagation();
-        var confirmacion = confirm('<?= $lng['L_AREYOUSURE'] ?>');
-
-        if (confirmacion) {
-            refresh(action, param);
-        }
-    }
-
     function refresh(command, command_value, object_id = null) {
         var requestData = {order: command, order_value: command_value};
 
@@ -70,114 +61,7 @@
                         $(position).append(jsonData.term_logs.data);
                     }
 
-                    if (jsonData.command_receive === 'removeBookmark') {
-                        var commandValue = jsonData.command_value;
-                        var elementSelector = "#item_num_" + commandValue;
-                        $(elementSelector).hide();
-                    }
-                    if (jsonData.command_receive === 'submitScanPorts') {
-                        if (jsonData.command_success === 1) {
-                            $('#config_status_msg').html('OK');
-                            $('#host-title').val(jsonData.command_success);
-                        } else {
-                            $('#config_status_msg').html('Error');
-                        }
-                    }
-                    if (jsonData.command_receive === 'addNetwork') {
-                        $('#network_status_msg').html('');
-                        $('#network_error_msg').html('');
-                        if (jsonData.command_success && jsonData.response_msg) {
-                            $('#networkName').html('');
-                            $('#network').html('');
-                            $('#networkCIDR').html('');
-                        }
-                        if (jsonData.command_error_msg) {
-                            $('#network_error_msg').html(jsonData.command_error_msg);
-                        }
-                    }
-                    if (jsonData.command_receive === 'addBookmark') {
-                        $('#status_msg').html('');
-                        $('#error_msg').html('');
-                        if (jsonData.command_success && jsonData.response_msg) {
-                            $('#status_msg').html(jsonData.response_msg);
-                            $('#bookmarkName').val('');
-                            $('#urlip').val('');
-                            $('#field_img').val('');
-                        }
-                        if (jsonData.command_error_msg) {
-                            $('#error_msg').html(jsonData.command_error_msg);
-                        }
-                    }
-                    //Bookmarks Hosts Config stdbox
-                    if (
-                            jsonData.command_receive === 'submitBookmarkCat' ||
-                            jsonData.command_receive === 'submitHostsCat'
-                    ) {
-                        $('#stdbox-status-msg').html('');
-                        $('#stdbox-error-msg').html('');
-                        if (jsonData.command_success && jsonData.response_msg) {
-                            $('#stdbox-status-msg').html(jsonData.response_msg);
-                            $('#stdbox-content').empty();
-                        }
-                        if (jsonData.command_error_msg) {
-                            $('#stdbox-error-msg').html(jsonData.command_error_msg);
-                        }
-                    }
-                    //Add remote host
-                    if (jsonData.command_receive === 'submitHost') {
-                        $('#stdbox-status-msg').html('');
-                        $('#stdbox-error-msg').html('');
-                        if (jsonData.command_success && jsonData.response_msg) {
-                            $('#stdbox-status-msg').html(jsonData.response_msg);
-                            $('#addedHost').val('');
-                        }
-                        if (jsonData.command_error_msg) {
-                            $('#stdbox-error-msg').html(jsonData.command_error_msg);
-                        }
-                    }
-                    if (jsonData.command_receive === 'submitTitle') {
-                        if (jsonData.command_success) {
-                            $('#config_status_msg').html('Validated:' + jsonData.command_value);
-                        } else {
-                            $('#config_status_msg').html('Error: ' + jsonData.command_value);
-                        }
-                        $('#host-title').val(jsonData.command_value);
-                    }
-                    if (jsonData.command_receive === 'submitCat') {
-                        if (jsonData.command_success === 1) {
-                            $('#config_status_msg').html(jsonData.response_msg);
-                        } else {
-                            $('#config_status_msg').html('Error');
-                        }
-                    }
-                    if (jsonData.command_receive === 'submitManufacture') {
-                        if (jsonData.command_success === 1) {
-                            $('#config_status_msg').html(jsonData.response_msg);
-                        } else {
-                            $('#config_status_msg').html('Error');
-                        }
-                    }
-                    if (jsonData.command_receive === 'submitOS') {
-                        if (jsonData.command_success === 1) {
-                            $('#config_status_msg').html(jsonData.response_msg);
-                        } else {
-                            $('#config_status_msg').html('Error');
-                        }
-                    }
-                    if (jsonData.command_receive === 'submitHostToken') {
-                        if (jsonData.command_success === 1) {
-                            $('#host_token').val(jsonData.response_msg);
-                        } else {
-                            $('#host_token').val('Error');
-                        }
-                    }
-                    if (jsonData.command_receive === 'submitSystemType') {
-                        if (jsonData.command_success === 1) {
-                            $('#config_status_msg').html(jsonData.response_msg);
-                        } else {
-                            $('#config_status_msg').html('Error');
-                        }
-                    }
+
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
                             position = jsonData.other_hosts.cfg.place;

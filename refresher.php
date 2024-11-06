@@ -26,15 +26,9 @@ $tdata = [];
 $force_host_reload = 0;
 $hosts = $ctx->get('Hosts');
 
-//TODO: We pass target id in  command_value and object_id -> change to always use object_id for that
 $data = [
     'conn' => 'success',
     'login' => 'fail',
-    'command_receive' => '',
-    'command_value' => '',
-    'object_id' => '',
-    'command_success' => 0,
-    'command_error_msg' => '',
     'response_msg' => '',
 ];
 
@@ -65,7 +59,7 @@ if ($user->getPref('show_highlight_hosts_status')) {
         $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
         $data['highlight_hosts']['cfg']['place'] = '#host_place';
     } else {
-        $data['command_error_msg'] .= 'Invalid highlight host data';
+        $data['response_msg'] .= 'Invalid highlight host data';
     }
 }
 if ($user->getPref('show_other_hosts_status')) {
@@ -83,12 +77,9 @@ if ($user->getPref('show_other_hosts_status')) {
         $data['other_hosts']['cfg']['place'] = '#host_place';
         $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
     } else {
-        $data['command_error_msg'] .= 'Invalid other host data' . print_r($hosts_view, true);
+        $data['response_msg'] .= 'Invalid other host data' . print_r($hosts_view, true);
     }
 }
-
-
-/* ALWAYS */
 
 $logs = [];
 $type_mark = '';
@@ -175,6 +166,5 @@ foreach ($system_prefs as $sys_pref) {
 $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last;
 $data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last;
 
-/* END ALWAYS */
 
 print json_encode($data, JSON_UNESCAPED_UNICODE);
