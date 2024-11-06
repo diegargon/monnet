@@ -534,7 +534,7 @@ if ($command == 'submitHost' && !empty($command_value)) {
         $host['ip'] = $command_value;
     }
 
-    if (!empty($host['ip']) && !$ctx->get('Networks')->isLocal($new_network['network'])) {
+    if (!empty($host['ip']) && !$ctx->get('Networks')->isLocal($host['ip'])) {
         $network_match = $ctx->get('Networks')->matchNetwork($host['ip']);
         if (valid_array($network_match)) {
             if ($hosts->getHostByIP($host['ip'])) {

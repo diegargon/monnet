@@ -2,13 +2,18 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function check_known_hosts(AppContext $ctx)
+/**
+ *
+ * @param AppContext $ctx
+ * @return bool
+ */
+function check_known_hosts(AppContext $ctx): bool
 {
     $lng = $ctx->get('lng');
     $db = $ctx->get('Mysql');
@@ -93,9 +98,15 @@ function check_known_hosts(AppContext $ctx)
         }
     }
     Log::debug('Finish check_known_hosts');
+
+    return true;
 }
 
-function ping_net(AppContext $ctx)
+/**
+ * Ping... nets
+ * @param AppContext $ctx
+ */
+function ping_nets(AppContext $ctx): void
 {
     $hosts = $ctx->get('Hosts');
     $networks = $ctx->get('Networks');
@@ -103,7 +114,7 @@ function ping_net(AppContext $ctx)
     $timeout = ['sec' => 0, 'usec' => 100000];
 
     $db_hosts = $hosts->getAll();
-    $iplist = $networks->buildIpList();
+    $iplist = $networks->buildIpScanList();
 
     //We remove known hosts since we checked in other functions
     foreach ($iplist as $kip => $vip) {
@@ -152,7 +163,12 @@ function ping_net(AppContext $ctx)
     Log::info('Ping net took ' . (intval(microtime(true) - $ping_net_time)) . ' seconds');
 }
 
-function fill_hostnames(Hosts $hosts, int $forceall = 0)
+/**
+ *
+ * @param Hosts $hosts
+ * @param int $forceall
+ */
+function fill_hostnames(Hosts $hosts, int $forceall = 0): void
 {
     $db_hosts = $hosts->getknownEnabled();
 
@@ -168,7 +184,12 @@ function fill_hostnames(Hosts $hosts, int $forceall = 0)
     }
 }
 
-function fill_mac_vendors(Hosts $hosts, int $forceall = 0)
+/**
+ *
+ * @param Hosts $hosts
+ * @param int $forceall
+ */
+function fill_mac_vendors(Hosts $hosts, int $forceall = 0): void
 {
     $db_hosts = $hosts->getknownEnabled();
 
@@ -203,7 +224,12 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0)
     }
 }
 
-function check_macs(Hosts $hosts)
+/**
+ *
+ * @param Hosts $hosts
+ * @return void
+ */
+function check_macs(Hosts $hosts): void
 {
 
     $known_hosts = $hosts->getknownEnabled();
@@ -218,7 +244,13 @@ function check_macs(Hosts $hosts)
     }
 }
 
-function host_access(array $cfg, Hosts $hosts)
+/**
+ *
+ * @param array $cfg
+ * @param Hosts $hosts
+ * @return void
+ */
+function host_access(array $cfg, Hosts $hosts): void
 {
 
     $db_hosts = $hosts->getknownEnabled();
@@ -263,8 +295,14 @@ function host_access(array $cfg, Hosts $hosts)
     }
 }
 
-/* port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping */
-function ping_host_ports(AppContext $ctx, array $host)
+/**
+ * Scan Host Ports
+ * port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping
+ * @param AppContext $ctx
+ * @param array $host
+ * @return array
+ */
+function ping_host_ports(AppContext $ctx, array $host): array
 {
     $time_now = utc_date_now();
 
@@ -333,7 +371,13 @@ function ping_host_ports(AppContext $ctx, array $host)
     return $host_status;
 }
 
-function ping_known_host(AppContext $ctx, array $host)
+/**
+ *
+ * @param AppContext $ctx
+ * @param array $host
+ * @return array
+ */
+function ping_known_host(AppContext $ctx, array $host): array
 {
     $sec = 0;
     $usec = 500000;
@@ -436,7 +480,12 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
     return $status;
 }
 
-function get_mac(string $ip)
+/**
+ *
+ * @param string $ip
+ * @return string
+ */
+function get_mac(string $ip): string
 {
 
     $comm_path = check_command('arp');

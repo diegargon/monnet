@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -118,7 +118,7 @@ class Networks
     }
 
     //Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
-    public function buildIpList(): array
+    public function buildIpScanList(): array
     {
         $ip_list = [];
         $networks = $this->getNetworks();
@@ -128,8 +128,10 @@ class Networks
                 Log::err("Invalid network detected " . $net['network']);
                 continue;
             }
-            //We will use 0.0.0.0 to allow create a INTERNET network category for add external host.
-            if (str_starts_with($net['network'], "0")) {
+            /*
+             * Jump 0.0.0.0 (we use for add internet host and networks without scan field
+             */
+            if (str_starts_with($net['network'], "0") || $net['scan'] !== 1) {
                 continue;
             }
             Log::debug("Ping networks " . array2string($net));
