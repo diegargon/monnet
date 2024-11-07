@@ -227,10 +227,6 @@
                                         });
                             }, 600);
                         });
-                        //Agregamos el script que detecta los cambios de tabs dinamicamente
-                        const script = document.createElement("script");
-                        script.src = "scripts/tabsfetch.js";
-                        document.body.appendChild(script);
                     }
 
                     if ("misc" in jsonData) {
