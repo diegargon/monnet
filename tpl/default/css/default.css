@@ -92,28 +92,19 @@ tr:hover {
     width:100%;
     max-height:150px;
 }
-
-.head_align_center{
-    display:flex;
-    align-content: center;
-    margin:auto;
-    border:0px solid red;
-}
 #head_left {
     border:0px solid #0E9700;
     width: 100%;
 }
-
 #head_center {
-    border:0px solid #5ac4e3;
+    border: 0px solid #5ac4e3;
 }
-
 #head_right {
-    border:0px solid #0E9700;
+    border: 0px solid #0E9700;
     width: 100%;
 }
 .head_left_content {
-    display:inline-block;
+    display: inline-flex;
 }
 .head_center_content {
 }
@@ -919,26 +910,28 @@ input:checked + .slider:before {
 .login_button:hover {
     background-color: #45a049
 }
-.top_container_bar {
-    position: absolute;
+.top_button_bar {
+    display: flex;
+    border: 0px solid blue;
+    width:max-content;
     float:left;
     top: 10px;
-    left: 5px;
+    margin:auto;
 }
-.top_container_bar a {
+.top_button_bar a {
     /* display: flex;*/
     border: 0px solid yellow;
     padding: 0px;
     margin: 0px;
     overflow: auto;
 }
-.top_container_bar img {
+.top_button_bar img {
     width: 30px;
     padding: 0px;
     margin: 0px;
     border: 0px solid blue;
 }
-.bar_item_container {
+.bar_button_container {
     float:left;
     margin: 0px;
     padding: 3px 3px 0px 3px;

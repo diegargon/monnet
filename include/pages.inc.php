@@ -112,6 +112,12 @@ function page_index(AppContext $ctx)
     /* Include submmitter script tpl */
     $page['web_main']['main_head_tpl'][] = 'submitter';
 
+    /* Top Buttons */
+    $page['load_tpl'][] = [
+        'file' => 'topbuttoms',
+        'place' => 'head_left',
+    ];
+
     /* Controls */
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
     $show_this_system = $user->getPref('show_this_system_status');
@@ -268,6 +274,11 @@ function page_settings(AppContext $ctx): array
     $cfg = $ctx->get('cfg');
 
     $page = page_common_head($ctx);
+    /* Top Buttons */
+    $page['load_tpl'][] = [
+        'file' => 'topbuttoms',
+        'place' => 'head_left',
+    ];
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
 
@@ -281,6 +292,11 @@ function page_privacy(AppContext $ctx): array
     $cfg = $ctx->get('cfg');
 
     $page = page_common_head($ctx);
+    /* Top Buttons */
+    $page['load_tpl'][] = [
+        'file' => 'topbuttoms',
+        'place' => 'head_left',
+    ];
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
     $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
