@@ -34,7 +34,7 @@ function changeBookmarksTab(tabId) {
     // Resaltar el botón de la pestaña seleccionada
     const selectedTab = document.querySelector(`button[onclick="changeBookmarksTab('${tabId}')"]`);
     selectedTab.classList.add('active');
-    submitCommand('change_bookmarks_tab', tabId);
+    submitCommand('change_bookmarks_tab', {id: tabId});
 }
 
 function closeStdContainer() {
@@ -129,7 +129,7 @@ $(document).ready(function () {
         event.preventDefault(); // Evitar la acción predeterminada del doble clic
 
         catID = $(this).data('catid');
-        submitCommand('show_host_only_cat', catID);
+        submitCommand('show_host_only_cat', {id: catID});
         // Reiniciar la variable clicked
         clicked = false;
         clearTimeout(timer); // Limpiar el temporizador para evitar que se ejecute el clic normal
@@ -148,7 +148,7 @@ $(document).ready(function () {
         timer = setTimeout(function () {
             // Reiniciar clicked después de un intervalo de tiempo
             clicked = false;
-            submitCommand('show_host_cat', catID);
+            submitCommand('show_host_cat', {id: catID});
         }, 300);
 
     });
@@ -158,115 +158,115 @@ $(document).ready(function () {
     });
 
     $(document).on("change", "#chkHighlight", function () {
-        var host_id = $('#host_id').val();
+        var hostId = $('#host_id').val();
 
         var value = 0;
         if (this.checked) {
             value = 1;
         }
-        submitCommand('setHighlight', value, host_id);
+        submitCommand('setHighlight', {id: hostId, value: value});
     });
 
     $(document).on("change", "#checkports_enabled", function () {
-        var host_id = $('#host_id').val();
+        var hostId = $('#host_id').val();
         var value = 1;
 
         if (this.checked) {
             value = 2;
         }
-        submitCommand('setCheckPorts', value, host_id);
+        submitCommand('setCheckPorts', {id: hostId, value: value});
     });
 
     $(document).on("click", "#submitPorts", function () {
         var portsValue = $('#checkports').val();
-        var host_id = $('#host_id').val();
-        if (portsValue && host_id) {
-            submitCommand('submitScanPorts', portsValue, host_id);
+        var hostId = $('#host_id').val();
+        if (portsValue && hostId) {
+            submitCommand('submitScanPorts', {id: hostId, value: portsValue});
         }
     });
     $(document).on("click", "#submitTitle", function () {
         var titleValue = $('#host-title').val();
-        var host_id = $('#host_id').val();
-        if (titleValue && host_id) {
-            submitCommand('submitTitle', titleValue, host_id);
+        var hostId = $('#host_id').val();
+        if (titleValue && hostId) {
+            submitCommand('submitTitle', {id: hostId, value: titleValue});
         }
     });
 
     $(document).on("click", "#submitCat", function () {
         var catValue = $('#hostcat_id').val();
-        var host_id = $('#host_id').val();
-        if (catValue && host_id) {
-            submitCommand('submitCat', catValue, host_id);
+        var hostId = $('#host_id').val();
+        if (catValue && hostId) {
+            submitCommand('submitCat', {id: hostId, value: catValue});
         }
     });
 
     $(document).on("click", "#submitManufacture", function () {
-        var mValue = $('#manufacture').val();
-        var host_id = $('#host_id').val();
-        if (mValue && host_id) {
-            submitCommand('submitManufacture', mValue, host_id);
+        var manuValue = $('#manufacture').val();
+        var hostId = $('#host_id').val();
+        if (manuValue && hostId) {
+            submitCommand('submitManufacture', {id: hostId, value: manuValue});
         }
     });
     $(document).on("click", "#submitOS", function () {
         var osValue = $('#os').val();
-        var host_id = $('#host_id').val();
-        if (osValue && host_id) {
-            submitCommand('submitOS', osValue, host_id);
+        var hostId = $('#host_id').val();
+        if (osValue && hostId) {
+            submitCommand('submitOS', {id: hostId, value: osValue});
         }
     });
     $(document).on("click", "#submitSystemType", function () {
         var stValue = $('#system_type').val();
-        var host_id = $('#host_id').val();
-        if (stValue && host_id) {
-            submitCommand('submitSystemType', stValue, host_id);
+        var hostId = $('#host_id').val();
+        if (stValue && hostId) {
+            submitCommand('submitSystemType', {id: hostId, value: stValue});
         }
     });
     $(document).on("click", "#submitHostToken", function () {
-        var host_id = $('#host_id').val();
-        if (host_id) {
-            submitCommand('submitHostToken', host_id);
+        var hostId = $('#host_id').val();
+        if (hostId) {
+            submitCommand('submitHostToken', {id: hostId});
         }
     });
 
     $(document).on("click", "#submitHostsCat", function () {
-        var value = $('#hostsCat').val();
-        if (value) {
-            submitCommand('submitHostsCat', value);
+        var catValue = $('#hostsCat').val();
+        if (catValue) {
+            submitCommand('submitHostsCat', {id: 0, value: catValue});
         }
     });
 
     $(document).on("click", "#submitBookmarkCat", function () {
-        var value = $('#bookmarkCat').val();
-        if (value) {
-            submitCommand('submitBookmarkCat', value);
+        var bookValue = $('#bookmarkCat').val();
+        if (bookValue) {
+            submitCommand('submitBookmarkCat', {id: 0, value: bookValue});
         }
     });
 
     $(document).on("click", "#submitHost", function () {
-        var value = $('#addedHost').val();
-        if (value) {
-            submitCommand('submitHost', value);
+        var hostValue = $('#addedHost').val();
+        if (hostValue) {
+            submitCommand('submitHost', {id: 0, value: hostValue});
         }
     });
     $(document).on("click", "#submitOwner", function () {
         var ownerValue = $('#host_owner').val();
-        var host_id = $('#host_id').val();
-        if (ownerValue && host_id) {
-            submitCommand('submitOwner', ownerValue, host_id);
+        var hostId = $('#host_id').val();
+        if (ownerValue && hostId) {
+            submitCommand('submitOwner', {id: hostId, value: ownerValue});
         }
     });
     $(document).on("click", "#submitAccessLink", function () {
         var accessLinkValue = $('#access_link').val();
-        var host_id = $('#host_id').val();
-        if (accessLinkValue && host_id) {
-            submitCommand('submitAccessLink', accessLinkValue, host_id);
+        var hostId = $('#host_id').val();
+        if (hostId) {
+            submitCommand('submitAccessLink', {id: hostId, value: accessLinkValue});
         }
     });
     $(document).on("click", "#submitHostTimeout", function () {
         var timeoutValue = $('#host_timeout').val();
-        var host_id = $('#host_id').val();
-        if (timeoutValue && host_id) {
-            submitCommand('submitHostTimeout', timeoutValue, host_id);
+        var hostId = $('#host_id').val();
+        if (timeoutValue && hostId) {
+            submitCommand('submitHostTimeout', {id: hostId, value: timeoutValue});
         }
     });
     $(document).on("click", "#submitNetwork", function () {

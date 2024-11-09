@@ -23,7 +23,7 @@ if (empty($tdata['hosts'])) {
     <div class="hosts-head"><?= $tdata['head-title'] ?></div>
     <?php foreach ($tdata['hosts'] as $host) { ?>
         <div id="hosts-container" class="hosts-container">
-            <a onclick="submitCommand('host-details', <?= $host['id'] ?>)"
+            <a onclick="submitCommand('host-details', {id: <?= $host['id'] ?>})"
                href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['details'] ?>">
                 <div class="hosts-thumb shadow1 <?= $host['glow'] ?> ">
                     <img class="hosts-online" src="<?= $host['online_image'] ?>"

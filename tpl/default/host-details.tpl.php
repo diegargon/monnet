@@ -65,7 +65,7 @@
             </div> <!--host-controls-right -->
             <div class="host-controls-right">
                 <?php if (!empty($tdata['host_details']['mac']) && empty($tdata['host_details']['online'])) : ?>
-                    <input onClick="submitCommand('power_on', <?= $tdata['host_details']['id'] ?>)" type="image"
+                    <input onClick="submitCommand('power_on', {id: <?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png"
                            alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
                 <?php endif; ?>
@@ -73,16 +73,16 @@
                         !empty($tdata['host_details']['access_method']) &&
                         !empty($tdata['host_details']['online'])
                     ) : ?>
-                    <input onClick="submitCommand('power_off', <?= $tdata['host_details']['id'] ?>)" type="image"
+                    <input onClick="submitCommand('power_off', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png"
                            alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
                 <?php endif; ?>
                 <?php if (!empty($tdata['host_details']['access_method'])) : ?>
-                    <input onClick="submitCommand('reboot', <?= $tdata['host_details']['id'] ?>)" type="image"
+                    <input onClick="submitCommand('reboot', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png"
                            alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
                 <?php endif; ?>
-                <input onClick="confirmSubmit('remove_host',<?= $tdata['host_details']['id'] ?>)" type="image"
+                <input onClick="confirmSubmit('remove_host',{id:<?= $tdata['host_details']['id']?>})" type="image"
                        class="action-icon remove" src="tpl/<?= $cfg['theme'] ?>/img/remove.png"
                        alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>"/>
             </div> <!--host-controls-right -->
@@ -254,9 +254,11 @@
             <!-- <div class="textarea-bar"></div> -->
             <input type="number" id="host_note_id" style="display:none"
                    readonly value="<?= $tdata['host_details']['notes_id'] ?>"/>
-            <textarea id="textnotes" name="textnotes" rows="10" cols="100">
-                <?= $tdata['host_details']['notes'] ?>
-            </textarea>
+            <textarea
+                id="textnotes"
+                name="textnotes"
+                rows="10"
+                cols="100"><?= $tdata['host_details']['notes'] ?></textarea>
         </div>
         <!-- /TAB3 -->
         <!-- TAB9 --><!-- Host Logs -->
@@ -268,7 +270,7 @@
                     <div class="logs_header">
                         <div><button id="logs_reload_btn">Reload</button></div>
                         <div>
-                            <select id="logType" name="logType">
+                            <select id="log_type" name="log_type">
                                 <option value="-1">LOG_ALL</option>
                                 <option value="0">LOG_EMERG</option>
                                 <option value="1">LOG_ALERT</option>
@@ -281,6 +283,8 @@
                             </select>
                         </div>
                     </div>
+                    <label for="log_size">Nº:</label>
+                    <input type="number" id="log_size" name="log_size" step="25" value="25">
                     <?= $tdata['host_details']['host_logs'] ?>
                 </div>
         <?php } ?>

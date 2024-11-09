@@ -23,7 +23,7 @@
             <button id="bookmarks_tab_<?= $id ?>" class="bookmarks-tabs-head"
                     onclick="changeBookmarksTab('bookmark_content_tab_<?= $id ?>')">
                         <?= $bookmark_head['cat_name'] ?>
-                <input onclick="confirmRefresh('removeBookmarkCat',<?= $id ?>)"
+                <input onclick="confirmSubmit('removeBookmarkCat', {id: <?= $id ?>})"
                        type="image" class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png"
                        alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>">
             </button>
@@ -56,7 +56,7 @@
                 ?>
                 <div id="item_num_<?= $bookmark['id'] ?>" class="item-container">
                     <div class="delete_bookmark">
-                        <input onclick="confirmRefresh('removeBookmark',<?= $bookmark['id'] ?>)" type="image"
+                        <input onclick="confirmSubmit('removeBookmark',{id: <?= $bookmark['id'] ?>})" type="image"
                                class="action-icon remove" src="tpl/default/img/remove.png" alt="Borrar"
                                title="Borrar">
                     </div>

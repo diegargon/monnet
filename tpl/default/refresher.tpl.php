@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -18,31 +18,24 @@
         refresh();
     });
 
-    function refresh(command, command_value, object_id = null) {
-        var requestData = {order: command, order_value: command_value};
+    function refresh() {
+        var requestData = {};
 
-        if (object_id !== null) {
-            requestData.object_id = object_id;
-        }
-
-        if (typeof command === 'undefined') {
-            command = false;
-        }
-        if (typeof command_value === 'undefined') {
-            command_value = false;
-        }
-        //console.log(requestData);
         $.post('refresher.php', requestData)
                 .done(function (data, textStatus, xhr) {
                     var contentType = xhr.getResponseHeader('Content-Type');
-                    //console.log(requestData);
-                    console.log(data);
-                    if (typeof data === 'object') {
-                        //console.log('ya es un objeto');
-                        jsonData = data;
+                    //console.log(data);
+
+                    // Verificamos si el Content-Type es JSON
+                    if (contentType && contentType.toLowerCase().includes('application/json')) {
+                        jsonData = (typeof data === 'object') ? data : JSON.parse(data);
+                        //}
+                        // Si el Content-Type es HTML o texto
+                        //else if (contentType && contentType.includes('text/html')) {
+                        //    jsonData = {response_msg: data};  // Parseamos la respuesta como texto HTML
                     } else {
-                        //console.log('no es un objeto');
-                        var jsonData = JSON.parse(data);
+                        console.warn("Tipo de contenido inesperado:", contentType);
+                        return; // Terminamos si el tipo de contenido no es el esperado
                     }
 
                     //console.log(jsonData);
@@ -50,17 +43,11 @@
                         location.href = '';
                     }
 
-                    if ('categories_host' in jsonData) {
-                        $('#hosts_cat').remove();
-                        position = jsonData.categories_host.cfg.place;
-                        $(position).prepend(jsonData.categories_host.data);
-                    }
                     if ("term_logs" in jsonData) {
                         $('#term_container').remove();
                         position = jsonData.term_logs.cfg.place;
                         $(position).append(jsonData.term_logs.data);
                     }
-
 
                     if ("other_hosts" in jsonData) {
                         if ($('#other-hosts').length === 0) {
@@ -72,6 +59,7 @@
                             $(position).prepend(jsonData.other_hosts.data);
                         }
                     }
+
                     if ("highlight_hosts" in jsonData) {
                         if ($('#highlight-hosts').length === 0) {
                             position = jsonData.highlight_hosts.cfg.place;
@@ -81,41 +69,6 @@
                             position = jsonData.highlight_hosts.cfg.place;
                             $(position).prepend(jsonData.highlight_hosts.data);
                         }
-                    }
-
-                    if ("host_details" in jsonData) {
-                        $('#host-details').remove();
-                        if ($.isEmptyObject(jsonData.host_details.cfg)) {
-                            return;
-                        }
-                        position = jsonData.host_details.cfg.place;
-                        $(position).prepend(jsonData.host_details.data);
-                        var hostDetails = $(position).find("#host-details");
-                        makeDraggable(hostDetails);
-
-                        $('#tab1_btn').addClass('active');
-                        $('#tab1').addClass('active');
-                        var textNote = document.getElementById('textnotes');
-                        var debounceTimeout;
-                        var object_id = $('#host_note_id').val();
-
-                        textNote.addEventListener('input', function () {
-                            clearTimeout(debounceTimeout);
-                            debounceTimeout = setTimeout(function () {
-                                $.post('refresher.php', {
-                                    order: 'saveNote',
-                                    order_value: encodeURIComponent(textNote.value.replace(/[']/g, '"')),
-                                    object_id: object_id
-                                })
-                                        .done(function (response) {
-                                            console.log(response);
-                                        })
-                                        .fail(function (error) {
-                                            console.error('Error:', error);
-                                        });
-                            }, 600);
-                        });
-
                     }
 
                     if ("misc" in jsonData) {
@@ -131,10 +84,6 @@
                     console.error('Error en la solicitud AJAX:', status, error);
                 });
 
-        //Prevent launch another timeout on command
-        if (command === false) {
-            setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);
-    }
-
+        setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);
     }
 </script>
