@@ -136,7 +136,7 @@ footer {
     border:0px solid red;
 }
 .main_container {
-    display:block;
+    display:flex;
     margin:auto;
     padding:0;
     border:0px solid red;
@@ -170,31 +170,30 @@ footer {
     width:max-content;
 }
 
-.center_container {
-    border:0px solid yellow;
-    margin-top:5px;
-    float:left;
-    overflow:hidden;
-    width:49%;
-}
-
 .left_container, .right_container {
 
 }
 .left_container {
+    flex: 1 1 40%;
     border: 0px solid red;
-    margin-top:5px;
-    float:left;
+    margin-top: 5px;
+
     overflow:visible;
-    width:49%;
     margin-left:10px;
 }
-.right_container {
-    border:0px solid black;
-    margin-top:5px;
-    float:left;
+.center_container {
+    flex: 0 0 auto;
+    border: 0px solid yellow;
+    margin-top: 5px;
+    min-width: min-content;
     overflow:hidden;
 
+}
+.right_container {
+    flex: 0 0 auto;
+    border: 0px solid black;
+    margin-top: 5px;
+    overflow:hidden;
 }
 .search_container {
     text-align: center;
@@ -221,11 +220,12 @@ footer {
 }
 
 .bookmarks{
+    min-width: 460px;
     margin: 5px 5px 10px 5px;
     display: grid;
     grid-gap: 6px;
     border: 2px;
-    grid-template-columns: repeat( auto-fit, minmax(86px, 0fr) );
+    grid-template-columns: repeat( auto-fill, minmax(86px, 0fr) );
     /*
     grid-template-columns: repeat(6, 80px);
     grid-template-rows: 80px;
@@ -1293,6 +1293,9 @@ input:checked + .slider:before {
     .main {
         margin-top: 5vh;
     }
+    .bookmarks{
+        min-width: 360px;
+    }
 
 }
 @media only screen and (max-width: 950px) {
@@ -1304,6 +1307,9 @@ input:checked + .slider:before {
     }
     .search_container {
         width:100%;
+    }
+    .bookmarks{
+        min-width: 260px;
     }
 }
 @media only screen and (max-width: 800px) {
@@ -1322,22 +1328,12 @@ input:checked + .slider:before {
     .left_container {
         width:99%;
     }
-    .center_container {
-        width:99%;
-    }
     .search_container h1 {
         font-size: 2rem;
     }
-
 }
 
 @media only screen and (max-width: 645px) {
-    .bookmarks {
-        /*
-                grid-template-columns: repeat(5, 75px);
-                grid-template-rows: 75px;
-        */
-    }
 
     .search_container input {
         width: 75%;
