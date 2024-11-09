@@ -1,9 +1,9 @@
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css');
@@ -37,7 +37,6 @@ a {
 }
 a:hover {
     color: #1e90ff;
-    text-decoration: underline;
 }
 
 a:visited {
@@ -527,16 +526,6 @@ input:checked + .slider:before {
 .hosts-container img {
     width:20px;
     border-radius: 5px;
-    padding-right: 4px;
-
-}
-.hosts-container .fas, .fab {
-    font-size:20px;
-    margin-top: 0;
-    border-radius: 5px;
-    margin-right: 5px;
-    background: transparent;
-    color: white;
 }
 .hosts-container img:first-of-type {
     padding-left: 2px;
@@ -575,6 +564,7 @@ input:checked + .slider:before {
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
+    padding-left: 3px;
 }
 .hosts-head {
     display: inline-block;
@@ -685,9 +675,10 @@ input:checked + .slider:before {
     font-size:20px;
     margin-top: 0;
     border-radius: 5px;
-    margin-right: 5px;
+    margin-right: 1px;
     background: transparent;
     color: white;
+    text-decoration: none;
 }
 .host-details-main {
     display: flex;
@@ -1104,7 +1095,6 @@ input:checked + .slider:before {
     border: 1px solid black;
     border-radius: 2rem;
 }
-
 .term_crystal {
     border:0px solid red;
     position:relative;
@@ -1124,7 +1114,6 @@ input:checked + .slider:before {
     height: 300px;
     overflow:auto;
 }
-
 .term_output {
     color: #00fa00;
     font-family: 'VT323';
@@ -1136,7 +1125,6 @@ input:checked + .slider:before {
     box-sizing: border-box;
     letter-spacing: -1.5px;
 }
-
 .glow {
     animation: crt-glow 60s infinite;
     background:
@@ -1148,7 +1136,6 @@ input:checked + .slider:before {
         rgba(104, 255, 0, 0) 100%);
     opacity: 0.15;
 }
-
 .footer_bar {
     border:0px solid pink;
     width:95%;
@@ -1217,7 +1204,7 @@ input:checked + .slider:before {
     border-radius: 5px;
     background-color: #3e1818;
     align-items: center;
-    width: 3px;
+    width: 5px;
     overflow: hidden;
     top: 3px;
     right:3px;
@@ -1226,9 +1213,8 @@ input:checked + .slider:before {
 .min-details-hidden img {
     display: none;
 }
-
 .min-details-hidden:hover {
-    width: 75px;
+    width: 70px;
     background-color: rgb(41, 40, 40);
     border: 1px solid #000;
     padding: 0px;
@@ -1238,7 +1224,7 @@ input:checked + .slider:before {
     height: 98%;
 }
 .min-details-hidden:hover img {
-    display: flex;
+    display: inline-flex;
 }
 
 .general_ctrl, .bookmarks_ctrl, .addhost_ctrl {
