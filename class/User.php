@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -87,42 +87,70 @@ class User
         $this->loadUserHostCatsState();
     }
 
-    public function getId()
+    /**
+     *
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->user['id'];
     }
 
-    public function getUser()
+    /**
+     *
+     * @return array
+     */
+    public function getUser(): array
     {
         return $this->user;
     }
 
-    public function getLang()
+    /**
+     *
+     * @return string
+     */
+    public function getLang(): string
     {
         return $this->user['lang'];
     }
 
-    public function getTheme()
+    /**
+     *
+     * @return string
+     */
+    public function getTheme(): string
     {
         return $this->user['theme'];
     }
-
-    public function getEmail()
+    /**
+     *
+     * @return string
+     */
+    public function getEmail(): string
     {
         return $this->user['email'] ? $this->user['email'] : false;
     }
-
-    public function getUsername()
+    /**
+     *
+     * @return string
+     */
+    public function getUsername():string
     {
         return $this->user['username'] ? $this->user['username'] : false;
     }
-
-    public function getPassword()
+    /**
+     *
+     * @return string
+     */
+    public function getPassword():string
     {
         return $this->user['password'] ? $this->user['password'] : false;
     }
-
-    public function isAdmin()
+    /**
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
     {
         return empty($this->user['isAdmin']) ? false : true;
     }
@@ -133,15 +161,18 @@ class User
      *
      * @return array
      */
-    public function getProfile(int $uid)
+    public function getProfile(int $uid): array
     {
         $result = $this->db->select('users', '*', ['id' => $uid], 'LIMIT 1');
         $user = $this->db->fetch($result);
 
         return $user ?: [];
     }
-
-    public function getTimezone()
+    /**
+     *
+     * @return string
+     */
+    public function getTimezone(): string
     {
         return $this->user['timezone'];
     }
@@ -240,7 +271,7 @@ class User
 
     public function turnHostsCatsOff()
     {
-        foreach ($this->categories_state as $key => $_) {
+        foreach (array_keys($this->categories_state) as $key) {
             $this->categories_state[$key] = 0;
         }
         $this->saveHostsCatsState();
@@ -248,7 +279,7 @@ class User
 
     public function turnHostsCatsOn()
     {
-        foreach ($this->categories_state as $key => $_) {
+        foreach (array_keys($this->categories_state) as $key) {
             $this->categories_state[$key] = 1;
         }
         $this->saveHostsCatsState();

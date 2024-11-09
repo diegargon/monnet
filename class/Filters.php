@@ -20,7 +20,7 @@ class Filters
      */
     public static function getInt(string $val, int $size = PHP_INT_MAX): int|bool|array
     {
-        if (empty($_GET[$val])) {
+        if (!isset($_GET[$val])) {
             return false;
         }
 
@@ -36,7 +36,7 @@ class Filters
      */
     public static function postInt(string $val, int $size = PHP_INT_MAX): int|bool|array
     {
-        if (empty($_POST[$val])) {
+        if (!isset($_POST[$val])) {
             return false;
         }
 
@@ -52,31 +52,30 @@ class Filters
      */
     public static function varInt(string $val, int $size = PHP_INT_MAX): int|bool|array
     {
-        if (empty($val)) {
+        if (!isset($val)) {
             return false;
         }
 
-        $values = is_array($val) ? $val : trim($val);
-
-        if (!is_array($val)) {
-            if (!is_numeric($values) || $values > $size) {
+        if (is_array($val)) {
+            if (count($val) <= 0) {
                 return false;
             }
-            $values = (int) trim($val);
-        } else {
-            $values = $val;
-            if (count($values) <= 0) {
-                return false;
-            }
-            foreach ($values as $key => $value) {
+            foreach ($val as $key => $value) {
                 if (!is_numeric($value) || $value > $size || !is_numeric($key)) {
                     return false;
                 }
-                $values[$key] = (int) trim($value);
+                // Convertir cada elemento del array a int
+                $val[$key] = (int) $value;
             }
+            return $val;
         }
 
-        return $values;
+        $triVal = trim($val);
+        if (!is_numeric($triVal) || $triVal > $size) {
+            return false;
+        }
+
+        return (int) $triVal;
     }
 
     //Simple String words without accents or special characters

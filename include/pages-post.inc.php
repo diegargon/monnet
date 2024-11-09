@@ -2,12 +2,18 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+/**
+ * Deal with form post
+ *
+ * @param AppContext $ctx
+ * @return bool
+ */
 function page_index_post(AppContext $ctx): bool
 {
     $user = $ctx->get('User');
@@ -18,7 +24,6 @@ function page_index_post(AppContext $ctx): bool
     $show_highlight_hosts = Filters::postInt('show_highlight_hosts');
     $show_other_hosts = Filters::postInt('show_rest_hosts');
     //add Item
-
 
     if ($profile_type !== false) {
         $user->setPref('profile_type', $profile_type);
