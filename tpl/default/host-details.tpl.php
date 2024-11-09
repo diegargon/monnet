@@ -72,7 +72,7 @@
                 <?php if (
                         !empty($tdata['host_details']['access_method']) &&
                         !empty($tdata['host_details']['online'])
-                    ) : ?>
+                ) : ?>
                     <input onClick="submitCommand('power_off', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png"
                            alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
@@ -125,7 +125,7 @@
             <?php if (
                     !empty($tdata['host_details']['mac_vendor']) &&
                     $tdata['host_details']['mac_vendor'] != '-'
-                ) : ?>
+            ) : ?>
                 <div class="host-item"><?= $tdata['host_details']['mac_vendor'] ?> </div>
             <?php endif; ?>
         </div>
@@ -177,7 +177,7 @@
                 <?php if (
                     !empty($tdata['host_details']['uptime']) &&
                     is_array($tdata['host_details']['uptime'])
-                    ) : ?>
+                ) : ?>
                     <div class="" >
                         <label class="resume_label"><?= $lng['L_UPTIME'] ?>:</label>
                         <span class="resume_field">
@@ -239,7 +239,7 @@
                     <?php if (
                             !empty($tdata['host_details']['disks']) &&
                             count($tdata['host_details']['disks']) > 0
-                        ) : ?>
+                    ) : ?>
                         <?php foreach ($tdata['host_details']['disks'] as $disk) : ?>
                             <label class="disk"><?= $disk['mounted'] ?>:</label>
                             <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
@@ -375,20 +375,28 @@
                     </div>
                     <div class="">
                         <label for="host_owner"><?= $lng['L_OWNER'] ?>: </label><br />
-                        <input type="text" id="host_owner" name="host_owner"
-                               value="<?=
-                                    !empty($tdata['host_details']['owner']) ?
-                                    $tdata['host_details']['owner'] : null
-                                    ?>"/>
+                        <input
+                            type="text" id="host_owner" name="host_owner"
+                            value="<?=
+                                !empty($tdata['host_details']['owner'])
+                                ? $tdata['host_details']['owner']
+                                : null
+                            ?>"
+                        />
                         <button id="submitOwner"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
                         <label for="access_link"><?= $lng['L_ACCESS'] ?>: </label><br />
-                        <input type="text" id="access_link" name="access_link"
-                               value="<?=
-                                   !empty($tdata['host_details']['access_link']) ?
-                                   $tdata['host_details']['access_link'] : null
-                                    ?>"/>
+                        <input
+                            type="text"
+                            id="access_link"
+                            name="access_link"
+                            value="<?=
+                                !empty($tdata['host_details']['access_link'])
+                                    ? $tdata['host_details']['access_link']
+                                    : null
+                            ?>"
+                        />
                         <select id="access_link_type" name="access_link_type">
                             <?php foreach ($cfg['access_link_types'] as $key => $access_type) : ?>
                                 <option value="<?= $key ?>" selected="1"><?= $access_type ?></option>

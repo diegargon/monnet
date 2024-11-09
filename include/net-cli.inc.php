@@ -483,9 +483,9 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
 /**
  *
  * @param string $ip
- * @return string
+ * @return string|bool
  */
-function get_mac(string $ip): string
+function get_mac(string $ip): string|bool
 {
 
     $comm_path = check_command('arp');
