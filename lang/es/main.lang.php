@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 $lng = [
 //A
@@ -13,7 +13,6 @@ $lng = [
     'L_ADD' => 'Añadir',
     'L_ADD_HOST_CAT' => 'Añadir categoria para hosts',
     'L_ADD_BOOKMARKS_CAT' => 'Añadir categoria para bookmarks',
-    'L_ADD_REMOTE_HOST' => 'Añadir host remoto',
     'L_APPLINKS' => 'Web apps',
     'L_AREYOUSURE' => '¿estas seguro?',
     'L_ALL' => 'Todo',
@@ -135,6 +134,7 @@ $lng = [
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',
     'L_REFRESHED' => 'Refrescado',
+    'L_REMOTE_HOST' => 'Host Remoto',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',
@@ -155,6 +155,7 @@ $lng = [
     'L_TOTAL' => 'Total',
     'L_TOKEN' => 'Token',
     'L_TIMEOUT' => 'Timeout',
+    'L_TERMLOG' => 'Term Log',
     //U
     'L_USERS' => 'Usuarios',
     'L_USERNAME' => 'Usuario',
@@ -168,6 +169,7 @@ $lng = [
     'L_VM' => 'VM',
     'L_VLAN' => 'Vlan',
     'L_VALUE_EXISTS' => 'El valor ya existe',
+    'L_VISIBILITY' => 'Visibilidad',
     //W
     'L_WINDSPEED' => 'Viento',
     'L_WEIGHT' => 'Peso',

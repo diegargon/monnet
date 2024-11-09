@@ -23,6 +23,7 @@ function page_index_post(AppContext $ctx): bool
     $show_this_system = Filters::postInt('show_this_system');
     $show_highlight_hosts = Filters::postInt('show_highlight_hosts');
     $show_other_hosts = Filters::postInt('show_rest_hosts');
+    $show_termlog = Filters::postInt('show_termlog');
     //add Item
 
     if ($profile_type !== false) {
@@ -39,6 +40,9 @@ function page_index_post(AppContext $ctx): bool
     }
     if ($show_other_hosts !== false) {
         $user->setPref('show_other_hosts_status', $show_other_hosts);
+    }
+    if ($show_termlog !== false) {
+        $user->setPref('show_termlog_status', $show_termlog);
     }
 
     return true;

@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 function page_defaults(AppContext $ctx)
@@ -117,6 +117,7 @@ function page_index(AppContext $ctx)
     $show_this_system = $user->getPref('show_this_system_status');
     $show_highlight_hosts_status = $user->getPref('show_highlight_hosts_status');
     $show_other_hosts_status = $user->getPref('show_other_hosts_status');
+    $show_termlog_status = $user->getPref('show_termlog_status');
     $show_bookmarks_status ? $page['controls']['show_bookmarks_status'] = 1 :
             $page['controls']['show_bookmarks_status'] = 0;
     $show_highlight_hosts_status ? $page['controls']['show_highlight_hosts_status'] = 1 :
@@ -125,6 +126,8 @@ function page_index(AppContext $ctx)
             $page['controls']['show_other_hosts_status'] = 0;
     $show_this_system ? $page['controls']['show_this_system_status'] = 1 :
             $page['controls']['show_this_system_status'] = 0;
+    $show_termlog_status ? $page['controls']['show_termlog_status'] = 1 :
+            $page['controls']['show_termlog_status'] = 0;
 
     $page['load_tpl'][] = [
         'file' => 'controls',

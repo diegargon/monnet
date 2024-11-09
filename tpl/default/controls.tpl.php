@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -21,13 +21,6 @@
         <legend class="ctrl_legend"><?= $lng['L_GENERAL'] ?></legend>
 
         <div class="general_ctrl">
-            <button id="addNetwork" class="button-ctrl" type="submit">
-                <img class="add_link"
-                     src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?>">
-            </button>
-            <span class="opt_labels"><?= $lng['L_ADD'] . ' ' . $lng['L_NETWORK'] ?></span>
-        </div>
-        <div class="general_ctrl">
             <button id="toggleItemsSettings" class="button-ctrl" type="submit">
                 <img class="settigns_link"
                      src="./tpl/default/img/settings-items.png" title="<?= $lng['L_SETTINGS'] ?>">
@@ -36,17 +29,40 @@
         </div>
     </fieldset>
 
-    <!-- HOSTS -->
+    <!-- Add Items -->
     <fieldset class="ctrl_fieldset">
-        <legend class="ctrl_legend"><?= $lng['L_HOSTS'] ?></legend>
-
-        <div class="addhost_ctrl">
-            <button id="addHostBox" class="button-ctrl" type="submit" data-title="<?= $lng['L_ADD_REMOTE_HOST'] ?>">
+        <legend class="ctrl_legend"><?= $lng['L_ADD'] ?></legend>
+        <div class="bookmarks_ctrl">
+            <button id="addBookmark" class="button-ctrl" type="submit">
                 <img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>">
             </button>
-            <span class="opt_labels"><?= $lng['L_ADD'] . ' R' . $lng['L_HOST'] ?></span>
+            <span class="opt_labels"><?= $lng['L_BOOKMARKS'] ?></span>
         </div>
-        <form method="POST" name="host_form">
+        <div class="addhost_ctrl">
+            <button id="addHostBox" class="button-ctrl" type="submit" data-title="<?= $lng['L_REMOTE_HOST'] ?>">
+                <img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_REMOTE_HOST'] ?></span>
+        </div>
+        <div class="general_ctrl">
+            <button id="addNetwork" class="button-ctrl" type="submit">
+                <img class="add_link"
+                     src="./tpl/default/img/add.png" title="<?= $lng['L_NETWORK'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_NETWORK'] ?></span>
+        </div>
+    </fieldset>
+    <!-- Visibility -->
+    <fieldset class="ctrl_fieldset">
+        <legend class="ctrl_legend"><?= $lng['L_VISIBILITY'] ?></legend>
+        <form method="POST" name="visibility_form">
+            <div class="bookmarks_ctrl">
+                <input type="hidden" name="show_bookmarks" value="0" />
+                <input class="check" type="checkbox" value="1" name="show_bookmarks"
+                <?= $tdata['controls']['show_bookmarks_status'] ? ' checked ' : null; ?>
+                       onchange="this.form.submit()" />
+                <span class="opt_labels"><?= $lng['L_BOOKMARKS'] ?></span>
+            </div>
             <div class="hosts_highlight_ctrl">
                 <input type="hidden" name="show_highlight_hosts" value="0" />
                 <input class="check" type="checkbox" value="1"  name="show_highlight_hosts"
@@ -61,25 +77,12 @@
                        onchange="this.form.submit()" />
                 <span class="opt_labels"><?= $lng['L_OTHERS'] ?></span>
             </div>
-        </form>
-    </fieldset>
-
-    <!-- BOOKMARKS -->
-    <fieldset class="ctrl_fieldset">
-        <legend class="ctrl_legend"><?= $lng['L_BOOKMARKS'] ?></legend>
-        <div class="bookmarks_ctrl">
-            <button id="addBookmark" class="button-ctrl" type="submit">
-                <img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>">
-            </button>
-            <span class="opt_labels"><?= $lng['L_ADD'] ?></span>
-        </div>
-        <form method="POST" name="links_form">
-            <div class="bookmarks_ctrl">
-                <input type="hidden" name="show_bookmarks" value="0" />
-                <input class="check" type="checkbox" value="1" name="show_bookmarks"
-                <?= $tdata['controls']['show_bookmarks_status'] ? ' checked ' : null; ?>
+            <div class="termlog_ctrl">
+                <input type="hidden" name="show_termlog" value="0" />
+                <input class="check" type="checkbox" value="1" name="show_termlog"
+                <?= $tdata['controls']['show_termlog_status'] ? ' checked ' : null ?>
                        onchange="this.form.submit()" />
-                <span class="opt_labels"><?= $lng['L_BOOKMARKS'] ?></span>
+                <span class="opt_labels"><?= $lng['L_TERMLOG'] ?></span>
             </div>
         </form>
     </fieldset>

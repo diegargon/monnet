@@ -81,57 +81,59 @@ if ($user->getPref('show_other_hosts_status')) {
     }
 }
 
-$logs = [];
-$type_mark = '';
+if ($user->getPref('show_termlog_status')) {
+    $logs = [];
+    $type_mark = '';
 
-$host_logs = Log::getLoghosts($cfg['term_max_lines']);
+    $host_logs = Log::getLoghosts($cfg['term_max_lines']);
 
-if (!empty($host_logs)) {
-    foreach ($host_logs as &$log) {
-        $log['type_mark'] = '[H]';
-    }
-    $logs = $host_logs;
-}
-
-
-if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
-    $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
-    if (!empty($system_logs)) {
-        foreach ($system_logs as &$system_log) {
-            $system_log['type_mark'] = '[S]';
+    if (!empty($host_logs)) {
+        foreach ($host_logs as &$log) {
+            $log['type_mark'] = '[H]';
         }
-        $logs = array_merge($logs, $system_logs);
+        $logs = $host_logs;
     }
-}
 
-foreach ($logs as &$log) {
-    $log['timestamp'] = strtotime($log['date']);
-}
 
-usort($logs, function ($a, $b) {
-    return $b['timestamp'] <=> $a['timestamp'];
-});
+    if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
+        $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
+        if (!empty($system_logs)) {
+            foreach ($system_logs as &$system_log) {
+                $system_log['type_mark'] = '[S]';
+            }
+            $logs = array_merge($logs, $system_logs);
+        }
+    }
 
-foreach ($logs as &$log) {
-    unset($log['timestamp']);
-}
+    foreach ($logs as &$log) {
+        $log['timestamp'] = strtotime($log['date']);
+    }
+
+    usort($logs, function ($a, $b) {
+        return $b['timestamp'] <=> $a['timestamp'];
+    });
+
+    foreach ($logs as &$log) {
+        unset($log['timestamp']);
+    }
 
 //If we add systems logs probably we exceed the max
-if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {
-    $term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
-} else {
-    $term_logs = $logs;
-}
-if (valid_array($term_logs)) {
-    $log_lines = [];
-    foreach ($term_logs as $term_log) {
-        $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
-        $loglevelname = Log::getLogLevelName($term_log['level']);
-        $loglevelname = str_replace('LOG_', '', $loglevelname);
-        $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg'];
+    if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {
+        $term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
+    } else {
+        $term_logs = $logs;
     }
-    $data['term_logs']['cfg']['place'] = '#center_container';
-    $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
+    if (valid_array($term_logs)) {
+        $log_lines = [];
+        foreach ($term_logs as $term_log) {
+            $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
+            $loglevelname = Log::getLogLevelName($term_log['level']);
+            $loglevelname = str_replace('LOG_', '', $loglevelname);
+            $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg'];
+        }
+        $data['term_logs']['cfg']['place'] = '#center_container';
+        $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
+    }
 }
 
 if (!empty($hosts_totals_count)) {

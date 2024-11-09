@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 $lng = [
 //A
@@ -13,7 +13,6 @@ $lng = [
     'L_ADD' => 'Add',
     'L_ADD_HOST_CAT' => 'Add category for hosts',
     'L_ADD_BOOKMARKS_CAT' => 'Add category for bookmarks',
-    'L_ADD_REMOTE_HOST' => 'Add remote host',
     'L_APPLINKS' => 'Web apps',
     'L_AREYOUSURE' => 'Are you sure?',
     'L_ALL' => 'All',
@@ -130,6 +129,7 @@ $lng = [
     'L_REMOVE' => 'Remove',
     'L_REBOOT' => 'Reboot',
     'L_REFRESHED' => 'Refreshed',
+    'L_REMOTE_HOST' => 'Remote Host',
     //S
     'L_S_ONLINE' => 'Online',
     'L_S_OFFLINE' => 'Offline',
@@ -150,6 +150,7 @@ $lng = [
     'L_TOTAL' => 'Total',
     'L_TOKEN' => 'Token',
     'L_TIMEOUT' => 'Timeout',
+    'L_TERMLOG' => 'Term Log',
     //U
     'L_USERS' => 'Users',
     'L_USERNAME' => 'Username',
