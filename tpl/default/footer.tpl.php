@@ -16,6 +16,6 @@
 !defined('IN_WEB') ? exit : true;
 ?>
 <div class="footer_bar">
-    <div class="footer_right_element">v<?= $cfg['monnet_version'] ?></div>
+    <div class="footer_right_element"><a href="<?= $cfg['monnet_homepage'] ?>" target="_blank">v<?= $cfg['monnet_version'] ?>.<?= $cfg['monnet_revision'] ?></a></div>
     <div class="clearfix"></div>
 </div>

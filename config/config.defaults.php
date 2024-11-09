@@ -10,7 +10,7 @@
 global $cfg_db;
 /* Db Config */
 
-$cfg_db['dbtype'] = 'mysqli';
+$cfg_db['dbtype'] = 'mysqli'; //do not change
 $cfg_db['dbhost'] = '172.18.0.1';
 $cfg_db['dbname'] = 'monnet';
 $cfg_db['dbuser'] = 'root';

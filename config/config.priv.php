@@ -12,6 +12,8 @@
 $DEBUG = 1;
 
 $cfg['monnet_version'] = 0.36;
+$cfg['monnet_revision'] = 5;
+$cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['app_name'] = 'monnet';
 
 /* Manufacture */

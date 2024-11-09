@@ -21,14 +21,25 @@ You can add bookmarks, networks, and other elements, but some features, modifica
 
 The English language (EN/US) is IA generated.
 
+## Versions
+
+v0.0.0 Mayor.Minor.Revision
+
+Revision version implied not changes to the database only code changes
+Mayor/Minor implies changes to database
+
 # MonNet Install
 
 ## Deps
 
 LAMP
+    Linux, Apache, Mysql, PHP
 Composer
-phpseclib (Composer) (features disable due rewriting but going to be used)
-arp - Optional for get mac
+arp
+    Optional for get mac's address, only work same network (other method will added in the future)
+
+phpseclib (Composer)
+    Features is disable due rewriting. Thinking if port CLI scripts to python.
 
 ## Initial  database settings
 ```
@@ -51,15 +62,27 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 ```
 #
 /path/to/monnet# composer require phpseclib/phpseclib:~3.0
-#optional for send messsages
+#optional for send messsages (not yet)
 /path/to/monnet# composer require phpmailer/phpmailer
 ```
 
 ## Config
 
-Copy  config/config.defaults.php  to  /etc/monnet/config.inc.php and change whatever you want
-It's better remove all unnchaged config or just create the file with only the necessary changes.
+Check config/config.defaults.php  and add the keywords you want change to /etc/monnet/config.inc.php
+
+If you copy it's better remove all unnchaged config.
 Don't rename or modify directly config.defaults.php
+
+That the main config keyboards you must check/change and copy to the ethc file
+
+$cfg_db['dbhost']
+$cfg_db['dbname']
+$cfg_db['dbuser']
+$cfg_db['dbpassword']
+$cfg['path'] = '/var/www/html';
+$cfg['rel_path'] = '/';
+$cfg['lang'] = 'es';
+
 
 ## Load the sql
 
