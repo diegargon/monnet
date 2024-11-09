@@ -18,7 +18,7 @@
         refresh();
     });
 
-    function refresh() {
+    function refresh(force = 0) {
         var requestData = {};
 
         $.post('refresher.php', requestData)
@@ -83,7 +83,9 @@
                 .fail(function (xhr, status, error) {
                     console.error('Error en la solicitud AJAX:', status, error);
                 });
-
-        setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);
+        // Avoid set auto-refresh when a force call is execute
+        if (!force) {
+            setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);
+        }
     }
 </script>

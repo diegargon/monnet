@@ -23,7 +23,6 @@ require_once 'include/usermode.inc.php';
 require_once 'include/refresher-call.php';
 
 $tdata = [];
-$force_host_reload = 0;
 $hosts = $ctx->get('Hosts');
 
 $data = [

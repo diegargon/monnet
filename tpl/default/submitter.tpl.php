@@ -115,7 +115,12 @@
                         });
                     }
 
+                    if("force_host_refresh" in jsonData){
+                        refresh(1);
+                    }
+
                 })
+
                 .fail(function (xhr, status, error) {
                     console.error('Error en la solicitud AJAX:', status, error);
                 });

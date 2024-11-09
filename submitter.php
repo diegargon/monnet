@@ -24,7 +24,6 @@ require_once 'include/usermode.inc.php';
 require_once 'include/submitter-call.php';
 
 $tdata = [];
-$force_host_reload = 0;
 $hosts = $ctx->get('Hosts');
 
 $data = [
@@ -119,13 +118,13 @@ if ($command == 'network_select' && !empty($target_id)) {
     $pref_name = 'network_select_' . $target_id;
     $user->setPref($pref_name, 1);
     $data['command_success'] = 1;
-    $force_host_reload = 1;
+    $data['force_host_refresh'] = 1;
 }
 if ($command == 'network_unselect' && !empty($target_id)) {
     $pref_name = 'network_select_' . $target_id;
     $user->setPref($pref_name, 0);
     $data['command_success'] = 1;
-    $force_host_reload = 1;
+    $data['force_host_refresh'] = 1;
 }
 
 if ($command == 'setCheckPorts' && !empty($command_value) && !empty($target_id)) {
@@ -171,7 +170,7 @@ if ($command == 'submitTitle' && !empty($target_id)) {
         $success = 1;
     }
     $data['command_success'] = $success;
-    $force_host_reload = 1;
+    $data['force_host_refresh'] = 1;
 }
 
 if ($command == 'submitOwner' && !empty($target_id) ) {
@@ -201,7 +200,7 @@ if ($command == 'submitCat' && !empty($target_id) ) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'Category changed to ' . $command_value;
-    $force_host_reload = 1;
+    $data['force_host_refresh'] = 1;
 }
 
 
@@ -213,7 +212,7 @@ if ($command == 'submitManufacture' && !empty($target_id) ) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'Manufacture changed to ' . $command_value;
-    $force_host_reload = 1;
+    $data['force_host_refresh'] = 1;
 }
 
 if ($command == 'submitOS' && !empty($target_id) ) {
@@ -224,7 +223,7 @@ if ($command == 'submitOS' && !empty($target_id) ) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'OS changed to ' . $command_value;
-    $force_host_reload = 1;
+    $data['force_host_refresh'] = 1;
 }
 
 if ($command == 'submitSystemType' && !empty($target_id) ) {
@@ -235,7 +234,7 @@ if ($command == 'submitSystemType' && !empty($target_id) ) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'System Type changed to ' . $command_value;
-    $force_host_reload = 1;
+    $data['force_host_refresh'] = 1;
 }
 
 if ($command === 'submitAccessLink' && !empty($target_id)) {
@@ -285,29 +284,33 @@ if ($command == 'show_host_only_cat' && !empty($target_id) ) {
         $user->turnHostsCatsOn();
     } else {
         $user->turnHostsCatsOff();
-        $user->toggleHostsCat($command_value);
+        $user->toggleHostsCat($target_id);
     }
+    $data['command_success'] = 1;
+    $data['force_host_refresh'] = 1;
 }
 
-if ($command == 'show_host_cat' && !empty($command_value) ) {
-    $user->toggleHostsCat($command_value);
+if ($command == 'show_host_cat' && !empty($target_id) ) {
+    $user->toggleHostsCat($target_id);
+    $data['command_success'] = 1;
+    $data['force_host_refresh'] = 1;
 }
 
 if (
     $command == 'show_host_cat' ||
     $command == 'show_host_only_cat' &&
-    !empty($command_value) && $target_id
+    $target_id
 ) {
     $hosts_categories = $user->getHostsCats();
 
-    //Not show empty cats
+
     foreach ($hosts_categories as $key => $host_cat) {
         if (!$hosts->catHaveHosts($host_cat['id'])) {
             unset($hosts_categories[$key]);
         }
     }
     $tdata['hosts_categories'] = $hosts_categories;
-    //Networks dropdown
+
     $networks_list = $ctx->get('Networks')->getNetworks();
 
     $networks_selected = 0;
@@ -323,8 +326,6 @@ if (
 
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
     $data['categories_host']['cfg']['place'] = '#left_container';
-    $data['command_success'] = 1;
-    $force_host_reload = 1;
 }
 
 /* /end Host Cat */
