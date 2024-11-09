@@ -477,9 +477,9 @@ if ($command === 'host-details' && !empty($target_id)) {
                     ['host_logs'] = $frontend->getTpl('term', ['term_logs' => $log_lines, 'host_id' => $host_id]);
             }
         }
-        order_name($cfg['os']);
-        order_name($cfg['manufacture']);
-        order_name($cfg['system_type']);
+        order_by_name($cfg['os']);
+        order_by_name($cfg['manufacture']);
+        order_by_name($cfg['system_type']);
         unset($tdata['host_details']['ping_stats']);
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);

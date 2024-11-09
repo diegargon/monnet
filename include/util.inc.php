@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 /**
@@ -43,6 +43,13 @@ function formatBytes(int $size, int $precision = 2): string
     return round($size, $precision) . ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][$i];
 }
 
+/**
+ *
+ * @param array $ary
+ * @param string $sortKey
+ * @param string $order
+ * @return void
+ */
 function order(array &$ary, string $sortKey, string $order = 'asc'): void
 {
 
@@ -62,7 +69,12 @@ function order(array &$ary, string $sortKey, string $order = 'asc'): void
     });
 }
 
-function order_date(array &$ary): void
+/**
+ *
+ * @param array $ary
+ * @return void
+ */
+function order_by_date(array &$ary): void
 {
     usort($ary, function ($a, $b) {
         $itemA = strtotime($a['date']);
@@ -72,16 +84,29 @@ function order_date(array &$ary): void
     });
 }
 
-function order_name(array &$ary)
+/**
+ *
+ * @param array $ary
+ * @return void
+ */
+function order_by_name(array &$ary): void
 {
+    $elementZero = array_shift($ary);
+
     usort($ary, function ($a, $b) {
         $itemA = $a['name'];
         $itemB = $b['name'];
 
         return ($itemA < $itemB) ? -1 : 1;
     });
+    array_unshift($ary, $elementZero);
 }
 
+/**
+ *
+ * @param string $url
+ * @return string|bool
+ */
 function base_url(string $url): string|bool
 {
     $parsed_url = parse_url($url);
@@ -103,6 +128,11 @@ function base_url(string $url): string|bool
     return $base_url;
 }
 
+/**
+ *
+ * @param array $array
+ * @return string
+ */
 function array2string(array $array): string
 {
     /**
@@ -119,6 +149,14 @@ function array2string(array $array): string
     return implode(', ', $result);
 }
 
+/**
+ *
+ * @param User $user
+ * @param int $id
+ * @param string $img_url
+ * @param int $renew
+ * @return string|bool
+ */
 function cached_img(User $user, int $id, string $img_url, int $renew = 0): string|bool
 {
     $http_options = [];
@@ -181,6 +219,12 @@ function cached_img(User $user, int $id, string $img_url, int $renew = 0): strin
     return $img_url;
 }
 
+/**
+ *
+ * @param float $latency
+ * @param int $precision
+ * @return int|float
+ */
 function round_latency(float $latency, int $precision = 3): int|float
 {
     if ($latency > 0 && $latency <= 0.001) {
@@ -193,6 +237,10 @@ function round_latency(float $latency, int $precision = 3): int|float
     return $latency;
 }
 
+/**
+ *
+ * @return string
+ */
 function create_token(): string
 {
     return bin2hex(openssl_random_pseudo_bytes(16));

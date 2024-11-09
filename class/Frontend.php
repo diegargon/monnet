@@ -4,10 +4,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  *
  */
 class Frontend
@@ -31,8 +31,8 @@ class Frontend
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->lng = $ctx->get('lng');
-        $this->cfg = $ctx->get('cfg');
+        $this->lng = &$ctx->get('lng');
+        $this->cfg = &$ctx->get('cfg');
     }
 
     /**

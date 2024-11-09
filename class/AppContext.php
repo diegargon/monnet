@@ -26,18 +26,18 @@ class AppContext
      *
      * @param array $cfg configuracion
      */
-    public function __construct(array $cfg)
+    public function __construct(array &$cfg)
     {
-        $this->cfg = $cfg;
+        $this->cfg = &$cfg;
         spl_autoload_register(array($this, 'autoload'));
     }
 
     /**
      * @param array $lng TODO remove when change to class LANG
      */
-    public function setLang(array $lng)
+    public function setLang(array &$lng)
     {
-        $this->lng = $lng;
+        $this->lng = &$lng;
     }
 
     /**
@@ -88,7 +88,7 @@ class AppContext
      * @return mixed La instancia del servicio registrado.
 
      */
-    public function get(string $name): mixed
+    public function &get(string $name): mixed
     {
         //TODO Arreglar esto chapuza temporal
         if ($name === 'cfg') {
