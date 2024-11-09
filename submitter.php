@@ -112,6 +112,8 @@ if ($command === 'remove_host' && $target_id) {
     $data['host_details'] = '';
     $command = $target_id = '';
     $data['command_success'] = 1;
+    $data['force_host_refresh'] = 1;
+    $data['response_msg'] = 'Host removed: '. $target_id;
 }
 
 if ($command == 'network_select' && !empty($target_id)) {
@@ -119,12 +121,14 @@ if ($command == 'network_select' && !empty($target_id)) {
     $user->setPref($pref_name, 1);
     $data['command_success'] = 1;
     $data['force_host_refresh'] = 1;
+    $data['response_msg'] = 'Network Select';
 }
 if ($command == 'network_unselect' && !empty($target_id)) {
     $pref_name = 'network_select_' . $target_id;
     $user->setPref($pref_name, 0);
     $data['command_success'] = 1;
     $data['force_host_refresh'] = 1;
+    $data['response_msg'] = 'Network Unselect';
 }
 
 if ($command == 'setCheckPorts' && !empty($command_value) && !empty($target_id)) {
@@ -134,6 +138,7 @@ if ($command == 'setCheckPorts' && !empty($command_value) && !empty($target_id))
     $hosts->update($target_id, ['check_method' => $command_value]);
     $data['command_success'] = 1;
     $data['response_msg'] = $command_value;
+    $data['response_msg'] = 'ok';
 }
 
 if ($command == 'submitHostToken' && !empty($target_id) ) {
@@ -161,6 +166,7 @@ if ($command == 'submitScanPorts' && !empty($target_id)) {
     }
     $data['command_success'] = 1;
     $data['response_msg'] = $success_msg;
+    $data['response_msg'] = 'ok';
 }
 
 if ($command == 'submitTitle' && !empty($target_id)) {
@@ -171,6 +177,7 @@ if ($command == 'submitTitle' && !empty($target_id)) {
     }
     $data['command_success'] = $success;
     $data['force_host_refresh'] = 1;
+    $data['response_msg'] = 'ok';
 }
 
 if ($command == 'submitOwner' && !empty($target_id) ) {
@@ -180,6 +187,7 @@ if ($command == 'submitOwner' && !empty($target_id) ) {
         $success = 1;
     }
     $data['command_success'] = $success;
+    $data['response_msg'] = 'ok';
 }
 
 if ($command == 'submitHostTimeout' && !empty($target_id)) {
@@ -189,6 +197,7 @@ if ($command == 'submitHostTimeout' && !empty($target_id)) {
         $success = 1;
     }
     $data['command_success'] = $success;
+    $data['response_msg'] = 'ok';
 }
 
 // Change Host Cat
