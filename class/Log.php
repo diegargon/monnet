@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -185,7 +185,7 @@ class Log
      * @param int $limit
      * @return array
      */
-    public static function getLoghosts(int $limit): array
+    public static function getLoghosts(int $limit): array|bool
     {
         $query = 'SELECT * FROM hosts_logs WHERE level <= ' .
             self::$cfg['term_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
@@ -202,10 +202,21 @@ class Log
      *
      * @return array
      */
-    public static function getLoghost(int $host_id, int $limit): array
+    public static function getLoghost(int $host_id, array $opts): array|bool
     {
-        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . self::$cfg['term_log_level'] .
-            ' AND host_id = ' . $host_id . ' ORDER BY date DESC LIMIT ' . $limit;
+        if (!isset($opts['log_level']) || !is_numeric($opts['log_level'])) :
+            $log_level = self::$cfg['term_log_level'];
+        else :
+            $log_level = $opts['log_level'];
+        endif;
+
+        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . $log_level .
+            ' AND host_id = ' . $host_id . ' ORDER BY date DESC';
+
+        if (!empty($opts['max_lines'])):
+            $query .= ' LIMIT ' . $opts['max_lines'];
+        endif;
+
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 

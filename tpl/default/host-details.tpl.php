@@ -270,7 +270,7 @@
                     <div class="logs_header">
                         <div><button id="logs_reload_btn">Reload</button></div>
                         <div>
-                            <select id="log_type" name="log_type">
+                            <select id="log_level" name="log_level">
                                 <option value="-1">LOG_ALL</option>
                                 <option value="0">LOG_EMERG</option>
                                 <option value="1">LOG_ALERT</option>

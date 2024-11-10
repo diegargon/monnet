@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -21,9 +21,7 @@
             <div  id="term_output" class="term_output">
                 <?php
                 if (valid_array($tdata['term_logs'])) {
-                    foreach ($tdata['term_logs'] as $term_log) {
-                        echo $term_log . '<br />';
-                    }
+                    echo implode('', $tdata['term_logs']);
                 }
                 ?>
             </div>

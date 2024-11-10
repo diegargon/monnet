@@ -42,7 +42,7 @@ function get_host_detail_view_data(AppContext $ctx, $hid): array|bool
     }
 
     //HOST LOGS
-    $host['host_logs'] = Log::getLoghost($host['id'], $cfg['term_max_lines']);
+    $host['host_logs'] = Log::getLoghost($host['id'], ['max_lines' => $cfg['term_max_lines']]);
 
     $theme = $user->getTheme();
 
@@ -127,4 +127,19 @@ function get_host_detail_view_data(AppContext $ctx, $hid): array|bool
       }
      */
     return $host;
+}
+
+function format_host_logs($ctx, $logs, $nl = '<br/>'): array
+{
+    $cfg = $ctx->get('cfg');
+
+    $log_lines = [];
+    foreach ($logs as $term_log) {
+        $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
+        $loglevelname = Log::getLogLevelName($term_log['level']);
+        $loglevelname = str_replace('LOG_', '', $loglevelname);
+        $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'] . $nl;
+    }
+
+    return $log_lines;
 }

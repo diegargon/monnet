@@ -25,6 +25,7 @@ require_once 'include/submitter-call.php';
 
 $tdata = [];
 $hosts = $ctx->get('Hosts');
+$target_id = 0;
 
 $data = [
     'conn' => 'success',
@@ -473,20 +474,14 @@ if ($command === 'host-details' && !empty($target_id)) {
         if (!empty($host_details['ping_stats'])) {
             $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time', $host_details['ping_stats']);
         }
-        if (!empty($host_details['host_logs'])) {
-            if (valid_array($host_details['host_logs'])) {
-                $log_lines = [];
-                foreach ($host_details['host_logs'] as $term_log) {
-                    $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
-                    $loglevelname = Log::getLogLevelName($term_log['level']);
-                    $loglevelname = str_replace('LOG_', '', $loglevelname);
-                    $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'];
-                }
-
-                $tdata['host_details']
-                    ['host_logs'] = $frontend->getTpl('term', ['term_logs' => $log_lines, 'host_id' => $host_id]);
-            }
-        }
+        $log_lines = format_host_logs($ctx, $host_details['host_logs']);
+        $tdata['host_details']['host_logs'] = $frontend->getTpl(
+            'term',
+            [
+                'term_logs' => $log_lines,
+                'host_id' => $target_id
+            ]
+        );
         order_by_name($cfg['os']);
         order_by_name($cfg['manufacture']);
         order_by_name($cfg['system_type']);
@@ -634,4 +629,21 @@ if ($command == 'change_bookmarks_tab' && !empty($target_id)) {
     $data['command_success'] = 1;
 }
 
+if ($command == 'logs-reload' && !empty($target_id)) {
+    if (!empty($comm_values['log_size']) && is_numeric($comm_values['log_size'])) :
+        $opts['max_lines'] = $comm_values['log_size'];
+    else :
+        $opts['max_lines'] = $cfg['term_max_lines'];
+    endif;
+
+    if (isset($comm_values['log_level']) && is_numeric($comm_values['log_level'])) :
+        if ($comm_values['log_level'] >= 0):
+            $opts['log_level'] = $comm_values['log_level'];
+        endif;
+    endif;
+
+    $logs = Log::getLoghost($target_id, $opts);
+    $data['response_msg'] = format_host_logs($ctx, $logs);
+    $data['command_success'] = 1;
+}
 print json_encode($data, JSON_UNESCAPED_UNICODE);

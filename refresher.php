@@ -128,7 +128,7 @@ if ($user->getPref('show_termlog_status')) {
             $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
             $loglevelname = Log::getLogLevelName($term_log['level']);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
-            $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg'];
+            $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg']. '<br/>';
         }
         $data['term_logs']['cfg']['place'] = '#center_container';
         $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
