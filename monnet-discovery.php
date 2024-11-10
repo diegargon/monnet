@@ -12,6 +12,7 @@ define('IN_CLI', true);
 
 $APP_NAME = 'monnet-discovery';
 /**
+ * 
  * @var Database $db
  * @var AppContext|null $ctx An instance of AppCtx or null if not defined
  */
@@ -27,10 +28,10 @@ if (is_locked()) {
 register_shutdown_function('unlink', CLI_LOCK);
 ping_nets($ctx);
 
-if ($db) {
+if ($db !== null) {
     $db->update(
         'prefs',
-        ['uid' => 0,'pref_value' => utc_date_now()],
+        ['uid' => 0, 'pref_value' => utc_date_now()],
         ['pref_name' => 'discovery_last_run'],
         'LIMIT 1'
     );

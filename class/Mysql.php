@@ -251,7 +251,7 @@ class Database
      */
     public function close(): void
     {
-        $this->dblink ? $this->dblink->close() : null;
+        $this->dblink?->close();
     }
 
     /**
@@ -277,8 +277,6 @@ class Database
     {
         if (!($id = $this->dblink->insert_id)) {
             die('Could not connect: ' . $this->dblink->error);
-            $this->dblink->close();
-            exit;
         }
 
         return $id;

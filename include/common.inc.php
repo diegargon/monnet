@@ -2,17 +2,16 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
 /**
+ * 
  * @var array<int|string, mixed> $cfg
- */
-/**
  * @var array<int|string, mixed> $cfg_db
  */
 if (!file_exists('/etc/monnet/config.inc.php')) {
@@ -42,9 +41,18 @@ if ($cfg_db['dbtype'] == 'mysqli') {
 
 $ctx = new AppContext($cfg);
 
-$db = $ctx->set('Mysql', new Database($cfg_db));
+try {
+    $db = $ctx->set('Mysql', new Database($cfg_db));
 
-$db->connect();
+    if (!$db instanceof Database) {
+        throw new Exception("Database instance is not created.");
+    }
+
+    $db->connect();
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
 
 require_once 'class/Log.php';
 

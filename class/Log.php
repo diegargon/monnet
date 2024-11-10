@@ -145,18 +145,13 @@ class Log
     }
 
     /**
-     *
+     * Output log to console
      * @param bool $value
-     * @return bool
+     * @return void
      */
-    public static function setConsole(bool $value): bool
+    public static function setConsole(bool $value): void
     {
-        if ($value === true || $value === false) {
-            self::$console = $value;
-            return true;
-        }
-
-        return false;
+        self::$console = $value;
     }
 
     /**

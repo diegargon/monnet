@@ -11,9 +11,9 @@
 
 class Items
 {
+
+    /** @var Database */
     private Database $db;
-    private array $categories;
-    private array $cfg;
 
     /**
      * @var array<int, array<string, mixed>> $items
@@ -23,10 +23,9 @@ class Items
 
     public function __construct(AppContext $ctx)
     {
-        $this->cfg = $ctx->get('cfg');
         $this->db = $ctx->get('Mysql');
         $this->uid = $ctx->get('User')->getId();
-        $this->categories = $ctx->get('Categories')->getByType(2); //2:items
+        //$this->categories = $ctx->get('Categories')->getByType(2); //2:items
 
         $results = $this->db->select('items', '*', ['uid' => $this->uid], 'ORDER BY weight');
         $this->items = $this->db->fetchAll($results);

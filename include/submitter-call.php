@@ -11,10 +11,10 @@
 /**
  *
  * @param AppContext $ctx
- * @param type $hid
+ * @param int $hid
  * @return array|null
  */
-function get_host_detail_view_data(AppContext $ctx, $hid): ?array
+function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 {
     $hosts = $ctx->get('Hosts');
     $db = $ctx->get('Mysql');
@@ -137,12 +137,12 @@ function get_host_detail_view_data(AppContext $ctx, $hid): ?array
 
 /**
  *
- * @param type $ctx
- * @param type $logs
- * @param type $nl
+ * @param AppContext $ctx
+ * @param array $logs
+ * @param string $nl
  * @return array
  */
-function format_host_logs($ctx, $logs, $nl = '<br/>'): array
+function format_host_logs(AppContext $ctx, array $logs, string $nl = '<br/>'): array
 {
     $cfg = $ctx->get('cfg');
 

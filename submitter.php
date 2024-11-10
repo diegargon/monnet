@@ -12,6 +12,7 @@ define('IN_WEB', true);
 header('Content-Type: application/json; charset=UTF-8');
 
 /**
+ * 
  * @var User|null $user An instance of User or null if not defined
  * @var AppContext|null $ctx An instance of Context or null if not defined
  * @var array $lng
@@ -469,6 +470,7 @@ if (
 
 if ($command === 'host-details' && !empty($target_id)) {
     $host_details = [];
+    $tdata['host_details'] = [];
 
     $host_details = get_host_detail_view_data($ctx, $target_id);
     if (valid_array($host_details)) {

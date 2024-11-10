@@ -10,6 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 /**
  * Check if is array and is not empty
+ * 
  * @param mixed $array
  * @return bool
  */
@@ -223,9 +224,9 @@ function cached_img(User $user, int $id, string $img_url, int $renew = 0): strin
  *
  * @param float $latency
  * @param int $precision
- * @return int|float
+ * @return float
  */
-function round_latency(float $latency, int $precision = 3): int|float
+function round_latency(float $latency, int $precision = 3): float
 {
     if ($latency > 0 && $latency <= 0.001) {
         $latency = 0.001;

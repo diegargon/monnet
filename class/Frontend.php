@@ -12,27 +12,20 @@
  */
 class Frontend
 {
-    /**
-     *
-     * @var AppContext $ctx
-     */
+    /** @var AppContext $ctx */
     private AppContext $ctx;
 
-    /**
-     * @var array<int|string, mixed> $cfg
-     */
+    /** @var array<int|string, mixed> $cfg */
     private array $cfg;
 
-    /**
-     * @var array<string> $lang
-     */
+    /**  @var array<string> $lang */
     private array $lng;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->lng = &$ctx->get('lng');
-        $this->cfg = &$ctx->get('cfg');
+        $this->lng = &$this->ctx->get('lng');
+        $this->cfg = &$this->ctx->get('cfg');
     }
 
     /**

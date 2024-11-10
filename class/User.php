@@ -30,12 +30,6 @@ class User
 
     /**
      *
-     * @var array<string>
-     */
-    private array $lng;
-
-    /**
-     *
      * @var array
      */
     private $user = [];
@@ -57,7 +51,6 @@ class User
         $this->ctx = $ctx;
         $this->db = $ctx->get('Mysql');
         $this->cfg = $ctx->get('cfg');
-        $this->lng = $ctx->get('lng');
 
         if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
             $this->user = $this->getProfile($_SESSION['uid']);
