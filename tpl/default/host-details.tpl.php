@@ -72,11 +72,11 @@
                 <?php if (
                         !empty($tdata['host_details']['access_method']) &&
                         !empty($tdata['host_details']['online'])
-                ) : ?>
+                ) { ?>
                     <input onClick="submitCommand('power_off', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png"
                            alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
-                <?php endif; ?>
+                <?php } ?>
                 <?php if (!empty($tdata['host_details']['access_method'])) : ?>
                     <input onClick="submitCommand('reboot', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png"
@@ -125,9 +125,9 @@
             <?php if (
                     !empty($tdata['host_details']['mac_vendor']) &&
                     $tdata['host_details']['mac_vendor'] != '-'
-            ) : ?>
+            ) { ?>
                 <div class="host-item"><?= $tdata['host_details']['mac_vendor'] ?> </div>
-            <?php endif; ?>
+            <?php } ?>
         </div>
         <!-- THIRD HEADED BAR -->
         <?php
@@ -177,14 +177,14 @@
                 <?php if (
                     !empty($tdata['host_details']['uptime']) &&
                     is_array($tdata['host_details']['uptime'])
-                ) : ?>
+                ) { ?>
                     <div class="" >
                         <label class="resume_label"><?= $lng['L_UPTIME'] ?>:</label>
                         <span class="resume_field">
                             <?= $tdata['host_details']['uptime']['datetime'] ?>
                         </span>
                     </div>
-                <?php endif; ?>
+                <?php } ?>
                 <?php if (!empty($tdata['host_details']['latency_ms'])) : ?>
                     <div class="" >
                         <label class="resume_label"><?= $lng['L_LATENCY'] ?>:</label>
@@ -192,15 +192,17 @@
                     </div>
                 <?php endif; ?>
 
-                <?php if (
+                <?php
+                if (
                         empty($tdata['host_details']['online']) &&
                         !empty($tdata['host_details']['f_last_seen'])
-                    ) : ?>
+                ) {
+                ?>
                     <div>
                         <label class="resume_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
                         <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
                     </div>
-                <?php endif; ?>
+                <?php } ?>
 
                 <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
                     <div>
@@ -236,15 +238,17 @@
                         <progress id="mem" value="<?= $mem['mem_used'] ?>" max="<?= $mem['mem_available'] ?>">
                         </progress>
                     <?php endif; ?>
-                    <?php if (
+                    <?php
+                    if (
                             !empty($tdata['host_details']['disks']) &&
                             count($tdata['host_details']['disks']) > 0
-                    ) : ?>
+                    ) {
+                    ?>
                         <?php foreach ($tdata['host_details']['disks'] as $disk) : ?>
                             <label class="disk"><?= $disk['mounted'] ?>:</label>
                             <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
                         <?php endforeach; ?>
-                    <?php endif; ?>
+                    <?php } ?>
                 </div> <!-- progress container -->
             </div>
         <?php } ?>

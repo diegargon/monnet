@@ -134,7 +134,7 @@ class User
      *
      * @return string
      */
-    public function getUsername():string
+    public function getUsername(): string
     {
         return $this->user['username'] ? $this->user['username'] : false;
     }
@@ -142,7 +142,7 @@ class User
      *
      * @return string
      */
-    public function getPassword():string
+    public function getPassword(): string
     {
         return $this->user['password'] ? $this->user['password'] : false;
     }
@@ -177,7 +177,12 @@ class User
         return $this->user['timezone'];
     }
 
-    public function getDateNow(string $format = null)
+    /**
+     *
+     * @param string $format
+     * @return string|bool
+     */
+    public function getDateNow(string $format = null): string|bool
     {
         if (!$format) {
             $format = $this->cfg['datatime_format'];
@@ -205,7 +210,12 @@ class User
         return false;
     }
 
-    public function setUser(int $user_id)
+    /**
+     *
+     * @param int $user_id
+     * @return bool
+     */
+    public function setUser(int $user_id): bool
     {
         $_SESSION['uid'] = $user_id;
         $this->user = $this->getProfile($user_id);

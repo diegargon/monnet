@@ -213,7 +213,7 @@ class Log
         $query = 'SELECT * FROM hosts_logs WHERE level <= ' . $log_level .
             ' AND host_id = ' . $host_id . ' ORDER BY date DESC';
 
-        if (!empty($opts['max_lines'])):
+        if (!empty($opts['max_lines'])) :
             $query .= ' LIMIT ' . $opts['max_lines'];
         endif;
 
