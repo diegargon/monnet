@@ -85,7 +85,7 @@ if ($command == 'saveNote') {
     if (Filters::varInt($comm_values['value'])) {
         $command_value = Filters::varInt($comm_values['value']);
     } else {
-        $command_value = trim(Filters::varString($comm_values['value']));
+        $command_value = Filters::varString($comm_values['value']);
     }
 }
 

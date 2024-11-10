@@ -12,102 +12,111 @@
 class Filters
 {
     /**
-     * $_GET and call varInt - Check for int or array of int
+     * $_GET and call varInt - Check for int
      *
      * @param string $val
      * @param int $size
-     * @return int|bool|array
+     * @return int|null
      */
-    public static function getInt(string $val, int $size = PHP_INT_MAX): int|bool|array
+    public static function getInt(string $val, int $size = PHP_INT_MAX): ?int
     {
         if (empty($val)) {
-            return false;
+            return null;
         }
 
         return self::varInt($_GET[$val], $size);
     }
 
     /**
-     * $_POST and call varInt - Check for int or array  of int
-     * $_POST and call varInt
+     * $_POST and call varInt - Check for int
      * @param string $val
      * @param int $size
-     * @return int|bool|array
+     * @return int|null
      */
-    public static function postInt(string $val, int $size = PHP_INT_MAX): int|bool|array
+    public static function postInt(string $val, int $size = PHP_INT_MAX): ?int
     {
         if (empty($val)) {
-            return false;
+            return null;
         }
 
         return self::varInt($_POST[$val], $size);
     }
 
     /**
-     * Check for int or array  of int
+     * Check for int
      *
-     * @param string $val
+     * @param mixed $val
      * @param int $size
-     * @return int|bool|array
+     * @return int|null
      */
-    public static function varInt(string $val, int $size = PHP_INT_MAX): int|bool|array
+    public static function varInt(mixed $val, int $size = PHP_INT_MAX): ?int
     {
-        if (is_array($val)) {
-            if (count($val) <= 0) {
-                return false;
-            }
-            foreach ($val as $key => $value) {
-                if (!is_numeric($value) || $value > $size || !is_numeric($key)) {
-                    return false;
-                }
-                // Convertir cada elemento del array a int
-                $val[$key] = (int) $value;
-            }
-            return $val;
-        }
-
         $triVal = trim($val);
         if (!is_numeric($triVal) || $triVal > $size) {
-            return false;
+            return null;
         }
 
         return (int) $triVal;
     }
 
-    //Simple String words without accents or special characters
-    public static function getString(string $val, int $size = PHP_INT_MAX): string|bool
+    /*
+     * Parse get/post/var
+     * Simple String words without accents or special characters
+     */
+
+    /**
+     *
+     * @param string $val
+     * @param int $size
+     * @return string|null
+     */
+    public static function getString(string $val, int $size = PHP_INT_MAX): ?string
     {
         if (empty($_GET[$val])) {
-            return false;
+            return null;
         }
 
         return self::varString($_GET[$val], $size);
     }
 
-    public static function postString(string $val, int $size = PHP_INT_MAX)
+    /**
+     *
+     * @param string $val
+     * @param int $size
+     * @return string|null
+     */
+
+    public static function postString(string $val, int $size = PHP_INT_MAX): ?string
     {
         if (empty($_POST[$val])) {
-            return false;
+            return null;
         }
 
         return self::varString($_POST[$val], $size);
     }
 
-    public static function varString(string $val, int $size = PHP_INT_MAX)
+    /**
+     *
+     * @param mixed $val
+     * @param int $size
+     * @return string|null
+     */
+
+    public static function varString(mixed $val, int $size = PHP_INT_MAX): ?string
     {
         //Valida un string simple
         if (empty($val)) {
-            return false;
+            return null;
         }
 
         if (!empty($size) && strlen($val) > $size) {
-            return false;
+            return null;
         }
         if (preg_match('/[!@#$%^&*(),.?":{}|<>]/', $val)) {
-            return false;
+            return null;
         }
 
-        return $val;
+        return trim($val);
     }
 
     /**
