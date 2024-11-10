@@ -21,7 +21,7 @@
             $id = $bookmark_head['id'];
             ?>
             <button id="bookmarks_tab_<?= $id ?>" class="bookmarks-tabs-head"
-                    onclick="changeBookmarksTab('bookmark_content_tab_<?= $id ?>')">
+                    onclick="changeBookmarksTab(<?= $id ?>)">
                         <?= $bookmark_head['cat_name'] ?>
                 <input onclick="confirmSubmit('removeBookmarkCat', {id: <?= $id ?>})"
                        type="image" class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png"
@@ -31,7 +31,7 @@
         }
         ?>
         <button id="bookmarks_tab_0" class="bookmarks-tabs-head"
-                onclick="changeBookmarksTab('bookmark_content_tab_0')"><?= $lng['L_ALL'] ?></button>
+                onclick="changeBookmarksTab(0)"><?= $lng['L_ALL'] ?></button>
         <button id="bookmarks_tab_add" class="bookmarks-tabs-head add_cat_btn"
                 onclick="addBookmarkCat('<?= $lng['L_ADD_BOOKMARKS_CAT'] ?>')">+</button>
     </div>

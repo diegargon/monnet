@@ -29,10 +29,11 @@ function changeBookmarksTab(tabId) {
     const tabs = document.querySelectorAll('.bookmarks-tabs-head');
     tabs.forEach(tab => tab.classList.remove('active'));
     // Mostrar el contenido de la pestaña seleccionada
-    const selectedTabContent = document.getElementById(tabId);
+    console.log(tabId);
+    const selectedTabContent = document.getElementById(`bookmark_content_tab_${tabId}`);
     selectedTabContent.classList.add('active');
     // Resaltar el botón de la pestaña seleccionada
-    const selectedTab = document.querySelector(`button[onclick="changeBookmarksTab('${tabId}')"]`);
+    const selectedTab = document.querySelector(`button[onclick="changeBookmarksTab(${tabId})"]`);
     selectedTab.classList.add('active');
     submitCommand('change_bookmarks_tab', {id: tabId});
 }

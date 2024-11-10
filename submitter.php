@@ -61,9 +61,6 @@ if (!isset($comm_values['id'])) {
     $data['command_error_msg'] = 'Id field is mandatory';
 } else {
     $target_id = Filters::varInt($comm_values['id']);
-    if (empty($target_id)) :
-        $data['command_error_msg'] = 'Id field is no numeric:';
-    endif;
 }
 
 if ($command == 'saveNote') {
@@ -547,6 +544,10 @@ if (
 if (
     ($command == 'removeBookmarkCat' || $command == 'removeHostsCat') && !empty($target_id)
 ) {
+    /*
+     * 1 Host Cats 2 Bookmarks Cat
+     * id 50 is L_OTHERS cant delete
+     */
     $cat_type = ($command == 'removeBookmarkCat') ? 2 : 1;
     if ($cat_type === 2 && $target_id === 50) {
         $data['command_error_msg'] = $lng['L_ERR_CAT_NODELETE'];
@@ -628,7 +629,7 @@ if ($command == 'reboot' && !empty($target_id)) {
     $data['command_success'] = 1;
 }
 
-if ($command == 'change_bookmarks_tab' && !empty($target_id)) {
+if ($command == 'change_bookmarks_tab') {
     $user->setPref('default_bookmarks_tab', $target_id);
     $data['command_success'] = 1;
 }
