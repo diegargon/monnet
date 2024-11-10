@@ -50,22 +50,22 @@ if (empty($command)) {
     $data['command_error_msg'] = 'Command is empty or not a string';
 }
 
-if (isset($_POST['command_values'])) {
-    $comm_values = $_POST['command_values'];
+$comm_values = Filters::sanArray('command_values', 'post');
+
+if (empty($comm_values) || !is_array($comm_values)) {
+    $data['command_error_msg'] = 'Command values is empty or not an array';
 }
-if (!empty($comm_values) && !is_array($comm_values)) {
-    $data['command_error_msg'] = 'Value is not array';
+
+//ID is mandatory, must send 0 if not apply
+if (!isset($comm_values['id'])) {
+    $data['command_error_msg'] = 'Id field is mandatory';
 } else {
-    //ID is mandaotry, 0 if not need
-    if (!isset($comm_values['id'])) {
-        $data['command_error_msg'] = 'Id field is mandatory';
-    } else {
-        $target_id = Filters::varInt($comm_values['id']);
-        if (empty($target_id)) :
-            $data['command_error_msg'] = 'Id field is no numeric:';
-        endif;
-    }
+    $target_id = Filters::varInt($comm_values['id']);
+    if (empty($target_id)) :
+        $data['command_error_msg'] = 'Id field is no numeric:';
+    endif;
 }
+
 if ($command == 'saveNote') {
     $command_value = trim(Filters::varUTF8($comm_values['value']));
 } elseif ($command == 'submitScanPorts') {

@@ -110,6 +110,45 @@ class Filters
         return $val;
     }
 
+    /**
+     * Sanitize Array, can be array or string post/get value
+     * @param mixed $input
+     * @param string $method default var or post/get
+     * @return array
+     */
+    public static function sanArray(mixed $input, string $method = 'var'): array
+    {
+        if ($method === 'var') :
+            $var_ary = $input;
+        elseif ($method === 'post' && isset($_POST[$input])) :
+            $var_ary = $_POST[$input];
+        elseif ($method === 'get' && isset($_GET[$input])) :
+            $var_ary = $_GET[$input];
+        else :
+            return [];
+        endif;
+        // Here we must have an array
+        if (!is_array($var_ary)) {
+            return [];
+        }
+
+        foreach ($var_ary as $key => $value) {
+            if (is_array($value)) {
+                $var_ary[$key] = sanitizeArray($value, $method);
+            } else {
+                if (is_numeric($value)) {
+                    // Cast to int if it's a valid integer
+                    $var_ary[$key] = (int) $value;
+                } else {
+                    // Sanitize as string (eliminate special HTML characters)
+                    $var_ary[$key] = filter_var($value, FILTER_SANITIZE_STRING) ?: null;
+                }
+            }
+        }
+
+        return $var_ary;
+    }
+
 //UTF8
     public static function getUtf8(string $val, int $size = PHP_INT_MAX): string|bool
     {
