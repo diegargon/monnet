@@ -106,10 +106,10 @@ class AppContext
             $this->set($name);
         }
 
-        if ($this->services[$name]) {
+        if ($this->services[$name] !== null) {
             return $this->services[$name];
         } else {
-            return false;
+            return null;
         }
     }
 
