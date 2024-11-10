@@ -3,7 +3,6 @@ $(document).ready(function () {
         var hostId = $('#host_id').val();
         var logLevel = $('#log_level').val();
         var logSize = $('#log_size').val();
-        console.log(logLevel);
         requestHostDetails('logs-reload', {id: hostId, log_level: logLevel, log_size: logSize});
     });
 
