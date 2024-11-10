@@ -468,8 +468,9 @@ if (
 /* Set show/hide host-details */
 
 if ($command === 'host-details' && !empty($target_id)) {
-    $host_id = $target_id;
-    $host_details = get_host_detail_view_data($ctx, $host_id);
+    $host_details = [];
+
+    $host_details = get_host_detail_view_data($ctx, $target_id);
     if (valid_array($host_details)) {
         $tdata['host_details'] = $host_details;
         if (!empty($host_details['ping_stats'])) {
@@ -487,7 +488,6 @@ if ($command === 'host-details' && !empty($target_id)) {
         order_by_name($cfg['manufacture']);
         order_by_name($cfg['system_type']);
         unset($tdata['host_details']['ping_stats']);
-        $data['host_details']['cfg'] = [];
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_success'] = 1;

@@ -8,7 +8,13 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function get_host_detail_view_data(AppContext $ctx, $hid): array|bool
+/**
+ *
+ * @param AppContext $ctx
+ * @param type $hid
+ * @return array|null
+ */
+function get_host_detail_view_data(AppContext $ctx, $hid): ?array
 {
     $hosts = $ctx->get('Hosts');
     $db = $ctx->get('Mysql');
@@ -20,7 +26,7 @@ function get_host_detail_view_data(AppContext $ctx, $hid): array|bool
     $categories = $ctx->get('Categories');
 
     if (!valid_array($host)) {
-        return false;
+        return null;
     }
 
     $host['hosts_categories'] = $categories->getByType(1);
@@ -129,6 +135,13 @@ function get_host_detail_view_data(AppContext $ctx, $hid): array|bool
     return $host;
 }
 
+/**
+ *
+ * @param type $ctx
+ * @param type $logs
+ * @param type $nl
+ * @return array
+ */
 function format_host_logs($ctx, $logs, $nl = '<br/>'): array
 {
     $cfg = $ctx->get('cfg');
