@@ -29,7 +29,6 @@ function changeBookmarksTab(tabId) {
     const tabs = document.querySelectorAll('.bookmarks-tabs-head');
     tabs.forEach(tab => tab.classList.remove('active'));
     // Mostrar el contenido de la pestaña seleccionada
-    console.log(tabId);
     const selectedTabContent = document.getElementById(`bookmark_content_tab_${tabId}`);
     selectedTabContent.classList.add('active');
     // Resaltar el botón de la pestaña seleccionada
