@@ -20,7 +20,7 @@ class Filters
      */
     public static function getInt(string $val, int $size = PHP_INT_MAX): ?int
     {
-        if (empty($val)) {
+        if (empty($val)|| !isset($_GET['val'])) {
             return null;
         }
 
@@ -35,7 +35,7 @@ class Filters
      */
     public static function postInt(string $val, int $size = PHP_INT_MAX): ?int
     {
-        if (empty($val)) {
+        if (empty($val) || !isset($_POST[$val])) {
             return null;
         }
 
