@@ -6,6 +6,12 @@
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
+/**
+ * In frontend->getTpl()
+ * @var array<int|string, mixed> $cfg Config data
+ * @var array<string> $lng Language data
+ * @var array<mixed> $tdata Template Data
+ */
 $privacy_page = 'privacy';
 if (Filters::getString('page') == $privacy_page) {
     $privacy_page = 'index';

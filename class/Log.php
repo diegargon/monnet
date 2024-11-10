@@ -198,7 +198,7 @@ class Log
     /**
      *
      * @param int $host_id
-     * @param int $limit
+     * @param array $opts
      *
      * @return array
      */

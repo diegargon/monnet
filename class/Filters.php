@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -20,7 +20,7 @@ class Filters
      */
     public static function getInt(string $val, int $size = PHP_INT_MAX): int|bool|array
     {
-        if (!isset($_GET[$val])) {
+        if (empty($val)) {
             return false;
         }
 
@@ -36,7 +36,7 @@ class Filters
      */
     public static function postInt(string $val, int $size = PHP_INT_MAX): int|bool|array
     {
-        if (!isset($_POST[$val])) {
+        if (empty($val)) {
             return false;
         }
 
@@ -52,10 +52,6 @@ class Filters
      */
     public static function varInt(string $val, int $size = PHP_INT_MAX): int|bool|array
     {
-        if (!isset($val)) {
-            return false;
-        }
-
         if (is_array($val)) {
             if (count($val) <= 0) {
                 return false;

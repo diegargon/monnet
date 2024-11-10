@@ -95,6 +95,11 @@ if (!empty($command)) {
 if (!empty($command_value)) {
     $data['command_value'] = $command_value;
 }
+if (!is_numeric($target_id)) {
+    $data['command_error_msg'] = 'Id field is no numeric:';
+} else {
+    $target_id = (int) $target_id;
+}
 
 if(!empty($data['command_error_msg'])) {
     print json_encode($data, JSON_UNESCAPED_UNICODE);

@@ -1,16 +1,16 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
- * @var array<string> $lng
- * @var array<mixed> $tdata
+ * @var array<int|string, mixed> $cfg Config data
+ * @var array<string> $lng Language data
+ * @var array<mixed> $tdata Template Data
  */
 !defined('IN_WEB') ? exit : true;
 ?>
