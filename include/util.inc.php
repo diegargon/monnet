@@ -245,3 +245,16 @@ function create_token(): string
 {
     return bin2hex(openssl_random_pseudo_bytes(16));
 }
+
+/**
+ *
+ * @param mixed $var
+ * @return void
+ */
+function dump_in_json(mixed $var): void
+{
+    echo json_encode([
+        'dump' => str_replace(["\n", "  "], " ", print_r($var, true)),
+    ]);
+    exit();
+}
