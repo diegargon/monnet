@@ -487,6 +487,7 @@ if ($command === 'host-details' && !empty($target_id)) {
         order_by_name($cfg['manufacture']);
         order_by_name($cfg['system_type']);
         unset($tdata['host_details']['ping_stats']);
+        $data['host_details']['cfg'] = [];
         $data['host_details']['cfg']['place'] = "#left_container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_success'] = 1;

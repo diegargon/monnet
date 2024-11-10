@@ -69,10 +69,12 @@
                            class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png"
                            alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
                 <?php endif; ?>
-                <?php if (
-                        !empty($tdata['host_details']['access_method']) &&
-                        !empty($tdata['host_details']['online'])
-                ) { ?>
+                <?php
+                if (
+                    !empty($tdata['host_details']['access_method']) &&
+                    !empty($tdata['host_details']['online'])
+                ) {
+                    ?>
                     <input onClick="submitCommand('power_off', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png"
                            alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
@@ -122,10 +124,12 @@
             <?php if (!empty($tdata['host_details']['mac'])) : ?>
                 <div class="host-item"><?= $tdata['host_details']['mac'] ?> </div>
             <?php endif; ?>
-            <?php if (
-                    !empty($tdata['host_details']['mac_vendor']) &&
-                    $tdata['host_details']['mac_vendor'] != '-'
-            ) { ?>
+            <?php
+            if (
+                !empty($tdata['host_details']['mac_vendor']) &&
+                $tdata['host_details']['mac_vendor'] != '-'
+            ) {
+                ?>
                 <div class="host-item"><?= $tdata['host_details']['mac_vendor'] ?> </div>
             <?php } ?>
         </div>
@@ -174,10 +178,12 @@
                         <?= $tdata['host_details']['formated_creation_date'] ?>
                     </span>
                 </div>
-                <?php if (
+                <?php
+                if (
                     !empty($tdata['host_details']['uptime']) &&
                     is_array($tdata['host_details']['uptime'])
-                ) { ?>
+                ) {
+                    ?>
                     <div class="" >
                         <label class="resume_label"><?= $lng['L_UPTIME'] ?>:</label>
                         <span class="resume_field">
@@ -197,7 +203,7 @@
                         empty($tdata['host_details']['online']) &&
                         !empty($tdata['host_details']['f_last_seen'])
                 ) {
-                ?>
+                    ?>
                     <div>
                         <label class="resume_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
                         <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
@@ -243,7 +249,7 @@
                             !empty($tdata['host_details']['disks']) &&
                             count($tdata['host_details']['disks']) > 0
                     ) {
-                    ?>
+                        ?>
                         <?php foreach ($tdata['host_details']['disks'] as $disk) : ?>
                             <label class="disk"><?= $disk['mounted'] ?>:</label>
                             <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
