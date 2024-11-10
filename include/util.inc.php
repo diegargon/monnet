@@ -247,7 +247,7 @@ function create_token(): string
 }
 
 /**
- *
+ * Used to dbg
  * @param mixed $var
  * @return void
  */
