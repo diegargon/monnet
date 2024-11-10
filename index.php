@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var AppContext|null $ctx An instance of AppCtx or null if not defined
+ * @var AppContext|null $ctx Instance of AppCtx. Init in common.inc
  */
 define('IN_WEB', true);
 ini_set('display_errors', 1);
