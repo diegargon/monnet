@@ -1,5 +1,6 @@
 ** HIGH
 * Poder Editar las cosas
+* Revisar Items/addBookmark/updateBookmark y simplificar
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
 * [DB 0.35v] alert field - Señal de nuevo host descubierto, cambio de mac
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
@@ -26,7 +27,7 @@
 * Links comprobacion si funciona y una pequeña on/off señal
 * [DB 0.35v] Network weight
 * En el login opcionalmente que se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
-
+* Apartado add/edit link intentar obtener /favicon.ico logo.png si no caer en www.jpg local
     $secure = true; // Configurar para que solo se envíe sobre HTTPS
     $httpOnly = true; // Configurar la cookie como HTTP Only
     setcookie("critical_key", "mi_clave_critica", 0, "/", "", $secure, $httpOnly);

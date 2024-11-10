@@ -164,6 +164,7 @@ function page_index(AppContext $ctx)
         'place' => 'center_col',
     ];
     /* Add Bookmark Item */
+    $page['local_icons'] = getLocalIconsData('local_img/');
     $page['load_tpl'][] = [
         'file' => 'add-bookmark',
         'place' => 'center_col',
@@ -191,7 +192,7 @@ function page_index(AppContext $ctx)
     $page['networks_selected'] = $networks_selected; //to prevent unselect all
 
     /* Webs Categories */
-    $page['webs_categories'] = $categories->getByType(2);
+    $page['web_categories'] = $categories->getByType(2);
 
     /* Network Categories */
     $page['network_categories'] = $categories->getByType(1);

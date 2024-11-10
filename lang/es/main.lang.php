@@ -55,6 +55,7 @@ $lng = [
     'L_ERR_SENDING_EMAILS' => 'Error: Enviando correos',
     'L_ENABLE_EMAIL_ALARMS' => 'Habilitar Mensajes Alarmas',
     'L_EMAILS' => 'Emails',
+    'L_EDIT' => 'Editar',
 //F
     'L_FIELD' => 'Campo',
     //G

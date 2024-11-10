@@ -40,11 +40,52 @@ class Items
                 'type' => 'bookmarks', 'title' => $item_data['name'],
                 'conf' => json_encode($conf), 'weight' => $item_data['weight']];
             if ($this->db->insert('items', $set)) {
+                $id = $this->db->insertID();
+                $this->item[$id] = $set;
+
                 return true;
             }
         }
 
         return false;
+    }
+
+    public function updateItem(string $item_type, array $item_data): bool
+    {
+        if ($item_type == 'bookmarks') {
+            $conf = ['url' => $item_data['urlip'], 'image_type' => $item_data['image_type'],
+                'image_resource' => $item_data['field_img']];
+            $set = ['uid' => $this->uid, 'cat_id' => $item_data['cat_id'],
+                'type' => 'bookmarks', 'title' => $item_data['name'],
+                'conf' => json_encode($conf), 'weight' => $item_data['weight']];
+            /*
+            if ($this->db->insert('items', $set)) {
+                $id = $this->db->insertID();
+                $this->item[$id] = $set;
+
+                return true;
+            }
+             *
+             */
+        }
+
+        return false;
+    }
+
+    public function getById(int $id) : array
+    {
+        foreach ($this->items as $item) {
+            if($item['id'] == $id){
+                $confArray = json_decode($item['conf'], true);
+                if (is_array($confArray)) {
+                    $item = array_merge($item, $confArray);
+                    unset($item['conf']);
+                }
+                return $item;
+            }
+        }
+
+        return [];
     }
 
     public function getAll(?string $key_order = null, ?string $dir = 'asc'): array

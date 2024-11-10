@@ -80,12 +80,33 @@ function addBookmarkCat(title) {
     var element = document.getElementById("stdbox-container");
     var title_element = document.getElementById("stdbox-title");
     var std_content = document.getElementById("stdbox-content");
+
     if (element) {
         element.style.display = "block";
         title_element.innerHTML = title;
         std_content.innerHTML = '<input id="bookmarkCat" type="text"/><button id="submitBookmarkCat" type="submit">+</button>';
     } else {
         console.error("Stdbox not found.");
+    }
+}
+
+function updateThumbnail(select) {
+    const selectedOption = select.options[select.selectedIndex];
+    const thumbnailSrc = selectedOption.getAttribute('data-thumbnail');
+    const thumbnailImg = document.getElementById('thumbnail');
+    const imageName = document.getElementById('imageName');
+    const field_img = document.getElementById("field_img");
+    const image_type = document.getElementById("image_type");
+
+    if (thumbnailSrc) {
+        thumbnailImg.src = thumbnailSrc;
+        thumbnailImg.style.display = 'inline';
+        imageName.textContent = selectedOption.text;
+        field_img.value = selectedOption.value;
+        image_type.selectedIndex = 0;
+    } else {
+        thumbnailImg.style.display = 'none';
+        imageName.textContent = '';
     }
 }
 
@@ -111,7 +132,7 @@ $(document).ready(function () {
         $(".delete_bookmark").toggle();
         $(".delete_cat_btn").toggle();
         $(".add_cat_btn").toggle();
-
+        $(".edit_bookmark").toggle();
     });
     // add network "popup"
     $("#addNetwork").on("click", function () {
@@ -120,6 +141,7 @@ $(document).ready(function () {
     $("#close_addnetwork").on("click", function () {
         $("#add-network-container").css("display", "none");
     });
+
     // Show cat
 
     var clicked = false;
@@ -156,7 +178,9 @@ $(document).ready(function () {
     $(document).on("click", "#close_host_details", function () {
         $("#host-details").css("display", "none");
     });
-
+    $(document).on("click", "#close_mgmtbookmark", function () {
+        $("#mgmt-bookmark-container").css("display", "none");
+    });
     $(document).on("change", "#chkHighlight", function () {
         var hostId = $('#host_id').val();
 
@@ -300,7 +324,31 @@ $(document).ready(function () {
         } else {
             $('#error_msg').html('Empty field');
         }
+    });
 
+    $(document).on("click", "#updateBookmark", function () {
+        var fields = {};
+        var id = null;
+
+        $('#error_msg').html('');
+        $('#status_msg').html('');
+        fields.bookmark_id = $('#bookmark_id').val();
+        fields.name = $('#bookmarkName').val();
+        fields.cat_id = parseInt($('#cat_id').val());
+        fields.urlip = $('#urlip').val();
+        fields.image_type = $('#image_type').val();
+        fields.field_img = $('#field_img').val();
+        fields.weight = $('#weight').val();
+
+        id = $('#bookmark_id').val();
+        if(!id) {
+          $('#error_msg').html('Empty Id field');
+        } else if (fields.bookmarkName !== "" && fields.cat_id !== "" && fields.urlip !== "" && fields.image_type !== "") {
+            json_fields = JSON.stringify(fields);
+            submitCommand('updateBookmark', {id: id, value: json_fields} );
+        } else {
+            $('#error_msg').html('Empty field');
+        }
     });
 //Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');

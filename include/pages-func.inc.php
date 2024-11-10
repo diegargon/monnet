@@ -41,3 +41,25 @@ function format_items(User $user, array $items_results): array
 
     return $items;
 }
+
+function getLocalIconsData(string $directory): array {
+    $allowedExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+    $imageData = [];
+
+    if (is_dir($directory)) {
+        $dir = new DirectoryIterator($directory);
+        foreach ($dir as $fileinfo) {
+            if ($fileinfo->isFile()) {
+                $extension = strtolower($fileinfo->getExtension());
+                if (in_array($extension, $allowedExtensions)) {
+                    $imageData[] = [
+                        'path' => $fileinfo->getPathname(),
+                        'basename' => $fileinfo->getBasename()
+                    ];
+                }
+            }
+        }
+    }
+
+    return $imageData;
+}

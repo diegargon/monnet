@@ -12,7 +12,7 @@ define('IN_WEB', true);
 header('Content-Type: application/json; charset=UTF-8');
 
 /**
- * 
+ *
  * @var User|null $user An instance of User or null if not defined
  * @var AppContext|null $ctx An instance of Context or null if not defined
  * @var array $lng
@@ -65,6 +65,7 @@ if (!isset($comm_values['id'])) {
 }
 
 if ($command == 'saveNote') {
+
     $command_value = trim(Filters::varUTF8($comm_values['value']));
 } elseif ($command == 'submitScanPorts') {
     $command_value = trim(Filters::varCustomString($comm_values['value'], ',/', 255));
@@ -73,6 +74,8 @@ if ($command == 'saveNote') {
 } elseif ($command == 'addNetwork') {
     $command_value = Filters::varCustomString($comm_values['value'], ',":.{}'); //JSON only special chars
 } elseif ($command == 'addBookmark') {
+    $command_value = Filters::varCustomString($comm_values['value'], ',":.{}/_'); //Json + url chars
+} elseif ($command == 'updateBookmark') {
     $command_value = Filters::varCustomString($comm_values['value'], ',":.{}/_'); //Json + url chars
 } elseif ($command == 'submitHost') {
     $command_value = Filters::varIP($comm_values['value']);
@@ -466,6 +469,63 @@ if (
 }
 
 
+if ( $command == 'updateBookmark' && !empty($command_value) ) {
+    $decodedJson = json_decode($command_value, true);
+    $bookmark = [];
+    if ($decodedJson === null) {
+        $data['command_error_msg'] .= 'JSON Invalid<br/>';
+    } else {
+        foreach ($decodedJson as $key => $dJson) {
+            $bookmark[$key] = trim($dJson);
+        }
+
+        if (!Filters::varString($bookmark['name'])) {
+            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+        if (!Filters::varString($bookmark['image_type'])) {
+            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_IMAGE_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+        if (!Filters::varInt($bookmark['cat_id'])) {
+            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+        if (!Filters::varInt($bookmark['bookmark_id'])) {
+            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+        if (
+            !Filters::varUrl($bookmark['urlip']) ||
+            Filters::varIP($bookmark['urlip'])
+        ) {
+            $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        if (
+            (!Filters::varInt($bookmark['weight'])) &&
+            (Filters::varInt($bookmark['weight']) !== 0)
+        ) {
+            $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        if ($bookmark['image_type'] != 'favicon' && empty($bookmark['field_img'])) {
+            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+        if ($bookmark['image_type'] == 'favicon' && empty($bookmark['field_img'])) {
+            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_INVALID']}";
+        }
+        if ($bookmark['image_type'] == 'local_img' && empty($bookmark['field_img'])) {
+            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+        }
+
+        if (empty($data['command_error_msg'])) {
+            if ($ctx->get('Items')->updateItem('bookmarks', $bookmark)) {
+                $data['response_msg'] = 'ok';
+            } else {
+                $data['response_msg'] = 'error';
+            }
+        }
+        $data['command_success'] = 1;
+    }
+}
+
 /* Set show/hide host-details */
 
 if ($command === 'host-details' && !empty($target_id)) {
@@ -529,6 +589,32 @@ if ($command == 'removeBookmark' && !empty($target_id)) {
     $data['command_success'] = 1;
 }
 
+if ($command == "editBookmark" && !empty($target_id)) {
+    if (!isset($categories) || $categories === null) :
+        $categories = $ctx->get('Categories');
+    endif;
+    if (!isset($categories) || $categories === null) :
+        $categories = $ctx->get('Categories');
+    endif;
+
+    $tdata = [];
+    $items = $ctx->get('Items');
+    $tdata = $items->getById($target_id);
+    $tdata['web_categories'] = [];
+
+    if ($categories !== null) :
+        $tdata['web_categories'] = $categories->getByType(2);
+    endif;
+
+    $tdata['local_icons'] = getLocalIconsData('local_img/');
+
+    $data['response_msg'] = $target_id;
+    $data['mgmt_bookmark']['cfg']['place'] = "#left_container";
+    $data['mgmt_bookmark']['data'] = $frontend->getTpl('mgmt-bookmark', $tdata);
+    $data['command_success'] = $target_id;
+} elseif (empty($target_id)) {
+    $data['command_error_msg'] = "Id is empty";
+}
 /* /END Bookmarks */
 
 /* Host and Bookmarks create category */

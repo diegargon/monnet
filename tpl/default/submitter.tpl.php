@@ -77,6 +77,22 @@
                         $(elementSelector).hide();
                     }
 
+                    if (
+                            jsonData.command_receive === 'editBookmark' &&
+                            jsonData.command_success > 0
+                    ) {
+                        $('#mgmt-bookmark-container').remove();
+                        if ($.isEmptyObject(jsonData.mgmt_bookmark.cfg)) {
+                            console.log('Error en la solicitud mgmt-bookmark:');
+                            return;
+                        }
+                        let position = jsonData.mgmt_bookmark.cfg.place;
+                        $(position).prepend(jsonData.mgmt_bookmark.data);
+                        var mgmtBookmark = $(position).find("#mgmt-bookmark-container");
+                        makeDraggable(mgmtBookmark);
+                        mgmtBookmark.css('display', 'block');
+                    }
+
                     if ("host_details" in jsonData) {
                         $('#host-details').remove();
                         if ($.isEmptyObject(jsonData.host_details.cfg)) {
@@ -95,7 +111,6 @@
                         var note_id = $('#host_note_id').val();
 
                         textNote.addEventListener('input', function () {
-                            console.log(note_id);
                             clearTimeout(debounceTimeout);
                             debounceTimeout = setTimeout(function () {
                                 $.post('submitter.php', {

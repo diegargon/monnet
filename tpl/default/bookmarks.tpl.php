@@ -57,7 +57,12 @@
                 <div id="item_num_<?= $bookmark['id'] ?>" class="item-container">
                     <div class="delete_bookmark">
                         <input onclick="confirmSubmit('removeBookmark',{id: <?= $bookmark['id'] ?>})" type="image"
-                               class="action-icon remove" src="tpl/default/img/remove.png" alt="Borrar"
+                               class="action-icon remove" src="tpl/default/img/remove.png" alt="Delete"
+                               title="Borrar">
+                    </div>
+                    <div class="edit_bookmark">
+                        <input onclick="submitCommand('editBookmark',{id: <?= $bookmark['id'] ?>})" type="image"
+                               class="action-icon remove" src="tpl/default/img/edit.png" alt="Edit"
                                title="Borrar">
                     </div>
                     <a href="<?= $bookmark['url'] ?>" rel="noopener noreferrer" target="_blank"
