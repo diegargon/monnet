@@ -120,7 +120,7 @@ class Filters
     }
 
     /**
-     * Sanitize Array, can be array or string post/get value
+     * Sanitize Array, can be array or string post/get value, check to avoid json
      * @param mixed $input
      * @param string $method default var or post/get
      * @return array
@@ -149,8 +149,15 @@ class Filters
                     // Cast to int if it's a valid integer
                     $var_ary[$key] = (int) $value;
                 } else {
-                    // Sanitize as string (eliminate special HTML characters)
-                    $var_ary[$key] = filter_var($value, FILTER_SANITIZE_STRING) ?: null;
+                    // Verifica si el valor es JSON válido
+                    $decodedJson = json_decode($value, true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        // Si es JSON válido, mantenlo como está
+                        $var_ary[$key] = $value;
+                    } else {
+                        // Si no es JSON, sanitiza como cadena
+                        $var_ary[$key] = filter_var($value, FILTER_SANITIZE_STRING) ?: null;
+                    }
                 }
             }
         }
