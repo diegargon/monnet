@@ -467,10 +467,10 @@ if (
     }
 }
 
-
-if ($command == 'updateBookmark' && !empty($command_value)) {
+if ($command == 'updateBookmark' && !empty($command_value) && $target_id > 0) {
     $decodedJson = json_decode($command_value, true);
     $bookmark = [];
+    $bookmark['id'] = $target_id;
     if ($decodedJson === null) {
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
     } else {
@@ -592,15 +592,16 @@ if ($command == "editBookmark" && !empty($target_id)) {
     if (!isset($categories) || $categories === null) :
         $categories = $ctx->get('Categories');
     endif;
-    if (!isset($categories) || $categories === null) :
-        $categories = $ctx->get('Categories');
-    endif;
 
     $tdata = [];
     $items = $ctx->get('Items');
     $tdata = $items->getById($target_id);
     $tdata['web_categories'] = [];
-
+    if (!empty($tdata['conf'])) {
+        $conf = json_decode($tdata, true);
+        $tdata['image_resource'] = $conf['image_resource'];
+        $tdata['image_type'] = $conf['image_type'];
+    }
     if ($categories !== null) :
         $tdata['web_categories'] = $categories->getByType(2);
     endif;
@@ -611,8 +612,6 @@ if ($command == "editBookmark" && !empty($target_id)) {
     $data['mgmt_bookmark']['cfg']['place'] = "#left_container";
     $data['mgmt_bookmark']['data'] = $frontend->getTpl('mgmt-bookmark', $tdata);
     $data['command_success'] = $target_id;
-} elseif (empty($target_id)) {
-    $data['command_error_msg'] = "Id is empty";
 }
 /* /END Bookmarks */
 

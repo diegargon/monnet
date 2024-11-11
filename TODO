@@ -1,5 +1,6 @@
 ** HIGH
 * Poder Editar las cosas
+* El enlace para imagen deberia ser optativo, si no se pone pone un defecto www.png
 * Revisar Items/addBookmark/updateBookmark y simplificar
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
 * [DB 0.35v] alert field - Señal de nuevo host descubierto, cambio de mac

@@ -33,11 +33,21 @@ class Items
     public function addItem(string $item_type, array $item_data): bool
     {
         if ($item_type == 'bookmarks') {
-            $conf = ['url' => $item_data['urlip'], 'image_type' => $item_data['image_type'],
-                'image_resource' => $item_data['field_img']];
-            $set = ['uid' => $this->uid, 'cat_id' => $item_data['cat_id'],
-                'type' => 'bookmarks', 'title' => $item_data['name'],
-                'conf' => json_encode($conf), 'weight' => $item_data['weight']];
+            $conf = [
+                'url' => $item_data['urlip'],
+                'image_type' => $item_data['image_type'],
+                'image_resource' => $item_data['field_img']
+            ];
+
+            $set = [
+                'uid' => $this->uid,
+                'cat_id' => $item_data['cat_id'],
+                'type' => 'bookmarks',
+                'title' => $item_data['name'],
+                'conf' => json_encode($conf),
+                'weight' => $item_data['weight']
+            ];
+
             if ($this->db->insert('items', $set)) {
                 $id = $this->db->insertID();
                 $this->items[$id] = $set;
@@ -52,20 +62,27 @@ class Items
     public function updateItem(string $item_type, array $item_data): bool
     {
         if ($item_type == 'bookmarks') {
-            $conf = ['url' => $item_data['urlip'], 'image_type' => $item_data['image_type'],
-                'image_resource' => $item_data['field_img']];
-            $set = ['uid' => $this->uid, 'cat_id' => $item_data['cat_id'],
-                'type' => 'bookmarks', 'title' => $item_data['name'],
-                'conf' => json_encode($conf), 'weight' => $item_data['weight']];
-            /*
-            if ($this->db->insert('items', $set)) {
-                $id = $this->db->insertID();
-                $this->item[$id] = $set;
+            $id = $item_data['id'];
+            $conf = [
+                'url' => $item_data['urlip'],
+                'image_type' => $item_data['image_type'],
+                'image_resource' => $item_data['field_img']
+            ];
+            $set = [
+                'uid' => $this->uid,
+                'cat_id' => $item_data['cat_id'],
+                'type' => 'bookmarks',
+                'title' => $item_data['name'],
+                'conf' => json_encode($conf),
+                'weight' => $item_data['weight']
+            ];
 
+            if ($this->db->update('items', $set, ['id' => $id])) {
+                $set['id'] = $id;
+                $this->items[$id] = $set;
                 return true;
             }
-             *
-             */
+
         }
 
         return false;

@@ -309,6 +309,7 @@ $(document).ready(function () {
     });
     $(document).on("click", "#submitBookmark", function () {
         var fields = {};
+
         $('#error_msg').html('');
         $('#status_msg').html('');
         fields.name = $('#bookmarkName').val();
@@ -320,7 +321,7 @@ $(document).ready(function () {
 
         if (fields.bookmarkName !== "" && fields.cat_id !== "" && fields.urlip !== "" && fields.image_type !== "") {
             json_fields = JSON.stringify(fields);
-            submitCommand('addBookmark', json_fields);
+            submitCommand('addBookmark', {id: 0, value: json_fields});
         } else {
             $('#error_msg').html('Empty field');
         }
