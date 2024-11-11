@@ -133,7 +133,7 @@ class Log
                     self::err('Error opening/writing log to file', 1);
                 }
             }
-            if (self::$cfg['log_to_syslog']) {
+            if (self::$cfg['log_to_syslog'] === 1) {
                 if (openlog(self::$cfg['app_name'] . ' ' . self::$cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG)) {
                     isset(self::$console) ? self::$cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n" : null;
                     syslog($LOG_TYPE[$type], $msg);

@@ -65,7 +65,6 @@ if (!isset($comm_values['id'])) {
 }
 
 if ($command == 'saveNote') {
-
     $command_value = trim(Filters::varUTF8($comm_values['value']));
 } elseif ($command == 'submitScanPorts') {
     $command_value = trim(Filters::varCustomString($comm_values['value'], ',/', 255));
@@ -469,7 +468,7 @@ if (
 }
 
 
-if ( $command == 'updateBookmark' && !empty($command_value) ) {
+if ($command == 'updateBookmark' && !empty($command_value)) {
     $decodedJson = json_decode($command_value, true);
     $bookmark = [];
     if ($decodedJson === null) {

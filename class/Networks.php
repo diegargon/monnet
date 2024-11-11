@@ -112,7 +112,7 @@ class Networks
 
     /**
      *
-     * @param type $ip
+     * @param string $ip
      * @return array|false
      */
     public function matchNetwork($ip): array|false

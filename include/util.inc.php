@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 /**
  * Check if is array and is not empty
- * 
+ *
  * @param mixed $array
  * @return bool
  */

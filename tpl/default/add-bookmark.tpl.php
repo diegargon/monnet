@@ -52,7 +52,7 @@
         <div class="image-dropdown">
             <select onchange="updateThumbnail(this)">
                 <option value="">Selecciona una imagen...</option>
-                     <?php foreach ($tdata['local_icons'] as $image): ?>
+                    <?php foreach ($tdata['local_icons'] as $image) : ?>
                         <option value="<?= $image['path']; ?>" data-thumbnail="<?= $image['path']; ?>">
                             <?= $image['basename']; ?>
                         </option>

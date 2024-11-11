@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 /**
- * 
+ *
  * @var array<int|string, mixed> $cfg
  * @var array<int|string, mixed> $cfg_db
  */

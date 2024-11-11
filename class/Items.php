@@ -2,16 +2,15 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
 class Items
 {
-
     /** @var Database */
     private Database $db;
 
@@ -41,7 +40,7 @@ class Items
                 'conf' => json_encode($conf), 'weight' => $item_data['weight']];
             if ($this->db->insert('items', $set)) {
                 $id = $this->db->insertID();
-                $this->item[$id] = $set;
+                $this->items[$id] = $set;
 
                 return true;
             }
@@ -72,10 +71,10 @@ class Items
         return false;
     }
 
-    public function getById(int $id) : array
+    public function getById(int $id): array
     {
         foreach ($this->items as $item) {
-            if($item['id'] == $id){
+            if ($item['id'] == $id){
                 $confArray = json_decode($item['conf'], true);
                 if (is_array($confArray)) {
                     $item = array_merge($item, $confArray);

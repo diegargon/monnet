@@ -42,7 +42,8 @@ function format_items(User $user, array $items_results): array
     return $items;
 }
 
-function getLocalIconsData(string $directory): array {
+function getLocalIconsData(string $directory): array
+{
     $allowedExtensions = ['png', 'jpg', 'jpeg', 'gif'];
     $imageData = [];
 
