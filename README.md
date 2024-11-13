@@ -17,8 +17,6 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 MonNet is currently in an early version. It is possible that issues may arise between versions. The compatibility is not guaranteed.
 
-You can add bookmarks, networks, and other elements, but some features, modification is not yet possible. (Except by directly accessing the database, obviously)
-
 The English language (EN/US) is IA generated.
 
 ## Versions
