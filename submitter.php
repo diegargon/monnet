@@ -522,7 +522,7 @@ if ($command === 'host-details' && !empty($target_id)) {
     if (valid_array($host_details)) {
         $tdata['host_details'] = $host_details;
         if (!empty($host_details['ping_stats'])) {
-            $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time', $host_details['ping_stats']);
+            $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time-js', $host_details['ping_stats']);
         }
         $log_lines = format_host_logs($ctx, $host_details['host_logs']);
         $tdata['host_details']['host_logs'] = $frontend->getTpl(

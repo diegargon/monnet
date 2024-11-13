@@ -108,9 +108,9 @@ function page_index(AppContext $ctx)
     $page['web_main']['scriptlink'][] = './scripts/chartjs-adapter-date-fns.bundle.min.js';
 
     /* Include refresher script tpl */
-    $page['web_main']['main_head_tpl'][] = 'refresher';
+    $page['web_main']['main_head_tpl'][] = 'refresher-js';
     /* Include submmitter script tpl */
-    $page['web_main']['main_head_tpl'][] = 'submitter';
+    $page['web_main']['main_head_tpl'][] = 'submitter-js';
 
     /* Top Buttons */
     $page['load_tpl'][] = [
