@@ -12,7 +12,7 @@ define('IN_CLI', true);
 
 $APP_NAME = 'monnet-discovery';
 /**
- * 
+ *
  * @var Database $db
  * @var AppContext|null $ctx An instance of AppCtx or null if not defined
  */

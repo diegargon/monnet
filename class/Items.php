@@ -82,7 +82,6 @@ class Items
                 $this->items[$id] = $set;
                 return true;
             }
-
         }
 
         return false;
@@ -91,7 +90,7 @@ class Items
     public function getById(int $id): array
     {
         foreach ($this->items as $item) {
-            if ($item['id'] == $id){
+            if ($item['id'] == $id) {
                 $confArray = json_decode($item['conf'], true);
                 if (is_array($confArray)) {
                     $item = array_merge($item, $confArray);

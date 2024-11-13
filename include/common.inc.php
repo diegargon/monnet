@@ -49,7 +49,6 @@ try {
     }
 
     $db->connect();
-
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }

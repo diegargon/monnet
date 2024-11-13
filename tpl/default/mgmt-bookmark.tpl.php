@@ -52,8 +52,14 @@
         <br/>
         <label for="image_type"><?= $lng['L_IMAGE_TYPE'] ?>:</label>
         <select id="image_type" name="image_type">
-            <option value="local_img" <?= !empty($tdata['image_type']) && $tdata['image_type'] === 'local_img' ? 'selected' : '' ?>><?= $lng['L_LOCAL_IMAGE'] ?></option>
-            <option value="url" <?= !empty($tdata['image_type']) && $tdata['image_type'] === 'image_resource' ? 'selected' : '' ?>><?= $lng['L_LINK'] ?></option>
+            <option value="local_img"
+                <?= !empty($tdata['image_type']) && $tdata['image_type'] === 'local_img' ? 'selected' : '' ?>>
+                <?= $lng['L_LOCAL_IMAGE'] ?>
+            </option>
+            <option value="url"
+                <?= !empty($tdata['image_type']) && $tdata['image_type'] === 'image_resource' ? 'selected' : '' ?>>
+                <?= $lng['L_LINK'] ?>
+            </option>
         </select>
         <br/>
         <div class="image-dropdown">

@@ -61,9 +61,9 @@
                                title="Borrar">
                     </div>
                     <div class="edit_bookmark">
-                        <input onclick="submitCommand('mgmtBookmark',{id: <?= $bookmark['id'] ?>, action: 'edit'})" type="image"
-                               class="action-icon remove" src="tpl/default/img/edit.png" alt="Edit"
-                               title="Borrar">
+                        <input onclick="submitCommand('mgmtBookmark',{id: <?= $bookmark['id'] ?>, action: 'edit'})"
+                               type="image" class="action-icon remove" src="tpl/default/img/edit.png"
+                               alt="Edit" title="Borrar">
                     </div>
                     <a href="<?= $bookmark['url'] ?>" rel="noopener noreferrer" target="_blank"
                        class="item_link" title="<?= $bookmark['url'] ?>">

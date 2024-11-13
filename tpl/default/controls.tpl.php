@@ -33,7 +33,9 @@
     <fieldset class="ctrl_fieldset">
         <legend class="ctrl_legend"><?= $lng['L_ADD'] ?></legend>
         <div class="bookmarks_ctrl">
-            <button id="submitBookmark" onclick="submitCommand('mgmtBookmark',{id: 38, action: 'add'})" class="button-ctrl" type="submit">
+            <button id="submitBookmark"
+                    onclick="submitCommand('mgmtBookmark',{id: 38, action: 'add'})"
+                    class="button-ctrl" type="submit">
                 <img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_BOOKMARKS'] ?></span>
