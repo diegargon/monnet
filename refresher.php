@@ -143,7 +143,7 @@ if (!empty($total_hosts_on) && !empty($total_hosts_off)) {
 }
 $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
 
-//Todo instance system_prefs
+//TODO  system_prefs class?
 $results = $db->select('prefs', '*', ['uid' => 0]);
 $system_prefs = $db->fetchAll($results);
 $cli_last = 0;
