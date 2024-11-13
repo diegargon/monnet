@@ -954,8 +954,7 @@ input:checked + .slider:before {
     background: none;
     cursor: pointer;
 }
-
-#stdbox-container, #add-bookmark-container, #mgmt-bookmark-container, #add-network-container {
+#stdbox-container, #mgmt-bookmark-container, #add-network-container {
     display: none;
     position: absolute;
     top: 20%;

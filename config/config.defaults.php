@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 global $cfg_db;
 /* Db Config */
@@ -18,7 +18,7 @@ $cfg_db['dbpassword'] = 'monnetadmin';
 $cfg_db['dbprefix'] = '';
 $cfg_db['dbcharset'] = 'utf8';
 
-/* Config */
+/* General  Config */
 
 $cfg['web_title'] = 'MonNet';
 $cfg['path'] = '/var/www/html';
@@ -55,6 +55,7 @@ $cfg['datatime_graph_format'] = 'H:i';
 $cfg['datetime_log_format'] = 'd-m H:i:s';
 $cfg['refresher_time'] = 5; //minutes ideally same minutes than monnet-cli
 $cfg['cert'] = '/var/certs/id_rsa';
+$cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 
 /* Mail Config */
 $cfg['mailer_enabled'] = 0; //need compose->phpmailer

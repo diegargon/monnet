@@ -81,7 +81,7 @@
 
                 })
                 .fail(function (xhr, status, error) {
-                    console.error('Error en la solicitud AJAX:', status, error);
+                    console.error('Error en la solicitud AJAX: refresher', status, error);
                 });
         // Avoid set auto-refresh when a force call is execute
         if (!force) {

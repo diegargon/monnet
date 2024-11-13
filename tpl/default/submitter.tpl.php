@@ -78,7 +78,7 @@
                     }
 
                     if (
-                            jsonData.command_receive === 'editBookmark' &&
+                            jsonData.command_receive === 'mgmtBookmark' &&
                             jsonData.command_success > 0
                     ) {
                         $('#mgmt-bookmark-container').remove();
@@ -96,7 +96,7 @@
                     if ("host_details" in jsonData) {
                         $('#host-details').remove();
                         if ($.isEmptyObject(jsonData.host_details.cfg)) {
-                            console.log('Error en la solicitud host details:');
+                            console.log('Error en la solicitud host details: submitter.tpl');
                             return;
                         }
                         let position = jsonData.host_details.cfg.place;
@@ -137,7 +137,7 @@
                 })
 
                 .fail(function (xhr, status, error) {
-                    console.error('Error en la solicitud AJAX:', status, error);
+                    console.error('Error en la solicitud AJAX: submiter.tpl', status, error);
                 });
     }
 

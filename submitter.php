@@ -115,7 +115,6 @@ if ($command === 'remove_host' && $target_id) {
     $hosts->remove($target_id);
     //no host_details
     $user->setPref('host_details', 0);
-    $data['host_details'] = '';
     $command = $target_id = '';
     $data['command_success'] = 1;
     $data['force_host_refresh'] = 1;
@@ -446,12 +445,6 @@ if (
             $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if ($new_bookmark['image_type'] != 'favicon' && empty($new_bookmark['field_img'])) {
-            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
-        }
-        if ($new_bookmark['image_type'] == 'favicon' && empty($new_bookmark['field_img'])) {
-            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_INVALID']}";
-        }
         if ($new_bookmark['image_type'] == 'local_img' && empty($new_bookmark['field_img'])) {
             $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
@@ -494,7 +487,7 @@ if ($command == 'updateBookmark' && !empty($command_value) && $target_id > 0) {
             !Filters::varUrl($bookmark['urlip']) ||
             Filters::varIP($bookmark['urlip'])
         ) {
-            $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         if (
@@ -504,12 +497,6 @@ if ($command == 'updateBookmark' && !empty($command_value) && $target_id > 0) {
             $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if ($bookmark['image_type'] != 'favicon' && empty($bookmark['field_img'])) {
-            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
-        }
-        if ($bookmark['image_type'] == 'favicon' && empty($bookmark['field_img'])) {
-            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_INVALID']}";
-        }
         if ($bookmark['image_type'] == 'local_img' && empty($bookmark['field_img'])) {
             $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
         }
@@ -588,14 +575,16 @@ if ($command == 'removeBookmark' && !empty($target_id)) {
     $data['command_success'] = 1;
 }
 
-if ($command == "editBookmark" && !empty($target_id)) {
+if ($command == "mgmtBookmark" && !empty($target_id)) {
     if (!isset($categories) || $categories === null) :
         $categories = $ctx->get('Categories');
     endif;
 
     $tdata = [];
     $items = $ctx->get('Items');
-    $tdata = $items->getById($target_id);
+    if (isset($comm_values['action']) && $comm_values['action'] === 'edit') {
+        $tdata = $items->getById($target_id);
+    }
     $tdata['web_categories'] = [];
     if (!empty($tdata['conf'])) {
         $conf = json_decode($tdata, true);
@@ -606,8 +595,14 @@ if ($command == "editBookmark" && !empty($target_id)) {
         $tdata['web_categories'] = $categories->getByType(2);
     endif;
 
-    $tdata['local_icons'] = getLocalIconsData('local_img/');
-
+    $tdata['local_icons'] = getLocalIconsData($cfg, 'local_img/');
+    if (isset($comm_values['action']) && $comm_values['action'] === 'edit') {
+        $tdata['bookmark_buttonid'] = 'updateBookmark';
+        $tdata['bookmark_title'] = $lng['L_EDIT'];
+    } elseif (isset($comm_values['action']) && $comm_values['action'] === 'add') {
+        $tdata['bookmark_buttonid'] = 'addBookmark';
+        $tdata['bookmark_title'] = $lng['L_ADD'];
+    }
     $data['response_msg'] = $target_id;
     $data['mgmt_bookmark']['cfg']['place'] = "#left_container";
     $data['mgmt_bookmark']['data'] = $frontend->getTpl('mgmt-bookmark', $tdata);
@@ -651,7 +646,7 @@ if (
     } else {
         $data['command_error_msg'] = $lng['L_ERROR'];
     }
-
+    //$data['force_host_refresh'] = 1;
     $data['command_success'] = 1;
 }
 

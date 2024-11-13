@@ -112,11 +112,11 @@ function updateThumbnail(select) {
 
 $(document).ready(function () {
     // add bookmark "Popup"
-    $("#addBookmark").on("click", function () {
-        $("#add-bookmark-container").css("display", "block");
-    });
-    $("#close_addbookmark").on("click", function () {
-        $("#add-bookmark-container").css("display", "none");
+    //$("#addBookmark").on("click", function () {
+    //    $("#mgmt-bookmark-container").css("display", "block");
+    //});
+    $("#close_mgmtbookmark").on("click", function () {
+        $("#mgmt-bookmark-container").css("display", "none");
     });
 
     $("#addHostBox").on("click", function () {
@@ -307,7 +307,7 @@ $(document).ready(function () {
         }
 
     });
-    $(document).on("click", "#submitBookmark", function () {
+    $(document).on("click", "#addBookmark", function () {
         var fields = {};
 
         $('#error_msg').html('');
@@ -323,8 +323,9 @@ $(document).ready(function () {
             json_fields = JSON.stringify(fields);
             submitCommand('addBookmark', {id: 0, value: json_fields});
         } else {
-            $('#error_msg').html('Empty field');
+            $('#error_msg').html('Mandatory fields empty');
         }
+
     });
 
     $(document).on("click", "#updateBookmark", function () {
@@ -348,7 +349,7 @@ $(document).ready(function () {
             json_fields = JSON.stringify(fields);
             submitCommand('updateBookmark', {id: id, value: json_fields} );
         } else {
-            $('#error_msg').html('Empty field');
+            $('#error_msg').html('Mandatory fields empty');
         }
     });
 //Checkbox trigger

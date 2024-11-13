@@ -61,7 +61,7 @@
                                title="Borrar">
                     </div>
                     <div class="edit_bookmark">
-                        <input onclick="submitCommand('editBookmark',{id: <?= $bookmark['id'] ?>})" type="image"
+                        <input onclick="submitCommand('mgmtBookmark',{id: <?= $bookmark['id'] ?>, action: 'edit'})" type="image"
                                class="action-icon remove" src="tpl/default/img/edit.png" alt="Edit"
                                title="Borrar">
                     </div>

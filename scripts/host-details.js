@@ -54,6 +54,6 @@ function requestHostDetails(command, command_values = []) {
                 }
             })
             .fail(function (xhr, status, error) {
-                console.error('Error en la solicitud AJAX:', status, error);
+                console.error('Error en la solicitud AJAX: host-details.js', status, error);
             });
 }

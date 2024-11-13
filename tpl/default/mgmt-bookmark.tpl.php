@@ -19,7 +19,7 @@
         <button id="close_mgmtbookmark" class="button-ctrl" type="submit">
             <img class="close_link" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>">
         </button>
-        <div class="front-container-bar-title"><?= $lng['L_EDIT'] . ' ' . $lng['L_BOOKMARK'] ?></div>
+        <div class="front-container-bar-title"><?= $tdata['bookmark_title'] . ' ' . $lng['L_BOOKMARK'] ?></div>
     </div>
     <div class="form_container">
         <div id="status_msg"><?= $tdata['status_msg'] ?? '' ?></div>
@@ -35,8 +35,14 @@
         <label for="cat_id"><?= $lng['L_CATEGORY'] ?>:</label>
         <select id="cat_id" name="cat_id" required>
             <?php foreach ($tdata['web_categories'] as $cat) : ?>
-                <?php $cat_name = isset($lng[$cat['cat_name']]) ? $lng[$cat['cat_name']] : $cat['cat_name']; ?>
-                <option value="<?= $cat['id'] ?>"><?= $cat_name ?></option>
+                <?php
+                    $selected = '';
+                    $cat_name = $lng[$cat['cat_name']] ?? $cat['cat_name'];
+                    if (!empty($tdata['cat_id']) && ($tdata['cat_id'] == $cat['id'])) :
+                        $selected = 'selected=""';
+                    endif;
+                ?>
+                <option value="<?= $cat['id'] ?>"<?= $selected ?>><?= $cat_name ?></option>
             <?php endforeach; ?>
         </select>
         <br/>
@@ -46,15 +52,15 @@
         <br/>
         <label for="image_type"><?= $lng['L_IMAGE_TYPE'] ?>:</label>
         <select id="image_type" name="image_type">
-            <option value="local_img"><?= $lng['L_LOCAL_IMAGE'] ?></option>
-            <option value="image_resource"><?= $lng['L_LINK'] ?></option>
+            <option value="local_img" <?= !empty($tdata['image_type']) && $tdata['image_type'] === 'local_img' ? 'selected' : '' ?>><?= $lng['L_LOCAL_IMAGE'] ?></option>
+            <option value="url" <?= !empty($tdata['image_type']) && $tdata['image_type'] === 'image_resource' ? 'selected' : '' ?>><?= $lng['L_LINK'] ?></option>
         </select>
         <br/>
         <div class="image-dropdown">
             <select onchange="updateThumbnail(this)">
                 <option value="">Selecciona una imagen...</option>
                     <?php foreach ($tdata['local_icons'] as $image) : ?>
-                        <option value="<?= $image['path']; ?>" data-thumbnail="<?= $image['path']; ?>">
+                        <option value="<?= $image['basename']; ?>" data-thumbnail="<?= $image['path']; ?>">
                             <?= $image['basename']; ?>
                         </option>
                     <?php endforeach; ?>
@@ -70,12 +76,17 @@
         <br/>
         <label for="weight"><?= $lng['L_WEIGHT'] ?>:</label>
         <select id="weight" name="weight" required>
-            <?php for ($i = 0; $i <= 90; $i += 10) : ?>
-                <option value="<?= $i ?>"><?= $i ?></option>
-            <?php endfor; ?>
+            <?php for ($i = 0; $i <= 90; $i += 10) {
+                $selected = '';
+                if (!empty($tdata['weight']) && ($tdata['weight'] == $i)) :
+                    $selected = 'selected=""';
+                endif;
+            ?>
+                <option value="<?= $i ?>"<?= $selected ?>><?= $i ?></option>
+            <?php } ?>
         </select>
         <br/>
         <!-- Botón para enviar el formulario -->
-        <button id="updateBookmark" type="submit"><?= $lng['L_SEND'] ?></button>
+        <button id="<?= $tdata['bookmark_buttonid']?>" type="submit"><?= $lng['L_SEND'] ?></button>
     </div>
 </div>

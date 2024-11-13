@@ -163,12 +163,6 @@ function page_index(AppContext $ctx)
         'file' => 'stdbox',
         'place' => 'center_col',
     ];
-    /* Add Bookmark Item */
-    $page['local_icons'] = getLocalIconsData('local_img/');
-    $page['load_tpl'][] = [
-        'file' => 'add-bookmark',
-        'place' => 'center_col',
-    ];
 
     /* Add Network Item */
     $page['load_tpl'][] = [
