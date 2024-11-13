@@ -8,6 +8,7 @@
 * [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
 
 ** LOW
+* Si no esta visible no refresher
 * El scan ports especificados por el usuario solo debe escaner los user=1
 * [DB 0.35v]hosts->scan identificar servicios  [option nmap [0 noscan  - 1 scan - 2 full scan]] - guardar con ports, los ports metidos con el user tienen user=1
 * cambiar diseño barra logout y demás, ver donde poner y quizas meter ahi stop_cli y username
