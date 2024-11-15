@@ -6,6 +6,5 @@ parameters:
     excludePaths:
         - /myapp/tests
         - /myapp/vendor
-        - /myapp/misc
         - /myapp/ci-docker
         - /myapp/scripts

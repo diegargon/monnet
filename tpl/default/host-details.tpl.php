@@ -27,21 +27,26 @@
                 </button>
                 <div class="host-details-tabs-head-container">
                     <button id="tab1_btn" class="host-details-tabs-head" data-tab="1"
-                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab1')"><?= $lng['L_OVERVIEW'] ?>
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab1')">
+                            <?= $lng['L_OVERVIEW'] ?>
                     </button>
                     <?php if (!empty($tdata['host_details']['access_method'])) : ?>
                         <button id="tab2_btn" class="host-details-tabs-head" data-tab="2"
-                                onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab2')"><?= $lng['L_STATUS'] ?>
+                                onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab2')">
+                                <?= $lng['L_STATUS'] ?>
                         </button>
                     <?php endif; ?>
                     <button id="tab3_btn" class="host-details-tabs-head" data-tab="3"
-                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab3')"><?= $lng['L_NOTES'] ?>
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab3')">
+                            <?= $lng['L_NOTES'] ?>
                     </button>
                         <button id="tab9_btn" class="host-details-tabs-head" data-tab="9"
-                                onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab9')"><?= $lng['L_LOG'] ?>
+                                onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab9')">
+                                <?= $lng['L_LOG'] ?>
                         </button>
                     <button id="tab10_btn" class="host-details-tabs-head" data-tab="10"
-                            onclick="changeHDTab(<?= $tdata['host_details']['id'] ?>, 'tab10')"><?= $lng['L_METRICS'] ?>
+                            onclick="changeHDTab(<?= $tdata['host_details']['id'] ?>, 'tab10')">
+                            <?= $lng['L_METRICS'] ?>
                     </button>
 
                     <button id="tab11_btn" class="host-details-tabs-head" data-tab="11"

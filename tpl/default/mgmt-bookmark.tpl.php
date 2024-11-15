@@ -34,13 +34,12 @@
         <br/>
         <label for="cat_id"><?= $lng['L_CATEGORY'] ?>:</label>
         <select id="cat_id" name="cat_id" required>
-            <?php foreach ($tdata['web_categories'] as $cat) : ?>
-                <?php
-                    $selected = '';
-                    $cat_name = $lng[$cat['cat_name']] ?? $cat['cat_name'];
-                    if (!empty($tdata['cat_id']) && ($tdata['cat_id'] == $cat['id'])) :
-                        $selected = 'selected=""';
-                    endif;
+            <?php foreach ($tdata['web_categories'] as $cat) :
+                $selected = '';
+                $cat_name = $lng[$cat['cat_name']] ?? $cat['cat_name'];
+                if (!empty($tdata['cat_id']) && ($tdata['cat_id'] == $cat['id'])) :
+                    $selected = 'selected=""';
+                endif;
                 ?>
                 <option value="<?= $cat['id'] ?>"<?= $selected ?>><?= $cat_name ?></option>
             <?php endforeach; ?>
@@ -87,7 +86,7 @@
                 if (!empty($tdata['weight']) && ($tdata['weight'] == $i)) :
                     $selected = 'selected=""';
                 endif;
-            ?>
+                ?>
                 <option value="<?= $i ?>"<?= $selected ?>><?= $i ?></option>
             <?php } ?>
         </select>

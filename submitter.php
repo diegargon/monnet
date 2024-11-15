@@ -739,13 +739,13 @@ if (
 }
 
 /* Metrics */
-    if ($command === 'changeHDTab' && $value_command_ary == 'tab10') {
-        $ping_stats = get_host_metrics($ctx, $target_id);
-        if (!empty($ping_stats)) {
-            $data['response_msg'] = $frontend->getTpl('chart-time-js', $ping_stats);
-        }
-
-        $data['command_success'] = 1;
+if ($command === 'changeHDTab' && $value_command_ary == 'tab10') {
+    $ping_stats = get_host_metrics($ctx, $target_id);
+    if (!empty($ping_stats)) {
+        $data['response_msg'] = $frontend->getTpl('chart-time-js', $ping_stats);
     }
+
+    $data['command_success'] = 1;
+}
 
 print json_encode($data, JSON_UNESCAPED_UNICODE);
