@@ -31,25 +31,6 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 
     $host['hosts_categories'] = $categories->getByType(1);
 
-    $ping_states_query = 'SELECT *
-        FROM stats
-        WHERE host_id = ' . $host['id'] . ' AND
-        type = 1
-        AND date >= NOW() - INTERVAL 1 DAY
-        ORDER BY date DESC;';
-
-    $result = $db->query($ping_states_query);
-    $ping_stats = $db->fetchAll($result);
-    if (valid_array($ping_stats)) {
-        foreach ($ping_stats as &$ping) {
-            $ping['date'] = utc_to_user_tz($ping['date'], $cfg['timezone']);
-        }
-        $host['ping_stats'] = $ping_stats;
-    }
-
-    //HOST LOGS
-    $host['host_logs'] = Log::getLoghost($host['id'], ['max_lines' => $cfg['term_max_lines']]);
-
     $theme = $user->getTheme();
 
     // Host Work
@@ -155,4 +136,35 @@ function format_host_logs(AppContext $ctx, array $logs, string $nl = '<br/>'): a
     }
 
     return $log_lines;
+}
+
+/**
+ * TODO: To Hosts?
+ * @param AppContext $ctx
+ * @param type $host_id
+ * @return array
+ */
+function get_host_metrics(AppContext $ctx, $host_id): array
+{
+    $cfg = $ctx->get('cfg');
+    $db = $ctx->get('Mysql');
+
+    $ping_states_query = 'SELECT *
+        FROM stats
+        WHERE host_id = ' . $host_id . ' AND
+        type = 1
+        AND date >= NOW() - INTERVAL 1 DAY
+        ORDER BY date DESC;';
+
+    $result = $db->query($ping_states_query);
+    $ping_stats = $db->fetchAll($result);
+    if (valid_array($ping_stats)) {
+        foreach ($ping_stats as &$ping) :
+            $ping['date'] = utc_to_user_tz($ping['date'], $cfg['timezone']);
+        endforeach;
+
+        return $ping_stats;
+    }
+
+    return [];
 }

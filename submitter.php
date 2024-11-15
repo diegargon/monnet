@@ -81,11 +81,13 @@ if ($command == 'saveNote') {
     if (empty($value_command_ary)) {
         $value_command_ary = Filters::varDomain($command_values['value']);
     }
-} elseif (!empty($command_values['value'])) {
-    if (Filters::varInt($command_values['value'])) {
-        $value_command_ary = Filters::varInt($command_values['value']);
-    } else {
-        $value_command_ary = Filters::varString($command_values['value']);
+} else {
+    if (!empty($command_values['value'])) {
+        if (Filters::varInt($command_values['value'])) {
+            $value_command_ary = Filters::varInt($command_values['value']);
+        } else {
+            $value_command_ary = Filters::varString($command_values['value']);
+        }
     }
 }
 
@@ -521,14 +523,10 @@ if ($command === 'host-details' && !empty($target_id)) {
     $host_details = get_host_detail_view_data($ctx, $target_id);
     if (valid_array($host_details)) {
         $tdata['host_details'] = $host_details;
-        if (!empty($host_details['ping_stats'])) {
-            $tdata['host_details']['ping_graph'] = $frontend->getTpl('chart-time-js', $host_details['ping_stats']);
-        }
-        $log_lines = format_host_logs($ctx, $host_details['host_logs']);
         $tdata['host_details']['host_logs'] = $frontend->getTpl(
             'term',
             [
-                'term_logs' => $log_lines,
+                'term_logs' => '',
                 'host_id' => $target_id
             ]
         );
@@ -716,7 +714,11 @@ if ($command == 'change_bookmarks_tab') {
     $data['command_success'] = 1;
 }
 
-if ($command == 'logs-reload' && !empty($target_id)) {
+/* Logs Host */
+if (
+    $command === 'logs-reload' ||
+    ($command === 'changeHDTab' && $value_command_ary == 'tab9')
+    ) {
     if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) :
         $opts['max_lines'] = $command_values['log_size'];
     else :
@@ -730,7 +732,20 @@ if ($command == 'logs-reload' && !empty($target_id)) {
     endif;
 
     $logs = Log::getLoghost($target_id, $opts);
-    $data['response_msg'] = format_host_logs($ctx, $logs);
+    if (!empty($logs)) {
+        $data['response_msg'] = format_host_logs($ctx, $logs);
+    }
     $data['command_success'] = 1;
 }
+
+/* Metrics */
+    if ($command === 'changeHDTab' && $value_command_ary == 'tab10') {
+        $ping_stats = get_host_metrics($ctx, $target_id);
+        if (!empty($ping_stats)) {
+            $data['response_msg'] = $frontend->getTpl('chart-time-js', $ping_stats);
+        }
+
+        $data['command_success'] = 1;
+    }
+
 print json_encode($data, JSON_UNESCAPED_UNICODE);

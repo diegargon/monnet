@@ -27,37 +27,33 @@
                 </button>
                 <div class="host-details-tabs-head-container">
                     <button id="tab1_btn" class="host-details-tabs-head" data-tab="1"
-                            onclick="changeTab('tab1')"><?= $lng['L_OVERVIEW'] ?>
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab1')"><?= $lng['L_OVERVIEW'] ?>
                     </button>
                     <?php if (!empty($tdata['host_details']['access_method'])) : ?>
                         <button id="tab2_btn" class="host-details-tabs-head" data-tab="2"
-                                onclick="changeTab('tab2')"><?= $lng['L_STATUS'] ?>
+                                onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab2')"><?= $lng['L_STATUS'] ?>
                         </button>
                     <?php endif; ?>
                     <button id="tab3_btn" class="host-details-tabs-head" data-tab="3"
-                            onclick="changeTab('tab3')"><?= $lng['L_NOTES'] ?>
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab3')"><?= $lng['L_NOTES'] ?>
                     </button>
-                    <?php if (!empty($tdata['host_details']['host_logs'])) : ?>
                         <button id="tab9_btn" class="host-details-tabs-head" data-tab="9"
-                                onclick="changeTab('tab9')"><?= $lng['L_LOG'] ?>
+                                onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab9')"><?= $lng['L_LOG'] ?>
                         </button>
-                    <?php endif; ?>
+                    <button id="tab10_btn" class="host-details-tabs-head" data-tab="10"
+                            onclick="changeHDTab(<?= $tdata['host_details']['id'] ?>, 'tab10')"><?= $lng['L_METRICS'] ?>
+                    </button>
 
-                    <?php if (!empty($tdata['host_details']['ping_graph'])) : ?>
-                        <button id="tab10_btn" class="host-details-tabs-head" data-tab="10"
-                                onclick="changeTab('tab10')"><?= $lng['L_METRICS'] ?>
-                        </button>
-                    <?php endif; ?>
                     <button id="tab11_btn" class="host-details-tabs-head" data-tab="11"
-                            onclick="changeTab('tab11')">
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab11')">
                         <?= $lng['L_ALARMS'] ?>
                     </button>
                     <button id="tab12_btn" class="host-details-tabs-head" data-tab="12"
-                            onclick="changeTab('tab12')">
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab12')">
                         <?= $lng['L_CONFIG'] ?>
                     </button>
                     <!--
-                    <button id="tabx_btn" class="host-details-tabs-head" onclick="changeTab('tab2')">
+                    <button id="tabx_btn" class="host-details-tabs-head" onclick="changeHDTab('tab2')">
                         <?= $lng['L_DEPLOYS'] ?>
                     </button>
                     -->
@@ -271,44 +267,36 @@
                 cols="100"><?= $tdata['host_details']['notes'] ?></textarea>
         </div>
         <!-- /TAB3 -->
-        <!-- TAB9 --><!-- Host Logs -->
-        <?php
-        if (!empty($tdata['host_details']['host_logs'])) {
-            ?>
-            <!-- HOST LOGS -->
-                <div id="tab9" class="host-details-tab-content">
-                    <div class="logs_header">
-                        <div><button id="logs_reload_btn">Reload</button></div>
-                        <div>
-                            <select id="log_level" name="log_level">
-                                <option value="-1">LOG_ALL</option>
-                                <option value="0">LOG_EMERG</option>
-                                <option value="1">LOG_ALERT</option>
-                                <option value="2">LOG_CRIT</option>
-                                <option value="3">LOG_ERR</option>
-                                <option value="4">LOG_WARNING</option>
-                                <option value="5">LOG_NOTICE</option>
-                                <option value="6">LOG_INFO</option>
-                                <option value="7">LOG_DEBUG</option>
-                            </select>
-                        </div>
-                    </div>
-                    <label for="log_size">Nº:</label>
-                    <input type="number" id="log_size" name="log_size" step="25" value="25">
-                    <?= $tdata['host_details']['host_logs'] ?>
-                </div>
-        <?php } ?>
-        <!-- /TAB9 -->
-        <!-- TAB10 --><!-- Graphs / PING -->
-        <?php
-        if (!empty($tdata['host_details']['ping_graph'])) {
-            ?>
-            <div id="tab10" class="host-details-tab-content">
-                <div class="ping_graph_container">
-                    <?= $tdata['host_details']['ping_graph'] ?>
+        <!-- TAB9 -->
+        <!-- HOST LOGS -->
+        <div id="tab9" class="host-details-tab-content">
+            <div class="logs_header">
+                <div><button id="logs_reload_btn">Reload</button></div>
+                <div>
+                    <select id="log_level" name="log_level">
+                        <option value="-1">LOG_ALL</option>
+                        <option value="0">LOG_EMERG</option>
+                        <option value="1">LOG_ALERT</option>
+                        <option value="2">LOG_CRIT</option>
+                        <option value="3">LOG_ERR</option>
+                        <option value="4">LOG_WARNING</option>
+                        <option value="5">LOG_NOTICE</option>
+                        <option value="6">LOG_INFO</option>
+                        <option value="7">LOG_DEBUG</option>
+                    </select>
                 </div>
             </div>
-        <?php } ?>
+            <label for="log_size">Nº:</label>
+            <input type="number" id="log_size" name="log_size" step="25" value="25">
+            <?= $tdata['host_details']['host_logs'] ?>
+        </div>
+        <!-- /TAB9 -->
+        <!-- TAB10 --><!-- Graphs / PING -->
+        <div id="tab10" class="host-details-tab-content">
+            <div id="ping_graph_container" class="ping_graph_container">
+                <?= $tdata['host_details']['ping_graph'] ?? '' ?>
+            </div>
+        </div>
         <!-- /TAB10 -->
         <!-- TAB11 -->
         <div id="tab11" class="host-details-tab-content">

@@ -1,5 +1,5 @@
 ** HIGH
-* Poder Editar las cosas
+* Cuando borras o haces un submit la ventana no se cierra/limpia
 * El enlace para imagen deberia ser optativo, si no se pone pone un defecto www.png
 * Revisar Items/addBookmark/updateBookmark y simplificar
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
