@@ -1,5 +1,13 @@
+/**
+ *
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ */
+
 $(document).ready(function () {
-      $(document).off("click", "#logs_reload_btn").on("click", "#logs_reload_btn", function () {
+    $(document).off("click", "#logs_reload_btn").on("click", "#logs_reload_btn", function () {
         var hostId = $('#host_id').val();
         var logLevel = $('#log_level').val();
         var logSize = $('#log_size').val();
@@ -31,10 +39,10 @@ function requestHostDetails(command, command_values = []) {
                 // Verificamos si el Content-Type es JSON
                 if (contentType && contentType.toLowerCase().includes('application/json')) {
                     jsonData = (typeof data === 'object') ? data : JSON.parse(data);
-                //}
-                // Si el Content-Type es HTML o texto
-                //else if (contentType && contentType.includes('text/html')) {
-                //    jsonData = {response_msg: data};  // Parseamos la respuesta como texto HTML
+                    //}
+                    // Si el Content-Type es HTML o texto
+                    //else if (contentType && contentType.includes('text/html')) {
+                    //    jsonData = {response_msg: data};  // Parseamos la respuesta como texto HTML
                 } else {
                     console.warn("Tipo de contenido inesperado:", contentType);
                     return; // Terminamos si el tipo de contenido no es el esperado
