@@ -111,10 +111,6 @@ function updateThumbnail(select) {
 }
 
 $(document).ready(function () {
-    // add bookmark "Popup"
-    //$("#addBookmark").on("click", function () {
-    //    $("#mgmt-bookmark-container").css("display", "block");
-    //});
     $("#close_mgmtbookmark").on("click", function () {
         $("#mgmt-bookmark-container").css("display", "none");
     });
