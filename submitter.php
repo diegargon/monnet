@@ -75,11 +75,11 @@ if ($command == 'saveNote') {
 } elseif ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
     $value_command_ary = Filters::varInt($command_values['value']);
 } elseif ($command == 'addNetwork') {
-    $value_command_ary = Filters::varCustomString($command_values['value'], ',":.{}'); //JSON only special chars
+    $value_command_ary = Filters::varJson($command_values['value']);
 } elseif ($command == 'addBookmark') {
-    $value_command_ary = Filters::varCustomString($command_values['value'], ',":.{}/_'); //Json + url chars
+    $value_command_ary = Filters::varJson($command_values['value']);
 } elseif ($command == 'updateBookmark') {
-    $value_command_ary = Filters::varCustomString($command_values['value'], ',":.{}/_'); //Json + url chars
+    $value_command_ary = Filters::varJson($command_values['value']);
 } elseif ($command == 'submitHost') {
     $value_command_ary = Filters::varIP($command_values['value']);
     if (empty($value_command_ary)) {
@@ -595,7 +595,7 @@ if ($command == 'removeBookmark' && !empty($target_id)) {
 }
 
 if ($command == "mgmtBookmark" && !empty($target_id)) {
-    if (!isset($categories) || $categories === null) :
+    if (!empty($categories)) :
         $categories = $ctx->get('Categories');
     endif;
 

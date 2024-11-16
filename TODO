@@ -1,5 +1,6 @@
 ** HIGH
-* Cuando borras o haces un submit la ventana no se cierra/limpia
+* Editar un bookmark permite un enlace http en image_local
+* El selected de tipo imagen no funcion al editar, no establece el actual
 * El enlace para imagen deberia ser optativo, si no se pone pone un defecto www.png
 * Revisar Items/addBookmark/updateBookmark y simplificar
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail

@@ -789,4 +789,16 @@ class Filters
 
         return $val;
     }
+
+    /**
+     *
+     * @param string $json
+     * @return string|null
+     */
+    public static function varJson(string $json): ?string
+    {
+
+        return (json_decode($json) !== null || $json === 'null') ? $json : null;
+
+    }
 }
