@@ -25,7 +25,9 @@ if (!file_exists('config/config.defaults.php')) {
 
 require_once 'config/config.priv.php';
 require_once 'config/config.defaults.php';
-require '/etc/monnet/config.inc.php';
+if (file_exists('/etc/monnet/config.inc.php')) :
+    require_once '/etc/monnet/config.inc.php';
+endif;
 
 date_default_timezone_set($cfg['timezone']);
 
@@ -51,6 +53,7 @@ try {
     $db->connect();
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
+    exit();
 }
 
 require_once 'class/Log.php';

@@ -330,7 +330,7 @@ class User
         $results = $this->db->query($query);
 
         $prefs = $this->db->fetchAll($results);
-        if ($prefs && is_array($prefs)) {
+        if (!empty($prefs)) {
             foreach ($prefs as $pref) {
                 if (!empty($pref['pref_name']) && $pref['uid'] == 0) {
                     $this->prefs[$pref['pref_name']] = $pref['pref_value'];

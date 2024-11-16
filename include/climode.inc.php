@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_CLI') ? exit : true;
 
@@ -13,8 +13,9 @@ $custom_cfg = '/etc/monnet/config.inc.php';
 if (!file_exists($custom_cfg)) {
     echo 'Missing config file ' . $custom_cfg;
     exit(1);
+} else {
+    require_once $custom_cfg;
 }
-require_once $custom_cfg;
 
 /**  @var string $APP_NAME defined in monnet-cli or monnet-discovery */
 define('CLI_LOCK', '/var/run/' . $APP_NAME . '.lock');

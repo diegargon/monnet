@@ -171,7 +171,7 @@ function cached_img(User $user, int $id, string $img_url, int $renew = 0): strin
     $http_options['header'] = "User-agent: Mozilla/5.0 (X11; Fedora;" .
         "Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0";
 
-    if (empty($img_url) || is_dir($img_url) || empty($id) || !is_numeric($id)) {
+    if (empty($img_url) || is_dir($img_url) || empty($id)) {
         return false;
     }
 

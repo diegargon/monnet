@@ -2,13 +2,13 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function get_hosts_view(AppContext $ctx, int $highlight = 0): array|bool
+function get_hosts_view(AppContext $ctx, int $highlight = 0): array
 {
     $cfg = $ctx->get('cfg');
     $hosts = $ctx->get('Hosts');

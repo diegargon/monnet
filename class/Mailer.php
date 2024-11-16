@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -91,7 +91,7 @@ class Mailer
     private function configure(): void
     {
 
-        if ($this->phpMailer !== null) {
+        if ($this->phpMailer instanceof Mailer) {
             $this->phpMailer->isSMTP();
             //$this->phpMailer->SMTPDebug = 4;
             $this->phpMailer->Host = $this->cfg['mail_host'];

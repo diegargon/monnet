@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 function trigger_update(Database $db, float $db_version, float $monnet_version): void
@@ -126,7 +126,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
  * @var array $cfg
  * @var Database $db
  */
-if ($db !== null) {
+if ($db instanceof Database) {
     $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
     $result = $db->fetchAll($query);
     if ($result) {

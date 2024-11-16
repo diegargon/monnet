@@ -14,7 +14,7 @@ class Lang
     /** @var array<string> $language */
     private static array $language = [];
     private static string $defaultLang = 'es';
-    private static string $selLangCode;
+    //private static string $selectedLangCode;
 
     public function __construct()
     {

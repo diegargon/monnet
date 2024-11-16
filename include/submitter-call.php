@@ -141,10 +141,10 @@ function format_host_logs(AppContext $ctx, array $logs, string $nl = '<br/>'): a
 /**
  * TODO: To Hosts?
  * @param AppContext $ctx
- * @param type $host_id
+ * @param int $host_id
  * @return array
  */
-function get_host_metrics(AppContext $ctx, $host_id): array
+function get_host_metrics(AppContext $ctx, int $host_id): array
 {
     $cfg = $ctx->get('cfg');
     $db = $ctx->get('Mysql');

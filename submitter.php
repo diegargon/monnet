@@ -744,7 +744,7 @@ if ($command == 'change_bookmarks_tab') {
 if (
     $command === 'logs-reload' ||
     ($command === 'changeHDTab' && $value_command_ary == 'tab9')
-    ) {
+) {
     if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) :
         $opts['max_lines'] = $command_values['log_size'];
     else :

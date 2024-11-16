@@ -28,7 +28,7 @@ if (is_locked()) {
 register_shutdown_function('unlink', CLI_LOCK);
 ping_nets($ctx);
 
-if ($db !== null) {
+if ($db instanceof Database) {
     $db->update(
         'prefs',
         ['uid' => 0, 'pref_value' => utc_date_now()],
