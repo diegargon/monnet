@@ -1094,7 +1094,7 @@ input:checked + .slider:before {
 .frame {
     background-color: transparent;
     border-radius: 2rem;
-    border: 12px solid #2196F3;
+    border: 4px solid #2196F3;
     border-bottom-color: #121212;
     border-left-color: rgba(20,20,20,1);
     border-right-color: rgba(20,20,20,1);
@@ -1109,16 +1109,17 @@ input:checked + .slider:before {
 .term_output {
     color: #00fa00;
     font-family: 'VT323';
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 400;
     animation: crt-output 10ms infinite;
     background-color: transparent;
-    padding: 2rem 2rem;
+    padding: 1rem 1rem;
     box-sizing: border-box;
     letter-spacing: -1.5px;
 }
 .glow {
     animation: crt-glow 60s infinite;
+    /*
     background:
         radial-gradient(circle at center,
         rgb(0, 255, 85) 0%,
@@ -1126,6 +1127,7 @@ input:checked + .slider:before {
         rgba(0, 255, 85, 0.52) 80%,
         rgba(0, 255, 34, 0.27) 93%,
         rgba(104, 255, 0, 0) 100%);
+    */
     opacity: 0.15;
 }
 .footer_bar {
