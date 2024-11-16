@@ -69,28 +69,28 @@ if (!isset($command_values['id'])) {
 }
 
 if ($command == 'saveNote') {
-    $value_command_ary = trim(Filters::varUTF8($command_values['value']));
+    $value_command = trim(Filters::varUTF8($command_values['value']));
 } elseif ($command == 'submitScanPorts') {
-    $value_command_ary = trim(Filters::varCustomString($command_values['value'], ',/', 255));
+    $value_command = trim(Filters::varCustomString($command_values['value'], ',/', 255));
 } elseif ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
-    $value_command_ary = Filters::varInt($command_values['value']);
+    $value_command = Filters::varInt($command_values['value']);
 } elseif ($command == 'addNetwork') {
-    $value_command_ary = Filters::varJson($command_values['value']);
+    $value_command = Filters::varJson($command_values['value']);
 } elseif ($command == 'addBookmark') {
-    $value_command_ary = Filters::varJson($command_values['value']);
+    $value_command = Filters::varJson($command_values['value']);
 } elseif ($command == 'updateBookmark') {
-    $value_command_ary = Filters::varJson($command_values['value']);
+    $value_command = Filters::varJson($command_values['value']);
 } elseif ($command == 'submitHost') {
-    $value_command_ary = Filters::varIP($command_values['value']);
-    if (empty($value_command_ary)) {
-        $value_command_ary = Filters::varDomain($command_values['value']);
+    $value_command = Filters::varIP($command_values['value']);
+    if (empty($value_command)) {
+        $value_command = Filters::varDomain($command_values['value']);
     }
 } else {
     if (!empty($command_values['value'])) {
         if (Filters::varInt($command_values['value'])) {
-            $value_command_ary = Filters::varInt($command_values['value']);
+            $value_command = Filters::varInt($command_values['value']);
         } else {
-            $value_command_ary = Filters::varString($command_values['value']);
+            $value_command = Filters::varString($command_values['value']);
         }
     }
 }
@@ -98,8 +98,8 @@ if ($command == 'saveNote') {
 if (!empty($command)) :
     $data['command_receive'] = $command;
 endif;
-if (!empty($value_command_ary)) :
-    $data['command_value'] = $value_command_ary;
+if (!empty($value_command)) :
+    $data['command_value'] = $value_command;
 endif;
 if (!is_numeric($target_id)) :
     $data['command_error'] = 1;
@@ -143,13 +143,13 @@ if ($command == 'network_unselect' && !empty($target_id)) {
     $data['response_msg'] = 'Network Unselect';
 }
 
-if ($command == 'setCheckPorts' && !empty($value_command_ary) && !empty($target_id)) {
+if ($command == 'setCheckPorts' && !empty($value_command) && !empty($target_id)) {
     // 1 ping 2 TCP/UDP
-//    ($value_command_ary == 0) ? $value = 1 : $value = 2;
+//    ($value_command == 0) ? $value = 1 : $value = 2;
 
-    $hosts->update($target_id, ['check_method' => $value_command_ary]);
+    $hosts->update($target_id, ['check_method' => $value_command]);
     $data['command_success'] = 1;
-    $data['response_msg'] = $value_command_ary;
+    $data['response_msg'] = $value_command;
     $data['response_msg'] = 'ok';
 }
 
@@ -161,8 +161,8 @@ if ($command == 'submitHostToken' && !empty($target_id)) {
 }
 if ($command == 'submitScanPorts' && !empty($target_id)) {
     $success_msg = '';
-    if (!empty($value_command_ary)) {
-        $valid_ports = validatePortsInput(trim($value_command_ary));
+    if (!empty($value_command)) {
+        $valid_ports = validatePortsInput(trim($value_command));
         if (valid_array($valid_ports)) {
             if (($encoded_ports = json_encode($valid_ports))) {
                 $db->update('hosts', ['ports' => $encoded_ports], ['id' => $target_id]);
@@ -183,8 +183,8 @@ if ($command == 'submitScanPorts' && !empty($target_id)) {
 
 if ($command == 'submitTitle' && !empty($target_id)) {
     $success = 0;
-    if (!empty($value_command_ary)) {
-        $hosts->update($target_id, ['title' => $value_command_ary]);
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['title' => $value_command]);
         $success = 1;
     }
     $data['command_success'] = $success;
@@ -194,8 +194,8 @@ if ($command == 'submitTitle' && !empty($target_id)) {
 
 if ($command == 'submitOwner' && !empty($target_id)) {
     $success = 0;
-    if (!empty($value_command_ary)) {
-        $hosts->update($target_id, ['owner' => $value_command_ary]);
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['owner' => $value_command]);
         $success = 1;
     }
     $data['command_success'] = $success;
@@ -204,8 +204,8 @@ if ($command == 'submitOwner' && !empty($target_id)) {
 
 if ($command == 'submitHostTimeout' && !empty($target_id)) {
     $success = 0;
-    if (!empty($value_command_ary)) {
-        $hosts->update($target_id, ['timeout' => $value_command_ary]);
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['timeout' => $value_command]);
         $success = 1;
     }
     $data['command_success'] = $success;
@@ -215,46 +215,46 @@ if ($command == 'submitHostTimeout' && !empty($target_id)) {
 // Change Host Cat
 if ($command == 'submitCat' && !empty($target_id)) {
     $success = 0;
-    if (!empty($value_command_ary)) {
-        $hosts->update($target_id, ['category' => $value_command_ary]);
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['category' => $value_command]);
         $success = 1;
     }
     $data['command_success'] = $success;
-    $data['response_msg'] = 'Category changed to ' . $value_command_ary;
+    $data['response_msg'] = 'Category changed to ' . $value_command;
     $data['force_host_refresh'] = 1;
 }
 
 
 if ($command == 'submitManufacture' && !empty($target_id)) {
     $success = 0;
-    if (!empty($value_command_ary)) {
-        $hosts->update($target_id, ['manufacture' => $value_command_ary]);
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['manufacture' => $value_command]);
         $success = 1;
     }
     $data['command_success'] = $success;
-    $data['response_msg'] = 'Manufacture changed to ' . $value_command_ary;
+    $data['response_msg'] = 'Manufacture changed to ' . $value_command;
     $data['force_host_refresh'] = 1;
 }
 
 if ($command == 'submitOS' && !empty($target_id)) {
     $success = 0;
-    if (!empty($value_command_ary)) {
-        $hosts->update($target_id, ['os' => $value_command_ary]);
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['os' => $value_command]);
         $success = 1;
     }
     $data['command_success'] = $success;
-    $data['response_msg'] = 'OS changed to ' . $value_command_ary;
+    $data['response_msg'] = 'OS changed to ' . $value_command;
     $data['force_host_refresh'] = 1;
 }
 
 if ($command == 'submitSystemType' && !empty($target_id)) {
     $success = 0;
-    if (!empty($value_command_ary)) {
-        $hosts->update($target_id, ['system_type' => $value_command_ary]);
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['system_type' => $value_command]);
         $success = 1;
     }
     $data['command_success'] = $success;
-    $data['response_msg'] = 'System Type changed to ' . $value_command_ary;
+    $data['response_msg'] = 'System Type changed to ' . $value_command;
     $data['force_host_refresh'] = 1;
 }
 
@@ -262,9 +262,9 @@ if ($command === 'submitAccessLink' && !empty($target_id)) {
     $success = 5;
 
     if (!empty($command_values['value'])) {
-        $value_command_ary = Filters::varUrl($command_values['value']);
-        if (!empty($value_command_ary)) {
-            $hosts->update($target_id, ['access_link' => trim($value_command_ary)]);
+        $value_command = Filters::varUrl($command_values['value']);
+        if (!empty($value_command)) {
+            $hosts->update($target_id, ['access_link' => trim($value_command)]);
             $data['response_msg'] = "link updated";
             $success = 1;
         } else {
@@ -274,7 +274,7 @@ if ($command === 'submitAccessLink' && !empty($target_id)) {
     }
     //clear_field
     if (empty($command_values['value'])) {
-        $hosts->update($target_id, ['access_link' => $value_command_ary]);
+        $hosts->update($target_id, ['access_link' => $value_command]);
         $data['response_msg'] = "link cleared";
         $success = 1;
     }
@@ -283,8 +283,8 @@ if ($command === 'submitAccessLink' && !empty($target_id)) {
 
 if ($command === 'submitAccessType' && !empty($target_id)) {
     $success = 0;
-    if (!empty($value_command_ary)) {
-        $hosts->update($target_id, ['access_type' => $value_command_ary]);
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['access_type' => $value_command]);
         $success = 1;
     }
     $data['command_success'] = $success;
@@ -356,9 +356,9 @@ $new_network = [];
 /* ADD NETWORK */
 if (
     $command == 'addNetwork' &&
-    !empty($value_command_ary)
+    !empty($value_command)
 ) {
-    $decodedJson = json_decode($value_command_ary, true);
+    $decodedJson = json_decode($value_command, true);
 
     if ($decodedJson === null) {
         $data['command_error'] = 1;
@@ -424,9 +424,9 @@ if (
 $new_bookmark = [];
 if (
     $command == 'addBookmark' &&
-    !empty($value_command_ary)
+    !empty($value_command)
 ) {
-    $decodedJson = json_decode($value_command_ary, true);
+    $decodedJson = json_decode($value_command, true);
 
     if ($decodedJson === null) {
         $data['command_error'] = 1;
@@ -491,8 +491,8 @@ if (
     }
 }
 
-if ($command == 'updateBookmark' && !empty($value_command_ary) && $target_id > 0) {
-    $decodedJson = json_decode($value_command_ary, true);
+if ($command == 'updateBookmark' && !empty($value_command) && $target_id > 0) {
+    $decodedJson = json_decode($value_command, true);
     $bookmark = [];
     $bookmark['id'] = $target_id;
     if ($decodedJson === null) {
@@ -586,10 +586,10 @@ if ($command === 'host-details' && !empty($target_id)) {
     }
 }
 
-if ($command == 'saveNote' && !empty($target_id) && !empty($value_command_ary)) {
+if ($command == 'saveNote' && !empty($target_id) && !empty($value_command)) {
     //For empty note we must write ':clear' to begin to prevent clean the note
     //if a filter or other return false/empty
-    $content = urldecode($value_command_ary);
+    $content = urldecode($value_command);
     if (str_starts_with($content, ":clear")) {
         $content = '';
     }
@@ -600,7 +600,7 @@ if ($command == 'saveNote' && !empty($target_id) && !empty($value_command_ary)) 
 }
 
 if ($command == 'setHighlight' && !empty($target_id)) {
-    $value = (empty($value_command_ary)) ? 0 : 1;
+    $value = (empty($value_command)) ? 0 : 1;
 
     $hosts->update($target_id, ['highlight' => $value]);
     $data['command_success'] = 1;
@@ -655,10 +655,10 @@ if ($command == "mgmtBookmark" && !empty($target_id)) {
 /* Host and Bookmarks create category */
 if (
     ($command == 'submitBookmarkCat' || $command == 'submitHostsCat') &&
-    !empty($value_command_ary)
+    !empty($value_command)
 ) {
     $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;
-    $response = $ctx->get('Categories')->create($cat_type, $value_command_ary);
+    $response = $ctx->get('Categories')->create($cat_type, $value_command);
 
     if ($response['success'] == 1) :
         $data['command_success'] = 1;
@@ -700,12 +700,12 @@ if (
 /* Host External submit */
 if ($command == 'submitHost' && !empty($target_id)) {
     $host = [];
-    $host['hostname'] = Filters::varDomain($value_command_ary);
+    $host['hostname'] = Filters::varDomain($value_command);
 
     if (!empty($host['hostname'])) {
         $host['ip'] = $hosts->getHostnameIP($host['hostname']);
     } else {
-        $host['ip'] = $value_command_ary;
+        $host['ip'] = $value_command;
     }
 
     if (!empty($host['ip']) && !$ctx->get('Networks')->isLocal($host['ip'])) {
@@ -766,7 +766,7 @@ if ($command == 'change_bookmarks_tab') {
 /* Logs Host */
 if (
     $command === 'logs-reload' ||
-    ($command === 'changeHDTab' && $value_command_ary == 'tab9')
+    ($command === 'changeHDTab' && $value_command == 'tab9')
 ) {
     if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) :
         $opts['max_lines'] = $command_values['log_size'];
@@ -788,7 +788,7 @@ if (
 }
 
 /* Metrics */
-if ($command === 'changeHDTab' && $value_command_ary == 'tab10') {
+if ($command === 'changeHDTab' && $value_command == 'tab10') {
     $ping_stats = get_host_metrics($ctx, $target_id);
     if (!empty($ping_stats)) {
         $data['response_msg'] = $frontend->getTpl('chart-time-js', $ping_stats);
