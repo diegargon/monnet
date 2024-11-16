@@ -461,8 +461,20 @@ if (
             $data['command_error_msg'] = "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if ($new_bookmark['image_type'] == 'local_img' && empty($new_bookmark['field_img'])) {
-            $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
+        if ($new_bookmark['image_type'] === 'local_img') {
+            if (empty($new_bookmark['field_img'])) {
+                $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
+            } else {
+                if (!Filters::varCustomString($new_bookmark['field_img'], '.', 255) || !file_exists('local_img/')) {
+                    $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
+                }
+            }
+        }
+
+        if ($new_bookmark['image_type'] == 'url' && !empty($new_bookmark['field_img'])) {
+            if (!Filters::varUrl($new_bookmark['field_img'])) {
+                $data['command_error_msg'] = "{$lng['L_ERROR_URL_INVALID']}";
+            }
         }
 
         if (empty($data['command_error_msg'])) {
@@ -485,7 +497,7 @@ if ($command == 'updateBookmark' && !empty($value_command_ary) && $target_id > 0
     $bookmark['id'] = $target_id;
     if ($decodedJson === null) {
         $data['command_error'] = 1;
-        $data['command_error_msg'] .= 'JSON Invalid<br/>';
+        $data['command_error_msg'] .= 'JSON Invalid';
     } else {
         foreach ($decodedJson as $key => $dJson) {
             $bookmark[$key] = trim($dJson);
@@ -517,8 +529,19 @@ if ($command == 'updateBookmark' && !empty($value_command_ary) && $target_id > 0
             $data['command_error_msg'] = "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
-        if ($bookmark['image_type'] == 'local_img' && empty($bookmark['field_img'])) {
-            $data['command_error_msg'] = "{$lng['L_ERROR_EMPTY_INVALID']}";
+        if ($bookmark['image_type'] === 'local_img') {
+            if (empty($bookmark['field_img'])) {
+                $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
+            } else {
+                if (!Filters::varCustomString($bookmark['field_img'], '.', 255) || !file_exists('local_img/')) {
+                    $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
+                }
+            }
+        }
+        if ($bookmark['image_type'] == 'url' && !empty($bookmark['field_img'])) {
+            if (!Filters::varUrl($bookmark['field_img'])) {
+                $data['command_error_msg'] = "{$lng['L_ERROR_URL_INVALID']}";
+            }
         }
 
         if (empty($data['command_error_msg'])) {
@@ -595,7 +618,7 @@ if ($command == 'removeBookmark' && !empty($target_id)) {
 }
 
 if ($command == "mgmtBookmark" && !empty($target_id)) {
-    if (!empty($categories)) :
+    if (empty($categories)) :
         $categories = $ctx->get('Categories');
     endif;
 

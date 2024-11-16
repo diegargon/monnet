@@ -56,7 +56,7 @@
                 <?= $lng['L_LOCAL_IMAGE'] ?>
             </option>
             <option value="url"
-                <?= !empty($tdata['image_type']) && $tdata['image_type'] === 'image_resource' ? 'selected' : '' ?>>
+                <?= !empty($tdata['image_type']) && $tdata['image_type'] === 'url' ? 'selected' : '' ?>>
                 <?= $lng['L_LINK'] ?>
             </option>
         </select>

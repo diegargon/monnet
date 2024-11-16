@@ -54,6 +54,7 @@ $lng = [
     'L_ERR_PORT_INVALID' => 'Error: Puerto invalido',
     'L_ERR_SENDING_EMAILS' => 'Error: Enviando correos',
     'L_ENABLE_EMAIL_ALARMS' => 'Habilitar Mensajes Alarmas',
+    'L_ERROR_URL_INVALID' => 'Url no valida',
     'L_EMAILS' => 'Emails',
     'L_EDIT' => 'Editar',
 //F
