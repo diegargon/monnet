@@ -117,16 +117,28 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
         //$id = $vhost['id'];
         if ($minutes_diff > 0 && ($minutes_diff <= $cfg['refresher_time'])) {
             if ($vhost['online']) {
-                $hosts_view[$key]['glow'] = 'host-glow-on';
+                $hosts_view[$key]['glow'] = 'host-glow-green';
             } else {
-                $hosts_view[$key]['glow'] = 'host-glow-off';
+                $hosts_view[$key]['glow'] = 'host-glow-red';
             }
         }
-        // /glow
-        //Warn icon
-        if ($vhost['warn_port']) {
-            $hosts_view[$key]['warn_mark'] = 'tpl/' . $theme . '/img/error-mark.png';
-            $hosts_view[$key]['details'] .= $lng['L_PORT_DOWN'];
+
+        /*
+         * Alert/Warn
+         * Show msg on tooltip (details)
+         */
+
+        if ($vhost['alert']) {
+            $hosts_view[$key]['alert_mark'] = 'tpl/' . $theme . '/img/alert-mark.png';
+            $hosts_view[$key]['details'] .= $vhost['warn_msg'];
+        }
+        if ($vhost['warn'] || $vhost['warn_port']) {
+            $hosts_view[$key]['warn_mark'] = 'tpl/' . $theme . '/img/warn-mark.png';
+            if ($vhost['warn']) {
+                $hosts_view[$key]['warn_msg'] .= $vhost['warn_msg'];
+            } else {
+                $hosts_view[$key]['details'] .= $lng['L_PORT_DOWN'];
+            }
         }
     }
 

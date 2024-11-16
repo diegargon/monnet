@@ -28,7 +28,11 @@ if (empty($tdata['hosts'])) {
                 <div class="hosts-thumb shadow1 <?= $host['glow'] ?> ">
                     <img class="hosts-online" src="<?= $host['online_image'] ?>"
                          alt="online_status" title="<?= $host['title_online'] ?>"/>
-                <?php if (!empty($host['warn_mark']) && $host['online'] == 1) : ?>
+                <?php if (!empty($host['alert_mark'])) : ?>
+                    <img class="hosts-online" src="<?= $host['alert_mark'] ?>"
+                        alt="online_status" title="<?= $host['alert_msg'] ?>"/>
+                <?php endif; ?>
+                <?php if (!empty($host['warn_mark']) && empty($host['alert_mark'])) : ?>
                     <img class="hosts-online" src="<?= $host['warn_mark'] ?>"
                         alt="online_status" title="<?= $host['warn_msg'] ?>"/>
                 <?php endif; ?>

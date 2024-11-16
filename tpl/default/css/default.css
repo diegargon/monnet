@@ -540,13 +540,17 @@ input:checked + .slider:before {
     padding: 1px;
     overflow: hidden;
 }
-.host-glow-off {
+.host-glow-red {
     background-color: rgb(66, 22, 22);
     animation: GlowOffColor 2s linear infinite;
 }
-.host-glow-on {
+.host-glow-green {
     background-color: rgb(16, 32, 16);
     animation: GlowOnColor 2s linear infinite;
+}
+.host-glow-orange {
+    background-color: rgb(104, 68, 2);
+    animation: GlowOrangeColor 2s linear infinite;
 }
 .hosts-title {
     display: inline-block;
@@ -1399,6 +1403,20 @@ input:checked + .slider:before {
     100% {
         background-color: rgb(66, 22, 22);
     }
+}
+
+
+@keyframes GlowOrangeColor {
+    0% {
+        background-color: rgb(104, 68, 2);
+
+    }
+    50% {
+        background-color: rgb(136, 77, 45);
+
+
+    }
+
 }
 
 
