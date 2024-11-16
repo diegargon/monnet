@@ -71,9 +71,30 @@
                         $(position).append(jsonData.term_logs.data);
                     }
 
-                    if (jsonData.command_receive === 'removeBookmark') {
-                        var commandValue = jsonData.command_value;
-                        var elementSelector = "#item_num_" + commandValue;
+                    if (jsonData.command_receive === 'submitBookmarkCat') {
+                        if(jsonData.response_msg) {
+                            $('#stdbox-status-msg').append(jsonData.response_msg);
+                        }
+                        if(jsonData.command_success === 1) {
+                            closeStdContainer();
+                        }
+                    }
+
+                    if (
+                            jsonData.command_receive === 'removeBookmarkCat' &&
+                            jsonData.command_error === 0 &&
+                            jsonData.response_msg > 0
+                    ) {
+                        var elementSelector = "#bookmarks_tab_" + jsonData.response_msg;
+                        $(elementSelector).hide();
+                    }
+
+                    if (
+                            jsonData.command_receive === 'removeBookmark' &&
+                            jsonData.command_error === 0 &&
+                            jsonData.response_msg > 0
+                    ) {
+                        var elementSelector = "#item_num_" + jsonData.response_msg;
                         $(elementSelector).hide();
                     }
 
@@ -91,6 +112,22 @@
                         var mgmtBookmark = $(position).find("#mgmt-bookmark-container");
                         makeDraggable(mgmtBookmark);
                         mgmtBookmark.css('display', 'block');
+                    }
+                    /* Success */
+                    if (
+                            (jsonData.command_receive === 'updateBookmark' ||
+                            jsonData.command_receive === 'addBookmark') &&
+                            jsonData.command_success > 0 &&
+                            jsonData.command_error === 0
+                    ) {
+                        $('#mgmt-bookmark-container').remove();
+                    }
+                    /* Error */
+                    if (
+                            jsonData.command_receive === 'addBookmark' &&
+                            jsonData.command_error > 0
+                    ) {
+                        $('#error_msg').append(jsonData.command_error_msg);
                     }
 
                     if ("host_details" in jsonData) {

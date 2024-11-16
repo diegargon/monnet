@@ -26,7 +26,6 @@ function closeStdContainer() {
     var std_container = document.getElementById("stdbox-container");
     var std_content = document.getElementById("stdbox-content");
     var std_title = document.getElementById("stdbox-title");
-    var std_error_msg = document.getElementById("stdbox-error-msg");
     var std_status_msg = document.getElementById("stdbox-status-msg");
 
     if (std_container) {
@@ -36,9 +35,6 @@ function closeStdContainer() {
         }
         if (std_title) {
             $(std_title).empty();
-        }
-        if (std_error_msg) {
-            $(std_error_msg).empty();
         }
         if (std_status_msg) {
             $(std_status_msg).empty();

@@ -23,7 +23,6 @@
     </div>
     <div class="form_container">
         <div id="stdbox-status-msg"></div>
-        <div id="stdbox-error-msg"></div>
     </div>
     <div id="stdbox-content">
 

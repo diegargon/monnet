@@ -108,11 +108,11 @@ class Categories
         $query = "SELECT `cat_name` FROM categories WHERE `cat_type` = $cat_type AND `cat_name` = $query_value";
 
         if ($this->db->queryExists($query)) {
-            $response['sucess'] = false;
+            $response['sucess'] = -1;
             $response['msg'] = $this->lng['L_VALUE_EXISTS'];
         } else {
             $this->db->insert('categories', ['cat_name' => $value, 'cat_type' => $cat_type]);
-            $response['success'] = true;
+            $response['success'] = 1;
             $response['msg'] = $this->lng['L_OK'];
         }
 

@@ -33,6 +33,7 @@ $data = [
     'login' => 'fail',
     'command_receive' => '',
     'command_success' => 0,
+    'command_error' => 0,
     'command_error_msg' => '',
     'response_msg' => '',
 ];
@@ -48,17 +49,20 @@ $tdata['theme'] = $cfg['theme'];
 
 $command = Filters::postString('command');
 if (empty($command)) {
+    $data['command_error'] = 1;
     $data['command_error_msg'] = 'Command is empty or not a string';
 }
 
 $command_values = Filters::sanArray('command_values', 'post');
 
 if (empty($command_values) || !is_array($command_values)) {
+    $data['command_error'] = 1;
     $data['command_error_msg'] = 'Command values is empty or not an array';
 }
 
 //ID is mandatory, must send 0 if not apply
 if (!isset($command_values['id'])) {
+    $data['command_error'] = 1;
     $data['command_error_msg'] = 'Id field is mandatory';
 } else {
     $target_id = Filters::varInt($command_values['id']);
@@ -98,6 +102,7 @@ if (!empty($value_command_ary)) :
     $data['command_value'] = $value_command_ary;
 endif;
 if (!is_numeric($target_id)) :
+    $data['command_error'] = 1;
     $data['command_error_msg'] = 'Id field is no numeric:';
 else :
     $target_id = (int) $target_id;
@@ -263,6 +268,7 @@ if ($command === 'submitAccessLink' && !empty($target_id)) {
             $data['response_msg'] = "link updated";
             $success = 1;
         } else {
+            $data['command_error'] = 1;
             $data['command_error_msg'] = "Wrong value";
         }
     }
@@ -355,6 +361,7 @@ if (
     $decodedJson = json_decode($value_command_ary, true);
 
     if ($decodedJson === null) {
+        $data['command_error'] = 1;
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
     } else {
         foreach ($decodedJson as $key => $dJson) {
@@ -364,6 +371,7 @@ if (
             $new_network[$key] = trim($dJson);
         }
         if ($new_network['networkCIDR'] == 0 && $new_network['network'] != '0.0.0.0') {
+            $data['command_error'] = 1;
             $data['command_error_msg'] .= $lng['L_MASK'] .
                 ' ' . $new_network['networkCIDR'] .
                 ' ' . $lng['L_NOT_ALLOWED'] . '<br/>';
@@ -373,9 +381,11 @@ if (
         $new_network['network'] = $network_plus_cidr;
 
         if (!Filters::varNetwork($network_plus_cidr)) {
+            $data['command_error'] = 1;
             $data['command_error_msg'] .= $lng['L_NETWORK'] . ' ' . $lng['L_INVALID'] . '<br/>';
         }
         if (!is_numeric($new_network['vlan'])) {
+            $data['command_error'] = 1;
             $data['command_error_msg'] .= 'VLAN ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
         }
         if (!is_numeric($new_network['scan'])) {
@@ -385,9 +395,11 @@ if (
         $networks_list = $ctx->get('Networks')->getNetworks();
         foreach ($networks_list as $net) {
             if ($net['name'] == $new_network['name']) {
+                $data['command_error'] = 1;
                 $data['command_error_msg'] = 'Name must be unique<br/>';
             }
             if ($net['network'] == $network_plus_cidr) {
+                $data['command_error'] = 1;
                 $data['command_error_msg'] = 'Network must be unique<br/>';
             }
         }
@@ -417,6 +429,7 @@ if (
     $decodedJson = json_decode($value_command_ary, true);
 
     if ($decodedJson === null) {
+        $data['command_error'] = 1;
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
     } else {
         foreach ($decodedJson as $key => $dJson) {
@@ -424,31 +437,32 @@ if (
         }
 
         if (!Filters::varString($new_bookmark['name'])) {
-            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] .= "{$lng['L_NAME']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
         if (!Filters::varString($new_bookmark['image_type'])) {
-            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_IMAGE_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error'] = 1;
+            $data['command_error_msg'] .= "{$lng['L_IMAGE_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
         if (!Filters::varInt($new_bookmark['cat_id'])) {
-            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] .= "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         if (
             !Filters::varUrl($new_bookmark['urlip']) ||
             Filters::varIP($new_bookmark['urlip'])
         ) {
-            $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] = "{$lng['L_URLIP']}:{$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         if (
             (!Filters::varInt($new_bookmark['weight'])) &&
             (Filters::varInt($new_bookmark['weight']) !== 0)
         ) {
-            $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] = "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         if ($new_bookmark['image_type'] == 'local_img' && empty($new_bookmark['field_img'])) {
-            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         if (empty($data['command_error_msg'])) {
@@ -457,7 +471,10 @@ if (
             } else {
                 $data['response_msg'] = 'error';
             }
+        } else {
+            $data['command_error'] = 1;
         }
+
         $data['command_success'] = 1;
     }
 }
@@ -467,6 +484,7 @@ if ($command == 'updateBookmark' && !empty($value_command_ary) && $target_id > 0
     $bookmark = [];
     $bookmark['id'] = $target_id;
     if ($decodedJson === null) {
+        $data['command_error'] = 1;
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
     } else {
         foreach ($decodedJson as $key => $dJson) {
@@ -474,33 +492,33 @@ if ($command == 'updateBookmark' && !empty($value_command_ary) && $target_id > 0
         }
 
         if (!Filters::varString($bookmark['name'])) {
-            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_NAME']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] .= "{$lng['L_NAME']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
         if (!Filters::varString($bookmark['image_type'])) {
-            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_IMAGE_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] .= "{$lng['L_IMAGE_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
         if (!Filters::varInt($bookmark['cat_id'])) {
-            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] .= "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
         if (!Filters::varInt($bookmark['bookmark_id'])) {
-            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_TYPE']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] .= "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
         if (
             !Filters::varUrl($bookmark['urlip']) ||
             Filters::varIP($bookmark['urlip'])
         ) {
-            $data['command_error_msg'] .= "{$lng['L_FIELD']} {$lng['L_URLIP']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] .= "{$lng['L_URLIP']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         if (
             (!Filters::varInt($bookmark['weight'])) &&
             (Filters::varInt($bookmark['weight']) !== 0)
         ) {
-            $data['command_error_msg'] = "{$lng['L_FIELD']} {$lng['L_WEIGHT']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] = "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         if ($bookmark['image_type'] == 'local_img' && empty($bookmark['field_img'])) {
-            $data['command_error_msg'] = "{$lng['L_LINK']} {$lng['L_ERROR_EMPTY_INVALID']}";
+            $data['command_error_msg'] = "{$lng['L_ERROR_EMPTY_INVALID']}";
         }
 
         if (empty($data['command_error_msg'])) {
@@ -509,6 +527,8 @@ if ($command == 'updateBookmark' && !empty($value_command_ary) && $target_id > 0
             } else {
                 $data['response_msg'] = 'error';
             }
+        } else {
+            $data['command_error'] = 1;
         }
         $data['command_success'] = 1;
     }
@@ -538,6 +558,7 @@ if ($command === 'host-details' && !empty($target_id)) {
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_success'] = 1;
     } else {
+        $data['command_error'] = 1;
         $data['command_error_msg'] .= 'Invalid host-details array';
     }
 }
@@ -566,9 +587,9 @@ if ($command == 'setHighlight' && !empty($target_id)) {
 /* Bookmarks */
 if ($command == 'removeBookmark' && !empty($target_id)) {
     if ($ctx->get('Items')->remove($target_id)) {
-        $data['response_msg'] = 'ok';
+        $data['response_msg'] = $target_id;
     } else {
-        $data['response_msg'] = 'fail';
+        $data['response_msg'] = -1;
     }
     $data['command_success'] = 1;
 }
@@ -615,10 +636,15 @@ if (
 ) {
     $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;
     $response = $ctx->get('Categories')->create($cat_type, $value_command_ary);
-    ($response['success']) ? $data['response_msg'] = $response['msg'] :
-            $data['command_error_msg'] = $response['msg'];
 
-    $data['command_success'] = 1;
+    if ($response['success'] == 1) :
+        $data['command_success'] = 1;
+        $data['response_msg'] = $response['msg'];
+    else :
+        $data['command_success'] = $response['success'];
+        $data['response_msg'] = $response['msg'];
+        $data['command_error_msg'] = $response['msg'];
+    endif;
 }
 
 if (
@@ -640,7 +666,7 @@ if (
         } else {
             $db->update('items', ['cat_id' => 50], ['cat_id' => $target_id]);
         }
-        $data['command_response_msg'] = $lng['L_OK'];
+        $data['response_msg'] = $target_id;
     } else {
         $data['command_error_msg'] = $lng['L_ERROR'];
     }
