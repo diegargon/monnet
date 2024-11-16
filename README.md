@@ -66,13 +66,15 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 
 ## Config
 
-Check config/config.defaults.php  and add the keywords you want change to /etc/monnet/config.inc.php
+Check config/config.defaults.php and add the keywords you want to change to /etc/monnet/config.inc.php.
 
-If you copy it's better remove all unnchaged config.
-Don't rename or modify directly config.defaults.php
+If you copy the file, it’s better to remove all unchanged config entries.
 
-That the main config keyboards you must check/change and copy to the ethc file
+Do not rename or modify config.defaults.php directly, as it will be overwritten.
 
+These are the main config keywords you must check/change and copy to the /etc file.
+
+```
 $cfg_db['dbhost']
 $cfg_db['dbname']
 $cfg_db['dbuser']
@@ -80,7 +82,7 @@ $cfg_db['dbpassword']
 $cfg['path'] = '/var/www/html';
 $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
-
+```
 
 ## Load the sql
 
