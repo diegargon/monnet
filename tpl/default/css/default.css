@@ -1184,10 +1184,11 @@ input:checked + .slider:before {
 .dropdown:hover .dropdown-content {
     display: block;
 }
-
+/*
 #tab9 .frame {
     height: 145px;
 }
+*/
 #config_status_msg {
     width:100%;
     font-size: 12px;
