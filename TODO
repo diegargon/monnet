@@ -1,33 +1,26 @@
 ** HIGH
 * Editar un bookmark permite un enlace http en image_local
 * El selected de tipo imagen no funcion al editar, no establece el actual
-* El enlace para imagen deberia ser optativo, si no se pone pone un defecto www.png
-* Revisar Items/addBookmark/updateBookmark y simplificar
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
 * [DB 0.35v] alert field - Señal de nuevo host descubierto, cambio de mac
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
-* [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
 
 ** LOW
-* Si no esta visible no refresher
-* El scan ports especificados por el usuario solo debe escaner los user=1
+* refresher: Si no esta visible saltarse la parte no visible
 * [DB 0.35v]hosts->scan identificar servicios  [option nmap [0 noscan  - 1 scan - 2 full scan]] - guardar con ports, los ports metidos con el user tienen user=1
 * cambiar diseño barra logout y demás, ver donde poner y quizas meter ahi stop_cli y username
     Quizas añadir una barra superior con dichos iconos y tambien poder crear folders para bookmarks
     nombre de usuario en alguna parte
-* host-details configuracion (select) enviar al cambiar
 * clear cache dir 1week; poder limpiar stats y logs
 * perhost email warn
 * Bastionado / Antivirus / Compliant / VM en principio meterlos todos en un campo encoded json,
    en resumen si eso configuracion no es checkboxes
-* Calcula Host on/off incluidos en las categorias mostradas para poner en la barra de abajo de estado
 * Users management
 * SNMP get mac
 * $lang['L_'] to $lang::get['L_'] ? o lang::get['WORD'] and the L_
 * host user*password encoded
 * SNMP Mac
 * Boton/opcion para Stop_cli via preferencias (ver donde poner)
-* Links comprobacion si funciona y una pequeña on/off señal
 * [DB 0.35v] Network weight
 * En el login opcionalmente que se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
 * Apartado add/edit link intentar obtener /favicon.ico logo.png si no caer en www.jpg local
@@ -39,8 +32,10 @@
     $_SESSION['critical_key'] = "mi_clave_critica";
     session_destroy();
 * Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
-* al borrar un bookmark, esconderlo para evitar tener que hacer el  reload
 * Refrescado/Cli Update/Discovery Update: En vez de la fecha bola roja/verde si se pasa mas del tiempo configurado
+* [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
+* El scan ports especificados por el usuario solo debe escaner los user=1
+* host-details configuracion (select) enviar al cambiar
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
@@ -51,6 +46,7 @@
 * Config parar cronjob, poder cambiar jobs entre cron_hourly y demás
 * Notes Private (uid)? Public (!uid)? , option for selected if notes are by user or global?
 * everybody bookmarks items (uid = 0) ?
+* Links comprobacion si funciona y una pequeña on/off señal?
 
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
