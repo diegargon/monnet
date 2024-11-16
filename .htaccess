@@ -1,19 +1,22 @@
-<Files "monnet-cli.php">  
+<Files "monnet-cli.php">
 Require all denied
 </Files>
-<Files "monnet-discovery.php">  
+<Files "monnet-discovery.php">
 Require all denied
 </Files>
-<Files "config/config.priv.php">  
+<Files "config/config.priv.php">
 Require all denied
 </Files>
-<Files "config/config.inc.php">  
+<Files "config/config.inc.php">
 Require all denied
 </Files>
-<Files "config/config.defaults.php">  
+<Files "config/config.defaults.php">
 Require all denied
 </Files>
 <Files "log/monnet.log">
+Require all denied
+</Files>
+<Files "installdeps.sh">
 Require all denied
 </Files>
 #Require ip 192.168.1.0/24

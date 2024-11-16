@@ -28,6 +28,10 @@ Mayor/Minor implies changes to database
 
 # MonNet Install
 
+## Testing OS
+
+Debian 12
+
 ## Deps
 
 LAMP
