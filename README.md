@@ -28,14 +28,12 @@ Mayor/Minor implies changes to database
 
 # MonNet Install
 
-## Testing OS
-
-Debian 12
-
 ## Deps
 
 LAMP
     Linux, Apache, Mysql, PHP
+    Tested: Debian 12, Apache2, PHP8.2, Mariadb 10
+
 Composer
 arp
     Optional for get mac's address, only work same network (other method will added in the future)

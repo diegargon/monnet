@@ -110,7 +110,7 @@ function ping_nets(AppContext $ctx): void
 {
     $hosts = $ctx->get('Hosts');
     $networks = $ctx->get('Networks');
-    $lng = $ctx->get('lang');
+    $lng = $ctx->get('lng');
 
     $ping_net_time = microtime(true);
     $timeout = ['sec' => 0, 'usec' => 100000];
@@ -236,7 +236,6 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0): void
  */
 function check_macs(Hosts $hosts): void
 {
-
     $known_hosts = $hosts->getknownEnabled();
 
     Log::info('Checking macs');
@@ -257,7 +256,6 @@ function check_macs(Hosts $hosts): void
  */
 function host_access(array $cfg, Hosts $hosts): void
 {
-
     $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
@@ -492,7 +490,6 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
  */
 function get_mac(string $ip): string|bool
 {
-
     $comm_path = check_command('arp');
 
     if (empty($comm_path)) {

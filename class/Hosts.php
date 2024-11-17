@@ -11,12 +11,32 @@
 
 class Hosts
 {
+    /** @var int */
     public int $totals = 0;
+    /** @var int */
     public int $total_on = 0;
+    /** @var int */
     public int $total_off = 0;
+    /** @var int */
     public int $highlight_total = 0;
+
+    /**
+     *
+     * @var Database $db
+     */
     private Database $db;
 
+    /** @var array<string> $misc_keys are save in misc field with json format */
+    private $misc_keys = [
+            'mac_vendor',
+            'manufacture',
+            'system_type',
+            'os',
+            'owner',
+            'access_type',
+            'access_link',
+            'timeout'
+        ];
     /**
      * @var array<int, array<string, mixed>> $hosts
      */
@@ -110,18 +130,6 @@ class Hosts
         /** @var array<int, array<string, mixed>> $misc_container misc json field key/values */
         $misc_container = [];
 
-        /** @var array<string> $misc_keys This host[keys] are save in misc field with json format */
-        $misc_keys = [
-            'mac_vendor',
-            'manufacture',
-            'system_type',
-            'os',
-            'owner',
-            'access_type',
-            'access_link',
-            'timeout'
-        ];
-
         foreach ($values as $kvalue => $vvalue) {
             if (!empty($kvalue) && isset($vvalue)) {
                 //TODO warning signs
@@ -157,7 +165,7 @@ class Hosts
 
                 $this->hosts[$id][$kvalue] = $vvalue;
                 //misc is json field deal with it
-                if (in_array($kvalue, $misc_keys)) {
+                if (in_array($kvalue, $this->misc_keys)) {
                     $misc_container[$kvalue] = $vvalue;
                 } else {
                     $fvalues[$kvalue] = $vvalue;
@@ -173,7 +181,7 @@ class Hosts
             $host = $this->hosts[$id];
             foreach ($host as $h_key => $h_value) {
                 if (
-                    in_array($h_key, $misc_keys) &&
+                    in_array($h_key, $this->misc_keys) &&
                     !in_array($h_key, $misc_container)
                 ) {
                     $misc_container[$h_key] = $h_value;
@@ -189,13 +197,27 @@ class Hosts
 
     public function insert(array $host): void
     {
+        $misc_container = [];
+
         if (!isset($host['hostname'])) {
             $hostname = $this->getHostname($host['ip']);
             if ($hostname) {
                 $host['hostname'] = $hostname;
             }
         }
-
+        //remove keys that we store in misc json field
+        foreach ($host as $h_key => $h_value) {
+            if (
+                in_array($h_key, $this->misc_keys) &&
+                !in_array($h_key, $misc_container)
+            ) {
+                $misc_container[$h_key] = $h_value;
+                unset($host[$h_key]);
+            }
+        }
+        if (count($misc_container) > 0) {
+            $host['misc'] = json_encode($misc_container);
+        }
         $this->db->insert('hosts', $host);
 
         $host_id = $this->db->insertID();

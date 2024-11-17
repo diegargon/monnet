@@ -14,18 +14,28 @@
  * @var array<int|string, mixed> $cfg
  * @var array<int|string, mixed> $cfg_db
  */
+
 if (!file_exists('config/config.defaults.php')) {
     print 'Missing config.defaults.php. Leaving';
+    exit(1);
+}
+if (!file_exists('config/config.priv.php')) {
+    print 'Missing config.priv.php. Leaving';
     exit(1);
 }
 
 require_once 'config/config.priv.php';
 require_once 'config/config.defaults.php';
+
 if (!file_exists('/etc/monnet/config.inc.php')) {
     print 'Missing config.inc.php. Leaving';
-    exit(1);
 } else {
-    include_once '/etc/monnet/config.inc.php';
+    /*
+     * FIXME: climode.inc.php need this, we include here again and we dont
+     * use include_once since in climode will not load again and config.defaults
+     * overwrite the config.inc.php loaded in climode.inc.php
+     */
+    include '/etc/monnet/config.inc.php';
 }
 
 date_default_timezone_set($cfg['timezone']);
