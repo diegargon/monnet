@@ -81,6 +81,8 @@ class Database
      */
     private $query_history = [];
 
+    /** @var bool */
+    private $isConnected = false;
     /**
      * Set connection details, defaults, and init
      * @param array<string> $cfg_db
@@ -112,10 +114,12 @@ class Database
     {
         $this->dblink = new mysqli($this->dbhost, $this->dbuser, $this->dbpassword, $this->dbname);
         if ($this->dblink->connect_errno) {
+            $this->isConnected = false;
             printf("Failed to connect to database: %s\n ", $this->dblink->connect_error);
             exit();
         }
         //$this->query('SET NAMES ' . $this->charset);
+        $this->isConnected = true;
         $this->dblink->query('SET NAMES ' . $this->charset);
         return true;
     }
@@ -126,7 +130,11 @@ class Database
      */
     public function isConn(): bool
     {
-        return $this->dblink && $this->dblink->ping();
+        if ($this->isConnected && $this->dblink->ping()) :
+            return true;
+        endif;
+
+        return $this->connect();
     }
 
     /**
