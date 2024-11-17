@@ -137,13 +137,13 @@ class Hosts
                     $this->hosts[$id]['alert'] = 1;
                     $alert_msg = '';
                     if ($kvalue === 'mac') :
-                        $alert_msg = 'Mac '. $this->lng['L_HAS_CHANGED'];
+                        $alert_msg = 'Mac ' . $this->lng['L_HAS_CHANGED'];
                     endif;
                     if ($kvalue === 'mac_vendor') :
-                        $alert_msg = 'Mac vendor '. $this->lng['L_HAS_CHANGED'];
+                        $alert_msg = 'Mac vendor ' . $this->lng['L_HAS_CHANGED'];
                     endif;
                     if ($kvalue === 'hostname') :
-                        $alert_msg = 'Hostname '. $this->lng['L_HAS_CHANGED'];
+                        $alert_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'];
                     endif;
                     $this->hosts[$id]['alert_msg'] = $alert_msg;
                 }

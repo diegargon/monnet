@@ -160,7 +160,7 @@ function ping_nets(AppContext $ctx): void
             $set['last_seen'] = utc_date_now();
             $hostname = $hosts->getHostname($ip);
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
-            Log::alert($lng['L_NEW_HOST'] . ': '. $ip);
+            Log::alert($lng['L_NEW_HOST'] . ': ' . $ip);
             $hosts->insert($set);
         }
     }
