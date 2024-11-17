@@ -9,12 +9,11 @@
  */
 !defined('IN_CLI') ? exit : true;
 
-$custom_cfg = '/etc/monnet/config.inc.php';
-if (!file_exists($custom_cfg)) {
-    echo 'Missing config file ' . $custom_cfg;
+if (!file_exists('/etc/monnet/config.inc.php')) {
+    print 'Missing config.inc.php. Leaving';
     exit(1);
 } else {
-    require_once $custom_cfg;
+    include_once '/etc/monnet/config.inc.php';
 }
 
 /**  @var string $APP_NAME defined in monnet-cli or monnet-discovery */

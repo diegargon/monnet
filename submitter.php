@@ -55,7 +55,7 @@ if (empty($command)) {
 
 $command_values = Filters::sanArray('command_values', 'post');
 
-if (empty($command_values) || !is_array($command_values)) {
+if (empty($command_values)) {
     $data['command_error'] = 1;
     $data['command_error_msg'] = 'Command values is empty or not an array';
 }

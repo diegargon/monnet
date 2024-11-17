@@ -14,7 +14,7 @@ class Lang
     /** @var array<string> $language */
     private static array $language = [];
     private static string $defaultLang = 'es';
-    //private static string $selectedLangCode;
+    private static string $selectedLangCode;
 
     public function __construct()
     {
@@ -47,7 +47,7 @@ class Lang
         if ($langCode !== self::defaultLang) {
             $sel_langfile = 'lang/lang.' . $langCode . '.php';
             if (file_exists($sel_langfile)) {
-                self::$selLangCode = $langCode;
+                self::$selectedLangCode = $langCode;
                 $sel_lang = include $sel_langfile;
                 self::$language = array_merge(self::$language, $sel_lang);
             }

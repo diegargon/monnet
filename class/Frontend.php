@@ -76,7 +76,7 @@ class Frontend
         }
 
         /* Load Templates in tdata/tpl */
-        if (!empty($tdata['load_tpl']) && is_array($tdata['load_tpl']) && (count($tdata['load_tpl']) > 0)) {
+        if (!empty($tdata['load_tpl']) && is_array($tdata['load_tpl'])) {
             foreach ($tdata['load_tpl'] as $tpl) {
                 if (!empty($tpl['file']) && !empty($tpl['place'])) {
                     if (empty($tdata[$tpl['place']])) {

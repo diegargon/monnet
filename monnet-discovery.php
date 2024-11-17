@@ -28,15 +28,13 @@ if (is_locked()) {
 register_shutdown_function('unlink', CLI_LOCK);
 ping_nets($ctx);
 
-if ($db instanceof Database) {
+if ($db->isConn()) {
     $db->update(
         'prefs',
         ['uid' => 0, 'pref_value' => utc_date_now()],
         ['pref_name' => 'discovery_last_run'],
         'LIMIT 1'
     );
-} else {
-    Log::err("Error updateing discovery last run timestamp");
 }
 
 Log::debug("[Finishing] $APP_NAME " . datetime_machine() . "");

@@ -126,7 +126,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
  * @var array $cfg
  * @var Database $db
  */
-if ($db instanceof Database) {
+if ($db->isConn()) {
     $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
     $result = $db->fetchAll($query);
     if ($result) {

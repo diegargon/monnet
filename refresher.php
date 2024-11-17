@@ -49,35 +49,30 @@ $show_hosts_count = 0;
 if ($user->getPref('show_highlight_hosts_status')) {
     $hosts_view = get_hosts_view($ctx, 1);
     $highlight_hosts_count = 0;
-    if (is_array($hosts_view)) {
-        $highlight_hosts_count = count($hosts_view);
-        $tdata = [];
-        $tdata['hosts'] = $hosts_view;
-        $tdata['container-id'] = 'highlight-hosts';
-        $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
-        $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
-        $data['highlight_hosts']['cfg']['place'] = '#host_place';
-    } else {
-        $data['response_msg'] .= 'Invalid highlight host data';
-    }
+
+    $highlight_hosts_count = count($hosts_view);
+    $tdata = [];
+    $tdata['hosts'] = $hosts_view;
+    $tdata['container-id'] = 'highlight-hosts';
+    $tdata['head-title'] = $lng['L_HIGHLIGHT_HOSTS'];
+    $data['highlight_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
+    $data['highlight_hosts']['cfg']['place'] = '#host_place';
 }
+
 if ($user->getPref('show_other_hosts_status')) {
     $hosts_view = get_hosts_view($ctx);
-    if (is_array($hosts_view)) {
-        $show_hosts_count = count($hosts_view);
-        $hosts_totals_count = $hosts->totals;
-        $show_hosts_count = $show_hosts_count + $highlight_hosts_count;
-        $total_hosts_on = $hosts->total_on;
-        $total_hosts_off = $hosts->total_off;
-        $tdata = [];
-        $tdata['hosts'] = $hosts_view;
-        $tdata['container-id'] = 'other-hosts';
-        $tdata['head-title'] = $lng['L_OTHERS'];
-        $data['other_hosts']['cfg']['place'] = '#host_place';
-        $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
-    } else {
-        $data['response_msg'] .= 'Invalid other host data' . print_r($hosts_view, true);
-    }
+
+    $show_hosts_count = count($hosts_view);
+    $hosts_totals_count = $hosts->totals;
+    $show_hosts_count = $show_hosts_count + $highlight_hosts_count;
+    $total_hosts_on = $hosts->total_on;
+    $total_hosts_off = $hosts->total_off;
+    $tdata = [];
+    $tdata['hosts'] = $hosts_view;
+    $tdata['container-id'] = 'other-hosts';
+    $tdata['head-title'] = $lng['L_OTHERS'];
+    $data['other_hosts']['cfg']['place'] = '#host_place';
+    $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
 }
 
 if ($user->getPref('show_termlog_status')) {
