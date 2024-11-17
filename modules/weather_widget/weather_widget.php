@@ -9,17 +9,16 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-/**
- * @param array<string> $cfg
- * @param array<string> $lng
- */
-function weather_widget(array $cfg, array $lng): array
+
+function weather_widget(array $cfg, array $lng): ?array
 {
 
     $page_data = [];
 
     $weather_data = request_weather($cfg);
-
+    if ($weather_data === null) {
+       return null;
+    }
     $page_data['desc'] = ucwords($weather_data->weather[0]->description);
     $page_data['city_name'] = $weather_data->name;
     $page_data['weather_icon'] = 'https://openweathermap.org/img/wn/' . $weather_data->weather[0]->icon . '.png';

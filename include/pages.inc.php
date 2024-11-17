@@ -54,13 +54,17 @@ function page_common_head(AppContext $ctx)
 
     $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     $page['web_main']['scriptlink'][] = './scripts/common.js';
-    $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
 
-    $page['weather_widget'] = weather_widget($cfg, $lng);
-    $page['load_tpl'][] = [
-        'file' => 'weather-widget',
-        'place' => 'head_right',
-    ];
+
+    $weather = weather_widget($cfg, $lng);
+    if ($weather) {
+        $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
+        $page['weather_widget'] = $weather;
+        $page['load_tpl'][] = [
+            'file' => 'weather-widget',
+            'place' => 'head_right',
+        ];
+    }
 
     /* Footer */
     $page['web_main']['main_footer_tpl'][] = 'footer';
