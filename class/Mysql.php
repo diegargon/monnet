@@ -121,6 +121,15 @@ class Database
     }
 
     /**
+     *
+     * @return bool
+     */
+    public function isConn(): bool
+    {
+        return $this->dblink && $this->dblink->ping();
+    }
+
+    /**
      * prefix setter
      * @param string $prefix
      */
