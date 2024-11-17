@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * EN
  * @author diego/@/envigo.net
  * @package
  * @subpackage
@@ -66,6 +66,7 @@ $lng = [
     'L_HOST_PORT_BECOME_OFF' => 'Host port turned off',
     'L_HOME' => 'Home',
     'L_HUMIDITY' => 'Humidity',
+    'L_HAS_CHANGED' => 'has changed',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',
@@ -103,6 +104,7 @@ $lng = [
     'L_NETWORK_NAME' => 'Network Name',
     'L_NUMERIC' => 'Numeric',
     'L_NOT_ALLOWED' => 'not allowed',
+    'L_NEW_HOST' => 'New host discovery',
     //O
     'L_OK' => 'Ok',
     'L_ONLINE' => 'Online',

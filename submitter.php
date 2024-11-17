@@ -362,7 +362,7 @@ if (
 
     if ($decodedJson === null) {
         $data['command_error'] = 1;
-        $data['command_error_msg'] .= 'JSON Invalid<br/>';
+        $data['command_error_msg'] .= 'JSON Invalid';
     } else {
         foreach ($decodedJson as $key => $dJson) {
             ($key == 'networkVLAN') ? $key = 'vlan' : null;

@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -26,7 +26,17 @@ class Hosts
      * @var array<string> $lng
      */
     private array $lng = [];
+
+    /**
+     *
+     * @var AppContext $ctx
+     */
     private AppContext $ctx;
+
+    /**
+     *
+     * @var array $host_cat_track
+     */
     private array $host_cat_track = [];
 
     public function __construct(AppContext $ctx)
@@ -117,7 +127,7 @@ class Hosts
                 //TODO warning signs
                 //Log change
                 if (
-                    ($kvalue == 'mac' || $kvalue == 'mac_vendor' || $kvalue == 'hostname') &&
+                    ($kvalue === 'mac' || $kvalue === 'mac_vendor' || $kvalue === 'hostname') &&
                     ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
                     $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( '
@@ -125,6 +135,17 @@ class Hosts
                         . $this->hosts[$id][$kvalue] . '->' . $vvalue;
                     Log::logHost('LOG_ALERT', $id, $loghostmsg);
                     $this->hosts[$id]['alert'] = 1;
+                    $alert_msg = '';
+                    if ($kvalue === 'mac') :
+                        $alert_msg = 'Mac '. $this->lng['L_HAS_CHANGED'];
+                    endif;
+                    if ($kvalue === 'mac_vendor') :
+                        $alert_msg = 'Mac vendor '. $this->lng['L_HAS_CHANGED'];
+                    endif;
+                    if ($kvalue === 'hostname') :
+                        $alert_msg = 'Hostname '. $this->lng['L_HAS_CHANGED'];
+                    endif;
+                    $this->hosts[$id]['alert_msg'] = $alert_msg;
                 }
                 //Log category change
                 if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {

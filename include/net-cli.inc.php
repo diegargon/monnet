@@ -110,6 +110,8 @@ function ping_nets(AppContext $ctx): void
 {
     $hosts = $ctx->get('Hosts');
     $networks = $ctx->get('Networks');
+    $lng = $ctx->get('lang');
+
     $ping_net_time = microtime(true);
     $timeout = ['sec' => 0, 'usec' => 100000];
 
@@ -134,6 +136,7 @@ function ping_nets(AppContext $ctx): void
         $set = [];
 
         if ($ip_status['online']) {
+            //New host
             $mac = trim(get_mac($ip));
             if ($mac) {
                 $set['mac'] = $mac;
@@ -142,6 +145,8 @@ function ping_nets(AppContext $ctx): void
             }
             $set['ip'] = $ip;
             $set['online'] = 1;
+            $set['alert'] = 1;
+            $set['alert_msg'] = $lng['L_NEW_HOST'];
 
             $network_id = $networks->getNetworkIDbyIP($ip);
             if ($network_id == false) {
@@ -155,7 +160,7 @@ function ping_nets(AppContext $ctx): void
             $set['last_seen'] = utc_date_now();
             $hostname = $hosts->getHostname($ip);
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
-
+            Log::alert($lng['L_NEW_HOST'] . ': '. $ip);
             $hosts->insert($set);
         }
     }

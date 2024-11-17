@@ -280,7 +280,7 @@ $(document).ready(function () {
         fields.networkVLAN = parseInt($('#network_vlan').val());
         if (fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {
             json_fields = JSON.stringify(fields);
-            submitCommand('addNetwork', json_fields);
+            submitCommand('addNetwork', {id: 0, value: json_fields});
         }
 
     });
@@ -354,9 +354,9 @@ $(document).ready(function () {
 //Send event to refresher
             if ($(this).hasClass('option_network')) {
                 if (this.checked) {
-                    submitCommand('network_select', this.value);
+                    submitCommand('network_select', {id: 0, value: this.value});
                 } else {
-                    submitCommand('network_unselect', this.value);
+                    submitCommand('network_unselect', {id: 0, value: this.value});
                 }
             }
 //END Netrwork Checkboxes

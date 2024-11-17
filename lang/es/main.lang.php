@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * ES
  * @author diego/@/envigo.net
  * @package
  * @subpackage
@@ -73,6 +73,7 @@ $lng = [
     'L_HOST_PORT_BECOME_OFF' => 'Host port se apago',
     'L_HOME' => 'Inicio',
     'L_HUMIDITY' => 'Humedad',
+    'L_HAS_CHANGED' => 'ha cambiado',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',
@@ -110,6 +111,7 @@ $lng = [
     'L_NETWORK_NAME' => 'Nombre de la red',
     'L_NUMERIC' => 'numerico',
     'L_NOT_ALLOWED' => 'no permitida',
+    'L_NEW_HOST' => 'Nuevo host descubierto',
     //O
     'L_OK' => 'Ok',
     'L_ONLINE' => 'Online',
