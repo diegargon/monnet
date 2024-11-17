@@ -54,7 +54,7 @@ if (empty($tdata['hosts'])) {
                     <?php if (!empty($host['access_link'])) : ?>
                         <a href="<?= $host['access_link'] ?>">
                         <img class="fab" src="tpl/<?= $cfg['theme']?>/img/icons/link.png"
-                            alt="access_link" title="<?= $host['access_link'] ?>"/>
+                            alt="access_link" rel="noreferrer" target="_blank" title="<?= $host['access_link'] ?>"/>
                         </a>
                     <?php endif; ?>
                     </div>
