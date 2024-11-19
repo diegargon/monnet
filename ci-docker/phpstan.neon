@@ -8,5 +8,5 @@ parameters:
         - /myapp/vendor
         - /myapp/ci-docker
         - /myapp/scripts
-    scanFiles:
-        - /etc/monnet/config.inc.php
+    ignoreErrors:
+        - '#/etc/monnet/config\.inc\.php#'
