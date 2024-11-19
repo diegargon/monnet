@@ -16,7 +16,15 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mailer
 {
+    /**
+     *
+     * @var PHPMailer $phpMailer
+     */
     private PHPMailer $phpMailer;
+    /**
+     *
+     * @var AppContext $ctx
+     */
     private AppContext $ctx;
 
     /**
@@ -58,6 +66,12 @@ class Mailer
         $this->configure();
     }
 
+    /**
+     *
+     * @param array $emails
+     * @param string $subject
+     * @param string $body
+     */
     public function sendEmailMultiple(array $emails, string $subject, string $body)
     {
         foreach ($emails as $email) {
@@ -68,6 +82,13 @@ class Mailer
         }
     }
 
+    /**
+     *
+     * @param string $to
+     * @param string $subject
+     * @param string $body
+     * @return bool
+     */
     public function sendEmail(string $to, string $subject, string $body): bool
     {
         if (!$this->phpMailer) {
@@ -88,6 +109,10 @@ class Mailer
         }
     }
 
+    /**
+     *
+     * @return void
+     */
     private function configure(): void
     {
 

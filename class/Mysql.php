@@ -40,9 +40,9 @@ class Database
 
     /**
      * db link object
-     * @var object
+     * @var object|null
      */
-    protected $dblink;
+    protected $dblink = null;
 
     /**
      * host
