@@ -108,6 +108,13 @@
                             $('#network_status_msg').append(jsonData.command_error_msg);
                         }
                     }
+                    if (jsonData.command_receive === 'submitHost' ) {
+                        if (!jsonData.command_error) {
+                          closeStdContainer();
+                        } else {
+                            $('#stdbox_status_msg').append(jsonData.command_error_msg);
+                        }
+                    }
                     if (
                             jsonData.command_receive === 'mgmtBookmark' &&
                             jsonData.command_success > 0
