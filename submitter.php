@@ -698,7 +698,7 @@ if (
 }
 
 /* Host External submit */
-if ($command == 'submitHost' && !empty($target_id)) {
+if ($command == 'submitHost' && !empty($value_command)) {
     $host = [];
     $host['hostname'] = Filters::varDomain($value_command);
 
@@ -712,19 +712,22 @@ if ($command == 'submitHost' && !empty($target_id)) {
         $network_match = $ctx->get('Networks')->matchNetwork($host['ip']);
         if (valid_array($network_match)) {
             if ($hosts->getHostByIP($host['ip'])) {
+                $data['command_error'] = 1;
                 $data['command_error_msg'] = $lng['L_ERR_DUP_IP'];
             } else {
                 $host['network'] = $network_match['id'];
                 $hosts->addHost($host);
+                $data['command_success'] = 1;
                 $data['response_msg'] = $lng['L_OK'];
             }
         } else {
+            $data['command_error'] = 1;
             $data['command_error_msg'] = $lng['L_ERR_NOT_NET_CONTAINER'];
         }
     } else {
+        $data['command_error'] = 1;
         $data['command_error_msg'] = $lng['L_ERR_NOT_INTERNET_IP'] . $host['ip'];
     }
-    $data['command_success'] = 1;
 }
 
 /* Power ON/OFF  & Reboot */
