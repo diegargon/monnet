@@ -98,6 +98,16 @@
                         $(elementSelector).hide();
                     }
 
+                    if (jsonData.command_receive === 'remove_host' && !jsonData.command_error) {
+                        $('#host-details').remove();
+                    }
+                    if (jsonData.command_receive === 'addNetwork' ) {
+                        if (!jsonData.command_error) {
+                            $('#add-network-container').remove();
+                        } else {
+                            $('#network_status_msg').append(jsonData.command_error_msg);
+                        }
+                    }
                     if (
                             jsonData.command_receive === 'mgmtBookmark' &&
                             jsonData.command_success > 0

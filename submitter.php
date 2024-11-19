@@ -122,10 +122,10 @@ if ($command === 'remove_host' && $target_id) {
     $hosts->remove($target_id);
     //no host_details
     $user->setPref('host_details', 0);
-    $command = $target_id = '';
     $data['command_success'] = 1;
     $data['force_host_refresh'] = 1;
     $data['response_msg'] = 'Host removed: ' . $target_id;
+    $command = $target_id = '';
 }
 
 if ($command == 'network_select' && !empty($target_id)) {

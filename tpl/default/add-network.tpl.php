@@ -24,7 +24,6 @@
     </div>
     <div class="form_container">
         <div id="network_status_msg"><?= isset($tdata['status_msg']) ? $tdata['status_msg'] : null ?></div>
-        <div id="network_error_msg"><?= isset($tdata['error_msg']) ? $tdata['error_msg'] : null ?></div>
         <table>
             <tr>
                 <td><label for="networkName"><?= $lng['L_NAME'] ?>:</label></td>
