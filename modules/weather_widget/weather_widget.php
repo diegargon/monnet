@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -17,7 +17,7 @@ function weather_widget(array $cfg, array $lng): ?array
 
     $weather_data = request_weather($cfg);
     if ($weather_data === null) {
-       return null;
+        return null;
     }
     $page_data['desc'] = ucwords($weather_data->weather[0]->description);
     $page_data['city_name'] = $weather_data->name;
