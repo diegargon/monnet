@@ -121,10 +121,10 @@ footer {
     padding-bottom: 50px;
 }
 .main_align_container {
-    display:flex;
+    display: flex;
     align-content: center;
-    width:100%;
-    border:0px solid red;
+    height: 100%;
+    border: 0px solid red;
 }
 .main_container {
     display:flex;
@@ -165,20 +165,19 @@ footer {
 
 }
 .left_container {
-    flex: 1 1 40%;
+    flex-grow: 1;
     border: 0px solid red;
     margin-top: 5px;
-
-    overflow:visible;
-    margin-left:10px;
+    resize: horizontal;
+    overflow: visible;
+    margin-left: 10px;
 }
 .center_container {
-    flex: 0 0 auto;
+    flex-grow: 1;
     border: 0px solid yellow;
     margin-top: 5px;
     min-width: min-content;
-    overflow:hidden;
-
+    overflow: hidden;
 }
 .right_container {
     flex: 0 0 auto;

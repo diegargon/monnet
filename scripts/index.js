@@ -320,11 +320,11 @@ $(document).ready(function () {
         fields.weight = $('#weight').val();
 
         id = $('#bookmark_id').val();
-        if(!id) {
-          $('#error_msg').html('Empty Id field');
+        if (!id) {
+            $('#error_msg').html('Empty Id field');
         } else if (fields.bookmarkName !== "" && fields.cat_id !== "" && fields.urlip !== "" && fields.image_type !== "") {
             json_fields = JSON.stringify(fields);
-            submitCommand('updateBookmark', {id: id, value: json_fields} );
+            submitCommand('updateBookmark', {id: id, value: json_fields});
         } else {
             $('#error_msg').html('Mandatory fields empty');
         }
@@ -362,5 +362,45 @@ $(document).ready(function () {
 //END Netrwork Checkboxes
         });
     });
+
+    // Resize code
+    $(document).ready(function () {
+        const $left = $('#left_container');
+        const $center = $('#center_container');
+        let startX, startWidthLeft, startWidthCenter;
+
+        function resizeStart(e) {
+            e.preventDefault(); // Evita comportamientos predeterminados (como el scroll en táctiles)
+            const touch = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
+
+            startX = touch.pageX;
+            startWidthLeft = $left.width();
+            startWidthCenter = $center.width();
+
+            $(document).on('mousemove touchmove', resize);
+            $(document).on('mouseup touchend', stopResize);
+        }
+
+        function resize(e) {
+            const touch = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
+            const dx = touch.pageX - startX;
+            const newLeftWidth = Math.max(100, startWidthLeft + dx);
+            const newCenterWidth = Math.max(200, startWidthCenter - dx);
+
+            if (newLeftWidth + newCenterWidth <= $(window).width()) {
+                $left.css('width', `${newLeftWidth}px`);
+                $center.css('width', `${newCenterWidth}px`);
+            }
+        }
+
+        function stopResize() {
+            $(document).off('mousemove touchmove', resize);
+            $(document).off('mouseup touchend', stopResize);
+        }
+
+        $left.on('mousedown touchstart', resizeStart);
+    });
+
+    // END Resize code
 }
 );
