@@ -208,6 +208,15 @@ class Networks
         $query = $db->selectAll('networks',);
         $networks = $db->fetchAll($query);
         if (valid_array($networks)) {
+            /**
+             * prevent getNetworkByIP return the first match on a big cidr like /0
+             */
+            usort($networks, function ($a, $b) {
+                $cidrA = (int) explode('/', $a['network'])[1];
+                $cidrB = (int) explode('/', $b['network'])[1];
+                return $cidrB <=> $cidrA; // Orden descendente
+            });
+
             foreach ($networks as $net) {
                 $id = (int) $net['id'];
                 $fnet = [

@@ -151,6 +151,7 @@ function ping_nets(AppContext $ctx): void
             $network_id = $networks->getNetworkIDbyIP($ip);
             if ($network_id == false) {
                 Log::warning('Failed to get id network for ip ' . $ip);
+                //TODO 1???
                 $set['network'] = 1;
             } else {
                 $set['network'] = $network_id;
