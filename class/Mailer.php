@@ -91,7 +91,7 @@ class Mailer
      */
     public function sendEmail(string $to, string $subject, string $body): bool
     {
-        if (!$this->phpMailer) {
+        if ($this->phpMailer === null) {
             return false;
         }
 
@@ -116,7 +116,7 @@ class Mailer
     private function configure(): void
     {
 
-        if ($this->phpMailer) {
+        if ($this->phpMailer !== null) {
             $this->phpMailer->isSMTP();
             //$this->phpMailer->SMTPDebug = 4;
             $this->phpMailer->Host = $this->cfg['mail_host'];

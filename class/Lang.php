@@ -13,14 +13,20 @@ class Lang
 {
     /** @var array<string> $language */
     private static array $language = [];
+    /** @var string */
     private static string $defaultLang = 'es';
-    private static string $selectedLangCode;
 
     public function __construct()
     {
         self::loadLanguage();
     }
 
+    /**
+     *
+     * @param string|null $langCode
+     * @return bool
+     * @throws Exception
+     */
     private static function loadLanguage(?string $langCode = null): bool
     {
         /*
@@ -47,7 +53,6 @@ class Lang
         if ($langCode !== self::defaultLang) {
             $sel_langfile = 'lang/lang.' . $langCode . '.php';
             if (file_exists($sel_langfile)) {
-                self::$selectedLangCode = $langCode;
                 $sel_lang = include $sel_langfile;
                 self::$language = array_merge(self::$language, $sel_lang);
             }
@@ -55,6 +60,12 @@ class Lang
 
         return true;
     }
+
+    /**
+     *
+     * @param string $langCode
+     * @return bool
+     */
 
     public static function loadUserLang(string $langCode): bool
     {
@@ -73,6 +84,11 @@ class Lang
         return true;
     }
 
+    /**
+     *
+     * @param string $key
+     * @return string|false
+     */
     public static function get(string $key): string|false
     {
         if (self::$language && isset(self::$language[$key])) {

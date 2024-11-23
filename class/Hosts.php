@@ -323,7 +323,7 @@ class Hosts
             'warn_port' => 0,
             ];
         $this->update($id, $values);
-        Log::logHost('LOG_NOTICE', $id, $this->lng['L_CLEAR_ALARMS_BY'] .': ' . $username);
+        Log::logHost('LOG_NOTICE', $id, $this->lng['L_CLEAR_ALARMS_BY'] . ': ' . $username);
 
         return true;
     }

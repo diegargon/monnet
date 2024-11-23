@@ -134,14 +134,8 @@ class Log
                 }
             }
             if (self::$cfg['log_to_syslog'] === 1) {
-                if (openlog(self::$cfg['app_name'] . ' ' . self::$cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG)) {
-                    if ((self::$console)) :
-                        self::$cfg['app_name'] . ' : [' . $type . '] ' . $msg . "\n";
-                    endif;
-                    syslog($LOG_TYPE[$type], $msg);
-                } else {
-                    self::err('Error opening syslog', 1);
-                }
+                openlog(self::$cfg['app_name'] . ' ' . self::$cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG);
+                syslog($LOG_TYPE[$type], $msg);
             }
         }
     }
