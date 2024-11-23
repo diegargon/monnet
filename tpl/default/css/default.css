@@ -1289,6 +1289,7 @@ input:checked + .slider:before {
     margin-right: 5px;
     vertical-align: middle;
 }
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

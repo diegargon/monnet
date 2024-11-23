@@ -367,10 +367,11 @@ $(document).ready(function () {
     $(document).ready(function () {
         const $left = $('#left_container');
         const $center = $('#center_container');
+        const $hosts_cat = $('#hosts_cat');
+
         let startX, startWidthLeft, startWidthCenter;
 
         function resizeStart(e) {
-            e.preventDefault(); // Evita comportamientos predeterminados (como el scroll en táctiles)
             const touch = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
 
             startX = touch.pageX;
@@ -398,7 +399,7 @@ $(document).ready(function () {
             $(document).off('mouseup touchend', stopResize);
         }
 
-        $left.on('mousedown touchstart', resizeStart);
+        $hosts_cat.on('mousedown touchstart', resizeStart);
     });
 
     // END Resize code
