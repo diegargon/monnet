@@ -23,8 +23,9 @@ The English language (EN/US) is IA generated.
 
 v0.0.0 Mayor.Minor.Revision
 
-Revision version implied not changes to the database only code changes
-Mayor/Minor implies changes to database
+Mayor/Minor implies database changes or other code mayor changes
+Revision version implied only code changes, never database changes.
+
 
 # MonNet Install
 
