@@ -12,7 +12,7 @@
  *
  * @param AppContext $ctx
  * @param int $hid
- * @return array|null
+ * @return array<string, string|int>
  */
 function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 {
@@ -121,7 +121,7 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
  * @param AppContext $ctx
  * @param array $logs
  * @param string $nl
- * @return array
+ * @return array<string, string>
  */
 function format_host_logs(AppContext $ctx, array $logs, string $nl = '<br/>'): array
 {
@@ -142,7 +142,7 @@ function format_host_logs(AppContext $ctx, array $logs, string $nl = '<br/>'): a
  * TODO: To Hosts?
  * @param AppContext $ctx
  * @param int $host_id
- * @return array
+ * @return array<int|string, mixed>
  */
 function get_host_metrics(AppContext $ctx, int $host_id): array
 {

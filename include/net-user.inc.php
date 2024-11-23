@@ -2,13 +2,18 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
+/**
+ *
+ * @param string $host_mac
+ * @return bool
+ */
 function sendWOL(string $host_mac): bool
 {
 
@@ -42,6 +47,11 @@ function sendWOL(string $host_mac): bool
     return $result ? true : false;
 }
 
+/**
+ *
+ * @param string $input
+ * @return array<string,int|string>
+ */
 function validatePortsInput(string $input): array
 {
     // Split the input by commas

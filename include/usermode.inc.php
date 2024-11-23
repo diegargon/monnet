@@ -11,6 +11,7 @@
 /**
  * @var array<int|string, mixed> $cfg An instance of Config or null if not defined
  * @var AppContext|null $ctx An instance of AppCtx or null if not defined
+ * @var array<string,string> $lng - Default included in common, we overwrite user lang here
  */
 do_initial_usermode_checks($cfg);
 
@@ -19,7 +20,7 @@ session_start();
 
 $user = $ctx->get('User');
 /**
- * @var array $lng - Default included in common, we overwrite user lang here
+ *
  */
 if ($user->getLang() !== 'es') {
     $main_lang_file = 'lang/' . $user->getLang() . '/main.lang.php';

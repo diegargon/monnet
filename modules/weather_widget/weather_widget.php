@@ -9,7 +9,12 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-
+/**
+ *
+ * @param array<int|string, mixed> $cfg
+ * @param array<string,string> $lng
+ * @return array|null
+ */
 function weather_widget(array $cfg, array $lng): ?array
 {
 
@@ -31,6 +36,11 @@ function weather_widget(array $cfg, array $lng): ?array
     return $page_data;
 }
 
+/**
+ *
+ * @param array<int|string, mixed> $cfg
+ * @return mixed
+ */
 function request_weather(array $cfg): mixed
 {
 

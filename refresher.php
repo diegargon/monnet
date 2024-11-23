@@ -13,9 +13,9 @@ header('Content-Type: application/json; charset=UTF-8');
 /**
  * @var User|null $user An instance of User or null if not defined
  * @var AppContext|null $ctx An instance of Context or null if not defined
- * @var array $lng
+ * @var array<string,string> $lng
  * @var Database|null $db An instance of Database or null if not defined
- * @var array $cfg
+ * @var array<int|string, mixed> $cfg
  */
 require_once 'include/common.inc.php';
 require_once 'include/common-call.php';

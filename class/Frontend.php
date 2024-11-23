@@ -1,7 +1,5 @@
 <?php
 
-!defined('IN_WEB') ? exit : true;
-
 /**
  *
  * @author diego/@/envigo.net
@@ -10,6 +8,8 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  *
  */
+!defined('IN_WEB') ? exit : true;
+
 class Frontend
 {
     /** @var AppContext $ctx */
@@ -18,7 +18,7 @@ class Frontend
     /** @var array<int|string, mixed> $cfg */
     private array $cfg;
 
-    /**  @var array<string> $lang */
+    /**  @var array<string,string> $lang */
     private array $lng;
 
     public function __construct(AppContext $ctx)
@@ -29,8 +29,8 @@ class Frontend
     }
 
     /**
-     * @param array<mixed> $tdata
      *
+     * @param array<mixed> $tdata
      * @return void
      */
     public function showPage(array $tdata): void
@@ -94,6 +94,7 @@ class Frontend
     }
 
     /**
+     *
      * @param array<mixed> $tdata
      * @return string|bool
      */
@@ -153,8 +154,8 @@ class Frontend
     }
 
     /**
-     * @param array<string> $msg
      *
+     * @param array<string> $msg
      * @return void
      */
     public function msgPage(array $msg): void
@@ -171,10 +172,7 @@ class Frontend
         exit();
     }
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public function getFooter(): string
     {
         /* TODO

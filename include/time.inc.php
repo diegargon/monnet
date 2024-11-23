@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 function valid_timezone(string $timezone): bool
@@ -34,7 +34,7 @@ function utc_date_now(): string|bool
     return date_now();
 }
 
-function utc_to_user_tz($utc_date, $timezone, $time_format = 'Y-m-d H:i:s'): string
+function utc_to_user_tz(string $utc_date, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
 {
     $date = new DateTime($utc_date, new DateTimeZone('UTC'));
     $date->setTimezone(new DateTimeZone($timezone));

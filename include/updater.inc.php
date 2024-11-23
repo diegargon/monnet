@@ -123,7 +123,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
 }
 
 /**
- * @var array $cfg
+ * @var array<int|string, mixed> $cfg
  * @var Database $db
  */
 if ($db->isConn()) {

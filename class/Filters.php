@@ -123,7 +123,7 @@ class Filters
      * Sanitize Array, can be array or string post/get value, check to avoid json
      * @param mixed $input
      * @param string $method default var or post/get
-     * @return array
+     * @return array<mixed,mixed>
      */
     public static function sanArray(mixed $input, string $method = 'var'): array
     {
