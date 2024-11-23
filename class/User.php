@@ -319,7 +319,8 @@ class User
                 time() + $this->cfg['sid_expire'],
                 $this->cfg['rel_path']
             );
-            setcookie('username',
+            setcookie(
+                'username',
                 $this->getUsername(),
                 time() + (10 * 365 * 24 * 120),
                 $this->cfg['rel_path']
