@@ -20,6 +20,13 @@
     <fieldset class="ctrl_fieldset">
         <legend class="ctrl_legend"><?= $lng['L_GENERAL'] ?></legend>
 
+        <div class="user_ctrl">
+            <a href="/?page=logout">
+                <img class="settigns_link"
+                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_LOGOUT'] ?>">
+            </a>
+            <span class="opt_labels"><?= $tdata['username'] ?></span>
+        </div>
         <div class="general_ctrl">
             <button id="toggleItemsSettings" class="button-ctrl" type="submit">
                 <img class="settigns_link"

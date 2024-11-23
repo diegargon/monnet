@@ -22,9 +22,9 @@ if (Filters::getString('page') == $privacy_page) {
         <a href="<?= $cfg['rel_path'] ?>?page=logout">
             <img src="tpl/<?= $cfg['theme'] ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT']; ?>">
         </a>
-        <a href="<?= $cfg['rel_path'] ?>?page=index">
+        <a class="home" href="<?= $cfg['rel_path'] ?>?page=index">
             <img src="tpl/<?= $cfg['theme'] ?>/img/monnet.png"
-                 style="border-radius:20px" alt="home" title="<?= $lng['L_HOME']; ?>"/>
+                  alt="home" title="<?= $lng['L_HOME']; ?>"/>
         </a>
         <a href="<?= $cfg['rel_path'] ?>?page=settings">
             <img src="tpl/<?= $cfg['theme'] ?>/img/settings.png" alt="settings" title="<?= $lng['L_SETTINGS']; ?>"/>

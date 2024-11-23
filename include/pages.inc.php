@@ -8,7 +8,13 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function page_defaults(AppContext $ctx)
+
+/**
+ *
+ * @param AppContext $ctx
+ * @return array<string,string>
+ */
+function page_defaults(AppContext $ctx): array
 {
     $page = [];
 
@@ -25,7 +31,12 @@ function page_defaults(AppContext $ctx)
     return $page;
 }
 
-function page_common_head(AppContext $ctx)
+/**
+ *
+ * @param AppContext $ctx
+ * @return array<string,string>
+ */
+function page_common_head(AppContext $ctx): array
 {
     $page = [];
 
@@ -72,7 +83,12 @@ function page_common_head(AppContext $ctx)
     return $page;
 }
 
-function page_index(AppContext $ctx)
+/**
+ *
+ * @param AppContext $ctx
+ * @return array<string,string>
+ */
+function page_index(AppContext $ctx): array
 {
     $page = [];
 
@@ -139,6 +155,7 @@ function page_index(AppContext $ctx)
     $show_termlog_status ? $page['controls']['show_termlog_status'] = 1 :
             $page['controls']['show_termlog_status'] = 0;
 
+    $page['username'] = $user->getUsername();
     $page['load_tpl'][] = [
         'file' => 'controls',
         'place' => 'head_left',
@@ -198,6 +215,11 @@ function page_index(AppContext $ctx)
     return $page;
 }
 
+/**
+ *
+ * @param AppContext $ctx
+ * @return array<string,string>
+ */
 function page_login(AppContext $ctx): array
 {
     $page = [];
@@ -251,6 +273,12 @@ function page_login(AppContext $ctx): array
     return $page;
 }
 
+/**
+ *
+ * @param AppContext $ctx
+ * @return void
+ */
+
 function page_logout(AppContext $ctx): void
 {
 
@@ -266,6 +294,11 @@ function page_logout(AppContext $ctx): void
     header("Location: {$cfg['rel_path']}index.php");
 }
 
+/**
+ *
+ * @param AppContext $ctx
+ * @return array<string,string>
+ */
 function page_settings(AppContext $ctx): array
 {
     $page = [];
@@ -284,6 +317,11 @@ function page_settings(AppContext $ctx): array
     return $page;
 }
 
+/**
+ *
+ * @param AppContext $ctx
+ * @return array<string,string>
+ */
 function page_privacy(AppContext $ctx): array
 {
     $page = [];

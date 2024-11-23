@@ -1227,17 +1227,25 @@ input:checked + .slider:before {
     right: 0px;
     height: 98%;
 }
+
 .min-details-hidden:hover img {
     display: inline-flex;
 }
 
-.general_ctrl, .bookmarks_ctrl, .addhost_ctrl {
+.general_ctrl, .bookmarks_ctrl, .addhost_ctrl, .user_ctrl {
     display: flex;
     align-items: center;
 }
+
+.user_ctrl {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
 #stdbox-title {
     display: inline-flex;
 }
+
 .stdbox-bar {
     display: inline-flex;
     vertical-align: middle;
@@ -1288,6 +1296,9 @@ input:checked + .slider:before {
     height: 30px;
     margin-right: 5px;
     vertical-align: middle;
+}
+.home img {
+    border-radius: 20px
 }
 
 @keyframes crt-glow {
