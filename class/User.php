@@ -346,7 +346,12 @@ class User
         return isset($this->prefs[$r_key]) ? $this->prefs[$r_key] : false;
     }
 
-    public function setPref(string $key, string $value)
+    /**
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setPref(string $key, mixed $value)
     {
 
         if (isset($this->prefs[$key])) {
