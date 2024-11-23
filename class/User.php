@@ -296,7 +296,7 @@ class User
                 'secure' => true,
                 'samesite' => 'lax',
             ]);
-            setcookie('uid', $this->getId(), [
+            setcookie('uid', (string) $this->getId(), [
                 'expires' => time() + $this->cfg['sid_expire'],
                 'secure' => true,
                 'samesite' => 'lax',
@@ -307,9 +307,23 @@ class User
                 'samesite' => 'lax',
             ]);
         } else {
-            setcookie("sid", session_id(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
-            setcookie("uid", $this->getId(), time() + $this->cfg['sid_expire'], $this->cfg['rel_path']);
-            setcookie("username", $this->getUsername(), time() + (10 * 365 * 24 * 120), $this->cfg['rel_path']);
+            setcookie(
+                'sid',
+                session_id(),
+                time() + $this->cfg['sid_expire'],
+                $this->cfg['rel_path']
+            );
+            setcookie(
+                'uid',
+                (string)$this->getId(),
+                time() + $this->cfg['sid_expire'],
+                $this->cfg['rel_path']
+            );
+            setcookie('username',
+                $this->getUsername(),
+                time() + (10 * 365 * 24 * 120),
+                $this->cfg['rel_path']
+            );
         }
         $new_sid = session_id();
 

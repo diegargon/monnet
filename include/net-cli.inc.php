@@ -71,19 +71,26 @@ function check_known_hosts(AppContext $ctx): bool
          *  Update host with scan data
          */
 
-        if (valid_array($new_host_status) && $new_host_status['online'] && empty($host['mac'])) {
-            $mac = get_mac($host['ip']);
-            $new_host_status['mac'] = !empty($mac) ? $mac : null;
-        }
         if (valid_array($new_host_status)) {
+            if ($new_host_status['online'] && empty($host['mac'])) {
+                $mac = get_mac($host['ip']);
+                $new_host_status['mac'] = !empty($mac) ? $mac : null;
+            }
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
                 $new_host_status['online_change'] = utc_date_now();
-                Log::logHost('LOG_NOTICE', $host['id'], $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']);
+                Log::logHost(
+                    'LOG_NOTICE',
+                    $host['id'],
+                    $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']
+                );
             } elseif ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 $new_host_status['online_change'] = utc_date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
-                Log::logHost('LOG_WARNING', $host['id'], $host['display_name'] .
-                    ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout);
+                Log::logHost(
+                    'LOG_WARNING',
+                    $host['id'],
+                    $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout
+                );
             }
 
             $hosts->update($host['id'], $new_host_status);
@@ -370,7 +377,9 @@ function ping_host_ports(AppContext $ctx, array $host): array
             $host_status['online'] = 1;
         }
     }
-    valid_array($host_status['ports']) ? $host_status['ports'] = json_encode($host_status['ports'], true) : null;
+    if (valid_array($host_status['ports'])) {
+        $host_status['ports'] = json_encode($host_status['ports']);
+    }
 
     return $host_status;
 }
