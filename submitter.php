@@ -123,7 +123,7 @@ if ($command === 'remove_host' && $target_id) {
     //no host_details
     $user->setPref('host_details', 0);
     $data['command_success'] = 1;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
     $data['response_msg'] = 'Host removed: ' . $target_id;
     $command = $target_id = '';
 }
@@ -132,14 +132,14 @@ if ($command == 'network_select' && !empty($target_id)) {
     $pref_name = 'network_select_' . $target_id;
     $user->setPref($pref_name, 1);
     $data['command_success'] = 1;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
     $data['response_msg'] = 'Network Select';
 }
 if ($command == 'network_unselect' && !empty($target_id)) {
     $pref_name = 'network_select_' . $target_id;
     $user->setPref($pref_name, 0);
     $data['command_success'] = 1;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
     $data['response_msg'] = 'Network Unselect';
 }
 
@@ -188,7 +188,7 @@ if ($command == 'submitTitle' && !empty($target_id)) {
         $success = 1;
     }
     $data['command_success'] = $success;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
     $data['response_msg'] = 'ok';
 }
 
@@ -221,7 +221,7 @@ if ($command == 'submitCat' && !empty($target_id)) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'Category changed to ' . $value_command;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
 }
 
 
@@ -233,7 +233,7 @@ if ($command == 'submitManufacture' && !empty($target_id)) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'Manufacture changed to ' . $value_command;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
 }
 
 if ($command == 'submitOS' && !empty($target_id)) {
@@ -244,7 +244,7 @@ if ($command == 'submitOS' && !empty($target_id)) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'OS changed to ' . $value_command;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
 }
 
 if ($command == 'submitSystemType' && !empty($target_id)) {
@@ -255,7 +255,7 @@ if ($command == 'submitSystemType' && !empty($target_id)) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'System Type changed to ' . $value_command;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
 }
 
 if ($command === 'submitAccessLink' && !empty($target_id)) {
@@ -308,13 +308,13 @@ if ($command == 'show_host_only_cat' && !empty($target_id)) {
         $user->toggleHostsCat($target_id);
     }
     $data['command_success'] = 1;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
 }
 
 if ($command == 'show_host_cat' && !empty($target_id)) {
     $user->toggleHostsCat($target_id);
     $data['command_success'] = 1;
-    $data['force_host_refresh'] = 1;
+    $data['force_hosts_refresh'] = 1;
 }
 
 if (
@@ -693,7 +693,7 @@ if (
     } else {
         $data['command_error_msg'] = $lng['L_ERROR'];
     }
-    //$data['force_host_refresh'] = 1;
+    //$data['force_hosts_refresh'] = 1;
     $data['command_success'] = 1;
 }
 
@@ -798,6 +798,14 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
     }
 
     $data['command_success'] = 1;
+}
+
+/* Alarms */
+if ($command === 'clearAlarms' && $target_id > 0) {
+    if ($hosts->clearHostAlarms($user->getUsername(), $target_id)) {
+        $data['command_success'] = 1;
+        $data['force_hosts_refresh'] = 1;
+    }
 }
 
 print json_encode($data, JSON_UNESCAPED_UNICODE);

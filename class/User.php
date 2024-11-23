@@ -119,17 +119,17 @@ class User
      *
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
-        return $this->user['email'] ? $this->user['email'] : false;
+        return $this->user['email'] ?? null;
     }
     /**
      *
      * @return string
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
-        return $this->user['username'] ? $this->user['username'] : false;
+        return $this->user['username'] ?? null;
     }
     /**
      *

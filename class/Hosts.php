@@ -26,7 +26,10 @@ class Hosts
      */
     private Database $db;
 
-    /** @var array<string> $misc_keys are save in misc field with json format */
+    /**
+     *  List of field we save in json field misc.
+     *  @var array<string> $misc_keys
+     */
     private $misc_keys = [
             'mac_vendor',
             'manufacture',
@@ -38,6 +41,8 @@ class Hosts
             'timeout'
         ];
     /**
+     * host[$id] = ['key' => 'value']
+     * json field is decode and encode on load/update ($misc_keys)
      * @var array<int, array<string, mixed>> $hosts
      */
     private $hosts = [];
@@ -296,16 +301,6 @@ class Hosts
         return false;
     }
 
-    private function getDisplayName($host): string
-    {
-        if (!empty($host['title'])) {
-            return $host['title'];
-        } elseif (!empty($host['hostname'])) {
-            return ucfirst(explode('.', $host['hostname'])[0]);
-        }
-        return $host['ip'];
-    }
-
     public function getHostname(string $ip): string|false
     {
         $hostname = gethostbyaddr($ip);
@@ -318,6 +313,30 @@ class Hosts
     public function getHostnameIP(string $domain): string
     {
         return gethostbyname($domain);
+    }
+
+    public function clearHostAlarms(string $username, int $id): bool
+    {
+        $values = [
+            'alert' => 0,
+            'warn' => 0,
+            'warn_port' => 0,
+            ];
+        $this->update($id, $values);
+        Log::logHost('LOG_NOTICE', $id, $this->lng['L_CLEAR_ALARMS_BY'] .': ' . $username);
+
+        return true;
+    }
+
+    private function getDisplayName($host): string
+    {
+        if (!empty($host['title'])) {
+            return $host['title'];
+        } elseif (!empty($host['hostname'])) {
+            return ucfirst(explode('.', $host['hostname'])[0]);
+        }
+
+        return $host['ip'];
     }
 
     private function setHostsDb(): bool

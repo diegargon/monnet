@@ -184,7 +184,7 @@
                         });
                     }
 
-                    if("force_host_refresh" in jsonData){
+                    if("force_hosts_refresh" in jsonData){
                         refresh(1);
                     }
 

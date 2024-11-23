@@ -269,7 +269,7 @@
                 id="textnotes"
                 name="textnotes"
                 rows="10"
-                cols="100"><?= $tdata['host_details']['notes'] ?></textarea>
+                cols="100"><?= $tdata['host_details']['notes'] ?? '' ?></textarea>
         </div>
         <!-- /TAB3 -->
         <!-- TAB9 -->
@@ -303,7 +303,7 @@
             </div>
         </div>
         <!-- /TAB10 -->
-        <!-- TAB11 -->
+        <!-- TAB11 ALARMS -->
         <div id="tab11" class="host-details-tab-content">
             <div class="alarms_container">
                 <div class="">
@@ -331,6 +331,15 @@
                     <br/>
                     <label for="">Emails (Comma Separated)</label><br/>
                     <input type="text" size="50" id="alarm_emails">
+                </div>
+                <div>
+                    <div><?= $lng['L_ALARMS_LAST'] ?> :</div>
+                    <div><?= $tdata['host_details']['alert_msg'] ?? '' ?></div>
+                    <div><?= $tdata['host_details']['warn_msg'] ?? '' ?></div>
+                    <button id="clear_alarms"
+                             onclick="submitCommand('clearAlarms',{id: <?= $tdata['host_details']['id'] ?>})">
+                            <?= $lng['L_CLEAR_ALARMS'] ?>
+                    </button>
                 </div>
             </div>
         </div>

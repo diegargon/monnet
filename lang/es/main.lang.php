@@ -18,6 +18,7 @@ $lng = [
     'L_ALL' => 'Todo',
     'L_ALARMS' => 'Alarmas',
     'L_ACCESS' => 'Acceso',
+    'L_ALARMS_LAST' => 'Ultimas Alarmas',
     //B
     'L_BOOKMARKS' => 'Links',
     'L_BOOKMARK' => 'Link',
@@ -30,6 +31,8 @@ $lng = [
     'L_CATEGORIES' => 'Categorias',
     'L_CREATE' => 'Crear',
     'L_COMMA_SEPARATED' => '(Separado por coma)',
+    'L_CLEAR_ALARMS' => 'Limpiar alarmas',
+    'L_CLEAR_ALARMS_BY' => 'Alarms Cleared by user',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',

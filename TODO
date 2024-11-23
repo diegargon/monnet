@@ -1,7 +1,5 @@
 ** HIGH
 * No hay forma de borrar una red
-* Alertas se deberia poder borrar
-* AlertMsg fecha?
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
 
@@ -47,6 +45,7 @@
 * Notes Private (uid)? Public (!uid)? , option for selected if notes are by user or global?
 * everybody bookmarks items (uid = 0) ?
 * Links comprobacion si funciona y una pequeña on/off señal?
+* AlertMsg fecha?
 
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
