@@ -2,12 +2,17 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_CLI') ? exit : true;
+/**
+ *
+ * @param AppContext $ctx
+ * @return void
+ */
 function cron(AppContext $ctx): void
 {
     $db = $ctx->get('Mysql');
@@ -53,6 +58,9 @@ function cron(AppContext $ctx): void
 
     if (($cron_times['cron_halfday'] + 21600) < $time_now) {
         $cron_task_track .= '[12]';
+        clear_stats($db);
+        clear_system_logs($db);
+        clear_hosts_logs($db);
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_halfday']], 'LIMIT 1');
     }
     if (($cron_times['cron_daily'] + 8640) < $time_now) {
@@ -76,4 +84,38 @@ function cron(AppContext $ctx): void
     if (!empty($cron_task_track)) {
         Log::debug('Cron times :' . $cron_task_track);
     }
+}
+
+/**
+ *
+ * @param Database $db
+ * @return void
+ */
+function clear_stats(Database $db): void
+{
+    $db->query("DELETE FROM stats WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
+    $affected = $db->getAffected();
+    Log::info('Clear stats, affected rows '. $affected);
+}
+/**
+ *
+ * @param Database $db
+ * @return void
+ */
+function clear_system_logs(Database $db): void
+{
+    $db->query("DELETE FROM system_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
+    $affected = $db->getAffected();
+    Log::info('Clear system logs, affected rows '. $affected);
+}
+/**
+ *
+ * @param Database $db
+ * @return void
+ */
+function clear_hosts_logs(Database $db): void
+{
+    $db->query("DELETE FROM hosts_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
+    $affected = $db->getAffected();
+    Log::info('Clear host logs, affected rows '. $affected);
 }
