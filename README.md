@@ -63,16 +63,7 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 /var/www/html# git clone https://github.com/diegargon/monnet .
 
 /var/www/html# chown -R www-data:www-data *
-/var/www/html# chmod 755 cache
-```
-
-## Composer deeps
-
-```
-#
-/path/to/monnet# composer require phpseclib/phpseclib:~3.0
-#optional for send messsages (not yet)
-/path/to/monnet# composer require phpmailer/phpmailer
+/var/www/html# chmod 755 cache logs
 ```
 
 ## Config
@@ -109,13 +100,23 @@ monnet : monnetadmin
 
 ## Setting crontab
 
-Times depends of your network
+Times depends of your network. Paths depends of your system
 
 ```
 $ nano /etc/crontab
 */5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
 */15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
+
+## Composer deeps
+
+```
+#
+/path/to/monnet# composer require phpseclib/phpseclib:~3.0
+#optional for send messsages (not yet)
+/path/to/monnet# composer require phpmailer/phpmailer
+```
+
 
 ## CERTS (disable temporaraly due rewriting)
 
