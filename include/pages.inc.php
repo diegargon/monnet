@@ -56,7 +56,7 @@ function page_common_head(AppContext $ctx): array
         ];
     }
     $page['load_tpl'][] = [
-        'file' => 'search-box',
+        'file' => 'main-center-box',
         'place' => 'head-center',
     ];
 
