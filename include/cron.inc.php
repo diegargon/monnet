@@ -95,7 +95,7 @@ function clear_stats(Database $db): void
 {
     $db->query("DELETE FROM stats WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
     $affected = $db->getAffected();
-    Log::info('Clear stats, affected rows '. $affected);
+    Log::info('Clear stats, affected rows ' . $affected);
 }
 /**
  *
@@ -106,7 +106,7 @@ function clear_system_logs(Database $db): void
 {
     $db->query("DELETE FROM system_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
     $affected = $db->getAffected();
-    Log::info('Clear system logs, affected rows '. $affected);
+    Log::info('Clear system logs, affected rows ' . $affected);
 }
 /**
  *
@@ -117,5 +117,5 @@ function clear_hosts_logs(Database $db): void
 {
     $db->query("DELETE FROM hosts_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
     $affected = $db->getAffected();
-    Log::info('Clear host logs, affected rows '. $affected);
+    Log::info('Clear host logs, affected rows ' . $affected);
 }
