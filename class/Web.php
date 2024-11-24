@@ -50,7 +50,7 @@ class Web
 
     /**
      *
-     * @param array $page_data
+     * @param array<string,mixed> $page_data
      *
      * @return void
      */
@@ -79,7 +79,7 @@ class Web
      *
      * @param string $page Nombre de la página a obtener
      *
-     * @return array Datos de la página, combinando datos por defecto y específicos.
+     * @return array<string,mixed> Datos de la página, combinando datos por defecto y específicos.
      */
     private function get(string $page): array
     {
@@ -105,7 +105,7 @@ class Web
     /**
      * Paginas internas.
      *
-     * @return array Array de funciones de páginas internas.
+     * @return array<string,string> Funciones de páginas internas.
      */
     private function getPageFunctions(): array
     {

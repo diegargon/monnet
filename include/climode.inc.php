@@ -27,7 +27,7 @@ chdir($cfg['path']);
 require_once 'include/common.inc.php';
 
 isset($argv[1]) && ($argv[1] == '-console' || $argv[1] == '--console') ? Log::setConsole(true) : null;
-function is_locked()
+function is_locked(): bool
 {
 
     if (@symlink("/proc/" . getmypid(), CLI_LOCK) !== false) {

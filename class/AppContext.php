@@ -7,24 +7,24 @@
 class AppContext
 {
     /**
-     * @var array $services Servicios registrados en el contexto.
+     * @var array<string,mixed> $services Servicios registrados en el contexto.
      */
     private array $services = [];
 
     /**
-     * @var array $cfg Datos config
+     * @var array<string,mixed> $cfg Datos config
      */
     private array $cfg = [];
 
     /**
-     * @var array $lng  Datos Language TODO migrar a Lang
+     * @var array<string,string> $lng  Datos Language TODO migrar a Lang
      */
     private array $lng = [];
 
     /**
      * AppContext constructor.
      *
-     * @param array $cfg configuracion
+     * @param array<string,mixed> $cfg configuracion
      */
     public function __construct(array &$cfg)
     {
@@ -33,7 +33,7 @@ class AppContext
     }
 
     /**
-     * @param array $lng TODO remove when change to class LANG
+     * @param array<string,string> $lng TODO remove when change to class LANG
      */
     public function setLang(array &$lng)
     {

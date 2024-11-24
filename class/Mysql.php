@@ -201,7 +201,7 @@ class Database
      *
      * @param mysqli_result $result
      *
-     * @return array|bool
+     * @return array<string,string>|bool
      */
     public function fetch(mysqli_result $result): array|bool
     {
@@ -215,7 +215,7 @@ class Database
      *
      * @param mysqli_result $result
      *
-     * @return array
+     * @return array<string,string>
      */
     public function fetchAll(mysqli_result $result): array
     {
@@ -255,7 +255,6 @@ class Database
      * Return num rows
      *
      * @param object $result
-     *
      * @return int
      */
     public function numRows(object $result): int
@@ -346,6 +345,11 @@ class Database
         return $this->numRows($result) > 0;
     }
 
+    /**
+     *
+     * @param string $query
+     * @return bool
+     */
     public function queryExists(string $query): bool
     {
         $result = $this->query($query);
@@ -353,11 +357,21 @@ class Database
         return $this->numRows($result) > 0;
     }
 
+    /**
+     *
+     * @param mixed $value
+     * @return string
+     */
     public function valQuote(mixed $value): string
     {
         return '\'' . $this->escape($value) . '\'';
     }
 
+    /**
+     *
+     * @param string $value
+     * @return string
+     */
     public function fieldQuote(string $value): string
     {
         return '`' . $value . '`';
@@ -394,7 +408,7 @@ class Database
      * Select all fields
      *
      * @param string $table
-     * @param array $where
+     * @param array<string,int|string> $where
      * @param string $extra
      * @param string $logic
      * @return mysqli_result|bool
@@ -424,7 +438,7 @@ class Database
      *
      * @param string $table
      * @param string $what comma field separated
-     * @param array $where
+     * @param array<string,int|string> $where
      * @param string $extra
      * @param string $logic
      * @return mysqli_result|bool
@@ -474,7 +488,7 @@ class Database
      * @param string $table
      * @param string $s_fields
      * @param string $searchText
-     * @param array $where
+     * @param array<string,int|string> $where
      * @param string $extra
      * @return mysqli_result|bool
      */
@@ -524,8 +538,8 @@ class Database
      * Update database
      *
      * @param string $table
-     * @param array $set
-     * @param array $where
+     * @param array<string,int|string> $set
+     * @param array<string,int|string> $where
      * @param string $extra
      * @param string $logic
      * @return mysqli_result|boolean
@@ -554,7 +568,7 @@ class Database
      * Sum field +1
      * @param string $table
      * @param string $field
-     * @param array $where
+     * @param array<string,int|string> $where
      * @param string $logic
      * @return mysqli_result|bool
      */
@@ -583,7 +597,7 @@ class Database
      *
      * @param string $table
      * @param string $field
-     * @param array $where
+     * @param array<string,int|string> $where
      * @param string $logic
      * @return array|bool
      */
@@ -609,7 +623,7 @@ class Database
      * Insert
      *
      * @param string $table
-     * @param array $insert_data
+     * @param array<string,int|string> $insert_data
      * @param string $extra
      * @return array|bool
      */
@@ -631,7 +645,7 @@ class Database
      * Delete
      *
      * @param string $table
-     * @param array $where
+     * @param array<string,int|string> $where
      * @param string $extra
      * @param string $logic
      * @return array|bool
@@ -653,8 +667,8 @@ class Database
      * Insert or update if exists
      *
      * @param string $table
-     * @param array $set_ary
-     * @param array $where_ary
+     * @param array<string,int|string> $set_ary
+     * @param array<string,int|string> $where_ary
      */
     public function upsert(string $table, array $set_ary, array $where_ary): void
     {
@@ -686,8 +700,8 @@ class Database
     /**
      * Insert Processs
      *
-     * @param array $insert_data
-     * @return array
+     * @param array<string,int|string> $insert_data
+     * @return array<string,int|string>
      */
     private function insertProcess(array $insert_data): array
     {
@@ -709,7 +723,7 @@ class Database
     /**
      * Set process
      *
-     * @param array $set
+     * @param array<string,int|string> $set
      * @return string
      */
     private function setProcess(array $set): string
@@ -726,7 +740,7 @@ class Database
     /**
      * Where process
      *
-     * @param array $where
+     * @param array<string,int|string> $where
      * @param string $logic
      * @return string
      */

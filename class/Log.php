@@ -55,8 +55,8 @@ class Log
     ];
 
     /**
-     * @param array $lng
-     * @param array $cfg
+     * @param array<string,string> $lng
+     * @param array<string,mixed> $cfg
      */
     public static function init(array &$cfg, Database &$db, array &$lng): void
     {
@@ -174,16 +174,17 @@ class Log
     /**
      *
      * @param int $limit
-     * @return array
+     * @return array<string>
      */
-    public static function getLoghosts(int $limit): array|bool
+    public static function getLoghosts(int $limit): array
     {
+        $lines = [];
         $query = 'SELECT * FROM hosts_logs WHERE level <= ' .
             self::$cfg['term_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 
-        return valid_array($lines) ? $lines : false;
+        return $lines;
     }
 
     /**
@@ -191,10 +192,11 @@ class Log
      * @param int $host_id
      * @param array $opts
      *
-     * @return array
+     * @return array<string>
      */
-    public static function getLoghost(int $host_id, array $opts): array|bool
+    public static function getLoghost(int $host_id, array $opts): array
     {
+        $lines = [];
         if (!isset($opts['log_level']) || !is_numeric($opts['log_level'])) :
             $log_level = self::$cfg['term_log_level'];
         else :
@@ -211,9 +213,14 @@ class Log
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 
-        return valid_array($lines) ? $lines : false;
+        return $lines;
     }
 
+    /**
+     *
+     * @param string $loglevel
+     * @return int|bool
+     */
     public static function getLogLevelId(string $loglevel): int|bool
     {
         if (!isset(self::$LOG_TYPE[$loglevel])) {
@@ -243,16 +250,17 @@ class Log
      *
      * @param int $limit
      *
-     * @return array|bool
+     * @return array<string>
      */
-    public static function getSystemDBLogs(int $limit): array|bool
+    public static function getSystemDBLogs(int $limit): array
     {
+        $lines = [];
         $query = 'SELECT * FROM system_logs WHERE level <= ' .
             self::$cfg['term_system_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 
-        return valid_array($lines) ? $lines : false;
+        return $lines;
     }
 
     /**

@@ -14,10 +14,9 @@ class Items
     /** @var Database */
     private Database $db;
 
-    /**
-     * @var array<int, array<string, mixed>> $items
-     */
+    /** @var array<int, array<string, mixed>> $items */
     private array $items = [];
+    /** @var int */
     private int $uid;
 
     public function __construct(AppContext $ctx)
@@ -30,6 +29,12 @@ class Items
         $this->items = $this->db->fetchAll($results);
     }
 
+    /**
+     *
+     * @param string $item_type
+     * @param array<string,mixed> $item_data
+     * @return bool
+     */
     public function addItem(string $item_type, array $item_data): bool
     {
         if ($item_type == 'bookmarks') {
@@ -59,6 +64,12 @@ class Items
         return false;
     }
 
+    /**
+     *
+     * @param string $item_type
+     * @param array<string,mixed> $item_data
+     * @return bool
+     */
     public function updateItem(string $item_type, array $item_data): bool
     {
         if ($item_type == 'bookmarks') {
@@ -87,6 +98,11 @@ class Items
         return false;
     }
 
+    /**
+     *
+     * @param int $id
+     * @return array<string,mixed>
+     */
     public function getById(int $id): array
     {
         foreach ($this->items as $item) {
@@ -103,6 +119,12 @@ class Items
         return [];
     }
 
+    /**
+     *
+     * @param string|null $key_order
+     * @param string|null $dir
+     * @return array<string,mixed>
+     */
     public function getAll(?string $key_order = null, ?string $dir = 'asc'): array
     {
         if (!empty($key_order)) {
@@ -112,6 +134,11 @@ class Items
         return $this->items;
     }
 
+    /**
+     *
+     * @param int $id
+     * @return bool
+     */
     public function remove(int $id): bool
     {
         foreach ($this->items as $item) {
@@ -124,6 +151,13 @@ class Items
         return false;
     }
 
+    /**
+     *
+     * @param string $type
+     * @param string|null $key_order
+     * @param string|null $dir
+     * @return array<string,mixed>
+     */
     public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc'): array
     {
         /**
@@ -140,6 +174,11 @@ class Items
         return $result;
     }
 
+    /**
+     *
+     * @param int $category_id
+     * @return array<string,mixed>
+     */
     public function getByCatID(int $category_id): array
     {
         /**
@@ -155,6 +194,10 @@ class Items
         return $result;
     }
 
+    /**
+     *
+     * @return array<string>
+     */
     public function getTypes(): array
     {
         $types = array_column($this->items, 'type');

@@ -18,7 +18,7 @@ class Frontend
     /** @var array<int|string, mixed> $cfg */
     private array $cfg;
 
-    /**  @var array<string,string> $lang */
+    /**  @var array<string,string> $lng */
     private array $lng;
 
     public function __construct(AppContext $ctx)

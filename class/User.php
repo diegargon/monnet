@@ -30,19 +30,19 @@ class User
 
     /**
      *
-     * @var array
+     * @var array<string,string>
      */
     private $user = [];
 
     /**
      *
-     * @var array
+     * @var array<string,string>
      */
     private array $prefs = [];
 
     /**
 
-     * @var array
+     * @var array<int,int>
      */
     private $categories_state = [];
 
@@ -91,7 +91,7 @@ class User
 
     /**
      *
-     * @return array
+     * @return array<string,string>
      */
     public function getUser(): array
     {
@@ -152,7 +152,7 @@ class User
      *
      * @param int $uid
      *
-     * @return array
+     * @return array<string,string>
      */
     public function getProfile(int $uid): array
     {
@@ -184,7 +184,13 @@ class User
         return formatted_date_now($this->user['timezone'], $format);
     }
 
-    public function checkUser(string $username, string $password)
+    /**
+     *
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    public function checkUser(string $username, string $password): int|bool
     {
 
         $result = $this->db->select('users', '*', ['username' => $username], 'LIMIT 1');
@@ -217,12 +223,21 @@ class User
         return true;
     }
 
-    public function getHostsCatState()
+    /**
+     *
+     * @return array<int,int>
+     */
+    public function getHostsCatState(): array
     {
         return $this->categories_state;
     }
 
-    private function loadUserHostCatsState()
+
+    /**
+     *
+     * @return void
+     */
+    private function loadUserHostCatsState(): void
     {
         $prefs_cats = $this->getPref('hosts_cats_state');
         $h_prefs_cats = json_decode($prefs_cats, true);
@@ -239,7 +254,11 @@ class User
         }
     }
 
-    public function getHostsCats()
+    /**
+     *
+     * @return array<int, array <string,string>
+     */
+    public function getHostsCats(): array
     {
         $categories = $this->ctx->get('Categories')->prepareCats(1);
         foreach ($categories as $key => $cat) {
@@ -254,13 +273,21 @@ class User
         return $categories;
     }
 
-    public function toggleHostsCat(int $id)
+    /**
+     *
+     * @param int $id
+     */
+    public function toggleHostsCat(int $id): void
     {
         $this->categories_state[$id] = (!$this->categories_state[$id]) ? 1 : 0;
         $this->saveHostsCatsState();
     }
 
-    public function saveHostsCatsState()
+    /**
+     *
+     * @return bool
+     */
+    public function saveHostsCatsState(): bool
     {
         $json_cats_state = json_encode($this->categories_state);
         if (mb_strlen($json_cats_state, 'UTF-8') > 255) {
@@ -272,15 +299,22 @@ class User
         return true;
     }
 
-    public function turnHostsCatsOff()
+    /**
+     *
+     * @return void
+     */
+    public function turnHostsCatsOff(): void
     {
         foreach (array_keys($this->categories_state) as $key) {
             $this->categories_state[$key] = 0;
         }
         $this->saveHostsCatsState();
     }
-
-    public function turnHostsCatsOn()
+    /**
+     *
+     * @return bool
+     */
+    public function turnHostsCatsOn(): bool
     {
         foreach (array_keys($this->categories_state) as $key) {
             $this->categories_state[$key] = 1;
@@ -288,7 +322,11 @@ class User
         $this->saveHostsCatsState();
     }
 
-    private function updateSessionId()
+    /**
+     *
+     * @return bool
+     */
+    private function updateSessionId(): bool
     {
         if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
             setcookie('sid', session_id(), [
@@ -332,12 +370,21 @@ class User
         $this->user['sid'] = $new_sid;
     }
 
-    private function encryptPassword(string $password)
+    /**
+     *
+     * @param string $password
+     * @return string
+     */
+    private function encryptPassword(string $password): string
     {
         return sha1($password);
     }
 
-    private function loadPrefs()
+    /**
+     *
+     * @return void
+     */
+    private function loadPrefs(): void
     {
 
         $prefs = [];
@@ -356,7 +403,12 @@ class User
         }
     }
 
-    public function getPref(string $r_key)
+    /**
+     *
+     * @param string $r_key
+     * @return string|bool
+     */
+    public function getPref(string $r_key): string|bool
     {
         return isset($this->prefs[$r_key]) ? $this->prefs[$r_key] : false;
     }
@@ -366,7 +418,7 @@ class User
      * @param string $key
      * @param mixed $value
      */
-    public function setPref(string $key, mixed $value)
+    public function setPref(string $key, mixed $value): void
     {
 
         if (isset($this->prefs[$key])) {

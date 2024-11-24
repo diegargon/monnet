@@ -72,6 +72,11 @@ class Hosts
         $this->setHostsDb();
     }
 
+    /**
+     *
+     * @param array<string,mixed> $host
+     * @return bool
+     */
     public function addHost(array $host): bool
     {
         if (empty($host['ip']) && !empty($host['hostname'])) {
@@ -89,6 +94,10 @@ class Hosts
         return true;
     }
 
+    /**
+     *
+     * @return array<string,mixed>
+     */
     public function getknownEnabled(): array
     {
         /**
@@ -105,6 +114,11 @@ class Hosts
         return $hosts;
     }
 
+    /**
+     *
+     * @param int $highligth
+     * @return array<string,mixed>
+     */
     public function getHighlight(int $highligth = 1): array
     {
         $hosts = $this->getknownEnabled();
@@ -117,15 +131,21 @@ class Hosts
         return $hosts;
     }
 
+    /**
+     *
+     * @return array<string,mixed>
+     */
     public function getAll(): array
     {
         return $this->hosts;
     }
 
-    //function setMac($id, $mac) {
-    //    $this->hosts[$id]['mac'] = $mac;
-    //}
-
+    /**
+     *
+     * @param int $id
+     * @param array<string,mixed> $values
+     * @return void
+     */
     public function update(int $id, array $values): void
     {
         /**
@@ -200,6 +220,11 @@ class Hosts
         }
     }
 
+    /**
+     *
+     * @param array<string,mixed> $host
+     * @return void
+     */
     public function insert(array $host): void
     {
         $misc_container = [];
@@ -240,6 +265,11 @@ class Hosts
             . $host['display_name'] . ' on network ' . $network_name);
     }
 
+    /**
+     *
+     * @param int $hid
+     * @return void
+     */
     public function remove(int $hid): void
     {
         Log::notice('Deleted host: ' . $this->hosts[$hid]['display_name']);
@@ -250,11 +280,16 @@ class Hosts
         unset($this->hosts[$hid]);
     }
 
-    public function getHostById(int $id): array|false
+    /**
+     *
+     * @param int $id
+     * @return array<string,mixed>
+     */
+    public function getHostById(int $id): ?array
     {
 
         if (empty($this->hosts[$id])) {
-            return false;
+            return null;
         }
         $host = $this->hosts[$id];
         $result = $this->db->select('notes', '*', ['id' => $host['notes_id']], 'LIMIT 1');
@@ -265,7 +300,12 @@ class Hosts
         return $host;
     }
 
-    public function getHostByIp(string $ip): array|false
+    /**
+     *
+     * @param string $ip
+     * @return array<string>
+     */
+    public function getHostByIp(string $ip): ?array
     {
         foreach ($this->hosts as $host) {
             if ($host['ip'] == trim($ip)) {
@@ -273,10 +313,15 @@ class Hosts
             }
         }
 
-        return false;
+        return null;
     }
 
-    public function getHostsByCat(int $cat_id): array|false
+    /**
+     *
+     * @param int $cat_id
+     * @return array<string,mixed>
+     */
+    public function getHostsByCat(int $cat_id): array
     {
         /**
          * @var array<int, array<string, mixed>> $hosts_by_cat
@@ -289,9 +334,14 @@ class Hosts
             }
         }
 
-        return valid_array($hosts_by_cat) ? $hosts_by_cat : false;
+        return $hosts_by_cat;
     }
 
+    /**
+     *
+     * @param type $id
+     * @return bool
+     */
     public function catHaveHosts($id): bool
     {
         if (isset($this->host_cat_track[$id]) && $this->host_cat_track[$id] > 0) {
@@ -301,6 +351,11 @@ class Hosts
         return false;
     }
 
+    /**
+     *
+     * @param string $ip
+     * @return string|false
+     */
     public function getHostname(string $ip): string|false
     {
         $hostname = gethostbyaddr($ip);
@@ -310,11 +365,22 @@ class Hosts
         return $hostname;
     }
 
+    /**
+     *
+     * @param string $domain
+     * @return string
+     */
     public function getHostnameIP(string $domain): string
     {
         return gethostbyname($domain);
     }
 
+    /**
+     *
+     * @param string $username
+     * @param int $id
+     * @return bool
+     */
     public function clearHostAlarms(string $username, int $id): bool
     {
         $values = [
@@ -328,6 +394,11 @@ class Hosts
         return true;
     }
 
+    /**
+     *
+     * @param type $host
+     * @return string
+     */
     private function getDisplayName($host): string
     {
         if (!empty($host['title'])) {
@@ -339,6 +410,10 @@ class Hosts
         return $host['ip'];
     }
 
+    /**
+     *
+     * @return bool
+     */
     private function setHostsDb(): bool
     {
         $networks = $this->ctx->get('Networks');

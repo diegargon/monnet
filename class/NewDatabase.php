@@ -12,7 +12,7 @@ class NewDatabase
     private string $password;
 
     /**
-     * @param array $config Arreglo de configuración de la base de datos
+     * @param array<string,string> $config Arreglo de configuración de la base de datos
      *
      * @throws InvalidArgumentException Si el tipo de base de datos no es soportado
      */
@@ -75,9 +75,9 @@ class NewDatabase
      * Ejecutar una consulta SQL
      *
      * @param string $sql Consulta SQL a ejecutar
-     * @param array $params Parámetros de consulta
+     * @param array<string, mixed> $params Parámetros de consulta
      *
-     * @return bool Verdadero si la consulta se ejecutó con éxito
+     * @return bool
      */
     public function query(string $sql, array $params = []): bool
     {
@@ -89,9 +89,9 @@ class NewDatabase
      * Obtener una fila de resultados
      *
      * @param string $sql Consulta SQL para obtener datos
-     * @param array $params Parámetros de consulta
+     * @param array<string, mixed> $params Parámetros de consulta
      *
-     * @return array|null Un arreglo asociativo con los datos obtenidos o null si no hay resultados
+     * @return array|null
      */
     public function fetchOne(string $sql, array $params = []): ?array
     {
@@ -104,9 +104,9 @@ class NewDatabase
      * Obtener múltiples filas de resultados
      *
      * @param string $sql Consulta SQL para obtener datos
-     * @param array $params Parámetros de consulta
+     * @param array<string,mixed> $params Parámetros de consulta
      *
-     * @return array Un arreglo de arreglos asociativos con los datos obtenidos
+     * @return array<string,mixed>
      */
     public function fetchAll(string $sql, array $params = []): array
     {

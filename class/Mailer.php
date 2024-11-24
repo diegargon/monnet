@@ -68,11 +68,13 @@ class Mailer
 
     /**
      *
-     * @param array $emails
+     * @param array<string> $emails
      * @param string $subject
      * @param string $body
+     *
+     * @return void
      */
-    public function sendEmailMultiple(array $emails, string $subject, string $body)
+    public function sendEmailMultiple(array $emails, string $subject, string $body): void
     {
         foreach ($emails as $email) {
             if (!$this->sendEmail($email, $subject, $body)) {

@@ -48,6 +48,10 @@ class Categories
         $this->cat_types = $this->cfg['cat_types'];
     }
 
+    /**
+     *
+     * @return array<string>
+     */
     public function getAll(): array
     {
 
@@ -59,8 +63,12 @@ class Categories
 
         return $this->cat_types;
     }
-
-    public function getByType(int $type): array|bool
+    /**
+     *
+     * @param int $type
+     * @return array<string>
+     */
+    public function getByType(int $type): array
     {
         /**
          * @var array<string> $categories_by_type
@@ -73,9 +81,14 @@ class Categories
             }
         }
 
-        return !empty($categories_by_type) ? $categories_by_type : false;
+        return $categories_by_type;
     }
 
+    /**
+     *
+     * @param int $id
+     * @return int|bool
+     */
     public function getTypeByID(int $id): int|bool
     {
         foreach ($this->categories as $cat) {
@@ -87,7 +100,12 @@ class Categories
         return false;
     }
 
-    public function prepareCats(int $type): array|bool
+    /**
+     *
+     * @param int $type
+     * @return array<string>
+     */
+    public function prepareCats(int $type): array
     {
         $categories_by_type = $this->getByType($type);
         foreach ($categories_by_type as &$typecat) {
@@ -102,6 +120,12 @@ class Categories
         return $categories_by_type;
     }
 
+    /**
+     *
+     * @param int $cat_type
+     * @param string $value
+     * @return array<string,int|string>
+     */
     public function create(int $cat_type, string $value): array
     {
         $query_value = $this->db->valQuote($value);

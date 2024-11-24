@@ -258,7 +258,7 @@ function check_macs(Hosts $hosts): void
 
 /**
  *
- * @param array $cfg
+ * @param array<string,mixed> $cfg
  * @param Hosts $hosts
  * @return void
  */
