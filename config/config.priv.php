@@ -68,7 +68,7 @@ $cfg['manufacture'] = [
     49 => ['id' => 49, 'name' => 'Lexmark', 'img' => 'unknown.png'],
     50 => ['id' => 50, 'name' => 'Ricoh', 'img' => 'unknown.png'],
     51 => ['id' => 51, 'name' => 'Konica Minolta', 'img' => 'unknown.png'],
-    52 => ['id' => 52, 'name' => 'Chinese', 'img' => 'unknown.png'],
+    52 => ['id' => 52, 'name' => 'China', 'img' => 'china.png'],
     53 => ['id' => 53, 'name' => 'OpenWrt', 'img' => 'openwrt.png'],
 ];
 
@@ -107,7 +107,7 @@ $cfg['os'] = [
     30 => ['id' => 30, 'name' => 'DSM', 'img' => 'dsm.png'],
     31 => ['id' => 31, 'name' => 'ArubaOS', 'img' => 'unknown.png'],
     32 => ['id' => 32, 'name' => 'VMware', 'img' => 'vmware.png'],
-    33 => ['id' => 33, 'name' => 'Propietary', 'img' => 'unknown.png'],
+    33 => ['id' => 33, 'name' => 'Proprietary', 'img' => 'proprietary.png'],
     34 => ['id' => 34, 'name' => 'Linux Embebbed', 'img' => 'embedded.png'],
     35 => ['id' => 35, 'name' => 'Tasmota', 'img' => 'embedded.png'],
 ];
