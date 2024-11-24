@@ -20,8 +20,8 @@ $lng = [
     'L_ACCESS' => 'Acceso',
     'L_ALARMS_LAST' => 'Ultimas Alarmas',
     //B
-    'L_BOOKMARKS' => 'Links',
-    'L_BOOKMARK' => 'Link',
+    'L_BOOKMARKS' => 'Bookmarks',
+    'L_BOOKMARK' => 'Bookmark',
     //C
     'L_CODENAME' => 'Codename',
     'L_CLOSE' => 'Cerrar',

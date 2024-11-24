@@ -32,9 +32,9 @@ function format_items(User $user, array $items_results): array
             $item_img = $item_conf['image_resource'];
             $item_img = cached_img($user, $item['id'], $item_img);
         } elseif ($item_conf['image_type'] === 'local_img') {
-            $item_img = '/local_img/' . $item_conf['image_resource'];
+            $item_img = '/bookmark_img/' . $item_conf['image_resource'];
         } else {
-            $item_img = 'local_img/www.png';
+            $item_img = 'bookmark_img/www.png';
         }
 
         $item['img'] = $item_img;
