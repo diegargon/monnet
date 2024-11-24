@@ -1,0 +1,39 @@
+index
+    common
+        config.*
+        Filters
+        Db
+        Log
+        Lang(Default)
+        Updater
+        Appctx
+    usermode
+        Web
+            Frotend (init)
+        Lang (User)
+        User
+        Frontend (included)
+
+monnet_cli
+    climode
+        config (default)
+        common
+            -
+    cron
+
+monnet-discovery
+    climode
+        -
+    ping_nets
+
+refresher
+    common
+        -
+    usermode
+        -
+
+submitter
+    common
+        -
+    usermode
+        -
