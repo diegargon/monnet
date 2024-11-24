@@ -426,8 +426,8 @@ function ping_known_host(AppContext $ctx, array $host): array
 /**
  *
  * @param string $ip
- * @param array $timeout
- * @return array<string,string|int>
+ * @param array<string, int> $timeout
+ * @return array<string, float|string|int>
  */
 function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
 {

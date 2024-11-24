@@ -10,9 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 /**
  *
- * @param array $cfg
+ * @param array<string, mixed> $cfg
  * @param int $id
- * @return array<string,string|int>|bool
+ * @return array<string, string|int>|bool
  */
 function get_manufacture_data(array $cfg, int $id): array|bool
 {
@@ -26,9 +26,9 @@ function get_manufacture_data(array $cfg, int $id): array|bool
 
 /**
  *
- * @param array $cfg
+ * @param array<strig, mixed> $cfg
  * @param int $id
- * @return <string,string|int>|bool
+ * @return <string, string|int>|bool
  */
 function get_os_data(array $cfg, int $id): array|bool
 {
@@ -41,9 +41,9 @@ function get_os_data(array $cfg, int $id): array|bool
 }
 /**
  *
- * @param array $cfg
+ * @param array<string, mixed> $cfg
  * @param int $id
- * @return array<string,string|int>|bool
+ * @return array<string, string|int>|bool
  */
 function get_system_type_data(array $cfg, int $id): array|bool
 {

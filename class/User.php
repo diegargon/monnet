@@ -255,7 +255,7 @@ class User
 
     /**
      *
-     * @return array<int, array <string,string>>
+     * @return array<int, array<string, int|string>>
      */
     public function getHostsCats(): array
     {

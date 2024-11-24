@@ -12,7 +12,7 @@
 /**
  *
  * @param string $cmd
- * @param array $params
+ * @param array<string> $params
  * @param string $stdin
  * @return array<string,string|int>|bool
  */

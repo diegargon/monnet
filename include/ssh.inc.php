@@ -15,7 +15,13 @@ require 'vendor/autoload.php';
 use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
-function ssh_connect_host(array $cfg, array &$result, array $host)
+/**
+ * @param array<string, mixed> $cfg
+ * @param array<string, string> &$result
+ * @param array<string, string> $host
+ * @return SSH2|false El objeto SSH2
+ */
+function ssh_connect_host(array $cfg, array &$result, array $host): SSH2|false
 {
     $originalConnectionTimeout = ini_get('default_socket_timeout');
     ini_set('default_socket_timeout', 2);
@@ -54,7 +60,14 @@ function ssh_connect_host(array $cfg, array &$result, array $host)
     return $ssh;
 }
 
-function ssh_exec(SSH2 $ssh, array &$result, string $cmd)
+/**
+ *
+ * @param SSH2 $ssh
+ * @param array $result
+ * @param string $cmd
+ * @return void
+ */
+function ssh_exec(SSH2 $ssh, array &$result, string $cmd): void
 {
     if (empty($result['motd'])) {
         $result['motd'] = $ssh->read('$');
@@ -66,7 +79,14 @@ function ssh_exec(SSH2 $ssh, array &$result, string $cmd)
     $result['result'] = mb_substr($ssh_result, 0, -5);
 }
 
-function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts)
+/**
+ *
+ * @param array $cfg
+ * @param Database $db
+ * @param Hosts $hosts
+ * @return void
+ */
+function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts): void
 {
     $result = $db->select('cmd', '*');
     $cmds = $db->fetchAll($result);
@@ -108,8 +128,14 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts)
         $db->delete('cmd', ['cmd_id' => $cmd['cmd_id']], 'LIMIT 1');
     }
 }
-
-function ssh_exec_test(SSH2 $ssh, array &$result, string $cmd)
+/**
+ *
+ * @param SSH2 $ssh
+ * @param array $result
+ * @param string $cmd
+ * @return bool
+ */
+function ssh_exec_test(SSH2 $ssh, array &$result, string $cmd): bool
 {
     //Add Motd
     //empty($result['data']) ? $result['data'] = [] : null;

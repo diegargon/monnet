@@ -22,7 +22,7 @@ class Categories
     private array $cfg = [];
     private Database $db;
     /**
-     * @var array<int, array<string, mixed> $categories
+     * @var array<int, array<string, mixed>> $categories
      */
     private array $categories = [];
 
@@ -50,7 +50,7 @@ class Categories
 
     /**
      *
-     * @return array<int, array<string, mixed>
+     * @return array<int, array<string, mixed>>
      */
     public function getAll(): array
     {

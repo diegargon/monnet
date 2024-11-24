@@ -60,7 +60,7 @@ class Hosts
 
     /**
      *
-     * @var array $host_cat_track
+     * @var array<int, int> $host_cat_track
      */
     private array $host_cat_track = [];
 
@@ -96,7 +96,7 @@ class Hosts
 
     /**
      *
-     * @return array<string,mixed>
+     * @return array<int, array<string, mixed>>
      */
     public function getknownEnabled(): array
     {
@@ -133,7 +133,7 @@ class Hosts
 
     /**
      *
-     * @return array<string,mixed>
+     * @return array<int, array<string, mixed>>
      */
     public function getAll(): array
     {
@@ -319,7 +319,7 @@ class Hosts
     /**
      *
      * @param int $cat_id
-     * @return array<string,mixed>
+     * @return array<int, array<string, mixed>>
      */
     public function getHostsByCat(int $cat_id): array
     {

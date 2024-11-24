@@ -174,7 +174,7 @@ class Log
     /**
      *
      * @param int $limit
-     * @return array<string>
+     * @return array<int, array<string, string>>
      */
     public static function getLoghosts(int $limit): array
     {
@@ -250,7 +250,7 @@ class Log
      *
      * @param int $limit
      *
-     * @return array<string>
+     * @return array<int, array<string, string>>
      */
     public static function getSystemDBLogs(int $limit): array
     {

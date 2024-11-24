@@ -34,7 +34,7 @@ function page_defaults(AppContext $ctx): array
 /**
  *
  * @param AppContext $ctx
- * @return array<string,string>
+ * @return array<string, array<mixed>>
  */
 function page_common_head(AppContext $ctx): array
 {
@@ -223,7 +223,7 @@ function page_index(AppContext $ctx): array
 /**
  *
  * @param AppContext $ctx
- * @return array<string,string>
+ * @return array<string,mixed>
  */
 function page_login(AppContext $ctx): array
 {

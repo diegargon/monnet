@@ -16,7 +16,7 @@ use phpseclib3\Net\SSH2;
 /**
  *
  * @param SSH2 $ssh
- * @param array<string,string|int> $result
+ * @param array<mixed, mixed> $result
  * @return void
  */
 function h_get_hostname(SSH2 $ssh, array &$result): void
@@ -34,7 +34,7 @@ function h_get_hostname(SSH2 $ssh, array &$result): void
 /**
  *
  * @param SSH2 $ssh
- * @param array<string,string|int> $result
+ * @param array<mixed, mixed> $result
  * @return void
  */
 function h_get_ncpus(SSH2 $ssh, array &$result): void
@@ -56,7 +56,7 @@ function h_get_ncpus(SSH2 $ssh, array &$result): void
 /**
  *
  * @param SSH2 $ssh
- * @param array<string,string|int> $result
+ * @param array<mixed, mixed> $result
  * @return void
  */
 function h_get_sys_mem(SSH2 $ssh, array &$result): void
@@ -93,7 +93,7 @@ function h_get_sys_mem(SSH2 $ssh, array &$result): void
 /**
  *
  * @param SSH2 $ssh
- * @param array<string,string|int> $result
+ * @param array<mixed, mixed> $result
  * @return void
  */
 function h_get_sys_space(SSH2 $ssh, array &$result): void
@@ -148,7 +148,7 @@ function h_get_sys_space(SSH2 $ssh, array &$result): void
 /**
  *
  * @param SSH2 $ssh
- * @param array<string,string|int> $result
+ * @param array<mixed, mixed> $result
  * @return void
  */
 function h_get_uptime(SSH2 $ssh, array &$result): void
@@ -171,7 +171,7 @@ function h_get_uptime(SSH2 $ssh, array &$result): void
 /**
  *
  * @param SSH2 $ssh
- * @param array<string,string|int> $result
+ * @param array<mixed, mixed> $result
  */
 function h_get_load_average(SSH2 $ssh, array &$result)
 {
@@ -194,7 +194,7 @@ function h_get_load_average(SSH2 $ssh, array &$result)
 /**
  *
  * @param SSH2 $ssh
- * @param array<string,string|int> $result
+ * @param array<mixed, mixed> $result
  * @return void
  */
 function h_get_tail_syslog(SSH2 $ssh, array &$result): void
