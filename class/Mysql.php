@@ -197,7 +197,7 @@ class Database
         if (!$result && !$this->silent) {
             $this->dbdie($query);
         }
-        $this->query_affected = $result->rowCount();
+        $this->query_affected = $this->dblink->affected_rows;
 
         return $result;
     }
