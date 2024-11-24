@@ -35,9 +35,17 @@ LAMP
     Linux, Apache, Mysql, PHP
     Tested: Debian 12, Apache2, PHP8.2, Mariadb 10
 
-Composer
+    That mean in Debian:
+    apt install apache2 php-fpm php-mysqli php-curl php-mbstring
+
+Mysql/MariaDB:
+    You can install or use a remote machine
+
+Ccomposer
+    apt install composer
 arp
     Optional for get mac's address, only work same network (other method will added in the future)
+    apt install net-tools
 
 phpseclib (Composer)
     Features is disable due rewriting. Thinking if port CLI scripts to python.

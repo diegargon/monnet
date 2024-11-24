@@ -21,7 +21,15 @@ ask_yes_no() {
 }
 
 echo "Updating the system..."
+echo "This script avoid install any database options except php-mysqli"
 sudo apt update && sudo apt upgrade -y
+
+# Install Basic
+if ask_yes_no "Do you want to install the basic deps (apache,php-fpm,...)"; then
+    echo "Installing basic deps..."
+    sudo apt install -y apache2 php-fpm php-mysqli php-curl php-mbstring
+
+fi
 
 # Install Composer
 if ask_yes_no "Do you want to install Composer? (for phpseclib and phpmailer)"; then
