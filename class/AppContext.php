@@ -34,8 +34,9 @@ class AppContext
 
     /**
      * @param array<string,string> $lng TODO remove when change to class LANG
+     * @return void
      */
-    public function setLang(array &$lng)
+    public function setLang(array &$lng): void
     {
         $this->lng = &$lng;
     }

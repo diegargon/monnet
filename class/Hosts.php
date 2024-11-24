@@ -339,10 +339,10 @@ class Hosts
 
     /**
      *
-     * @param type $id
+     * @param int $id
      * @return bool
      */
-    public function catHaveHosts($id): bool
+    public function catHaveHosts(int $id): bool
     {
         if (isset($this->host_cat_track[$id]) && $this->host_cat_track[$id] > 0) {
             return true;
@@ -396,10 +396,10 @@ class Hosts
 
     /**
      *
-     * @param type $host
+     * @param array<string, mixed> $host
      * @return string
      */
-    private function getDisplayName($host): string
+    private function getDisplayName(array $host): string
     {
         if (!empty($host['title'])) {
             return $host['title'];

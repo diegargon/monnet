@@ -8,6 +8,11 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_CLI') ? exit : true;
+/**
+ *
+ * @param string $mac
+ * @return array<string,mixed>|bool
+ */
 function get_mac_vendor(string $mac): array|bool
 {
     $link = 'https://www.macvendorlookup.com/api/v2/';
@@ -28,6 +33,11 @@ function get_mac_vendor(string $mac): array|bool
     return $response;
 }
 
+/**
+ *
+ * @param string $mac
+ * @return array<string,string>|bool
+ */
 function get_mac_vendor_local(string $mac): array|bool
 {
 
@@ -40,20 +50,20 @@ function get_mac_vendor_local(string $mac): array|bool
 
     $file = './config/macvendors.txt';
 
-    /* TODO PASS CTX
-      if (!file_exists($file)) {
-      Log::error('File not found: ' . $file);
-      return false;
-      }
-     */
+    if (!file_exists($file)) {
+        Log::error('File not found: ' . $file);
+        return false;
+    }
 
     $content = file_get_contents($file);
 
     $pattern = "/\{MA-[LM]\}\{$formattedMAC\}([^\n]+)/i";
 
+    $matches = [];
     if (preg_match($pattern, $content, $matches)) {
         $info = trim($matches[1]);
         //obtain {$1}{$2}
+        $details = [];
         preg_match('/\{([^{}]+)\}\{([^{}]+)\}/', $info, $details);
 
         $company = isset($details[1]) ? trim($details[1]) : "";
@@ -64,6 +74,7 @@ function get_mac_vendor_local(string $mac): array|bool
 
         ///obtain country codes
         $country_pattern = '/\b([A-Z]{2})\b/';
+        $country_matches = [];
         if (preg_match_all($country_pattern, trim($details[2]), $country_matches)) {
             $country = implode('/', $country_matches[1]);
         } else {
@@ -79,6 +90,11 @@ function get_mac_vendor_local(string $mac): array|bool
     }
 }
 
+/**
+ *
+ * @param string $mac
+ * @return string|bool
+ */
 function formatMAC(string $mac): string|bool
 {
     // Remove any non-alphanumeric characters

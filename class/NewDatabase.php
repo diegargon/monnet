@@ -91,7 +91,7 @@ class NewDatabase
      * @param string $sql Consulta SQL para obtener datos
      * @param array<string, mixed> $params Parámetros de consulta
      *
-     * @return array|null
+     * @return array<int, array<string, mixed>>
      */
     public function fetchOne(string $sql, array $params = []): ?array
     {
@@ -106,7 +106,7 @@ class NewDatabase
      * @param string $sql Consulta SQL para obtener datos
      * @param array<string,mixed> $params Parámetros de consulta
      *
-     * @return array<string,mixed>
+     * @return array<int, array<string, mixed>>
      */
     public function fetchAll(string $sql, array $params = []): array
     {

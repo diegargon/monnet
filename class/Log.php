@@ -190,7 +190,7 @@ class Log
     /**
      *
      * @param int $host_id
-     * @param array $opts
+     * @param array<string,mixed> $opts
      *
      * @return array<string>
      */

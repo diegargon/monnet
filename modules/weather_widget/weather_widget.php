@@ -13,7 +13,7 @@
  *
  * @param array<int|string, mixed> $cfg
  * @param array<string,string> $lng
- * @return array|null
+ * @return array<string,string|int>|null
  */
 function weather_widget(array $cfg, array $lng): ?array
 {

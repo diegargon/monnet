@@ -2,12 +2,17 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+/**
+ *
+ * @param array<string,string> $cfg_db
+ * @return void
+ */
 function do_initial_db_check(array $cfg_db): void
 {
     if (empty($cfg_db)) {
@@ -39,6 +44,11 @@ function do_initial_db_check(array $cfg_db): void
     }
 }
 
+/**
+ *
+ * @param array<string,string|int|array<int|string,int|string>> $cfg
+ * @return void
+ */
 function do_initial_main_vars_checks(array $cfg): void
 {
     if (empty($cfg)) {
@@ -54,8 +64,11 @@ function do_initial_main_vars_checks(array $cfg): void
         exit($cfg['path'] . $err_nofile_msg);
     }
 }
-
-function do_initial_usermode_checks(array $cfg)
+/**
+ *
+ * @param array<string,string|int|array<int|string,int|string>> $cfg
+ */
+function do_initial_usermode_checks(array $cfg): void
 {
     if (empty($cfg)) {
         exit('cfg empty');

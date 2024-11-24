@@ -229,7 +229,7 @@ class Database
      *
      * @param mysqli_result $result
      *
-     * @return array<string,string>
+     * @return array<int, array<string,string>>
      */
     public function fetchAll(mysqli_result $result): array
     {
@@ -552,8 +552,8 @@ class Database
      * Update database
      *
      * @param string $table
-     * @param array<string,int|string> $set
-     * @param array<string,int|string> $where
+     * @param array<string, mixed> $set
+     * @param array<string, mixed> $where
      * @param string $extra
      * @param string $logic
      * @return mysqli_result|boolean

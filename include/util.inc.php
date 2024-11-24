@@ -131,7 +131,7 @@ function base_url(string $url): string|bool
 
 /**
  *
- * @param array<string|array>
+ * @param array<int, mixed>
  * @return string
  */
 function array2string(array $array): string

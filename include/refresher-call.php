@@ -8,6 +8,12 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+/**
+ *
+ * @param AppContext $ctx
+ * @param int $highlight
+ * @return array<string, mixed>
+ */
 function get_hosts_view(AppContext $ctx, int $highlight = 0): array
 {
     $cfg = $ctx->get('cfg');

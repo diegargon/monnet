@@ -123,7 +123,7 @@ class Items
      *
      * @param string|null $key_order
      * @param string|null $dir
-     * @return array<string,mixed>
+     * @return array<int, array<string,mixed>>
      */
     public function getAll(?string $key_order = null, ?string $dir = 'asc'): array
     {
@@ -160,9 +160,6 @@ class Items
      */
     public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc'): array
     {
-        /**
-         * @var array<int, array<string, mixed>> $result
-         */
         $result = [];
         foreach ($this->items as $item) {
             if ($item['type'] == $type) {
@@ -181,9 +178,6 @@ class Items
      */
     public function getByCatID(int $category_id): array
     {
-        /**
-         * @var array<int, array<string, mixed>> $result
-         */
         $result = [];
         foreach ($this->items as $item) {
             if ($item['cat_id'] == $category_id) {

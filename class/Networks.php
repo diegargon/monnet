@@ -12,7 +12,7 @@
 class Networks
 {
     /**
-     * @var array<int, array<string, mixed> $networks
+     * @var array<int, array<string, mixed>> $networks
      */
     private array $networks;
 
@@ -31,7 +31,7 @@ class Networks
 
     /**
      *
-     * @return array<int, array<string, mixed>
+     * @return array<int, array<string, mixed>>
      */
     public function getNetworks(): array
     {
@@ -156,7 +156,7 @@ class Networks
 
     /**
      * Source https://stackoverflow.com/questions/15521725/php-generate-ips-list-from-ip-range/15613770
-     * @return array<inr, mixed>
+     * @return array<int, mixed>
      */
     public function buildIpScanList(): array
     {

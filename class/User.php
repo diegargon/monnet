@@ -30,7 +30,7 @@ class User
 
     /**
      *
-     * @var array<string,string>
+     * @var array<string,string|int>
      */
     private $user = [];
 
@@ -86,7 +86,7 @@ class User
      */
     public function getId(): int
     {
-        return $this->user['id'];
+        return (int) $this->user['id'];
     }
 
     /**
@@ -202,8 +202,7 @@ class User
         !empty($password) ? $password_hashed = $this->encryptPassword($password) : $password_hashed = '';
 
         if (($user_check['password'] == $password_hashed)) {
-            //echo "LLEGO " . $user_check['id'];
-            return $user_check['id'];
+            return (int) $user_check['id'];
         }
 
         return false;
@@ -256,10 +255,11 @@ class User
 
     /**
      *
-     * @return array<int, array <string,string>
+     * @return array<int, array <string,string>>
      */
     public function getHostsCats(): array
     {
+        /** @var array<int, array <string,string>> $categories */
         $categories = $this->ctx->get('Categories')->prepareCats(1);
         foreach ($categories as $key => $cat) {
             $id = $cat['id'];
@@ -312,9 +312,9 @@ class User
     }
     /**
      *
-     * @return bool
+     * @return void
      */
-    public function turnHostsCatsOn(): bool
+    public function turnHostsCatsOn(): void
     {
         foreach (array_keys($this->categories_state) as $key) {
             $this->categories_state[$key] = 1;
@@ -368,6 +368,8 @@ class User
 
         $this->db->update('users', ['sid' => $new_sid], ['id' => $this->getId()], 'LIMIT 1');
         $this->user['sid'] = $new_sid;
+
+        return true;
     }
 
     /**
@@ -394,9 +396,7 @@ class User
         $prefs = $this->db->fetchAll($results);
         if (!empty($prefs)) {
             foreach ($prefs as $pref) {
-                if (!empty($pref['pref_name']) && $pref['uid'] == 0) {
-                    $this->prefs[$pref['pref_name']] = $pref['pref_value'];
-                } elseif (!empty($pref['pref_name'])) {
+                if (!empty($pref['pref_name'])) {
                     $this->prefs[$pref['pref_name']] = $pref['pref_value'];
                 }
             }

@@ -14,9 +14,9 @@
  * @param string $cmd
  * @param array $params
  * @param string $stdin
- * @return array
+ * @return array<string,string|int>|bool
  */
-function run_cmd(string $cmd, array $params, string $stdin = null): array
+function run_cmd(string $cmd, array $params, string $stdin = null): array|bool
 {
     $return = [];
     $pipes = [];

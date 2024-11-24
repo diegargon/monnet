@@ -50,7 +50,7 @@ function sendWOL(string $host_mac): bool
 /**
  *
  * @param string $input
- * @return array<string,int|string>
+ * @return array<int, array<string, int|float|string>>
  */
 function validatePortsInput(string $input): array
 {

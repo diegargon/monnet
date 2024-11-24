@@ -8,6 +8,12 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+/**
+ *
+ * @param array $cfg
+ * @param int $id
+ * @return array<string,string|int>|bool
+ */
 function get_manufacture_data(array $cfg, int $id): array|bool
 {
     foreach ($cfg['manufacture'] as $manufacture) {
@@ -18,6 +24,12 @@ function get_manufacture_data(array $cfg, int $id): array|bool
     return false;
 }
 
+/**
+ *
+ * @param array $cfg
+ * @param int $id
+ * @return <string,string|int>|bool
+ */
 function get_os_data(array $cfg, int $id): array|bool
 {
     foreach ($cfg['os'] as $os) {
@@ -27,7 +39,12 @@ function get_os_data(array $cfg, int $id): array|bool
     }
     return false;
 }
-
+/**
+ *
+ * @param array $cfg
+ * @param int $id
+ * @return array<string,string|int>|bool
+ */
 function get_system_type_data(array $cfg, int $id): array|bool
 {
     foreach ($cfg['system_type'] as $system_type) {
