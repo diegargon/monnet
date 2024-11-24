@@ -26,7 +26,7 @@ function get_manufacture_data(array $cfg, int $id): array|bool
 
 /**
  *
- * @param array<strig, mixed> $cfg
+ * @param array<string, mixed> $cfg
  * @param int $id
  * @return <string, string|int>|bool
  */

@@ -46,7 +46,7 @@ function formatBytes(int $size, int $precision = 2): string
 
 /**
  *
- * @param array<string|array> $ary
+ * @param array<array<string, string>> $ary
  * @param string $sortKey
  * @param string $order
  * @return void
@@ -72,7 +72,7 @@ function order(array &$ary, string $sortKey, string $order = 'asc'): void
 
 /**
  *
- * @param array<string|array> $ary
+ * @param array<array<string, string>> $ary
  * @return void
  */
 function order_by_date(array &$ary): void
@@ -87,7 +87,7 @@ function order_by_date(array &$ary): void
 
 /**
  *
- * @param array<string|array> $ary
+ * @param array<array<string, string>> $ary
  * @return void
  */
 function order_by_name(array &$ary): void
@@ -131,13 +131,13 @@ function base_url(string $url): string|bool
 
 /**
  *
- * @param array<int|string, array<mixed>>
+ * @param array<int|string, mixed[]>
  * @return string
  */
 function array2string(array $array): string
 {
     /**
-     * @var array<string> $result
+     * @var string $result
      */
     $result = [];
     foreach ($array as $subarray) {

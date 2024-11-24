@@ -74,7 +74,7 @@ class Hosts
 
     /**
      *
-     * @param array<string,mixed> $host
+     * @param array<string, mixed> $host
      * @return bool
      */
     public function addHost(array $host): bool
@@ -117,7 +117,7 @@ class Hosts
     /**
      *
      * @param int $highligth
-     * @return array<string,mixed>
+     * @return array<int, <string, mixed>>
      */
     public function getHighlight(int $highligth = 1): array
     {
@@ -143,7 +143,7 @@ class Hosts
     /**
      *
      * @param int $id
-     * @param array<string,mixed> $values
+     * @param array<string, mixed> $values
      * @return void
      */
     public function update(int $id, array $values): void
@@ -222,7 +222,7 @@ class Hosts
 
     /**
      *
-     * @param array<string,mixed> $host
+     * @param array<string, mixed> $host
      * @return void
      */
     public function insert(array $host): void
@@ -283,7 +283,7 @@ class Hosts
     /**
      *
      * @param int $id
-     * @return array<string,mixed>
+     * @return array<string, mixed>
      */
     public function getHostById(int $id): ?array
     {

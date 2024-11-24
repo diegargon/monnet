@@ -12,7 +12,7 @@
  *
  * @param User $user
  * @param array<int, array<string, mixed>> $items_results
- * @return array<string|string>
+ * @return array<int, array<string, string>>
  */
 function format_items(User $user, array $items_results): array
 {
@@ -46,9 +46,9 @@ function format_items(User $user, array $items_results): array
 
 /**
  *
- * @param array<string,mixed> $cfg
+ * @param array<string, mixed> $cfg
  * @param string $directory
- * @return array<string,string>
+ * @return array<int, array<string, string>>
  */
 function getLocalIconsData(array $cfg, string $directory): array
 {

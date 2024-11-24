@@ -111,7 +111,7 @@ if ($user->getPref('show_termlog_status')) {
         unset($log['timestamp']);
     }
 
-//If we add systems logs probably we exceed the max
+    //If we add systems logs probably we exceed the max
     if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {
         $term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
     } else {
@@ -120,8 +120,14 @@ if ($user->getPref('show_termlog_status')) {
     if (valid_array($term_logs)) {
         $log_lines = [];
         foreach ($term_logs as $term_log) {
+            if (is_numeric($term_log['level'])):
+                $log_level = (int) $term_log['level'];
+            else:
+                continue;
+            endif;
+
             $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
-            $loglevelname = Log::getLogLevelName($term_log['level']);
+            $loglevelname = Log::getLogLevelName($log_level);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
             $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg'] . '<br/>';
         }

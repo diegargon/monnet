@@ -173,7 +173,7 @@ function h_get_uptime(SSH2 $ssh, array &$result): void
  * @param SSH2 $ssh
  * @param array<mixed, mixed> $result
  */
-function h_get_load_average(SSH2 $ssh, array &$result)
+function h_get_load_average(SSH2 $ssh, array &$result): void
 {
 
     ssh_exec($ssh, $result, 'cat /proc/loadavg');

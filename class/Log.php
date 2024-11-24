@@ -55,8 +55,8 @@ class Log
     ];
 
     /**
-     * @param array<string,string> $lng
-     * @param array<string,mixed> $cfg
+     * @param array<string, string> $lng
+     * @param array<string, mixed> $cfg
      */
     public static function init(array &$cfg, Database &$db, array &$lng): void
     {
@@ -190,9 +190,9 @@ class Log
     /**
      *
      * @param int $host_id
-     * @param array<string,mixed> $opts
+     * @param array<string, mixed> $opts
      *
-     * @return array<string>
+     * @return array<int, array<string, string>>
      */
     public static function getLoghost(int $host_id, array $opts): array
     {

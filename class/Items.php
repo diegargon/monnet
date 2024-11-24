@@ -32,7 +32,7 @@ class Items
     /**
      *
      * @param string $item_type
-     * @param array<string,mixed> $item_data
+     * @param array<string, mixed> $item_data
      * @return bool
      */
     public function addItem(string $item_type, array $item_data): bool
@@ -67,7 +67,7 @@ class Items
     /**
      *
      * @param string $item_type
-     * @param array<string,mixed> $item_data
+     * @param array<string, mixed> $item_data
      * @return bool
      */
     public function updateItem(string $item_type, array $item_data): bool
@@ -101,7 +101,7 @@ class Items
     /**
      *
      * @param int $id
-     * @return array<string,mixed>
+     * @return array<string, mixed>
      */
     public function getById(int $id): array
     {
@@ -123,7 +123,7 @@ class Items
      *
      * @param string|null $key_order
      * @param string|null $dir
-     * @return array<int, array<string,mixed>>
+     * @return array<int, array<string, mixed>>
      */
     public function getAll(?string $key_order = null, ?string $dir = 'asc'): array
     {
@@ -156,7 +156,7 @@ class Items
      * @param string $type
      * @param string|null $key_order
      * @param string|null $dir
-     * @return array<string,mixed>
+     * @return array<string, mixed>
      */
     public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc'): array
     {
@@ -174,7 +174,7 @@ class Items
     /**
      *
      * @param int $category_id
-     * @return array<string,mixed>
+     * @return array<int, <string, mixed>>
      */
     public function getByCatID(int $category_id): array
     {

@@ -17,8 +17,8 @@ use phpseclib3\Crypt\PublicKeyLoader;
 
 /**
  * @param array<string, mixed> $cfg
- * @param array<string, string> &$result
- * @param array<string, string> $host
+ * @param array<string, mixed> &$result
+ * @param array<string, int|string> $host
  * @return SSH2|false El objeto SSH2
  */
 function ssh_connect_host(array $cfg, array &$result, array $host): SSH2|false
@@ -63,7 +63,7 @@ function ssh_connect_host(array $cfg, array &$result, array $host): SSH2|false
 /**
  *
  * @param SSH2 $ssh
- * @param array $result
+ * @param array<string, mixed> $result
  * @param string $cmd
  * @return void
  */
@@ -81,7 +81,7 @@ function ssh_exec(SSH2 $ssh, array &$result, string $cmd): void
 
 /**
  *
- * @param array $cfg
+ * @param array<string, mixed> $cfg
  * @param Database $db
  * @param Hosts $hosts
  * @return void
@@ -131,7 +131,7 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts): void
 /**
  *
  * @param SSH2 $ssh
- * @param array $result
+ * @param array<string, mixed> $result
  * @param string $cmd
  * @return bool
  */
