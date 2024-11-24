@@ -21,3 +21,14 @@ Require all denied
 </Files>
 #Require ip 192.168.1.0/24
 #Require ip 192.168.2.0/24
+
+<IfModule mod_headers.c>
+    Header set Cache-Control "public, max-age=604800, immutable"
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/png "access plus 1 week"
+    ExpiresByType image/jpeg "access plus 1 week"
+    ExpiresByType image/gif "access plus 1 week"
+</IfModule>
