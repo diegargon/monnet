@@ -309,28 +309,34 @@
                 <div class="">
                     <label for="disableAlarms"><?= $lng['L_DISABLE_ALARMS'] ?>:</label>
                     <input type="hidden" id="disableAlarms" value="0">
-                    <input type="checkbox" id="disableAlarms"
+                    <input
+                        onchange="submitCommand('toggleAlarms',
+                                    {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
+                            type="checkbox" id="disableAlarms"
                            <?= isset($tdata['host_details']['alarms_off']) ? 'checked' : null ?>>
-                    <label for="enableEmailAlarms"><?= $lng['L_ENABLE_EMAIL_ALARMS'] ?>:</label>
-                    <input type="hidden" id="enableMailAlarms" value="0">
-                    <input type="checkbox" id="enableMailAlarms"
-                           <?= isset($tdata['host_details']['alarms_email_on']) ? 'checked' : null ?>>
+                    <label for="enableEmailAlarms"><?= $lng['L_DISABLE_EMAIL_ALARMS'] ?>:</label>
+                    <input disabled
+                        onchange="submitCommand('toggleEmailAlarms',
+                                    {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
+                           type="checkbox" id="enableMailAlarms"
+                           <?= isset($tdata['host_details']['alarms_email_on']) ? 'checked' : null ?>
+                    >
                     <div>Tipo Alarmas</div>
                     <label for="">Ping Host Fail:</label>
                     <input type="hidden" id="alarm_ping_onoff" value="0">
-                    <input type="checkbox" id="alarm_ping_onoff">
+                    <input disabled type="checkbox" id="alarm_ping_onoff">
                     <label for="">Ping Port Fail:</label>
                     <input type="hidden" id="alarm_port_onoff" value="0">
-                    <input type="checkbox" id="alarm_port_onoff">
+                    <input disabled type="checkbox" id="alarm_port_onoff">
                     <label for="">Cambio MAC:</label>
                     <input type="hidden" id="alarm_mac_change" value="0">
-                    <input type="checkbox" id="alarm_mac_change">
+                    <input disabled type="checkbox" id="alarm_mac_change">
                     <label for="">Puerto Nuevo:</label>
                     <input type="hidden" id="alarm_new_port" value="0">
-                    <input type="checkbox" id="alarm_new_port">
+                    <input disabled type="checkbox" id="alarm_new_port">
                     <br/>
                     <label for="">Emails (Comma Separated)</label><br/>
-                    <input type="text" size="50" id="alarm_emails">
+                    <input disabled type="text" size="50" id="alarm_emails">
                 </div>
                 <div>
                     <div><?= $lng['L_ALARMS_LAST'] ?> :</div>

@@ -808,4 +808,8 @@ if ($command === 'clearAlarms' && $target_id > 0) {
     }
 }
 
+if ($command === 'toggleAlarms' && $target_id > 0) {
+    //$data['command_success'] = 1;
+    //$data['force_hosts_refresh'] = 1;
+}
 print json_encode($data, JSON_UNESCAPED_UNICODE);
