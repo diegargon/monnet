@@ -15,19 +15,19 @@
 !defined('IN_WEB') ? exit : true;
 ?>
 <div class="header">
-        <div id="head_left">
-            <div class="head_left_content">
-                <?= !empty($tdata['head_left']) ? $tdata['head_left'] : null; ?>
+        <div id="head-left">
+            <div class="head-left-content">
+                <?= !empty($tdata['head-left']) ? $tdata['head-left'] : null; ?>
             </div>
         </div>
-        <div id="head_center">
-            <div class="head_center_content">
-                <?= !empty($tdata['head_center']) ? $tdata['head_center'] : null; ?>
+        <div id="head-center">
+            <div class="head-center_content">
+                <?= !empty($tdata['head-center']) ? $tdata['head-center'] : null; ?>
             </div>
         </div>
-        <div id="head_right">
-            <div class="head_right_content">
-                <?= !empty($tdata['head_right']) ? $tdata['head_right'] : null; ?>
+        <div id="head-right">
+            <div class="head-right_content">
+                <?= !empty($tdata['head-right']) ? $tdata['head-right'] : null; ?>
             </div>
         </div>
 
@@ -38,17 +38,17 @@
 <div class="main_align_container">
     <div class="main_container">
         <!-- left -->
-        <div id="left_container" class="left_container">
+        <div id="left-container" class="left-container">
             <?= !empty($tdata['left_col_pre']) ? $tdata['left_col_pre'] : null; ?>
             <div id="host_place"></div>
             <?= !empty($tdata['left_col_post']) ? $tdata['left_col_post'] : null; ?>
         </div>
         <!-- Center -->
-        <div id="center_container" class="center_container">
+        <div id="center-container" class="center-container">
             <?= !empty($tdata['center_col']) ? $tdata['center_col'] : null; ?>
         </div>
         <!-- Right -->
-        <div id="right_container" class="right_container">
+        <div id="right-container" class="right-container">
             <?= !empty($tdata['right_col']) ? $tdata['right_col'] : null; ?>
         </div>
     </div>

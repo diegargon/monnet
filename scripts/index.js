@@ -365,8 +365,8 @@ $(document).ready(function () {
 
     // Resize code
     $(document).ready(function () {
-        const $left = $('#left_container');
-        const $center = $('#center_container');
+        const $left = $('#left-container');
+        const $center = $('#center-container');
         const $hosts_cat = $('#hosts_cat');
 
         let startX, startWidthLeft, startWidthCenter;

@@ -57,7 +57,7 @@ function page_common_head(AppContext $ctx): array
     }
     $page['load_tpl'][] = [
         'file' => 'search-box',
-        'place' => 'head_center',
+        'place' => 'head-center',
     ];
 
     /* Time Widget */
@@ -73,7 +73,7 @@ function page_common_head(AppContext $ctx): array
         $page['weather_widget'] = $weather;
         $page['load_tpl'][] = [
             'file' => 'weather-widget',
-            'place' => 'head_right',
+            'place' => 'head-right',
         ];
     }
 
@@ -135,7 +135,7 @@ function page_index(AppContext $ctx): array
     /* Top Buttons */
     $page['load_tpl'][] = [
         'file' => 'topbuttoms',
-        'place' => 'head_left',
+        'place' => 'head-left',
     ];
 
     /* Controls */
@@ -155,12 +155,17 @@ function page_index(AppContext $ctx): array
     $show_termlog_status ? $page['controls']['show_termlog_status'] = 1 :
             $page['controls']['show_termlog_status'] = 0;
 
+    /* Left-Right Controls Templeates */
     $page['username'] = $user->getUsername();
     $page['load_tpl'][] = [
-        'file' => 'controls',
-        'place' => 'head_left',
+        'file' => 'controls-left',
+        'place' => 'head-left',
     ];
-
+    $page['load_tpl'][] = [
+        'file' => 'controls-right',
+        'place' => 'head-right',
+        'weight' => 4
+    ];
     /* Bookmarks */
 
     if ($user->getPref('show_bookmarks_status')) {
@@ -309,10 +314,16 @@ function page_settings(AppContext $ctx): array
     /* Top Buttons */
     $page['load_tpl'][] = [
         'file' => 'topbuttoms',
-        'place' => 'head_left',
+        'place' => 'head-left',
     ];
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
+    $page['web_main']['scriptlink'][] = './scripts/settings.js';
+
+    $page['load_tpl'][] = [
+        'file' => 'settings',
+        'place' => 'center_col',
+    ];
 
     return $page;
 }
@@ -332,11 +343,13 @@ function page_privacy(AppContext $ctx): array
     /* Top Buttons */
     $page['load_tpl'][] = [
         'file' => 'topbuttoms',
-        'place' => 'head_left',
+        'place' => 'head-left',
     ];
+
     $page['page'] = 'index';
     $page['head_name'] = $cfg['web_title'];
     $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     $page['web_main']['scriptlink'][] = './scripts/background.js';
+
     return $page;
 }

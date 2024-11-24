@@ -136,7 +136,7 @@ $lng = [
     'L_PRINTER' => 'Impresora',
     'L_PRINTERS' => 'Impresoras',
     //Q
-    'L_QUICK_SETTINGS' => 'Configuración',
+    'L_QUICK_CONFIG' => 'Quick Config',
     //R
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',

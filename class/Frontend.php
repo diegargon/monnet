@@ -77,6 +77,11 @@ class Frontend
 
         /* Load Templates in tdata/tpl */
         if (!empty($tdata['load_tpl']) && is_array($tdata['load_tpl'])) {
+            usort($tdata['load_tpl'], function ($a, $b) {
+                $weightA = $a['weight'] ?? 5;
+                $weightB = $b['weight'] ?? 5;
+                return $weightA <=> $weightB; // Ascendent
+            });
             foreach ($tdata['load_tpl'] as $tpl) {
                 if (!empty($tpl['file']) && !empty($tpl['place'])) {
                     if (empty($tdata[$tpl['place']])) {

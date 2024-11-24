@@ -346,7 +346,7 @@ if (
     $tdata['networks_selected'] = $networks_selected;
 
     $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
-    $data['categories_host']['cfg']['place'] = '#left_container';
+    $data['categories_host']['cfg']['place'] = '#left-container';
 }
 
 /* /end Host Cat */
@@ -577,7 +577,7 @@ if ($command === 'host-details' && !empty($target_id)) {
         order_by_name($cfg['manufacture']);
         order_by_name($cfg['system_type']);
         unset($tdata['host_details']['ping_stats']);
-        $data['host_details']['cfg']['place'] = "#left_container";
+        $data['host_details']['cfg']['place'] = "#left-container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_success'] = 1;
     } else {
@@ -646,7 +646,7 @@ if ($command == "mgmtBookmark" && !empty($target_id)) {
         $tdata['bookmark_title'] = $lng['L_ADD'];
     }
     $data['response_msg'] = $target_id;
-    $data['mgmt_bookmark']['cfg']['place'] = "#left_container";
+    $data['mgmt_bookmark']['cfg']['place'] = "#left-container";
     $data['mgmt_bookmark']['data'] = $frontend->getTpl('mgmt-bookmark', $tdata);
     $data['command_success'] = $target_id;
 }

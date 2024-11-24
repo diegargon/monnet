@@ -14,7 +14,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 ?>
-<div class="bookmarks_container" id="bookmarks_container">
+<div class="bookmarks-container" id="bookmarks-container">
     <div class="bookmarks-tabs-head-container">
         <?php
         foreach ($tdata['bookmarks_head'] as $bookmark_head) {

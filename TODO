@@ -2,7 +2,6 @@
 * Posibilidad de desactivar alarmas/warns
 * clear cache dir 1week; poder limpiar stats y logs
 * Limpieza de stats y logs. Poder Specificar dias a mantaner
-* Poner el username en home
 * No hay forma de borrar una red
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria

@@ -26,9 +26,6 @@ if (Filters::getString('page') == $privacy_page) {
             <img src="tpl/<?= $cfg['theme'] ?>/img/monnet.png"
                   alt="home" title="<?= $lng['L_HOME']; ?>"/>
         </a>
-        <a href="<?= $cfg['rel_path'] ?>?page=settings">
-            <img src="tpl/<?= $cfg['theme'] ?>/img/settings.png" alt="settings" title="<?= $lng['L_SETTINGS']; ?>"/>
-        </a>
         <a href="<?= $cfg['rel_path'] ?>?page=<?= $privacy_page ?>">
             <img src="tpl/<?= $cfg['theme'] ?>/img/privacy.png" alt="privacy" title="<?= $lng['L_PRIVACY']; ?>"/>
         </a>

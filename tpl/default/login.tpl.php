@@ -15,10 +15,10 @@
 ?>
 <div class="header">
     <div class="head_align_center">
-        <div id="head_left"><div class="head_left_content"></div></div>
-        <div id="head_center">
-            <div class="head_center_content">
-                <div class="search_container">
+        <div id="head-left"><div class="head-left-content"></div></div>
+        <div id="head-center">
+            <div class="head-center_content">
+                <div class="search-container">
                     <h1 class='title gradiant'><a href=""><?= strtoupper($cfg['app_name']) ?></a></h1>
                     <div class="search-wrapper">
                         <form target="_blank"  action="https://gooogle.com/search" method="GET">
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div id="head_right"><div class="head_right_content"></div></div>
+        <div id="head-right"><div class="head-right_content"></div></div>
     </div>
 </div>
 
