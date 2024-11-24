@@ -77,9 +77,15 @@ class Database
 
     /**
      * hold query history
-     * @var array
+     * @var array<string>
      */
     private $query_history = [];
+
+    /**
+     *
+     * @var int
+     */
+    private $query_affected = 0;
 
     /** @var bool */
     private $isConnected = false;
@@ -187,15 +193,23 @@ class Database
     {
         $this->query_stats++;
         $this->query_history[] = $query;
-
         $result = $this->dblink->query($query);
         if (!$result && !$this->silent) {
             $this->dbdie($query);
         }
+        $this->query_affected = $result->rowCount();
 
         return $result;
     }
 
+    /**
+     *
+     * @return int
+     */
+    public function getAffected(): int
+    {
+        return $this->query_affected;
+    }
     /**
      * fetch wrap
      *
