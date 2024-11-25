@@ -162,7 +162,7 @@ class Hosts
                 //TODO warning signs
                 //Log change
                 if (
-                        empty($this->hosts[$id]['disable_alarm']) &&
+                        empty($this->hosts[$id]['disable_alarms']) &&
                         ($kvalue === 'mac' || $kvalue === 'mac_vendor' || $kvalue === 'hostname') &&
                         ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
