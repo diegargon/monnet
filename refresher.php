@@ -120,9 +120,9 @@ if ($user->getPref('show_termlog_status')) {
     if (valid_array($term_logs)) {
         $log_lines = [];
         foreach ($term_logs as $term_log) {
-            if (is_numeric($term_log['level'])):
+            if (is_numeric($term_log['level'])) :
                 $log_level = (int) $term_log['level'];
-            else:
+            else :
                 continue;
             endif;
 
