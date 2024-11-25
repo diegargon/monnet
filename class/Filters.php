@@ -799,4 +799,16 @@ class Filters
     {
         return (json_decode($json) !== null || $json === 'null') ? $json : null;
     }
+
+    /**
+     * Return the bool true/false or null if is not a boolean
+     * @param mixed $value
+     * @return bool|null
+     */
+    public static function varBool(mixed $value): ?bool
+    {
+        $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+
+        return $bool === null ? null : $bool;
+    }
 }
