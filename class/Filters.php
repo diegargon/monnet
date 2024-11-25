@@ -807,7 +807,7 @@ class Filters
      */
     public static function varBool(mixed $value): ?bool
     {
-        $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
         return $bool === null ? null : $bool;
     }
