@@ -87,9 +87,9 @@ function check_known_hosts(AppContext $ctx): bool
                 $new_host_status['online_change'] = utc_date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 Log::logHost(
-                    'LOG_WARNING',
-                    $host['id'],
-                    $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout
+                        'LOG_WARNING',
+                        $host['id'],
+                        $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout
                 );
             }
 

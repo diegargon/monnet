@@ -310,16 +310,16 @@
                     <label for="disableAlarms"><?= $lng['L_DISABLE_ALARMS'] ?>:</label>
                     <input type="hidden" id="disableAlarms" value="0">
                     <input
-                        onchange="submitCommand('toggleAlarms',
+                        onchange="submitCommand('setHostAlarms',
                                     {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
                             type="checkbox" id="disableAlarms"
-                           <?= isset($tdata['host_details']['alarms_off']) ? 'checked' : null ?>>
+                           <?= !empty($tdata['host_details']['disable_alarms']) ? 'checked' : null ?>>
                     <label for="enableEmailAlarms"><?= $lng['L_DISABLE_EMAIL_ALARMS'] ?>:</label>
-                    <input disabled
-                        onchange="submitCommand('toggleEmailAlarms',
+                    <input
+                        onchange="submitCommand('setHostEmailAlarms',
                                     {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
                            type="checkbox" id="enableMailAlarms"
-                           <?= isset($tdata['host_details']['alarms_email_on']) ? 'checked' : null ?>
+                           <?= !empty($tdata['host_details']['disable_email_alarms']) ? 'checked' : null ?>
                     >
                     <div>Tipo Alarmas</div>
                     <label for="">Ping Host Fail:</label>
@@ -343,7 +343,7 @@
                     <div><?= $tdata['host_details']['alert_msg'] ?? '' ?></div>
                     <div><?= $tdata['host_details']['warn_msg'] ?? '' ?></div>
                     <button id="clear_alarms"
-                             onclick="submitCommand('clearAlarms',{id: <?= $tdata['host_details']['id'] ?>})">
+                             onclick="submitCommand('clearHostAlarms',{id: <?= $tdata['host_details']['id'] ?>})">
                             <?= $lng['L_CLEAR_ALARMS'] ?>
                     </button>
                 </div>

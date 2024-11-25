@@ -86,7 +86,13 @@ if ($command == 'saveNote') {
         $value_command = Filters::varDomain($command_values['value']);
     }
 } else {
-    if (!empty($command_values['value'])) {
+    $bvalue_command = null;
+    if (isset($command_values['value'])) {
+        $bvalue_command = Filters::varBool($command_values['value']);
+    }
+    if ($bvalue_command !== null) {
+        $value_command = $bvalue_command;
+    } else if (!empty($command_values['value'])) {
         if (Filters::varInt($command_values['value'])) {
             $value_command = Filters::varInt($command_values['value']);
         } else {
@@ -98,7 +104,7 @@ if ($command == 'saveNote') {
 if (!empty($command)) :
     $data['command_receive'] = $command;
 endif;
-if (!empty($value_command)) :
+if (isset($value_command)) :
     $data['command_value'] = $value_command;
 endif;
 if (!is_numeric($target_id)) :
@@ -128,15 +134,15 @@ if ($command === 'remove_host' && $target_id) {
     $command = $target_id = '';
 }
 
-if ($command == 'network_select' && !empty($target_id)) {
-    $pref_name = 'network_select_' . $target_id;
+if ($command === 'network_select' && !empty($value_command)) {
+    $pref_name = 'network_select_' . $value_command;
     $user->setPref($pref_name, 1);
     $data['command_success'] = 1;
     $data['force_hosts_refresh'] = 1;
     $data['response_msg'] = 'Network Select';
 }
-if ($command == 'network_unselect' && !empty($target_id)) {
-    $pref_name = 'network_select_' . $target_id;
+if ($command === 'network_unselect' && !empty($value_command)) {
+    $pref_name = 'network_select_' . $value_command;
     $user->setPref($pref_name, 0);
     $data['command_success'] = 1;
     $data['force_hosts_refresh'] = 1;
@@ -801,15 +807,21 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
 }
 
 /* Alarms */
-if ($command === 'clearAlarms' && $target_id > 0) {
-    if ($hosts->clearHostAlarms($user->getUsername(), $target_id)) {
+if ($command === 'clearHostAlarms' && $target_id > 0) {
+    if ($hosts->clearAlarms($user->getUsername(), $target_id)) {
         $data['command_success'] = 1;
         $data['force_hosts_refresh'] = 1;
     }
 }
 
-if ($command === 'toggleAlarms' && $target_id > 0) {
-    //$data['command_success'] = 1;
-    //$data['force_hosts_refresh'] = 1;
+if ($command === 'setHostAlarms' && $target_id > 0) {
+    $msg = $hosts->setAlarms($target_id, $value_command);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $value_command;
+}
+if ($command === 'setHostEmailAlarms' && $target_id > 0) {
+    $msg = $hosts->setEmailAlarms($target_id, $value_command);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $value_command;
 }
 print json_encode($data, JSON_UNESCAPED_UNICODE);

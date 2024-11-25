@@ -38,7 +38,9 @@ class Hosts
             'owner',
             'access_type',
             'access_link',
-            'timeout'
+            'timeout',
+            'disable_alarms',
+            'disable_email_alarms'
         ];
     /**
      * host[$id] = ['key' => 'value']
@@ -160,12 +162,13 @@ class Hosts
                 //TODO warning signs
                 //Log change
                 if (
-                    ($kvalue === 'mac' || $kvalue === 'mac_vendor' || $kvalue === 'hostname') &&
-                    ($this->hosts[$id][$kvalue] != $vvalue)
+                        empty($this->hosts[$id]['disable_alarm']) &&
+                        ($kvalue === 'mac' || $kvalue === 'mac_vendor' || $kvalue === 'hostname') &&
+                        ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
                     $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( '
-                        . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])'
-                        . $this->hosts[$id][$kvalue] . '->' . $vvalue;
+                            . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])'
+                            . $this->hosts[$id][$kvalue] . '->' . $vvalue;
                     Log::logHost('LOG_ALERT', $id, $loghostmsg);
                     $this->hosts[$id]['alert'] = 1;
                     $alert_msg = '';
@@ -188,6 +191,7 @@ class Hosts
                     $this->host_cat_track[$vvalue]++;
                 }
 
+                //Add the new values to the current array.
                 $this->hosts[$id][$kvalue] = $vvalue;
                 //misc is json field deal with it
                 if (in_array($kvalue, $this->misc_keys)) {
@@ -199,7 +203,7 @@ class Hosts
         }
 
         /*
-         * To update the field misc (json) we add to the array the other fields
+         * To update the misc field (json) we add to the array the other fields
          * encode it and update all.
          */
         if (valid_array($misc_container)) {
@@ -207,7 +211,7 @@ class Hosts
             foreach ($host as $h_key => $h_value) {
                 if (
                     in_array($h_key, $this->misc_keys) &&
-                    !in_array($h_key, $misc_container)
+                    !array_key_exists($h_key, $misc_container)
                 ) {
                     $misc_container[$h_key] = $h_value;
                 }
@@ -381,7 +385,7 @@ class Hosts
      * @param int $id
      * @return bool
      */
-    public function clearHostAlarms(string $username, int $id): bool
+    public function clearAlarms(string $username, int $id): bool
     {
         $values = [
             'alert' => 0,
@@ -454,11 +458,16 @@ class Hosts
             if (!empty($this->hosts[$id]['ports'])) {
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
             }
-            /* Misc field JSON misc fields that not need a db field */
+            /* Misc field  fields that we keep in JSON format */
             if (!empty($this->hosts[$id]['misc'])) {
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
                 foreach ($misc_values as $key => $value) {
-                    $this->hosts[$id][$key] = $value;
+                    $bvalue = Filters::varBool($value);
+                    if (is_bool($bvalue)) :
+                        $this->hosts[$id][$key] = $bvalue;
+                    else :
+                        $this->hosts[$id][$key] = $value;
+                    endif;
                 }
             }
 
@@ -469,6 +478,19 @@ class Hosts
                 $this->hosts[$host['id']]['notes_id'] = $insert_id;
             }
         }
+
+        return true;
+    }
+
+    function setAlarms(int $id, bool $value): bool
+    {
+        $this->update($id, ['disable_alarms' => $value]);
+
+        return true;
+    }
+    function setEmailAlarms(int $id, bool $value): bool
+    {
+        $this->update($id, ['disable_email_alarms' => $value]);
 
         return true;
     }
