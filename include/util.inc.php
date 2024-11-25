@@ -131,13 +131,13 @@ function base_url(string $url): string|bool
 
 /**
  *
- * @param array<int|string, mixed[]>
+ * @param array<int|string, mixed>
  * @return string
  */
 function array2string(array $array): string
 {
     /**
-     * @var string $result
+     * @var array<string> $result
      */
     $result = [];
     foreach ($array as $subarray) {

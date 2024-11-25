@@ -119,7 +119,7 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 /**
  *
  * @param AppContext $ctx
- * @param array<string> $logs
+ * @param array<int, array<string, string>> $logs
  * @param string $nl
  * @return array<string>
  */

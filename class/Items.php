@@ -174,7 +174,7 @@ class Items
     /**
      *
      * @param int $category_id
-     * @return array<int, <string, mixed>>
+     * @return array<int, array<string, mixed>>
      */
     public function getByCatID(int $category_id): array
     {

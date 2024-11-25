@@ -28,7 +28,7 @@ function get_manufacture_data(array $cfg, int $id): array|bool
  *
  * @param array<string, mixed> $cfg
  * @param int $id
- * @return <string, string|int>|bool
+ * @return array<string, string|int>|bool
  */
 function get_os_data(array $cfg, int $id): array|bool
 {

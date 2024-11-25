@@ -310,8 +310,8 @@ function host_access(array $cfg, Hosts $hosts): void
  * Scan Host Ports
  * port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping
  * @param AppContext $ctx
- * @param array $host
- * @return array<string,string|int>
+ * @param array<string, mixed> $host
+ * @return array<string, mixed>
  */
 function ping_host_ports(AppContext $ctx, array $host): array
 {
@@ -387,7 +387,7 @@ function ping_host_ports(AppContext $ctx, array $host): array
 /**
  *
  * @param AppContext $ctx
- * @param array $host
+ * @param array<string, mixed> $host
  * @return array<string,string|int>
  */
 function ping_known_host(AppContext $ctx, array $host): array

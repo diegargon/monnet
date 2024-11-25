@@ -93,7 +93,12 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts): void
 
     foreach ($cmds as $cmd) {
         $run_command = $cfg['commands'][$cmd['cmd_type']];
-        $hid = $cmd['hid'];
+        if (is_numeric($cmd['hid'])) :
+            $hid = (int) $cmd['hid'];
+        else :
+            continue;
+        endif;
+            
         Log::notice("Run command {$cmd['cmd_type']}:$hid");
         $host = $hosts->getHostById($hid);
 

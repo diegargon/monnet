@@ -117,7 +117,7 @@ class Hosts
     /**
      *
      * @param int $highligth
-     * @return array<int, <string, mixed>>
+     * @return array<int, array<string, mixed>>
      */
     public function getHighlight(int $highligth = 1): array
     {

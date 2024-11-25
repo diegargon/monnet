@@ -422,7 +422,7 @@ class Database
      * Select all fields
      *
      * @param string $table
-     * @param array<string,int|string> $where
+     * @param array<string, mixed> $where
      * @param string $extra
      * @param string $logic
      * @return mysqli_result|bool
@@ -452,7 +452,7 @@ class Database
      *
      * @param string $table
      * @param string $what comma field separated
-     * @param array<string,int|string> $where
+     * @param array<string, mixed> $where
      * @param string $extra
      * @param string $logic
      * @return mysqli_result|bool
@@ -502,7 +502,7 @@ class Database
      * @param string $table
      * @param string $s_fields
      * @param string $searchText
-     * @param array<string,int|string> $where
+     * @param array<string, mixed> $where
      * @param string $extra
      * @return mysqli_result|bool
      */
@@ -582,7 +582,7 @@ class Database
      * Sum field +1
      * @param string $table
      * @param string $field
-     * @param array<string,int|string> $where
+     * @param array<string, mixed> $where
      * @param string $logic
      * @return mysqli_result|bool
      */
@@ -611,9 +611,9 @@ class Database
      *
      * @param string $table
      * @param string $field
-     * @param array<string,int|string> $where
+     * @param array<string, mixed> $where
      * @param string $logic
-     * @return array|bool
+     * @return mysqli_result|bool
      */
     public function toggleField(
         string $table,
@@ -637,9 +637,9 @@ class Database
      * Insert
      *
      * @param string $table
-     * @param array<string,int|string> $insert_data
+     * @param array<string, int|string> $insert_data
      * @param string $extra
-     * @return array|bool
+     * @return mysqli_result|bool
      */
     public function insert(string $table, array $insert_data, string $extra = null): array|bool
     {
@@ -659,10 +659,10 @@ class Database
      * Delete
      *
      * @param string $table
-     * @param array<string,int|string> $where
+     * @param array<string, mixed> $where
      * @param string $extra
      * @param string $logic
-     * @return array|bool
+     * @return mysqli_result|bool
      */
     public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): array|bool
     {
@@ -681,8 +681,8 @@ class Database
      * Insert or update if exists
      *
      * @param string $table
-     * @param array<string,int|string> $set_ary
-     * @param array<string,int|string> $where_ary
+     * @param array<string, int|string> $set_ary
+     * @param array<string, mixed> $where_ary
      */
     public function upsert(string $table, array $set_ary, array $where_ary): void
     {
@@ -704,7 +704,7 @@ class Database
     /**
      * return query history
      *
-     * @return array
+     * @return array<string>
      */
     public function getQueryHistory(): array
     {
@@ -754,7 +754,7 @@ class Database
     /**
      * Where process
      *
-     * @param array<string,int|string> $where
+     * @param array<string, mixed> $where
      * @param string $logic
      * @return string
      */

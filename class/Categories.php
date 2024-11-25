@@ -107,7 +107,7 @@ class Categories
     /**
      *
      * @param int $type
-     * @return array<string>
+     * @return array<array<string, mixed>>
      */
     public function prepareCats(int $type): array
     {
