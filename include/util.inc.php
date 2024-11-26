@@ -260,11 +260,11 @@ function dump_in_json(mixed $var): void
 }
 
 /**
- *
+ * & to avoid !isset error
  * @param type $var
  * @return bool
  */
-function isEmpty($var): bool
+function isEmpty(&$var): bool
 {
     if (!isset($var)) {
         return true;
