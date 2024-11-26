@@ -83,6 +83,11 @@ function check_known_hosts(AppContext $ctx): bool
                     $host['id'],
                     $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']
                 );
+                //Try get hostname when a host become on
+                $hostname = $hosts->getHostname($host['ip']);
+                if ($hostname && $hostname !== $host['hostname'] && $hostname !== $host['ip']) :
+                    $new_host_status['hostname'] = $hostname;
+                endif;
             } elseif ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 $new_host_status['online_change'] = utc_date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
