@@ -259,3 +259,21 @@ function dump_in_json(mixed $var): void
     ]);
     exit();
 }
+
+/**
+ *
+ * @param type $var
+ * @return bool
+ */
+function isEmpty($var): bool
+{
+    if (!isset($var)) {
+        return true;
+    }
+
+    if ( $var === '' || $var === [] ) {
+        return true;
+    }
+
+    return false;
+}
