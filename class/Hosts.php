@@ -400,6 +400,32 @@ class Hosts
 
     /**
      *
+     * @param int $id
+     * @param bool $value
+     * @return bool
+     */
+    public function setAlarms(int $id, bool $value): bool
+    {
+        $this->update($id, ['disable_alarms' => $value]);
+
+        return true;
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param bool $value
+     * @return bool
+     */
+    public function setEmailAlarms(int $id, bool $value): bool
+    {
+        $this->update($id, ['disable_email_alarms' => $value]);
+
+        return true;
+    }
+
+    /**
+     *
      * @param array<string, mixed> $host
      * @return string
      */
@@ -478,19 +504,6 @@ class Hosts
                 $this->hosts[$host['id']]['notes_id'] = $insert_id;
             }
         }
-
-        return true;
-    }
-
-    function setAlarms(int $id, bool $value): bool
-    {
-        $this->update($id, ['disable_alarms' => $value]);
-
-        return true;
-    }
-    function setEmailAlarms(int $id, bool $value): bool
-    {
-        $this->update($id, ['disable_email_alarms' => $value]);
 
         return true;
     }

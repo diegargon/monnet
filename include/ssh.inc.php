@@ -98,7 +98,7 @@ function run_cmd_db_tasks(array $cfg, Database $db, Hosts $hosts): void
         else :
             continue;
         endif;
-            
+
         Log::notice("Run command {$cmd['cmd_type']}:$hid");
         $host = $hosts->getHostById($hid);
 

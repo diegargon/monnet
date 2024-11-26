@@ -130,7 +130,6 @@ function base_url(string $url): string|bool
 }
 
 /**
- *
  * @param array<int|string, mixed>
  * @return string
  */

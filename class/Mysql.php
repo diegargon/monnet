@@ -620,7 +620,7 @@ class Database
         string $field,
         array $where = null,
         string $logic = 'AND'
-    ): array|bool {
+    ): mysqli_result|bool {
 
         if (empty($field) || empty($table)) {
             return false;
@@ -641,7 +641,7 @@ class Database
      * @param string $extra
      * @return mysqli_result|bool
      */
-    public function insert(string $table, array $insert_data, string $extra = null): array|bool
+    public function insert(string $table, array $insert_data, string $extra = null): mysqli_result|bool
     {
 
         if (empty($table) || empty($insert_data)) {
@@ -664,7 +664,7 @@ class Database
      * @param string $logic
      * @return mysqli_result|bool
      */
-    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): array|bool
+    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): mysqli_result|bool
     {
 
         if (empty($table) || empty($where)) {

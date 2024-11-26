@@ -92,7 +92,7 @@ if ($command == 'saveNote') {
     }
     if ($bvalue_command !== null) {
         $value_command = $bvalue_command;
-    } else if (!empty($command_values['value'])) {
+    } elseif (!empty($command_values['value'])) {
         if (Filters::varInt($command_values['value'])) {
             $value_command = Filters::varInt($command_values['value']);
         } else {
@@ -104,8 +104,10 @@ if ($command == 'saveNote') {
 if (!empty($command)) :
     $data['command_receive'] = $command;
 endif;
-if (isset($value_command)) :
+if (!isEmpty($value_command)) :
     $data['command_value'] = $value_command;
+else:
+    $value_command = '';
 endif;
 if (!is_numeric($target_id)) :
     $data['command_error'] = 1;

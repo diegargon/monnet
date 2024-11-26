@@ -129,10 +129,12 @@ function format_host_logs(AppContext $ctx, array $logs, string $nl = '<br/>'): a
 
     $log_lines = [];
     foreach ($logs as $term_log) {
-        $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
-        $loglevelname = Log::getLogLevelName($term_log['level']);
-        $loglevelname = str_replace('LOG_', '', $loglevelname);
-        $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'] . $nl;
+        if (is_numeric($term_log['level'])) {
+            $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
+            $loglevelname = Log::getLogLevelName((int) $term_log['level']);
+            $loglevelname = str_replace('LOG_', '', $loglevelname);
+            $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'] . $nl;
+        }
     }
 
     return $log_lines;
