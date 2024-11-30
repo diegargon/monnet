@@ -13,7 +13,7 @@
  * @var AppContext|null $ctx An instance of AppCtx or null if not defined
  * @var array<string,string> $lng - Default included in common, we overwrite user lang here
  */
-do_initial_usermode_checks($cfg);
+usermode_checks($cfg);
 
 session_name('monnet');
 session_start();

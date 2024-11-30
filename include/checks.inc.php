@@ -8,13 +8,14 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+
 /**
  *
  * @param array<string,string> $cfg_db
+ * @param array<string,string|int|array<int|string,int|string>> $cfg
  * @return void
  */
-function do_initial_db_check(array $cfg_db): void
-{
+function common_checks(array $cfg_db, array $cfg): void {
     if (empty($cfg_db)) {
         exit('cfg_db empty');
     }
@@ -42,15 +43,7 @@ function do_initial_db_check(array $cfg_db): void
     if (empty($cfg_db['dbcharset'])) {
         exit('dbcharset' . $err_empty_msg);
     }
-}
 
-/**
- *
- * @param array<string,string|int|array<int|string,int|string>> $cfg
- * @return void
- */
-function do_initial_main_vars_checks(array $cfg): void
-{
     if (empty($cfg)) {
         exit('cfg empty');
     }
@@ -68,7 +61,7 @@ function do_initial_main_vars_checks(array $cfg): void
  *
  * @param array<string,string|int|array<int|string,int|string>> $cfg
  */
-function do_initial_usermode_checks(array $cfg): void
+function usermode_checks(array $cfg): void
 {
     if (empty($cfg)) {
         exit('cfg empty');
