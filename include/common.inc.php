@@ -32,9 +32,9 @@ require_once 'config/config.priv.php';
 require_once 'config/config.defaults.php';
 
 /*
- * FIXME: climode.inc.php need this, we include here again and we dont
- * use include_once since in climode will not load again and config.defaults
- * overwrite the config.inc.php loaded in climode.inc.php
+ * FIXME: climode.inc.php need include this file before for acccess 'path'
+ * This include cant be include_once because climode rewrite with defaults
+ * and must load again
  */
 include '/etc/monnet/config.inc.php';
 
