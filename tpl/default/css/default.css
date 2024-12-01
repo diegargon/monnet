@@ -46,7 +46,7 @@ a:visited {
 p {
 }
 
-button {
+button, button-submit {
     background-color: #007bff; /* Color de fondo */
     color: #fff; /* Color del texto */
     border: none; /* Sin borde */

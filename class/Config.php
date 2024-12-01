@@ -141,10 +141,18 @@ class Config
      */
     public function set($key, $value): void
     {
-        $this->cfg[$key] = $value;
-        $this->modifiedKeys[$key] = $value;
+        if (isset($this->cfg[$key]) && $this->cfg[$key] !== $value) {
+            $this->cfg[$key] = $value;
+            $this->modifiedKeys[$key] = $value;
+        }
     }
 
+    public function setMultiple(array $values): void
+    {
+        foreach ($values as $key => $value) {
+            $this->set($key, $value);
+        }
+    }
     /**
      * Guarda los cambios en la base de datos.
      *

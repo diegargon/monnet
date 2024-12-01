@@ -63,6 +63,7 @@ try {
     echo "Error: " . $e->getMessage();
     exit();
 }
+$ncfg = $ctx->set('Config', new Config($cfg, $ctx));
 
 require_once 'class/Log.php';
 

@@ -111,12 +111,15 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db->query("CREATE TABLE `config` (
                     `id` int NOT NULL,
                     `ckey` varchar(128) NOT NULL,
-                    `cvalue` varchar(1024) NOT NULL,
-                    `type` tinyint NOT NULL DEFAULT '0',
+                    `cvalue` JSON NOT NULL,
+                    `ctype` TINYINT NOT NULL DEFAULT '0',
+                    `ccat` TINYINT NOT NULL DEFAULT '0',
+                    `cdesc` varchar(128) NOT NULL,
                     `uid` int NOT NULL DEFAULT '0'
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
         ");
         $db->query("ALTER TABLE `config` ADD PRIMARY KEY (`id`);");
+        $db->query("ALTER TABLE config ADD UNIQUE (ckey);");
         $db->query("ALTER TABLE `config` MODIFY `id` int NOT NULL AUTO_INCREMENT;");
         $db->query("COMMIT");
         Log::info("Update version to 0.37 successful");

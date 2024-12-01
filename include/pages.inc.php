@@ -309,8 +309,18 @@ function page_settings(AppContext $ctx): array
     $page = [];
 
     $cfg = $ctx->get('cfg');
+    $newcfg = $ctx->get('Config')->getAllEditable();
+    $groupedConfig = [];
+    foreach ($newcfg as $config) {
+        $ccat = $config['ccat'];
+        if(empty($config['cdesc'])) :
+            $config['cdesc'] = $config['ckey'];
+        endif;
+        $groupedConfig[$ccat][] = $config;
+    }
 
     $page = page_common_head($ctx);
+    $page['groupedConfig'] = $groupedConfig;
     /* Top Buttons */
     $page['load_tpl'][] = [
         'file' => 'topbuttoms',

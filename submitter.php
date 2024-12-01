@@ -815,7 +815,6 @@ if ($command === 'clearHostAlarms' && $target_id > 0) {
         $data['force_hosts_refresh'] = 1;
     }
 }
-
 if ($command === 'setHostAlarms' && $target_id > 0) {
     $msg = $hosts->setAlarms($target_id, $value_command);
     $data['command_success'] = 1;
@@ -826,4 +825,20 @@ if ($command === 'setHostEmailAlarms' && $target_id > 0) {
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
 }
+
+/* Submit Forms */
+if ($command === 'submitform') {
+    if(!isset($newcfg)) :
+        $newcfg = $ctx->get('Config');
+    endif;
+
+    if (isset($command_values['id'])) {
+        unset($command_values['id']);
+    }
+    // TODO 1111: Filter/check values
+    $newcfg->setMultiple($command_values);
+    $data['command_success'] = 1;
+    $data['response_msg'] = 'ok';
+}
+
 print json_encode($data, JSON_UNESCAPED_UNICODE);
