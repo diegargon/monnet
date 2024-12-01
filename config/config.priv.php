@@ -161,17 +161,20 @@ $cfg['check_method'] = [
 ];
 
 $cfg['deploys'] = [
-    1 => ['name' => 'Apache',
+    1 => [
+        'name' => 'Apache',
         'comment' => 'Installation apache on Ubuntu',
         'os_distribution' => 2,
         'file' => 'scripts/ubuntu-apache.sh'
     ],
-    2 => ['name' => 'LAMP',
+    2 => [
+        'name' => 'LAMP',
         'comment' => 'Installation apache, mysql php on Ubuntu',
         'os_distribution' => 2,
         'file' => 'scripts/ubuntu-lamp.sh'
     ],
-    3 => ['name' => 'Logrotate',
+    3 => [
+        'name' => 'Logrotate',
         'comment' => 'Rotate logs',
         'os_distribution' => 2,
         'file' => ''
