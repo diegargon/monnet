@@ -106,13 +106,34 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db_version = 0.36;
     }
     // 0.37
-    if ($db_version < 0.00) {
+    if ($db_version < 0.37) {
         $db->query("ALTER TABLE `hosts` DROP `alert_msg`;");
-        Log::info("Update version to 0.00 successful");
+        $db->query("CREATE TABLE `config` (
+                    `id` int NOT NULL,
+                    `ckey` varchar(128) NOT NULL,
+                    `cvalue` varchar(1024) NOT NULL,
+                    `uid` int NOT NULL DEFAULT '0'
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+        ");
+        $db->query("ALTER TABLE `config` ADD PRIMARY KEY (`id`);");
+        $db->query("ALTER TABLE `config` MODIFY `id` int NOT NULL AUTO_INCREMENT;");
+        $db->query("COMMIT");
+        Log::info("Update version to 0.37 successful");
         $db->query("UPDATE prefs SET pref_value='0.37' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db_version = 0.37;
     }
-
+    // 0.38
+    if ($db_version < 0.00) {
+        Log::info("Update version to 0.38 successful");
+        $db->query("UPDATE prefs SET pref_value='0.38' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        $db_version = 0.38;
+    }
+    // 0.39
+    if ($db_version < 0.00) {
+        Log::info("Update version to 0.38 successful");
+        $db->query("UPDATE prefs SET pref_value='0.39' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        $db_version = 0.39;
+    }
     // Template
     if ($db_version < 0.00) {
         $db->query("");
