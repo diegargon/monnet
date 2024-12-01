@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 function trigger_update(Database $db, float $db_version, float $monnet_version): void
 {
-    Log::notice("Triggered updater Files: $monnet_version DB: $db_version");
+    Log::notice("Triggered updater File version: $monnet_version DB version: $db_version");
 
     if ($db_version < 0.31) {
         $db->query("UPDATE prefs SET pref_value='0.31' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
