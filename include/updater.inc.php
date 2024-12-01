@@ -112,6 +112,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
                     `id` int NOT NULL,
                     `ckey` varchar(128) NOT NULL,
                     `cvalue` varchar(1024) NOT NULL,
+                    `type` tinyint NOT NULL DEFAULT '0',
                     `uid` int NOT NULL DEFAULT '0'
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
         ");
