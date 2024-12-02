@@ -136,21 +136,35 @@ class Config
      *
      * @param string|int $key Clave de configuración.
      * @param mixed $value Valor de configuración.
-     * @return void
+     * @return int 1 if field change
      */
-    public function set($key, $value): void
+    public function set($key, $value): int
     {
+        $change = 0;
+
         if (isset($this->cfg[$key]) && $this->cfg[$key] !== $value) {
             $this->cfg[$key] = $value;
             $this->modifiedKeys[$key] = $value;
+            $change = 1;
         }
+
+        return $change;
     }
 
-    public function setMultiple(array $values): void
+    /**
+     *
+     * @param array $values
+     * @return int
+     */
+    public function setMultiple(array $values): int
     {
+        $changes = 0;
+
         foreach ($values as $key => $value) {
-            $this->set($key, $value);
+            $this->set($key, $value) && $changes++;
         }
+        
+        return $changes;
     }
     /**
      * Guarda los cambios en la base de datos.

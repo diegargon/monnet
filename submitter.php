@@ -836,9 +836,9 @@ if ($command === 'submitform') {
         unset($command_values['id']);
     }
     // TODO 1111: Filter/check values
-    $newcfg->setMultiple($command_values);
+    $changes = $newcfg->setMultiple($command_values);
     $data['command_success'] = 1;
-    $data['response_msg'] = 'ok';
+    $data['response_msg'] = $changes;
 }
 
 print json_encode($data, JSON_UNESCAPED_UNICODE);
