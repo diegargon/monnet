@@ -21,3 +21,26 @@ function changeSettingsTab(tabId) {
     selectedTab.classList.add('active');
     //submitCommand('change_settings_tab', {id: tabId});
 }
+
+function sendFormData(button) {
+    event.preventDefault();
+    // Encontrar el formulario padre del botón que disparó el evento
+    let form = $(button).closest('form');
+
+    // Obtener los datos del formulario como un array de objetos
+    let formData = form.serializeArray();
+
+    let commandValues = {};
+    formData.forEach(function (item) {
+        commandValues[item.name] = item.value;
+    });
+    commandValues.id = 0;
+
+    var requestData = {
+        command: 'submitform',
+        command_values: commandValues
+    };
+    $.post('submitter.php', requestData, function (response) {
+        console.log('Respuesta del servidor:', response);
+    });
+}

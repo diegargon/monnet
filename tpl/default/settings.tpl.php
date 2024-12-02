@@ -8,35 +8,10 @@
  */
 !defined('IN_WEB') ? exit : true;
 ?>
-<script>
-    function sendFormData(button) {
-        event.preventDefault();
-        // Encontrar el formulario padre del botón que disparó el evento
-        let form = $(button).closest('form');
-
-        // Obtener los datos del formulario como un array de objetos
-        let formData = form.serializeArray();
-
-        let commandValues = {};
-        formData.forEach(function (item) {
-            commandValues[item.name] = item.value;
-        });
-        commandValues.id = 0;
-
-        var requestData = {
-            command: 'submitform',
-            command_values: commandValues
-        };
-        $.post('submitter.php', requestData, function (response) {
-            console.log('Respuesta del servidor:', response);
-        });
-    }
-</script>
-
 <div class="settings-container" id="settings-container">
 
     <div class="settings-tabs-head-container">
-        <button id="settings_tab_1" onclick="changeSettingsTab(1)" class="settings-tabs-head">General</button>
+        <button id="settings_tab_1" onclick="changeSettingsTab(1)" class="settings-tabs-head active">General</button>
         <button id="settings_tab_2" onclick="changeSettingsTab(2)" class="settings-tabs-head">Apartado 2</button>
         <!--
             <button id="settings_tab_3" onclick="changeSettingsTab(3)" class="settings-tabs-head">Apartado 3</button>
@@ -50,17 +25,18 @@
 // Recorremos las configuraciones agrupadas por cada tab (solapa)
 foreach ($tdata['groupedConfig'] as $tabId => $configs) {
     ?>
-    <div id="settings_content_tab_<?= $tabId ?>" class="settings-tab-content">
-        <!-- <h3><?= $configs[0]['ctab_desc'] ?? null ?></h3>   descripción de la tab -->
+    <div id="settings_content_tab_<?= $tabId ?>" class="settings-tab-content <?= $tabId === 1 ? 'active' : '' ?>">
+        <!-- <h3><?= $configs[0]['ctab_desc'] ?? null ?></h3>  -->
         <form id="config_<?= $tabId ?>">
             <?php foreach ($configs as $config) {
                 $ctype = $config['ctype'];
                 $ckey = $config['ckey'];
                 $cvalue = $config['cvalue'];
-                $cdesc = $config['cdesc']; // Descripción del campo
+                $cdesc = $config['cdesc'];
+                $cdisplay = $config['cdisplay'];
             ?>
                 <div class="config-field">
-                    <label for="<?= $ckey ?>"><?= $cdesc ?></label>
+                    <label for="<?= $ckey ?>"><?= $cdisplay ?></label>
                     <?php
                     switch ($ctype) {
                         case 0: // string
@@ -75,10 +51,12 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                             break;
                         case 2: // bool
                             ?>
+                            <input type="hidden" name="<?= $ckey ?>" value="0">
                             <input
                                 type="checkbox"
                                 id="<?= $ckey ?>"
                                 name="<?= $ckey ?>"
+                                value="1"
                                 <?= $cvalue ? 'checked' : '' ?>
                             />
                             <?php

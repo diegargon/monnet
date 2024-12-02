@@ -61,16 +61,22 @@ class Config
     {
         $db = $this->ctx->get('Mysql');
 
-        $query = "SELECT ckey, cvalue FROM config";
+        $query = "SELECT ckey, cvalue, ctype FROM config";
         $result = $db->query($query);
 
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $key = $row['ckey'];
-                $value = json_decode($row['cvalue'], true);
+                $value = $this->parseRowValue($row['cvalue'], (int) $row['ctype']);
 
-                // Solo actualiza si no existe ya en la configuración
-                if (!array_key_exists($key, $this->cfg)) {
+                /*
+                 * Only update values with category set to nondefault
+                 * Mean db cfg only have precedence if ccat > 0
+                 */
+                if (
+                    isset($row['ccat']) &&
+                    $row['ccat'] > 0
+                ) {
                     $this->cfg[$key] = $value;
                 }
             }
@@ -116,6 +122,7 @@ class Config
     public function getAllEditable()
     {
         $db = $this->ctx->get('Mysql');
+        $lng = $this->ctx->get('lng');
 
         $query = "SELECT ckey, cvalue, ctype, ccat, cdesc FROM config WHERE ccat > 0";
         $result = $db->query($query);
@@ -124,7 +131,20 @@ class Config
 
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $row['cvalue']  = json_decode($row['cvalue'], true);
+                $row['cvalue'] = $this->parseRowValue($row['cvalue'], (int) $row['ctype']);
+                if(empty($row['cdesc'])) :
+                    $row['cdisplay'] = ucfirst($row['ckey']);
+                else :
+                    if(
+                        substr($row['cdesc'], 0, 2) == 'L_'
+                        && isset($lng[$row['cdesc']])
+                    ) {
+                        $row['cdisplay'] = $lng[$row['cdesc']];
+                    } else {
+                        $row['cdisplay'] = ucfirst($row['ckey']);
+                    }
+                endif;
+
                 $config[] = $row;
             }
         }
@@ -140,15 +160,14 @@ class Config
      */
     public function set($key, $value): int
     {
-        $change = 0;
 
         if (isset($this->cfg[$key]) && $this->cfg[$key] !== $value) {
             $this->cfg[$key] = $value;
             $this->modifiedKeys[$key] = $value;
-            $change = 1;
+            return 1;
         }
 
-        return $change;
+        return 0;
     }
 
     /**
@@ -163,7 +182,7 @@ class Config
         foreach ($values as $key => $value) {
             $this->set($key, $value) && $changes++;
         }
-        
+
         return $changes;
     }
     /**
@@ -171,7 +190,7 @@ class Config
      *
      * @return void
      */
-    public function saveChanges(): void
+    private function saveChanges(): void
     {
         if (empty($this->modifiedKeys)) {
             return;
@@ -181,14 +200,13 @@ class Config
         $values = [];
 
         foreach ($this->modifiedKeys as $key => $value) {
-            // Escapar las claves y los valores para evitar inyecciones SQL
             $escapedKey = $db->escape($key);
-            $escapedValue = $db->escape(json_encode($value)); // Convertir a JSON antes de guardar
+            $escapedValue = $db->escape(json_encode($value));
 
             $values[] = "('$escapedKey', '$escapedValue')";
         }
 
-        // Combina todas las filas en una sola consulta para eficiencia
+        // Combina todas las filas en una sola consulta
         $query = "INSERT INTO config (ckey, cvalue) VALUES " . implode(', ', $values) . "
               ON DUPLICATE KEY UPDATE cvalue = VALUES(cvalue)";
 
@@ -196,5 +214,37 @@ class Config
 
         // Limpia el buffer de modificaciones
         $this->modifiedKeys = [];
+    }
+
+    /**
+     * Parses a JSON-encoded database value based on its expected type.
+     *
+     * @param string|null $value JSON-encoded value from the database (nullable).
+     * @param int $type Expected type as per `ctype`:
+     *                  0 = string, 1 = int, 2 = bool, 3 = float, 4 = date.
+     * @return mixed The parsed and type-casted value.
+     */
+    private function parseRowValue(?string $value, int $type = 0): mixed
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $decodedValue = json_decode($value, true);
+
+        switch ($type) {
+            case 0: // string
+                return (string)$decodedValue;
+            case 1: // int
+                return (int)$decodedValue;
+            case 2: // bool
+                return (bool)$decodedValue;
+            case 3: // float
+                return (float)$decodedValue;
+            case 4: // date
+                return (strtotime($decodedValue) !== false) ? $decodedValue : null;
+            default:
+                throw new InvalidArgumentException("Unsupported type: $type");
+        }
     }
 }

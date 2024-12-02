@@ -313,9 +313,6 @@ function page_settings(AppContext $ctx): array
     $groupedConfig = [];
     foreach ($newcfg as $config) {
         $ccat = $config['ccat'];
-        if (empty($config['cdesc'])) :
-            $config['cdesc'] = $config['ckey'];
-        endif;
         $groupedConfig[$ccat][] = $config;
     }
 

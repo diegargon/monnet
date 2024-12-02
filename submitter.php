@@ -832,13 +832,13 @@ if ($command === 'submitform') {
         $newcfg = $ctx->get('Config');
     endif;
 
-    if (isset($command_values['id'])) {
-        unset($command_values['id']);
-    }
+    unset($command_values['id']);
+
     // TODO 1111: Filter/check values
     $changes = $newcfg->setMultiple($command_values);
     $data['command_success'] = 1;
     $data['response_msg'] = $changes;
+    $data['response_msg2'] = $command_values;
 }
 
 print json_encode($data, JSON_UNESCAPED_UNICODE);

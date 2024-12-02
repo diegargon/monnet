@@ -802,6 +802,21 @@ input:checked + .slider:before {
     /* )overflow: scroll;*/
 
 }
+.settings-tab-content {
+    display: none;
+}
+
+.settings-tab-content.active {
+    display: block;
+}
+
+.settings-tabs-head {
+    background-color: #4236d3;
+}
+.settings-tabs-head.active {
+    background-color: #6f1b1b;
+    font-weight: bold;
+}
 .host_port_container {
     text-align: center;
     font-size: 0.8em;
