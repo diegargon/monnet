@@ -106,7 +106,7 @@ if (!empty($command)) :
 endif;
 if (!isEmpty($value_command)) :
     $data['command_value'] = $value_command;
-else:
+else :
     $value_command = '';
 endif;
 if (!is_numeric($target_id)) :
@@ -828,7 +828,7 @@ if ($command === 'setHostEmailAlarms' && $target_id > 0) {
 
 /* Submit Forms */
 if ($command === 'submitform') {
-    if(!isset($newcfg)) :
+    if (!isset($newcfg)) :
         $newcfg = $ctx->get('Config');
     endif;
 

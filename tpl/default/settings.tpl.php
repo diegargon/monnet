@@ -38,8 +38,12 @@
     <div class="settings-tabs-head-container">
         <button id="settings_tab_1" onclick="changeSettingsTab(1)" class="settings-tabs-head">General</button>
         <button id="settings_tab_2" onclick="changeSettingsTab(2)" class="settings-tabs-head">Apartado 2</button>
-        <!-- <button id="settings_tab_3" onclick="changeSettingsTab(3)" class="settings-tabs-head">Apartado 3</button> -->
-        <!-- <button id="settings_tab_4" onclick="changeSettingsTab(4)" class="settings-tabs-head">Apartado 4</button> -->
+        <!--
+            <button id="settings_tab_3" onclick="changeSettingsTab(3)" class="settings-tabs-head">Apartado 3</button>
+        -->
+        <!--
+            <button id="settings_tab_4" onclick="changeSettingsTab(4)" class="settings-tabs-head">Apartado 4</button>
+        -->
         <div id="config_status_msg"></div>
     </div>
 <?php
@@ -71,12 +75,22 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                             break;
                         case 2: // bool
                             ?>
-                            <input type="checkbox" id="<?= $ckey ?>" name="<?= $ckey ?>" <?= $cvalue ? 'checked' : '' ?> />
+                            <input
+                                type="checkbox"
+                                id="<?= $ckey ?>"
+                                name="<?= $ckey ?>"
+                                <?= $cvalue ? 'checked' : '' ?>
+                            />
                             <?php
                             break;
                         case 3: // float
                             ?>
-                            <input type="number" id="<?= $ckey ?>" name="<?= $ckey ?>" value="<?= (float)$cvalue ?>" step="any" />
+                            <input
+                                type="number"
+                                id="<?= $ckey ?>"
+                                name="<?= $ckey ?>"
+                                value="<?= (float)$cvalue ?>" step="any"
+                            />
                             <?php
                             break;
                         case 4: // date
@@ -96,7 +110,10 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                                 // Supongo que $config['options'] contiene las opciones para el dropdown
                                 foreach ($config['options'] as $option) {
                                     ?>
-                                    <option value="<?= $option ?>" <?= $option == $cvalue ? 'selected' : '' ?>><?= $option ?></option>
+                                    <option
+                                        value="<?= $option ?>" <?= $option == $cvalue ? 'selected' : '' ?>>
+                                        <?= $option ?>
+                                    </option>
                                     <?php
                                 }
                                 ?>
@@ -106,7 +123,12 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                         case 7: // password
                             ?>
                             <input type="password" id="<?= $ckey ?>" name="<?= $ckey ?>" value="<?= $cvalue ?>" />
-                            <input type="password" id="<?= $ckey ?>_confirm" name="<?= $ckey ?>_confirm" value="<?= $cvalue ?>" placeholder="Confirmar contraseña" />
+                            <input
+                                type="password"
+                                id="<?= $ckey ?>_confirm" name="<?= $ckey ?>_confirm"
+                                value="<?= $cvalue ?>"
+                                placeholder="Confirmar contraseña"
+                            />
                             <?php
                             break;
                         case 8: // email

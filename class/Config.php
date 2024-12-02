@@ -127,7 +127,6 @@ class Config
                 $row['cvalue']  = json_decode($row['cvalue'], true);
                 $config[] = $row;
             }
-
         }
         return $config;
     }

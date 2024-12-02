@@ -266,13 +266,13 @@ function dump_in_json(mixed $var): void
  */
 function isEmpty(&$var): bool
 {
-    if (!isset($var)) {
+    if (!isset($var)) :
         return true;
-    }
+    endif;
 
-    if ( $var === '' || $var === [] ) {
+    if ($var === '' || $var === []) :
         return true;
-    }
+    endif;
 
     return false;
 }
