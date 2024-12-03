@@ -59,9 +59,6 @@ $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 $cfg['stats_clear_days'] = 30;
 $cfg['logs_clear_days'] = 30;
 
-/* Ansible */
-$cfg['ansible'] = 0; // db
-
 /* Mail Config */
 $cfg['mailer_enabled'] = 0; //need compose->phpmailer
 $cfg['mail_host'] = 'localhost';
