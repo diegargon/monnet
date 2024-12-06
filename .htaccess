@@ -19,6 +19,9 @@ Require all denied
 <Files "installdeps.sh">
 Require all denied
 </Files>
+<Files "ansible-test.php">
+Require all denied
+</Files>
 #Require ip 192.168.1.0/24
 #Require ip 192.168.2.0/24
 

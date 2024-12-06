@@ -9,7 +9,6 @@ $data = [
     'extra_vars' => ['some_var' => 'some_value']
 ];
 
-
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 if ($socket === false) {
     echo json_encode(["error" => "Error al crear el socket", "details" => socket_strerror(socket_last_error())]);
@@ -22,11 +21,40 @@ if ($result === false) {
     exit;
 }
 
-
 socket_write($socket, json_encode($data), strlen(json_encode($data)));
 
+$response = '';
+$openBraces = 0; // Contador para llaves abiertas
+$jsonComplete = false;
 
-$response = socket_read($socket, 4096);
+while (!$jsonComplete) {
+    $chunk = socket_read($socket, 1024); // Leer fragmentos de 1024 bytes
+    if ($chunk === false) {
+        echo json_encode(["error" => "Error al leer del socket", "details" => socket_strerror(socket_last_error($socket))]);
+        exit;
+    }
+    if ($chunk === '') {
+        // No hay más datos, pero el JSON aún no está completo
+        break;
+    }
+
+    $response .= $chunk;
+
+    // Verificar balanceo de llaves
+    foreach (str_split($chunk) as $char) {
+        if ($char === '{' || $char === '[') {
+            $openBraces++;
+        } elseif ($char === '}' || $char === ']') {
+            $openBraces--;
+        }
+    }
+
+    // JSON completo si las llaves están balanceadas
+    if ($openBraces === 0 && trim($response) !== '') {
+        $jsonComplete = true;
+    }
+}
+
 socket_close($socket);
 
 $responseArray = json_decode($response, true);
@@ -49,4 +77,3 @@ if (isset($responseArray['status']) && $responseArray['status'] === 'success' &&
     echo "Status no es success o el campo 'status' no existe.\n";
     var_dump($responseArray);
 }
-
