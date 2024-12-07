@@ -61,7 +61,7 @@ class Config
     {
         $db = $this->ctx->get('Mysql');
 
-        $query = "SELECT ckey, cvalue, ctype FROM config";
+        $query = "SELECT ckey, cvalue, ctype, ccat FROM config";
         $result = $db->query($query);
 
         if ($result && $result->num_rows > 0) {
@@ -110,9 +110,20 @@ class Config
      */
     public function get($key)
     {
-        return $this->cfg[$key] ?? null;
+        if(!isset($this->cfg[$key])) {
+            return null;
+        }
+        return $this->cfg[$key];
     }
 
+    /**
+     *
+     * @return type
+     */
+    public function getAll()
+    {
+        return $this->cfg;
+    }
     /**
      * Obtiene todos los valores editables
      *
