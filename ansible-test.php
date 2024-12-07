@@ -1,12 +1,20 @@
 <?php
 
+
+$playbook = $argv[1] ?? null;
+
 $host = '127.0.0.1';
 $port = 65432;
 
+if (empty($playbook)) :
+    $playbook = 'system-info.yml';
+endif;
+
 // Datos que enviamos al servicio (en formato JSON)
 $data = [
-    'playbook' => 'df.yml',
-    'extra_vars' => ['some_var' => 'some_value']
+    'playbook' => $playbook,
+    //'extra_vars' => ['some_var' => 'some_value'],
+    'ip' => '192.168.2.117',
 ];
 
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
@@ -24,7 +32,10 @@ if ($result === false) {
 socket_write($socket, json_encode($data), strlen(json_encode($data)));
 
 $response = '';
-$openBraces = 0; // Contador para llaves abiertas
+/*
+ * Contamos llaves abiertas para detectar el final }
+ */
+$openBraces = 0;
 $jsonComplete = false;
 
 while (!$jsonComplete) {
@@ -34,7 +45,7 @@ while (!$jsonComplete) {
         exit;
     }
     if ($chunk === '') {
-        // No hay más datos, pero el JSON aún no está completo
+        //TODO No hay más datos, pero el JSON aún no está completo
         break;
     }
 
@@ -49,7 +60,7 @@ while (!$jsonComplete) {
         }
     }
 
-    // JSON completo si las llaves están balanceadas
+    // Full JSON (all braces closed)
     if ($openBraces === 0 && trim($response) !== '') {
         $jsonComplete = true;
     }
