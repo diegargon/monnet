@@ -309,9 +309,9 @@ function page_settings(AppContext $ctx): array
     $page = [];
 
     $cfg = $ctx->get('cfg');
-    $newcfg = $ctx->get('Config')->getAllEditable();
+    $ncfg = $ctx->get('Config')->getAllEditable();
     $groupedConfig = [];
-    foreach ($newcfg as $config) {
+    foreach ($ncfg as $config) {
         $ccat = $config['ccat'];
         $groupedConfig[$ccat][] = $config;
     }
