@@ -118,7 +118,9 @@ tr:hover {
 footer {
     height: 5px;
 }
-
+.inline {
+    display: inline;
+}
 .main {
     margin-top: 1vh;
     padding-bottom: 50px;
@@ -1283,6 +1285,7 @@ input:checked + .slider:before {
 }
 
 #stdbox-content {
+    max-height: 50vh;
     margin: 5px;
 }
 

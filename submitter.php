@@ -751,23 +751,6 @@ if ($command == 'power_on' && !empty($target_id)) {
         $data['command_error_msg'] .= $err_msg;
     }
 }
-if ($command == 'power_off' && !empty($target_id)) {
-    $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 2, 'hid' => $target_id], 'LIMIT 1');
-    $coincidence = $db->fetchAll($result);
-
-    if (empty($coincidence)) {
-        $db->insert('cmd', ['cmd_type' => 2, 'hid' => $target_id]);
-    }
-}
-if ($command == 'reboot' && !empty($target_id)) {
-    $result = $db->select('cmd', 'cmd_id', ['cmd_type' => 1, 'hid' => $target_id], 'LIMIT 1');
-    $coincidence = $db->fetchAll($result);
-
-    if (empty($coincidence)) {
-        $db->insert('cmd', ['cmd_type' => 1, 'hid' => $target_id]);
-    }
-    $data['command_success'] = 1;
-}
 
 if ($command == 'change_bookmarks_tab') {
     $user->setPref('default_bookmarks_tab', $target_id);
@@ -828,17 +811,105 @@ if ($command === 'setHostEmailAlarms' && $target_id > 0) {
 
 /* Submit Forms */
 if ($command === 'submitform') {
-    if (!isset($newcfg)) :
-        $newcfg = $ctx->get('Config');
+    if (!isset($ncfg)) :
+        $ncfg = $ctx->get('Config');
     endif;
 
     unset($command_values['id']);
 
     // TODO 1111: Filter/check values
-    $changes = $newcfg->setMultiple($command_values);
+    $changes = $ncfg->setMultiple($command_values);
     $data['command_success'] = 1;
     $data['response_msg'] = $changes;
     $data['response_msg2'] = $command_values;
+}
+
+/* Ansible */
+if ($command == 'setHostAnsible' && !empty($value_command) && !empty($target_id)) {
+    $hosts->update($target_id, ['ansible_enabled' => $value_command]);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $value_command;
+}
+
+if ($command == 'facts-reload' && !empty($target_id)) {
+    $host = $hosts->getHostById($target_id);
+    $playbook = 'ansible-facts';
+    if (valid_array($host) && $host['ansible_enabled']) {
+        $response = ansible_playbook($ctx, $host, $playbook);
+        if ($response['status'] === "success") {
+            $data['command_success'] = 1;
+            $data['response_msg'] = $response;
+        } else {
+            $data['command_error'] = 1;
+            $data['command_error_msg'] = $response['error_msg'];
+        }
+    } else {
+        $data['command_error'] = 1;
+        $data['command_error_msg'] = $lng['L_ACCESS_METHOD'];
+    }
+}
+
+if (
+    ($command == 'reboot' || $command == 'shutdown') &&
+    !empty($target_id)
+) {
+    $host = $hosts->getHostById($target_id);
+    $playbook = $command . '-linux';
+    if (valid_array($host) && $host['ansible_enabled']) {
+        $response = ansible_playbook($ctx, $host, $playbook);
+        if ($response['status'] === "success") {
+            $data['command_success'] = 1;
+            $data['response_msg'] = $response;
+        } else {
+            $data['command_error'] = 1;
+            $data['command_error_msg'] = $response['error_msg'];
+        }
+    } else {
+        $data['command_error'] = 1;
+        $data['command_error_msg'] = $lng['L_ACCESS_METHOD'];
+    }
+}
+
+if (
+    ($command === 'syslog-load' || $command === 'journald-load') &&
+    !empty($target_id)
+) {
+    $host = $hosts->getHostById($target_id);
+    if ($command === 'syslog-load') {
+        $playbook = 'syslog-linux';
+    } else {
+        $playbook = 'journald-linux';
+    }
+    if (valid_array($host) && $host['ansible_enabled']) {
+        $extra_vars = [];
+        if(isset($value_command) && is_numeric($value_command)) {
+            $extra_vars['num_lines'] = $value_command;
+        }
+        $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
+        if ($response['status'] === "success") {
+            $debug_lines = [];
+            $host_ip = $host['ip'];
+            foreach ($response['plays'] as $play) {
+                foreach ($play['tasks'] as $task) {
+                    if (isset($task['hosts'][$host_ip]['action']) && $task['hosts'][$host_ip]['action'] === 'debug') {
+                        $debug_lines = $task['hosts'][$host_ip]['msg'] ?? [];
+                        foreach($debug_lines as &$debug_line) :
+                            $debug_line = $debug_line .'<br/>';
+                        endforeach;
+                        //$debug_lines[] =  serialize($task['hosts']);
+                    }
+                }
+            }
+            $data['command_success'] = 1;
+            $data['response_msg'] = $debug_lines ; // $response['plays'];
+        } else {
+            $data['command_error'] = 1;
+            $data['command_error_msg'] = $response['error_msg'];
+        }
+    } else {
+        $data['command_error'] = 1;
+        $data['command_error_msg'] = $lng['L_ACCESS_METHOD'];
+    }
 }
 
 print json_encode($data, JSON_UNESCAPED_UNICODE);

@@ -7,7 +7,7 @@ $host = '127.0.0.1';
 $port = 65432;
 
 if (empty($playbook)) :
-    $playbook = 'system-info.yml';
+    $playbook = 'journald-linux.yml';
 endif;
 
 // Datos que enviamos al servicio (en formato JSON)
@@ -78,7 +78,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 }
 
 if (isset($responseArray['status']) && $responseArray['status'] === 'success' && isset($responseArray['result'])) {
-    echo json_encode($responseArray['result'], JSON_PRETTY_PRINT);
+    echo "Resultado\n". json_encode($responseArray, JSON_PRETTY_PRINT);
     if (json_last_error() !== JSON_ERROR_NONE) {
         echo "Error al decodificar el campo 'result': " . json_last_error_msg() . "\n";
         echo "Contenido de 'result': " . $responseArray['result'];

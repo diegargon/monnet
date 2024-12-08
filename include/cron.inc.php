@@ -40,8 +40,6 @@ function cron(AppContext $ctx): void
         $cron_task_track .= '[5]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_five']], 'LIMIT 1');
         fill_hostnames($hosts);
-
-#        host_access($cfg, $hosts);
     }
 
     if (($cron_times['cron_quarter'] + 900) < $time_now) {

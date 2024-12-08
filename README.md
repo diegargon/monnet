@@ -17,9 +17,11 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 MonNet is currently in an early version. It is possible that issues may arise between versions. The compatibility is not guaranteed.
 
-The English language (EN/US) is IA generated.
+The English language (EN/US) is AI generated.
 
-## Versions
+I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts.
+
+## Versions Convention
 
 v0.0.0 Mayor.Minor.Revision
 
@@ -41,14 +43,9 @@ LAMP
 Mysql/MariaDB:
     You can install or use a remote machine
 
-Ccomposer
-    apt install composer
 arp
     Optional for get mac's address, only work same network (other method will added in the future)
     apt install net-tools
-
-phpseclib (Composer)
-    Features is disable due rewriting. Thinking if port CLI scripts to python.
 
 ## Initial  database settings
 ```
@@ -86,13 +83,13 @@ $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
 ```
 
-## Load the sql
+## Setting the database
 
 ```
 /var/www/html# mysql monnet < config/monnet.sql -p
 ```
 
-## Default user : pwd
+## Default frontend user : pwd
 
 ```
 monnet : monnetadmin
@@ -108,46 +105,69 @@ $ nano /etc/crontab
 */15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
 
-## Composer deeps
+## [NOT YET NECESSARY] Composer
 
 ```
-#
-/path/to/monnet# composer require phpseclib/phpseclib:~3.0
+apt install composer
+
 #optional for send messsages (not yet)
 /path/to/monnet# composer require phpmailer/phpmailer
 ```
 
+## [NOT YET NECESSARY] Ansible Support
 
-## CERTS (disable temporaraly due rewriting)
+# Install ansible
 
-(without password)
 ```
-$ mkdir /var/certs && cd /var/certs
+apt install ansible
+```
+
+# Install monnet-ansible
+
+```
+git clone...
+```
+
+
+## [NOT YET NECESSARY] Configure ansible server
+
+Ansible must output in json format
+
+```
+nano /etc/ansible/ansible.cfg
+
+[defaults]
+stdout_callback=json
+```
+
+## [NOT YET NECESSARY] Configure ansible hosts
+
+By default the ansible ssh user will be 'ansible'
+
+Must be:
+
+    * sudo member
+    * have the public ssh key
+    *
+
+Example
+
+```
+apt install sudo
+adduser --disabled-password ansible
+```
+visudo and add:
+
+```
+ansible ALL=(ALL) NOPASSWD: ALL
+```
+
+## [NOT YET NECESSARY] CERTS
+
+For Ansible to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via Monnet/Ansible.
+```
 $ ssh-keygen -m PEM -t rsa -b 4096
-```
-
-
-
-add /var/certs/id_rsa to cfg[‘certs’]
-
-## Server to monitor (disable temporaraly due rewriting)
-
-```
-$ adduser monnet
-$ usermod -aG sudo monnet
-$ usermod -aG adm monnet
-```
-
-Add to /etc/sudoers
-
-```
-monnet ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown
-```
-
-From monnet server to server to monitor
-
-```
-$ ssh-copy-id -i /var/certs/id_rsa.pub monnet@ip.ip.ip.ip
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub root@ip.ip.ip.ip
 ```
 
 

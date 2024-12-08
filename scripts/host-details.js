@@ -13,6 +13,45 @@ $(document).ready(function () {
         var logSize = $('#log_size').val();
         requestHostDetails('logs-reload', {id: hostId, log_level: logLevel, log_size: logSize});
     });
+
+    $(document).off("click", "#facts_reload_btn").on("click", "#facts_reload_btn", function () {
+        var hostId = $('#host_id').val();
+        requestHostDetails('facts-reload', {id: hostId});
+    });
+
+    $(document).off("click", "#syslog_btn").on("click", "#syslog_btn", function () {
+        var hostId = $('#host_id').val();
+        var logSize = $('#log_size').val();
+        requestHostDetails('syslog-load', {id: hostId, value: logSize});
+    });
+
+    $(document).off("click", "#journald_btn").on("click", "#journald_btn", function () {
+        var hostId = $('#host_id').val();
+        var logSize = $('#log_size').val();
+        requestHostDetails('journald-load', {id: hostId, value: logSize});
+    });
+
+    $(document).on("change", "#chkHighlight", function () {
+        var hostId = $('#host_id').val();
+
+        var value = 0;
+        if (this.checked) {
+            value = 1;
+        }
+        submitCommand('setHighlight', {id: hostId, value: value});
+    });
+
+    //Ansible host enable
+    $(document).on("change", "#ansible_enabled", function () {
+        var hostId = $('#host_id').val();
+
+        var value = 0;
+        if (this.checked) {
+            value = 1;
+        }
+        submitCommand('setHostAnsible', {id: hostId, value: value});
+    });
+
 });
 
 function changeHDTab(id, tabId) {
@@ -69,7 +108,7 @@ function requestHostDetails(command, command_values = []) {
                 if (jsonData.login === "fail") {
                     location.href = '';
                 }
-
+                /* Logs reload */
                 if (
                         jsonData.command_receive === 'logs-reload' ||
                         jsonData.command_receive === 'changeHDTab' && jsonData.command_value ===  'tab9'
@@ -81,6 +120,19 @@ function requestHostDetails(command, command_values = []) {
                     }
                 }
 
+                /* Syslog Journald load */
+                if (
+                        jsonData.command_receive === 'syslog-load' ||
+                        jsonData.command_receive === 'journald-load'
+                ) {
+                    if (jsonData.command_success === 1) {
+                        $('#term_output').html(jsonData.response_msg);
+                    } else {
+                        $('#term_output').html('Error');
+                    }
+                }
+
+                /* Change Host Details Tab */
                 if (jsonData.command_receive === 'changeHDTab' && jsonData.command_value ===  'tab10') {
                     if (jsonData.command_success === 1) {
                         $('#ping_graph_container').html(jsonData.response_msg);
@@ -89,6 +141,19 @@ function requestHostDetails(command, command_values = []) {
                     }
                 }
 
+                /* Facts reload */
+                if (jsonData.command_receive === 'facts-reload') {
+                    if (jsonData.command_success === 1) {
+                        $('#raw_lines').html(JSON.stringify(jsonData.response_msg, null, 2));
+                        $('#raw_lines').css({
+                            "width": "600px",
+                            "overflow": "auto",
+                            "max-height": "200px"
+                        });
+                    } else {
+                        $('#raw_lines').html(jsonData.command_error_msg);
+                    }
+                }
             })
             .fail(function (xhr, status, error) {
                 console.error('Error en la solicitud AJAX: host-details.js', status, error);

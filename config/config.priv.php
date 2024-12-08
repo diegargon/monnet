@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.37;
-$cfg['monnet_revision'] = 4;
+$cfg['monnet_revision'] = 6;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['app_name'] = 'monnet';
 
@@ -149,10 +149,6 @@ $cfg['versions'] = [
     0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
     1 => '20.04',
     2 => '21H1'
-];
-
-$cfg['access_methods'] = [
-    1 => 'ssh',
 ];
 
 $cfg['check_method'] = [

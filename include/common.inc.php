@@ -81,3 +81,6 @@ require_once 'class/Filters.php';
 require_once 'include/util.inc.php';
 require_once 'include/time.inc.php';
 require_once 'include/updater.inc.php';
+if($ncfg->get('ansible')) {
+    require_once('include/ansible.inc.php');
+}

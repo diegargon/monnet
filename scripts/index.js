@@ -158,15 +158,6 @@ $(document).ready(function () {
     $(document).on("click", "#close_mgmtbookmark", function () {
         $("#mgmt-bookmark-container").css("display", "none");
     });
-    $(document).on("change", "#chkHighlight", function () {
-        var hostId = $('#host_id').val();
-
-        var value = 0;
-        if (this.checked) {
-            value = 1;
-        }
-        submitCommand('setHighlight', {id: hostId, value: value});
-    });
 
     $(document).on("change", "#checkports_enabled", function () {
         var hostId = $('#host_id').val();

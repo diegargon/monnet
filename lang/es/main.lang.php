@@ -19,6 +19,7 @@ $lng = [
     'L_ALARMS' => 'Alarmas',
     'L_ACCESS' => 'Acceso',
     'L_ALARMS_LAST' => 'Ultimas Alarmas',
+    'L_ACCESS_METHOD' => 'No se establecio un metodo de acceso',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',

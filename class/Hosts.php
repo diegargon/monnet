@@ -40,7 +40,8 @@ class Hosts
             'access_link',
             'timeout',
             'disable_alarms',
-            'disable_email_alarms'
+            'disable_email_alarms',
+            'ansible_enabled'
         ];
     /**
      * host[$id] = ['key' => 'value']

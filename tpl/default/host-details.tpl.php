@@ -57,6 +57,16 @@
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab12')">
                         <?= $lng['L_CONFIG'] ?>
                     </button>
+                    <?php if (isset($tdata['host_details']['ansible_enabled'])) : ?>
+                    <button id="tab13_btn" class="host-details-tabs-head" data-tab="13"
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab13')">
+                            Ansible
+                    </button>
+                    <button id="tab14_btn" class="host-details-tabs-head" data-tab="14"
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab14')">
+                            Ansible Raw
+                    </button>
+                    <?php endif; ?>
                     <!--
                     <button id="tabx_btn" class="host-details-tabs-head" onclick="changeHDTab('tab2')">
                         <?= $lng['L_DEPLOYS'] ?>
@@ -72,16 +82,16 @@
                 <?php endif; ?>
                 <?php
                 if (
-                    !empty($tdata['host_details']['access_method']) &&
+                    !empty($tdata['host_details']['ansible_enabled']) &&
                     !empty($tdata['host_details']['online'])
                 ) {
                     ?>
-                    <input onClick="submitCommand('power_off', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
+                    <input onClick="submitCommand('shutdown', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png"
                            alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
                 <?php } ?>
-                <?php if (!empty($tdata['host_details']['access_method'])) : ?>
-                    <input onClick="submitCommand('reboot', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
+                <?php if (!empty($tdata['host_details']['ansible_enabled'])) : ?>
+                <input onClick="submitCommand('reboot', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                            class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png"
                            alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
                 <?php endif; ?>
@@ -293,6 +303,10 @@
             </div>
             <label for="log_size">Nº:</label>
             <input type="number" id="log_size" name="log_size" step="25" value="25">
+            <?php if (isset($tdata['host_details']['ansible_enabled'])) : ?>
+            <div class="inline"><button id="syslog_btn">Syslog</button></div>
+            <div class="inline"><button id="journald_btn">Journald</button></div>
+            <?php endif; ?>
             <?= $tdata['host_details']['host_logs'] ?>
         </div>
         <!-- /TAB9 -->
@@ -490,6 +504,16 @@
                         </select>
                         <button id="submitSystemType"><?= $lng['L_SEND'] ?></button>
                     </div>
+                    <?php if ($ncfg->get('ansible')) : ?>
+                    <div class="">
+                        <label for="">Ansible:</label>
+                        <input type="hidden" id="ansible_enabled" value="0">
+                        <input
+                            type="checkbox"
+                            id="ansible_enabled"
+                            <?= isset($tdata['host_details']['ansible_enabled']) ? ' checked' : '' ?>>
+                    </div>
+                    <?php endif; ?>
                     <div class="">
                         <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
                         <input type="text" size="32" id="host_token" name="host_token"
@@ -502,45 +526,23 @@
             </div>
         </div>
         <!-- /TAB12 -->
+        <!-- TAB13 --><!-- Ansible -->
+        <div id="tab13" class="host-details-tab-content">
+            <div id="ansible_container" class="ansible_container">
 
-        <!-- TODO DISABLED -->
-        <!--
-        <?php
-        if (!empty($tdata['host_details']['access_method'])) {
-            ?>
+            </div>
         </div>
-        <?php } ?>
-        -->
-        <!-- DEPLOYS -->
-        <!--
-        <?php
-        if (!empty($tdata['host_details']['deploys']) && valid_array($tdata['host_details']['deploys'])) {
-            ?>
-        <option value="0"></option>
-            <?php
-            foreach ($tdata['host_details']['deploys'] as $k_deploy => $deploy) {
-                ?>
-        <option value="<?= $k_deploy ?>"><?= $deploy['name'] ?></option>
-                <?php
-            }
-            ?>
-            <?php
-        }
-        ?>
-        <?php
-        if (!empty($tdata['host_details']['tail_syslog']) && valid_array($tdata['host_details']['tail_syslog'])) {
-            ?><div class="log_container">
-            <?php
-            $logs = array_reverse($tdata['host_details']['tail_syslog']); //TODO move to backend not frontend
-            foreach ($logs as $log) {
-                ?>
-                <div class="log_line"><?= $log ?></div>
-            <?php }
-            ?>
+        <!-- /TAB13 -->
+        <!-- TAB14 --><!-- Ansible Facts -->
+        <div id="tab14" class="host-details-tab-content">
+            <div id="ansible_raw_container" class="ansible_raw_container">
+                <div><button id="facts_reload_btn">Facts</button></div>
+                <div id="raw_lines_container>">
+                    <pre id="raw_lines"></pre>
+                </div>
+            </div>
         </div>
-        <?php }
-        ?>
-        <!-- /TODO DISABLED -->
+        <!-- /TAB14 -->
     </div> <!-- host-details-container -->
     <!-- host-details -->
     <script src="scripts/host-details.js"></script>

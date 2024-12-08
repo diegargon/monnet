@@ -115,6 +115,32 @@
                             $('#stdbox_status_msg').append(jsonData.command_error_msg);
                         }
                     }
+                    /* Reboot / Poweroff */
+                    if (
+                            jsonData.command_receive === 'reboot' ||
+                            jsonData.command_receive === 'shutdown'
+                    ) {
+                        console.log(jsonData.response_msg);
+                        closeStdContainer();
+                        $("#stdbox-title").html(jsonData.command_receive);
+                        $("#stdbox-container").css({
+                            "display": "block",
+                            "max-width": "50vw"
+                        });
+
+                        if (jsonData.command_success) {
+                            $("#stdbox-content").html('<pre>' + JSON.stringify(jsonData.response_msg, null, 2) + '</pre>');
+                        } else if (jsonData.command_error) {
+                            var f_error = jsonData.command_error_msg.replace(/\n/g, '<br>');
+                            $("#stdbox-content").html(f_error);
+                        }
+                        $("#stdbox-content").css({
+                            "max-width": "50vw",
+                            "word-wrap": "break-word",
+                            "white-space": "normal",
+                            "overflow": "auto"
+                        });
+                    }
                     if (
                             jsonData.command_receive === 'mgmtBookmark' &&
                             jsonData.command_success > 0
