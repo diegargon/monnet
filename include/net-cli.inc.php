@@ -262,56 +262,6 @@ function check_macs(Hosts $hosts): void
 }
 
 /**
- *
- * @param array<string,mixed> $cfg
- * @param Hosts $hosts
- * @return void
- */
-function host_access(array $cfg, Hosts $hosts): void
-{
-    $db_hosts = $hosts->getknownEnabled();
-
-    foreach ($db_hosts as $host) {
-        if ($host['access_method'] < 1 || empty($host['online'])) {
-            continue;
-        }
-
-        $ssh_conn_result = [];
-        $set = [];
-        $set['access_results'] = [];
-
-        $ssh = ssh_connect_host($cfg, $ssh_conn_result, $host);
-        if (!$ssh) {
-            Log::err("SSH host_access: Cant connect host {$host['ip']}");
-            continue;
-        }
-        Log::info("SSH hosts access: Succesful connect to {$host['ip']}");
-        $ssh->setKeepAlive(1);
-
-        $results = [];
-
-        if (empty($host['hostname'])) {
-            h_get_hostname($ssh, $results);
-        }
-        h_get_ncpus($ssh, $results);
-        h_get_sys_mem($ssh, $results);
-        h_get_sys_space($ssh, $results);
-        h_get_uptime($ssh, $results);
-        h_get_load_average($ssh, $results);
-        h_get_tail_syslog($ssh, $results);
-
-        if (!empty($results['hostname'])) {
-            $set['hostname'] = $results['hostname'];
-            unset($results['hostname']);
-        }
-        unset($results['motd']);
-        $set['access_results'] = json_encode($results);
-
-        $hosts->update($host['id'], $set);
-    }
-}
-
-/**
  * Scan Host Ports
  * port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping
  * @param AppContext $ctx
