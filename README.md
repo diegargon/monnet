@@ -140,6 +140,8 @@ nano /etc/ansible/ansible.cfg
 stdout_callback=json
 ```
 
+
+
 ## [NOT YET NECESSARY] Configure ansible hosts
 
 By default the ansible ssh user will be 'ansible'
@@ -155,6 +157,7 @@ Example
 ```
 apt install sudo
 adduser --disabled-password ansible
+usermod -aG sudo ansible
 ```
 visudo and add:
 
@@ -164,10 +167,29 @@ ansible ALL=(ALL) NOPASSWD: ALL
 
 ## [NOT YET NECESSARY] CERTS
 
-For Ansible to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via Monnet/Ansible.
+For Ansible server to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via Monnet/Ansible.
 ```
 $ ssh-keygen -m PEM -t rsa -b 4096
 $ ssh-copy-id -i ~/.ssh/id_rsa.pub root@ip.ip.ip.ip
+```
+
+If you don't use ssh-copy-id you must set 'host key manually'
+
+```
+ssh-keyscan -t ecdsa,ed25519 -H server.example.com >> ~/.ssh/known_hosts 2>&1
+```
+
+If the host fingerprint change remove first the old one
+
+```
+ssh-keygen -R
+```
+
+You can force ansible to ignore the host check
+
+```
+[defaults]
+host_key_checking = False
 ```
 
 

@@ -128,10 +128,10 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db_version = 0.37;
     }
     // 0.38
-    if ($db_version < 0.00) {
-#        $db->query("DROP TABLE `cmd`;");
+    if ($db_version < 0.38) {
+        $db->query("ALTER TABLE `hosts` ADD `alert_msg` CHAR(255) NULL DEFAULT NULL AFTER `warn_mail`;");
+        $db->query("DROP TABLE `cmd`;");
 #        $db->query("ALTER TABLE `hosts` ADD `ansible` TINYINT NOT NULL DEFAULT '0';");
-#        $db->query("ALTER TABLE `hosts` DROP `access_method`;");
 #        $db->query(
 #            "INSERT INTO `config` (`id`, `ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) "
 #            . " VALUES (59, 'ansible', '1', 2, 1, NULL, 0);"
@@ -143,10 +143,27 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
     }
     // 0.39
     if ($db_version < 0.00) {
-        Log::info("Update version to 0.38 successful");
+#        $db->query("ALTER TABLE `hosts` DROP `access_method`;");
+        Log::info("Update version to 0.39 successful");
         $db->query("UPDATE prefs SET pref_value='0.39' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db->query("COMMIT");
         $db_version = 0.39;
+    }
+    // 0.40
+    if ($db_version < 0.00) {
+        $db->query("");
+        Log::info("Update version to 0.40 successful");
+        $db->query("UPDATE prefs SET pref_value='0.40' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        $db->query("COMMIT");
+        $db_version = 0.40;
+    }
+    // 0.41
+    if ($db_version < 0.00) {
+        $db->query("");
+        Log::info("Update version to 0.41 successful");
+        $db->query("UPDATE prefs SET pref_value='0.41' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        $db->query("COMMIT");
+        $db_version = 0.41;
     }
     // Template
     if ($db_version < 0.00) {
