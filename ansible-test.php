@@ -19,13 +19,19 @@ $data = [
 
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 if ($socket === false) {
-    echo json_encode(["error" => "Error al crear el socket", "details" => socket_strerror(socket_last_error())]);
+    echo json_encode(
+            ["error" => "Error al crear el socket", "details" =>
+                socket_strerror(socket_last_error())]
+            );
     exit;
 }
 
 $result = socket_connect($socket, $host, $port);
 if ($result === false) {
-    echo json_encode(["error" => "No se pudo conectar al socket", "details" => socket_strerror(socket_last_error($socket))]);
+    echo json_encode(
+            ["error" => "No se pudo conectar al socket", "details" =>
+                socket_strerror(socket_last_error($socket))]
+            );
     exit;
 }
 
@@ -41,7 +47,10 @@ $jsonComplete = false;
 while (!$jsonComplete) {
     $chunk = socket_read($socket, 1024); // Leer fragmentos de 1024 bytes
     if ($chunk === false) {
-        echo json_encode(["error" => "Error al leer del socket", "details" => socket_strerror(socket_last_error($socket))]);
+        echo json_encode([
+            "error" => "Error al leer del socket", "details" =>
+            socket_strerror(socket_last_error($socket))]
+            );
         exit;
     }
     if ($chunk === '') {
@@ -77,7 +86,11 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit;
 }
 
-if (isset($responseArray['status']) && $responseArray['status'] === 'success' && isset($responseArray['result'])) {
+if (
+        isset($responseArray['status']) &&
+        $responseArray['status'] === 'success' &&
+        isset($responseArray['result'])
+) {
     echo "Resultado\n". json_encode($responseArray, JSON_PRETTY_PRINT);
     if (json_last_error() !== JSON_ERROR_NONE) {
         echo "Error al decodificar el campo 'result': " . json_last_error_msg() . "\n";

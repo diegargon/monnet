@@ -131,6 +131,7 @@ function base_url(string $url): string|bool
 
 /**
  * @param array<int|string, mixed>
+ * 
  * @return string
  */
 function array2string(array $array): string
@@ -261,7 +262,7 @@ function dump_in_json(mixed $var): void
 
 /**
  * & to avoid !isset error
- * @param type $var
+ * @param mixed $var
  * @return bool
  */
 function isEmpty(&$var): bool
@@ -270,7 +271,7 @@ function isEmpty(&$var): bool
         return true;
     endif;
 
-    if ($var === '' || $var === []) :
+    if ($var === '' || (is_arrau($var) && $var === [])) :
         return true;
     endif;
 

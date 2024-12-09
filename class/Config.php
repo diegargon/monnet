@@ -110,7 +110,7 @@ class Config
      */
     public function get($key)
     {
-        if(!isset($this->cfg[$key])) {
+        if (!isset($this->cfg[$key])) {
             return null;
         }
         return $this->cfg[$key];
@@ -118,7 +118,7 @@ class Config
 
     /**
      *
-     * @return type
+     * @return array<int|string, mixed>
      */
     public function getAll()
     {
@@ -143,10 +143,10 @@ class Config
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $row['cvalue'] = $this->parseRowValue($row['cvalue'], (int) $row['ctype']);
-                if(empty($row['cdesc'])) :
+                if (empty($row['cdesc'])) :
                     $row['cdisplay'] = ucfirst($row['ckey']);
                 else :
-                    if(
+                    if (
                         substr($row['cdesc'], 0, 2) == 'L_'
                         && isset($lng[$row['cdesc']])
                     ) {
@@ -183,7 +183,7 @@ class Config
 
     /**
      *
-     * @param array $values
+     * @param array<mixed,mixed> $values
      * @return int
      */
     public function setMultiple(array $values): int

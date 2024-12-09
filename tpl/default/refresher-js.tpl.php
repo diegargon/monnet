@@ -9,6 +9,7 @@
 /**
  * In frontend->getTpl()
  * @var array<int|string, mixed> $cfg
+ * @var array<int|string, mixed> $ncfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */

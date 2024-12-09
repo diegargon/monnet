@@ -6,6 +6,15 @@
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
+
+/**
+ * In frontend->getTpl()
+ * @var array<int|string, mixed> $cfg
+ * @var array<int|string, mixed> $ncfg
+ * @var array<string> $lng
+ * @var array<mixed> $tdata
+ */
+
 !defined('IN_WEB') ? exit : true;
 ?>
 <div class="settings-container" id="settings-container">
@@ -28,13 +37,13 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
     <div id="settings_content_tab_<?= $tabId ?>" class="settings-tab-content <?= $tabId === 1 ? 'active' : '' ?>">
         <!-- <h3><?= $configs[0]['ctab_desc'] ?? null ?></h3>  -->
         <form id="config_<?= $tabId ?>">
-            <?php foreach ($configs as $config) {
+        <?php foreach ($configs as $config) {
                 $ctype = $config['ctype'];
                 $ckey = $config['ckey'];
                 $cvalue = $config['cvalue'];
                 $cdesc = $config['cdesc'];
                 $cdisplay = $config['cdisplay'];
-            ?>
+        ?>
                 <div class="config-field">
                     <label for="<?= $ckey ?>"><?= $cdisplay ?></label>
                     <?php

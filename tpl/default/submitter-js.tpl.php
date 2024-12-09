@@ -129,7 +129,9 @@
                         });
 
                         if (jsonData.command_success) {
-                            $("#stdbox-content").html('<pre>' + JSON.stringify(jsonData.response_msg, null, 2) + '</pre>');
+                            $("#stdbox-content").html(
+                                    '<pre>' + JSON.stringify(jsonData.response_msg, null, 2) + '</pre>'
+                        );
                         } else if (jsonData.command_error) {
                             var f_error = jsonData.command_error_msg.replace(/\n/g, '<br>');
                             $("#stdbox-content").html(f_error);

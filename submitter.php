@@ -170,7 +170,7 @@ if ($command == 'submitHostToken' && !empty($target_id)) {
 if ($command == 'submitScanPorts' && !empty($target_id)) {
     $success_msg = '';
     if (!empty($value_command)) {
-        $valid_ports = validatePortsInput(trim($value_command));
+        $valid_ports = validatePortsInput($value_command);
         if (valid_array($valid_ports)) {
             if (($encoded_ports = json_encode($valid_ports))) {
                 $db->update('hosts', ['ports' => $encoded_ports], ['id' => $target_id]);
@@ -882,7 +882,7 @@ if (
     }
     if (valid_array($host) && $host['ansible_enabled']) {
         $extra_vars = [];
-        if(isset($value_command) && is_numeric($value_command)) {
+        if (is_numeric($value_command)) {
             $extra_vars['num_lines'] = $value_command;
         }
         $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
@@ -893,8 +893,8 @@ if (
                 foreach ($play['tasks'] as $task) {
                     if (isset($task['hosts'][$host_ip]['action']) && $task['hosts'][$host_ip]['action'] === 'debug') {
                         $debug_lines = $task['hosts'][$host_ip]['msg'] ?? [];
-                        foreach($debug_lines as &$debug_line) :
-                            $debug_line = $debug_line .'<br/>';
+                        foreach ($debug_lines as &$debug_line) :
+                            $debug_line = $debug_line . '<br/>';
                         endforeach;
                         //$debug_lines[] =  serialize($task['hosts']);
                     }

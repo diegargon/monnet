@@ -13,7 +13,7 @@
  * @param AppContext $ctx
  * @param array<string,mixed> $host
  * @param string $playbook
- * @param aarray<string,mxied> $extra_vars
+ * @param array<string,mixed> $extra_vars
  *
  * @return array<mixed,mixed>
  */
