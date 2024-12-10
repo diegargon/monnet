@@ -148,7 +148,8 @@ function requestHostDetails(command, command_values = []) {
                         $('#raw_lines').css({
                             "width": "600px",
                             "overflow": "auto",
-                            "max-height": "200px"
+                            "max-height": "200px",
+                            "resize": "both"
                         });
                     } else {
                         $('#raw_lines').html(jsonData.command_error_msg);
