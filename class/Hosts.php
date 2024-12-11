@@ -489,12 +489,13 @@ class Hosts
             if (!empty($this->hosts[$id]['misc'])) {
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
                 foreach ($misc_values as $key => $value) {
-                    $bvalue = Filters::varBool($value);
-                    if (is_bool($bvalue)) :
-                        $this->hosts[$id][$key] = $bvalue;
-                    else :
+                    if (is_numeric($value)) {
+                        $this->hosts[$id][$key] = (int) $value;
+                    } elseif (is_bool($value)) {
+                        $this->hosts[$id][$key] = (bool) $value;
+                    } else {
                         $this->hosts[$id][$key] = $value;
-                    endif;
+                    }
                 }
             }
 

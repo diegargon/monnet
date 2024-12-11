@@ -452,8 +452,7 @@
                     <div class="">
                         <label for="manufacture"><?= $lng['L_MANUFACTURE'] ?>: </label><br/>
                         <select id="manufacture">
-                            <?php foreach ($cfg['manufacture'] as $manufacture) : ?>
-                                <?php
+                            <?php foreach ($cfg['manufacture'] as $manufacture) :
                                 $selected = '';
                                 if (
                                     !empty($tdata['host_details']['manufacture']) &&
@@ -470,8 +469,7 @@
                     <div class="">
                         <label for="os"><?= $lng['L_OS'] ?>: </label><br/>
                         <select id="os">
-                            <?php foreach ($cfg['os'] as $os) : ?>
-                                <?php
+                            <?php foreach ($cfg['os'] as $os) :
                                 $selected = '';
                                 if (
                                     !empty($tdata['host_details']['os']) &&
@@ -488,8 +486,7 @@
                     <div class="">
                         <label for="system_type"><?= $lng['L_SYSTEM_TYPE'] ?>: </label><br/>
                         <select id="system_type">
-                            <?php foreach ($cfg['system_type'] as $system_type) : ?>
-                                <?php
+                            <?php foreach ($cfg['system_type'] as $system_type) :
                                 $selected = '';
                                 if (
                                     !empty($tdata['host_details']['system_type']) &&

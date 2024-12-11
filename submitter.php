@@ -86,18 +86,24 @@ if ($command == 'saveNote') {
         $value_command = Filters::varDomain($command_values['value']);
     }
 } else {
-    $bvalue_command = null;
-    if (isset($command_values['value'])) {
-        $bvalue_command = Filters::varBool($command_values['value']);
+
+    if (isset($command_values['value']) && is_numeric($command_values['value'])) :
+        $value_command = Filters::varInt($command_values['value']);
+    endif;
+
+    if (
+        empty($value_command) &&
+        isset($command_values['value']) &&
+        is_bool($command_values['value'])
+    ) {
+        $value_command = Filters::varBool($command_values['value']);
     }
-    if ($bvalue_command !== null) {
-        $value_command = $bvalue_command;
-    } elseif (!empty($command_values['value'])) {
-        if (Filters::varInt($command_values['value'])) {
-            $value_command = Filters::varInt($command_values['value']);
-        } else {
-            $value_command = Filters::varString($command_values['value']);
-        }
+
+    if (
+        empty($value_command) &&
+        isset($command_values['value'])
+    ) {
+        $value_command = Filters::varString($command_values['value']);
     }
 }
 
