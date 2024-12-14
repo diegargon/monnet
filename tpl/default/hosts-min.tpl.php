@@ -63,9 +63,9 @@ if (empty($tdata['hosts'])) {
                             alt="os_img" title="<?= $host['os_name'] ?>"/>
                     <?php endif; ?>
                     <?php if (!empty($host['access_link'])) : ?>
-                        <a href="<?= $host['access_link'] ?>">
+                        <a href="<?= $host['access_link'] ?>" target="_blank">
                         <img class="fab" src="tpl/<?= $cfg['theme']?>/img/icons/link.png"
-                            alt="access_link" rel="noreferrer" target="_blank" title="<?= $host['access_link'] ?>"/>
+                            alt="access_link" rel="noreferrer" title="<?= $host['access_link'] ?>"/>
                         </a>
                     <?php endif; ?>
                     </div>
