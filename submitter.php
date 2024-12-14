@@ -164,6 +164,20 @@ if ($command == 'toggleDisablePing' && isset($value_command) && !empty($target_i
     $data['response_msg'] = 'ok';
 }
 
+if ($command == 'toggleVMMachine' && isset($value_command) && !empty($target_id)) {
+    $hosts->update($target_id, ['vm_machine' => $value_command]);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $value_command;
+    $data['response_msg'] = 'ok';
+}
+
+if ($command == 'toggleHypervisorMachine' && isset($value_command) && !empty($target_id)) {
+    $hosts->update($target_id, ['hypervisor_machine' => $value_command]);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $value_command;
+    $data['response_msg'] = 'ok';
+}
+
 if ($command == 'setCheckPorts' && !empty($value_command) && !empty($target_id)) {
     // 1 ping 2 TCP/UDP
 //    ($value_command == 0) ? $value = 1 : $value = 2;

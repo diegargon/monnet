@@ -1387,23 +1387,42 @@ input:checked + .slider:before {
     border-radius: 20px
 }
 
-/* Alternativa: esquina coloreada */
 .ansible-mark {
-    position: relative;
     overflow: hidden;
-}
-
-.ansible-mark::before {
     content: '';
     position: absolute;
     /* top: 0; Arriba  Izquierda*/
     bottom: 0;
     left: 0;
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
     background-color: #ffef00;
     /* clip-path: polygon(0 0, 100% 0, 0 100%);  Hace que sea un triángulo  Arriba Izquierda*/
     clip-path: polygon(0 100%, 0 0, 100% 100%);
+}
+
+.vm-mark {
+    overflow: hidden;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 4px;
+    background-color: #f0f0f0;
+    clip-path: polygon(100% 0, 100% 100%, 0 0);
+}
+
+.hypervisor-mark {
+    overflow: hidden;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 4px;
+    background-color: #37ffc7;
+    clip-path: polygon(100% 0, 100% 100%, 0 0);
 }
 
 @keyframes crt-glow {

@@ -131,6 +131,10 @@
                 <img class="fab" src="tpl/<?= $tdata['theme']?>/img/ansible.png"
                      alt="ansible" title="ansible"/>
             <?php endif; ?>
+            <?php if (!empty($tdata['host_details']['vm_machine'])) : ?>
+                <img class="fab" src="tpl/<?= $tdata['theme']?>/img/vm.png"
+                     alt="vm" title="vm"/>
+            <?php endif; ?>
             <div class="host-item"><?= $tdata['host_details']['title'] ?> </div>
             <?php if (!empty($tdata['host_details']['hostname'])) : ?>
                 <div class="host-item"><?= $tdata['host_details']['hostname'] ?> </div>

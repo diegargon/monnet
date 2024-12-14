@@ -162,7 +162,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#close_host_details", function () {
-        $("#host-details").css("display", "none");
+        $("#host-details").remove();
     });
     $(document).on("click", "#close_mgmtbookmark", function () {
         $("#mgmt-bookmark-container").css("display", "none");

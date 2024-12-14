@@ -48,6 +48,8 @@ class Hosts
             'disable_alarms',
             'disable_email_alarms',
             'disable_ping',
+            'hypervisor_machine',
+            'vm_machine',
         ];
     /**
      * host[$id] = ['key' => 'value']

@@ -41,6 +41,26 @@ $(document).ready(function () {
         submitCommand('setHighlight', {id: hostId, value: value});
     });
 
+    $(document).on("change", "#vm_machine", function () {
+        var hostId = $('#host_id').val();
+
+        var value = 0;
+        if (this.checked) {
+            value = 1;
+        }
+        submitCommand('toggleVMMachine', {id: hostId, value: value});
+    });
+
+    $(document).on("change", "#hypervisor_machine", function () {
+        var hostId = $('#host_id').val();
+
+        var value = 0;
+        if (this.checked) {
+            value = 1;
+        }
+        submitCommand('toggleHypervisorMachine', {id: hostId, value: value});
+    });
+
     //Ansible host enable
     $(document).on("change", "#ansible_enabled", function () {
         var hostId = $('#host_id').val();

@@ -23,6 +23,7 @@ $lng = [
     'L_ANSIBLE_HOSTS' =>'Ansible Hosts',
     'L_ANSIBLE_HOSTS_OFF' => '(H)Ansible Off',
     'L_ANSIBLE_HOSTS_FAIL' => '(H)Ansible Fail',
+    'L_ANSIBLE_SUPPORT' => 'Ansible Support',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -84,6 +85,7 @@ $lng = [
     'L_HAS_CHANGED' => 'ha cambiado',
     'L_HOSTS_ON' => 'Host On',
     'L_HOSTS_OFF' => 'Host Off',
+    'L_HYPERVISOR' => 'Hypervisor',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',
@@ -185,6 +187,7 @@ $lng = [
     'L_VLAN' => 'Vlan',
     'L_VALUE_EXISTS' => 'El valor ya existe',
     'L_VISIBILITY' => 'Visibilidad',
+    'L_VIRTUAL_MACHINE' => 'Maquina virtual',
     //W
     'L_WINDSPEED' => 'Viento',
     'L_WEIGHT' => 'Peso',
