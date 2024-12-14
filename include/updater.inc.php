@@ -154,6 +154,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
                 `id` INT NOT NULL AUTO_INCREMENT,
                 `host_id` INT NOT NULL,
                 `msg` TEXT NOT NULL,
+                `type` TINYINT NOT NULL DEFAULT '0',
                 `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
                 KEY `host_id` (`host_id`)
