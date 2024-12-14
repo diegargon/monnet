@@ -37,6 +37,7 @@ $lng = [
     'L_COMMA_SEPARATED' => '(Separado por coma)',
     'L_CLEAR_ALARMS' => 'Limpiar alarmas',
     'L_CLEAR_ALARMS_BY' => 'Alarms Cleared by user',
+    'L_CHECKS' => 'Checks',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',

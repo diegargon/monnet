@@ -57,6 +57,10 @@
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab12')">
                         <?= $lng['L_CONFIG'] ?>
                     </button>
+                    <button id="tab13_btn" class="host-details-tabs-head" data-tab="13"
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab13')">
+                        <?= $lng['L_CHECKS'] ?>
+                    </button>
                     <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
                     <button id="tab20_btn" class="host-details-tabs-head" data-tab="20"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab20')">
@@ -374,6 +378,13 @@
             <div class="config_container">
                 <div class="left-config-column">
                     <div class="">
+                        <label for="chkHighlight"><?= $lng['L_HIGHLIGHT_HOSTS'] ?>:</label>
+                        <input type="checkbox"
+                               id="chkHighlight" <?= $tdata['host_details']['highlight'] ? 'checked' : null ?>>
+                        <input type="number" id="host_id" name="host_id"
+                               style="display:none;" readonly value="<?= $tdata['host_details']['id'] ?>"/>
+                    </div>
+                    <div class="">
                         <label for="host-title"><?= $lng['L_DISPLAY_NAME'] ?></label><br />
                         <input type="text" id="host-title" size="32" name="host-title"
                                value="<?= $tdata['host_details']['title'] ?>"/>
@@ -391,23 +402,6 @@
                             <?php endforeach; ?>
                         </select>
                         <button id="submitCat"><?= $lng['L_SEND'] ?></button>
-                    </div>
-                    <div class="">
-                        <label for="chkHighlight"><?= $lng['L_HIGHLIGHT_HOSTS'] ?>:</label>
-                        <input type="checkbox"
-                               id="chkHighlight" <?= $tdata['host_details']['highlight'] ? 'checked' : null ?>>
-                        <input type="number" id="host_id" name="host_id"
-                               style="display:none;" readonly value="<?= $tdata['host_details']['id'] ?>"/>
-                    </div>
-                    <div class="">
-                        <label for="checkport"><?= $lng['L_PORT_CHECK'] ?>: </label>
-                        <input type="checkbox" id="checkports_enabled"
-                               <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
-                        <label for="checkports"><?= $lng['L_PORT_LIST'] ?>
-                            (ex: 53/udp/name,443/tcp/name): </label><br />
-                        <input type="text" id="checkports" name="checkports"
-                               value="<?= $tdata['host_details']['ports_formated'] ?>"/>
-                        <button id="submitPorts"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
                         <label for="host_owner"><?= $lng['L_OWNER'] ?>: </label><br />
@@ -444,15 +438,6 @@
                 <!-- /left config column -->
                 <!-- right config column -->
                 <div class="right-config-column">
-                    <div class="">
-                        <label for="host_timeout"><?= $lng['L_TIMEOUT'] ?>(0.0): </label><br />
-                        <input size="12" max-size="12" type="number" id="host_timeout" name="host_timeout"
-                               value="<?=
-                                !empty($tdata['host_details']['timeout']) ?
-                                $tdata['host_details']['timeout'] : null
-                                ?>"/>
-                        <button id="submitHostTimeout"><?= $lng['L_SEND'] ?></button>
-                    </div>
                     <div class="">
                         <label for="manufacture"><?= $lng['L_MANUFACTURE'] ?>: </label><br/>
                         <select id="manufacture">
@@ -527,6 +512,43 @@
             </div>
         </div>
         <!-- /TAB12 -->
+        <!-- TAB13 --><!-- Checks -->
+        <div id="tab13" class="host-details-tab-content">
+            <div id="config_status_msg"></div>
+            <div class="config_container">
+                <div class="left-config-column">
+                    <div class="">
+                        <label for="checkport"><?= $lng['L_PORT_CHECK'] ?>: </label>
+                        <input type="checkbox" id="checkports_enabled"
+                               <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
+                        <label for="checkports"><?= $lng['L_PORT_LIST'] ?>
+                            (ex: 53/udp/name,443/tcp/name): </label><br />
+                        <input type="text" id="checkports" name="checkports"
+                               value="<?= $tdata['host_details']['ports_formated'] ?>"/>
+                        <button id="submitPorts"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="host_timeout"><?= $lng['L_TIMEOUT'] ?>(0.0): </label><br />
+                        <input size="12" max-size="12" type="number" id="host_timeout" name="host_timeout"
+                               value="<?=
+                                !empty($tdata['host_details']['timeout']) ?
+                                $tdata['host_details']['timeout'] : null
+                                ?>"/>
+                        <button id="submitHostTimeout"><?= $lng['L_SEND'] ?></button>
+                    </div>
+
+                </div>
+                <!-- /left config column -->
+                <!-- right config column -->
+                <div class="right-config-column">
+                    <div class="">
+
+                    </div>
+                </div>
+                <!-- /right config column -->
+
+            </div>
+        </div>
         <!-- TAB20 --><!-- Ansible -->
         <div id="tab20" class="host-details-tab-content">
             <div id="ansible_container" class="ansible_container">
