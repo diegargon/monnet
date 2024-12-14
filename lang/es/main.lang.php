@@ -142,6 +142,7 @@ $lng = [
     'L_PHONE' => 'Phone',
     'L_PRINTER' => 'Impresora',
     'L_PRINTERS' => 'Impresoras',
+    'L_PING_CHECK_DISABLE' => 'Deshabilitar Ping',
     //Q
     'L_QUICK_CONFIG' => 'Quick Config',
     //R

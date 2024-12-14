@@ -55,14 +55,18 @@ function check_known_hosts(AppContext $ctx): bool
              * Ping Scan
              */
         } else {
-            if ($host['check_method'] == 2 && !valid_array($host['ports'])) {
+            if ($host['disable_ping']) :
+                continue;
+            endif;
+
+            if ($host['check_method'] == 2 && !valid_array($host['ports'])) :
                 Log::warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
-            }
+            endif;
             $ping_host_result = ping_known_host($ctx, $host);
-            if ($host['online'] == 1 && $ping_host_result['online'] == 0) {
-                //recheck
+            //recheck
+            if ($host['online'] == 1 && $ping_host_result['online'] == 0) :
                 $ping_host_result = ping_known_host($ctx, $host);
-            }
+            endif;
 
             (valid_array($ping_host_result)) ? $new_host_status = $ping_host_result : null;
         }
@@ -221,23 +225,23 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0): void
         ) {
             Log::debug("Getting mac vendor for {$host['display_name']}");
             $vendor = get_mac_vendor_local(trim($host['mac']));
-            if (empty($vendor)) {
+            if (empty($vendor)) :
                 Log::debug("Local lookup fail, checking mac online");
                 $vendor = get_mac_vendor(trim($host['mac']));
-            }
+            endif;
 
-            if (empty($vendor['company'])) {
+            if (empty($vendor['company'])) :
                 Log::debug("Mac vendor for {$host['mac']} is null");
                 (empty($host['mac_vendor'])) ? $update['mac_vendor'] = '-' : null;
-            } else {
-                if (!empty($host['mac_vendor']) && ($vendor['company'] != $host['mac_vendor'])) {
+            else :
+                if (!empty($host['mac_vendor']) && ($vendor['company'] != $host['mac_vendor'])) :
                     Log::warning("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
-                }
+                endif;
                 $update['mac_vendor'] = $vendor['company'];
-            }
-            if (!empty($update) && ($host['mac_vendor'] != $update['mac_vendor'])) {
+            endif;
+            if (!empty($update) && ($host['mac_vendor'] != $update['mac_vendor'])) :
                 $hosts->update($host['id'], $update);
-            }
+            endif;
         }
     }
 }
@@ -254,10 +258,10 @@ function check_macs(Hosts $hosts): void
     Log::info('Checking macs');
     foreach ($known_hosts as $host) {
         $new_mac = get_mac($host['ip']);
-        if (!empty($new_mac) && $host['mac'] != $new_mac) {
+        if (!empty($new_mac) && $host['mac'] != $new_mac) :
             $update['mac'] = trim($new_mac);
             $hosts->update($host['id'], $update);
-        }
+        endif;
     }
 }
 
@@ -277,11 +281,11 @@ function ping_host_ports(AppContext $ctx, array $host): array
     $err_code = $err_msg = '';
 
     //Custom timeout for host
-    if (!empty($host['timeout'])) {
+    if (!empty($host['timeout'])) :
         $timeout = $host['timeout'];
-    } else {
+    else :
         $timeout = $networks->isLocal($host['ip']) ? 0.6 : 1;
-    }
+    endif;
 
     $host_status = [];
     $host_status['online'] = 0;
@@ -328,13 +332,13 @@ function ping_host_ports(AppContext $ctx, array $host): array
         }
 
         $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
-        if ($host_ping['online']) {
+        if ($host_ping['online']) :
             $host_status['online'] = 1;
-        }
+        endif;
     }
-    if (valid_array($host_status['ports'])) {
+    if (valid_array($host_status['ports'])) :
         $host_status['ports'] = json_encode($host_status['ports']);
-    }
+    endif;
 
     return $host_status;
 }

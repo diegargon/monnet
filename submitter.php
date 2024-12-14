@@ -157,6 +157,13 @@ if ($command === 'network_unselect' && !empty($value_command)) {
     $data['response_msg'] = 'Network Unselect';
 }
 
+if ($command == 'toggleDisablePing' && isset($value_command) && !empty($target_id)) {
+    $hosts->update($target_id, ['disable_ping' => $value_command]);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $value_command;
+    $data['response_msg'] = 'ok';
+}
+
 if ($command == 'setCheckPorts' && !empty($value_command) && !empty($target_id)) {
     // 1 ping 2 TCP/UDP
 //    ($value_command == 0) ? $value = 1 : $value = 2;
@@ -910,7 +917,7 @@ if (
             $data['response_msg'] = $debug_lines;
         } else {
             $hosts->setAnsibleAlarm($target_id, $response['error_msg']);
-            $data['command_error'] = 1;            
+            $data['command_error'] = 1;
             $data['command_error_msg'] = $response['error_msg'];
         }
     } else {

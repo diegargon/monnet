@@ -47,6 +47,7 @@ class Hosts
             'timeout',
             'disable_alarms',
             'disable_email_alarms',
+            'disable_ping',
         ];
     /**
      * host[$id] = ['key' => 'value']

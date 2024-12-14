@@ -167,6 +167,16 @@ $(document).ready(function () {
     $(document).on("click", "#close_mgmtbookmark", function () {
         $("#mgmt-bookmark-container").css("display", "none");
     });
+    $(document).on("change", "#disable_ping", function () {
+        var hostId = $('#host_id').val();
+
+        if (this.checked) {
+            value = 1;
+        } else {
+            value = 0;
+        }
+        submitCommand('toggleDisablePing', {id: hostId, value: value});
+    });
 
     $(document).on("change", "#checkports_enabled", function () {
         var hostId = $('#host_id').val();

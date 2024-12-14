@@ -518,6 +518,12 @@
             <div class="config_container">
                 <div class="left-config-column">
                     <div class="">
+                        <label for="disable_ping"><?= $lng['L_PING_CHECK_DISABLE'] ?>: </label>
+                        <input type="hidden" id="disable_ping" value="0"/>
+                        <input type="checkbox" id="disable_ping"
+                               <?= !empty($tdata['host_details']['disable_ping']) ? 'checked' : null ?>><br />
+                    </div>
+                    <div class="">
                         <label for="checkport"><?= $lng['L_PORT_CHECK'] ?>: </label>
                         <input type="checkbox" id="checkports_enabled"
                                <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
