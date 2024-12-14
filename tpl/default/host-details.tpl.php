@@ -385,6 +385,18 @@
                                style="display:none;" readonly value="<?= $tdata['host_details']['id'] ?>"/>
                     </div>
                     <div class="">
+                        <label for="vm_machine"><?= $lng['L_VIRTUAL_MACHINE'] ?>: </label>
+                        <input type="hidden" id="vm_machine" value="0"/>
+                        <input type="checkbox" id="vm_machine"
+                               <?= !empty($tdata['host_details']['vm_machine']) ? 'checked' : null ?>><br />
+                    </div>
+                    <div class="">
+                        <label for="hypervisor_machine"><?= $lng['L_HYPERVISOR'] ?>: </label>
+                        <input type="hidden" id="hypervisor_machine" value="0"/>
+                        <input type="checkbox" id="hypervisor_machine"
+                               <?= !empty($tdata['host_details']['hypervisor_machine']) ? 'checked' : null ?>><br />
+                    </div>
+                    <div class="">
                         <label for="host-title"><?= $lng['L_DISPLAY_NAME'] ?></label><br />
                         <input type="text" id="host-title" size="32" name="host-title"
                                value="<?= $tdata['host_details']['title'] ?>"/>
@@ -490,9 +502,15 @@
                         </select>
                         <button id="submitSystemType"><?= $lng['L_SEND'] ?></button>
                     </div>
+                    <div class="">
+                        <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
+                        <input type="text" size="32" id="host_token" name="host_token"
+                               value="<?= $tdata['host_details']['token'] ?>" readonly/>
+                        <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
+                    </div>
                     <?php if ($ncfg->get('ansible')) : ?>
                     <div class="">
-                        <label for="">Ansible:</label>
+                        <label for=""><?= $lng['L_ANSIBLE_SUPPORT'] ?></label>
                         <input type="hidden" id="ansible_enabled" value="0">
                         <input
                             type="checkbox"
@@ -500,12 +518,6 @@
                             <?= !empty($tdata['host_details']['ansible_enabled']) ? ' checked' : '' ?>>
                     </div>
                     <?php endif; ?>
-                    <div class="">
-                        <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
-                        <input type="text" size="32" id="host_token" name="host_token"
-                               value="<?= $tdata['host_details']['token'] ?>" readonly/>
-                        <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
-                    </div>
                 </div>
                 <!-- /right config column -->
 
@@ -574,5 +586,17 @@
         <!-- /TAB21 -->
     </div> <!-- host-details-container -->
     <!-- host-details -->
-    <script src="scripts/host-details.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Verificar si el script ya ha sido cargado
+            if ($('script[src="scripts/host-details.js"]').length === 0) {
+                // Si no está cargado, lo añadimos dinámicamente
+                $('<script>', {
+                    src: 'scripts/host-details.js',
+                    type: 'text/javascript'
+                }).appendTo('head');
+
+            }
+        });
+    </script>
 </div>
