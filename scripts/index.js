@@ -92,6 +92,15 @@ function updateThumbnail(select) {
 }
 
 $(document).ready(function () {
+    $("#hosts_footer_dropdown_btn").on("click", function () {
+        const dropdown = $("#footer_hosts_dropdown");
+        if (dropdown.css("display") === "none") {
+            dropdown.css("display", "inline-flex");
+        } else {
+            dropdown.css("display", "none");
+        }
+    });
+
     $("#close_mgmtbookmark").on("click", function () {
         $("#mgmt-bookmark-container").css("display", "none");
     });

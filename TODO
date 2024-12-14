@@ -5,6 +5,7 @@
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
 * Migrar Mysql a NewDatabase
 * ansible: Opcion para seleccionar que es una vm y tipo de hypervisor
+* Host Reports: nojson reports field , genera un report si hay alguna alarma, ansible y email
 
 ** LOW
 * refresher: Si no esta visible saltarse la parte no visible

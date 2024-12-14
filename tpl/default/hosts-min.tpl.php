@@ -25,7 +25,7 @@ if (empty($tdata['hosts'])) {
         <div id="hosts-container" class="hosts-container">
             <a onclick="submitCommand('host-details', {id: <?= $host['id'] ?>})"
                href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['details'] ?>">
-                <div class="hosts-thumb shadow1 <?= $host['glow'] ?> ">
+                <div class="hosts-thumb shadow1 <?= $host['glow'] ?> <?= !empty($host['ansible_enabled']) ? 'ansible-mark' : '' ?>">
                     <img class="hosts-online" src="<?= $host['online_image'] ?>"
                          alt="online_status" title="<?= $host['title_online'] ?>"/>
                 <?php if (!empty($host['alert_mark'])) : ?>

@@ -20,6 +20,9 @@ $lng = [
     'L_ACCESS' => 'Acceso',
     'L_ALARMS_LAST' => 'Ultimas Alarmas',
     'L_ACCESS_METHOD' => 'No se establecio un metodo de acceso',
+    'L_ANSIBLE_HOSTS' =>'Ansible Hosts',
+    'L_ANSIBLE_HOSTS_OFF' => '(H)Ansible Off',
+    'L_ANSIBLE_HOSTS_FAIL' => '(H)Ansible Fail',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -78,6 +81,8 @@ $lng = [
     'L_HOME' => 'Inicio',
     'L_HUMIDITY' => 'Humedad',
     'L_HAS_CHANGED' => 'ha cambiado',
+    'L_HOSTS_ON' => 'Host On',
+    'L_HOSTS_OFF' => 'Host Off',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',

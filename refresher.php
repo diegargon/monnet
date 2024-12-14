@@ -16,6 +16,7 @@ header('Content-Type: application/json; charset=UTF-8');
  * @var array<string,string> $lng
  * @var Database|null $db An instance of Database or null if not defined
  * @var array<int|string, mixed> $cfg
+ * @var array<int|string, mixed> $ncfg
  */
 require_once 'include/common.inc.php';
 require_once 'include/common-call.php';
@@ -41,9 +42,13 @@ if ($user->getId() > 0) {
 $frontend = new Frontend($ctx);
 $tdata['theme'] = $cfg['theme'];
 
+$data['footer_dropdown'] = [];
 $highlight_hosts_count = 0;
 $hosts_totals_count = 0;
 $show_hosts_count = 0;
+$ansible_hosts = 0;
+$ansible_hosts_off = 0;
+$ansible_hosts_fail = 0;
 
 /* Set show/hide highlight hosts */
 if ($user->getPref('show_highlight_hosts_status')) {
@@ -75,6 +80,12 @@ if ($user->getPref('show_other_hosts_status')) {
     $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
 }
 
+if ($ncfg->get('ansible')) {
+    $ansible_hosts_off = $hosts->ansible_hosts_off;
+    $ansible_hosts = $hosts->ansible_hosts;
+    $ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
+    $ansible_hosts_fail = $hosts->ansible_hosts_fail;
+}
 if ($user->getPref('show_termlog_status')) {
     $logs = [];
     $type_mark = '';
@@ -136,14 +147,17 @@ if ($user->getPref('show_termlog_status')) {
     }
 }
 
-if (!empty($hosts_totals_count)) {
-    $data['misc']['totals'] = $lng['L_SHOWED'] . ": $show_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count | ";
-}
-if (!empty($total_hosts_on) && !empty($total_hosts_off)) {
-    $data['misc']['onoff'] = $lng['L_ON'] . ": $total_hosts_on | {$lng['L_OFF']}: $total_hosts_off | ";
-}
+$data['misc']['totals'] = $lng['L_SHOWED'] . ": $show_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count";
 $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
 
+$data['footer_dropdown'][] = ['value' => $total_hosts_on, 'desc' => $lng['L_HOSTS_ON'], 'number-color' => 'blue'];
+$data['footer_dropdown'][] = ['value' => $total_hosts_off, 'desc' => $lng['L_HOSTS_OFF'], 'number-color' => 'red'];
+
+if ($ncfg->get('ansible')) {
+    $data['footer_dropdown'][] = ['value' => $ansible_hosts, 'desc' => $lng['L_ANSIBLE_HOSTS'], 'number-color' => 'blue'];
+    $data['footer_dropdown'][] = ['value' => $ansible_hosts_off, 'desc' => $lng['L_ANSIBLE_HOSTS_OFF'], 'number-color' => 'red'];
+    $data['footer_dropdown'][] = ['value' => $ansible_hosts_fail, 'desc' => $lng['L_ANSIBLE_HOSTS_FAIL'], 'number-color' => 'red'];
+}
 //TODO  system_prefs class?
 $results = $db->select('prefs', '*', ['uid' => 0]);
 $system_prefs = $db->fetchAll($results);
@@ -175,6 +189,5 @@ foreach ($system_prefs as $sys_pref) {
 }
 $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last;
 $data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last;
-
 
 print json_encode($data, JSON_UNESCAPED_UNICODE);

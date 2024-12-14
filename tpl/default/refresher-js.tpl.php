@@ -79,6 +79,38 @@
                         $('#cli_last_run').html(jsonData.misc.cli_last_run);
                         $('#discovery_last_run').html(jsonData.misc.discovery_last_run);
                     }
+                    if ("footer_dropdown" in jsonData) {
+                        // Obtener el contenedor donde se agregará el HTML
+                        const container = document.getElementById("footer-dropdown-item-container");
+
+
+                        container.innerHTML = '';
+
+                        // Iterar sobre cada item en footer_dropdown
+                        jsonData.footer_dropdown.forEach(item => {
+                            // Crear el div del item
+                            const itemDiv = document.createElement("div");
+                            itemDiv.classList.add("footer-dropdown-item");
+
+                            const numberDiv = document.createElement("div");
+                            numberDiv.classList.add("footer-number");
+                            numberDiv.textContent = item.value;
+
+                            if (item["number-color"] === "blue") {
+                                numberDiv.classList.add("footer-number-blue");
+                            } else if (item["number-color"] === "red") {
+                                numberDiv.classList.add("footer-number-red");
+                            }
+
+                            const textDiv = document.createElement("div");
+                            textDiv.classList.add("footer-text");
+                            textDiv.textContent = item.desc;
+
+                            itemDiv.appendChild(numberDiv);
+                            itemDiv.appendChild(textDiv);
+                            container.appendChild(itemDiv);
+                        });
+                    }
 
                 })
                 .fail(function (xhr, status, error) {
@@ -87,6 +119,6 @@
         // Avoid set auto-refresh when a force call is execute
         if (!force) {
             setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);
-        }
+    }
     }
 </script>

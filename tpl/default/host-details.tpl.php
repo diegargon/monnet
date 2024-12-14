@@ -57,7 +57,7 @@
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab12')">
                         <?= $lng['L_CONFIG'] ?>
                     </button>
-                    <?php if (isset($tdata['host_details']['ansible_enabled'])) : ?>
+                    <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
                     <button id="tab13_btn" class="host-details-tabs-head" data-tab="13"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab13')">
                             Ansible
@@ -122,6 +122,10 @@
                 <img class="fab" src="<?= $tdata['host_details']['system_type_image'] ?>"
                      alt="<?= $tdata['host_details']['system_type_name'] ?>"
                      title="<?= $tdata['host_details']['system_type_name'] ?>"/>
+            <?php endif; ?>
+            <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
+                <img class="fab" src="tpl/<?= $tdata['theme']?>/img/ansible.png"
+                     alt="ansible" title="ansible"/>
             <?php endif; ?>
             <div class="host-item"><?= $tdata['host_details']['title'] ?> </div>
             <?php if (!empty($tdata['host_details']['hostname'])) : ?>
@@ -303,7 +307,7 @@
             </div>
             <label for="log_size">Nº:</label>
             <input type="number" id="log_size" name="log_size" step="25" value="25">
-            <?php if (isset($tdata['host_details']['ansible_enabled'])) : ?>
+            <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
             <div class="inline"><button id="syslog_btn">Syslog</button></div>
             <div class="inline"><button id="journald_btn">Journald</button></div>
             <?php endif; ?>
@@ -508,7 +512,7 @@
                         <input
                             type="checkbox"
                             id="ansible_enabled"
-                            <?= isset($tdata['host_details']['ansible_enabled']) ? ' checked' : '' ?>>
+                            <?= !empty($tdata['host_details']['ansible_enabled']) ? ' checked' : '' ?>>
                     </div>
                     <?php endif; ?>
                     <div class="">

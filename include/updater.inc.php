@@ -137,13 +137,28 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db_version = 0.38;
     }
     // 0.39
-    if ($db_version < 0.00) {
-
-#        $db->query("ALTER TABLE `hosts` ADD `ansible` TINYINT NOT NULL DEFAULT '0';");
-#        $db->query(
-#            "INSERT INTO `config` (`id`, `ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) "
-#            . " VALUES (59, 'ansible', '1', 2, 1, NULL, 0);"
-#            );
+    if ($db_version < 0.39) {
+        $db->query(
+            "ALTER TABLE `hosts`
+            ADD `ansible_enabled` TINYINT NOT NULL DEFAULT '0',
+            ADD `ansible_fail` TINYINT NOT NULL DEFAULT '0';"
+        );
+        $db->query(
+            "INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+            ('ansible', JSON_QUOTE('0'), 2, 1, NULL, 0),
+            ('ansible_server_ip', JSON_QUOTE('127.0.0.1'), 0, 1, NULL, 0),
+            ('ansible_server_port', JSON_QUOTE('65432'), 1, 1, NULL, 0);"
+        );
+        $db->query(
+            "CREATE TABLE `ansible_msg` (
+                `id` INT NOT NULL AUTO_INCREMENT,
+                `host_id` INT NOT NULL,
+                `msg` TEXT NOT NULL,
+                `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                KEY `host_id` (`host_id`)
+            );"
+        );
         Log::info("Update version to 0.39 successful");
         $db->query("UPDATE prefs SET pref_value='0.39' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db->query("COMMIT");
@@ -152,6 +167,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
     // 0.40
     if ($db_version < 0.00) {
 #        $db->query("ALTER TABLE `hosts` DROP `access_method`;");
+#        $db->query("ALTER TABLE `hosts` ADD `reports_on_fail` TINYINT NOT NULL DEFAULT '0';");
         Log::info("Update version to 0.40 successful");
         $db->query("UPDATE prefs SET pref_value='0.40' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db->query("COMMIT");

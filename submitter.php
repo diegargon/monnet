@@ -799,7 +799,7 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
 
 /* Alarms */
 if ($command === 'clearHostAlarms' && $target_id > 0) {
-    if ($hosts->clearAlarms($user->getUsername(), $target_id)) {
+    if ($hosts->clearHostAlarms($user->getUsername(), $target_id)) {
         $data['command_success'] = 1;
         $data['force_hosts_refresh'] = 1;
     }
@@ -907,9 +907,10 @@ if (
                 }
             }
             $data['command_success'] = 1;
-            $data['response_msg'] = $debug_lines ; // $response['plays'];
+            $data['response_msg'] = $debug_lines;
         } else {
-            $data['command_error'] = 1;
+            $hosts->setAnsibleAlarm($target_id, $response['error_msg']);
+            $data['command_error'] = 1;            
             $data['command_error_msg'] = $response['error_msg'];
         }
     } else {

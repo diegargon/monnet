@@ -19,6 +19,12 @@ class Hosts
     public int $total_off = 0;
     /** @var int */
     public int $highlight_total = 0;
+    /** @var int */
+    public int $ansible_hosts = 0;
+    /** @var int */
+    public int $ansible_hosts_off = 0;
+    /** @var int */
+    public int $ansible_hosts_fail = 0;
 
     /**
      *
@@ -41,7 +47,6 @@ class Hosts
             'timeout',
             'disable_alarms',
             'disable_email_alarms',
-            'ansible_enabled'
         ];
     /**
      * host[$id] = ['key' => 'value']
@@ -386,12 +391,13 @@ class Hosts
      * @param int $id
      * @return bool
      */
-    public function clearAlarms(string $username, int $id): bool
+    public function clearHostAlarms(string $username, int $id): bool
     {
         $values = [
             'alert' => 0,
             'warn' => 0,
             'warn_port' => 0,
+            'ansible_fail' => 0,
             ];
         $this->update($id, $values);
         Log::logHost('LOG_NOTICE', $id, $this->lng['L_CLEAR_ALARMS_BY'] . ': ' . $username);
@@ -410,6 +416,35 @@ class Hosts
         $this->update($id, ['disable_alarms' => $value]);
 
         return true;
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param string $msg
+     * @return void
+     */
+    public function setAlarmOn(int $id, string $msg): void
+    {
+        $this->hosts['id']['alert'] = 1;
+        $this->hosts['id']['alert_msg'] = $msg;
+        $this->update($id, ['alert' => 1, 'alert_msg' => $msg]);
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param string $msg
+     * @return void
+     */
+    public function setAnsibleAlarm(int $id, string $msg): void
+    {
+
+        $this->hosts['id']['alert'] = 1;
+        $this->hosts['id']['alert_msg'] = 'Ansible Alert';
+        $this->hosts['id']['ansible_fail'] = 1;
+        $this->update($id, ['alert' => 1, 'alert_msg' => $msg, 'ansible_fail' => 1]);
+        $this->db("INSERT INTO `ansible_msg` ('host_id', 'msg') VALUES ($id, $msg)");
     }
 
     /**
@@ -447,6 +482,7 @@ class Hosts
      */
     private function setHostsDb(): bool
     {
+        $ncfg = $this->ctx->get('Config');
         $networks = $this->ctx->get('Networks');
         $query_hosts = 'SELECT * FROM hosts';
         $results = $this->db->query($query_hosts);
@@ -489,16 +525,29 @@ class Hosts
             if (!empty($this->hosts[$id]['misc'])) {
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
                 foreach ($misc_values as $key => $value) {
-                    if (is_numeric($value)) {
-                        $this->hosts[$id][$key] = (int) $value;
-                    } elseif (is_bool($value)) {
-                        $this->hosts[$id][$key] = (bool) $value;
-                    } else {
-                        $this->hosts[$id][$key] = $value;
+                    if (in_array($key, $this->misc_keys, true)) { //Prevent unused/old keys
+                        if (is_numeric($value)) {
+                            $this->hosts[$id][$key] = (int) $value;
+                        } elseif (is_bool($value)) {
+                            $this->hosts[$id][$key] = (bool) $value;
+                        } else {
+                            $this->hosts[$id][$key] = $value;
+                        }
                     }
                 }
             }
 
+        if ($ncfg->get('ansible')) {
+                if ($host['ansible_enabled']) {
+                    $this->ansible_hosts++;
+                    if (!$host['online']) :
+                        $this->ansible_hosts_off++;
+                    endif;
+                }
+                if ($host['ansible_fail']) {
+                    $this->ansible_hosts_fail++;
+                }
+            }
             if (empty($host['notes_id'])) {
                 $this->db->insert('notes', ['host_id' => $host['id']]);
                 $insert_id = $this->db->insertID();
