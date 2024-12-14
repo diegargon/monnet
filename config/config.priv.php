@@ -156,44 +156,6 @@ $cfg['check_method'] = [
     2 => 'port',
 ];
 
-$cfg['deploys'] = [
-    1 => [
-        'name' => 'Apache',
-        'comment' => 'Installation apache on Ubuntu',
-        'os_distribution' => 2,
-        'file' => 'scripts/ubuntu-apache.sh'
-    ],
-    2 => [
-        'name' => 'LAMP',
-        'comment' => 'Installation apache, mysql php on Ubuntu',
-        'os_distribution' => 2,
-        'file' => 'scripts/ubuntu-lamp.sh'
-    ],
-    3 => [
-        'name' => 'Logrotate',
-        'comment' => 'Rotate logs',
-        'os_distribution' => 2,
-        'file' => ''
-    ]
-];
-
-$cfg['ssh_profile'] = [
-    'os_profile_id' => 2,
-    'motd_end_root' => '~#',
-    'motd_end_user' => '~$',
-];
-
-$cfg['commands'] = [
-    1 => 'sudo shutdown -r now;exit',
-    2 => 'sudo shutdown -h now;exit',
-];
-
-$cfg['cat_types'] = [
-    1 => 'L_HOSTS',
-    2 => 'L_LINKS',
-    3 => 'L_SEARCH_ENGINE',
-];
-
 $cfg['access_link_types'] = [
     1 => 'www',
 ];

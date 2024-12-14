@@ -105,14 +105,6 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
         $host['f_maxload'] = 100 * $host['ncpu'];
     }
 
-    /*
-      $host['deploy'] = [];
-      foreach ($cfg['deploys'] as $deploy) {
-      if ($host['os_distribution'] == $deploy['os_distribution']) {
-      $host['deploys'][] = $deploy;
-      }
-      }
-     */
     return $host;
 }
 
