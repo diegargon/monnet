@@ -156,6 +156,12 @@ $cfg['check_method'] = [
     2 => 'port',
 ];
 
+$cfg['cat_types'] = [
+    1 => 'L_HOSTS',
+    2 => 'L_LINKS',
+    3 => 'L_SEARCH_ENGINE',
+];
+
 $cfg['access_link_types'] = [
     1 => 'www',
 ];
