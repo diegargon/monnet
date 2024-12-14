@@ -160,6 +160,7 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
                 KEY `host_id` (`host_id`)
             );"
         );
+        $db->query("ALTER TABLE `config` CHANGE `cvalue` `cvalue` JSON NULL;");
         Log::info("Update version to 0.39 successful");
         $db->query("UPDATE prefs SET pref_value='0.39' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db->query("COMMIT");
