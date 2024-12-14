@@ -58,12 +58,12 @@
                         <?= $lng['L_CONFIG'] ?>
                     </button>
                     <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
-                    <button id="tab13_btn" class="host-details-tabs-head" data-tab="13"
-                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab13')">
+                    <button id="tab20_btn" class="host-details-tabs-head" data-tab="20"
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab20')">
                             Ansible
                     </button>
-                    <button id="tab14_btn" class="host-details-tabs-head" data-tab="14"
-                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab14')">
+                    <button id="tab21_btn" class="host-details-tabs-head" data-tab="21"
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab21')">
                             Ansible Raw
                     </button>
                     <?php endif; ?>
@@ -527,15 +527,15 @@
             </div>
         </div>
         <!-- /TAB12 -->
-        <!-- TAB13 --><!-- Ansible -->
-        <div id="tab13" class="host-details-tab-content">
+        <!-- TAB20 --><!-- Ansible -->
+        <div id="tab20" class="host-details-tab-content">
             <div id="ansible_container" class="ansible_container">
 
             </div>
         </div>
-        <!-- /TAB13 -->
-        <!-- TAB14 --><!-- Ansible Facts -->
-        <div id="tab14" class="host-details-tab-content">
+        <!-- /TAB20 -->
+        <!-- TAB21 --><!-- Ansible Facts -->
+        <div id="tab21" class="host-details-tab-content">
             <div id="ansible_raw_container" class="ansible_raw_container">
                 <div><button id="facts_reload_btn">Facts</button></div>
                 <div id="raw_lines_container>">
@@ -543,7 +543,7 @@
                 </div>
             </div>
         </div>
-        <!-- /TAB14 -->
+        <!-- /TAB21 -->
     </div> <!-- host-details-container -->
     <!-- host-details -->
     <script src="scripts/host-details.js"></script>
