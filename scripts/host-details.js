@@ -19,6 +19,12 @@ $(document).ready(function () {
         requestHostDetails('facts-reload', {id: hostId});
     });
 
+    $(document).off("click", "#playbook_btn").on("click", "#playbook_btn", function () {
+        var hostId = $('#host_id').val();
+        var command = $('#playbook_select').val();
+        requestHostDetails('playbook_exec', {id: hostId, value: command});
+    });
+
     $(document).off("click", "#syslog_btn").on("click", "#syslog_btn", function () {
         var hostId = $('#host_id').val();
         var logSize = $('#log_size').val();
@@ -63,12 +69,90 @@ $(document).ready(function () {
     $(document).on("change", "input[type='checkbox'][data-command]", function () {
         var hostId = $('#host_id').val();
         var value = this.checked ? 1 : 0;
-
         var command = $(this).data('command');
 
-        submitCommand(command, { id: hostId, value: value });
+        submitCommand(command, {id: hostId, value: value});
     });
 
+    $(document).on("input", "#alarm_emails", function () {
+        var hostId = $('#host_id').val();
+
+        var emailInput = $(this).val();
+
+        // Divide por comas y limpia espacios extra
+        var emailList = emailInput.split(",").map(email => email.trim()).filter(email => email);
+
+        // Validacion correo
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        var validEmails = [];
+        var invalidEmails = [];
+
+        emailList.forEach(email => {
+            if (emailRegex.test(email)) {
+                validEmails.push(email);
+            } else {
+                invalidEmails.push(email);
+            }
+        });
+
+        //retroalimentacion
+        if (invalidEmails.length > 0) {
+            $("#email_feedback").text("Invalid emails: " + invalidEmails.join(", "));
+        } else {
+            $("#email_feedback").text(""); // Limpiar retroalimentación si todo es válido
+        }
+
+        //console.log("Valid emails:", validEmails);
+
+        if (validEmails.length > 0) {
+            submitCommand("updateAlertEmailList", {id: hostId, value: validEmails});
+        }
+    });
+
+});
+
+function initializePlaybookForm() {
+    // Obtener el array de playbooks directamente desde el atributo data-playbooks
+    const playbooks = $('#ansible_container').data('playbooks'); // Esto ya te devuelve un objeto
+
+    // Llenar el dropdown con los nombres de los playbooks
+    playbooks.forEach(function(playbook) {
+        $('#playbook_select').append('<option value="' + playbook.name + '">' + playbook.name + '</option>');
+    });
+
+    // Evento para cuando se selecciona un playbook
+    $('#playbook_select').change(function() {
+        const selectedPlaybook = $(this).val();
+        const playbook = playbooks.find(pb => pb.name === selectedPlaybook);
+
+        if (playbook) {
+            // Mostrar la descripción
+            $('#playbook_desc').text(playbook.desc);
+
+            // Limpiar cualquier campo previo de string_vars
+            $('#string_vars_container').empty();
+
+            // Si existen string_vars, agregar los campos de texto
+            if (playbook.string_vars) {
+                playbook.string_vars.forEach(function(varName) {
+                    $('#string_vars_container').append(`
+                        <label for="${varName}">${varName}:</label>
+                        <input type="text" id="${varName}" name="${varName}" placeholder="Enter ${varName}">
+                    `);
+                });
+            }
+        } else {
+            // Limpiar si no hay playbook seleccionado
+            $('#playbook_desc').empty();
+            $('#string_vars_container').empty();
+        }
+    });
+}
+
+// Llamar a la función después de que el DOM esté listo
+$(function() {
+    initializePlaybookForm();
 });
 
 function changeHDTab(id, tabId) {
@@ -170,6 +254,20 @@ function requestHostDetails(command, command_values = []) {
                         });
                     } else {
                         $('#raw_lines').html(jsonData.command_error_msg);
+                    }
+                }
+                /* Playbacks exec */
+                if (jsonData.command_receive === 'playbook_exec') {
+                    if (jsonData.command_success === 1) {
+                        $('#raw_lines2').html(JSON.stringify(jsonData.response_msg, null, 2));
+                        $('#raw_lines2').css({
+                            "width": "600px",
+                            "overflow": "auto",
+                            "max-height": "200px",
+                            "resize": "both"
+                        });
+                    } else {
+                        $('#raw_lines2').html(jsonData.command_error_msg);
                     }
                 }
             })

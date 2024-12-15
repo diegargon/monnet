@@ -29,9 +29,7 @@ function check_known_hosts(AppContext $ctx): bool
 
     foreach ($db_hosts as $host) {
         $new_host_status = [];
-        /*
-         * Port Scan
-         */
+        /* Port Scan */
         if ($host['check_method'] == 2 && valid_array($host['ports'])) { //TCP
             Log::debug("Pinging host ports {$host['ip']}");
             $ping_ports_result = ping_host_ports($ctx, $host);
@@ -51,9 +49,7 @@ function check_known_hosts(AppContext $ctx): bool
             }
             (valid_array($ping_ports_result)) ? $new_host_status = $ping_ports_result : null;
 
-            /*
-             * Ping Scan
-             */
+            /* Ping Scan */
         } else {
             if ($host['disable_ping']) :
                 continue;
@@ -71,9 +67,7 @@ function check_known_hosts(AppContext $ctx): bool
             (valid_array($ping_host_result)) ? $new_host_status = $ping_host_result : null;
         }
 
-        /*
-         *  Update host with scan data
-         */
+        /*  Update host with scan data */
 
         if (valid_array($new_host_status)) {
             if ($new_host_status['online'] && empty($host['mac'])) {
@@ -82,11 +76,12 @@ function check_known_hosts(AppContext $ctx): bool
             }
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
                 $new_host_status['online_change'] = utc_date_now();
-                Log::logHost(
-                    'LOG_NOTICE',
-                    $host['id'],
-                    $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON']
-                );
+                $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON'];
+                Log::logHost('LOG_NOTICE', $host['id'], $log_msg);
+                if($host['alarm_port_email']) :
+                    $hosts->sendHostMail($host['id'], $log_msg);
+                endif;
+
                 //Try get hostname when a host become on
                 $hostname = $hosts->getHostname($host['ip']);
                 if ($hostname && $hostname !== $host['hostname'] && $hostname !== $host['ip']) :
@@ -95,11 +90,11 @@ function check_known_hosts(AppContext $ctx): bool
             } elseif ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 $new_host_status['online_change'] = utc_date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
-                Log::logHost(
-                    'LOG_WARNING',
-                    $host['id'],
-                    $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout
-                );
+                $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout;
+                Log::logHost('LOG_WARNING', $host['id'], $log_msg);
+                if($host['alarm_ping_email']) :
+                    $hosts->sendHostMail($host['id'], $log_msg);
+                endif;
             }
 
             $hosts->update($host['id'], $new_host_status);

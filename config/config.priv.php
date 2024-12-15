@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.39;
-$cfg['monnet_revision'] = 6;
+$cfg['monnet_revision'] = 8;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['app_name'] = 'monnet';
 
@@ -143,6 +143,7 @@ $cfg['system_type'] = [
     25 => ['id' => 25, 'name' => 'Printer', 'img' => 'printer.png'],
     26 => ['id' => 26, 'name' => 'Printer Server', 'img' => 'printer-server.png'],
     27 => ['id' => 27, 'name' => 'Log Server', 'img' => 'printer-server.png'],
+    28 => ['id' => 28, 'name' => 'Database Server', 'img' => 'database-server.png'],
 ];
 
 $cfg['versions'] = [
@@ -165,3 +166,135 @@ $cfg['cat_types'] = [
 $cfg['access_link_types'] = [
     1 => 'www',
 ];
+
+/* TODO: Retrieve from monnet-ansible */
+
+$cfg['playbooks'] = [
+    [
+        'name' => 'ansible-facts',
+        'desc' => 'Display gathered facts',
+    ],
+    [
+        'name' => 'buildin-cmd-df-linux',
+        'desc' => 'Get disk usage',
+    ],
+    [
+        'name' => 'buildin-shell-free-linux',
+        'desc' => 'Get memory usage',
+    ],
+    [
+        'name' => 'cmd-df-linux',
+        'desc' => 'Obtener información de particiones reales',
+    ],
+    [
+        'name' => 'cmd-sstuln',
+        'desc' => 'Get network socket information',
+    ],
+    [
+        'name' => 'cmd-topbn1',
+        'desc' => 'Gather system load information',
+    ],
+    [
+        'name' => 'cmd-uptime',
+        'desc' => 'Gather uptime information',
+    ],
+    [
+        'name' => 'df',
+        'desc' => 'Obtener información de particiones reales',
+    ],
+    [
+        'name' => 'gather-facts',
+        'desc' => 'Minimal fact gathering',
+    ],
+    [
+        'name' => 'ip-info',
+        'desc' => 'Gather IP address and routes',
+    ],
+    [
+        'name' => 'iptables-facts',
+        'desc' => 'Gather iptables facts',
+    ],
+    [
+        'name' => 'journald-linux',
+        'desc' => 'Get the last lines from the system journal',
+    ],
+    [
+        'name' => 'linux-df',
+        'desc' => 'Obtener información de particiones reales',
+    ],
+    [
+        'name' => 'linux-load',
+        'desc' => 'Get load statistics',
+    ],
+    [
+        'name' => 'load-linux',
+        'desc' => 'Get load statistics',
+    ],
+    [
+        'name' => 'reboot-linux',
+        'desc' => 'Reboot a Linux system',
+    ],
+    [
+        'name' => 'reboot-win',
+        'desc' => 'Reboot a Windows system',
+    ],
+    [
+        'name' => 'service-facts',
+        'desc' => 'Gather service facts',
+    ],
+    [
+        'name' => 'setup-system_info',
+        'desc' => 'Get load statistics via setup module',
+    ],
+    [
+        'name' => 'setup',
+        'desc' => 'Gather system information',
+    ],
+    [
+        'name' => 'shutdown-linux',
+        'desc' => 'Shutdown a Linux system',
+    ],
+    [
+        'name' => 'shutdown-win',
+        'desc' => 'Shutdown a Windows system',
+    ],
+    [
+        'name' => 'syslog-linux',
+        'desc' => 'Get the last lines of syslog',
+    ],
+    [
+        'name' => 'system-info',
+        'desc' => 'Get load statistics via setup module',
+    ],
+    [
+        'name' => 'test',
+        'desc' => 'Playbook que no hace nada',
+    ],
+    [
+        'name' => 'uptime-facts',
+        'desc' => 'Get uptime facts from all hosts',
+    ],
+    [
+        'name' => 'win-facts',
+        'desc' => 'Gather facts from Windows hosts',
+    ],
+    [
+        'name' => 'mysql-keepalive',
+        'desc' => 'Check and ensure MySQL service is running',
+    ],
+    [
+        'name' => 'mysql-dblocks',
+        'desc' => 'Ensure MySQL is running and check database locks',
+        'string_vars' => ['database_service', 'database_name', 'db_username', 'db_password']
+    ],
+    [
+        'name' => 'mysql-performance',
+        'desc' => 'Monitor MySQL performance and resource usage',
+        'string_vars' => ['db_username', 'db_password']
+    ],
+    [
+        'name' => 'ansible-ping',
+        'desc' => 'Test Ansible connectivity',
+    ],
+];
+

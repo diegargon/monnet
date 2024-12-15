@@ -333,36 +333,91 @@
         <div id="tab11" class="host-details-tab-content">
             <div class="alarms_container">
                 <div class="">
-                    <label for="disableAlarms"><?= $lng['L_DISABLE_ALARMS'] ?>:</label>
+                    <label for="disableAlarms"><?= $lng['L_DISABLE_ALL_ALARMS'] ?>:</label>
                     <input type="hidden" id="disableAlarms" value="0">
                     <input
                         onchange="submitCommand('setHostAlarms',
                                     {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
                             type="checkbox" id="disableAlarms"
                            <?= !empty($tdata['host_details']['disable_alarms']) ? 'checked' : null ?>>
-                    <label for="enableEmailAlarms"><?= $lng['L_DISABLE_EMAIL_ALARMS'] ?>:</label>
-                    <input
-                        onchange="submitCommand('setHostEmailAlarms',
-                                    {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
-                           type="checkbox" id="enableMailAlarms"
-                           <?= !empty($tdata['host_details']['disable_email_alarms']) ? 'checked' : null ?>
-                    >
-                    <div>Tipo Alarmas</div>
-                    <label for="">Ping Host Fail:</label>
-                    <input type="hidden" id="alarm_ping_onoff" value="0">
-                    <input disabled type="checkbox" id="alarm_ping_onoff">
-                    <label for="">Ping Port Fail:</label>
-                    <input type="hidden" id="alarm_port_onoff" value="0">
-                    <input disabled type="checkbox" id="alarm_port_onoff">
-                    <label for="">Cambio MAC:</label>
-                    <input type="hidden" id="alarm_mac_change" value="0">
-                    <input disabled type="checkbox" id="alarm_mac_change">
-                    <label for="">Puerto Nuevo:</label>
-                    <input type="hidden" id="alarm_new_port" value="0">
-                    <input disabled type="checkbox" id="alarm_new_port">
+                    <div><?= $lng['L_DISABLE_PER_TYPE']?></div>
+                    <label for=""><?= $lng['L_ALARM_PING']?>:</label>
+                    <input type="hidden" id="alarm_ping_disable" value="0">
+                    <input type="checkbox"
+                           id="alarm_ping_disable"
+                           data-command="alarm_ping_disable"
+                           <?= !empty($tdata['host_details']['alarm_ping_disable']) ? 'checked' : null ?>
+                           >
+                    <label for=""><?= $lng['L_ALARM_PING_PORT']?>:</label>
+                    <input type="hidden" id="alarm_port_disable" value="0">
+                    <input type="checkbox"
+                           id="alarm_port_disable"
+                           data-command="alarm_port_disable"
+                           <?= !empty($tdata['host_details']['alarm_port_disable']) ? 'checked' : null ?>
+                           >
+                    <label for=""><?= $lng['L_ALARM_MACCHANGE']?>:</label>
+                    <input type="hidden" id="alarm_macchange_disable" value="0">
+                    <input type="checkbox"
+                           id="alarm_macchange_disable"
+                           data-command="alarm_macchange_disable""
+                           <?= !empty($tdata['host_details']['alarm_macchange_disable']) ? 'checked' : null ?>
+                           >
+                    <label for=""><?= $lng['L_ALARM_NEW_PORT']?>:</label>
+                    <input disable type="hidden" id="alarm_newport_disable" value="0">
+                    <input disable type="checkbox"
+                           id="alarm_newport_disable"
+                           data-command="alarm_newport_disable"
+                           <?= !empty($tdata['host_details']['alarm_newport_disable']) ? 'checked' : null ?>
+                           >
                     <br/>
-                    <label for="">Emails (Comma Separated)</label><br/>
-                    <input disabled type="text" size="50" id="alarm_emails">
+                    <label for="enableEmailAlarms"><?= $lng['L_EMAIL_ALARMS'] ?>:</label>
+                    <input
+                        type="checkbox" id="toggleMailAlarms"
+                        data-command="toggleMailAlarms"
+                        <?= !empty($tdata['host_details']['email_alarms']) ? 'checked' : null ?>
+                    >
+                    <br/>
+                    <div><?= $lng['L_ENABLE_PER_TYPE']?></div>
+                    <label for=""><?= $lng['L_ALARM_PING']?>:</label>
+                    <input type="hidden" id="alarm_ping_email" value="0">
+                    <input type="checkbox"
+                           id="alarm_ping_email"
+                           data-command="alarm_ping_email"
+                           <?= !empty($tdata['host_details']['alarm_ping_email']) ? 'checked' : null ?>
+                           >
+                    <label for=""><?= $lng['L_ALARM_PING_PORT']?>:</label>
+                    <input type="hidden" id="alarm_port_email" value="0">
+                    <input type="checkbox"
+                           id="alarm_port_email"
+                           data-command="alarm_port_email"
+                           <?= !empty($tdata['host_details']['alarm_port_email']) ? 'checked' : null ?>
+                           >
+                    <label for=""><?= $lng['L_ALARM_MACCHANGE']?>:</label>
+                    <input type="hidden" id="alarm_macchange_email" value="0">
+                    <input type="checkbox"
+                           id="alarm_macchange_email"
+                           data-command="alarm_macchange_email"
+                           <?= !empty($tdata['host_details']['alarm_macchange_email']) ? 'checked' : null ?>
+                           >
+                    <label for=""><?= $lng['L_ALARM_NEW_PORT']?>:</label>
+                    <input disable type="hidden" id="alarm_newport_email" value="0">
+                    <input disable type="checkbox"
+                           id="alarm_newport_email"
+                           data-command="alarm_newport_email"
+                           <?= !empty($tdata['host_details']['alarm_newport_email']) ? 'checked' : null ?>
+                           >
+                    <br/>
+                    <label for="alarm_emails">Emails (Comma Separated)</label><br/>
+                    <input type="text"
+                           size="50"
+                           id="alarm_emails"
+                           placeholder="Enter emails separated by commas"
+                           value="<?php if(!empty($tdata['host_details']['email_list'])) {
+                                    echo $tdata['host_details']['email_list'];
+                                }
+                                ?>"
+                           >
+                    <div id="email_feedback" style="color: red; font-size: 0.9em;"></div>
                 </div>
                 <div>
                     <div><?= $lng['L_ALARMS_LAST'] ?> :</div>
@@ -573,8 +628,19 @@
         </div>
         <!-- TAB20 --><!-- Ansible -->
         <div id="tab20" class="host-details-tab-content">
-            <div id="ansible_container" class="ansible_container">
-
+            <div id="ansible_container" class="ansible_container"
+                 data-playbooks='<?= json_encode($cfg['playbooks']); ?>'>
+                <div><button id="playbook_btn">Exec</button></div>
+                <select id="playbook_select">
+                    <option value="">Select Playbook</option>
+                </select>
+                <div id="playbook_desc"></div>
+                <div id="string_vars_container"></div>
+                <div id="ansible_raw_container2" class="ansible_raw_container2">
+                    <div id="raw_lines_container2>">
+                        <pre id="raw_lines2"></pre>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- /TAB20 -->

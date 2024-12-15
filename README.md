@@ -165,6 +165,13 @@ visudo and add:
 ansible ALL=(ALL) NOPASSWD: ALL
 ```
 
+# Fedora
+
+```
+sudo adduser ansible
+sudo usermod -aG wheel ansible
+```
+
 ## [NOT YET NECESSARY] CERTS
 
 For Ansible server to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via Monnet/Ansible.
@@ -172,6 +179,14 @@ For Ansible server to connect to the hosts, you need to generate an SSH key and 
 $ ssh-keygen -m PEM -t rsa -b 4096
 $ ssh-copy-id -i ~/.ssh/id_rsa.pub root@ip.ip.ip.ip
 ```
+
+# Or
+
+```
+runuser -u ansible mkdir /home/ansible/.ssh
+runuser -u ansible nano /home/ansible/.ssh/authorized_keys
+```
+and paste the ssh pub key
 
 If you don't use ssh-copy-id you must set 'host key manually'
 

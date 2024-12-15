@@ -85,21 +85,20 @@ if ($command == 'saveNote') {
     if (empty($value_command)) {
         $value_command = Filters::varDomain($command_values['value']);
     }
+} elseif ($command == 'updateAlertEmailList') {
+    //TODO filter array of emails
+    $value_command = $command_values['value'];
 } else {
 
-    if (isset($command_values['value']) && is_numeric($command_values['value'])) :
+    if (isset($command_values['value']) && is_numeric($command_values['value'])) {
         $value_command = Filters::varInt($command_values['value']);
-    endif;
-
-    if (
+    } elseif (
         empty($value_command) &&
         isset($command_values['value']) &&
         is_bool($command_values['value'])
     ) {
         $value_command = Filters::varBool($command_values['value']);
-    }
-
-    if (
+    } elseif (
         empty($value_command) &&
         isset($command_values['value'])
     ) {
@@ -830,10 +829,38 @@ if ($command === 'setHostAlarms' && $target_id > 0) {
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
 }
-if ($command === 'setHostEmailAlarms' && $target_id > 0) {
+if ($command === 'toggleMailAlarms' && $target_id > 0) {
     $msg = $hosts->setEmailAlarms($target_id, $value_command);
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
+}
+
+if ($target_id > 0 && in_array($command, [
+    "alarm_ping_disable",
+    "alarm_port_disable",
+    "alarm_macchange_disable",
+    "alarm_newport_disable",
+])) {
+    $msg = $hosts->toggleAlarmType($target_id, $command, $value_command);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $msg;
+}
+
+if ($target_id > 0 && in_array($command, [
+    "alarm_ping_email",
+    "alarm_port_email",
+    "alarm_macchange_email",
+    "alarm_newport_email",
+])) {
+    $msg = $hosts->toggleEmailAlarmType($target_id, $command, $value_command);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $msg;
+}
+
+if ($command === 'updateAlertEmailList' && $target_id > 0) {
+    $msg = $hosts->setEmailList($target_id, $value_command);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $msg;
 }
 
 /* Submit Forms */
@@ -876,6 +903,24 @@ if ($command == 'facts-reload' && !empty($target_id)) {
     }
 }
 
+if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command)) {
+    $host = $hosts->getHostById($target_id);
+    $playbook = $value_command;
+    if (valid_array($host) && $host['ansible_enabled']) {
+        $response = ansible_playbook($ctx, $host, $playbook);
+        if ($response['status'] === "success") {
+            $data['command_success'] = 1;
+            $data['response_msg'] = $response;
+        } else {
+            $data['command_error'] = 1;
+            $data['command_error_msg'] = $response['error_msg'];
+            $data['command_error_msg2'] = $value_command;
+        }
+    } else {
+        $data['command_error'] = 1;
+        $data['command_error_msg'] = $lng['L_ACCESS_METHOD'];
+    }
+}
 if (
     ($command == 'reboot' || $command == 'shutdown') &&
     !empty($target_id)

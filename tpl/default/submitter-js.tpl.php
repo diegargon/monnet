@@ -35,6 +35,7 @@
         if (typeof command_values === 'undefined' || command_values === null) {
             command_values = {};
         }
+
         console.log(requestData);
         $.post('submitter.php', requestData)
                 .done(function (data, textStatus, xhr) {

@@ -26,10 +26,7 @@ class Hosts
     /** @var int */
     public int $ansible_hosts_fail = 0;
 
-    /**
-     *
-     * @var Database $db
-     */
+    /** @var Database $db */
     private Database $db;
 
     /**
@@ -37,20 +34,30 @@ class Hosts
      *  @var array<string> $misc_keys
      */
     private $misc_keys = [
-            'mac_vendor',
-            'manufacture',
-            'system_type',
-            'os',
-            'owner',
-            'access_type',
-            'access_link',
-            'timeout',
-            'disable_alarms',
-            'disable_email_alarms',
-            'disable_ping',
-            'hypervisor_machine',
-            'vm_machine',
-        ];
+        'mac_vendor',
+        'manufacture',
+        'system_type',
+        'os',
+        'owner',
+        'access_type',
+        'access_link',
+        'timeout',
+        'disable_alarms',
+        'email_alarms',
+        'disable_ping',
+        'hypervisor_machine',
+        'vm_machine',
+        'alarm_ping_disable',
+        'alarm_port_disable',
+        'alarm_macchange_disable',
+        'alarm_newport_disable',
+        'enableMailAlarms',
+        'alarm_ping_email',
+        'alarm_port_email',
+        'alarm_macchange_email',
+        'alarm_newport_email',
+        'email_list',
+    ];
     /**
      * host[$id] = ['key' => 'value']
      * json field is decode and encode on load/update ($misc_keys)
@@ -58,17 +65,13 @@ class Hosts
      */
     private $hosts = [];
 
-    /**
-     * @var array<string> $lng
-     */
+    /** @var array<string> $lng */
     private array $lng = [];
 
-    /**
-     *
-     * @var AppContext $ctx
-     */
+    /** @var AppContext $ctx */
     private AppContext $ctx;
-
+    /** @var Config $ncfg */
+    private Config $ncfg;
     /**
      *
      * @var array<int, int> $host_cat_track
@@ -80,6 +83,7 @@ class Hosts
         $this->ctx = $ctx;
         $this->db = $ctx->get('Mysql');
         $this->lng = $ctx->get('lng');
+        $this->ncfg = $ctx->get('Config');
         $this->setHostsDb();
     }
 
@@ -191,6 +195,11 @@ class Hosts
                         $alert_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'];
                     endif;
                     $this->hosts[$id]['alert_msg'] = $alert_msg;
+                    if (!empty($this->host[$id]['alarm_macchange_email'])) {
+                        $this->sendHostMailAlert(
+                            $this->host[$id],
+                            $alert_msg, $alert_msg);
+                    }
                 }
                 //Log category change
                 if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
@@ -458,11 +467,51 @@ class Hosts
      */
     public function setEmailAlarms(int $id, bool $value): bool
     {
-        $this->update($id, ['disable_email_alarms' => $value]);
+        $this->update($id, ['email_alarms' => $value]);
 
         return true;
     }
 
+    /**
+     *
+     * @param int $id
+     * @param string $command
+     * @param int $value
+     * @return bool
+     */
+    public function toggleAlarmType(int $id, string $command, int $value): bool
+    {
+        $this->update($id, [$command => $value]);
+
+        return true;
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param string $command
+     * @param int $value
+     * @return bool
+     */
+    public function toggleEmailAlarmType(int $id, string $command, int $value): bool
+    {
+        $this->update($id, [$command => $value]);
+
+        return true;
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param array $value
+     * @return bool
+     */
+    public function setEmailList(int $id, array $value) {
+        $string = implode(",", $value);
+        $this->update($id, ['email_list' => $string]);
+
+        return true;
+    }
     /**
      *
      * @param array<string, mixed> $host
@@ -560,5 +609,33 @@ class Hosts
         }
 
         return true;
+    }
+
+    private function sendHostMailAlert(int $id, string $subject, ?string $body): void
+    {
+        if (
+            $this->ncfg->get('mail') &&
+            !empty($this->host[$id]['mail']) &&
+            !empty($this->host[$id]['email_list'])
+        ) {
+            $mails = explode(",", $this->host[$id]['email_list']);
+
+            if(!isEmpty($mails)) {
+                $mailer = $this->ctx->get('Mailer');
+                if(isset($this->host[$id]['display_name'])) :
+                    $body .= $this->host[$id]['display_name'] ."\n";
+                endif;
+                if(isset($this->host[$id]['hostname'])) :
+                    $body .= $this->host[$id]['hostname'] ."\n";
+                endif;
+                if(isset($this->host[$id]['ip'])) :
+                    $body .= $this->host[$id]['ip'] ."\n";
+                endif;
+                foreach ($mails as $mail) :
+                    $mailer->sendMail($mail, $subject, $body);
+                endforeach;
+
+            }
+        }
     }
 }

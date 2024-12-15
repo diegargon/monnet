@@ -24,6 +24,10 @@ $lng = [
     'L_ANSIBLE_HOSTS_OFF' => '(H)Ansible Off',
     'L_ANSIBLE_HOSTS_FAIL' => '(H)Ansible Fail',
     'L_ANSIBLE_SUPPORT' => 'Ansible Support',
+    'L_ALARM_PING' => 'Fallo ping',
+    'L_ALARM_PING_PORT' => 'Fallo ping port',
+    'L_ALARM_MACCHANGE' => 'Cambio de MAC',
+    'L_ALARM_NEW_PORT' => 'Nuevo puerto descubierto',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -45,7 +49,8 @@ $lng = [
     'L_DEPLOYS' => 'Deploys',
     'L_DESKTOP' => 'Escritorio',
     'L_DISPLAY_NAME' => 'Nombre a mostrar',
-    'L_DISABLE_ALARMS' => 'Deshabilitar Alarmas',
+    'L_DISABLE_ALL_ALARMS' => 'Deshabilitar todas las Alarmas',
+    'L_DISABLE_PER_TYPE' => 'Deshabilitar por tipo',
     //E
 //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
@@ -62,10 +67,11 @@ $lng = [
     'L_ERR_USERPASS_INVALID' => 'Error: usuario o password invalido',
     'L_ERR_PORT_INVALID' => 'Error: Puerto invalido',
     'L_ERR_SENDING_EMAILS' => 'Error: Enviando correos',
-    'L_DISABLE_EMAIL_ALARMS' => 'Deshabilitar Emails',
     'L_ERROR_URL_INVALID' => 'Url no valida',
     'L_EMAILS' => 'Emails',
     'L_EDIT' => 'Editar',
+    'L_EMAIL_ALARMS' => 'Alarmas correo',
+    'L_ENABLE_PER_TYPE' => 'Habilitar por tipo',
 //F
     'L_FIELD' => 'Campo',
     //G
