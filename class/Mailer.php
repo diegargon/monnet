@@ -102,7 +102,7 @@ class Mailer
      * @param string $body
      * @return bool
      */
-    public function sendEmail(string $to, string $subject, string $body): bool
+    public function sendEmail(string $to, string $subject, ?string $body): bool
     {
         if ($this->phpMailer == null) :
             return false;
