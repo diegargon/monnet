@@ -33,43 +33,40 @@ $(document).ready(function () {
 
     $(document).on("change", "#chkHighlight", function () {
         var hostId = $('#host_id').val();
+        var value = this.checked ? 1 : 0;
 
-        var value = 0;
-        if (this.checked) {
-            value = 1;
-        }
         submitCommand('setHighlight', {id: hostId, value: value});
     });
 
     $(document).on("change", "#vm_machine", function () {
         var hostId = $('#host_id').val();
+        var value = this.checked ? 1 : 0;
 
-        var value = 0;
-        if (this.checked) {
-            value = 1;
-        }
         submitCommand('toggleVMMachine', {id: hostId, value: value});
     });
 
     $(document).on("change", "#hypervisor_machine", function () {
         var hostId = $('#host_id').val();
+        var value = this.checked ? 1 : 0;
 
-        var value = 0;
-        if (this.checked) {
-            value = 1;
-        }
         submitCommand('toggleHypervisorMachine', {id: hostId, value: value});
     });
 
     //Ansible host enable
     $(document).on("change", "#ansible_enabled", function () {
         var hostId = $('#host_id').val();
+        var value = this.checked ? 1 : 0;
 
-        var value = 0;
-        if (this.checked) {
-            value = 1;
-        }
         submitCommand('setHostAnsible', {id: hostId, value: value});
+    });
+
+    $(document).on("change", "input[type='checkbox'][data-command]", function () {
+        var hostId = $('#host_id').val();
+        var value = this.checked ? 1 : 0;
+
+        var command = $(this).data('command');
+
+        submitCommand(command, { id: hostId, value: value });
     });
 
 });
