@@ -57,23 +57,23 @@ class Mailer
             return;
         }
         if (!Filters::varIp($this->ncfg->get('mail_host'))) {
-            if (!Filters::varHostname($this->ncfg->get('mail_host'))) {
+            if (!Filters::varHostname($this->ncfg->get('mail_host'))) :
                 Log::err($lang->get('L_ERR_MAIL_HOST'));
                 return;
-            }
+            endif;
         }
         if (
             $this->ncfg->get('mail_auth') &&
             empty($this->ncfg->get('mail_username')) ||
             empty($this->ncfg->get('mail_password'))
-        ) {
+        ) :
             Log::err($lang->get('L_ERR_USERPASS_INVALID'));
             return;
-        }
-        if (!empty($this->ncfg->get('mail_port')) && !is_numeric($this->ncfg->get('mail_port'))) {
+        endif;
+        if (!empty($this->ncfg->get('mail_port')) && !is_numeric($this->ncfg->get('mail_port'))) :
             Log::err($lang->get('L_ERR_PORT_INVALID'));
             return;
-        }
+        endif;
         $this->configure();
     }
 
@@ -88,10 +88,10 @@ class Mailer
     public function sendEmailMultiple(array $emails, string $subject, string $body): void
     {
         foreach ($emails as $email) {
-            if (!$this->sendEmail($email, $subject, $body)) {
+            if (!$this->sendEmail($email, $subject, $body)) :
                 Log::err('L_ERR_SENDING_EMAILS ' . $email);
                 break;
-            }
+            endif;
         }
     }
 
@@ -104,9 +104,9 @@ class Mailer
      */
     public function sendEmail(string $to, string $subject, string $body): bool
     {
-        if ($this->phpMailer == null) {
+        if ($this->phpMailer == null) :
             return false;
-        }
+        endif;
 
         try {
             $this->phpMailer->setFrom($this->phpMailer->Username);
@@ -133,18 +133,18 @@ class Mailer
             $this->phpMailer->SMTPDebug = 4;
             $this->phpMailer->Host = $ncfg->get('mail_host');
             $this->phpMailer->SMTPAuth = (bool) $ncfg->get('mail_auth');
-            if ($ncfg->get('mail_auth')) {
+            if ($ncfg->get('mail_auth')) :
                 $this->phpMailer->Username = $ncfg->get('mail_username');
                 $this->phpMailer->Password = $ncfg->get('mail_password');
-            }
-            if ($ncfg->get('mail_auth_type')) {
+            endif;
+            if ($ncfg->get('mail_auth_type')) :
                 $this->phpMailer->AuthType = $ncfg->get('mail_auth_type');
-            }
-            if ($ncfg->get('smtp_security') == 'STARTTLS') {
+            endif;
+            if ($ncfg->get('smtp_security') == 'STARTTLS') :
                 $this->phpMailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            } else {
+            else :
                 $this->phpMailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            }
+            endif;
             $this->phpMailer->Port = $ncfg->get('mail_port');
         }
     }
