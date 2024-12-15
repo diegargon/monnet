@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -28,7 +28,6 @@
         <div id="discovery_last_run" class="discovery_last_run text_shadow_style1"></div>
         <!-- Total On/Off -->
     </div>
-    <br/>
     <div id="footer_hosts_dropdown">
         <div id="footer-dropdown-item-container" class="footer-dropdown-item-container">
         </div>
