@@ -146,8 +146,8 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db->query("
             INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
             ('ansible', JSON_QUOTE('0'), 2, 1, NULL, 0),
-            ('ansible_server_ip', JSON_QUOTE('127.0.0.1'), 0, 1, NULL, 0),
-            ('ansible_server_port', JSON_QUOTE('65432'), 1, 1, NULL, 0),
+            ('ansible_server_ip', JSON_QUOTE('127.0.0.1'), 0, 102, NULL, 0),
+            ('ansible_server_port', JSON_QUOTE('65432'), 1, 102, NULL, 0),
             ('mail', JSON_QUOTE('1'), 2, 1, NULL, 0),
             ('mail_auth', JSON_QUOTE('1'), 2, 101, NULL, 0),
             ('mail_host', JSON_QUOTE('localhost'), 0, 101, NULL, 0),

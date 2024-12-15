@@ -21,7 +21,9 @@
 
     <div class="settings-tabs-head-container">
         <button id="settings_tab_1" onclick="changeSettingsTab(1)" class="settings-tabs-head active">General</button>
-        <button id="settings_tab_2" onclick="changeSettingsTab(2)" class="settings-tabs-head">Apartado2</button>
+        <?php if ($ncfg->get('ansible')) : ?>
+        <button id="settings_tab_102" onclick="changeSettingsTab(102)" class="settings-tabs-head">Ansible</button>
+        <?php endif; ?>
         <?php if ($ncfg->get('mail')) : ?>
         <button id="settings_tab_101" onclick="changeSettingsTab(101)" class="settings-tabs-head">Mail</button>
         <?php endif; ?>
