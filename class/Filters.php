@@ -143,7 +143,7 @@ class Filters
 
         foreach ($var_ary as $key => $value) {
             if (is_array($value)) {
-                $var_ary[$key] = self::sanArray($value, $method);
+                $var_ary[$key] = self::sanArray($value, 'var');
             } else {
                 if (is_numeric($value)) {
                     // Cast to int if it's a valid integer
