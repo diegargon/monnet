@@ -21,7 +21,10 @@
 
     <div class="settings-tabs-head-container">
         <button id="settings_tab_1" onclick="changeSettingsTab(1)" class="settings-tabs-head active">General</button>
-        <button id="settings_tab_2" onclick="changeSettingsTab(2)" class="settings-tabs-head">Apartado 2</button>
+        <button id="settings_tab_2" onclick="changeSettingsTab(2)" class="settings-tabs-head">Apartado2</button>
+        <?php if ($ncfg->get('mail')) : ?>
+        <button id="settings_tab_101" onclick="changeSettingsTab(101)" class="settings-tabs-head">Mail</button>
+        <?php endif; ?>
         <!--
             <button id="settings_tab_3" onclick="changeSettingsTab(3)" class="settings-tabs-head">Apartado 3</button>
         -->
@@ -94,12 +97,11 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                             ?>
                             <select id="<?= $ckey ?>" name="<?= $ckey ?>">
                                 <?php
-                                // Supongo que $config['options'] contiene las opciones para el dropdown
-                                foreach ($config['options'] as $option) {
+                                foreach ($cvalue as $cvalue_key => $cvalue_value) {
                                     ?>
                                     <option
-                                        value="<?= $option ?>" <?= $option == $cvalue ? 'selected' : '' ?>>
-                                        <?= $option ?>
+                                        value="<?= $cvalue_key ?>" <?= $cvalue_value === 1 ? 'selected' : '' ?>>
+                                        <?= $cvalue_key ?>
                                     </option>
                                     <?php
                                 }
@@ -107,7 +109,7 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                             </select>
                             <?php
                             break;
-                        case 7: // password
+                        case 700: // password
                             ?>
                             <input type="password" id="<?= $ckey ?>" name="<?= $ckey ?>" value="<?= $cvalue ?>" />
                             <input
@@ -118,12 +120,12 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                             />
                             <?php
                             break;
-                        case 8: // email
+                        case 800: // email
                             ?>
                             <input type="email" id="<?= $ckey ?>" name="<?= $ckey ?>" value="<?= $cvalue ?>" />
                             <?php
                             break;
-                        case 10: // array
+                        case 1000: // array
                             ?>
                             <textarea id="<?= $ckey ?>" name="<?= $ckey ?>"><?= json_encode($cvalue) ?></textarea>
                             <?php

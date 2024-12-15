@@ -21,6 +21,7 @@ class Mailer
      * @var PHPMailer $phpMailer
      */
     private PHPMailer $phpMailer;
+
     /**
      *
      * @var AppContext $ctx
@@ -32,34 +33,44 @@ class Mailer
      */
     private array $cfg;
 
+    /**
+     * @var Config $ncfg
+     */
+    private Config $ncfg;
+
     public function __construct(AppContext $ctx)
     {
-        $this->cfg = $ctx->get('cfg');
+        $this->ncfg = $ctx->get('Config');
         $this->ctx = $ctx;
         $lang = $this->ctx->get('Lang');
 
-        if (!$this->cfg['mailer_enabled']) {
+        if (!$this->ncfg->get('mail')) :
             return;
-        }
+        endif;
+
         // Verify  PHPMailer install
         if (\Composer\InstalledVersions::isInstalled('phpmailer/phpmailer')) {
             $this->phpMailer = new PHPMailer(true);
-            $this->phpMailer->setLanguage($this->cfg['lang']);
+            $this->phpMailer->setLanguage($this->ncfg->get('lang'));
         } else {
             Log::err($lang->get('L_ERR_MAILER'));
             return;
         }
-        if (!Filters::varIp($this->cfg['mail_host'])) {
-            if (!Filters::varHostname($this->cfg['mail_host'])) {
+        if (!Filters::varIp($this->ncfg->get('mail_host'))) {
+            if (!Filters::varHostname($this->ncfg->get('mail_host'))) {
                 Log::err($lang->get('L_ERR_MAIL_HOST'));
                 return;
             }
         }
-        if ($this->cfg['mail_auth'] && empty($this->cfg['mail_username']) || empty($this->cfg['mail_password'])) {
+        if (
+            $this->ncfg->get('mail_auth') &&
+            empty($this->ncfg->get('mail_username')) ||
+            empty($this->ncfg->get('mail_password'))
+        ) {
             Log::err($lang->get('L_ERR_USERPASS_INVALID'));
             return;
         }
-        if (!empty($this->cfg['mail_port']) && !is_numeric($this->cfg['mail_port'])) {
+        if (!empty($this->ncfg->get('mail_port')) && !is_numeric($this->ncfg->get('mail_port'))) {
             Log::err($lang->get('L_ERR_PORT_INVALID'));
             return;
         }
@@ -102,7 +113,6 @@ class Mailer
             $this->phpMailer->addAddress($to);
             $this->phpMailer->Subject = $subject;
             $this->phpMailer->Body = $body;
-
             $this->phpMailer->send();
             return true;
         } catch (Exception $e) {
@@ -117,22 +127,25 @@ class Mailer
      */
     private function configure(): void
     {
-
+        $ncfg = $this->ncfg;
         if ($this->phpMailer != null) {
             $this->phpMailer->isSMTP();
-            //$this->phpMailer->SMTPDebug = 4;
-            $this->phpMailer->Host = $this->cfg['mail_host'];
-            $this->phpMailer->SMTPAuth = (bool) $this->cfg['mail_auth'];
-            if ($this->cfg['mail_auth']) {
-                $this->phpMailer->Username = $this->cfg['mail_username'];
-                $this->phpMailer->Password = $this->cfg['mail_password'];
+            $this->phpMailer->SMTPDebug = 4;
+            $this->phpMailer->Host = $ncfg->get('mail_host');
+            $this->phpMailer->SMTPAuth = (bool) $ncfg->get('mail_auth');
+            if ($ncfg->get('mail_auth')) {
+                $this->phpMailer->Username = $ncfg->get('mail_username');
+                $this->phpMailer->Password = $ncfg->get('mail_password');
             }
-            if ($this->cfg['mail_auth_type']) {
-                $this->phpMailer->AuthType = $this->cfg['mail_auth_type'];
+            if ($ncfg->get('mail_auth_type')) {
+                $this->phpMailer->AuthType = $ncfg->get('mail_auth_type');
             }
-            $this->phpMailer->SMTPSecure = $this->cfg['mail_security'];
-
-            $this->phpMailer->Port = $this->cfg['mail_port'];
+            if ($ncfg->get('smtp_security') == 'STARTTLS') {
+                $this->phpMailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            } else {
+                $this->phpMailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            }
+            $this->phpMailer->Port = $ncfg->get('mail_port');
         }
     }
 }

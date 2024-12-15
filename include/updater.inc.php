@@ -143,12 +143,21 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
             ADD `ansible_enabled` TINYINT NOT NULL DEFAULT '0',
             ADD `ansible_fail` TINYINT NOT NULL DEFAULT '0';"
         );
-        $db->query(
-            "INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+        $db->query("
+            INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
             ('ansible', JSON_QUOTE('0'), 2, 1, NULL, 0),
             ('ansible_server_ip', JSON_QUOTE('127.0.0.1'), 0, 1, NULL, 0),
-            ('ansible_server_port', JSON_QUOTE('65432'), 1, 1, NULL, 0);"
-        );
+            ('ansible_server_port', JSON_QUOTE('65432'), 1, 1, NULL, 0),
+            ('mail', JSON_QUOTE('1'), 2, 1, NULL, 0),
+            ('mail_auth', JSON_QUOTE('1'), 2, 101, NULL, 0),
+            ('mail_host', JSON_QUOTE('localhost'), 0, 101, NULL, 0),
+            ('mail_username', JSON_QUOTE('monnet@localhost'), 0, 101, NULL, 0),
+            ('mail_password', JSON_QUOTE('mypassword'), 0, 101, NULL, 0),
+            ('mail_port', JSON_QUOTE('587'), 1, 101, NULL, 0),
+            ('mail_auth_type', JSON_QUOTE('{\"LOGIN\": 0, \"PLAIN\": 1, \"XOAUTH2\": 0, \"CRAM-MD5\": 0}'), 6, 101, NULL, 0),
+            ('mail_from', JSON_QUOTE('monnet@localhost'), 0, 101, NULL, 0),
+            ('smtp_security', JSON_QUOTE('{\"SMTPS\": 0, \"STARTTLS\": 1}'), 6, 101, NULL, 0);
+        ");
         $db->query(
             "CREATE TABLE `ansible_msg` (
                 `id` INT NOT NULL AUTO_INCREMENT,

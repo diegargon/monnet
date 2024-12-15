@@ -2,13 +2,12 @@
 
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-
 /**
  * Clase config
  * ctype =
@@ -18,11 +17,10 @@
  *          3(float)
  *          4(date)
  *          5(url)
- *          6(dropdown)
- *          7(password)
- *          8(email)
- *          10(array)
- *          11(array<array>)
+ *          6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
+ *          7(password)?
+ *          8(email) ?
+ *
  * ccat = 0 (hidde), 1 (misc) 2 (general)
  */
 class Config
@@ -45,7 +43,10 @@ class Config
     public function __construct(array $cfg, AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->cfg = $cfg;
+        foreach ($cfg as $cfg_key => $cfg_value) :
+            $this->cfg[$cfg_key]['value'] = $cfg_value;
+        endforeach;
+
         $this->loadFromDatabase();
 
         // Registrar la función de guardado al cierre
@@ -77,7 +78,9 @@ class Config
                     isset($row['ccat']) &&
                     $row['ccat'] > 0
                 ) {
-                    $this->cfg[$key] = $value;
+                    $this->cfg[$key]['value'] = $value;
+                    $this->cfg[$key]['ctype'] = (int) $row['ctype'];
+                    $this->cfg[$key]['ccat'] = $row['ccat'];
                 }
             }
         }
@@ -110,10 +113,17 @@ class Config
      */
     public function get($key)
     {
-        if (!isset($this->cfg[$key])) {
+        if (!isset($this->cfg[$key]['value'])) :
             return null;
+        endif;
+        if (isset($this->cfg[$key]['ctype']) && $this->cfg[$key]['ctype'] == 6) {
+            foreach($this->cfg[$key]['value'] as $kvalue => $vvalue) {
+                if($vvalue):
+                    return $kvalue;
+                endif;
+            }
         }
-        return $this->cfg[$key];
+        return $this->cfg[$key]['value'];
     }
 
     /**
@@ -171,11 +181,29 @@ class Config
      */
     public function set($key, $value): int
     {
+        if (isset($this->cfg[$key])) {
+            $config = &$this->cfg[$key];
 
-        if (isset($this->cfg[$key]) && $this->cfg[$key] !== $value) {
-            $this->cfg[$key] = $value;
-            $this->modifiedKeys[$key] = $value;
-            return 1;
+            if ($config['ctype'] == 6) {
+                foreach($config['value'] as $key_value => &$value_value) {
+
+                    if ($key_value == $value) {
+                        if ($value_value != 1) {
+                            $config['value'][$key_value] = 1;
+                        }
+                    } else {
+                        $value_value = 0;
+                    }
+
+                    unset($value_value);
+                }
+                $this->modifiedKeys[$key]['value'] = $config['value'];
+                return 1;
+            } elseif ($config['value'] !== $value) {
+                $config['value'] = $value;
+                $this->modifiedKeys[$key]['value'] = $value;
+                return 1;
+            }
         }
 
         return 0;
@@ -212,7 +240,7 @@ class Config
 
         foreach ($this->modifiedKeys as $key => $value) {
             $escapedKey = $db->escape($key);
-            $escapedValue = $db->escape(json_encode($value));
+            $escapedValue = $db->escape(json_encode($value['value']));
 
             $values[] = "('$escapedKey', '$escapedValue')";
         }
@@ -254,6 +282,11 @@ class Config
                 return (float)$decodedValue;
             case 4: // date
                 return (strtotime($decodedValue) !== false) ? $decodedValue : null;
+            case 5: // url
+                //TODO Filter?
+                return (string) $decodedValue;
+            case 6: // json object VALUE=1 (1 selected)
+                return $decodedValue;
             default:
                 throw new InvalidArgumentException("Unsupported type: $type");
         }

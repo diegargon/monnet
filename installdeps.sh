@@ -32,15 +32,15 @@ if ask_yes_no "Do you want to install the basic deps (apache,php-fpm,...)"; then
 fi
 
 # Install Composer
-if ask_yes_no "Do you want to install Composer? (for phpseclib and phpmailer)"; then
+if ask_yes_no "Do you want to install Composer? (need phpmailer)"; then
     echo "Installing Composer..."
     sudo apt install -y composer
 
     # Install phpseclib
-    if ask_yes_no "Do you want to install phpseclib? (not necesary yet)"; then
-        echo "Installing phpseclib with Composer..."
-        composer require phpseclib/phpseclib
-    fi
+    #if ask_yes_no "Do you want to install phpseclib? (not necesary yet)"; then
+    #    echo "Installing phpseclib with Composer..."
+    #    composer require phpseclib/phpseclib
+    #fi
 
     # Install PHPMailer
     if ask_yes_no "Do you want to install PHPMailer? (not necesary yet)"; then

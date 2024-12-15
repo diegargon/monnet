@@ -58,16 +58,6 @@ $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 $cfg['stats_clear_days'] = 30;
 $cfg['logs_clear_days'] = 30;
 
-/* Mail Config */
-$cfg['mailer_enabled'] = 0; //need compose->phpmailer
-$cfg['mail_host'] = 'localhost';
-$cfg['mail_auth'] = true;
-$cfg['mail_username'] = 'monnet@';
-$cfg['mail_password'] = 'monnet';
-$cfg['mail_security'] = null; // null:false:ssl:tls
-$cfg['mail_auth_type'] = 'LOGIN';
-$cfg['mail_port'] = 25;
-$cfg['mail_from'] = "noreply@";
 /* Modules Config */
 
 $cfg['weather_widget']['country'] = 'vigo';

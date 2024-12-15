@@ -13,6 +13,7 @@ class Lang
 {
     /** @var array<string> $language */
     private static array $language = [];
+
     /** @var string */
     private static string $defaultLang = 'es';
 
@@ -35,15 +36,17 @@ class Lang
          *
          */
         //Default lang
-        $langFile = 'lang/lang.' . self::$defaultLang . '.php';
+        $langFile = 'lang/' . self::$defaultLang . '/main.lang.php';
         if (file_exists($langFile)) {
-            self::$language = include $langFile;
+            /** @var array<string,string> $lng */
+            include $langFile;
+            self::$language = $lng;
         } else {
             throw new Exception("Lang file '$langFile' not found");
         }
-        if (!$langCode) {
+        if (!$langCode) :
             return true;
-        }
+        endif;
         //Config lang
 
         /**
@@ -51,9 +54,11 @@ class Lang
          * @phpstan-ignore-next-line
          */
         if ($langCode !== self::defaultLang) {
-            $sel_langfile = 'lang/lang.' . $langCode . '.php';
+            $sel_langfile = 'lang/' . $langCode . '/main.lang.php';
             if (file_exists($sel_langfile)) {
-                $sel_lang = include $sel_langfile;
+                /** @var array<string,string> $lng */
+                include $sel_langfile;
+                $sel_lang = $lng;
                 self::$language = array_merge(self::$language, $sel_lang);
             }
         }
@@ -66,7 +71,6 @@ class Lang
      * @param string $langCode
      * @return bool
      */
-
     public static function loadUserLang(string $langCode): bool
     {
         /**
@@ -76,9 +80,11 @@ class Lang
         if ($langCode === self::$defaultLang || $langCode === self::$selLanCode) {
             return false;
         }
-        $userlangfile = 'lang/lang.' . $langCode . '.php';
+        $userlangfile = 'lang/' . $langCode . '/main.lang.php';
         if (file_exists($userlangfile)) {
-            $user_lang = include $userlangfile;
+            /** @var array<string,string> $lng */
+            include $userlangfile;
+            $user_lang = $lng;
             self::$language = array_merge(self::$language, $user_lang);
         }
         return true;
@@ -91,9 +97,10 @@ class Lang
      */
     public static function get(string $key): string|false
     {
-        if (self::$language && isset(self::$language[$key])) {
+        if (self::$language && isset(self::$language[$key])) :
             return self::$language[$key];
-        }
+        endif;
+
         return false;
     }
 }
