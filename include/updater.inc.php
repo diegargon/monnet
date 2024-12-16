@@ -138,6 +138,9 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
     }
     // 0.39
     if ($db_version < 0.39) {
+        $db->query("ALTER TABLE `config` CHANGE `cvalue` `cvalue` JSON NULL;");
+        $db->query("ALTER TABLE `config` CHANGE `cdesc` `cdesc` JSON NULL;");
+        $db->query("COMMIT");
         $db->query(
             "ALTER TABLE `hosts`
             ADD `ansible_enabled` TINYINT NOT NULL DEFAULT '0',
@@ -169,7 +172,6 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
                 KEY `host_id` (`host_id`)
             );"
         );
-        $db->query("ALTER TABLE `config` CHANGE `cvalue` `cvalue` JSON NULL;");
         Log::info("Update version to 0.39 successful");
         $db->query("UPDATE prefs SET pref_value='0.39' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db->query("COMMIT");
