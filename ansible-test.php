@@ -29,9 +29,10 @@ if ($socket === false) {
 $result = socket_connect($socket, $host, $port);
 if ($result === false) {
     echo json_encode(
-            ["error" => "No se pudo conectar al socket", "details" =>
-                socket_strerror(socket_last_error($socket))]
-            );
+        [
+            "error" => "No se pudo conectar al socket",
+            "details" => socket_strerror(socket_last_error($socket))]
+        );
     exit;
 }
 
@@ -49,8 +50,7 @@ while (!$jsonComplete) {
     if ($chunk === false) {
         echo json_encode([
             "error" => "Error al leer del socket", "details" =>
-            socket_strerror(socket_last_error($socket))]
-            );
+            socket_strerror(socket_last_error($socket))]);
         exit;
     }
     if ($chunk === '') {
@@ -91,7 +91,7 @@ if (
         $responseArray['status'] === 'success' &&
         isset($responseArray['result'])
 ) {
-    echo "Resultado\n". json_encode($responseArray, JSON_PRETTY_PRINT);
+    echo "Resultado\n" . json_encode($responseArray, JSON_PRETTY_PRINT);
     if (json_last_error() !== JSON_ERROR_NONE) {
         echo "Error al decodificar el campo 'result': " . json_last_error_msg() . "\n";
         echo "Contenido de 'result': " . $responseArray['result'];

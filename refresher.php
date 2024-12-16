@@ -150,13 +150,33 @@ if ($user->getPref('show_termlog_status')) {
 $data['misc']['totals'] = $lng['L_SHOWED'] . ": $show_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count";
 $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
 
-$data['footer_dropdown'][] = ['value' => $total_hosts_on, 'desc' => $lng['L_HOSTS_ON'], 'number-color' => 'blue'];
-$data['footer_dropdown'][] = ['value' => $total_hosts_off, 'desc' => $lng['L_HOSTS_OFF'], 'number-color' => 'red'];
+$data['footer_dropdown'][] = [
+    'value' => $total_hosts_on,
+    'desc' => $lng['L_HOSTS_ON'],
+    'number-color' => 'blue'
+];
+$data['footer_dropdown'][] = [
+    'value' => $total_hosts_off,
+    'desc' => $lng['L_HOSTS_OFF'],
+    'number-color' => 'red'
+];
 
 if ($ncfg->get('ansible')) {
-    $data['footer_dropdown'][] = ['value' => $ansible_hosts, 'desc' => $lng['L_ANSIBLE_HOSTS'], 'number-color' => 'blue'];
-    $data['footer_dropdown'][] = ['value' => $ansible_hosts_off, 'desc' => $lng['L_ANSIBLE_HOSTS_OFF'], 'number-color' => 'red'];
-    $data['footer_dropdown'][] = ['value' => $ansible_hosts_fail, 'desc' => $lng['L_ANSIBLE_HOSTS_FAIL'], 'number-color' => 'red'];
+    $data['footer_dropdown'][] = [
+        'value' => $ansible_hosts,
+        'desc' => $lng['L_ANSIBLE_HOSTS'],
+        'number-color' => 'blue'
+    ];
+    $data['footer_dropdown'][] = [
+        'value' => $ansible_hosts_off,
+        'desc' => $lng['L_ANSIBLE_HOSTS_OFF'],
+        'number-color' => 'red'
+    ];
+    $data['footer_dropdown'][] = [
+        'value' => $ansible_hosts_fail,
+        'desc' => $lng['L_ANSIBLE_HOSTS_FAIL'],
+        'number-color' => 'red'
+    ];
 }
 //TODO  system_prefs class?
 $results = $db->select('prefs', '*', ['uid' => 0]);

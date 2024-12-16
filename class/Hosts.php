@@ -198,7 +198,8 @@ class Hosts
                     if (!empty($this->host[$id]['alarm_macchange_email'])) {
                         $this->sendHostMailAlert(
                             $this->host[$id],
-                            $alert_msg, $alert_msg);
+                            $alert_msg, $alert_msg
+                        );
                     }
                 }
                 //Log category change
@@ -506,7 +507,8 @@ class Hosts
      * @param array $value
      * @return bool
      */
-    public function setEmailList(int $id, array $value) {
+    public function setEmailList(int $id, array $value): bool
+    {
         $string = implode(",", $value);
         $this->update($id, ['email_list' => $string]);
 
@@ -589,7 +591,7 @@ class Hosts
                 }
             }
 
-        if ($ncfg->get('ansible')) {
+            if ($ncfg->get('ansible')) {
                 if ($host['ansible_enabled']) {
                     $this->ansible_hosts++;
                     if (!$host['online']) :
@@ -620,12 +622,12 @@ class Hosts
         ) {
             $mails = explode(",", $this->host[$id]['email_list']);
 
-            if(!isEmpty($mails)) {
+            if (!isEmpty($mails)) {
                 $mailer = $this->ctx->get('Mailer');
-                if(isset($this->host[$id]['display_name'])) :
+                if (isset($this->host[$id]['display_name'])) :
                     $body .= $this->host[$id]['display_name'] ."\n";
                 endif;
-                if(isset($this->host[$id]['hostname'])) :
+                if (isset($this->host[$id]['hostname'])) :
                     $body .= $this->host[$id]['hostname'] ."\n";
                 endif;
                 if(isset($this->host[$id]['ip'])) :
@@ -634,7 +636,6 @@ class Hosts
                 foreach ($mails as $mail) :
                     $mailer->sendMail($mail, $subject, $body);
                 endforeach;
-
             }
         }
     }

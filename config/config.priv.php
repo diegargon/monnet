@@ -297,4 +297,3 @@ $cfg['playbooks'] = [
         'desc' => 'Test Ansible connectivity',
     ],
 ];
-

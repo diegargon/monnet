@@ -89,7 +89,6 @@ if ($command == 'saveNote') {
     //TODO filter array of emails
     $value_command = $command_values['value'];
 } else {
-
     if (isset($command_values['value']) && is_numeric($command_values['value'])) {
         $value_command = Filters::varInt($command_values['value']);
     } elseif (
@@ -846,12 +845,15 @@ if ($target_id > 0 && in_array($command, [
     $data['response_msg'] = $msg;
 }
 
-if ($target_id > 0 && in_array($command, [
+if (
+    $target_id > 0 &&
+    in_array($command, [
     "alarm_ping_email",
     "alarm_port_email",
     "alarm_macchange_email",
     "alarm_newport_email",
-])) {
+    ])
+    ) {
     $msg = $hosts->toggleEmailAlarmType($target_id, $command, $value_command);
     $data['command_success'] = 1;
     $data['response_msg'] = $msg;

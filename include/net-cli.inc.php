@@ -78,7 +78,7 @@ function check_known_hosts(AppContext $ctx): bool
                 $new_host_status['online_change'] = utc_date_now();
                 $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON'];
                 Log::logHost('LOG_NOTICE', $host['id'], $log_msg);
-                if($host['alarm_port_email']) :
+                if ($host['alarm_port_email']) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;
 
@@ -92,7 +92,7 @@ function check_known_hosts(AppContext $ctx): bool
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout;
                 Log::logHost('LOG_WARNING', $host['id'], $log_msg);
-                if($host['alarm_ping_email']) :
+                if ($host['alarm_ping_email']) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;
             }

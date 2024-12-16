@@ -143,7 +143,7 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                     }
                     ?>
                 </div>
-            <?php } ?>
+    <?php } ?>
             <button onclick="sendFormData(this)" class="button-submit" type="button">Submit</button>
         </form>
     </div>
