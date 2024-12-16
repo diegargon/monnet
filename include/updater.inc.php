@@ -179,6 +179,10 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
     }
     // 0.40
     if ($db_version < 0.00) {
+#        $db->query("
+#            INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+#            ('ansible_user', JSON_QUOTE('ansible'), 0, 102, NULL, 0);
+#        ");
 #        $db->query("ALTER TABLE `hosts` DROP `access_method`;");
 #        $db->query("ALTER TABLE `hosts` ADD `reports_on_fail` TINYINT NOT NULL DEFAULT '0';");
         Log::info("Update version to 0.40 successful");
