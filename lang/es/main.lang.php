@@ -121,6 +121,7 @@ $lng = [
     'L_MANUFACTURE' => 'Manufacture',
     'L_MUST_BE' => 'debe ser',
     'L_MASK' => 'Mascara',
+    'L_MAIL' => 'Correo',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',

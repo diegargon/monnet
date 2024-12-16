@@ -277,3 +277,14 @@ function isEmpty(&$var): bool
 
     return false;
 }
+
+/**
+ * Devuelve Json decodicado o null si no es valido
+ *
+ * @param string $string
+ * @return mixed
+ */
+function isJson(string $string): mixed {
+    $decoded = json_decode($string, true);
+    return json_last_error() === JSON_ERROR_NONE ? $decoded : null;
+}

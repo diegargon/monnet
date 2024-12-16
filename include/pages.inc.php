@@ -313,6 +313,9 @@ function page_settings(AppContext $ctx): array
     $groupedConfig = [];
     foreach ($config_all as $config) {
         $ccat = $config['ccat'];
+        if ( ($json = isJson($config['cvalue']))):
+            $config['cvalue'] = $json;
+        endif;
         $groupedConfig[$ccat][] = $config;
     }
 
