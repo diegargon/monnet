@@ -118,7 +118,7 @@ class Config
         endif;
         if (isset($this->cfg[$key]['ctype']) && $this->cfg[$key]['ctype'] == 6) {
             foreach ($this->cfg[$key]['value'] as $kvalue => $vvalue) {
-                if ($vvalue):
+                if ($vvalue) :
                     return $kvalue;
                 endif;
             }

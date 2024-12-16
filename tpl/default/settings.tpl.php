@@ -10,7 +10,7 @@
 /**
  * In frontend->getTpl()
  * @var array<int|string, mixed> $cfg
- * @var array<int|string, mixed> $ncfg
+ * @var Config $ncfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -48,7 +48,7 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                 $cvalue = $config['cvalue'];
                 $cdesc = $config['cdesc'];
                 $cdisplay = $config['cdisplay'];
-        ?>
+            ?>
                 <div class="config-field">
                     <label for="<?= $ckey ?>"><?= $cdisplay ?></label>
                     <?php
@@ -143,7 +143,7 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                     }
                     ?>
                 </div>
-    <?php } ?>
+        <?php } ?>
             <button onclick="sendFormData(this)" class="button-submit" type="button">Submit</button>
         </form>
     </div>

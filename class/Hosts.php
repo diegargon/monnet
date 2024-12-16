@@ -198,7 +198,8 @@ class Hosts
                     if (!empty($this->host[$id]['alarm_macchange_email'])) {
                         $this->sendHostMailAlert(
                             $this->host[$id],
-                            $alert_msg, $alert_msg
+                            $alert_msg,
+                            $alert_msg
                         );
                     }
                 }
@@ -439,8 +440,8 @@ class Hosts
      */
     public function setAlarmOn(int $id, string $msg): void
     {
-        $this->hosts['id']['alert'] = 1;
-        $this->hosts['id']['alert_msg'] = $msg;
+        $this->hosts[$id]['alert'] = 1;
+        $this->hosts[$id]['alert_msg'] = $msg;
         $this->update($id, ['alert' => 1, 'alert_msg' => $msg]);
     }
 
@@ -453,11 +454,11 @@ class Hosts
     public function setAnsibleAlarm(int $id, string $msg): void
     {
 
-        $this->hosts['id']['alert'] = 1;
-        $this->hosts['id']['alert_msg'] = 'Ansible Alert';
-        $this->hosts['id']['ansible_fail'] = 1;
+        $this->hosts[$id]['alert'] = 1;
+        $this->hosts[$id]['alert_msg'] = 'Ansible Alert';
+        $this->hosts[$id]['ansible_fail'] = 1;
         $this->update($id, ['alert' => 1, 'alert_msg' => $msg, 'ansible_fail' => 1]);
-        $this->db("INSERT INTO `ansible_msg` ('host_id', 'msg') VALUES ($id, $msg)");
+        $this->db->query("INSERT INTO `ansible_msg` ('host_id', 'msg') VALUES ($id, $msg)");
     }
 
     /**
@@ -504,7 +505,7 @@ class Hosts
     /**
      *
      * @param int $id
-     * @param array $value
+     * @param array<string> $value
      * @return bool
      */
     public function setEmailList(int $id, array $value): bool
@@ -625,13 +626,13 @@ class Hosts
             if (!isEmpty($mails)) {
                 $mailer = $this->ctx->get('Mailer');
                 if (isset($this->host[$id]['display_name'])) :
-                    $body .= $this->host[$id]['display_name'] ."\n";
+                    $body .= $this->host[$id]['display_name'] . "\n";
                 endif;
                 if (isset($this->host[$id]['hostname'])) :
-                    $body .= $this->host[$id]['hostname'] ."\n";
+                    $body .= $this->host[$id]['hostname'] . "\n";
                 endif;
                 if(isset($this->host[$id]['ip'])) :
-                    $body .= $this->host[$id]['ip'] ."\n";
+                    $body .= $this->host[$id]['ip'] . "\n";
                 endif;
                 foreach ($mails as $mail) :
                     $mailer->sendMail($mail, $subject, $body);

@@ -845,8 +845,7 @@ if ($target_id > 0 && in_array($command, [
     $data['response_msg'] = $msg;
 }
 
-if (
-    $target_id > 0 &&
+if ($target_id > 0 &&
     in_array($command, [
     "alarm_ping_email",
     "alarm_port_email",

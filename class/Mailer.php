@@ -29,11 +29,6 @@ class Mailer
     private AppContext $ctx;
 
     /**
-     * @var array<int|string, mixed> $cfg
-     */
-    private array $cfg;
-
-    /**
      * @var Config $ncfg
      */
     private Config $ncfg;

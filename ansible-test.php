@@ -20,9 +20,9 @@ $data = [
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 if ($socket === false) {
     echo json_encode(
-            ["error" => "Error al crear el socket", "details" =>
-                socket_strerror(socket_last_error())]
-            );
+        ["error" => "Error al crear el socket",
+        "details" => socket_strerror(socket_last_error())]
+    );
     exit;
 }
 
@@ -32,7 +32,7 @@ if ($result === false) {
         [
             "error" => "No se pudo conectar al socket",
             "details" => socket_strerror(socket_last_error($socket))]
-        );
+    );
     exit;
 }
 

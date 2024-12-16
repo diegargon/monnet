@@ -130,8 +130,8 @@ function base_url(string $url): string|bool
 }
 
 /**
- * @param array<int|string, mixed>
- * 
+ * @param array<int|string, mixed> array
+ *
  * @return string
  */
 function array2string(array $array): string
@@ -271,7 +271,7 @@ function isEmpty(&$var): bool
         return true;
     endif;
 
-    if ($var === '' || (is_arrau($var) && $var === [])) :
+    if ($var === '' || (is_array($var) && $var === [])) :
         return true;
     endif;
 
