@@ -1,4 +1,5 @@
 ** HIGH
+* Ansible menu los playbooks no cargan despues de cerrar la ventana y abrirla otra vez
 * [DB 0.35v] Host: Envio de correos cuando cambia el estado "Alert Tab". Meter en misc la lista de emails, activar/desactivar con warn_mail
 * TODO 1111: Filter/check values
 * No hay forma de borrar una red

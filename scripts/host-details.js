@@ -22,7 +22,23 @@ $(document).ready(function () {
     $(document).off("click", "#playbook_btn").on("click", "#playbook_btn", function () {
         var hostId = $('#host_id').val();
         var command = $('#playbook_select').val();
-        requestHostDetails('playbook_exec', {id: hostId, value: command});
+
+        var extraVars = $('#string_vars_container input').serializeArray();
+
+        // Preparar el objeto de datos
+        var requestData = {
+            id: hostId,
+            value: command
+        };
+
+        // Añadir extra_vars solo si tiene valores
+        if (extraVars.length > 0) {
+            requestData.extra_vars = extraVars;
+        }
+
+        // Llamar a requestHostDetails
+        requestHostDetails('playbook_exec', requestData);
+
     });
 
     $(document).off("click", "#syslog_btn").on("click", "#syslog_btn", function () {
@@ -138,7 +154,7 @@ function initializePlaybookForm() {
                 playbook.string_vars.forEach(function(varName) {
                     $('#string_vars_container').append(`
                         <label for="${varName}">${varName}:</label>
-                        <input type="text" id="${varName}" name="${varName}" placeholder="Enter ${varName}">
+                        <input type="text" id="${varName}" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
                     `);
                 });
             }

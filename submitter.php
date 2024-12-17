@@ -908,20 +908,29 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
     $host = $hosts->getHostById($target_id);
     $playbook = $value_command;
     if (valid_array($host) && $host['ansible_enabled']) {
-        $response = ansible_playbook($ctx, $host, $playbook);
+        // Verificar si extra_vars está presente y no vacío
+        if(!isEmpty($command_values['extra_vars'])) {
+            $extra_vars = $command_values['extra_vars'];
+        } else {
+            $extra_vars = [];
+        }
+
+        $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
         if ($response['status'] === "success") {
             $data['command_success'] = 1;
             $data['response_msg'] = $response;
+            $data['response_msg2'] = $extra_vars;
         } else {
             $data['command_error'] = 1;
             $data['command_error_msg'] = $response['error_msg'];
-            $data['command_error_msg2'] = $value_command;
+            $data['command_error_msg2'] = $extra_vars;
         }
     } else {
         $data['command_error'] = 1;
         $data['command_error_msg'] = $lng['L_ACCESS_METHOD'];
     }
 }
+
 if (
     ($command == 'reboot' || $command == 'shutdown') &&
     !empty($target_id)
