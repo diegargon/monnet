@@ -239,7 +239,7 @@ class Config
 
         foreach ($this->modifiedKeys as $key => $value) {
             $escapedKey = $db->escape($key);
-            $escapedValue = $db->escape(json_encode($value['value']));
+            $escapedValue = json_encode($value['value'], JSON_HEX_APOS | JSON_HEX_QUOT);
 
             $values[] = "('$escapedKey', '$escapedValue')";
         }
@@ -285,6 +285,9 @@ class Config
                 //TODO Filter?
                 return (string) $decodedValue;
             case 6: // json object VALUE=1 (1 selected)
+                if ( (!is_array($decodedValue) && $json = isJson($decodedValue))) :
+                    $decodedValue = $json;
+                endif;
                 return $decodedValue;
             default:
                 throw new InvalidArgumentException("Unsupported type: $type");

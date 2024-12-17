@@ -110,6 +110,7 @@ $cfg['os'] = [
     33 => ['id' => 33, 'name' => 'Proprietary', 'img' => 'proprietary.png'],
     34 => ['id' => 34, 'name' => 'Linux Embebbed', 'img' => 'embedded.png'],
     35 => ['id' => 35, 'name' => 'Tasmota', 'img' => 'embedded.png'],
+    36 => ['id' => 36, 'name' => 'Proxmox', 'img' => 'proxmox.png'],
 ];
 
 /* Systems */
@@ -144,6 +145,7 @@ $cfg['system_type'] = [
     26 => ['id' => 26, 'name' => 'Printer Server', 'img' => 'printer-server.png'],
     27 => ['id' => 27, 'name' => 'Log Server', 'img' => 'printer-server.png'],
     28 => ['id' => 28, 'name' => 'Database Server', 'img' => 'database-server.png'],
+    29 => ['id' => 29, 'name' => 'N', 'img' => 'database-server.png'],
 ];
 
 $cfg['versions'] = [

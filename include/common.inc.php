@@ -75,11 +75,11 @@ $ctx->setLang($lng);
 require_once 'class/Lang.php';
 Log::init($cfg, $db, $lng);
 
+require_once 'include/util.inc.php';
 require_once 'include/updater.inc.php';
 $ncfg = $ctx->set('Config', new Config($cfg, $ctx));
 
 require_once 'class/Filters.php';
-require_once 'include/util.inc.php';
 require_once 'include/time.inc.php';
 
 if ($ncfg->get('ansible')) {
