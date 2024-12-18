@@ -130,17 +130,17 @@ function base_url(string $url): string|bool
 }
 
 /**
- * @param array<int|string, mixed> array
+ * @param array<int|string, mixed> ary
  *
  * @return string
  */
-function array2string(array $array): string
+function array2string(array $ary): string
 {
     /**
      * @var array<string> $result
      */
     $result = [];
-    foreach ($array as $subarray) {
+    foreach ($ary as $subarray) {
         if (is_array($subarray)) {
             $result[] = array2string($subarray) . '::';
         } else {
@@ -284,7 +284,8 @@ function isEmpty(&$var): bool
  * @param string $string
  * @return mixed
  */
-function isJson(string $string): mixed {
+function isJson(string $string): mixed
+{
     $decoded = json_decode($string, true);
     return json_last_error() === JSON_ERROR_NONE ? $decoded : null;
 }

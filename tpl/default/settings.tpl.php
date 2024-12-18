@@ -19,12 +19,23 @@
 ?>
 <div class="settings-container" id="settings-container">
     <div class="settings-tabs-head-container">
-        <button id="settings_tab_1" onclick="changeSettingsTab(1)" class="settings-tabs-head active"><?= $lng['L_GENERAL'];?></button>
+        <button
+            id="settings_tab_1"
+            onclick="changeSettingsTab(1)"
+            class="settings-tabs-head active"><?= $lng['L_GENERAL'];?>
+        </button>
         <?php if ($ncfg->get('ansible')) : ?>
-        <button id="settings_tab_102" onclick="changeSettingsTab(102)" class="settings-tabs-head">Ansible</button>
+        <button
+            id="settings_tab_102"
+            onclick="changeSettingsTab(102)"
+            class="settings-tabs-head">Ansible
+        </button>
         <?php endif; ?>
         <?php if ($ncfg->get('mail')) : ?>
-        <button id="settings_tab_101" onclick="changeSettingsTab(101)" class="settings-tabs-head"><?= $lng['L_MAIL']?></button>
+        <button
+            id="settings_tab_101" onclick="changeSettingsTab(101)"
+            class="settings-tabs-head"><?= $lng['L_MAIL']?>
+        </button>
         <?php endif; ?>
         <!--
             <button id="settings_tab_3" onclick="changeSettingsTab(3)" class="settings-tabs-head">Apartado 3</button>

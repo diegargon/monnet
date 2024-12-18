@@ -151,12 +151,12 @@ $data['misc']['totals'] = $lng['L_SHOWED'] . ": $show_hosts_count | {$lng['L_TOT
 $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
 
 $data['footer_dropdown'][] = [
-    'value' => $total_hosts_on,
+    'value' => $total_hosts_on ?? 0,
     'desc' => $lng['L_HOSTS_ON'],
     'number-color' => 'blue'
 ];
 $data['footer_dropdown'][] = [
-    'value' => $total_hosts_off,
+    'value' => $total_hosts_off ?? 0,
     'desc' => $lng['L_HOSTS_OFF'],
     'number-color' => 'red'
 ];

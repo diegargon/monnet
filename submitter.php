@@ -834,12 +834,15 @@ if ($command === 'toggleMailAlarms' && $target_id > 0) {
     $data['response_msg'] = $value_command;
 }
 
-if ($target_id > 0 && in_array($command, [
-    "alarm_ping_disable",
-    "alarm_port_disable",
-    "alarm_macchange_disable",
-    "alarm_newport_disable",
-])) {
+if (
+    $target_id > 0 &&
+    in_array($command, [
+        "alarm_ping_disable",
+        "alarm_port_disable",
+        "alarm_macchange_disable",
+        "alarm_newport_disable",
+    ])
+) {
     $msg = $hosts->toggleAlarmType($target_id, $command, $value_command);
     $data['command_success'] = 1;
     $data['response_msg'] = $msg;
@@ -852,7 +855,7 @@ if ($target_id > 0 &&
     "alarm_macchange_email",
     "alarm_newport_email",
     ])
-    ) {
+) {
     $msg = $hosts->toggleEmailAlarmType($target_id, $command, $value_command);
     $data['command_success'] = 1;
     $data['response_msg'] = $msg;
@@ -909,7 +912,7 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
     $playbook = $value_command;
     if (valid_array($host) && $host['ansible_enabled']) {
         // Verificar si extra_vars está presente y no vacío
-        if(!isEmpty($command_values['extra_vars'])) {
+        if (!isEmpty($command_values['extra_vars'])) {
             $extra_vars = $command_values['extra_vars'];
         } else {
             $extra_vars = [];

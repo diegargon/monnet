@@ -413,11 +413,12 @@
                            size="50"
                            id="alarm_emails"
                            placeholder="Enter emails separated by commas"
-                           value="<?php
-                                    if (!empty($tdata['host_details']['email_list'])) {
-                                        echo $tdata['host_details']['email_list'];
-                                    }
-                                ?>"
+                           value="
+                        <?php
+                            if (!empty($tdata['host_details']['email_list'])) {
+                                echo $tdata['host_details']['email_list'];
+                            }
+                        ?>"
                            >
                     <div id="email_feedback" style="color: red; font-size: 0.9em;"></div>
                 </div>

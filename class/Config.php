@@ -285,7 +285,7 @@ class Config
                 //TODO Filter?
                 return (string) $decodedValue;
             case 6: // json object VALUE=1 (1 selected)
-                if ( (!is_array($decodedValue) && $json = isJson($decodedValue))) :
+                if ((!is_array($decodedValue) && $json = isJson($decodedValue))) :
                     $decodedValue = $json;
                 endif;
                 return $decodedValue;

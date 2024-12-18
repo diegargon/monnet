@@ -631,7 +631,7 @@ class Hosts
                 if (isset($this->host[$id]['hostname'])) :
                     $body .= $this->host[$id]['hostname'] . "\n";
                 endif;
-                if(isset($this->host[$id]['ip'])) :
+                if (isset($this->host[$id]['ip'])) :
                     $body .= $this->host[$id]['ip'] . "\n";
                 endif;
                 foreach ($mails as $mail) :
