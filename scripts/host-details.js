@@ -23,8 +23,15 @@ $(document).ready(function () {
         var hostId = $('#host_id').val();
         var command = $('#playbook_select').val();
 
-        var extraVars = $('#string_vars_container input').serializeArray();
+        var extraVars = {};
 
+        $('#string_vars_container input').each(function () {
+            var name = $(this).attr('name').match(/\[([^\]]+)\]/)[1]; // Extraer el nombre dentro de los corchetes
+            var value = $(this).val();
+            if (value) { // Solo añadir si hay un valor
+                extraVars[name] = value;
+            }
+        });
         // Preparar el objeto de datos
         var requestData = {
             id: hostId,
