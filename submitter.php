@@ -915,18 +915,16 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
         if (!isEmpty($command_values['extra_vars'])) {
             $extra_vars = $command_values['extra_vars'];
         } else {
-            $extra_vars = [];
+            $extra_vars = $command_values['extra_vars'];
         }
 
         $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
         if ($response['status'] === "success") {
             $data['command_success'] = 1;
             $data['response_msg'] = $response;
-            $data['response_msg2'] = $extra_vars;
         } else {
             $data['command_error'] = 1;
             $data['command_error_msg'] = $response['error_msg'];
-            $data['command_error_msg2'] = $extra_vars;
         }
     } else {
         $data['command_error'] = 1;

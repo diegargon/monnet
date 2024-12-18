@@ -30,22 +30,21 @@ $(document).ready(function () {
             var value = $(this).val();
             if (value) { // Solo añadir si hay un valor
                 extraVars[name] = value;
-            }
+                }
         });
-        // Preparar el objeto de datos
-        var requestData = {
-            id: hostId,
-            value: command
-        };
+           // Preparar el objeto de datos
+           var requestData = {
+               id: hostId,
+               value: command
+           };
 
-        // Añadir extra_vars solo si tiene valores
-        if (extraVars.length > 0) {
-            requestData.extra_vars = extraVars;
-        }
+           // Añadir extra_vars solo si tiene valores
+            if (Object.keys(extraVars).length > 0) {
+               requestData.extra_vars = extraVars;
+           }
 
-        // Llamar a requestHostDetails
-        requestHostDetails('playbook_exec', requestData);
-
+           // Llamar a requestHostDetails
+           requestHostDetails('playbook_exec', requestData);
     });
 
     $(document).off("click", "#syslog_btn").on("click", "#syslog_btn", function () {

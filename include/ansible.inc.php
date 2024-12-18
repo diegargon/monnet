@@ -17,7 +17,7 @@
  *
  * @return array<mixed,mixed>
  */
-function ansible_playbook(AppContext $ctx, array $host, string $playbook, array $extra_vars = []): array
+function ansible_playbook(AppContext $ctx, array $host, string $playbook, ?array $extra_vars = []): array
 {
     $ncfg = $ctx->get('Config');
 
