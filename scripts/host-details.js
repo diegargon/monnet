@@ -173,9 +173,10 @@ function initializePlaybookForm() {
 }
 
 // Llamar a la función después de que el DOM esté listo
-$(function() {
-    initializePlaybookForm();
-});
+//$(function() {
+//    console.log("TEST");
+//    initializePlaybookForm();
+//});
 
 function changeHDTab(id, tabId) {
     // Ocultar todos los contenidos de las pestañas
@@ -192,6 +193,9 @@ function changeHDTab(id, tabId) {
     selectedTab.classList.add('active');
     if (['tab9', 'tab10'].includes(tabId)) {
         requestHostDetails('changeHDTab', { id: id, value: tabId});
+    }
+    if (['tab20'].includes(tabId)) {
+        initializePlaybookForm();
     }
 }
 
@@ -271,7 +275,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#raw_lines').css({
                             "width": "600px",
                             "overflow": "auto",
-                            "max-height": "200px",
+                            "height": "200px",
                             "resize": "both"
                         });
                     } else {
@@ -285,7 +289,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#raw_lines2').css({
                             "width": "600px",
                             "overflow": "auto",
-                            "max-height": "200px",
+                            "height": "200px",
                             "resize": "both"
                         });
                     } else {

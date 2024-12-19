@@ -772,6 +772,7 @@ input:checked + .slider:before {
     min-height: 35%;
     z-index: 1;
     background-color: rgb(55, 50, 37);
+    resize: both;
 }
 .host-details-bar {
     display: inline-block;
