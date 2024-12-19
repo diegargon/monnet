@@ -138,7 +138,7 @@ $cfg['system_type'] = [
     19 => ['id' => 19, 'name' => 'Switch', 'img' => 'switch.png'],
     20 => ['id' => 20, 'name' => 'Mediacenter', 'img' => 'mediacenter.png'],
     21 => ['id' => 21, 'name' => 'NAS', 'img' => 'nas.png'],
-    22 => ['id' => 22, 'name' => 'IOT Router', 'img' => 'iot-router.png'],
+    22 => ['id' => 22, 'name' => 'IOT Gateway', 'img' => 'iot-router.png'],
     23 => ['id' => 23, 'name' => 'P2P', 'img' => 'p2p.png'],
     24 => ['id' => 24, 'name' => 'Game Console', 'img' => 'gameconsole.png'],
     25 => ['id' => 25, 'name' => 'Printer', 'img' => 'printer.png'],
