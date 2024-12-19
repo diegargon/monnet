@@ -515,6 +515,33 @@ class Hosts
 
         return true;
     }
+
+    public function sendHostMail(int $id, string $subject, ?string $body = ''): void
+    {
+        if (
+            $this->ncfg->get('mail') &&
+            !empty($this->host[$id]['mail']) &&
+            !empty($this->host[$id]['email_list'])
+        ) {
+            $mails = explode(",", $this->host[$id]['email_list']);
+
+            if (!isEmpty($mails)) {
+                $mailer = $this->ctx->get('Mailer');
+                if (isset($this->host[$id]['display_name'])) :
+                    $body .= $this->host[$id]['display_name'] . "\n";
+                endif;
+                if (isset($this->host[$id]['hostname'])) :
+                    $body .= $this->host[$id]['hostname'] . "\n";
+                endif;
+                if (isset($this->host[$id]['ip'])) :
+                    $body .= $this->host[$id]['ip'] . "\n";
+                endif;
+                foreach ($mails as $mail) :
+                    $mailer->sendMail($mail, $subject, $body);
+                endforeach;
+            }
+        }
+    }
     /**
      *
      * @param array<string, mixed> $host
@@ -612,32 +639,5 @@ class Hosts
         }
 
         return true;
-    }
-
-    private function sendHostMailAlert(int $id, string $subject, ?string $body): void
-    {
-        if (
-            $this->ncfg->get('mail') &&
-            !empty($this->host[$id]['mail']) &&
-            !empty($this->host[$id]['email_list'])
-        ) {
-            $mails = explode(",", $this->host[$id]['email_list']);
-
-            if (!isEmpty($mails)) {
-                $mailer = $this->ctx->get('Mailer');
-                if (isset($this->host[$id]['display_name'])) :
-                    $body .= $this->host[$id]['display_name'] . "\n";
-                endif;
-                if (isset($this->host[$id]['hostname'])) :
-                    $body .= $this->host[$id]['hostname'] . "\n";
-                endif;
-                if (isset($this->host[$id]['ip'])) :
-                    $body .= $this->host[$id]['ip'] . "\n";
-                endif;
-                foreach ($mails as $mail) :
-                    $mailer->sendMail($mail, $subject, $body);
-                endforeach;
-            }
-        }
     }
 }
