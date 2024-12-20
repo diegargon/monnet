@@ -18,7 +18,7 @@
  *          4(date)
  *          5(url)
  *          6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
- *          7(password)?
+ *          7(password
  *          8(email) ?
  *
  * ccat = 0 (hidde), 1 (misc) 2 (general)
@@ -288,6 +288,8 @@ class Config
                 if ((!is_array($decodedValue) && $json = isJson($decodedValue))) :
                     $decodedValue = $json;
                 endif;
+                return $decodedValue;
+            case 7: //password
                 return $decodedValue;
             default:
                 throw new InvalidArgumentException("Unsupported type: $type");
