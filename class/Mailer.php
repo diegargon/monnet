@@ -80,7 +80,7 @@ class Mailer
      *
      * @return void
      */
-    public function sendEmailMultiple(array $emails, string $subject, string $body): void
+    public function sendMailMultiple(array $emails, string $subject, string $body): void
     {
         foreach ($emails as $email) {
             if (!$this->sendEmail($email, $subject, $body)) :
@@ -97,7 +97,7 @@ class Mailer
      * @param string $body
      * @return bool
      */
-    public function sendEmail(string $to, string $subject, ?string $body): bool
+    public function sendMail(string $to, string $subject, ?string $body): bool
     {
         if ($this->phpMailer == null) :
             return false;

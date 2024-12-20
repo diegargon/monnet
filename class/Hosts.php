@@ -195,7 +195,7 @@ class Hosts
                         $alert_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'];
                     endif;
                     $this->hosts[$id]['alert_msg'] = $alert_msg;
-                    if (!empty($this->host[$id]['alarm_macchange_email'])) {
+                    if (!empty($this->hosts[$id]['alarm_macchange_email'])) {
                         $this->sendHostMailAlert(
                             $this->host[$id],
                             $alert_msg,
@@ -520,21 +520,20 @@ class Hosts
     {
         if (
             $this->ncfg->get('mail') &&
-            !empty($this->host[$id]['mail']) &&
-            !empty($this->host[$id]['email_list'])
+            !empty($this->hosts[$id]['email_alarms']) &&
+            !empty($this->hosts[$id]['email_list'])
         ) {
-            $mails = explode(",", $this->host[$id]['email_list']);
-
+            $mails = explode(",", $this->hosts[$id]['email_list']);
             if (!isEmpty($mails)) {
                 $mailer = $this->ctx->get('Mailer');
-                if (isset($this->host[$id]['display_name'])) :
-                    $body .= $this->host[$id]['display_name'] . "\n";
+                if (isset($this->hosts[$id]['display_name'])) :
+                    $body .= $this->hosts[$id]['display_name'] . "\n";
                 endif;
-                if (isset($this->host[$id]['hostname'])) :
-                    $body .= $this->host[$id]['hostname'] . "\n";
+                if (isset($this->hosts[$id]['hostname'])) :
+                    $body .= $this->hosts[$id]['hostname'] . "\n";
                 endif;
-                if (isset($this->host[$id]['ip'])) :
-                    $body .= $this->host[$id]['ip'] . "\n";
+                if (isset($this->hosts[$id]['ip'])) :
+                    $body .= $this->hosts[$id]['ip'] . "\n";
                 endif;
                 foreach ($mails as $mail) :
                     $mailer->sendMail($mail, $subject, $body);
