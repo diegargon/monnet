@@ -25,26 +25,26 @@ $(document).ready(function () {
 
         var extraVars = {};
 
-        $('#string_vars_container input').each(function () {
+        $('#vars_container input').each(function () {
             var name = $(this).attr('name').match(/\[([^\]]+)\]/)[1]; // Extraer el nombre dentro de los corchetes
             var value = $(this).val();
             if (value) { // Solo añadir si hay un valor
                 extraVars[name] = value;
-                }
+            }
         });
-           // Preparar el objeto de datos
-           var requestData = {
-               id: hostId,
-               value: command
-           };
+        // Preparar el objeto de datos
+        var requestData = {
+            id: hostId,
+            value: command
+        };
 
-           // Añadir extra_vars solo si tiene valores
-            if (Object.keys(extraVars).length > 0) {
-               requestData.extra_vars = extraVars;
-           }
+        // Añadir extra_vars solo si tiene valores
+        if (Object.keys(extraVars).length > 0) {
+            requestData.extra_vars = extraVars;
+        }
 
-           // Llamar a requestHostDetails
-           requestHostDetails('playbook_exec', requestData);
+        // Llamar a requestHostDetails
+        requestHostDetails('playbook_exec', requestData);
     });
 
     $(document).off("click", "#syslog_btn").on("click", "#syslog_btn", function () {
@@ -136,47 +136,55 @@ $(document).ready(function () {
 
 function initializePlaybookForm() {
     // Obtener el array de playbooks directamente desde el atributo data-playbooks
-    const playbooks = $('#ansible_container').data('playbooks'); // Esto ya te devuelve un objeto
+    const playbooks = $('#ansible_container').data('playbooks'); //devuelve un objeto
 
     // Llenar el dropdown con los nombres de los playbooks
-    playbooks.forEach(function(playbook) {
+    playbooks.forEach(function (playbook) {
         $('#playbook_select').append('<option value="' + playbook.name + '">' + playbook.name + '</option>');
     });
 
     // Evento para cuando se selecciona un playbook
-    $('#playbook_select').change(function() {
+    $('#playbook_select').change(function () {
         const selectedPlaybook = $(this).val();
         const playbook = playbooks.find(pb => pb.name === selectedPlaybook);
 
         if (playbook) {
-            // Mostrar la descripción
             $('#playbook_desc').text(playbook.desc);
-
-            // Limpiar cualquier campo previo de string_vars
-            $('#string_vars_container').empty();
+            $('#vars_container').empty();
 
             // Si existen string_vars, agregar los campos de texto
             if (playbook.string_vars) {
-                playbook.string_vars.forEach(function(varName) {
-                    $('#string_vars_container').append(`
+                playbook.string_vars.forEach(function (varName) {
+                    $('#vars_container').append(`
                         <label for="${varName}">${varName}:</label>
                         <input type="text" id="${varName}" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
                     `);
                 });
             }
+            if (playbook.password_vars) {
+                playbook.password_vars.forEach(function (varName) {
+                    $('#vars_container').append(`
+                        <div class="password-container">
+                        <label for="${varName}">${varName}:</label>
+                        <input type="password" id="${varName}" name="extra_vars[${varName}]"  class="password-input" placeholder="Enter ${varName}">
+                        <span class="toggle-password">👁️</span>
+                        </div>
+                    `);
+                });
+
+                $('#vars_container').off("click", ".toggle-password").on("click", ".toggle-password", function () {
+                    const passwordInput = $(this).prev(".password-input");
+                    const inputType = passwordInput.attr("type");
+                    passwordInput.attr("type", inputType === "password" ? "text" : "password");
+                });
+            }
         } else {
             // Limpiar si no hay playbook seleccionado
             $('#playbook_desc').empty();
-            $('#string_vars_container').empty();
+            $('vars_container').empty();
         }
     });
 }
-
-// Llamar a la función después de que el DOM esté listo
-//$(function() {
-//    console.log("TEST");
-//    initializePlaybookForm();
-//});
 
 function changeHDTab(id, tabId) {
     // Ocultar todos los contenidos de las pestañas
@@ -192,7 +200,7 @@ function changeHDTab(id, tabId) {
     const selectedTab = document.querySelector(`button[onclick="changeHDTab(${id}, '${tabId}')"]`);
     selectedTab.classList.add('active');
     if (['tab9', 'tab10'].includes(tabId)) {
-        requestHostDetails('changeHDTab', { id: id, value: tabId});
+        requestHostDetails('changeHDTab', {id: id, value: tabId});
     }
     if (['tab20'].includes(tabId)) {
         initializePlaybookForm();
@@ -238,8 +246,8 @@ function requestHostDetails(command, command_values = []) {
                 /* Logs reload */
                 if (
                         jsonData.command_receive === 'logs-reload' ||
-                        jsonData.command_receive === 'changeHDTab' && jsonData.command_value ===  'tab9'
-                ) {
+                        jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'tab9'
+                        ) {
                     if (jsonData.command_success === 1) {
                         $('#term_output').html(jsonData.response_msg);
                     } else {
@@ -251,7 +259,7 @@ function requestHostDetails(command, command_values = []) {
                 if (
                         jsonData.command_receive === 'syslog-load' ||
                         jsonData.command_receive === 'journald-load'
-                ) {
+                        ) {
                     if (jsonData.command_success === 1) {
                         $('#term_output').html(jsonData.response_msg);
                     } else {
@@ -260,7 +268,7 @@ function requestHostDetails(command, command_values = []) {
                 }
 
                 /* Change Host Details Tab */
-                if (jsonData.command_receive === 'changeHDTab' && jsonData.command_value ===  'tab10') {
+                if (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'tab10') {
                     if (jsonData.command_success === 1) {
                         $('#ping_graph_container').html(jsonData.response_msg);
                     } else {

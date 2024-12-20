@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.39;
-$cfg['monnet_revision'] = 11;
+$cfg['monnet_revision'] = 12;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['app_name'] = 'monnet';
 
@@ -286,12 +286,14 @@ $cfg['playbooks'] = [
     [
         'name' => 'mysql-dblocks',
         'desc' => 'Ensure MySQL is running and check database locks',
-        'string_vars' => ['database_service', 'database_name', 'db_username', 'db_password']
+        'string_vars' => ['database_service', 'database_name', 'db_username'],
+        'passwd_vars' => ['db_passwordd']
     ],
     [
         'name' => 'mysql-performance',
         'desc' => 'Monitor MySQL performance and resource usage',
-        'string_vars' => ['db_username', 'db_password']
+        'string_vars' => ['db_username'],
+        'password_vars' => ['db_password']
     ],
     [
         'name' => 'ansible-ping',

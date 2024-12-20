@@ -413,8 +413,7 @@
                            size="50"
                            id="alarm_emails"
                            placeholder="Enter emails separated by commas"
-                           value="
-                        <?php
+                           value="<?php
                             if (!empty($tdata['host_details']['email_list'])) {
                                 echo $tdata['host_details']['email_list'];
                             }
@@ -638,7 +637,7 @@
                     <option value="">Select Playbook</option>
                 </select>
                 <div id="playbook_desc"></div>
-                <div id="string_vars_container"></div>
+                <div id="vars_container"></div>
                 <div id="ansible_raw_container2" class="ansible_raw_container2">
                     <div id="raw_lines_container2>">
                         <pre id="raw_lines2"></pre>
@@ -668,7 +667,6 @@
                     src: 'scripts/host-details.js',
                     type: 'text/javascript'
                 }).appendTo('head');
-
             }
         });
     </script>

@@ -258,6 +258,25 @@ footer {
     font-size: 35px;
 }
 
+.password-container {
+    position: relative;
+    display: inline-flex;
+    width: 225px;
+}
+
+.password-input {
+    width: 100%;
+    padding-right: 30px; /* Espacio para el ícono */
+    box-sizing: border-box;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    transform: translateY(15%);
+    cursor: pointer;
+    user-select: none;
+}
 
 .shadow1 {
     box-shadow: 10px 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
