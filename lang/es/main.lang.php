@@ -28,6 +28,8 @@ $lng = [
     'L_ALARM_PING_PORT' => 'Fallo ping port',
     'L_ALARM_MACCHANGE' => 'Cambio de MAC',
     'L_ALARM_NEW_PORT' => 'Nuevo puerto descubierto',
+    'L_AGENT_HOSTS' => 'Agentes',
+    'L_AGENT_HOSTS_OFF' => 'Agentes Off',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',

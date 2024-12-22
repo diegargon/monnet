@@ -25,7 +25,10 @@ class Hosts
     public int $ansible_hosts_off = 0;
     /** @var int */
     public int $ansible_hosts_fail = 0;
-
+    /** @var int */
+    public int $agents = 0;
+    /** @var int */
+    public int $agents_off = 0;
     /** @var Database $db */
     private Database $db;
 
@@ -57,6 +60,7 @@ class Hosts
         'alarm_macchange_email',
         'alarm_newport_email',
         'email_list',
+        'agents_installed',
     ];
     /**
      * host[$id] = ['key' => 'value']
@@ -589,8 +593,11 @@ class Hosts
             $this->hosts[$id] = $host;
             $host['online'] == 1 ? ++$this->total_on : ++$this->total_off;
             $host['highlight'] ? $this->highlight_total++ : null;
-
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
+
+            if(!empty($host['agent_installed'])):
+                ($host['online']) ? ++$this->agents_on : ++$this->agents_off;
+            endif;
 
             //Track host categories
             if (empty($this->host_cat_track[$host['category']])) {

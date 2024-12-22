@@ -49,6 +49,8 @@ $show_hosts_count = 0;
 $ansible_hosts = 0;
 $ansible_hosts_off = 0;
 $ansible_hosts_fail = 0;
+$agent_hosts = 0;
+$agent_hosts_off = 0;
 
 /* Set show/hide highlight hosts */
 if ($user->getPref('show_highlight_hosts_status')) {
@@ -80,12 +82,6 @@ if ($user->getPref('show_other_hosts_status')) {
     $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
 }
 
-if ($ncfg->get('ansible')) {
-    $ansible_hosts_off = $hosts->ansible_hosts_off;
-    $ansible_hosts = $hosts->ansible_hosts;
-    $ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
-    $ansible_hosts_fail = $hosts->ansible_hosts_fail;
-}
 if ($user->getPref('show_termlog_status')) {
     $logs = [];
     $type_mark = '';
@@ -162,22 +158,35 @@ $data['footer_dropdown'][] = [
 ];
 
 if ($ncfg->get('ansible')) {
+    $ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
     $data['footer_dropdown'][] = [
-        'value' => $ansible_hosts,
+        'value' => $hosts->ansible_hosts,
         'desc' => $lng['L_ANSIBLE_HOSTS'],
         'number-color' => 'blue'
     ];
     $data['footer_dropdown'][] = [
-        'value' => $ansible_hosts_off,
+        'value' => $hosts->ansible_hosts_off,
         'desc' => $lng['L_ANSIBLE_HOSTS_OFF'],
         'number-color' => 'red'
     ];
     $data['footer_dropdown'][] = [
-        'value' => $ansible_hosts_fail,
+        'value' => $hosts->ansible_hosts_fail,
         'desc' => $lng['L_ANSIBLE_HOSTS_FAIL'],
         'number-color' => 'red'
     ];
 }
+
+$data['footer_dropdown'][] = [
+    'value' => $hosts->agents,
+    'desc' => $lng['L_AGENT_HOSTS'],
+    'number-color' => 'blue'
+];
+$data['footer_dropdown'][] = [
+    'value' => $hosts->agents_off,
+    'desc' => $lng['L_AGENT_HOSTS_OFF'],
+    'number-color' => 'red'
+];
+
 //TODO  system_prefs class?
 $results = $db->select('prefs', '*', ['uid' => 0]);
 $system_prefs = $db->fetchAll($results);
