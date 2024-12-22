@@ -92,6 +92,7 @@ $lng = [
     'L_HOSTS_ON' => 'Host On',
     'L_HOSTS_OFF' => 'Host Off',
     'L_HYPERVISOR' => 'Hypervisor',
+    'L_HW_MANUFACTURE' => 'HW Manufacture',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',
@@ -118,7 +119,6 @@ $lng = [
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',
-    'L_MANUFACTURE' => 'Manufacture',
     'L_MUST_BE' => 'debe ser',
     'L_MASK' => 'Mascara',
     'L_MAIL' => 'Correo',

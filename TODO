@@ -1,4 +1,16 @@
 ** HIGH
+* Ansible: Instalador cron para enviar stats? crear agente?
+    Opcion para establecer el tipo de agente: monnet-agent, prometheus etc
+    Clase
+    Instala un agente via ansible con un token en cron
+    Opcion para renovar el token el UI y automaticamente cambiar el token en el host
+* Ansible: Turn off Host/VM container
+* Ansible: Tema almacenar passwords
+    Todos los passwd almacenados cifrados con maestra
+    Variable mpass en /etc/monnet/  con el pass maestro permisos root
+    El webui no puede acceder a esa contraseña sin ser por el gateway que tiene permisos para accceder a mpass
+    Para encriptar una contraseña introducida por el usuario se la tiene que pasar al gateway y esta la
+    encripta.
 * TODO 1111: Filter/check values
 * No hay forma de borrar una red
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria

@@ -14,35 +14,22 @@ $cfg['monnet_revision'] = 13;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['app_name'] = 'monnet';
 
-/* Manufacture */
+/* Hardware Manufacture */
 $cfg['manufacture'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
-    1 => ['id' => 1, 'name' => 'Microsoft', 'img' => 'microsoft.png'],
-    2 => ['id' => 2, 'name' => 'Apple Inc.', 'img' => 'apple.png'],
-    3 => ['id' => 3, 'name' => 'Canonical Ltd.', 'img' => 'canonical.png'],
-    4 => ['id' => 4, 'name' => 'Google', 'img' => 'google.png'],
-    5 => ['id' => 5, 'name' => 'The Linux Foundation', 'img' => 'linuxfoundation.png'],
-    6 => ['id' => 6, 'name' => 'Red Hat', 'img' => 'redhat.png'],
-    7 => ['id' => 7, 'name' => 'IBM', 'img' => 'ibm.png'],
-    8 => ['id' => 8, 'name' => 'Hewlett Packard', 'img' => 'hp.png'],
-    9 => ['id' => 9, 'name' => 'FreeBSD Foundation', 'img' => 'freebsd.png'],
-    10 => ['id' => 10, 'name' => 'Oracle Corporation', 'img' => 'oracle.png'],
+    1 => ['id' => 1, 'name' => 'Virtual Machine', 'img' => 'vm.png'],
+    2 => ['id' => 2, 'name' => 'Container', 'img' => 'container.png'],
+    10 => ['id' => 10, 'name' => 'Microsoft', 'img' => 'microsoft.png'],
     11 => ['id' => 11, 'name' => 'OpenBSD Project', 'img' => 'openbsd.png'],
     12 => ['id' => 12, 'name' => 'Samsung Electronics', 'img' => 'samsung.png'],
     13 => ['id' => 13, 'name' => 'Sony Corporation', 'img' => 'sony.png'],
-    14 => ['id' => 14, 'name' => 'FreeRTOS', 'img' => 'freertos.png'],
     15 => ['id' => 15, 'name' => 'Meta', 'img' => 'Meta.png'],
-    16 => ['id' => 16, 'name' => 'Ubuntu', 'img' => 'ubuntu.png'],
-    17 => ['id' => 17, 'name' => 'Debian', 'img' => 'debian.png'],
-    18 => ['id' => 18, 'name' => 'CentOS', 'img' => 'centos.png'],
-    19 => ['id' => 19, 'name' => 'FreeBSD', 'img' => 'freebsd.png'],
     20 => ['id' => 20, 'name' => 'OPNSense', 'img' => 'opnsense.png'],
     21 => ['id' => 21, 'name' => 'Dlink', 'img' => 'dlink.png'],
     22 => ['id' => 22, 'name' => 'Tplink', 'img' => 'tplink.png'],
     23 => ['id' => 23, 'name' => 'Mikrotik', 'img' => 'mikrotik.png'],
     24 => ['id' => 24, 'name' => 'Supermicro', 'img' => 'supermicro.png'],
-    25 => ['id' => 25, 'name' => 'free', 'img' => 'unknown.png'],
-    26 => ['id' => 26, 'name' => 'Proxmox', 'img' => 'proxmox.png'],
+    24 => ['id' => 24, 'name' => 'Apple Inc.', 'img' => 'apple.png'],
     27 => ['id' => 27, 'name' => 'Tenda', 'img' => 'tenda.png'],
     28 => ['id' => 28, 'name' => 'Fortinet', 'img' => 'fortinet.png'],
     29 => ['id' => 29, 'name' => 'Cisco Systems', 'img' => 'cisco_systems.png'],
@@ -70,6 +57,13 @@ $cfg['manufacture'] = [
     51 => ['id' => 51, 'name' => 'Konica Minolta', 'img' => 'unknown.png'],
     52 => ['id' => 52, 'name' => 'China', 'img' => 'china.png'],
     53 => ['id' => 53, 'name' => 'OpenWrt', 'img' => 'openwrt.png'],
+    54 => ['id' => 54, 'name' => 'Google', 'img' => 'google.png'],
+    55 => ['id' => 55, 'name' => 'IBM', 'img' => 'ibm.png'],
+    56 => ['id' => 56, 'name' => 'Hewlett Packard', 'img' => 'hp.png'],
+    57 => ['id' => 57, 'name' => 'Red Hat', 'img' => 'redhat.png'],
+    58 => ['id' => 58, 'name' => 'FreeBSD Foundation', 'img' => 'freebsd.png'],
+    59 => ['id' => 59, 'name' => 'Oracle Corporation', 'img' => 'oracle.png'],
+
 ];
 
 /* OS */

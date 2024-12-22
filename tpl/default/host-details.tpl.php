@@ -512,7 +512,7 @@
                 <!-- right config column -->
                 <div class="right-config-column">
                     <div class="">
-                        <label for="manufacture"><?= $lng['L_MANUFACTURE'] ?>: </label><br/>
+                        <label for="manufacture"><?= $lng['L_HW_MANUFACTURE'] ?>: </label><br/>
                         <select id="manufacture">
                             <?php foreach ($cfg['manufacture'] as $manufacture) :
                                 $selected = '';
