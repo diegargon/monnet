@@ -45,18 +45,25 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 
     if (!empty($host['manufacture'])) {
         $manufacture = get_manufacture_data($cfg, $host['manufacture']);
-        $host['manufacture_name'] = $manufacture['name'];
-        $host['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
+        if ($manufacture):
+            $host['manufacture_name'] = $manufacture['name'];
+            $host['manufacture_image'] = $manufacture['manufacture_image'];
+        endif;
+
     }
     if (!empty($host['os'])) {
         $os = get_os_data($cfg, $host['os']);
-        $host['os_name'] = $os['name'];
-        $host['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+        if ($os):
+            $host['os_name'] = $os['name'];
+            $host['os_image'] = $os['os_image'];
+        endif;
     }
     if (!empty($host['system_type'])) {
         $system_type = get_system_type_data($cfg, $host['system_type']);
-        $host['system_type_name'] = $system_type['name'];
-        $host['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
+        if ($system_type):
+            $host['system_type_name'] = $system_type['name'];
+            $host['system_type_image'] = $system_type['system_type_image'];
+        endif;
     }
 
     if (!empty($host['last_seen'])) {

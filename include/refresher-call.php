@@ -98,18 +98,24 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
 
         if (!empty($vhost['manufacture'])) {
             $manufacture = get_manufacture_data($cfg, $vhost['manufacture']);
-            $hosts_view[$key]['manufacture_name'] = $manufacture['name'];
-            $hosts_view[$key]['manufacture_image'] = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
+            if ($manufacture):
+                $hosts_view[$key]['manufacture_image'] = $manufacture['manufacture_image'];
+                $hosts_view[$key]['manufacture_name'] = $manufacture['name'];
+            endif;
         }
         if (!empty($vhost['os'])) {
             $os = get_os_data($cfg, $vhost['os']);
-            $hosts_view[$key]['os_name'] = $os['name'];
-            $hosts_view[$key]['os_image'] = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+            if ($os):
+                $hosts_view[$key]['os_image'] = $os['os_image'];
+                $hosts_view[$key]['os_name'] = $os['name'];
+            endif;
         }
         if (!empty($vhost['system_type'])) {
             $system_type = get_system_type_data($cfg, $vhost['system_type']);
-            $hosts_view[$key]['system_type_name'] = $system_type['name'];
-            $hosts_view[$key]['system_type_image'] = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
+            if ($system_type):
+                $hosts_view[$key]['system_type_image'] = $system_type['system_type_image'];
+                $hosts_view[$key]['system_type_name'] = $system_type['name'];
+            endif;
         }
 
         $hosts_view[$key]['glow'] = '';
