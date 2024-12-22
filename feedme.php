@@ -30,21 +30,34 @@ require_once 'include/common.inc.php';
 require_once 'include/common-call.php';
 
 // Configuración
+const DEFAULT_REFRESH = 5;
 
 // Leer la entrada JSON
 $request = file_get_contents('php://input');
 $data = json_decode($request, true);
 
 // Validacion
-if (!isset($data['cmd'], $data['token'], $data['version']) || $data['cmd'] !== 'ping') {
+if (!isset($data['id'], $data['cmd'], $data['token'], $data['version']) || $data['cmd'] !== 'ping') {
     http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode([
-        'error' => 'Comando no válido o parámetros faltantes.'
+        'error' => 'Comando no valido o parametros faltantes.'
     ]);
     exit;
 }
 $hosts = $ctx->get('Hosts');
+$host = $hosts->getHostById($data['id']);
+if (!$host):
+    echo json_encode([
+        'error' => 'Host no encontrado'
+    ]);
+else:
+    if(empty($host['token']) || $host['token'] !== $data['token']):
+        echo json_encode([
+            'error' => 'Token invalido'
+        ]);
+    endif;
+endif;
 
 // Respuesta al comando 'ping'
 $response = [
@@ -53,7 +66,7 @@ $response = [
     'version' => $cfg['agent_version'],
     'data' => [
         'response_msg' => true,
-        'refresh' => 10 // Opcional, modificar el tiempo de solicitud
+        'refresh' => DEFAULT_REFRESH
     ]
 ];
 
