@@ -294,4 +294,8 @@ $cfg['playbooks'] = [
         'name' => 'ansible-ping',
         'desc' => 'Test Ansible connectivity',
     ],
+    [
+        'name' => 'install-monnet-agent-linux',
+        'desc' => 'Install Monnet Agent on Linux',
+    ],
 ];
