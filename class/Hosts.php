@@ -545,6 +545,19 @@ class Hosts
             }
         }
     }
+
+    /**
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function createHostToken(int $id): ?bool
+    {
+        $token = create_token();
+        $this->update($id, ['token' => $token]);
+
+        return $token;
+    }
     /**
      *
      * @param array<string, mixed> $host

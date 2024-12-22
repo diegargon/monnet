@@ -57,6 +57,8 @@ $cfg['refresher_time'] = 5; //minutes ideally same minutes than monnet-cli
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 $cfg['stats_clear_days'] = 30;
 $cfg['logs_clear_days'] = 30;
+$cfg['agent_refresh_interval'] = 5;
+$cfg['agent_allow_selfcerts'] = true;
 
 /* Modules Config */
 

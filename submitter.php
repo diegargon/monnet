@@ -187,10 +187,14 @@ if ($command == 'setCheckPorts' && !empty($value_command) && !empty($target_id))
 }
 
 if ($command == 'submitHostToken' && !empty($target_id)) {
-    $token = create_token();
-    $hosts->update($target_id, ['token' => $token]);
-    $data['response_msg'] = $token;
-    $data['command_success'] = 1;
+    if($hosts->createHostToken()) {
+        $data['response_msg'] = 'Token Created';
+        $data['command_success'] = 1;
+    } else {
+        $data['command_success'] = 0;
+        $data['error_msg'] = 'Error creating token';
+    }
+
 }
 if ($command == 'submitScanPorts' && !empty($target_id)) {
     $success_msg = '';
@@ -918,6 +922,23 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
             $extra_vars = $command_values['extra_vars'];
         }
 
+        if ($playbook == 'install-monnet-agent-linux'):
+            if (empty($host['token'])):
+                $token = $hosts->createHostToken($target_id);
+            else:
+                $token = $host['token'];
+            endif;
+            $agent_config = [
+                "id" => $host['id'],
+                "token" => $token,
+                "default_interval" => $cfg['agent_refresh_interval'],
+                "ignore_cert" => $cfg['agent_allow_selfcerts'],
+                "server_host" => $_SERVER['HTTP_HOST'], //TODO Filter?
+                "server_endpoint" => "/feedme.php",
+            ];
+
+            $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
+        endif;
         $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
         if ($response['status'] === "success") {
             $data['command_success'] = 1;
