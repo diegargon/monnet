@@ -30,6 +30,7 @@ $lng = [
     'L_ALARM_NEW_PORT' => 'Nuevo puerto descubierto',
     'L_AGENT_HOSTS' => 'Agentes',
     'L_AGENT_HOSTS_OFF' => 'Agentes Off',
+    'L_AGENT_MISSING_PINGS' => 'Agents Pings',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
