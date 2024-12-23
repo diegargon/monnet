@@ -931,6 +931,7 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
             $agent_config = [
                 "id" => $host['id'],
                 "token" => $token,
+                "loglevel" => 'info',
                 "default_interval" => $cfg['agent_refresh_interval'],
                 "ignore_cert" => $cfg['agent_allow_selfcerts'],
                 "server_host" => $_SERVER['HTTP_HOST'], //TODO Filter?
