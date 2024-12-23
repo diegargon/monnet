@@ -161,16 +161,19 @@ if ($ncfg->get('ansible')) {
     $ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
     $data['footer_dropdown'][] = [
         'value' => $hosts->ansible_hosts,
+        'report_type' => 'ansible_hosts',
         'desc' => $lng['L_ANSIBLE_HOSTS'],
         'number-color' => 'blue'
     ];
     $data['footer_dropdown'][] = [
         'value' => $hosts->ansible_hosts_off,
+        'report_type' => 'ansible_hosts_off',
         'desc' => $lng['L_ANSIBLE_HOSTS_OFF'],
         'number-color' => 'red'
     ];
     $data['footer_dropdown'][] = [
         'value' => $hosts->ansible_hosts_fail,
+        'report_type' => 'ansible_hosts_fail',
         'desc' => $lng['L_ANSIBLE_HOSTS_FAIL'],
         'number-color' => 'red'
     ];
@@ -178,17 +181,20 @@ if ($ncfg->get('ansible')) {
 
 $data['footer_dropdown'][] = [
     'value' => $hosts->agents,
+    'report_type' => 'agents_hosts',
     'desc' => $lng['L_AGENT_HOSTS'],
     'number-color' => 'blue'
 ];
 $data['footer_dropdown'][] = [
     'value' => $hosts->agents_off,
+    'report_type' => 'agents_hosts_off',
     'desc' => $lng['L_AGENT_HOSTS_OFF'],
     'number-color' => 'red'
 ];
 
 $data['footer_dropdown'][] = [
     'value' => $hosts->agents_missing_pings,
+    'report_type' => 'agents_hosts_missing_pings',
     'desc' => $lng['L_AGENT_MISSING_PINGS'],
     'number-color' => 'red'
 ];

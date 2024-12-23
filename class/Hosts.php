@@ -38,7 +38,7 @@ class Hosts
      *  List of field we save in json field misc.
      *  @var array<string> $misc_keys
      */
-    private $misc_keys = [
+    private array $misc_keys = [
         'mac_vendor',
         'manufacture',
         'system_type',
@@ -64,6 +64,14 @@ class Hosts
         'email_list',
         'agent_installed', /* Setting at first ping */
         'agent_next_report', /* Timesstamp for next report */
+    ];
+
+    /**
+     * List of ignore/not keep in database keys
+     * @var array<string> $ignore_keys
+     */
+    private array $db_ignore_keys = [
+        'agent_missing_pings'
     ];
     /**
      * host[$id] = ['key' => 'value']
@@ -170,9 +178,7 @@ class Hosts
      */
     public function update(int $id, array $values): void
     {
-        /**
-         * @var array<int, array<string, mixed>> $fvalues
-         */
+        /** @var array<int, array<string, mixed>> $fvalues */
         $fvalues = []; //filter
         /** @var array<int, array<string, mixed>> $misc_container misc json field key/values */
         $misc_container = [];
@@ -224,7 +230,9 @@ class Hosts
                 if (in_array($kvalue, $this->misc_keys)) {
                     $misc_container[$kvalue] = $vvalue;
                 } else {
-                    $fvalues[$kvalue] = $vvalue;
+                    if (!in_array($kvalue, $this->db_ignore_keys)):
+                        $fvalues[$kvalue] = $vvalue;
+                    endif;
                 }
             }
         }
@@ -561,9 +569,82 @@ class Hosts
 
         return $token;
     }
+
+    /**
+     * Status (null All) (0 Off) (1 On) (2 Fail) - Returns hosts
+     * @param int|null $status
+     * @return array
+     */
+    public function getAnsibleHosts(?int $status = null): array
+    {
+        $result_hosts = [];
+
+        if (!$this->ncfg->get('ansible')):
+            return [];
+        endif;
+
+        foreach ($this->hosts as $host):
+            if (empty($host['ansible_enabled'])):
+                continue;
+            endif;
+            // All
+            if ($status === null):
+                $result_hosts[] = $host;
+            endif;
+            // Off
+            if ($status === 0 && (int) $host['online'] === 0):
+                $result_hosts[] = $host;
+            endif;
+            // On
+            if ($status === 1 && (int) $host['online'] === 1):
+                $result_hosts[] = $host;
+            endif;
+            // Fail
+            if ($status === 2 && $host['ansible_fail']):
+                $result_hosts[] = $host;
+            endif;
+        endforeach;
+
+        return $result_hosts;
+    }
+    /**
+     * Status (null All) (0 Off) (1 Missing Pings)
+     * @param int|null $status
+     * @return array
+     */
+    public function getAgentsHosts(?int $status = null): array
+    {
+        $result_hosts = [];
+
+        foreach ($this->hosts as $host):
+            if (empty($host['agent_installed'])):
+                continue;
+            endif;
+            // All
+            if ($status === null):
+                $result_hosts[] = $host;
+            endif;
+            // Off
+            if ($status === 0 && (int) $host['online'] === 0):
+                $result_hosts[] = $host;
+            endif;
+            // On
+            if ($status === 1 && (int) $host['online'] === 1):
+                $result_hosts[] = $host;
+            endif;
+            // Ping Fail
+            if ($status === 2 && !empty($host['agent_missing_pings'])):
+                $result_hosts[] = $host;
+            endif;
+        endforeach;
+
+        return $result_hosts;
+    }
+
     /**
      *
      * @param array<string, mixed> $host
+     *
      * @return string
      */
     private function getDisplayName(array $host): string
@@ -578,6 +659,7 @@ class Hosts
     }
 
     /**
+     * Load and set the hosts db
      *
      * @return bool
      */
@@ -661,13 +743,13 @@ class Hosts
             /* Agent */
             if (!empty($this->hosts[$id]['agent_installed'])):
                 $this->agents++;
-                ($host['online']) ? $this->agents++ : $this->agents_off++;
+                !$host['online'] ? $this->agents_off++ : null;
                 if (
-                    !isset($this->hosts[$id]['agent_next_report']) ||
-                    !isset($this->hosts[$id]['agent_next_report']) > (time()+ 1) //+1 Grace
+                    !empty($this->hosts[$id]['agent_next_report']) &&
+                    $this->hosts[$id]['agent_next_report'] < time()
                 ):
-                    Log::warning('Host missing a ping, id:'. $id);
                     $this->agents_missing_pings++;
+                    $this->hosts[$id]['agent_missing_pings'] = 1;
                 endif;
             endif;
         } // LOOP FIN

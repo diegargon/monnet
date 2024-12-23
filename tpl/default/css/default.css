@@ -1445,6 +1445,19 @@ input:checked + .slider:before {
     clip-path: polygon(100% 0, 100% 100%, 0 0);
 }
 
+.report-table-container {
+    max-height: 75vh;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+}
+
+.report-table-container td {
+    text-align: center;
+}
+
+.report-table-container img {
+    width: 20px;
+}
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

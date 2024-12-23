@@ -1018,4 +1018,40 @@ if (
     }
 }
 
+if (
+    $command === 'report_ansible_hosts' ||
+    $command === 'report_ansible_hosts_off' ||
+    $command === 'report_ansible_hosts_fail' ||
+    $command === 'report_agents_hosts' ||
+    $command === 'report_agents_hosts_off' ||
+    $command === 'report_agents_hosts_missing_pings'
+) {
+    $keysToShow = ["id", "display_name", "ip" , "online"];
+
+    if ($command === 'report_ansible_hosts'):
+        $tdata['hosts'] = $hosts->getAnsibleHosts();
+    elseif ($command === 'report_ansible_hosts_off'):
+        $tdata['hosts'] = $hosts->getAnsibleHosts(0);
+    elseif ($command === 'report_ansible_hosts_fail'):
+        $tdata['hosts'] = $hosts->getAnsibleHosts(2);
+    elseif ($command === 'report_agents_hosts'):
+        $tdata['hosts'] = $hosts->getAgentsHosts();
+    elseif ($command === 'report_agents_hosts_off'):
+        $tdata['hosts'] = $hosts->getAgentsHosts(0);
+    elseif ($command === 'report_agents_hosts_missing_pings'):
+        $tdata['hosts'] = $hosts->getAgentsHosts(2);
+    endif;
+
+
+    $availableKeys = array_keys($tdata['hosts'][0] ?? []);
+    $tdata['keysToShow'] = array_intersect($keysToShow, $availableKeys);
+
+    if (empty($tdata['hosts'])):
+        $data['response_msg'] = "No results";
+    else:
+        $data['response_msg'] = $frontend->getTpl("hosts-report", $tdata);
+    endif;
+
+    $data['command_success'] = 1;
+}
 print json_encode($data, JSON_UNESCAPED_UNICODE);

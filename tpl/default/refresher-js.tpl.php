@@ -93,14 +93,23 @@
                             itemDiv.classList.add("footer-dropdown-item");
 
                             const numberDiv = document.createElement("div");
-                            numberDiv.classList.add("footer-number");
-                            numberDiv.textContent = item.value;
+                            // Crear el enlace
+                            const link = document.createElement("a");
+                            link.href = "#";  //  href como # o vacío para evitar recarga de la página
+                            link.textContent = item.value;
+                            link.classList.add("footer-number");
+                            // Asignar el evento click al enlace para llamar a la función
+                            link.addEventListener("click", function(event) {
+                                event.preventDefault();  // Evitar que el enlace haga su acción predeterminada
+                                submitCommand('report_' + item.report_type, {id: 0});
+                            });
 
                             if (item["number-color"] === "blue") {
-                                numberDiv.classList.add("footer-number-blue");
+                                link.classList.add("footer-number-blue");
                             } else if (item["number-color"] === "red") {
-                                numberDiv.classList.add("footer-number-red");
+                                link.classList.add("footer-number-red");
                             }
+                            numberDiv.appendChild(link);
 
                             const textDiv = document.createElement("div");
                             textDiv.classList.add("footer-text");

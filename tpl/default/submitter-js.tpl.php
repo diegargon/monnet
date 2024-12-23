@@ -116,6 +116,27 @@
                             $('#stdbox_status_msg').append(jsonData.command_error_msg);
                         }
                     }
+
+                    if (
+                        jsonData.command_receive === 'report_ansible_hosts' ||
+                        jsonData.command_receive === 'report_ansible_hosts_off' ||
+                        jsonData.command_receive === 'report_ansible_hosts_fail' ||
+                        jsonData.command_receive === 'report_agents_hosts' ||
+                        jsonData.command_receive === 'report_agents_hosts_off' ||
+                        jsonData.command_receive === 'report_agents_hosts_missing_pings'
+                    ) {
+                        closeStdContainer();
+                        if(jsonData.response_msg) {
+                            $("#stdbox-title").html(jsonData.command_receive);
+                            $("#stdbox-container").css({
+                                "display": "block",
+                                "max-width": "50vw"
+                            });
+                            $('#stdbox-status-msg').append(jsonData.response_msg);
+                        }
+
+                    }
+
                     /* Reboot / Poweroff */
                     if (
                             jsonData.command_receive === 'reboot' ||
