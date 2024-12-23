@@ -893,24 +893,6 @@ if ($command == 'setHostAnsible' && !empty($value_command) && !empty($target_id)
     $data['response_msg'] = $value_command;
 }
 
-if ($command == 'facts-reload' && !empty($target_id)) {
-    $host = $hosts->getHostById($target_id);
-    $playbook = 'ansible-facts';
-    if (valid_array($host) && $host['ansible_enabled']) {
-        $response = ansible_playbook($ctx, $host, $playbook);
-        if ($response['status'] === "success") {
-            $data['command_success'] = 1;
-            $data['response_msg'] = $response;
-        } else {
-            $data['command_error'] = 1;
-            $data['command_error_msg'] = $response['error_msg'];
-        }
-    } else {
-        $data['command_error'] = 1;
-        $data['command_error_msg'] = $lng['L_ACCESS_METHOD'];
-    }
-}
-
 if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command)) {
     $host = $hosts->getHostById($target_id);
     $playbook = $value_command;

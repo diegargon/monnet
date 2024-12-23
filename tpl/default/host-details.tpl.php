@@ -65,10 +65,6 @@
                     <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
                     <button id="tab20_btn" class="host-details-tabs-head" data-tab="20"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab20')">
-                            Ansible
-                    </button>
-                    <button id="tab21_btn" class="host-details-tabs-head" data-tab="21"
-                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab21')">
                             Ansible Raw
                     </button>
                     <?php endif; ?>
@@ -638,24 +634,14 @@
                 </select>
                 <div id="playbook_desc"></div>
                 <div id="vars_container"></div>
-                <div id="ansible_raw_container2" class="ansible_raw_container2">
-                    <div id="raw_lines_container2>">
-                        <pre id="raw_lines2"></pre>
+                <div id="ansible_raw_container" class="ansible_raw_container">
+                    <div id="raw_lines_container>">
+                        <pre id="raw_lines"></pre>
                     </div>
                 </div>
             </div>
         </div>
         <!-- /TAB20 -->
-        <!-- TAB21 --><!-- Ansible Facts -->
-        <div id="tab21" class="host-details-tab-content">
-            <div id="ansible_raw_container" class="ansible_raw_container">
-                <div><button id="facts_reload_btn">Facts</button></div>
-                <div id="raw_lines_container>">
-                    <pre id="raw_lines"></pre>
-                </div>
-            </div>
-        </div>
-        <!-- /TAB21 -->
     </div> <!-- host-details-container -->
     <!-- host-details -->
     <script>

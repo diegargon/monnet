@@ -14,11 +14,6 @@ $(document).ready(function () {
         requestHostDetails('logs-reload', {id: hostId, log_level: logLevel, log_size: logSize});
     });
 
-    $(document).off("click", "#facts_reload_btn").on("click", "#facts_reload_btn", function () {
-        var hostId = $('#host_id').val();
-        requestHostDetails('facts-reload', {id: hostId});
-    });
-
     $(document).off("click", "#playbook_btn").on("click", "#playbook_btn", function () {
         var hostId = $('#host_id').val();
         var command = $('#playbook_select').val();
@@ -276,8 +271,8 @@ function requestHostDetails(command, command_values = []) {
                     }
                 }
 
-                /* Facts reload */
-                if (jsonData.command_receive === 'facts-reload') {
+                /* Playbacks exec */
+                if (jsonData.command_receive === 'playbook_exec') {
                     if (jsonData.command_success === 1) {
                         $('#raw_lines').html(JSON.stringify(jsonData.response_msg, null, 2));
                         $('#raw_lines').css({
@@ -288,20 +283,6 @@ function requestHostDetails(command, command_values = []) {
                         });
                     } else {
                         $('#raw_lines').html(jsonData.command_error_msg);
-                    }
-                }
-                /* Playbacks exec */
-                if (jsonData.command_receive === 'playbook_exec') {
-                    if (jsonData.command_success === 1) {
-                        $('#raw_lines2').html(JSON.stringify(jsonData.response_msg, null, 2));
-                        $('#raw_lines2').css({
-                            "width": "600px",
-                            "overflow": "auto",
-                            "height": "200px",
-                            "resize": "both"
-                        });
-                    } else {
-                        $('#raw_lines2').html(jsonData.command_error_msg);
                     }
                 }
             })
