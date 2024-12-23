@@ -68,7 +68,7 @@ class Hosts
 
     /**
      * List of ignore/not keep in database keys
-     * @var array<string> $ignore_keys
+     * @var array<string> $db_ignore_keys
      */
     private array $db_ignore_keys = [
         'agent_missing_pings'
@@ -110,13 +110,13 @@ class Hosts
     public function addHost(array $host): bool
     {
         if (empty($host['ip']) && !empty($host['hostname'])) {
-            if (!Filters::varDomain($host['hostname'])) {
+            if (!Filters::varDomain($host['hostname'])) :
                 return false;
-            }
+            endif;
             $host['ip'] = gethostbyname($host['hostname']);
-            if (!$host['ip']) {
+            if (!$host['ip']) :
                 return false;
-            }
+            endif;
         }
 
         $this->insert($host);
@@ -136,9 +136,9 @@ class Hosts
         $hosts = [];
 
         foreach ($this->hosts as $host) {
-            if (empty($host['disable'])) {
+            if (empty($host['disable'])) :
                 $hosts[] = $host;
-            }
+            endif;
         }
 
         return $hosts;
@@ -153,9 +153,9 @@ class Hosts
     {
         $hosts = $this->getknownEnabled();
         foreach ($hosts as $khost => $vhost) {
-            if ($vhost['highlight'] != $highligth) {
+            if ($vhost['highlight'] != $highligth) :
                 unset($hosts[$khost]);
-            }
+            endif;
         }
 
         return $hosts;
@@ -209,7 +209,7 @@ class Hosts
                     endif;
                     $this->hosts[$id]['alert_msg'] = $alert_msg;
                     if (!empty($this->hosts[$id]['alarm_macchange_email'])) {
-                        $this->sendHostMailAlert(
+                        $this->sendHostsMail(
                             $this->host[$id],
                             $alert_msg,
                             $alert_msg
@@ -230,7 +230,7 @@ class Hosts
                 if (in_array($kvalue, $this->misc_keys)) {
                     $misc_container[$kvalue] = $vvalue;
                 } else {
-                    if (!in_array($kvalue, $this->db_ignore_keys)):
+                    if (!in_array($kvalue, $this->db_ignore_keys)) :
                         $fvalues[$kvalue] = $vvalue;
                     endif;
                 }
@@ -254,9 +254,9 @@ class Hosts
 
             $fvalues['misc'] = json_encode($misc_container);
         }
-        if (valid_array($fvalues)) {
+        if (valid_array($fvalues)) :
             $this->db->update('hosts', $fvalues, ['id' => ['value' => $id]], 'LIMIT 1');
-        }
+        endif;
     }
 
     /**
@@ -270,9 +270,9 @@ class Hosts
 
         if (!isset($host['hostname'])) {
             $hostname = $this->getHostname($host['ip']);
-            if ($hostname) {
+            if ($hostname) :
                 $host['hostname'] = $hostname;
-            }
+            endif;
         }
         //remove keys that we store in misc json field
         foreach ($host as $h_key => $h_value) {
@@ -327,9 +327,9 @@ class Hosts
     public function getHostById(int $id): ?array
     {
 
-        if (empty($this->hosts[$id])) {
+        if (empty($this->hosts[$id])) :
             return null;
-        }
+        endif;
         $host = $this->hosts[$id];
         $result = $this->db->select('notes', '*', ['id' => $host['notes_id']], 'LIMIT 1');
         $notes = $this->db->fetch($result);
@@ -347,9 +347,9 @@ class Hosts
     public function getHostByIp(string $ip): ?array
     {
         foreach ($this->hosts as $host) {
-            if ($host['ip'] == trim($ip)) {
+            if ($host['ip'] == trim($ip)) :
                 return $host;
-            }
+            endif;
         }
 
         return null;
@@ -560,31 +560,35 @@ class Hosts
     /**
      *
      * @param int $id
-     * @return bool
+     * @return string|bool
      */
-    public function createHostToken(int $id): ?bool
+    public function createHostToken(int $id): string|bool
     {
         $token = create_token();
-        $this->update($id, ['token' => $token]);
+        if ($token) :
+            $this->update($id, ['token' => $token]);
+            return $token;
+        endif;
 
-        return $token;
+        return false;
+
     }
 
     /**
      * Status (null All) (0 Off) (1 On) (2 Fail) - Returns hosts
      * @param int|null $status
-     * @return array
+     * @return array<string, mixed>
      */
     public function getAnsibleHosts(?int $status = null): array
     {
         $result_hosts = [];
 
-        if (!$this->ncfg->get('ansible')):
+        if (!$this->ncfg->get('ansible')) :
             return [];
         endif;
 
         foreach ($this->hosts as $host):
-            if (empty($host['ansible_enabled'])):
+            if (empty($host['ansible_enabled'])) :
                 continue;
             endif;
             // All
@@ -592,15 +596,15 @@ class Hosts
                 $result_hosts[] = $host;
             endif;
             // Off
-            if ($status === 0 && (int) $host['online'] === 0):
+            if ($status === 0 && (int) $host['online'] === 0) :
                 $result_hosts[] = $host;
             endif;
             // On
-            if ($status === 1 && (int) $host['online'] === 1):
+            if ($status === 1 && (int) $host['online'] === 1) :
                 $result_hosts[] = $host;
             endif;
             // Fail
-            if ($status === 2 && $host['ansible_fail']):
+            if ($status === 2 && $host['ansible_fail']) :
                 $result_hosts[] = $host;
             endif;
         endforeach;
@@ -610,30 +614,30 @@ class Hosts
     /**
      * Status (null All) (0 Off) (1 Missing Pings)
      * @param int|null $status
-     * @return array
+     * @return array<string, mixed>
      */
     public function getAgentsHosts(?int $status = null): array
     {
         $result_hosts = [];
 
         foreach ($this->hosts as $host):
-            if (empty($host['agent_installed'])):
+            if (empty($host['agent_installed'])) :
                 continue;
             endif;
             // All
-            if ($status === null):
+            if ($status === null) :
                 $result_hosts[] = $host;
             endif;
             // Off
-            if ($status === 0 && (int) $host['online'] === 0):
+            if ($status === 0 && (int) $host['online'] === 0) :
                 $result_hosts[] = $host;
             endif;
             // On
-            if ($status === 1 && (int) $host['online'] === 1):
+            if ($status === 1 && (int) $host['online'] === 1) :
                 $result_hosts[] = $host;
             endif;
             // Ping Fail
-            if ($status === 2 && !empty($host['agent_missing_pings'])):
+            if ($status === 2 && !empty($host['agent_missing_pings'])) :
                 $result_hosts[] = $host;
             endif;
         endforeach;
@@ -669,9 +673,9 @@ class Hosts
         $networks = $this->ctx->get('Networks');
         $query_hosts = 'SELECT * FROM hosts';
         $results = $this->db->query($query_hosts);
-        if (!$results) {
+        if (!$results) :
             return false;
-        }
+        endif;
         $hosts = $this->db->fetchAll($results);
         $this->totals = count($hosts);
 
@@ -694,15 +698,15 @@ class Hosts
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
 
             //Track host categories
-            if (empty($this->host_cat_track[$host['category']])) {
+            if (empty($this->host_cat_track[$host['category']])) :
                 $this->host_cat_track[$host['category']] = 1;
-            } else {
+            else :
                 $this->host_cat_track[$host['category']]++;
-            }
+            endif;
             /* Port Field JSON TODO Need rethink */
-            if (!empty($this->hosts[$id]['ports'])) {
+            if (!empty($this->hosts[$id]['ports'])) :
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
-            }
+            endif;
             /* Misc field  fields that we keep in JSON format */
             if (!empty($this->hosts[$id]['misc'])) {
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
@@ -719,12 +723,12 @@ class Hosts
                 }
             }
 
-            if (empty($host['notes_id'])) {
+            if (empty($host['notes_id'])) :
                 $this->db->insert('notes', ['host_id' => $host['id']]);
                 $insert_id = $this->db->insertID();
                 $this->db->update('hosts', ['notes_id' => $insert_id], ['id' => $host['id']]);
                 $this->hosts[$host['id']]['notes_id'] = $insert_id;
-            }
+            endif;
 
             /* MISC KEYS EXTRA */
             /* Ansible */
@@ -735,19 +739,19 @@ class Hosts
                         $this->ansible_hosts_off++;
                     endif;
                 }
-                if ($host['ansible_fail']) {
+                if ($host['ansible_fail']) :
                     $this->ansible_hosts_fail++;
-                }
+                endif;
             }
 
             /* Agent */
-            if (!empty($this->hosts[$id]['agent_installed'])):
+            if (!empty($this->hosts[$id]['agent_installed'])) :
                 $this->agents++;
                 !$host['online'] ? $this->agents_off++ : null;
                 if (
                     !empty($this->hosts[$id]['agent_next_report']) &&
                     $this->hosts[$id]['agent_next_report'] < time()
-                ):
+                ) :
                     $this->agents_missing_pings++;
                     $this->hosts[$id]['agent_missing_pings'] = 1;
                 endif;

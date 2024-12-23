@@ -417,7 +417,7 @@
                             if (!empty($tdata['host_details']['email_list'])) {
                                 echo $tdata['host_details']['email_list'];
                             }
-                        ?>"
+                            ?>"
                            >
                     <div id="email_feedback" style="color: red; font-size: 0.9em;"></div>
                 </div>

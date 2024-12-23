@@ -30,7 +30,7 @@ $cfg['manufacture'] = [
     22 => ['id' => 22, 'name' => 'Tplink', 'img' => 'tplink.png'],
     23 => ['id' => 23, 'name' => 'Mikrotik', 'img' => 'mikrotik.png'],
     24 => ['id' => 24, 'name' => 'Supermicro', 'img' => 'supermicro.png'],
-    24 => ['id' => 24, 'name' => 'Apple Inc.', 'img' => 'apple.png'],
+    25 => ['id' => 25, 'name' => 'Apple Inc.', 'img' => 'apple.png'],
     27 => ['id' => 27, 'name' => 'Tenda', 'img' => 'tenda.png'],
     28 => ['id' => 28, 'name' => 'Fortinet', 'img' => 'fortinet.png'],
     29 => ['id' => 29, 'name' => 'Cisco Systems', 'img' => 'cisco_systems.png'],

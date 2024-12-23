@@ -83,7 +83,7 @@ class Mailer
     public function sendMailMultiple(array $emails, string $subject, string $body): void
     {
         foreach ($emails as $email) {
-            if (!$this->sendEmail($email, $subject, $body)) :
+            if (!$this->sendMail($email, $subject, $body)) :
                 Log::err('L_ERR_SENDING_EMAILS ' . $email);
                 break;
             endif;
