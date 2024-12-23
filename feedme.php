@@ -30,14 +30,15 @@ require_once 'include/common.inc.php';
 require_once 'include/common-call.php';
 
 // Configuración
-const DEFAULT_REFRESH = 5;
-
+$agent_refresh_interval = $cfg['agent_refresh_interval'];
 // Leer la entrada JSON
 $request = file_get_contents('php://input');
 $data = json_decode($request, true);
 
+Log::debug("Host contact request". print_r($request, true));
 // Validacion
 if (!isset($data['id'], $data['cmd'], $data['token'], $data['version']) || $data['cmd'] !== 'ping') {
+    Log::err("Invalid data receive");
     http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode([
@@ -48,17 +49,24 @@ if (!isset($data['id'], $data['cmd'], $data['token'], $data['version']) || $data
 $hosts = $ctx->get('Hosts');
 $host = $hosts->getHostById($data['id']);
 if (!$host):
+    Log::err("Host not found id:", $host['id']);
     echo json_encode([
-        'error' => 'Host no encontrado'
+        'error' => 'Host not found'
     ]);
 else:
-    if(empty($host['token']) || $host['token'] !== $data['token']):
+    if (empty($host['token']) || $host['token'] !== $data['token']):
+        Log::warning("Invalid Token receive from id:", $host['id']);
         echo json_encode([
-            'error' => 'Token invalido'
+            'error' => 'Invalid Token'
         ]);
     endif;
 endif;
 
+if (empty($host['agent_installed'])):
+    $hosts->update($host['id'],['agent_installed' => 1]);
+endif;
+
+$hosts->update($host['id'],['agent_last_report' => time()]);
 // Respuesta al comando 'ping'
 $response = [
     'cmd' => 'pong',
@@ -66,7 +74,7 @@ $response = [
     'version' => $cfg['agent_version'],
     'data' => [
         'response_msg' => true,
-        'refresh' => DEFAULT_REFRESH
+        'refresh' => $agent_refresh_interval
     ]
 ];
 

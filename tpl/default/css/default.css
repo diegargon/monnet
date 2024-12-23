@@ -538,8 +538,8 @@ input:checked + .slider:before {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 120px;
-    height: 80px;
+    width: 80px;
+    height: 50px;
     border: 1px solid #ccc;
     background-color: #d9d9d9;
     color: #222;
@@ -547,7 +547,7 @@ input:checked + .slider:before {
 }
 
 .footer-number {
-    font-size: 18px; /* Tamaño del número */
+    font-size: 14px;
     font-weight: bold;
 }
 .footer-number-blue {
@@ -557,8 +557,8 @@ input:checked + .slider:before {
     color: #a42121;
 }
 .footer-text {
-    font-size: 12px; /* Tamaño del texto de referencia */
-    margin-top: 5px; /* Separación entre el número y el texto */
+    font-size: 10px;
+    margin-top: 5px;
     text-align: center;
     color: #000;
 }

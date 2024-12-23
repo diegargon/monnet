@@ -60,7 +60,8 @@ class Hosts
         'alarm_macchange_email',
         'alarm_newport_email',
         'email_list',
-        'agents_installed',
+        'agent_installed', /* Setting at first ping */
+        'agent_last_report', /* Timestamp last ping  */
     ];
     /**
      * host[$id] = ['key' => 'value']
@@ -608,10 +609,6 @@ class Hosts
             $host['highlight'] ? $this->highlight_total++ : null;
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
 
-            if(!empty($host['agent_installed'])):
-                ($host['online']) ? ++$this->agents_on : ++$this->agents_off;
-            endif;
-
             //Track host categories
             if (empty($this->host_cat_track[$host['category']])) {
                 $this->host_cat_track[$host['category']] = 1;
@@ -649,6 +646,12 @@ class Hosts
                     $this->ansible_hosts_fail++;
                 }
             }
+
+            if (!empty($this->hosts[$id]['agent_installed'])):
+                $this->agents++;
+                ($host['online']) ? ++$this->agents : ++$this->agents_off;
+            endif;
+
             if (empty($host['notes_id'])) {
                 $this->db->insert('notes', ['host_id' => $host['id']]);
                 $insert_id = $this->db->insertID();
