@@ -187,6 +187,12 @@ $data['footer_dropdown'][] = [
     'number-color' => 'red'
 ];
 
+$data['footer_dropdown'][] = [
+    'value' => $hosts->agents_missing_pings,
+    'desc' => $lng['L_AGENT_MISSING_PINGS'],
+    'number-color' => 'red'
+];
+
 //TODO  system_prefs class?
 $results = $db->select('prefs', '*', ['uid' => 0]);
 $system_prefs = $db->fetchAll($results);
