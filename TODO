@@ -1,26 +1,18 @@
 ** HIGH
-* Ansible: Instalador cron para enviar stats? crear agente?
-    Opcion para establecer el tipo de agente: monnet-agent, prometheus etc
-    Clase
-    Instala un agente via ansible con un token en cron
-    Opcion para renovar el token el UI y automaticamente cambiar el token en el host
+* Agent: Al pinchar en el valor del dropdown msgbox con la lista de host que fallan.
+* Agent: metodo para no spamear los logs si falla un ping
 * Ansible: Turn off Host/VM container
-* Ansible: Tema almacenar passwords
-    Todos los passwd almacenados cifrados con maestra
-    Variable mpass en /etc/monnet/  con el pass maestro permisos root
-    El webui no puede acceder a esa contraseña sin ser por el gateway que tiene permisos para accceder a mpass
-    Para encriptar una contraseña introducida por el usuario se la tiene que pasar al gateway y esta la
-    encripta.
 * TODO 1111: Filter/check values
 * No hay forma de borrar una red
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
 * Migrar Mysql a NewDatabase
 * Migrar cfg a Config
 * migrar lng a Lang
+    $lang['L_'] to $lang::get['L_'] ? o lang::get['WORD'] and the L_
 * Host Reports: nojson reports field , genera un report si hay alguna alarma, ansible y email
 
 ** LOW
-* refresher: Si no esta visible saltarse la parte no visible
+* refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible
 * [DB 0.35v]hosts->scan identificar servicios  [option nmap [0 noscan  - 1 scan - 2 full scan]] - guardar con ports, los ports metidos con el user tienen user=1
 * cambiar diseño barra logout y demás, ver donde poner y quizas meter ahi stop_cli y username
     Quizas añadir una barra superior con dichos iconos y tambien poder crear folders para bookmarks
@@ -29,7 +21,6 @@
 * Bastionado / Antivirus / Compliant / VM en principio meterlos todos en un campo encoded json,
    en resumen si eso configuracion no es checkboxes
 * Users management
-* $lang['L_'] to $lang::get['L_'] ? o lang::get['WORD'] and the L_
 * host user*password encoded
 * [DB 0.35v] Network weight
 * En el login opcionalmente que se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
@@ -45,7 +36,13 @@
 * Refrescado/Cli Update/Discovery Update: En vez de la fecha bola roja/verde si se pasa mas del tiempo configurado
 * [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
 * El scan ports especificados por el usuario solo debe escaner los user=1
-
+* Ansible: Tema almacenar passwords
+    Todos los passwd almacenados cifrados con maestra
+    Variable mpass en /etc/monnet/  con el pass maestro permisos root
+    El webui no puede acceder a esa contraseña sin ser por el gateway que tiene permisos para accceder a mpass
+    Para encriptar una contraseña introducida por el usuario se la tiene que pasar al gateway y esta la
+    encripta.
+* Ansible: Opcion para actualizar todos los agentes
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
@@ -58,7 +55,8 @@
 * everybody bookmarks items (uid = 0) ?
 * Links comprobacion si funciona y una pequeña on/off señal?
 * AlertMsg fecha?
-
+* Ansible: ¿opcion para otros agentes tipo prometheus ?
+* Agent: Opcion para renovar el token el UI y automaticamente cambiar el token en el host
 
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.

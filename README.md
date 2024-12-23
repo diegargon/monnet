@@ -97,7 +97,7 @@ monnet : monnetadmin
 
 ## Setting crontab
 
-Times depends of your network. Paths depends of your system
+Times depends of the size of your network. Paths depends of your system
 
 ```
 $ nano /etc/crontab
@@ -105,16 +105,27 @@ $ nano /etc/crontab
 */15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
 
-## [NOT YET NECESSARY] Composer
+## Composer
+
+Necessary if you want support for send mail
 
 ```
 apt install composer
 
-#optional for send messsages (not yet)
 /path/to/monnet# composer require phpmailer/phpmailer
 ```
 
-## [NOT YET NECESSARY] Ansible Support
+## Monne Agent
+
+Testing a basic linux agent (python based) for reports. Shipping with monnet-ansbile
+repo/sources and his own playbook to install.
+
+You can do it manually check install-agent-linux playbook for steps
+
+
+## Ansible Support
+
+Ansible support its testing feature
 
 # Install ansible
 
@@ -125,13 +136,16 @@ apt install ansible
 # Install monnet-ansible
 
 ```
-git clone...
+git clone https://github.com/diegargon/monnet-ansible.git
 ```
 
 
-## [NOT YET NECESSARY] Configure ansible server
+## Configure ansible server
 
-Ansible must output in json format
+Ansible server listen in localhost only, due testing feauture without security.
+You must install ansible in the same Monnet system.
+
+Ansible must output in json format.
 
 ```
 nano /etc/ansible/ansible.cfg
@@ -142,15 +156,14 @@ stdout_callback=json
 
 
 
-## [NOT YET NECESSARY] Configure ansible hosts
+## Configure ansible client hosts
 
 By default the ansible ssh user will be 'ansible'
 
-Must be:
+Must be be/have:
 
-    * sudo member
-    * have the public ssh key
-    *
+    * sudo member without need type password
+    * have the public ssh key installed
 
 Example
 
@@ -172,7 +185,7 @@ sudo adduser ansible
 sudo usermod -aG wheel ansible
 ```
 
-## [NOT YET NECESSARY] CERTS
+## CERTS
 
 For Ansible server to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via Monnet/Ansible.
 ```
@@ -180,7 +193,7 @@ $ ssh-keygen -m PEM -t rsa -b 4096
 $ ssh-copy-id -i ~/.ssh/id_rsa.pub root@ip.ip.ip.ip
 ```
 
-# Or
+# Or manually
 
 ```
 runuser -u ansible mkdir /home/ansible/.ssh
@@ -188,13 +201,13 @@ runuser -u ansible nano /home/ansible/.ssh/authorized_keys
 ```
 and paste the ssh pub key
 
-If you don't use ssh-copy-id you must set 'host key manually'
+If you don't use ssh-copy-id you must add manually the known_host (Monnet server side)
 
 ```
 ssh-keyscan -t ecdsa,ed25519 -H server.example.com >> ~/.ssh/known_hosts 2>&1
 ```
 
-If the host fingerprint change remove first the old one
+If the host fingerprint change you must remove first the old one
 
 ```
 ssh-keygen -R
@@ -207,6 +220,7 @@ You can force ansible to ignore the host check
 host_key_checking = False
 ```
 
+## External Resource used (included in sources)
 
 ## MAC address, latest oui.csv
 https://regauth.standards.ieee.org/standards-ra-web/pub/view.html
