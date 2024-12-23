@@ -19,42 +19,66 @@ define('IN_WEB', true);
       cmd: pong
       token: string
       version: 0.1
-      data: [
-        response_msg: true
-        refresh: 1 //seconds (optional value)
-      ]
+      response_msg: true
+      refresh: 5 // Inform when is the next update
+      data: []
   }
  */
 
 require_once 'include/common.inc.php';
 require_once 'include/common-call.php';
+require_once 'include/feedme.inc.php';
+
 
 // Configuración
 $agent_refresh_interval = $cfg['agent_refresh_interval'];
 // Leer la entrada JSON
-$request = file_get_contents('php://input');
-$data = json_decode($request, true);
+$request_content = file_get_contents('php://input');
+$request = json_decode($request_content, true);
 
 Log::debug("Host contact request". print_r($request, true));
-// Validacion
-if (!isset($data['id'], $data['cmd'], $data['token'], $data['version']) || $data['cmd'] !== 'ping') {
-    Log::err("Invalid data receive");
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode([
-        'error' => 'Comando no valido o parametros faltantes.'
-    ]);
-    exit;
-}
+
+// Validation
+if (!isset($request['id'],  $request['cmd'], $request['token'], $request['version'])):
+    trigger_feedme_error('Invalid data receive: Empty or missing fields');
+endif;
+
+if (
+    !is_numeric($request['id']) ||
+    !is_string($request['cmd']) ||
+    !is_string($request['token']) ||
+    !is_float($request['version'])
+):
+
+    if (is_numeric($request['id'])) :
+        $dtype_error_host = $request['id'];
+    else:
+        $dtype_error_host = 'Wrong id';
+    endif;
+    trigger_feedme_error('Invalid datatypes receive id: ' . $dtype_error_host);
+endif;
+
+$host_id = $request['id'];
+
+if ($request['cmd'] !== 'ping'):
+    trigger_feedme_error('Invalid command receive id: ' . $host_id);
+endif;
+
+if (!is_array($request['data'])):
+    trigger_feedme_error('Invalid data field recevive: not an array, id: ' . $host_id);
+else:
+    $rdata = $request['data'];
+endif;
+
 $hosts = $ctx->get('Hosts');
-$host = $hosts->getHostById($data['id']);
+$host = $hosts->getHostById($request['id']);
 if (!$host):
     Log::err("Host not found id:", $host['id']);
     echo json_encode([
         'error' => 'Host not found'
     ]);
 else:
-    if (empty($host['token']) || $host['token'] !== $data['token']):
+    if (empty($host['token']) || $host['token'] !== $request['token']):
         Log::warning("Invalid Token receive from id:", $host['id']);
         echo json_encode([
             'error' => 'Invalid Token'
@@ -66,16 +90,16 @@ if (empty($host['agent_installed'])):
     $hosts->update($host['id'],['agent_installed' => 1]);
 endif;
 
-$hosts->update($host['id'],['agent_last_report' => time()]);
+$hosts->update($host['id'],['agent_next_report' => time() + $agent_refresh_interval]);
+
 // Respuesta al comando 'ping'
 $response = [
     'cmd' => 'pong',
-    'token' => $data['token'],
+    'token' => $request['token'],
     'version' => $cfg['agent_version'],
-    'data' => [
-        'response_msg' => true,
-        'refresh' => $agent_refresh_interval
-    ]
+    'response_msg' => true,
+    'refresh' => $agent_refresh_interval,
+    'data' => []
 ];
 
 // Enviar la respuesta JSON

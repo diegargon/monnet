@@ -29,6 +29,8 @@ class Hosts
     public int $agents = 0;
     /** @var int */
     public int $agents_off = 0;
+    /** @var int */
+    public int $agents_missing_pings = 0;
     /** @var Database $db */
     private Database $db;
 
@@ -61,7 +63,7 @@ class Hosts
         'alarm_newport_email',
         'email_list',
         'agent_installed', /* Setting at first ping */
-        'agent_last_report', /* Timestamp last ping  */
+        'agent_next_report', /* Timesstamp for next report */
     ];
     /**
      * host[$id] = ['key' => 'value']
@@ -635,6 +637,15 @@ class Hosts
                 }
             }
 
+            if (empty($host['notes_id'])) {
+                $this->db->insert('notes', ['host_id' => $host['id']]);
+                $insert_id = $this->db->insertID();
+                $this->db->update('hosts', ['notes_id' => $insert_id], ['id' => $host['id']]);
+                $this->hosts[$host['id']]['notes_id'] = $insert_id;
+            }
+
+            /* MISC KEYS EXTRA */
+            /* Ansible */
             if ($ncfg->get('ansible')) {
                 if ($host['ansible_enabled']) {
                     $this->ansible_hosts++;
@@ -647,18 +658,19 @@ class Hosts
                 }
             }
 
+            /* Agent */
             if (!empty($this->hosts[$id]['agent_installed'])):
                 $this->agents++;
-                ($host['online']) ? ++$this->agents : ++$this->agents_off;
+                ($host['online']) ? $this->agents++ : $this->agents_off++;
+                if (
+                    !isset($this->hosts[$id]['agent_next_report']) ||
+                    !isset($this->hosts[$id]['agent_next_report']) > (time()+ 1) //+1 Grace
+                ):
+                    Log::warning('Host missing a ping, id:'. $id);
+                    $this->agents_missing_pings++;
+                endif;
             endif;
-
-            if (empty($host['notes_id'])) {
-                $this->db->insert('notes', ['host_id' => $host['id']]);
-                $insert_id = $this->db->insertID();
-                $this->db->update('hosts', ['notes_id' => $insert_id], ['id' => $host['id']]);
-                $this->hosts[$host['id']]['notes_id'] = $insert_id;
-            }
-        }
+        } // LOOP FIN
 
         return true;
     }
