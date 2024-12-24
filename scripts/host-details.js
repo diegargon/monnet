@@ -16,6 +16,8 @@ $(document).ready(function () {
 
     $(document).off("click", "#playbook_btn").on("click", "#playbook_btn", function () {
         var hostId = $('#host_id').val();
+        var as_html = $('#as_html').prop('checked');
+
         var command = $('#playbook_select').val();
 
         var extraVars = {};
@@ -30,7 +32,8 @@ $(document).ready(function () {
         // Preparar el objeto de datos
         var requestData = {
             id: hostId,
-            value: command
+            value: command,
+            as_html: as_html
         };
 
         // Añadir extra_vars solo si tiene valores
@@ -181,6 +184,48 @@ function initializePlaybookForm() {
     });
 }
 
+function toggleSection(id) {
+    const section = document.getElementById(id);
+    const toggleButton = document.querySelector(`[onclick="toggleSection('${id}')"]`);
+
+    // Cambiar la visibilidad de la sección
+    section.classList.toggle('hidden-section');
+
+    // Cambiar el texto del botón [+] / [-]
+    if (section.classList.contains('hidden-section')) {
+        toggleButton.textContent = toggleButton.textContent.replace('[-] ', '[+] ');
+    } else {
+        toggleButton.textContent = toggleButton.textContent.replace('[+] ', '[-] ');
+    }
+}
+
+function expandAll() {
+    const sections = document.querySelectorAll('.hidden-section');
+    sections.forEach(section => {
+        section.classList.remove('hidden-section');
+    });
+
+    const toggleButtons = document.querySelectorAll('[onclick^="toggleSection"]');
+    toggleButtons.forEach(button => {
+        button.textContent = button.textContent.replace('[+] ', '[-] ');
+    });
+}
+
+function collapseAll() {
+    // Seleccionar solo las secciones desplegables con la clase "hidden-section" en su id asociado
+    const sections = document.querySelectorAll('div[id]');
+    sections.forEach(section => {
+        if (!section.classList.contains('hidden-section') && section.querySelector('ul')) {
+            section.classList.add('hidden-section');
+        }
+    });
+
+    const toggleButtons = document.querySelectorAll('[onclick^="toggleSection"]');
+    toggleButtons.forEach(button => {
+        button.textContent = button.textContent.replace('[-] ', '[+] ');
+    });
+}
+
 function changeHDTab(id, tabId) {
     // Ocultar todos los contenidos de las pestañas
     const tabContents = document.querySelectorAll('.host-details-tab-content');
@@ -274,13 +319,24 @@ function requestHostDetails(command, command_values = []) {
                 /* Playbacks exec */
                 if (jsonData.command_receive === 'playbook_exec') {
                     if (jsonData.command_success === 1) {
-                        $('#raw_lines').html(JSON.stringify(jsonData.response_msg, null, 2));
-                        $('#raw_lines').css({
-                            "width": "600px",
-                            "overflow": "auto",
-                            "height": "200px",
-                            "resize": "both"
-                        });
+                        if (jsonData.as_html) {
+                            $('#html_lines').html(jsonData.response_msg);
+                            $('#html_lines').css({
+                                "overflow": "auto",
+                                "resize": "both",
+                                "height": "200px",
+                            });
+                        } else {
+                            $('#raw_lines').html(JSON.stringify(jsonData.response_msg, null, 2));
+                            //$('#raw_lines').html(jsonData.response_msg);
+                            $('#raw_lines').css({
+                                "width": "600px",
+                                "overflow": "auto",
+                                "height": "200px",
+                                "resize": "both"
+                            });
+                        }
+
                     } else {
                         $('#raw_lines').html(jsonData.command_error_msg);
                     }
