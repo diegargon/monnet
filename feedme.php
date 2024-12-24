@@ -78,7 +78,7 @@ if (!$host) :
         'error' => 'Host not found'
     ]);
 else :
-    if (empty($host['token']) || $host['token'] !== $request['token']):
+    if (empty($host['token']) || $host['token'] !== $request['token']) :
         Log::warning("Invalid Token receive from id:", $host['id']);
         echo json_encode([
             'error' => 'Invalid Token'
@@ -87,10 +87,10 @@ else :
 endif;
 
 if (empty($host['agent_installed'])) :
-    $hosts->update($host['id'],['agent_installed' => 1]);
+    $hosts->update($host['id'], ['agent_installed' => 1]);
 endif;
 
-$hosts->update($host['id'],['agent_next_report' => time() + $agent_refresh_interval]);
+$hosts->update($host['id'], ['agent_next_report' => time() + $agent_refresh_interval]);
 
 // Respuesta al comando 'ping'
 $response = [
@@ -105,4 +105,3 @@ $response = [
 // Enviar la respuesta JSON
 header('Content-Type: application/json');
 echo json_encode($response);
-
