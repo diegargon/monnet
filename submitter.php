@@ -187,14 +187,13 @@ if ($command == 'setCheckPorts' && !empty($value_command) && !empty($target_id))
 }
 
 if ($command == 'submitHostToken' && !empty($target_id)) {
-    if($hosts->createHostToken()) {
+    if ($hosts->createHostToken()) :
         $data['response_msg'] = 'Token Created';
         $data['command_success'] = 1;
-    } else {
+    else :
         $data['command_success'] = 0;
         $data['error_msg'] = 'Error creating token';
-    }
-
+    endif;
 }
 if ($command == 'submitScanPorts' && !empty($target_id)) {
     $success_msg = '';
@@ -867,7 +866,8 @@ if (
     $data['response_msg'] = $msg;
 }
 
-if ($target_id > 0 &&
+if (
+    $target_id > 0 &&
     in_array($command, [
     "alarm_ping_email",
     "alarm_port_email",
@@ -919,10 +919,10 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
             $extra_vars = $command_values['extra_vars'];
         }
 
-        if ($playbook == 'install-monnet-agent-linux'):
-            if (empty($host['token'])):
+        if ($playbook == 'install-monnet-agent-linux') :
+            if (empty($host['token'])) :
                 $token = $hosts->createHostToken($target_id);
-            else:
+            else :
                 $token = $host['token'];
             endif;
             $agent_config = [
@@ -935,7 +935,7 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
                 "server_endpoint" => "/feedme.php",
             ];
 
-            $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
+            $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         endif;
         $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
         if ($response['status'] === "success") {
@@ -1025,17 +1025,17 @@ if (
 ) {
     $keysToShow = ["id", "display_name", "ip" , "online"];
 
-    if ($command === 'report_ansible_hosts'):
+    if ($command === 'report_ansible_hosts') :
         $tdata['hosts'] = $hosts->getAnsibleHosts();
-    elseif ($command === 'report_ansible_hosts_off'):
+    elseif ($command === 'report_ansible_hosts_off') :
         $tdata['hosts'] = $hosts->getAnsibleHosts(0);
-    elseif ($command === 'report_ansible_hosts_fail'):
+    elseif ($command === 'report_ansible_hosts_fail') :
         $tdata['hosts'] = $hosts->getAnsibleHosts(2);
-    elseif ($command === 'report_agents_hosts'):
+    elseif ($command === 'report_agents_hosts') :
         $tdata['hosts'] = $hosts->getAgentsHosts();
-    elseif ($command === 'report_agents_hosts_off'):
+    elseif ($command === 'report_agents_hosts_off') :
         $tdata['hosts'] = $hosts->getAgentsHosts(0);
-    elseif ($command === 'report_agents_hosts_missing_pings'):
+    elseif ($command === 'report_agents_hosts_missing_pings') :
         $tdata['hosts'] = $hosts->getAgentsHosts(2);
     endif;
 
@@ -1043,9 +1043,9 @@ if (
     $availableKeys = array_keys($tdata['hosts'][0] ?? []);
     $tdata['keysToShow'] = array_intersect($keysToShow, $availableKeys);
 
-    if (empty($tdata['hosts'])):
+    if (empty($tdata['hosts'])) :
         $data['response_msg'] = "No results";
-    else:
+    else :
         $data['response_msg'] = $frontend->getTpl("hosts-report", $tdata);
     endif;
 

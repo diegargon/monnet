@@ -211,8 +211,8 @@ class Hosts
                     endif;
                     $this->hosts[$id]['alert_msg'] = $alert_msg;
                     if (!empty($this->hosts[$id]['alarm_macchange_email'])) {
-                        $this->sendHostsMail(
-                            $this->host[$id],
+                        $this->sendMail(
+                            $this->hosts[$id],
                             $alert_msg,
                             $alert_msg
                         );
@@ -573,13 +573,12 @@ class Hosts
         endif;
 
         return false;
-
     }
 
     /**
      * Status (null All) (0 Off) (1 On) (2 Fail) - Returns hosts
      * @param int|null $status
-     * @return array<string, mixed>
+     * @return list<array<string, mixed>>
      */
     public function getAnsibleHosts(?int $status = null): array
     {
@@ -589,12 +588,12 @@ class Hosts
             return [];
         endif;
 
-        foreach ($this->hosts as $host):
+        foreach ($this->hosts as $host) :
             if (empty($host['ansible_enabled'])) :
                 continue;
             endif;
             // All
-            if ($status === null):
+            if ($status === null) :
                 $result_hosts[] = $host;
             endif;
             // Off
@@ -616,13 +615,13 @@ class Hosts
     /**
      * Status (null All) (0 Off) (1 Missing Pings)
      * @param int|null $status
-     * @return array<string, mixed>
+     * @return list<array<string, mixed>>
      */
     public function getAgentsHosts(?int $status = null): array
     {
         $result_hosts = [];
 
-        foreach ($this->hosts as $host):
+        foreach ($this->hosts as $host) :
             if (empty($host['agent_installed'])) :
                 continue;
             endif;

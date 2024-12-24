@@ -29,8 +29,8 @@
                     <?php foreach ($tdata['keysToShow'] as $key) : ?>
                         <td>
                         <?php
-                        if ($key === 'online' && (int) $host['online'] === 1):
-                        ?>
+                        if ($key === 'online' && (int) $host['online'] === 1) :
+                            ?>
                             <img
                                 class="hosts-online"
                                 src="tpl/<?= $cfg['theme']?>/img/green2.png"
@@ -39,13 +39,13 @@
                             >
                         <?php
                         elseif ($key === 'online' && (int) $host['online'] === 0) :
-                        ?>
+                            ?>
                             <img
                                 class="hosts-offline"
                                 src="tpl/<?= $cfg['theme']?>/img/red2.png"
                                 alt="online_status"
                                 title="Off">
-                        <?php
+                            <?php
                         else :
                             echo $host[$key] ?? '.';
                         endif;
