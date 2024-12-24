@@ -289,3 +289,52 @@ function isJson(string $string): mixed
     $decoded = json_decode($string, true);
     return json_last_error() === JSON_ERROR_NONE ? $decoded : null;
 }
+
+/**
+ * Renders a nested array as an HTML unordered list with collapsible functionality.
+ *
+ * @param array $array The input array (can be nested).
+ * @param bool $omitEmpty Whether to omit keys with null/empty values (default: true).
+ * @return string The generated HTML string with collapsible arrays.
+ */
+function renderArrayAsHtml(array $array, bool $omitEmpty = true): string
+{
+    static $idCounter = 0; // To ensure unique IDs for toggle buttons and sections
+    $html = '<ul>';
+
+    foreach ($array as $key => $value) {
+        // Skip empty values if $omitEmpty is true
+        if ($omitEmpty && (is_null($value) || $value === '' ||
+            (is_array($value) && empty(array_filter($value, fn($v) => $v !== '' && $v !== null))))) {
+            continue;
+        }
+
+        $id = 'section_' . $idCounter++; // Unique ID for collapsible sections
+
+        if (is_array($value)) {
+            $html .= '<li>';
+            $html .= "<button onclick=\"toggleSection('$id')\">[+] $key</button>";
+            $html .= "<div id=\"$id\" class=\"hidden-section\">";
+            $html .= renderArrayAsHtml($value, $omitEmpty); // Recursively render nested arrays
+            $html .= '</div>';
+            $html .= '</li>';
+        } elseif (is_string($value) && strpos($value, "\n") !== false) {
+            // Handle multiline strings (e.g., stdout content)
+            $lines = explode("\n", $value);
+            $html .= '<li>';
+            $html .= "<button onclick=\"toggleSection('$id')\">[+] $key</button>";
+            $html .= "<div id=\"$id\" class=\"hidden-section\"><ul>";
+            foreach ($lines as $line) {
+                $html .= "<li>" . htmlspecialchars($line) . "</li>";
+            }
+            $html .= '</ul></div></li>';
+        } else {
+            $html .= '<li>';
+            $html .= is_string($key) ? "<strong>$key:</strong> $value" : $value;
+            $html .= '</li>';
+        }
+    }
+
+    $html .= '</ul>';
+    return $html;
+}
