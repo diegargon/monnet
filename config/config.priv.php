@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.39;
-$cfg['monnet_revision'] = 14;
+$cfg['monnet_revision'] = 15;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_version'] = 0.8;
 $cfg['app_name'] = 'monnet';
@@ -18,8 +18,6 @@ $cfg['app_name'] = 'monnet';
 /* Hardware Manufacture */
 $cfg['manufacture'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
-    1 => ['id' => 1, 'name' => 'Virtual Machine', 'img' => 'vm.png'],
-    2 => ['id' => 2, 'name' => 'Container', 'img' => 'container.png'],
     10 => ['id' => 10, 'name' => 'Microsoft', 'img' => 'microsoft.png'],
     11 => ['id' => 11, 'name' => 'OpenBSD Project', 'img' => 'openbsd.png'],
     12 => ['id' => 12, 'name' => 'Samsung Electronics', 'img' => 'samsung.png'],
@@ -64,9 +62,48 @@ $cfg['manufacture'] = [
     57 => ['id' => 57, 'name' => 'Red Hat', 'img' => 'redhat.png'],
     58 => ['id' => 58, 'name' => 'FreeBSD Foundation', 'img' => 'freebsd.png'],
     59 => ['id' => 59, 'name' => 'Oracle Corporation', 'img' => 'oracle.png'],
+    60 => ['id' => 60, 'name' => 'Arista', 'img' => 'unknown.png'],
+    61 => ['id' => 61, 'name' => 'F5 Networks', 'img' => 'unknown.png'],
+    62 => ['id' => 62, 'name' => 'Vyos', 'img' => 'unknown.png'],
+    63 => ['id' => 63, 'name' => 'Unraid', 'img' => 'unknown.png'],
+   /* CLOUD  SYSTEMS */
+   100 => ['id' => 100, 'name' => 'AWS', 'img' => 'unknown.png'],
+   101 => ['id' => 101, 'name' => 'Azure', 'img' => 'unknown.png'],
+   102 => ['id' => 102, 'name' => 'Google Cloud', 'img' => 'unknown.png'],
+   /* Hypervisors */
+   150 => ['id' => 150, 'name' => 'Proxmox VE', 'img' => 'proxmox.png'],
+   151 => ['id' => 151, 'name' => 'VMWare ESXI', 'img' => 'vmware.png'],
+   152 => ['id' => 152, 'name' => 'Hyper-V', 'img' => 'unknown.png'],
+   153 => ['id' => 153, 'name' => 'Oracle Virtualbox', 'img' => 'unknown.png'],
+   154 => ['id' => 154, 'name' => 'KVM', 'img' => 'unknown.png'],
+   155 => ['id' => 155, 'name' => 'Citrix Hypervisor', 'img' => 'unknown.png'],
+   156 => ['id' => 156, 'name' => 'Xen', 'img' => 'unknown.png'],
+   157 => ['id' => 157, 'name' => 'Parallels', 'img' => 'unknown.png'],
+   158 => ['id' => 158, 'name' => 'QEMU', 'img' => 'unknown.png'],
+   159 => ['id' => 159, 'name' => 'OpenVZ', 'img' => 'unknown.png'],
+   160 => ['id' => 160, 'name' => 'XCP-ng', 'img' => 'unknown.png'],
+   /* Container Orchestration */
+   200 => ['id' => 200, 'name' => 'Docker', 'img' => 'unknown.png'],
+   201 => ['id' => 201, 'name' => 'Podman', 'img' => 'unknown.png'],
+   202 => ['id' => 202, 'name' => 'Kubernetes', 'img' => 'unknown.png'],
+   203 => ['id' => 203, 'name' => 'Docker Swarm', 'img' => 'unknown.png'],
+   204 => ['id' => 204, 'name' => 'Apache Mesos', 'img' => 'unknown.png'],
+   205 => ['id' => 205, 'name' => 'Nomad', 'img' => 'unknown.png'],
+   206 => ['id' => 206, 'name' => 'Rancher', 'img' => 'unknown.png'],
+   207 => ['id' => 207, 'name' => 'OpenShift', 'img' => 'unknown.png'],
 
 ];
 
+/* Macbhine Type */
+$cfg['machine_type'] = [
+    0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
+    1 => ['id' => 1, 'name' => 'Physical', 'img' => 'unknown.png'],
+    2 => ['id' => 2, 'name' => 'Virtual', 'img' => 'unknown.png'],
+    3 => ['id' => 3, 'name' => 'Container', 'img' => 'unknown.png'],
+    4 => ['id' => 4, 'name' => 'Cloud', 'img' => 'unknown.png'],
+    5 => ['id' => 5, 'name' => 'Bare Metal Cloud', 'img' => 'unknown.png'],
+
+];
 /* OS */
 $cfg['os'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
@@ -106,6 +143,13 @@ $cfg['os'] = [
     34 => ['id' => 34, 'name' => 'Linux Embebbed', 'img' => 'embedded.png'],
     35 => ['id' => 35, 'name' => 'Tasmota', 'img' => 'embedded.png'],
     36 => ['id' => 36, 'name' => 'Proxmox', 'img' => 'proxmox.png'],
+    37 => ['id' => 37, 'name' => 'Cisco IOS', 'img' => 'unknown.png'],
+    38 => ['id' => 38, 'name' => 'Cisco NXOS', 'img' => 'unknown.png'],
+    39 => ['id' => 39, 'name' => 'JunOS', 'img' => 'unknown.png'],
+    40 => ['id' => 40, 'name' => 'PanOS', 'img' => 'unknown.png'],
+    41 => ['id' => 41, 'name' => 'VyOS', 'img' => 'unknown.png'],
+    42 => ['id' => 42, 'name' => 'AMI', 'img' => 'unknown.png'],
+
 ];
 
 /* Systems */
@@ -142,6 +186,17 @@ $cfg['system_type'] = [
     28 => ['id' => 28, 'name' => 'Database Server', 'img' => 'database-server.png'],
 ];
 
+$cfg['sys_availability'] = [
+    0 => ['id' => 0, 'name' => 'Unknown'],
+    1 => ['id' => 1, 'name' => 'High Availability'],
+    2 => ['id' => 2, 'name' => 'Fault Tolerant'],
+    3 => ['id' => 3, 'name' => 'Disaster Recovery'],
+    4 => ['id' => 4, 'name' => 'Development'],
+    5 => ['id' => 5, 'name' => 'Test/Staging'],
+    6 => ['id' => 6, 'name' => 'Best Effort'],
+    7 => ['id' => 7, 'name' => 'Cold Storage'],
+];
+
 $cfg['versions'] = [
     0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
     1 => '20.04',
@@ -169,86 +224,107 @@ $cfg['playbooks'] = [
     [
         'name' => 'ansible-facts',
         'desc' => 'Display gathered facts',
+        'cat' => ['posix', 'windows'],
     ],
     [
         'name' => 'buildin-cmd-df-linux',
         'desc' => 'Get disk usage',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'buildin-shell-free-linux',
         'desc' => 'Get memory usage',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'cmd-df-linux',
         'desc' => 'Obtener información de particiones reales',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'cmd-sstuln',
         'desc' => 'Get network socket information',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'cmd-topbn1',
         'desc' => 'Gather system load information',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'cmd-uptime',
         'desc' => 'Gather uptime information',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'df',
         'desc' => 'Obtener información de particiones reales',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'gather-facts',
         'desc' => 'Minimal fact gathering',
+        'cat' => ['posix', 'windows'],
     ],
     [
         'name' => 'ip-info',
         'desc' => 'Gather IP address and routes',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'iptables-facts',
         'desc' => 'Gather iptables facts',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'journald-linux',
         'desc' => 'Get the last lines from the system journal',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'linux-df',
         'desc' => 'Obtener información de particiones reales',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'linux-load',
         'desc' => 'Get load statistics',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'load-linux',
         'desc' => 'Get load statistics',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'reboot-linux',
         'desc' => 'Reboot a Linux system',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'reboot-win',
         'desc' => 'Reboot a Windows system',
+        'cat' => ['windows'],
     ],
     [
         'name' => 'service-facts',
         'desc' => 'Gather service facts',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'setup-system_info',
         'desc' => 'Get load statistics via setup module',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'setup',
         'desc' => 'Gather system information',
+        'cat' => ['posix', 'windows'],
     ],
     [
         'name' => 'shutdown-linux',
         'desc' => 'Shutdown a Linux system',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'shutdown-win',
@@ -257,45 +333,55 @@ $cfg['playbooks'] = [
     [
         'name' => 'syslog-linux',
         'desc' => 'Get the last lines of syslog',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'system-info',
         'desc' => 'Get load statistics via setup module',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'test',
         'desc' => 'Playbook que no hace nada',
+        'cat' => ['posix', 'windows'],
     ],
     [
         'name' => 'uptime-facts',
         'desc' => 'Get uptime facts from all hosts',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'win-facts',
         'desc' => 'Gather facts from Windows hosts',
+        'cat' => ['windows'],
     ],
     [
         'name' => 'mysql-keepalive',
         'desc' => 'Check and ensure MySQL service is running',
+        'cat' => ['posix'],
     ],
     [
         'name' => 'mysql-dblocks',
         'desc' => 'Ensure MySQL is running and check database locks',
         'string_vars' => ['database_service', 'database_name', 'db_username'],
-        'passwd_vars' => ['db_passwordd']
+        'passwd_vars' => ['db_passwordd'],
+        'cat' => ['posix'],
     ],
     [
         'name' => 'mysql-performance',
         'desc' => 'Monitor MySQL performance and resource usage',
         'string_vars' => ['db_username'],
-        'password_vars' => ['db_password']
+        'password_vars' => ['db_password'],
+        'cat' => ['posix'],
     ],
     [
         'name' => 'ansible-ping',
         'desc' => 'Test Ansible connectivity',
+        'cat' => ['posix', 'windows'],
     ],
     [
         'name' => 'install-monnet-agent-linux',
         'desc' => 'Install Monnet Agent on Linux',
+        'cat' => ['posix'],
     ],
 ];

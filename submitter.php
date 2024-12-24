@@ -270,7 +270,24 @@ if ($command == 'submitManufacture' && !empty($target_id)) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'Manufacture changed to ' . $value_command;
-    $data['force_hosts_refresh'] = 1;
+}
+if ($command == 'submitMachineType' && !empty($target_id)) {
+    $success = 0;
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['machine_type' => $value_command]);
+        $success = 1;
+    }
+    $data['command_success'] = $success;
+    $data['response_msg'] = 'Machine type changed to ' . $value_command;
+}
+if ($command == 'submitSysAval' && !empty($target_id)) {
+    $success = 0;
+    if (!empty($value_command)) {
+        $hosts->update($target_id, ['sys_availability' => $value_command]);
+        $success = 1;
+    }
+    $data['command_success'] = $success;
+    $data['response_msg'] = 'System availability changed to ' . $value_command;
 }
 
 if ($command == 'submitOS' && !empty($target_id)) {
@@ -281,7 +298,6 @@ if ($command == 'submitOS' && !empty($target_id)) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'OS changed to ' . $value_command;
-    $data['force_hosts_refresh'] = 1;
 }
 
 if ($command == 'submitSystemType' && !empty($target_id)) {
@@ -292,7 +308,6 @@ if ($command == 'submitSystemType' && !empty($target_id)) {
     }
     $data['command_success'] = $success;
     $data['response_msg'] = 'System Type changed to ' . $value_command;
-    $data['force_hosts_refresh'] = 1;
 }
 
 if ($command === 'submitAccessLink' && !empty($target_id)) {

@@ -41,6 +41,8 @@ class Hosts
     private array $misc_keys = [
         'mac_vendor',
         'manufacture',
+        'machine_type',
+        'sys_availability',
         'system_type',
         'os',
         'owner',

@@ -218,6 +218,21 @@ $(document).ready(function () {
             submitCommand('submitManufacture', {id: hostId, value: manuValue});
         }
     });
+
+    $(document).on("click", "#submitMachineType", function () {
+        var mtypeValue = $('#machine_type').val();
+        var hostId = $('#host_id').val();
+        if (mtypeValue && hostId) {
+            submitCommand('submitMachineType', {id: hostId, value: mtypeValue});
+        }
+    });
+    $(document).on("click", "#submitSysAval", function () {
+        var savalValue = $('#system_aval').val();
+        var hostId = $('#host_id').val();
+        if (savalValue && hostId) {
+            submitCommand('submitSysAval', {id: hostId, value: savalValue});
+        }
+    });
     $(document).on("click", "#submitOS", function () {
         var osValue = $('#os').val();
         var hostId = $('#host_id').val();

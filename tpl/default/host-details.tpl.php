@@ -453,6 +453,16 @@
                         <input type="checkbox" id="hypervisor_machine"
                                <?= !empty($tdata['host_details']['hypervisor_machine']) ? 'checked' : null ?>><br />
                     </div>
+                    <?php if ($ncfg->get('ansible')) : ?>
+                    <div class="">
+                        <label for=""><?= $lng['L_ANSIBLE_SUPPORT'] ?></label>
+                        <input type="hidden" id="ansible_enabled" value="0">
+                        <input
+                            type="checkbox"
+                            id="ansible_enabled"
+                            <?= !empty($tdata['host_details']['ansible_enabled']) ? ' checked' : '' ?>>
+                    </div>
+                    <?php endif; ?>
                     <div class="">
                         <label for="host-title"><?= $lng['L_DISPLAY_NAME'] ?></label><br />
                         <input type="text" id="host-title" size="32" name="host-title"
@@ -508,7 +518,24 @@
                 <!-- right config column -->
                 <div class="right-config-column">
                     <div class="">
-                        <label for="manufacture"><?= $lng['L_HW_MANUFACTURE'] ?>: </label><br/>
+                        <label for="machine_type"><?= $lng['L_MACHINE_TYPE'] ?>: </label><br/>
+                        <select id="machine_type">
+                            <?php foreach ($cfg['machine_type'] as $mtype) :
+                                $selected = '';
+                                if (
+                                    !empty($tdata['host_details']['machine_type']) &&
+                                    ($mtype['id'] == $tdata['host_details']['machine_type'])
+                                ) :
+                                    $selected = ' selected=1 ';
+                                endif; ?>
+                                <option value="<?= $mtype['id'] ?>"<?= $selected ?>><?= $mtype['name'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="submitMachineType"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="manufacture"><?= $lng['L_PROVIDER'] ?>: </label><br/>
                         <select id="manufacture">
                             <?php foreach ($cfg['manufacture'] as $manufacture) :
                                 $selected = '';
@@ -560,21 +587,29 @@
                         <button id="submitSystemType"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
+                        <label for="system_aval"><?= $lng['L_AVAILABILITY'] ?>: </label><br/>
+                        <select id="system_aval">
+                            <?php foreach ($cfg['sys_availability'] as $sys_aval) :
+                                $selected = '';
+                                if (
+                                    !empty($tdata['host_details']['sys_availability']) &&
+                                    ($sys_aval['id'] == $tdata['host_details']['sys_availability'])
+                                ) :
+                                    $selected = ' selected=1 ';
+                                endif;
+                                ?>
+                                <option value="<?= $sys_aval['id'] ?>"<?= $selected ?>><?= $sys_aval['name'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="submitSysAval"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
                         <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
                         <input type="text" size="32" id="host_token" name="host_token"
                                value="<?= $tdata['host_details']['token'] ?>" readonly/>
                         <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
                     </div>
-                    <?php if ($ncfg->get('ansible')) : ?>
-                    <div class="">
-                        <label for=""><?= $lng['L_ANSIBLE_SUPPORT'] ?></label>
-                        <input type="hidden" id="ansible_enabled" value="0">
-                        <input
-                            type="checkbox"
-                            id="ansible_enabled"
-                            <?= !empty($tdata['host_details']['ansible_enabled']) ? ' checked' : '' ?>>
-                    </div>
-                    <?php endif; ?>
                 </div>
                 <!-- /right config column -->
 

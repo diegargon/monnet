@@ -31,6 +31,7 @@ $lng = [
     'L_AGENT_HOSTS' => 'Agentes',
     'L_AGENT_HOSTS_OFF' => 'Agentes Off',
     'L_AGENT_MISSING_PINGS' => 'Agents Pings',
+    'L_AVAILABILITY' => 'Disponibilidad',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -95,7 +96,6 @@ $lng = [
     'L_HOSTS_ON' => 'Host On',
     'L_HOSTS_OFF' => 'Host Off',
     'L_HYPERVISOR' => 'Hypervisor',
-    'L_HW_MANUFACTURE' => 'HW Manufacture',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',
@@ -125,6 +125,7 @@ $lng = [
     'L_MUST_BE' => 'debe ser',
     'L_MASK' => 'Mascara',
     'L_MAIL' => 'Correo',
+    'L_MACHINE_TYPE' => 'Tipo de maquina',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',
@@ -155,6 +156,7 @@ $lng = [
     'L_PRINTER' => 'Impresora',
     'L_PRINTERS' => 'Impresoras',
     'L_PING_CHECK_DISABLE' => 'Deshabilitar Ping',
+    'L_PROVIDER' => 'Proveedor',
     //Q
     'L_QUICK_CONFIG' => 'Quick Config',
     //R
