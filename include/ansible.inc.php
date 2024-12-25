@@ -30,6 +30,10 @@ function ansible_playbook(AppContext $ctx, array $host, string $playbook, ?array
         'ip' => $host['ip'],
     ];
 
+    $send_data = [
+        'command' => 'playbook',
+        'data' => $data
+    ];
     $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
     if ($socket === false) {
         $error_msg = 'Socket Creation fail: ' . socket_strerror(socket_last_error());
@@ -44,7 +48,7 @@ function ansible_playbook(AppContext $ctx, array $host, string $playbook, ?array
         return ['status' => 'error', 'error_msg' => $error_msg];
     }
 
-    socket_write($socket, json_encode($data), strlen(json_encode($data)));
+    socket_write($socket, json_encode($send_data), strlen(json_encode($send_data)));
 
     $response = '';
     /*
