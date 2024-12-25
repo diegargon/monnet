@@ -781,7 +781,7 @@ input:checked + .slider:before {
     border-right: 0;
 }
 .host-details-container img:first-of-type {
-    padding-left: 5px;
+    padding-left: 3px;
 }
 .host-details {
     position: absolute;
@@ -808,6 +808,9 @@ input:checked + .slider:before {
     padding: 2px 0px 2px 1px;
     margin: 0px;
     background-color: #808080;
+}
+.host-details-bar img {
+    padding: 0px;
 }
 .host-details-select {
     border: 1px solid black;
@@ -923,11 +926,11 @@ input:checked + .slider:before {
     border: 0px solid blue;
     border-radius: 5px;
 }
-.host-controls-left{
+.host-controls-left {
     float: left;
     border: 0px solid blue;
 }
-.host-controls-right{
+.host-controls-right {
     float: right;
     border: 0px solid blue;
     margin: 3px 2px 0px 0px;

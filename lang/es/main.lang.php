@@ -126,6 +126,7 @@ $lng = [
     'L_MASK' => 'Mascara',
     'L_MAIL' => 'Correo',
     'L_MACHINE_TYPE' => 'Tipo de maquina',
+    'L_MAXIMIZE' => 'Maximize',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',

@@ -26,6 +26,10 @@
                     <img src="tpl/<?= $cfg['theme'] ?>/img/close.png"
                          alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
                 </button>
+                <button id="max_host_details" type="submit"  class="button-ctrl">
+                    <img src="tpl/<?= $cfg['theme'] ?>/img/maximize.png"
+                         alt="<?= $lng['L_MAXIMIZE'] ?>" title="<?= $lng['L_MAXIMIZE'] ?>" />
+                </button>
                 <div class="host-details-tabs-head-container">
                     <button id="tab1_btn" class="host-details-tabs-head" data-tab="1"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab1')">

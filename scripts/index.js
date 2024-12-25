@@ -164,6 +164,32 @@ $(document).ready(function () {
     $(document).on("click", "#close_host_details", function () {
         $("#host-details").remove();
     });
+    $(document).on("click", "#max_host_details", function () {
+    const $hostDetails = $("#host-details");
+        if ($hostDetails.hasClass("fullscreen")) {
+            $hostDetails.css({
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                width: "",
+                height: "",
+                transform: "translate(-50%, -50%)",
+                margin: "auto",
+                padding: "0"
+            }).removeClass("fullscreen");
+        } else {
+            $hostDetails.css({
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                width: "90%",
+                height: "90%",
+                transform: "translate(-50%, -50%)",
+                margin: "auto",
+                padding: "0"
+            }).addClass("fullscreen");
+        }
+    });
     $(document).on("click", "#close_mgmtbookmark", function () {
         $("#mgmt-bookmark-container").css("display", "none");
     });
