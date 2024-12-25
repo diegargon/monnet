@@ -56,13 +56,13 @@ function cron(AppContext $ctx): void
 
     if (($cron_times['cron_halfday'] + 21600) < $time_now) {
         $cron_task_track .= '[12]';
-        clear_stats($db);
-        clear_system_logs($db);
-        clear_hosts_logs($db);
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_halfday']], 'LIMIT 1');
     }
     if (($cron_times['cron_daily'] + 8640) < $time_now) {
         $cron_task_track .= '[24]';
+        clear_stats($db);
+        clear_system_logs($db);
+        clear_hosts_logs($db);
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_daily']], 'LIMIT 1');
     }
 
