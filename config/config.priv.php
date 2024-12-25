@@ -257,11 +257,6 @@ $cfg['playbooks'] = [
         'cat' => ['posix'],
     ],
     [
-        'name' => 'df',
-        'desc' => 'Obtener información de particiones reales',
-        'cat' => ['posix'],
-    ],
-    [
         'name' => 'gather-facts',
         'desc' => 'Minimal fact gathering',
         'cat' => ['posix', 'windows'],
