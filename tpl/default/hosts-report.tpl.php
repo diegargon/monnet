@@ -37,7 +37,7 @@
                                 alt="online_status"
                                 title="On"
                             >
-                        <?php
+                            <?php
                         elseif ($key === 'online' && (int) $host['online'] === 0) :
                             ?>
                             <img

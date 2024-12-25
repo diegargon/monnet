@@ -211,7 +211,7 @@ class Hosts
                     endif;
                     $this->hosts[$id]['alert_msg'] = $alert_msg;
                     if (!empty($this->hosts[$id]['alarm_macchange_email'])) {
-                        $this->sendMail(
+                        $this->sendHostMail(
                             $this->hosts[$id],
                             $alert_msg,
                             $alert_msg

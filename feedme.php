@@ -66,23 +66,25 @@ endif;
 
 if (!is_array($request['data'])) :
     trigger_feedme_error('Invalid data field recevive: not an array, id: ' . $host_id);
-else:
+else :
     $rdata = $request['data'];
 endif;
 
 $hosts = $ctx->get('Hosts');
 $host = $hosts->getHostById($request['id']);
 if (!$host) :
-    Log::err("Host not found id:", $host['id']);
+    Log::err("Host not found, requested id:", $request['id']);
     echo json_encode([
         'error' => 'Host not found'
     ]);
+    exit();
 else :
     if (empty($host['token']) || $host['token'] !== $request['token']) :
         Log::warning("Invalid Token receive from id:", $host['id']);
         echo json_encode([
             'error' => 'Invalid Token'
         ]);
+        exit();
     endif;
 endif;
 
@@ -90,7 +92,7 @@ if (empty($host['agent_installed'])) :
     $hosts->update($host['id'], ['agent_installed' => 1]);
 endif;
 
-$hosts->update($host['id'], ['agent_next_report' => time() + $agent_refresh_interval]);
+$hosts->update($host['id'], ['agent_next_report' => time() + (int) $agent_refresh_interval]);
 
 // Respuesta al comando 'ping'
 $response = [

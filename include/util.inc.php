@@ -293,7 +293,7 @@ function isJson(string $string): mixed
 /**
  * Renders a nested array as an HTML unordered list with collapsible functionality.
  *
- * @param array $array The input array (can be nested).
+ * @param array<string,mixed> $array The input array (can be nested).
  * @param bool $omitEmpty Whether to omit keys with null/empty values (default: true).
  * @return string The generated HTML string with collapsible arrays.
  */
@@ -304,8 +304,10 @@ function array2Html(array $array, bool $omitEmpty = true): string
 
     foreach ($array as $key => $value) {
         // Skip empty values if $omitEmpty is true
-        if ($omitEmpty && (is_null($value) || $value === '' ||
-            (is_array($value) && empty(array_filter($value, fn($v) => $v !== '' && $v !== null))))) {
+        if (
+            $omitEmpty && (is_null($value) || $value === '' ||
+            (is_array($value) && empty(array_filter($value, fn($v) => $v !== '' && $v !== null))))
+        ) {
             continue;
         }
 

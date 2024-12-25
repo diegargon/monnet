@@ -3,8 +3,6 @@
 * Agent: metodo para no spamear los logs si falla un ping
 * Ansible: Turn off Host/VM container
 * Ansible: Filtros por categoria o sistema
-* Ansible: raw2html
-
 * Si agente esta instalado el ping debe estar deshabilitado y las metricas basadas en el agente
 * TODO 1111: Filter/check values
 * No hay forma de borrar una red

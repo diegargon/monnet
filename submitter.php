@@ -949,7 +949,7 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
         $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
         if ($response['status'] === "success") {
             $data['command_success'] = 1;
-            if ( $command_values['as_html'] === "true") :
+            if ($command_values['as_html'] === "true") :
                 $data['response_msg'] = $frontend->getTpl('ansible-report', $response);
                 $data['as_html'] = 1;
             else :
