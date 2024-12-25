@@ -188,15 +188,16 @@ $cfg['system_type'] = [
     24 => ['id' => 24, 'name' => 'Game Console', 'img' => 'gameconsole.png'],
     25 => ['id' => 25, 'name' => 'Printer', 'img' => 'printer.png'],
     26 => ['id' => 26, 'name' => 'Printer Server', 'img' => 'printer-server.png'],
-    27 => ['id' => 27, 'name' => 'Log Server', 'img' => 'printer-server.png'],
+    27 => ['id' => 27, 'name' => 'Log Server', 'img' => 'nas.png'],
     28 => ['id' => 28, 'name' => 'Database Server', 'img' => 'database-server.png'],
     29 => ['id' => 29, 'name' => 'VPN Server', 'img' => 'vpn-server.png'],
-    30 => ['id' => 30, 'name' => 'Proxy/Load Balancer', 'img' => 'proxy-server.png'],
-    31 => ['id' => 31, 'name' => 'Container Orchestation', 'img' => 'container-orchestation.png'],
+    30 => ['id' => 30, 'name' => 'Load Balancer', 'img' => 'load-balancer.png'],
+    31 => ['id' => 31, 'name' => 'Container Orchestation', 'img' => 'container.png'],
     32 => ['id' => 32, 'name' => 'Version Control System', 'img' => 'vcs.png'],
     33 => ['id' => 33, 'name' => 'Mail Server/Gateway', 'img' => 'mail-server.png'],
-    34 => ['id' => 34, 'name' => 'Web Server', 'img' => 'www-server.png'],
+    34 => ['id' => 34, 'name' => 'Web Server', 'img' => 'www.png'],
     35 => ['id' => 35, 'name' => 'File Server', 'img' => 'file-server.png'],
+    36 => ['id' => 36, 'name' => 'Proxy', 'img' => 'balancer-balancer.png'],
 ];
 
 $cfg['sys_availability'] = [
