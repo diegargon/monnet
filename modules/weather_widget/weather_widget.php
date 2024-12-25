@@ -39,7 +39,8 @@ function weather_widget(array $cfg, array $lng): ?array
 /**
  *
  * @param array<int|string, mixed> $cfg
- * @return mixed
+ *
+ * @return array<string, mixed>|null
  */
 function request_weather(array $cfg): mixed
 {
@@ -58,9 +59,23 @@ function request_weather(array $cfg): mixed
     curl_setopt($ch, CURLOPT_VERBOSE, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if ($response === false || $httpCode !== 200) {
+        $error = curl_error($ch) ?: "HTTP code: $httpCode";
+        curl_close($ch);
+        Log::warning($error);
+        return null;
+    }
 
     curl_close($ch);
+
     $data = json_decode($response);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        Log::warning("Weather: Error al decodificar JSON: " . json_last_error_msg());
+        return null;
+    }
 
     return $data;
 }

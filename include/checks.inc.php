@@ -60,12 +60,12 @@ function common_checks(array $cfg_db, array $cfg): void
 }
 /**
  *
- * @param array<string,string|int|array<int|string,int|string>> $cfg
+ * @param array<int|string, mixed> $cfg
  */
 function usermode_checks(array $cfg): void
 {
     if (empty($cfg)) {
-        exit('cfg empty');
+        exit('cfg can be empty');
     }
     $err_empty_msg = ' can\'t be empty check config.inc.php';
     $err_nofile_msg = ' file/directory not exists';

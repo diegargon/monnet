@@ -223,13 +223,16 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
  */
 if ($db->isConn()) {
     $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
-    $result = $db->fetchAll($query);
-    if ($result) {
-        $db_version = (float) $result[0]['pref_value'];
-        $monnet_version = $cfg['monnet_version'];
+    if ($query) :
+        $result = $db->fetchAll($query);
+        if ($result) {
+            $db_version = (float) $result[0]['pref_value'];
+            $monnet_version = $cfg['monnet_version'];
 
-        if ($monnet_version > $db_version) {
-            trigger_update($db, $db_version, $monnet_version);
+            if ($monnet_version > $db_version) {
+                trigger_update($db, $db_version, $monnet_version);
+            }
         }
-    }
+    endif;
+
 }

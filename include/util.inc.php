@@ -106,19 +106,25 @@ function order_by_name(array &$ary): void
 /**
  *
  * @param string $url
- * @return string|bool
+ * @return string|false
  */
-function base_url(string $url): string|bool
+function base_url(string $url): string|false
 {
     $parsed_url = parse_url($url);
 
     if ($parsed_url === false) {
-        return false; // Si no se pudo parsear, retornamos false
+        Log::warn('Cant parse url: ' . $url);
+        return false;
     }
 
     if (isset($parsed_url['fragment'])) {
         unset($parsed_url['fragment']);
     }
+
+    if(empty($parsed_url['scheme'])|| empty($parsed_url['host'])) :
+        Log::warn('Cant parse url: ' . $url);
+        return false;
+    endif;
 
     $base_url = $parsed_url['scheme'] . '://' . $parsed_url['host'];
 
@@ -332,7 +338,7 @@ function array2Html(array $array, bool $omitEmpty = true): string
             $html .= '</ul></div></li>';
         } else {
             $html .= '<li><pre>';
-            $html .= is_string($key) ? "<strong>$key:</strong> " . htmlspecialchars($value) : htmlspecialchars($value);
+            $html .= "<strong>$key:</strong> " . htmlspecialchars($value);
             $html .= '</pre></li>';
         }
     }

@@ -31,7 +31,7 @@ class Config
     /** @var array<int|string, mixed> $cfg */
     private array $cfg;
 
-    /** @var array<string, mixed> $modifiedKeys */
+    /** @var array<int|string, mixed> $modifiedKeys */
     private array $modifiedKeys = [];
 
     /**

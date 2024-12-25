@@ -406,9 +406,9 @@ class User
     /**
      *
      * @param string $r_key
-     * @return string|bool
+     * @return string|false
      */
-    public function getPref(string $r_key): string|bool
+    public function getPref(string $r_key): string|false
     {
         return isset($this->prefs[$r_key]) ? $this->prefs[$r_key] : false;
     }

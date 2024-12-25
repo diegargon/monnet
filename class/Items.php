@@ -44,12 +44,19 @@ class Items
                 'image_resource' => $item_data['field_img']
             ];
 
+            $en_conf = json_encode($conf);
+
+            if ($en_conf === false) :
+                Log::err("Error adding item: json_encode conf");
+                return false;
+            endif;
+
             $set = [
                 'uid' => $this->uid,
                 'cat_id' => $item_data['cat_id'],
                 'type' => 'bookmarks',
                 'title' => $item_data['name'],
-                'conf' => json_encode($conf),
+                'conf' => $en_conf,
                 'weight' => $item_data['weight']
             ];
 

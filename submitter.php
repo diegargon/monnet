@@ -78,9 +78,9 @@ if (!isset($command_values['id'])) {
 }
 
 if ($command == 'saveNote') {
-    $value_command = trim(Filters::varUTF8($command_values['value']));
+    $value_command = Filters::varUTF8($command_values['value']);
 } elseif ($command == 'submitScanPorts') {
-    $value_command = trim(Filters::varCustomString($command_values['value'], ',/', 255));
+    $value_command = Filters::varCustomString($command_values['value'], ',/', 255);
 } elseif ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
     $value_command = Filters::varInt($command_values['value']);
 } elseif ($command == 'addNetwork') {
@@ -118,13 +118,17 @@ if (!empty($command)) :
     $data['command_receive'] = $command;
 endif;
 if (!isEmpty($value_command)) :
+    $value_command = trim($value_command);
     $data['command_value'] = $value_command;
 else :
     $value_command = '';
 endif;
+
 if (!is_numeric($target_id)) :
     $data['command_error'] = 1;
     $data['command_error_msg'] = 'Id field is no numeric:';
+    print json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit();
 else :
     $target_id = (int) $target_id;
 endif;

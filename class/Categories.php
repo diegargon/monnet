@@ -70,7 +70,7 @@ class Categories
     /**
      *
      * @param int $type
-     * @return  array<array<string, mixed>>
+     * @return  array<array<string, mixed>|string>
      */
     public function getByType(int $type): array
     {
