@@ -672,7 +672,7 @@
                 <div id="playbook_desc"></div>
                 <div id="vars_container"></div>
                 <div id="ansible_raw_container" class="ansible_raw_container">
-                    <div id="raw_lines_container>">
+                    <div id="raw_lines_container">
                         <div id="html_lines"></div>
                         <pre id="raw_lines"></pre>
                     </div>
