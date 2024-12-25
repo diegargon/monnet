@@ -175,20 +175,6 @@ if ($command == 'toggleDisablePing' && isset($value_command) && !empty($target_i
     $data['response_msg'] = 'ok';
 }
 
-if ($command == 'toggleVMMachine' && isset($value_command) && !empty($target_id)) {
-    $hosts->update($target_id, ['vm_machine' => $value_command]);
-    $data['command_success'] = 1;
-    $data['response_msg'] = $value_command;
-    $data['response_msg'] = 'ok';
-}
-
-if ($command == 'toggleHypervisorMachine' && isset($value_command) && !empty($target_id)) {
-    $hosts->update($target_id, ['hypervisor_machine' => $value_command]);
-    $data['command_success'] = 1;
-    $data['response_msg'] = $value_command;
-    $data['response_msg'] = 'ok';
-}
-
 if ($command == 'setCheckPorts' && !empty($value_command) && !empty($target_id)) {
     // 1 ping 2 TCP/UDP
 //    ($value_command == 0) ? $value = 1 : $value = 2;
@@ -231,99 +217,89 @@ if ($command == 'submitScanPorts' && !empty($target_id)) {
 }
 
 if ($command == 'submitTitle' && !empty($target_id)) {
-    $success = 0;
+
     if (!empty($value_command)) {
         $hosts->update($target_id, ['title' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['force_hosts_refresh'] = 1;
+        $data['response_msg'] = 'ok';
     }
-    $data['command_success'] = $success;
-    $data['force_hosts_refresh'] = 1;
-    $data['response_msg'] = 'ok';
 }
 
 if ($command == 'submitOwner' && !empty($target_id)) {
-    $success = 0;
     if (!empty($value_command)) {
         $hosts->update($target_id, ['owner' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'ok';
     }
-    $data['command_success'] = $success;
-    $data['response_msg'] = 'ok';
 }
 
 if ($command == 'submitHostTimeout' && !empty($target_id)) {
-    $success = 0;
     if (!empty($value_command)) {
         $hosts->update($target_id, ['timeout' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'ok';
     }
-    $data['command_success'] = $success;
-    $data['response_msg'] = 'ok';
 }
 
 // Change Host Cat
 if ($command == 'submitCat' && !empty($target_id)) {
-    $success = 0;
     if (!empty($value_command)) {
         $hosts->update($target_id, ['category' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'Category changed to ' . $value_command;
+        $data['force_hosts_refresh'] = 1;
     }
-    $data['command_success'] = $success;
-    $data['response_msg'] = 'Category changed to ' . $value_command;
-    $data['force_hosts_refresh'] = 1;
 }
-
 
 if ($command == 'submitManufacture' && !empty($target_id)) {
-    $success = 0;
-    if (!empty($value_command)) {
+    if (isset($value_command) && is_numeric($value_command)) {
         $hosts->update($target_id, ['manufacture' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'Manufacture changed to ' . $value_command;
     }
-    $data['command_success'] = $success;
-    $data['response_msg'] = 'Manufacture changed to ' . $value_command;
 }
 if ($command == 'submitMachineType' && !empty($target_id)) {
-    $success = 0;
-    if (!empty($value_command)) {
+    if (isset($value_command) && is_numeric($value_command)) {
         $hosts->update($target_id, ['machine_type' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'Machine type changed to ' . $value_command;
     }
-    $data['command_success'] = $success;
-    $data['response_msg'] = 'Machine type changed to ' . $value_command;
 }
 if ($command == 'submitSysAval' && !empty($target_id)) {
-    $success = 0;
-    if (!empty($value_command)) {
+    if (isset($value_command) && is_numeric($value_command)) {
         $hosts->update($target_id, ['sys_availability' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'System availability changed to ' . $value_command;
     }
-    $data['command_success'] = $success;
-    $data['response_msg'] = 'System availability changed to ' . $value_command;
 }
 
 if ($command == 'submitOS' && !empty($target_id)) {
-    $success = 0;
-    if (!empty($value_command)) {
+    if (isset($value_command) && is_numeric($value_command)) {
         $hosts->update($target_id, ['os' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'OS changed to ' . $value_command;
     }
-    $data['command_success'] = $success;
-    $data['response_msg'] = 'OS changed to ' . $value_command;
+}
+
+if ($command == 'submitOSVersion' && !empty($target_id)) {
+    if (isset($value_command) && is_numeric($value_command)) :
+        $hosts->update($target_id, ['os_version' => $value_command]);
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'OS version changed to ' . $value_command;
+    endif;
 }
 
 if ($command == 'submitSystemType' && !empty($target_id)) {
-    $success = 0;
-    if (!empty($value_command)) {
+    if (isset($value_command) && is_numeric($value_command)) {
         $hosts->update($target_id, ['system_type' => $value_command]);
-        $success = 1;
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'System Type changed to ' . $value_command;
     }
-    $data['command_success'] = $success;
-    $data['response_msg'] = 'System Type changed to ' . $value_command;
 }
 
 if ($command === 'submitAccessLink' && !empty($target_id)) {
-    $success = 5;
+    $success = 0;
 
     if (!empty($command_values['value'])) {
         $value_command = Filters::varUrl($command_values['value']);

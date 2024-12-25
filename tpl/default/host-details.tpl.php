@@ -128,7 +128,12 @@
                 <img class="fab" src="tpl/<?= $tdata['theme']?>/img/ansible.png"
                      alt="ansible" title="ansible"/>
             <?php endif; ?>
-            <?php if (!empty($tdata['host_details']['vm_machine'])) : ?>
+            <?php
+            if (
+                !empty($tdata['host_details']['machine_type']) &&
+                (int) $tdata['host_details']['machine_type'] === 2
+            ) :
+            ?>
                 <img class="fab" src="tpl/<?= $tdata['theme']?>/img/vm.png"
                      alt="vm" title="vm"/>
             <?php endif; ?>
@@ -441,18 +446,6 @@
                         <input type="number" id="host_id" name="host_id"
                                style="display:none;" readonly value="<?= $tdata['host_details']['id'] ?>"/>
                     </div>
-                    <div class="">
-                        <label for="vm_machine"><?= $lng['L_VIRTUAL_MACHINE'] ?>: </label>
-                        <input type="hidden" id="vm_machine" value="0"/>
-                        <input type="checkbox" id="vm_machine"
-                               <?= !empty($tdata['host_details']['vm_machine']) ? 'checked' : null ?>><br />
-                    </div>
-                    <div class="">
-                        <label for="hypervisor_machine"><?= $lng['L_HYPERVISOR'] ?>: </label>
-                        <input type="hidden" id="hypervisor_machine" value="0"/>
-                        <input type="checkbox" id="hypervisor_machine"
-                               <?= !empty($tdata['host_details']['hypervisor_machine']) ? 'checked' : null ?>><br />
-                    </div>
                     <?php if ($ncfg->get('ansible')) : ?>
                     <div class="">
                         <label for=""><?= $lng['L_ANSIBLE_SUPPORT'] ?></label>
@@ -513,6 +506,12 @@
                         </select>
                         <button id="submitAccessLink"><?= $lng['L_SEND'] ?></button>
                     </div>
+                    <div class="">
+                        <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
+                        <input type="text" size="32" id="host_token" name="host_token"
+                               value="<?= $tdata['host_details']['token'] ?>" readonly/>
+                        <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
+                    </div>
                 </div>
                 <!-- /left config column -->
                 <!-- right config column -->
@@ -569,7 +568,7 @@
                         <button id="submitOS"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
-                        <label for="system_type"><?= $lng['L_SYSTEM_TYPE'] ?>: </label><br/>
+                        <label for="system_type"><?= $lng['L_ROL'] ?>: </label><br/>
                         <select id="system_type">
                             <?php foreach ($cfg['system_type'] as $system_type) :
                                 $selected = '';
@@ -605,10 +604,10 @@
                         <button id="submitSysAval"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
-                        <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
-                        <input type="text" size="32" id="host_token" name="host_token"
-                               value="<?= $tdata['host_details']['token'] ?>" readonly/>
-                        <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
+                        <label for="os_version"><?= $lng['L_VERSION'] ?>: </label><br/>
+                        <input type="text" size="20" id="os_version" name="os_version"
+                               value="<?= $tdata['host_details']['os_version'] ?? '' ?>" />
+                        <button id="submitOSVersion"><?= $lng['L_SEND'] ?></button>
                     </div>
                 </div>
                 <!-- /right config column -->

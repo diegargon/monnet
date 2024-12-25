@@ -240,6 +240,13 @@ $(document).ready(function () {
             submitCommand('submitOS', {id: hostId, value: osValue});
         }
     });
+    $(document).on("click", "#submitOSVersion", function () {
+        var osversionValue = $('#os_version').val();
+        var hostId = $('#host_id').val();
+        if (osversionValue && hostId) {
+            submitCommand('submitOSVersion', {id: hostId, value: osversionValue});
+        }
+    });
     $(document).on("click", "#submitSystemType", function () {
         var stValue = $('#system_type').val();
         var hostId = $('#host_id').val();

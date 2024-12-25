@@ -225,7 +225,6 @@ INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `disable`, `weight`) VAL
 (1, 1, 'L_UNCATEGORIZED', 0, 0),
 (2, 1, 'L_NETWORK', 0, 0),
 (3, 1, 'L_SERVERS', 0, 0),
-(4, 1, 'L_VM', 0, 0),
 (5, 1, 'L_DESKTOP', 0, 0),
 (6, 1, 'L_IOT', 0, 0),
 (7, 1, 'L_CAMERAS', 0, 0),

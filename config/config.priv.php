@@ -66,6 +66,14 @@ $cfg['manufacture'] = [
     61 => ['id' => 61, 'name' => 'F5 Networks', 'img' => 'unknown.png'],
     62 => ['id' => 62, 'name' => 'Vyos', 'img' => 'unknown.png'],
     63 => ['id' => 63, 'name' => 'Unraid', 'img' => 'unknown.png'],
+    64 => ['id' => 64, 'name' => 'Debian', 'img' => 'debian.png'],
+    65 => ['id' => 65, 'name' => 'Ubuntu', 'img' => 'ubuntu.png'],
+    66 => ['id' => 66, 'name' => 'Fedora', 'img' => 'fedora.png'],
+    67 => ['id' => 67, 'name' => 'openSuse', 'img' => 'suse.png'],
+    68 => ['id' => 68, 'name' => 'Arch Linux', 'img' => 'arch.png'],
+    69 => ['id' => 69, 'name' => 'Manjaro', 'img' => 'manjaro.png'],
+    70 => ['id' => 70, 'name' => 'CentoOS', 'img' => 'manjaro.png'],
+    71 => ['id' => 71, 'name' => 'RHEL', 'img' => 'rhel.png'],
    /* CLOUD  SYSTEMS */
    100 => ['id' => 100, 'name' => 'AWS', 'img' => 'unknown.png'],
    101 => ['id' => 101, 'name' => 'Azure', 'img' => 'unknown.png'],
@@ -97,12 +105,11 @@ $cfg['manufacture'] = [
 /* Macbhine Type */
 $cfg['machine_type'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
-    1 => ['id' => 1, 'name' => 'Physical', 'img' => 'unknown.png'],
+    1 => ['id' => 1, 'name' => 'Physical/On-Premises', 'img' => 'unknown.png'],
     2 => ['id' => 2, 'name' => 'Virtual', 'img' => 'unknown.png'],
-    3 => ['id' => 3, 'name' => 'Container', 'img' => 'unknown.png'],
-    4 => ['id' => 4, 'name' => 'Cloud', 'img' => 'unknown.png'],
-    5 => ['id' => 5, 'name' => 'Bare Metal Cloud', 'img' => 'unknown.png'],
-
+    4 => ['id' => 4, 'name' => 'Container', 'img' => 'unknown.png'],
+    5 => ['id' => 5, 'name' => 'Cloud', 'img' => 'unknown.png'],
+    6 => ['id' => 6, 'name' => 'Bare Metal Cloud', 'img' => 'unknown.png'],
 ];
 /* OS */
 $cfg['os'] = [
@@ -142,17 +149,16 @@ $cfg['os'] = [
     33 => ['id' => 33, 'name' => 'Other Proprietary', 'img' => 'proprietary.png'],
     34 => ['id' => 34, 'name' => 'Linux Embebbed', 'img' => 'embedded.png'],
     35 => ['id' => 35, 'name' => 'Tasmota', 'img' => 'embedded.png'],
-    36 => ['id' => 36, 'name' => 'Proxmox', 'img' => 'proxmox.png'],
     37 => ['id' => 37, 'name' => 'Cisco IOS', 'img' => 'unknown.png'],
     38 => ['id' => 38, 'name' => 'Cisco NXOS', 'img' => 'unknown.png'],
     39 => ['id' => 39, 'name' => 'JunOS', 'img' => 'unknown.png'],
     40 => ['id' => 40, 'name' => 'PanOS', 'img' => 'unknown.png'],
     41 => ['id' => 41, 'name' => 'VyOS', 'img' => 'unknown.png'],
     42 => ['id' => 42, 'name' => 'AMI', 'img' => 'unknown.png'],
-
+    43 => ['id' => 43, 'name' => 'Opnsense', 'img' => 'opnsense.png'],
 ];
 
-/* Systems */
+/* System ROL */
 
 $cfg['system_type'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
@@ -184,23 +190,27 @@ $cfg['system_type'] = [
     26 => ['id' => 26, 'name' => 'Printer Server', 'img' => 'printer-server.png'],
     27 => ['id' => 27, 'name' => 'Log Server', 'img' => 'printer-server.png'],
     28 => ['id' => 28, 'name' => 'Database Server', 'img' => 'database-server.png'],
+    29 => ['id' => 29, 'name' => 'VPN Server', 'img' => 'vpn-server.png'],
+    30 => ['id' => 30, 'name' => 'Proxy/Load Balancer', 'img' => 'proxy-server.png'],
+    31 => ['id' => 31, 'name' => 'Container Orchestation', 'img' => 'container-orchestation.png'],
+    32 => ['id' => 32, 'name' => 'Version Control System', 'img' => 'vcs.png'],
+    33 => ['id' => 33, 'name' => 'Mail Server/Gateway', 'img' => 'mail-server.png'],
+    34 => ['id' => 34, 'name' => 'Web Server', 'img' => 'www-server.png'],
+    35 => ['id' => 35, 'name' => 'File Server', 'img' => 'file-server.png'],
 ];
 
 $cfg['sys_availability'] = [
-    0 => ['id' => 0, 'name' => 'Unknown'],
-    1 => ['id' => 1, 'name' => 'High Availability'],
-    2 => ['id' => 2, 'name' => 'Fault Tolerant'],
-    3 => ['id' => 3, 'name' => 'Disaster Recovery'],
-    4 => ['id' => 4, 'name' => 'Development'],
-    5 => ['id' => 5, 'name' => 'Test/Staging'],
-    6 => ['id' => 6, 'name' => 'Best Effort'],
+    0 => ['id' => 0, 'name' => 'None'],
+    1 => ['id' => 1, 'name' => 'HA Active-Passive'],
+    2 => ['id' => 1, 'name' => 'HA Active-Active'],
+    3 => ['id' => 3, 'name' => 'Fault Tolerant'],
+    4 => ['id' => 4, 'name' => 'Disaster Recovery'],
+    5 => ['id' => 5, 'name' => 'Load Balancer'],
     7 => ['id' => 7, 'name' => 'Cold Storage'],
-];
-
-$cfg['versions'] = [
-    0 => ['name' => 'Unknown', 'img' => 'unknown.png'],
-    1 => '20.04',
-    2 => '21H1'
+    8 => ['id' => 8, 'name' => 'Scalable'],
+    9 => ['id' => 9, 'name' => 'Geographical Redundancy'],
+   10 => ['id' => 10, 'name' => 'Real-Time'],
+   11 => ['id' => 11, 'name' => 'Maintainable'],
 ];
 
 $cfg['check_method'] = [

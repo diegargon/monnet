@@ -164,6 +164,7 @@ $lng = [
     'L_REBOOT' => 'Reiniciar',
     'L_REFRESHED' => 'Refrescado',
     'L_REMOTE_HOST' => 'Host Remoto',
+    'L_ROL' => 'Rol',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',
@@ -201,6 +202,7 @@ $lng = [
     'L_VALUE_EXISTS' => 'El valor ya existe',
     'L_VISIBILITY' => 'Visibilidad',
     'L_VIRTUAL_MACHINE' => 'Maquina virtual',
+    'L_VERSION' => 'Version',
     //W
     'L_WINDSPEED' => 'Viento',
     'L_WEIGHT' => 'Peso',
