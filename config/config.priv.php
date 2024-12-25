@@ -287,11 +287,6 @@ $cfg['playbooks'] = [
         'cat' => ['posix'],
     ],
     [
-        'name' => 'linux-load',
-        'desc' => 'Get load statistics',
-        'cat' => ['posix'],
-    ],
-    [
         'name' => 'load-linux',
         'desc' => 'Get load statistics',
         'cat' => ['posix'],
