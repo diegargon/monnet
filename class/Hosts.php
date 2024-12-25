@@ -210,13 +210,9 @@ class Hosts
                         $alert_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'];
                     endif;
                     $this->hosts[$id]['alert_msg'] = $alert_msg;
-                    if (!empty($this->hosts[$id]['alarm_macchange_email'])) {
-                        $this->sendHostMail(
-                            $this->hosts[$id],
-                            $alert_msg,
-                            $alert_msg
-                        );
-                    }
+                    if (!empty($this->hosts[$id]['alarm_macchange_email'])) :
+                        $this->sendHostMail($id, $alert_msg, $alert_msg);
+                    endif;
                 }
                 //Log category change
                 if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
@@ -755,6 +751,7 @@ class Hosts
                 ) :
                     $this->agents_missing_pings++;
                     $this->hosts[$id]['agent_missing_pings'] = 1;
+                    $this->update($id, ['online' => 0]);
                 endif;
             endif;
         } // LOOP FIN
