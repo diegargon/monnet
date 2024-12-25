@@ -92,7 +92,12 @@ if (empty($host['agent_installed'])) :
     $hosts->update($host['id'], ['agent_installed' => 1]);
 endif;
 
-$hosts->update($host['id'], ['agent_next_report' => time() + (int) $agent_refresh_interval]);
+$host_update_values['agent_next_report'] = time() + (int) $agent_refresh_interval;
+
+if( (int) $host['online'] !== 1) {
+    $host_update_values['online'] = 1;
+}
+$hosts->update($host['id'], $host_update_values);
 
 // Respuesta al comando 'ping'
 $response = [
