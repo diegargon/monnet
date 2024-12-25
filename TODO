@@ -1,9 +1,7 @@
 ** HIGH
-* Agent: Al pinchar en el valor del dropdown msgbox con la lista de host que fallan.
 * Agent: metodo para no spamear los logs si falla un ping
 * Ansible: Turn off Host/VM container
 * Ansible: Filtros por categoria o sistema
-* Si agente esta instalado el ping debe estar deshabilitado y las metricas basadas en el agente
 * TODO 1111: Filter/check values
 * No hay forma de borrar una red
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
@@ -46,6 +44,7 @@
     encripta.
 * Ansible: Opcion para actualizar todos los agentes
 
+
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
 * Email Alert Groups: Poder especicar en vez de uno por uno el email un grupo.
@@ -59,6 +58,7 @@
 * AlertMsg fecha?
 * Ansible: ¿opcion para otros agentes tipo prometheus ?
 * Agent: Opcion para renovar el token el UI y automaticamente cambiar el token en el host
+* Si agente esta instalado ¿deshabilitar ping? ¿o mantenerlo por la latencia?
 
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
