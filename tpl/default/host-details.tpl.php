@@ -667,10 +667,13 @@
                 <select id="playbook_select">
                     <option value="">Select Playbook</option>
                 </select>
+                <label for="as_html">HTML</label>
+                <input id="as_html" type="checkbox" checked>
                 <div id="playbook_desc"></div>
                 <div id="vars_container"></div>
                 <div id="ansible_raw_container" class="ansible_raw_container">
                     <div id="raw_lines_container>">
+                        <div id="html_lines"></div>
                         <pre id="raw_lines"></pre>
                     </div>
                 </div>

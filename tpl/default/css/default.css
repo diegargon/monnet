@@ -121,6 +121,12 @@ footer {
 .inline {
     display: inline;
 }
+.inline-flex {
+    display: inline-flex;
+}
+.flex {
+    display: flex;
+}
 .main {
     margin-top: 1vh;
     padding-bottom: 50px;
@@ -1458,6 +1464,33 @@ input:checked + .slider:before {
 .report-table-container img {
     width: 20px;
 }
+
+.hidden-section {
+    display: none;
+}
+
+.toggle {
+    cursor: pointer;
+    color: #0056b3;
+}
+
+.indent4 {
+    text-indent: 4em;
+}
+
+#html_lines button {
+    padding: 0;
+    font-size: 13px;
+    margin: 4px;
+    background-color: transparent;
+    font-weight: bold;
+    color: #0056b3;
+}
+
+.ansible_list {
+    font-size: 12px;
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

@@ -200,29 +200,36 @@ function toggleSection(id) {
 }
 
 function expandAll() {
-    const sections = document.querySelectorAll('.hidden-section');
+    // Seleccionar solo los div asociados con toggleSection
+    const sections = document.querySelectorAll('div[id].hidden-section');
     sections.forEach(section => {
         section.classList.remove('hidden-section');
     });
 
     const toggleButtons = document.querySelectorAll('[onclick^="toggleSection"]');
     toggleButtons.forEach(button => {
-        button.textContent = button.textContent.replace('[+] ', '[-] ');
+        if (button.textContent.includes('[+] ')) {
+            button.textContent = button.textContent.replace('[+] ', '[-] ');
+        }
     });
 }
 
 function collapseAll() {
-    // Seleccionar solo las secciones desplegables con la clase "hidden-section" en su id asociado
+    // Seleccionar solo los div asociados con toggleSection
     const sections = document.querySelectorAll('div[id]');
     sections.forEach(section => {
-        if (!section.classList.contains('hidden-section') && section.querySelector('ul')) {
+        // Asegurarse de que sea una sección desplegable
+        const button = document.querySelector(`[onclick="toggleSection('${section.id}')"]`);
+        if (button && !section.classList.contains('hidden-section')) {
             section.classList.add('hidden-section');
         }
     });
 
     const toggleButtons = document.querySelectorAll('[onclick^="toggleSection"]');
     toggleButtons.forEach(button => {
-        button.textContent = button.textContent.replace('[-] ', '[+] ');
+        if (button.textContent.includes('[-] ')) {
+            button.textContent = button.textContent.replace('[-] ', '[+] ');
+        }
     });
 }
 

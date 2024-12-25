@@ -28,6 +28,7 @@ $tdata = [];
 $hosts = $ctx->get('Hosts');
 $target_id = 0;
 
+/* Response initial data */
 $data = [
     'conn' => 'success',
     'login' => 'fail',
@@ -47,6 +48,14 @@ if ($user->getId() > 0) {
 $frontend = new Frontend($ctx);
 $tdata['theme'] = $cfg['theme'];
 
+/*
+ Receive:
+ command string filtered
+ command_values array
+ command_values['value'] to value_command filtered
+ rest command_values unfiltered
+
+ */
 $command = Filters::postString('command');
 if (empty($command)) {
     $data['command_error'] = 1;
@@ -940,7 +949,13 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
         $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
         if ($response['status'] === "success") {
             $data['command_success'] = 1;
-            $data['response_msg'] = $response;
+            if ( $command_values['as_html'] === "true") :
+                $data['response_msg'] = $frontend->getTpl('ansible-report', $response);
+                $data['as_html'] = 1;
+            else :
+                $data['response_msg'] = $response;
+                $data['as_html'] = 0;
+            endif;
         } else {
             $data['command_error'] = 1;
             $data['command_error_msg'] = $response['error_msg'];
@@ -1051,4 +1066,4 @@ if (
 
     $data['command_success'] = 1;
 }
-print json_encode($data, JSON_UNESCAPED_UNICODE);
+print json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

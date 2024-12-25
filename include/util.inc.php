@@ -297,7 +297,7 @@ function isJson(string $string): mixed
  * @param bool $omitEmpty Whether to omit keys with null/empty values (default: true).
  * @return string The generated HTML string with collapsible arrays.
  */
-function renderArrayAsHtml(array $array, bool $omitEmpty = true): string
+function array2Html(array $array, bool $omitEmpty = true): string
 {
     static $idCounter = 0; // To ensure unique IDs for toggle buttons and sections
     $html = '<ul>';
@@ -315,7 +315,7 @@ function renderArrayAsHtml(array $array, bool $omitEmpty = true): string
             $html .= '<li>';
             $html .= "<button onclick=\"toggleSection('$id')\">[+] $key</button>";
             $html .= "<div id=\"$id\" class=\"hidden-section\">";
-            $html .= renderArrayAsHtml($value, $omitEmpty); // Recursively render nested arrays
+            $html .= array2Html($value, $omitEmpty); // Recursively render nested arrays
             $html .= '</div>';
             $html .= '</li>';
         } elseif (is_string($value) && strpos($value, "\n") !== false) {
@@ -325,13 +325,13 @@ function renderArrayAsHtml(array $array, bool $omitEmpty = true): string
             $html .= "<button onclick=\"toggleSection('$id')\">[+] $key</button>";
             $html .= "<div id=\"$id\" class=\"hidden-section\"><ul>";
             foreach ($lines as $line) {
-                $html .= "<li>" . htmlspecialchars($line) . "</li>";
+                $html .= "<li><pre>" . htmlspecialchars($line) . "</pre></li>";
             }
             $html .= '</ul></div></li>';
         } else {
-            $html .= '<li>';
-            $html .= is_string($key) ? "<strong>$key:</strong> $value" : $value;
-            $html .= '</li>';
+            $html .= '<li><pre>';
+            $html .= is_string($key) ? "<strong>$key:</strong> " . htmlspecialchars($value) : htmlspecialchars($value);
+            $html .= '</pre></li>';
         }
     }
 

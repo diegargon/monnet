@@ -177,6 +177,7 @@ $lng = [
     'L_SHOWED' => 'Mostrando',
     'L_SCAN' => 'Scan',
     'L_SYSTEM_TYPE' => 'Tipo sistema',
+    'L_STATS' => 'Estadisticas',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',
