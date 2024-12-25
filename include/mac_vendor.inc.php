@@ -56,6 +56,10 @@ function get_mac_vendor_local(string $mac): array|bool
     }
 
     $content = file_get_contents($file);
+    if (empty($content)) {
+        Log::warning('get_mac_vendor_local file_got_content empty or false');
+        return false;
+    }
 
     $pattern = "/\{MA-[LM]\}\{$formattedMAC\}([^\n]+)/i";
 
@@ -68,7 +72,7 @@ function get_mac_vendor_local(string $mac): array|bool
 
         $company = isset($details[1]) ? trim($details[1]) : "";
         if (empty($company)) {
-            Log::debug("Mac Lookup fail: Empty mac vendor company");
+            Log::debug('Mac Lookup fail: Empty mac vendor company');
             return false;
         }
 
@@ -81,7 +85,7 @@ function get_mac_vendor_local(string $mac): array|bool
             $country = '';
         }
         $vendor = trim($company) . " (" . trim($country) . ")";
-        Log::debug("Mac vendor DB result is " . $vendor);
+        Log::debug('Mac vendor DB result is ' . $vendor);
 
         return ['company' => $vendor];
     } else {
