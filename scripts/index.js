@@ -165,7 +165,7 @@ $(document).ready(function () {
         $("#host-details").remove();
     });
     $(document).on("click", "#max_host_details", function () {
-    const $hostDetails = $("#host-details");
+        const $hostDetails = $("#host-details");
         if ($hostDetails.hasClass("fullscreen")) {
             $hostDetails.css({
                 position: "absolute",
@@ -387,12 +387,13 @@ $(document).ready(function () {
             $('#error_msg').html('Mandatory fields empty');
         }
     });
-//Checkbox trigger
+
+    //Checkbox trigger
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-//Network Checkboxes
-//Prevent disable all networks
+            checkbox.addEventListener('change', function () {
+        //Network Checkboxes
+        //Prevent disable all networks
             const checkedNetworks = document.querySelectorAll('input[type="checkbox"].option_network:checked');
             if ($(this).hasClass('option_network')) {
                 if (checkedNetworks.length === 1) {
@@ -409,7 +410,7 @@ $(document).ready(function () {
                     });
                 }
             }
-//Send event to refresher
+        //Send event to refresher
             if ($(this).hasClass('option_network')) {
                 if (this.checked) {
                     submitCommand('network_select', {id: 0, value: this.value});
@@ -417,7 +418,7 @@ $(document).ready(function () {
                     submitCommand('network_unselect', {id: 0, value: this.value});
                 }
             }
-//END Netrwork Checkboxes
+        //END Netrwork Checkboxes
         });
     });
 

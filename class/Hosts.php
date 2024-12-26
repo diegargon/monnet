@@ -33,6 +33,10 @@ class Hosts
     public int $agents_missing_pings = 0;
     /**  @var int */
     public int $hypervisor_rols = 0;
+    /**  @var int */
+    public int $alerts = 0;
+    /**  @var int */
+    public int $warns = 0;
     /** @var Database $db */
     private Database $db;
 
@@ -646,6 +650,39 @@ class Hosts
 
     /**
      *
+     * @return array<int,array<string,string>
+     */
+    public function getAlertHosts(): array
+    {
+        $result_hosts = [];
+
+        foreach ($this->hosts as $host) :
+            if ($host['alert']) :
+                $result_hosts[] = $host;
+            endif;
+        endforeach;
+
+        return $result_hosts;
+    }
+
+    /**
+     *
+     * @return array<int,array<string,string>
+     */
+    public function getWarnHosts(): array
+    {
+        $result_hosts = [];
+
+        foreach ($this->hosts as $host) :
+            if ($host['warn']) :
+                $result_hosts[] = $host;
+            endif;
+        endforeach;
+
+        return $result_hosts;
+    }
+    /**
+     *
      * @param array<string, mixed> $host
      *
      * @return string
@@ -695,6 +732,14 @@ class Hosts
             $host['online'] == 1 ? ++$this->total_on : ++$this->total_off;
             $host['highlight'] ? $this->highlight_total++ : null;
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
+
+            if (!empty($host['alert'])) :
+                $this->alerts++;
+            endif;
+
+            if (!empty($host['warn'])) :
+                $this->warns++;
+            endif;
 
             //Track host categories
             if (empty($this->host_cat_track[$host['category']])) :

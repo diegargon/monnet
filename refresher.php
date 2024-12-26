@@ -157,6 +157,24 @@ $data['footer_dropdown'][] = [
     'number-color' => 'red'
 ];
 
+if ($hosts->alerts) :
+    $data['footer_dropdown'][] = [
+        'value' => $hosts->alerts,
+        'report_type' => 'alerts',
+        'desc' => $lng['L_ALERTS'],
+        'number-color' => 'red'
+    ];
+endif;
+
+if ($hosts->warns) :
+    $data['footer_dropdown'][] = [
+        'value' => $hosts->warns,
+        'report_type' => 'warns',
+        'desc' => $lng['L_WARNS'],
+        'number-color' => 'yellow'
+    ];
+endif;
+
 if ($ncfg->get('ansible')) {
     $ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
     $data['footer_dropdown'][] = [

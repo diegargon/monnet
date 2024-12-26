@@ -32,6 +32,7 @@ $lng = [
     'L_AGENT_HOSTS_OFF' => 'Agentes Off',
     'L_AGENT_MISSING_PINGS' => 'Agents Pings',
     'L_AVAILABILITY' => 'Disponibilidad',
+    'L_ALERTS' => 'Alertas',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -208,4 +209,5 @@ $lng = [
     'L_WINDSPEED' => 'Viento',
     'L_WEIGHT' => 'Peso',
     'L_WEBS' => 'Webs',
+    'L_WARNS' => 'Advertencias',
 ];

@@ -12,6 +12,7 @@
 * Host Reports: nojson reports field , genera un report si hay alguna alarma, ansible y email
 * Display Alarms Counter (footer dropdown) y posibilidad de abrir y mostrar el resumen
 * Agent: Detectar first boot
+* Split Configuration > Inventory
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible
@@ -45,6 +46,7 @@
     Para encriptar una contraseña introducida por el usuario se la tiene que pasar al gateway y esta la
     encripta.
 * Ansible: Opcion para actualizar todos los agentes
+* Alarms: Crear tabla con alarmas y solo dejar en la tabla host los bits [id:hostid:alarm_type{alert,warn}:alarm_msg]
 
 
 ** Undecided

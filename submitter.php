@@ -1016,7 +1016,9 @@ if (
     $command === 'report_ansible_hosts_fail' ||
     $command === 'report_agents_hosts' ||
     $command === 'report_agents_hosts_off' ||
-    $command === 'report_agents_hosts_missing_pings'
+    $command === 'report_agents_hosts_missing_pings' ||
+    $command === 'report_alerts' ||
+    $command === 'report_warns'
 ) {
     $keysToShow = ["id", "display_name", "ip" , "online"];
 
@@ -1032,6 +1034,12 @@ if (
         $tdata['hosts'] = $hosts->getAgentsHosts(0);
     elseif ($command === 'report_agents_hosts_missing_pings') :
         $tdata['hosts'] = $hosts->getAgentsHosts(2);
+    elseif ($command === 'report_alerts') :
+        $keysToShow[] = 'alert_msg';
+        $tdata['hosts'] = $hosts->getAlertHosts();
+    elseif ($command === 'report_warns') :
+        $keysToShow[] = 'warn_msg';
+        $tdata['hosts'] = $hosts->getWarnHosts();
     endif;
 
 

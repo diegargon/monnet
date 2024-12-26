@@ -123,7 +123,9 @@
                         jsonData.command_receive === 'report_ansible_hosts_fail' ||
                         jsonData.command_receive === 'report_agents_hosts' ||
                         jsonData.command_receive === 'report_agents_hosts_off' ||
-                        jsonData.command_receive === 'report_agents_hosts_missing_pings'
+                        jsonData.command_receive === 'report_agents_hosts_missing_pings' ||
+                        jsonData.command_receive === 'report_alerts' ||
+                        jsonData.command_receive === 'report_warns'
                     ) {
                         closeStdContainer();
                         if(jsonData.response_msg) {
