@@ -198,6 +198,7 @@ $cfg['system_type'] = [
     34 => ['id' => 34, 'name' => 'Web Server', 'img' => 'www.png'],
     35 => ['id' => 35, 'name' => 'File Server', 'img' => 'file-server.png'],
     36 => ['id' => 36, 'name' => 'Proxy', 'img' => 'balancer-balancer.png'],
+    37 => ['id' => 37, 'name' => 'Management', 'img' => 'management.png'],
 ];
 
 $cfg['sys_availability'] = [

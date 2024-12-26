@@ -31,6 +31,8 @@ class Hosts
     public int $agents_off = 0;
     /** @var int */
     public int $agents_missing_pings = 0;
+    /**  @var int */
+    public int $hypervisor_rols = 0;
     /** @var Database $db */
     private Database $db;
 
@@ -727,7 +729,16 @@ class Hosts
                 $this->hosts[$host['id']]['notes_id'] = $insert_id;
             endif;
 
-            /* MISC KEYS EXTRA */
+            /*
+             * MISC KEYS EXTRA TASKS
+             */
+            /* General */
+            if (!empty($this->host['system_type'])) :
+                if ((int) $this->host['system_type'] === 17 ) :
+                    $this->hypervisor_rols++;
+                endif;
+            endif;
+
             /* Ansible */
             if ($ncfg->get('ansible')) {
                 if ($host['ansible_enabled']) {
