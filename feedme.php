@@ -48,7 +48,7 @@ if (
     !is_numeric($request['id']) ||
     !is_string($request['cmd']) ||
     !is_string($request['token']) ||
-    !is_float($request['version'])
+    !is_string($request['version'])
 ) :
     if (is_numeric($request['id'])) :
         $dtype_error_host = $request['id'];
@@ -58,56 +58,71 @@ if (
     trigger_feedme_error('Invalid datatypes receive id: ' . $dtype_error_host);
 endif;
 
-$host_id = $request['id'];
+$valid_commands = ['ping', 'notification'];
 
-if ($request['cmd'] !== 'ping') :
-    trigger_feedme_error('Invalid command receive id: ' . $host_id);
+if (!in_array($request['cmd'], $valid_commands, true)) :
+    trigger_feedme_error('Invalid command receive id: ' . $request['id']);
 endif;
 
 if (!is_array($request['data'])) :
-    trigger_feedme_error('Invalid data field recevive: not an array, id: ' . $host_id);
-else :
-    $rdata = $request['data'];
+    trigger_feedme_error('Invalid data field recevive: not an array, id: ' . $request['id']);
 endif;
 
+/* Setting Vars */
+$command = $request['cmd'];
+$host_id = $request['id'];
 $hosts = $ctx->get('Hosts');
 $host = $hosts->getHostById($request['id']);
+$rdata = $request['data'];
+
+
 if (!$host) :
-    Log::err("Host not found, requested id:", $request['id']);
+    Log::err("Host not found, requested id:", $host_id);
     echo json_encode([
         'error' => 'Host not found'
     ]);
     exit();
-else :
-    if (empty($host['token']) || $host['token'] !== $request['token']) :
-        Log::warning("Invalid Token receive from id:", $host['id']);
-        echo json_encode([
-            'error' => 'Invalid Token'
-        ]);
-        exit();
-    endif;
+elseif (empty($host['token']) || $host['token'] !== $request['token']) :
+    Log::warning("Invalid Token receive from id:", $host_id);
+    echo json_encode([
+        'error' => 'Invalid Token'
+    ]);
+    exit();
 endif;
 
+$agent_logId = '[AGENT v' . $request['version'] . '][' . $host['display_name'] . '] ';
+
 if (empty($host['agent_installed'])) :
-    $hosts->update($host['id'], ['agent_installed' => 1]);
+    $hosts->update($host_id, ['agent_installed' => 1]);
 endif;
 
 $host_update_values['agent_next_report'] = time() + (int) $agent_refresh_interval;
 
-if( (int) $host['online'] !== 1) {
+if( (int) $host['online'] !== 1) :
     $host_update_values['online'] = 1;
-}
+endif;
 $hosts->update($host['id'], $host_update_values);
 
-// Respuesta al comando 'ping'
+/* Response Template */
 $response = [
-    'cmd' => 'pong',
+    'cmd' => $command,
     'token' => $request['token'],
     'version' => $cfg['agent_version'],
-    'response_msg' => true,
+    'response_msg' => null,
     'refresh' => $agent_refresh_interval,
     'data' => []
 ];
+
+switch ($command)
+{
+    case 'ping':
+        $response['cmd'] = 'pong';
+        $response['response_msg'] = true;
+        break;
+    case 'notification':
+        Log::logHost('LOG_NOTICE', $host_id, $agent_logId . $rdata['type'] . ':' . $rdata['msg']);
+        break;
+}
 
 // Enviar la respuesta JSON
 header('Content-Type: application/json');

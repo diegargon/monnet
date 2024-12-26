@@ -10,9 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.39;
-$cfg['monnet_revision'] = 20;
+$cfg['monnet_revision'] = 21;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
-$cfg['agent_version'] = 0.8;
+$cfg['agent_version'] = 0.18;
 $cfg['app_name'] = 'monnet';
 
 /* Hardware Manufacture */

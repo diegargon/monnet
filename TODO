@@ -10,6 +10,8 @@
 * migrar lng a Lang
     $lang['L_'] to $lang::get['L_'] ? o lang::get['WORD'] and the L_
 * Host Reports: nojson reports field , genera un report si hay alguna alarma, ansible y email
+* Display Alarms Counter (footer dropdown) y posibilidad de abrir y mostrar el resumen
+* Agent: Detectar first boot
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible
