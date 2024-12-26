@@ -655,7 +655,38 @@
                 <!-- right config column -->
                 <div class="right-config-column">
                     <div class="">
-
+                        <div>Agent</div>
+                        <div>
+                        <label for="reports_stats">Report Stats</label>
+                        <input type="checkbox" id="report_stats"</input>
+                        </div>
+                        <div>
+                        <label for="reports_ports">Report Ports</label>
+                        <input type="checkbox" id="report_ports"</input>
+                        <label for="monitor_ports">Monitor Ports</label>
+                        <input type="text" id="monitor_ports" name="checkports" value=""/>
+                        </div>
+                        <div>
+                        <label for="reports_services">Report Services</label>
+                        <input type="checkbox" id="report_services"</input>
+                        <label for="monitor_services">Monitor Services</label>
+                        <select id="monitor_services"></select>
+                        </div>
+                        <div>Ansible</div>
+                        <div>
+                        <label for="ansible_recovery">Recovery Services</label>
+                        <input type="checkbox" id="ansible_recovery"</input>
+                        <label for="ansible_recovery_service">Recovery Service</label>
+                        <select id="ansible_recovery_service"></select>
+                        <label for="ansible_recovery_service_playbook">Recovery Playbook</label>
+                        <select id="ansible_recovery_service_playbook"></select>
+                        <!-- Mutliple services check? -->
+                        <div>Ansible Reports</div>
+                        <label for="ansible_boot_report">Boot Report</label>
+                        <input type="checkbox" id="ansible_boot_report"</input>
+                        <label for="ansible_boot_report_playbook">Boot Report Playbook</label>
+                        <select id="ansible_boot_report_playbook"></select>
+                        </div>
                     </div>
                 </div>
                 <!-- /right config column -->
