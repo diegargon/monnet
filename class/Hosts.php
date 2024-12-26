@@ -64,6 +64,7 @@ class Hosts
         'alarm_newport_email',
         'email_list',
         'agent_installed', /* Setting at first ping */
+        'agent_online',
         'agent_next_report', /* Timesstamp for next report */
     ];
 
@@ -743,14 +744,20 @@ class Hosts
             /* Agent */
             if (!empty($this->hosts[$id]['agent_installed'])) :
                 $this->agents++;
-                !$host['online'] ? $this->agents_off++ : null;
+                if (!$host['online'] || empty($this->hosts[$id]['agent_online'])) :
+                    $this->agents_off++;
+                endif;
+
                 if (
                     !empty($this->hosts[$id]['agent_next_report']) &&
                     $this->hosts[$id]['agent_next_report'] < time()
                 ) :
                     $this->agents_missing_pings++;
                     $this->hosts[$id]['agent_missing_pings'] = 1;
-                    $this->update($id, ['online' => 0]);
+                    //With pings disabled, agent pings missing change state to off
+                    if (!empty($this->hosts[$id]['disable_pings'])):
+                        $this->update($id, ['online' => 0]);
+                    endif;
                 endif;
             endif;
         } // LOOP FIN

@@ -101,6 +101,8 @@ $host_update_values['agent_next_report'] = time() + (int) $agent_refresh_interva
 if( (int) $host['online'] !== 1) :
     $host_update_values['online'] = 1;
 endif;
+$host_update_values['agent_online'] = 1;
+
 $hosts->update($host['id'], $host_update_values);
 
 /* Response Template */
