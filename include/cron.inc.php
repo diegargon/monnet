@@ -75,7 +75,7 @@ function cron(AppContext $ctx): void
     if (($cron_times['cron_weekly'] + 604800) < $time_now) {
         $cron_task_track .= '[7d]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_weekly']], 'LIMIT 1');
-        $ncfg->set('cron_weekly', $time_now );
+        $ncfg->set('cron_weekly', $time_now);
         fill_hostnames($hosts, 1);
         fill_mac_vendors($hosts, 1);
     }
