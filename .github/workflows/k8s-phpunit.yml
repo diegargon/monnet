@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: arc-runner-set-monnet
-    
+
     services:
       mysql-service:
         image: mysql:8
@@ -23,12 +23,12 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-          -e MYSQL_ROOT_PASSWORD=monnetadmin 
-          -e MYSQL_USER=monnet 
-          -e MYSQL_PASSWORD=monnetadmin 
+          -e MYSQL_ROOT_PASSWORD=monnetadmin
+          -e MYSQL_USER=monnet
+          -e MYSQL_PASSWORD=monnetadmin
           -e MYSQL_DATABASE=monnet
     steps:
-        
+
       - name: Verify MySQL connection
         run: |
           sudo apt update
@@ -37,7 +37,7 @@ jobs:
           mysql \
             --host 127.0.0.1 \
             --port 3306 \
-            -uroot -pmonnetadmin -e "SHOW DATABASES;"          
+            -uroot -pmonnetadmin -e "SHOW DATABASES;"
 
       - name: Wait for MySQL to start
         run: |
@@ -55,10 +55,10 @@ jobs:
 
 #      - name: Set up Docker Buildx
 #        uses: docker/setup-buildx-action@v3
-        
+
       - name: Build Phpunit Docker image
         run: docker build -t my-app:latest -f ci-docker/Dockerfile-phpunit .
-        
+
       - name: Configure MySQL root user permissions
         run: |
           mysql -h 127.0.0.1 -uroot -pmonnetadmin -e "ALTER USER 'root'@'%' IDENTIFIED BY 'monnetadmin';"
@@ -68,9 +68,13 @@ jobs:
       - name: Check MySQL logs
         run: docker logs $(docker ps -q -f name=mysql)
 
-      - name: Check containers
+      - name: Show containers
         if: ${{ always() }}
         run: docker ps -a
+
+      - name: Show containers
+        if: ${{ always() }}
+        run: docker network ls
 
       - name: Get IP addresses of all containers
         run: |
