@@ -36,6 +36,7 @@ if ($ctx) {
 //Log::debug($db->getQueryHistory();
 
 if ($db->isConn()) {
+    $ncfg->set('cli_last_run', utc_date_now());
     $db->update('prefs', ['uid' => 0, 'pref_value' => utc_date_now()], ['pref_name' => 'cli_last_run'], 'LIMIT 1');
 }
 

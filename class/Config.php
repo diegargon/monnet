@@ -21,7 +21,8 @@
  *          7(password
  *          8(email) ?
  *
- * ccat = 0 (hidde), 1 (misc) 2 (general)
+ * ccat = 0 (hidden), 1 (general) 101 (mail) 102 Ansible
+ * ('keyname', JSON_QUOTE('key_value'), ctype, ccat, cdesc, cuid=0);
  */
 class Config
 {
@@ -73,16 +74,17 @@ class Config
                 /*
                  * Only update values with category set to nondefault
                  * Mean db cfg only have precedence if ccat > 0
+                 * exception to ccat > 0  if key not exists in cfg
                  */
                 if (
-                    isset($row['ccat']) &&
-                    $row['ccat'] > 0
+                    (isset($row['ccat']) && $row['ccat'] > 0) ||
+                    !isset($this->cfg[$key])
                 ) {
                     $this->cfg[$key]['value'] = $value;
                     $this->cfg[$key]['ctype'] = (int) $row['ctype'];
                     $this->cfg[$key]['ccat'] = $row['ccat'];
                 }
-            }
+        }
         }
 
         // Verificar claves predefinidas que no estén en la base de datos
@@ -224,7 +226,7 @@ class Config
         return $changes;
     }
     /**
-     * Guarda los cambios en la base de datos.
+     * Guarda los cambios en la base de datos. Called by register shudown
      *
      * @return void
      */

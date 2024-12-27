@@ -33,7 +33,7 @@ require_once 'include/common.inc.php';
 require_once 'include/common-call.php';
 require_once 'include/feedme.inc.php';
 
-$agent_refresh_interval = $cfg['agent_refresh_interval'];
+$agent_default_interval = $cfg['agent_default_interval'];
 $request_content = file_get_contents('php://input');
 $request = json_decode($request_content, true);
 
@@ -96,7 +96,18 @@ if (empty($host['agent_installed'])) :
     $hosts->update($host_id, ['agent_installed' => 1]);
 endif;
 
-$host_update_values['agent_next_report'] = time() + (int) $agent_refresh_interval;
+
+/*
+ * Si alguien esta refrescando solicitamos que los agentes esten mas atentos
+ */
+$last_refreshing = $ncfg->get('refreshing');
+$refresh_time_seconds = $cfg['refresher_time'] * 60;
+
+if ((time() - $last_refreshing) < $refresh_time_seconds) :
+    $agent_default_interval = 5;
+endif;
+
+$host_update_values['agent_next_report'] = time() + (int) $agent_default_interval;
 
 if( (int) $host['online'] !== 1) :
     $host_update_values['online'] = 1;
@@ -107,11 +118,11 @@ $hosts->update($host['id'], $host_update_values);
 
 /* Response Template */
 $response = [
-    'cmd' => $command,
-    'token' => $request['token'],
+    'cmd' => $command,  /* required */
+    'token' => $request['token'], /* required */
     'version' => $cfg['agent_version'],
     'response_msg' => null,
-    'refresh' => $agent_refresh_interval,
+    'refresh' => $agent_default_interval,
     'data' => []
 ];
 

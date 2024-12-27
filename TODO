@@ -4,6 +4,7 @@
 * Ansible: Filtros por categoria o sistema
 * TODO 1111: Filter/check values
 * No hay forma de borrar una red
+    Añadir opcion y tambien para poder marcar como "proveedor de ips para IPAM"
 * [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
 * Migrar Mysql a NewDatabase
 * Migrar cfg a Config
@@ -14,6 +15,12 @@
 * Agent: Detectar first boot
 * Split Configuration > Inventory
 * Move system_prefs to cfg
+        Migrate updating system (usar db_monnet_version en ncfg)
+        Migrate cron keys.
+* creada config key allow_save_passwords para permitir guardar los password como de ansible y otros, ver mecanismo
+* creada config key ansible_user cambiar para usar el especificado
+* cron, submitter: borrar duplicidades cfg/ncfg
+
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible
@@ -50,6 +57,7 @@
 * Alarms: Crear tabla con alarmas y solo dejar en la tabla host los bits [id:hostid:alarm_type{alert,warn}:alarm_msg]
 * IPAM opcion marca red para permitir solicitar ips, y un boton solicita y entrega ips libres en las redes en cuestion
     con un boton para reservar 8h configurables.
+* Alert/Warn dropdown popup permitir limpiar alarma individual
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario

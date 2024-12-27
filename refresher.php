@@ -218,7 +218,7 @@ $data['footer_dropdown'][] = [
 ];
 
 //TODO  system_prefs class?
-//TODO2 Move to ncfg?
+//TODO2 Move to ncfg (done remove)
 
 $results = $db->select('prefs', '*', ['uid' => 0]);
 $system_prefs = $db->fetchAll($results);
@@ -248,6 +248,9 @@ foreach ($system_prefs as $sys_pref) {
         }
     }
 }
+/* Usado para saber si hay alguien conectado */
+$ncfg->set('refreshing', time());
+
 $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last;
 $data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last;
 

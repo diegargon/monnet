@@ -8,9 +8,9 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function trigger_update(Database $db, float $db_version, float $monnet_version): void
+function trigger_update(Config $ncfg, Database $db, float $db_version, float $files_version): void
 {
-    Log::notice("Triggered updater File version: $monnet_version DB version: $db_version");
+    Log::notice("Triggered updater File version: $files_version DB version: $db_version");
 
     if ($db_version < 0.31) {
         $db->query("UPDATE prefs SET pref_value='0.31' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
@@ -178,42 +178,104 @@ function trigger_update(Database $db, float $db_version, float $monnet_version):
         $db_version = 0.39;
     }
     // 0.40
-    if ($db_version < 0.00) {
+    if ($db_version < 0.40) {
         $db->query("
             INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
             ('allow_save_password', JSON_QUOTE('0'), 2, 1, NULL, 0),
-            ('ansible_user', JSON_QUOTE('ansible'), 0, 102, NULL, 0);
+            ('ansible_user', JSON_QUOTE('ansible'), 0, 102, NULL, 0),
+            ('cli_last_run', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('discover_last_run', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('cron_quarter', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('cron_hourly', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('cron_halfday', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('cron_weekly', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('cron_monthly', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('cron_update', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('cron_five', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('cron_daily', JSON_QUOTE('0'), 1, 0, NULL, 0),
+            ('refreshing', JSON_QUOTE('0'), 1, 0, NULL, 0), /* Track if someone is logged/refreshing */
+            ('db_monnet_version', JSON_QUOTE('0.40'), 0, 0, NULL, 0);
         ");
         Log::info("Update version to 0.40 successful");
         $db->query("UPDATE prefs SET pref_value='0.40' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
         $db->query("COMMIT");
         $db_version = 0.40;
     }
-    // 0.41
-    if ($db_version < 0.00) {
-        $db->query("ALTER TABLE `hosts` DROP `access_method`;");
-        $db->query("ALTER TABLE `hosts` ADD `reports_on_fail` TINYINT NOT NULL DEFAULT '0';");
-        $db->query("");
-        Log::info("Update version to 0.41 successful");
-        $db->query("UPDATE prefs SET pref_value='0.41' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("COMMIT");
-        $db_version = 0.41;
+
+    // 0.42 # test template
+    if ($db_version < 0.42) {
+        try {
+            $db->query("START TRANSACTION");
+            Log::info('Update version to ' . $files_version .' successful');
+            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $files_version);
+            $db_version = $files_version;
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+        }
     }
-    // 0.42
+
+    // 0.43
     if ($db_version < 0.00) {
-        $db->query("");
-        Log::info("Update version to 0.42 successful");
-        $db->query("UPDATE prefs SET pref_value='0.42' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("COMMIT");
-        $db_version = 0.42;
+        try {
+            $db->query("START TRANSACTION");
+
+            Log::info('Update version to ' . $files_version .' successful');
+            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $files_version);
+            $db_version = $files_version;
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+        }
     }
+    // 0.43
+    if ($db_version < 0.00) {
+        try {
+            $db->query("START TRANSACTION");
+
+            Log::info('Update version to ' . $files_version .' successful');
+            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $files_version);
+            $db_version = $files_version;
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+        }
+    }
+    // 0.45
+    if ($db_version < 0.00) {
+        try {
+            $db->query("START TRANSACTION");
+
+            Log::info('Update version to ' . $files_version .' successful');
+            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $files_version);
+            $db_version = $files_version;
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+        }
+    }
+
     // Template
     if ($db_version < 0.00) {
-        $db->query("");
-        Log::info("Update version to 0.00 successful");
-        $db->query("UPDATE prefs SET pref_value='0.00' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("COMMIT");
-        //$db_version = 0.00;
+        try {
+            $db->query("START TRANSACTION");
+            Log::info('Update version to ' . $files_version .' successful');
+            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $files_version);
+            $db_version = $files_version;
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+        }
     }
 }
 
@@ -225,14 +287,14 @@ if ($db->isConn()) {
     $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
     if ($query) :
         $result = $db->fetchAll($query);
-        if ($result) {
+        if ($result) :
             $db_version = (float) $result[0]['pref_value'];
-            $monnet_version = $cfg['monnet_version'];
+            $files_version = $cfg['monnet_version'];
 
-            if ($monnet_version > $db_version) {
-                trigger_update($db, $db_version, $monnet_version);
-            }
-        }
+            if ($files_version > $db_version) :
+                trigger_update($ncfg, $db, $db_version, $files_version);
+            endif;
+        endif;
     endif;
 
 }
