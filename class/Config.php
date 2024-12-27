@@ -41,17 +41,26 @@ class Config
      * @param array<int|string, mixed> $cfg Configuraciones iniciales.
      * @param AppContext $ctx Contexto de la aplicación.
      */
-    public function __construct(array $cfg, AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
+
+        // Registrar la función de guardado al cierre
+        register_shutdown_function([$this, 'saveChanges']);
+    }
+
+    /**
+     *
+     * @param array<int|string, mixed> $cfg Configuraciones iniciales.
+     * @return void
+     */
+    public function init(array $cfg) : void
+    {
         foreach ($cfg as $cfg_key => $cfg_value) :
             $this->cfg[$cfg_key]['value'] = $cfg_value;
         endforeach;
 
         $this->loadFromDatabase();
-
-        // Registrar la función de guardado al cierre
-        register_shutdown_function([$this, 'saveChanges']);
     }
 
     /**

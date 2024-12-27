@@ -101,7 +101,8 @@ Log::init($cfg, $db, $lng);
 if (isset($db_version) && $db_version  < 0.42) {
     require_once 'include/updaterold.inc.php';
 } else {
-    $ncfg = $ctx->set('Config', new Config($cfg, $ctx));
+    $ncfg = $ctx->set('Config', new Config($ctx));
+    $ncfg->init($cfg);
     require_once 'include/updater.inc.php';
 }
 
