@@ -259,6 +259,9 @@ class Filters
         }
 
         // Validar que la extensión del archivo esté en la lista permitida
+        if (empty($urlParts['path'])) :
+            return false;
+        endif;
         $extension = strtolower(pathinfo($urlParts['path'], PATHINFO_EXTENSION));
         if (!in_array($extension, $exts)) {
             return false;
