@@ -148,9 +148,9 @@ function ping_nets(AppContext $ctx): void
 
         if ($ip_status['online']) {
             //New host
-            $mac = trim(get_mac($ip));
+            $mac = get_mac($ip);
             if ($mac) {
-                $set['mac'] = $mac;
+                $set['mac'] = trim($mac);
                 $mac_info = get_mac_vendor($mac);
                 $set['mac_vendor'] = (!empty($mac_info['company'])) ? $mac_info['company'] : '-';
             }
