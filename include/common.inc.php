@@ -104,6 +104,6 @@ if (isset($db_version) && $db_version  < 0.40) {
     require_once 'include/updater.inc.php';
 }
 
-if ($ncfg->get('ansible')) {
+if (!empty($ncfg) && $ncfg->get('ansible')) {
     require_once('include/ansible.inc.php');
 }
