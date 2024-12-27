@@ -21,14 +21,8 @@ class AppContext
      */
     private array $lng = [];
 
-    /**
-     * AppContext constructor.
-     *
-     * @param array<string,mixed> $cfg configuracion
-     */
     public function __construct()
     {
-
         spl_autoload_register(array($this, 'autoload'));
     }
 
