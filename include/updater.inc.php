@@ -206,7 +206,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.42) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version .' successful');
+            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
@@ -223,7 +223,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version .' successful');
+            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
@@ -239,7 +239,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version .' successful');
+            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
@@ -255,7 +255,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version .' successful');
+            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
@@ -272,7 +272,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version .' successful');
+            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
