@@ -22,6 +22,7 @@ $tdata = [
     ]
 ];
 */
+$progress_bar_width = $tdata['progress_bar_width'] ?? '175'
 ?>
 <style>
 .progress-bar-container {
