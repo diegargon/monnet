@@ -52,7 +52,10 @@ Mysql/MariaDB:
 
 arp
     Optional for get mac's address, only work same network (other method will added in the future)
+
+```
     apt install net-tools
+```
 
 ## Initial  database settings
 ```
@@ -106,6 +109,8 @@ monnet : monnetadmin
 
 Times depends of the size of your network. Paths depends of your system
 
+Here the config for run every 5 and 15 minutes each task
+
 ```
 $ nano /etc/crontab
 */5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
@@ -127,7 +132,7 @@ apt install composer
 Testing a basic linux agent (python based) for reports. Shipping with monnet-ansbile
 repo/sources and his own playbook to install.
 
-You can do it manually check install-agent-linux playbook for steps
+You can install it manually check the install-agent-linux playbook for steps
 
 
 ## Ansible Support
@@ -167,7 +172,7 @@ stdout_callback=json
 
 By default the ansible ssh user will be 'ansible'
 
-Must be be/have:
+Must be/have:
 
     * sudo member without need type password
     * have the public ssh key installed
@@ -200,7 +205,9 @@ $ ssh-keygen -m PEM -t rsa -b 4096
 $ ssh-copy-id -i ~/.ssh/id_rsa.pub root@ip.ip.ip.ip
 ```
 
-# Or manually
+Or do it manually
+
+On the client host:
 
 ```
 runuser -u ansible mkdir /home/ansible/.ssh
