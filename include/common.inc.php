@@ -95,14 +95,14 @@ if ($query) :
     endif;
 endif;
 
-if ($db_version < 0.40) {
+Log::init($cfg, $db, $lng);
+
+if (isset($db_version) && $db_version  < 0.40) {
     require_once 'include/updaterold.inc.php';
 } else {
     $ncfg = $ctx->set('Config', new Config($cfg, $ctx));
     require_once 'include/updater.inc.php';
 }
-
-Log::init($cfg, $db, $lng);
 
 if ($ncfg->get('ansible')) {
     require_once('include/ansible.inc.php');
