@@ -220,34 +220,40 @@ $data['footer_dropdown'][] = [
 //TODO  system_prefs class?
 //TODO2 Move to ncfg (done remove)
 
-$results = $db->select('prefs', '*', ['uid' => 0]);
-$system_prefs = $db->fetchAll($results);
 $cli_last = 0;
 $discovery_last = 0;
 
-foreach ($system_prefs as $sys_pref) {
-    if ($sys_pref['pref_name'] == 'cli_last_run') {
-        if (empty($sys_pref['pref_value'])) {
-            $cli_last = 'Never';
-        } else {
-            $cli_last = utc_to_user_tz(
-                $sys_pref['pref_value'],
-                $user->getTimezone(),
-                $cfg['datetime_format_min']
-            );
-        }
-    } elseif ($sys_pref['pref_name'] == 'discovery_last_run') {
-        if (empty($sys_pref['pref_value'])) {
-            $discovery_last = 'Never';
-        } else {
-            $discovery_last = utc_to_user_tz(
-                $sys_pref['pref_value'],
-                $user->getTimezone(),
-                $cfg['datetime_format_min']
-            );
+$results = $db->select('prefs', '*', ['uid' => 0]);
+
+if ($result) :
+    $system_prefs = $db->fetchAll($results);
+
+
+    foreach ($system_prefs as $sys_pref) {
+        if ($sys_pref['pref_name'] == 'cli_last_run') {
+            if (empty($sys_pref['pref_value'])) {
+                $cli_last = 'Never';
+            } else {
+                $cli_last = utc_to_user_tz(
+                    $sys_pref['pref_value'],
+                    $user->getTimezone(),
+                    $cfg['datetime_format_min']
+                );
+            }
+        } elseif ($sys_pref['pref_name'] == 'discovery_last_run') {
+            if (empty($sys_pref['pref_value'])) {
+                $discovery_last = 'Never';
+            } else {
+                $discovery_last = utc_to_user_tz(
+                    $sys_pref['pref_value'],
+                    $user->getTimezone(),
+                    $cfg['datetime_format_min']
+                );
+            }
         }
     }
-}
+endif;
+
 /* Usado para saber si hay alguien conectado */
 $ncfg->set('refreshing', time());
 
