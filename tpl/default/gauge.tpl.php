@@ -48,7 +48,7 @@ $textSize = $tdata['text_size'] ?? round($gauge_container_width / 8);
     }
 </style>
 <div class="grid-container">
-    <?php foreach ($tdata['gauge_graph'] as $id => $graph): ?>
+    <?php foreach ($tdata['gauge_graph'] as $id => $graph) : ?>
         <div class="chart-container">
             <canvas id="chart_<?= $id ?>" class="border border-gray-600"></canvas>
         </div>

@@ -78,11 +78,11 @@ foreach ($tdata['progress_bar_data'] as $pbar) :
     }
 
     $gradient = "linear-gradient(to right, " . implode(', ', $gradientParts) . ")";
-?>
+    ?>
 <div class="progress-bar-container">
     <div class="pbar_legend"><?= $pbar['legend'] ?> (<?= $pbar['value'] ?>%)</div>
     <div class="progress-bar" style="background: <?= $gradient ?>;"></div>
 </div>
-<?php
+    <?php
 endforeach;
 

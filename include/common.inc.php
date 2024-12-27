@@ -78,10 +78,14 @@ require_once 'include/util.inc.php';
 require_once 'include/time.inc.php';
 require_once 'class/Filters.php';
 
+/*
+ * TODO Actualmente necesita update primero para que cree la tabla Config
+ * Cuando se actualice el monnet.sql mover update para que este debajo de
+ * la inicializacion de Config
+ */
+require_once 'include/updater.inc.php';
 $ncfg = $ctx->set('Config', new Config($cfg, $ctx));
 Log::init($cfg, $db, $lng);
-
-require_once 'include/updater.inc.php';
 
 if ($ncfg->get('ansible')) {
     require_once('include/ansible.inc.php');

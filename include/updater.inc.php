@@ -207,7 +207,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $db->query("START TRANSACTION");
             Log::info('Update version to ' . $files_version .' successful');
-            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("
+                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
+            ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
@@ -222,7 +224,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $db->query("START TRANSACTION");
             Log::info('Update version to ' . $files_version .' successful');
-            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("
+                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
+            ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
@@ -236,7 +240,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $db->query("START TRANSACTION");
             Log::info('Update version to ' . $files_version .' successful');
-            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("
+                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
+            ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
@@ -250,7 +256,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $db->query("START TRANSACTION");
             Log::info('Update version to ' . $files_version .' successful');
-            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("
+                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
+            ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
@@ -265,7 +273,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $db->query("START TRANSACTION");
             Log::info('Update version to ' . $files_version .' successful');
-            $db->query("UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+            $db->query("
+                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
+            ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
@@ -293,5 +303,4 @@ if ($db->isConn()) {
             endif;
         endif;
     endif;
-
 }

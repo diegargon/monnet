@@ -40,20 +40,20 @@ function cron(AppContext $ctx): void
     if (($cron_times['cron_five'] + 300) < $time_now) {
         $cron_task_track .= '[5]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_five']], 'LIMIT 1');
-        $ncfg->set('cron_five', $time_now );
+        $ncfg->set('cron_five', $time_now);
         fill_hostnames($hosts);
     }
 
     if (($cron_times['cron_quarter'] + 900) < $time_now) {
         $cron_task_track .= '[15]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_quarter']], 'LIMIT 1');
-        $ncfg->set('cron_quarter', $time_now );
+        $ncfg->set('cron_quarter', $time_now);
     }
 
     if (($cron_times['cron_hourly'] + 3600) < $time_now) {
         $cron_task_track .= '[60]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_hourly']], 'LIMIT 1');
-        $ncfg->set('cron_hourly', $time_now );
+        $ncfg->set('cron_hourly', $time_now);
         fill_mac_vendors($hosts);
     }
 
@@ -61,7 +61,7 @@ function cron(AppContext $ctx): void
         $cron_task_track .= '[12]';
         check_macs($hosts);
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_halfday']], 'LIMIT 1');
-        $ncfg->set('cron_halfday', $time_now );
+        $ncfg->set('cron_halfday', $time_now);
     }
     if (($cron_times['cron_daily'] + 8640) < $time_now) {
         $cron_task_track .= '[24]';
@@ -69,7 +69,7 @@ function cron(AppContext $ctx): void
         clear_system_logs($db);
         clear_hosts_logs($db);
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_daily']], 'LIMIT 1');
-        $ncfg->set('cron_daily', $time_now );
+        $ncfg->set('cron_daily', $time_now);
     }
 
     if (($cron_times['cron_weekly'] + 604800) < $time_now) {
@@ -82,11 +82,11 @@ function cron(AppContext $ctx): void
     if (($cron_times['cron_monthly'] + 2592000) < $time_now) {
         $cron_task_track .= '[30d]';
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_monthly']], 'LIMIT 1');
-        $ncfg->set('cron_monthly', $time_now );
+        $ncfg->set('cron_monthly', $time_now);
     }
     if ($cron_times['cron_update'] == 0) {
         $db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_update']], 'LIMIT 1');
-        $ncfg->set('cron_update', $time_now );
+        $ncfg->set('cron_update', $time_now);
     }
     if (!empty($cron_task_track)) {
         Log::debug('Cron times :' . $cron_task_track);

@@ -84,7 +84,7 @@ class Config
                     $this->cfg[$key]['ctype'] = (int) $row['ctype'];
                     $this->cfg[$key]['ccat'] = $row['ccat'];
                 }
-        }
+            }
         }
 
         // Verificar claves predefinidas que no estén en la base de datos

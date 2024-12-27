@@ -109,7 +109,7 @@ endif;
 
 $host_update_values['agent_next_report'] = time() + (int) $agent_default_interval;
 
-if( (int) $host['online'] !== 1) :
+if ((int) $host['online'] !== 1) :
     $host_update_values['online'] = 1;
 endif;
 $host_update_values['agent_online'] = 1;
@@ -126,8 +126,7 @@ $response = [
     'data' => []
 ];
 
-switch ($command)
-{
+switch ($command) {
     case 'ping':
         $response['cmd'] = 'pong';
         $response['response_msg'] = true;

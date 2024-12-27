@@ -34,7 +34,7 @@ function ansible_playbook(AppContext $ctx, array $host, string $playbook, ?array
     if (!empty($ncfg->get('ansible_user'))) :
         $data['user'] = $ncfg->get('ansible_user');
     endif;
-    
+
     $send_data = [
         'command' => 'playbook',
         'data' => $data

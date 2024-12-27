@@ -64,12 +64,12 @@ foreach ($tdata['plays'] as $playIndex => $play) : ?>
 
     <?php
     foreach ($play['tasks'] as $taskIndex => $task) :
-    ?>
+        ?>
     <div class="section hidden-section" id="play<?= $playIndex ?>_task<?= $taskIndex ?>">
         <h3><?= $task['task']['name'] ?? "Tarea sin nombre" ?></h3>
         <?php
         foreach ($task['hosts'] as $host => $host_result) :
-        ?>
+            ?>
         <div class="flex">
             <div class="toggle" onclick="toggleSection('<?=$host?>_<?= $playIndex ?>_task<?= $taskIndex ?>')">
                 [+] Host: <?= $host ?>
@@ -101,7 +101,7 @@ foreach ($tdata['plays'] as $playIndex => $play) : ?>
         <div class="indent4 section hidden-section" id="<?= $host ?>_<?= $playIndex ?>_task<?= $taskIndex ?>">
             <?php
             echo array2Html($host_result);
-        ?>
+            ?>
         </div>
             <?php
         endforeach;

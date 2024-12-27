@@ -779,7 +779,7 @@ class Hosts
              */
             /* General */
             if (!empty($this->host['system_type'])) :
-                if ((int) $this->host['system_type'] === 17 ) :
+                if ((int) $this->host['system_type'] === 17) :
                     $this->hypervisor_rols++;
                 endif;
             endif;
@@ -811,7 +811,7 @@ class Hosts
                     $this->agents_missing_pings++;
                     $this->hosts[$id]['agent_missing_pings'] = 1;
                     //With pings disabled, agent pings missing change state to off
-                    if (!empty($this->hosts[$id]['disable_pings'])):
+                    if (!empty($this->hosts[$id]['disable_pings'])) :
                         $this->update($id, ['online' => 0]);
                     endif;
                 endif;

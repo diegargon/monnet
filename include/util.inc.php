@@ -121,7 +121,7 @@ function base_url(string $url): string|false
         unset($parsed_url['fragment']);
     }
 
-    if(empty($parsed_url['scheme'])|| empty($parsed_url['host'])) :
+    if (empty($parsed_url['scheme'])|| empty($parsed_url['host'])) :
         Log::warn('Cant parse url: ' . $url);
         return false;
     endif;

@@ -137,7 +137,7 @@
                 !empty($tdata['host_details']['machine_type']) &&
                 (int) $tdata['host_details']['machine_type'] === 2
             ) :
-            ?>
+                ?>
                 <img class="fab" src="tpl/<?= $tdata['theme']?>/img/vm.png"
                      alt="vm" title="vm"/>
             <?php endif; ?>

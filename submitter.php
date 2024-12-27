@@ -168,7 +168,7 @@ if ($command === 'network_unselect' && !empty($value_command)) {
     $data['response_msg'] = 'Network Unselect';
 }
 
-if ($command == 'toggleDisablePing' && isset($value_command) && !empty($target_id)) {
+if ($command == 'toggleDisablePing' && !empty($target_id)) {
     $hosts->update($target_id, ['disable_ping' => $value_command]);
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
@@ -217,7 +217,6 @@ if ($command == 'submitScanPorts' && !empty($target_id)) {
 }
 
 if ($command == 'submitTitle' && !empty($target_id)) {
-
     if (!empty($value_command)) {
         $hosts->update($target_id, ['title' => $value_command]);
         $data['command_success'] = 1;
