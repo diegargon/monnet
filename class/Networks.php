@@ -179,7 +179,10 @@ class Networks
             $network = $parts[0];
             $prefix = (int) $parts[1];
             $count = pow(2, (32 - $prefix));
-
+            if (!filter_var($network, FILTER_VALIDATE_IP)) {
+                Log::err("Invalid  ip build network for scan");
+                continue;
+            }
             // Obtener la dirección de red
             $network_long = ip2long($network);
             $network_address = long2ip($network_long & ((-1 << (32 - $prefix))));
