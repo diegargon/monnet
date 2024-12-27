@@ -5,7 +5,6 @@ sleep 2
 # TODO No se puede acceder por nombre por que estan en redes diferentes ¿que pasa si cambia la ip?
 ping -c 1 mysql-service
 ping -c 1 172.18.0.2
-ip a
 for i in {1..5}; do
   if mysql -h mysql-service -uroot -pmonnetadmin -e "SELECT 1;" >/dev/null 2>&1; then
     echo "MySQL is up and running!"
