@@ -20,7 +20,8 @@
 * creada config key allow_save_passwords para permitir guardar los password como de ansible y otros, ver mecanismo
 * creada config key ansible_user cambiar para usar el especificado
 * cron, submitter: borrar duplicidades cfg/ncfg
-
+* feedme y agente intercambian versiones de agente agent_min_version existe para que en caso de que el agente no cumpla
+    min version no haga nada, el feedme deberia de notificarlo (corregir antes el log spam)
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible

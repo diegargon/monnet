@@ -120,7 +120,7 @@ $hosts->update($host['id'], $host_update_values);
 $response = [
     'cmd' => $command,  /* required */
     'token' => $request['token'], /* required */
-    'version' => $cfg['agent_version'],
+    'version' => $cfg['agent_min_version'],
     'response_msg' => null,
     'refresh' => $agent_default_interval,
     'data' => []
