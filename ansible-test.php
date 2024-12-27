@@ -44,7 +44,7 @@ if ($j_data === false) {
     exit;
 }
 
-socket_write($socket, json_encode($data), strlen($jdata));
+socket_write($socket, $j_data, strlen($j_data));
 
 $response = '';
 /*
