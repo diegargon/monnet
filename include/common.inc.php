@@ -84,16 +84,25 @@ require_once 'class/Filters.php';
  * para evitar y actualice bien de momento usamos un archivo updateuserold.inc.php
  * hasta que exista la tabla config y $ncfg no devuelva null borrar sobre finales
  * de enero
- * 
+ *
  */
 
-$ncfg = $ctx->set('Config', new Config($cfg, $ctx));
-Log::init($cfg, $db, $lng);
-if ($ncfg) :
-    require_once 'include/updater.inc.php';
-else:
-    require_once 'include/updaterold.inc.php';
+$query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
+if ($query) :
+    $result = $db->fetchAll($query);
+    if ($result) :
+        $db_version = (float) $result[0]['pref_value'];
+    endif;
 endif;
+
+if ($db_version < 0.40) {
+    require_once 'include/updaterold.inc.php';
+} else {
+    $ncfg = $ctx->set('Config', new Config($cfg, $ctx));
+    require_once 'include/updater.inc.php';
+}
+
+Log::init($cfg, $db, $lng);
 
 if ($ncfg->get('ansible')) {
     require_once('include/ansible.inc.php');
