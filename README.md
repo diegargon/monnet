@@ -28,6 +28,13 @@ v0.0.0 Mayor.Minor.Revision
 Mayor/Minor implies database changes or other code mayor changes
 Revision version implied only code changes, never database changes.
 
+## LICENSE
+
+CC BY-NC-ND 4.0 Deed
+
+Resume:
+    Non-Commercial Use = Allowed
+    Commercial Use = License
 
 # MonNet Install
 
