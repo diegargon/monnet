@@ -54,7 +54,7 @@ class Config
      * @param array<int|string, mixed> $cfg Configuraciones iniciales.
      * @return void
      */
-    public function init(array $cfg) : void
+    public function init(array $cfg): void
     {
         foreach ($cfg as $cfg_key => $cfg_value) :
             $this->cfg[$cfg_key]['value'] = $cfg_value;

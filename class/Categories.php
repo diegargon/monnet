@@ -112,7 +112,7 @@ class Categories
     public function prepareCats(int $type): array
     {
         $categories_by_type = $this->getByType($type);
-        if (isEmpty($categories_by_type)):
+        if (isEmpty($categories_by_type)) :
             return [];
         endif;
 
