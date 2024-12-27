@@ -6,15 +6,15 @@ sleep 2
 ping -c 1 mysql-service
 ping -c 1 172.18.0.2
 ip a
-for i in {1..15}; do
-  if mysql -h 172.18.0.2 -uroot -pmonnetadmin -e "SELECT 1;" >/dev/null 2>&1; then
+for i in {1..5}; do
+  if mysql -h mysql-service -uroot -pmonnetadmin -e "SELECT 1;" >/dev/null 2>&1; then
     echo "MySQL is up and running!"
     break
   fi
   echo "Waiting for MySQL to start..."
   sleep 1
 done
-if ! mysql -h 172.18.0.2 -uroot -pmonnetadmin --verbose monnet < /var/www/html/config/monnet.sql; then
+if ! mysql -h mysql-service -uroot -pmonnetadmin --verbose monnet < /var/www/html/config/monnet.sql; then
     echo "Error al ejecutar el script SQL. Asegúrate de que MySQL esté disponible."
 else
     echo "Base de datos subida con exito"
