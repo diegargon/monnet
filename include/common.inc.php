@@ -100,9 +100,6 @@ if ($tableExists) {
             $db_version = (float) $result[0]['pref_value'];
         }
     }
-} else {
-    //New Installation
-    $db_version = 0.42;
 }
 Log::init($cfg, $db, $lng);
 
