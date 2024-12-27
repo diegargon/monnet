@@ -27,7 +27,7 @@ function format_items(User $user, array $items_results): array
         } elseif ($item_conf['image_type'] === 'favicon') {
             $favicon_path = $item_conf['image_resource'];
             $item_img = base_url($item_conf['url']) . '/' . $favicon_path;
-            if ($item_img):
+            if ($item_img) :
                 $item_img = cached_img($user, $item['id'], $item_img);
             endif;
         } elseif ($item_conf['image_type'] === 'url' && !empty($item_conf['image_resource'])) {
