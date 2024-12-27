@@ -85,17 +85,25 @@ require_once 'class/Filters.php';
  * para evitar y actualice bien de momento usamos un archivo updateuserold.inc.php
  * hasta que exista la tabla config y $ncfg no devuelva null borrar sobre finales
  * de enero
- *
+ * Despues limpiar casi todo esto;
  */
 
-$query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
-if ($query) :
-    $result = $db->fetchAll($query);
-    if ($result) :
-        $db_version = (float) $result[0]['pref_value'];
-    endif;
-endif;
+$tableExistsQuery = $db->query("SHOW TABLES LIKE 'prefs'");
+$tableExists = $tableExistsQuery ? $db->fetch($tableExistsQuery) : false;
 
+if ($tableExists) {
+    $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
+
+    if ($query) {
+        $result = $db->fetchAll($query);
+        if (!empty($result) && isset($result[0]['pref_value'])) {
+            $db_version = (float) $result[0]['pref_value'];
+        }
+    }
+} else {
+    //New Installation
+    $db_version = 0.42;
+}
 Log::init($cfg, $db, $lng);
 
 if (isset($db_version) && $db_version  < 0.42) {
