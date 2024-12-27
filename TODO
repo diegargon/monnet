@@ -13,6 +13,7 @@
 * Display Alarms Counter (footer dropdown) y posibilidad de abrir y mostrar el resumen
 * Agent: Detectar first boot
 * Split Configuration > Inventory
+* Move system_prefs to cfg
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible
@@ -47,7 +48,8 @@
     encripta.
 * Ansible: Opcion para actualizar todos los agentes
 * Alarms: Crear tabla con alarmas y solo dejar en la tabla host los bits [id:hostid:alarm_type{alert,warn}:alarm_msg]
-
+* IPAM opcion marca red para permitir solicitar ips, y un boton solicita y entrega ips libres en las redes en cuestion
+    con un boton para reservar 8h configurables.
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario

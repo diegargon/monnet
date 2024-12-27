@@ -14,7 +14,6 @@
  * @var array<mixed> $tdata
  */
 /*
-  TODO MIN/MAX
   $tdata = [
     'gauge_elements_width' => 2,
     'gauge_container_width' => 100,

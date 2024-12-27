@@ -73,11 +73,12 @@ require_once 'lang/es/main.lang.php';
 $ctx->setLang($lng);
 
 require_once 'class/Lang.php';
-Log::init($cfg, $db, $lng);
 
+Log::init($cfg, $db, $lng);
+$ncfg = $ctx->set('Config', new Config($cfg, $ctx));
 require_once 'include/util.inc.php';
 require_once 'include/updater.inc.php';
-$ncfg = $ctx->set('Config', new Config($cfg, $ctx));
+
 
 require_once 'class/Filters.php';
 require_once 'include/time.inc.php';

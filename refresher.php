@@ -218,6 +218,8 @@ $data['footer_dropdown'][] = [
 ];
 
 //TODO  system_prefs class?
+//TODO2 Move to ncfg?
+
 $results = $db->select('prefs', '*', ['uid' => 0]);
 $system_prefs = $db->fetchAll($results);
 $cli_last = 0;
