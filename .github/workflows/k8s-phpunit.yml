@@ -82,5 +82,8 @@ jobs:
           docker inspect -f '{{.Name}}: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
 
       - name: Run Docker Phpunit container
-        run: docker run --rm  my-app:latest
+        run: |
+          NETWORK_NAME=$(docker network ls --filter driver=bridge --format "{{.Name}}" | grep "github_network")
+          docker run --rm --network $NETWORK_NAME my-app:latest
+
         timeout-minutes: 5
