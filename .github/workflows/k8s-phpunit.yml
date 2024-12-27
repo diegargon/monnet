@@ -18,8 +18,6 @@ jobs:
           MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
         ports:
           - 3306:3306
-        networks:
-          - my-shared-network
         options: >-
           --health-cmd="mysqladmin ping -h localhost"
           --health-interval=10s
@@ -30,10 +28,6 @@ jobs:
           -e MYSQL_PASSWORD=monnetadmin
           -e MYSQL_DATABASE=monnet
     steps:
-
-      - name: Create shared network
-        run: |
-          docker network create my-shared-network || echo "Network already exists"
 
       - name: Verify MySQL connection
         run: |
@@ -88,5 +82,5 @@ jobs:
           docker inspect -f '{{.Name}}: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
 
       - name: Run Docker Phpunit container
-        run: docker run --rm --network my-shared-network my-app:latest
+        run: docker run --rm  my-app:latest
         timeout-minutes: 5
