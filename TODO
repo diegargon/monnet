@@ -1,18 +1,11 @@
 ** HIGH
 * Agent: metodo para no spamear los logs si falla un ping
-* Ansible: Turn off Host/VM container
-* Ansible: Filtros por categoria o sistema
-* TODO 1111: Filter/check values
 * No hay forma de borrar una red
     Añadir opcion y tambien para poder marcar como "proveedor de ips para IPAM"
-* [DB 0.35v] alert field - Host: filtro para mostrar solo alert/warning, igual un popup con una host list con host de warnings independiente de la  categoria
 * Migrar Mysql a NewDatabase
 * Migrar cfg a Config
 * migrar lng a Lang
     $lang['L_'] to $lang::get['L_'] ? o lang::get['WORD'] and the L_
-* Host Reports: nojson reports field , genera un report si hay alguna alarma, ansible y email
-* Agent: Detectar first boot
-* Split Configuration > Inventory
 * Move system_prefs to cfg
         Migrate updating system (usar db_monnet_version en ncfg)
         Migrate cron keys.
@@ -25,24 +18,10 @@
 * cambiar diseño barra logout y demás, ver donde poner y quizas meter ahi stop_cli y username
     Quizas añadir una barra superior con dichos iconos y tambien poder crear folders para bookmarks
     nombre de usuario en alguna parte
-* perhost email warn
-* Bastionado / Antivirus / Compliant / VM en principio meterlos todos en un campo encoded json,
-   en resumen si eso configuracion no es checkboxes
-* Users management
-* host user*password encoded
+* Inventory: Checkboxes: Bastionado / Antivirus / Compliant
 * [DB 0.35v] Network weight
 * En el login opcionalmente que se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
-* Apartado add/edit link intentar obtener /favicon.ico logo.png si no caer en www.jpg local
-    $secure = true; // Configurar para que solo se envíe sobre HTTPS
-    $httpOnly = true; // Configurar la cookie como HTTP Only
-    setcookie("critical_key", "mi_clave_critica", 0, "/", "", $secure, $httpOnly);
-
-    session_start();
-    $_SESSION['critical_key'] = "mi_clave_critica";
-    session_destroy();
-* Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
 * Refrescado/Cli Update/Discovery Update: En vez de la fecha bola roja/verde si se pasa mas del tiempo configurado
-* [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados]
 * El scan ports especificados por el usuario solo debe escaner los user=1
 * Ansible: Tema almacenar passwords
     Todos los passwd almacenados cifrados con maestra
@@ -51,27 +30,41 @@
     Para encriptar una contraseña introducida por el usuario se la tiene que pasar al gateway y esta la
     encripta.
 * Ansible: Opcion para actualizar todos los agentes
-* Alarms: Crear tabla con alarmas y solo dejar en la tabla host los bits [id:hostid:alarm_type{alert,warn}:alarm_msg]
+* Alarms: Crear tabla con alarmas y solo dejar en la tabla hosts el alarm/warn para avisar [id:hostid:alarm_type{alert,warn}:alarm_msg]
+    * AlertMsg fecha?
 * IPAM opcion marca red para permitir solicitar ips, y un boton solicita y entrega ips libres en las redes en cuestion
     con un boton para reservar 8h configurables.
+* Agent Host: Al primer arranque o reinicio realizar/enviar infome
+* Agent Host/Ansible Reports: nojson reports field , genera un report si hay alguna alarma, ansible y email
+* Split Configuration > Inventory
+* TODO 1111: Filter/check values
+* Ansible: Turn off Host/VM container (shutdown)
+* Ansible: Turn On VM/Container Proxmox (on proxmox host)
+* Ansible: Turn On VM/Container VMWare (on vmware host)
+* Ansible: Filtros por categoria o sistema para playbooks
+* Ansible: Hypervisor Proxmox crear vm/contaniner
+* Ansible: Hypervisor VMWARE crear vm/contaniner
+* Users management
+* Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
 * Alert/Warn dropdown popup permitir limpiar alarma individual
 * feedme y agente intercambian versiones de agente agent_min_version existe para que en caso de que el agente no cumpla
     min version no haga nada, el feedme deberia de notificarlo (corregir antes el log spam)
 
+
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
-* Email Alert Groups: Poder especicar en vez de uno por uno el email un grupo.
+* Email Alert Groups: Poder especificar un grupo de emails en vez de uno por uno el email un grupo.
 * Host: Aviso si la latency es muy grande?
 * Opcion del buscador cambie a buscar elementos en la pagina?
 * Bell options term + onoff pref
 * Config parar cronjob, poder cambiar jobs entre cron_hourly y demás
 * Notes Private (uid)? Public (!uid)? , option for selected if notes are by user or global?
-* everybody bookmarks items (uid = 0) ?
+* everybody bookmarks items (uid = 0) y añadir personales con uid = user?
 * Links comprobacion si funciona y una pequeña on/off señal?
-* AlertMsg fecha?
 * Ansible: ¿opcion para otros agentes tipo prometheus ?
 * Agent: Opcion para renovar el token el UI y automaticamente cambiar el token en el host
 * Si agente esta instalado ¿deshabilitar ping? ¿o mantenerlo por la latencia?
+* Crear campo host user*password encoded?
 
 ** Backlog
 * obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
@@ -80,3 +73,4 @@
 * SNMP get mac
 * host-details configuracion (select) enviar al cambiar
 * Bookmarks mostrados como grid iconos (ahora) y poder cambia a lista de links
+* [DB 0.35v] hosts->encrypted - [Contraseñas y datos cifrados] ?
