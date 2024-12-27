@@ -148,9 +148,9 @@ class Frontend
     /**
      *
      * @param array<string> $msg
-     * @return string
+     * @return string|bool
      */
-    public function msgBox(array $msg): string
+    public function msgBox(array $msg): string|bool
     {
 
         (substr($msg['title'], 0, 2) == 'L_') ? $msg['title'] = $this->lng[$msg['title']] : null;
