@@ -26,9 +26,9 @@ class AppContext
      *
      * @param array<string,mixed> $cfg configuracion
      */
-    public function __construct(array &$cfg)
+    public function __construct()
     {
-        $this->cfg = &$cfg;
+
         spl_autoload_register(array($this, 'autoload'));
     }
 
@@ -41,6 +41,15 @@ class AppContext
         $this->lng = &$lng;
     }
 
+    /**
+     *
+     * @param array<string,mixed> $cfg
+     * @return void
+     */
+    public function setCfg(array &$cfg): void
+    {
+        $this->cfg = &$cfg;
+    }
     /**
      * autoload class method TODO: Change autoload
      *
