@@ -650,7 +650,7 @@ class Hosts
 
     /**
      *
-     * @return array<int,array<string,string>
+     * @return array<int,array<string,string>>
      */
     public function getAlertHosts(): array
     {
@@ -667,7 +667,7 @@ class Hosts
 
     /**
      *
-     * @return array<int,array<string,string>
+     * @return array<int,array<string,string>>
      */
     public function getWarnHosts(): array
     {
@@ -716,7 +716,7 @@ class Hosts
         $this->totals = count($hosts);
 
         foreach ($hosts as $host) {
-            $id = $host['id'];
+            $id = (int) $host['id'];
             $net_id = $host['network'];
             $network = $networks->getNetworkByID($net_id);
             if ($network !== false) {
