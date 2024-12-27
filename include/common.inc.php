@@ -48,7 +48,8 @@ if ($cfg_db['dbtype'] == 'mysqli') {
     require_once 'class/Mysql.php';
 }
 
-$ctx = new AppContext($cfg);
+$ctx = new AppContext();
+$ctx->setCfg($cfg);
 
 try {
     $db = $ctx->set('Mysql', new Database($cfg_db));
@@ -97,7 +98,7 @@ endif;
 
 Log::init($cfg, $db, $lng);
 
-if (isset($db_version) && $db_version  < 0.40) {
+if (isset($db_version) && $db_version  < 0.42) {
     require_once 'include/updaterold.inc.php';
 } else {
     $ncfg = $ctx->set('Config', new Config($cfg, $ctx));
