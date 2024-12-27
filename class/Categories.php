@@ -112,6 +112,10 @@ class Categories
     public function prepareCats(int $type): array
     {
         $categories_by_type = $this->getByType($type);
+        if (isEmpty($categories_by_type)):
+            return [];
+        endif;
+
         foreach ($categories_by_type as &$typecat) {
             if (
                 (strpos($typecat['cat_name'], 'L_') === 0 ) &&
