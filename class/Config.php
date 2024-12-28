@@ -38,7 +38,6 @@ class Config
     /**
      * Constructor de la clase Config.
      *
-     * @param array<int|string, mixed> $cfg Configuraciones iniciales.
      * @param AppContext $ctx Contexto de la aplicación.
      */
     public function __construct(AppContext $ctx)

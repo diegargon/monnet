@@ -37,6 +37,10 @@ $agent_default_interval = $cfg['agent_default_interval'];
 $request_content = file_get_contents('php://input');
 $request = json_decode($request_content, true);
 
+if (json_last_error() !== JSON_ERROR_NONE) :
+    trigger_feedme_error('Invalid json receive: ' . json_last_error_msg());
+endif;
+
 Log::debug("Host contact request" . print_r($request, true));
 
 // Validation
@@ -100,8 +104,8 @@ endif;
 /*
  * Si alguien esta refrescando solicitamos que los agentes esten mas atentos
  */
-$last_refreshing = $ncfg->get('refreshing');
-$refresh_time_seconds = $cfg['refresher_time'] * 60;
+$last_refreshing = (int) $ncfg->get('refreshing');
+$refresh_time_seconds = (int) $cfg['refresher_time'] * 60;
 
 if ((time() - $last_refreshing) < $refresh_time_seconds) :
     $agent_default_interval = 5;

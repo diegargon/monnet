@@ -53,7 +53,13 @@ function ansible_playbook(AppContext $ctx, array $host, string $playbook, ?array
         return ['status' => 'error', 'error_msg' => $error_msg];
     }
 
-    socket_write($socket, json_encode($send_data), strlen(json_encode($send_data)));
+    $encoded_send_data = json_encode($send_data);
+
+    if (json_last_error() !== JSON_ERROR_NONE) :
+        return ['status' => 'error', 'error_msg' => 'Invalid json receive: ' . json_last_error_msg()];
+    endif;
+
+    socket_write($socket, $encoded_send_data, strlen($encoded_send_data));
 
     $response = '';
     /*

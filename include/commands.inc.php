@@ -14,7 +14,7 @@
  * @param string $cmd
  * @param array<string> $params
  * @param string $stdin
- * @return array<string,string|int>|bool
+ * @return array<string,string>|bool
  */
 function run_cmd(string $cmd, array $params, string $stdin = null): array|bool
 {

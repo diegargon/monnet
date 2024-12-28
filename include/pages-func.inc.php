@@ -26,8 +26,9 @@ function format_items(User $user, array $items_results): array
             $item_img = cached_img($user, $item['id'], $item_img);
         } elseif ($item_conf['image_type'] === 'favicon') {
             $favicon_path = $item_conf['image_resource'];
-            $item_img = base_url($item_conf['url']) . '/' . $favicon_path;
-            if ($item_img) :
+            $parse_item_img = base_url($item_conf['url']);
+            if($parse_item_img !== false) :
+                $item_img = $parse_item_img . '/' . $favicon_path;
                 $item_img = cached_img($user, $item['id'], $item_img);
             endif;
         } elseif ($item_conf['image_type'] === 'url' && !empty($item_conf['image_resource'])) {

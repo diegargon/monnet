@@ -91,7 +91,7 @@ class Database
     private $isConnected = false;
     /**
      * Set connection details, defaults, and init
-     * @param array<string> $cfg_db
+     * @param array<string, string> $cfg_db
      */
     public function __construct(array $cfg_db)
     {

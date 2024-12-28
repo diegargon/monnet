@@ -17,46 +17,50 @@
  */
 function common_checks(array $cfg_db, array $cfg): void
 {
-    if (empty($cfg_db)) {
+    if (empty($cfg_db)) :
         exit('cfg_db empty');
-    }
+    endif;
     $err_empty_msg = ' can\'t be empty check config.inc.php';
 
-    if (empty($cfg_db['dbtype'])) {
+    if (empty($cfg_db['dbtype'])) :
         exit('dbtype' . $err_empty_msg);
-    }
+    endif;
 
-    if (empty($cfg_db['dbhost'])) {
+    if (empty($cfg_db['dbhost'])) :
         exit('dbhost' . $err_empty_msg);
-    }
+    endif;
 
-    if (empty($cfg_db['dbname'])) {
+    if (empty($cfg_db['dbname'])) :
         exit('dbname' . $err_empty_msg);
-    }
+    endif;
 
-    if (empty($cfg_db['dbuser'])) {
+    if (empty($cfg_db['dbuser'])) :
         exit('dbuser' . $err_empty_msg);
-    }
+    endif;
 
-    if (empty($cfg_db['dbpassword'])) {
+    if (empty($cfg_db['dbpassword'])) :
         exit('dbpassword' . $err_empty_msg);
-    }
-    if (empty($cfg_db['dbcharset'])) {
+    endif;
+    if (empty($cfg_db['dbcharset'])) :
         exit('dbcharset' . $err_empty_msg);
-    }
+    endif;
 
-    if (empty($cfg)) {
+    if (empty($cfg)) :
         exit('cfg empty');
-    }
+    endif;
     $err_empty_msg = ' can\'t be empty check config.inc.php';
     $err_nofile_msg = ' file/directory not exists';
 
-    if (empty($cfg['path'])) {
+    if (empty($cfg['path'])) :
         exit('path' . $err_empty_msg);
-    }
-    if (!is_dir($cfg['path'])) {
-        exit($cfg['path'] . $err_nofile_msg);
-    }
+    endif;
+    if (!is_dir($cfg['path'])) :
+        if (is_string($cfg['path'])) :
+            exit($cfg['path'] . $err_nofile_msg);
+        else :
+            exit('Undefinided path');
+        endif;
+    endif;
 }
 /**
  *

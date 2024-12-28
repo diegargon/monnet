@@ -39,11 +39,11 @@ class Web
         $req_page = Filters::getString('page');
         empty($req_page) ? $req_page = 'index' : null;
 
-        if (!$this->hasAccess()) {
+        if (!$this->hasAccess()) :
             $pageData = $this->get('login');
-        } else {
+        else :
             $pageData = $this->get($req_page);
-        }
+        endif;
 
         $this->render($pageData);
     }
@@ -89,10 +89,13 @@ class Web
         $pageFunctions = $this->getPageFunctions();
         if (array_key_exists($page, $pageFunctions)) {
             $pageFunc = $pageFunctions[$page];
-            if ($page === 'logout') {
+            if (!is_callable($pageFunc)) :
+                return [];
+            endif;
+            if ($page === 'logout') :
                 $pageFunc($this->ctx);
                 exit();
-            }
+            endif;
             $pageData = $pageFunc($this->ctx);
         } else {
             return [];

@@ -12,7 +12,7 @@
 /**
  *
  * @var array<int|string, mixed> $cfg
- * @var array<int|string, mixed> $cfg_db
+ * @var array<string, string> $cfg_db
  */
 if (!file_exists('config/config.defaults.php')) {
     print 'Missing config.defaults.php. Leaving';

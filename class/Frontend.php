@@ -137,7 +137,7 @@ class Frontend
      *
      * @param string $scriptlink
      *
-     * @return bool|string
+     * @return string
      */
     public function scriptLink(string $scriptlink): string
     {
