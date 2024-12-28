@@ -113,7 +113,7 @@ function base_url(string $url): string|false
     $parsed_url = parse_url($url);
 
     if ($parsed_url === false) {
-        Log::warn('Cant parse url: ' . $url);
+        Log::warning('Cant parse url: ' . $url);
         return false;
     }
 
@@ -122,7 +122,7 @@ function base_url(string $url): string|false
     }
 
     if (empty($parsed_url['scheme']) || empty($parsed_url['host'])) :
-        Log::warn('Cant parse url: ' . $url);
+        Log::warning('Cant parse url: ' . $url);
         return false;
     endif;
 
