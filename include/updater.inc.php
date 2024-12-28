@@ -264,7 +264,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db_version = $files_version;
         } catch (Exception $e) {
             $db->query("ROLLBACK");
-            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
 
@@ -281,7 +281,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db_version = $files_version;
         } catch (Exception $e) {
             $db->query("ROLLBACK");
-            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
 }
