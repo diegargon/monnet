@@ -185,8 +185,8 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`id`, `uid`, `cat_id`, `type`, `title`, `conf`, `weight`, `highlight`, `online`) VALUES
-(1, 20, 'search_engine', 'Google', '{\"url\":\"https:\\/\\/google.com\\/search\",\"name\":\"q\"}', 60, 0, 0),
-(2, 20, 'search_engine', 'Duck', '{\"url\":\"https:\\/\\/duckdockgo.com\\/search\",\"name\":\"q\"}', 60, 0, 0),
+(1, 1, 20, 'search_engine', 'Google', '{\"url\":\"https:\\/\\/google.com\\/search\",\"name\":\"q\"}', 60, 0, 0),
+(2, 1, 20, 'search_engine', 'Duck', '{\"url\":\"https:\\/\\/duckdockgo.com\\/search\",\"name\":\"q\"}', 60, 0, 0),
 (4, 1, 121, 'bookmarks', 'Reddit', '{\"url\":\"https:\\/\\/reddit.com\",\"image_type\":\"local_img\",\"image_resource\":\"reddit.png\"}', 50, 0, 0);
 
 -- --------------------------------------------------------
