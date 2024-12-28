@@ -51,6 +51,7 @@
     min version no haga nada, el feedme deberia de notificarlo (corregir antes el log spam)
 * Ansible/Feedme: Cambiar version a min_version que acepta feedme y configurar una var con agente_version_latest
     Configuracion: Automatic agent updates (si feedme detecta un agente en version antigua actualizarlo automaticamente
+* Agent: El agente deberia enviar los logs al servidor.
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario

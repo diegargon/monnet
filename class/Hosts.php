@@ -72,6 +72,10 @@ class Hosts
         'agent_installed', /* Setting at first ping */
         'agent_online',
         'agent_next_report', /* Timesstamp for next report */
+        'agent_last_contact',
+        'load_avg',
+        'mem_info',
+        'disk_info',
     ];
 
     /**

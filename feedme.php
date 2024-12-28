@@ -118,6 +118,28 @@ if ((int) $host['online'] !== 1) :
 endif;
 $host_update_values['agent_online'] = 1;
 
+if (!isEmpty($rdata)) :
+    if (!isEmpty($rdata['loadavg'])) :
+        $host_update_values['load_avg'] = serialize($rdata['loadavg']);
+    endif;
+    if (!isEmpty($rdata['loadavg_stats'])) :
+        $set_stats = [
+            'date' => utc_date_now(),
+            'type' => 2,   //loadavg
+            'host_id' => $host['id'],
+            'value' => $rdata['loadavg_stats']
+        ];
+        $db->insert('stats', $set_stats);
+    endif;
+    if (!isEmpty($rdata['meminfo'])) :
+        $host_update_values['mem_info'] = serialize($rdata['meminfo']);
+    endif;
+    if (!isEmpty($rdata['diskinfo'])) :
+        $host_update_values['disk_info'] = serialize($rdata['diskinfo']);
+    endif;
+endif;
+
+/* Update host */
 $hosts->update($host['id'], $host_update_values);
 
 /* Response Template */

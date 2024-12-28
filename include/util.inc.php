@@ -267,6 +267,7 @@ function dump_in_json(mixed $var): void
 }
 
 /**
+ * Returns true if empty
  * & to avoid !isset error
  * @param mixed $var
  * @return bool
