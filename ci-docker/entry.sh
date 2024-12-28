@@ -15,6 +15,7 @@ for i in {1..10}; do
 done
 if ! mysql -h mysql-service -uroot -pmonnetadmin --verbose monnet < /var/www/html/config/monnet.sql; then
     echo "Error al ejecutar el script SQL. Asegúrate de que MySQL esté disponible."
+    exit 1
 else
     echo "Base de datos subida con exito"
 fi
