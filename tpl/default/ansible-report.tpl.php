@@ -23,7 +23,7 @@
                 $keys = array_keys($tdata['stats'][key($tdata['stats'])]); // Tomamos las claves del primer host
                 foreach ($keys as $key) :
                     ?>
-                    <th><?= ucwords($key) ?></th> <!-- Capitalizamos la primera letra de cada palabra -->
+                    <th><?= is_string($key) ? ucwords($key) : $key; ?></th> <!-- Capitalizamos la primera letra de cada palabra -->
                 <?php endforeach; ?>
             </tr>
         </thead>

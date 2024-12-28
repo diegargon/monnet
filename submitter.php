@@ -625,7 +625,12 @@ if ($command === 'host-details' && !empty($target_id)) {
     }
 }
 
-if ($command == 'saveNote' && !empty($target_id) && !empty($value_command)) {
+if (
+    $command == 'saveNote' &&
+    !empty($target_id) &&
+    !empty($value_command) &&
+    is_string($value_command)
+) {
     //For empty note we must write ':clear' to begin to prevent clean the note
     //if a filter or other return false/empty
     $content = urldecode($value_command);
@@ -737,7 +742,7 @@ if (
 }
 
 /* Host External submit */
-if ($command == 'submitHost' && !empty($value_command)) {
+if ($command == 'submitHost' && !empty($value_command) && is_string($value_command)) {
     $host = [];
     $host['hostname'] = Filters::varDomain($value_command);
 
@@ -805,7 +810,7 @@ if (
         endif;
     endif;
 
-    $logs = Log::getLoghost($target_id, $opts);
+    $logs = Log::getLoghost((int) $target_id, $opts);
     if (!empty($logs)) {
         $data['response_msg'] = format_host_logs($ctx, $logs);
     }
@@ -814,7 +819,7 @@ if (
 
 /* Metrics */
 if ($command === 'changeHDTab' && $value_command == 'tab10') {
-    $ping_stats = get_host_metrics($ctx, $target_id);
+    $ping_stats = get_host_metrics($ctx, (int) $target_id);
     if (!empty($ping_stats)) {
         $data['response_msg'] = $frontend->getTpl('chart-time-js', $ping_stats);
     }
@@ -899,7 +904,12 @@ if ($command == 'setHostAnsible' && !empty($value_command) && !empty($target_id)
 if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command)) {
     $host = $hosts->getHostById($target_id);
     $playbook = $value_command;
-    if (valid_array($host) && $host['ansible_enabled']) {
+
+    if (
+        valid_array($host) &&
+        $host['ansible_enabled'] &&
+        is_string($playbook)
+    ) {
         // Verificar si extra_vars está presente y no vacío
         if (!isEmpty($command_values['extra_vars'])) {
             $extra_vars = $command_values['extra_vars'];
