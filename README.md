@@ -30,10 +30,12 @@ Revision version implied only code changes, never database changes.
 
 ## LICENSE
 
-CC BY-NC-ND 4.0 Deed
+CC BY-NC-ND 4.0
 
 Resume:
+
     Non-Commercial Use = Allowed
+
     Commercial Use = License
 
 # MonNet Install
@@ -57,7 +59,7 @@ arp
     apt install net-tools
 ```
 
-## Initial  database settings
+## Initial database settings
 ```
 mysql -u root -p
 mysql> CREATE DATABASE monnet;
@@ -137,7 +139,7 @@ You can install it manually check the install-agent-linux playbook for steps
 
 ## Ansible Support
 
-Ansible support its testing feature
+Ansible support its a testing feature
 
 # Install ansible
 
