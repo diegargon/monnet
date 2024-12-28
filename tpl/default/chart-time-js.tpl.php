@@ -43,7 +43,7 @@
             datasets: [{
                     label: 'Latencia',
                     data: valores,
-                    borderWidth: 2,
+                    borderWidth: 2
                 }]
         },
         options: {
@@ -80,7 +80,7 @@
                     }
                 },
                 y: {
-                    beginAtZero: true,
+                    beginAtZero: false,
                     grid: {
                         color: 'rgba(255, 255, 255, 0.1)' // grid y
                     }
