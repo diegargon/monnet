@@ -49,7 +49,8 @@
 * Alert/Warn dropdown popup permitir limpiar alarma individual
 * feedme y agente intercambian versiones de agente agent_min_version existe para que en caso de que el agente no cumpla
     min version no haga nada, el feedme deberia de notificarlo (corregir antes el log spam)
-
+* Ansible/Feedme: Cambiar version a min_version que acepta feedme y configurar una var con agente_version_latest
+    Configuracion: Automatic agent updates (si feedme detecta un agente en version antigua actualizarlo automaticamente
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
