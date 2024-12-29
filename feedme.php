@@ -65,11 +65,11 @@ endif;
 $valid_commands = ['ping', 'notification'];
 
 if (!in_array($request['cmd'], $valid_commands, true)) :
-    trigger_feedme_error('Invalid command receive id: ' . $request['id']);
+    trigger_feedme_error('Invalid command receive id: ' . serialize($request));
 endif;
 
 if (!is_array($request['data'])) :
-    trigger_feedme_error('Invalid data field recevive: not an array, id: ' . $request['id']);
+    trigger_feedme_error('Invalid data field recevive: not an array, id: ' . serialize($request));
 endif;
 
 /* Setting Vars */
@@ -112,6 +112,7 @@ if ((time() - $last_refreshing) < $refresh_time_seconds) :
 endif;
 
 $host_update_values['agent_next_report'] = time() + (int) $agent_default_interval;
+$host_update_values['agent_last_contact'] = time();
 
 if ((int) $host['online'] !== 1) :
     $host_update_values['online'] = 1;
@@ -124,7 +125,7 @@ if (!isEmpty($rdata)) :
     endif;
     if (!isEmpty($rdata['loadavg_stats'])) :
         $set_stats = [
-            'date' => utc_date_now(),
+            'date' => date_now(),
             'type' => 2,   //loadavg
             'host_id' => $host['id'],
             'value' => $rdata['loadavg_stats']
@@ -134,8 +135,21 @@ if (!isEmpty($rdata)) :
     if (!isEmpty($rdata['meminfo'])) :
         $host_update_values['mem_info'] = serialize($rdata['meminfo']);
     endif;
-    if (!isEmpty($rdata['diskinfo'])) :
-        $host_update_values['disk_info'] = serialize($rdata['diskinfo']);
+    if (!isEmpty($rdata['disksinfo'])) :
+        $host_update_values['disks_info'] = serialize($rdata['disksinfo']);
+    endif;
+endif;
+
+if ($command === 'notification' && isset($rdata['type']) && $rdata['type'] == 'starting') :
+    if (!empty($rdata['ncpu'])) :
+        if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu']) ) :
+            $host_update_values['ncpu'] = $rdata['ncpu'];
+        endif;
+    endif;
+    if (!empty($rdata['uptime'])) :
+        if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime']) ) :
+            $host_update_values['uptime'] = $rdata['uptime'];
+        endif;
     endif;
 endif;
 

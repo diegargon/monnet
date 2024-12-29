@@ -35,12 +35,6 @@
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab1')">
                             <?= $lng['L_OVERVIEW'] ?>
                     </button>
-                    <?php if (!empty($tdata['host_details']['access_method'])) : ?>
-                        <button id="tab2_btn" class="host-details-tabs-head" data-tab="2"
-                                onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab2')">
-                                <?= $lng['L_STATUS'] ?>
-                        </button>
-                    <?php endif; ?>
                     <button id="tab3_btn" class="host-details-tabs-head" data-tab="3"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab3')">
                             <?= $lng['L_NOTES'] ?>
@@ -72,11 +66,6 @@
                             Ansible Raw
                     </button>
                     <?php endif; ?>
-                    <!--
-                    <button id="tabx_btn" class="host-details-tabs-head" onclick="changeHDTab('tab2')">
-                        <?= $lng['L_DEPLOYS'] ?>
-                    </button>
-                    -->
                 </div>
             </div> <!--host-controls-right -->
             <div class="host-controls-right">
@@ -185,109 +174,121 @@
         <!-- /HOST COMMON BAR -->
         <!-- TAB1  RESUME -->
         <div id="tab1" class="host-details-tab-content">
-            <div class="">
-                <div class="">
-                    <label class="resume_label"><?= $lng['L_NAME'] ?>:</label>
-                    <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
-                </div>
-                <div class"">
-                    <div><?= $lng['L_NETWORK'] ?>: <?= $tdata['host_details']['net_cidr'] ?></div>
-                    <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
-                    <div><?= $lng['L_VLAN'] ?>: <?= $tdata['host_details']['network_vlan'] ?></div>
-                </div>
-                <?php if (!empty($tdata['host_details']['owner'])) : ?>
+            <div class="resume_container">
+                <div class="resume-left-column">
+                    <!-- LEFT -->
                     <div class="">
-                        <label class="resume_label"><?= $lng['L_OWNER'] ?>:</label>
-                        <span class="resume_field"><?= $tdata['host_details']['owner'] ?></span>
+                        <span class="resume_label"><?= $lng['L_NAME'] ?>:</span>
+                        <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
                     </div>
-                <?php endif; ?>
-                <div class="">
-                    <label class="resume_label"><?= $lng['L_ADDED'] ?>:</label>
-                    <span class="resume_field">
-                        <?= $tdata['host_details']['formated_creation_date'] ?>
-                    </span>
-                </div>
-                <?php
-                if (
-                    !empty($tdata['host_details']['uptime']) &&
-                    is_array($tdata['host_details']['uptime'])
-                ) {
-                    ?>
-                    <div class="" >
-                        <label class="resume_label"><?= $lng['L_UPTIME'] ?>:</label>
+                    <div class"">
+                        <div><?= $lng['L_NETWORK'] ?>: <?= $tdata['host_details']['net_cidr'] ?></div>
+                        <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
+                        <div><?= $lng['L_VLAN'] ?>: <?= $tdata['host_details']['network_vlan'] ?></div>
+                    </div>
+                    <?php if (!empty($tdata['host_details']['owner'])) : ?>
+                        <div class="">
+                            <span class="resume_label"><?= $lng['L_OWNER'] ?>:</span>
+                            <span class="resume_field"><?= $tdata['host_details']['owner'] ?></span>
+                        </div>
+                    <?php endif; ?>
+                    <div class="">
+                        <span class="resume_label"><?= $lng['L_ADDED'] ?>:</span>
                         <span class="resume_field">
-                            <?= $tdata['host_details']['uptime']['datetime'] ?>
+                            <?= $tdata['host_details']['formated_creation_date'] ?>
                         </span>
                     </div>
-                <?php } ?>
-                <?php if (!empty($tdata['host_details']['latency_ms'])) : ?>
-                    <div class="" >
-                        <label class="resume_label"><?= $lng['L_LATENCY'] ?>:</label>
-                        <span class="resume_field"><?= $tdata['host_details']['latency_ms'] ?></span>
-                    </div>
-                <?php endif; ?>
-
-                <?php
-                if (
-                        empty($tdata['host_details']['online']) &&
-                        !empty($tdata['host_details']['f_last_seen'])
-                ) {
-                    ?>
-                    <div>
-                        <label class="resume_label"><?= $lng['L_LAST_SEEN'] ?>:</label>
-                        <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
-                    </div>
-                <?php } ?>
-
-                <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
-                    <div>
-                        <label class="resume_label"><?= $lng['L_LAST_CHECK'] ?>:</label>
-                        <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
-                    </div>
-                <?php endif; ?>
-                <?php if (!empty($tdata['host_details']['access_link'])) : ?>
-                    <div>
-                        <a href="<?= $tdata['host_details']['access_link'] ?>"
-                           target="_blank"><?= $tdata['host_details']['access_link'] ?>
-                        </a>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-        <!-- /TAB1 -->
-        <!-- TAB2 DETAILS -->
-        <?php if (!empty($tdata['host_details']['access_method'])) { ?>
-            <div id="tab2" class="host-details-tab-content">
-                <div id="progress_bars">
-                    <?php if (!empty($tdata['host_details']['f_loadavg'])) : ?>
-                        <label for="load_avg"><?= $lng['L_LOAD'] ?>:</label>
-                        <progress id="load_avg" value="<?= $tdata['host_details']['f_loadavg'] ?>"
-                                  max="<?= $tdata['host_details']['f_maxload'] ?>"
-                                  data-label="<?= $tdata['host_details']['f_loadavg'] ?>">
-                        </progress>
-                    <?php endif; ?>
-                    <?php if (!empty($tdata['host_details']['mem'])) :
-                        $mem = $tdata['host_details']['mem'];
-                        ?>
-                        <label for="mem"><?= $lng['L_MEM'] ?>:</label>
-                        <progress id="mem" value="<?= $mem['mem_used'] ?>" max="<?= $mem['mem_available'] ?>">
-                        </progress>
-                    <?php endif; ?>
                     <?php
                     if (
-                            !empty($tdata['host_details']['disks']) &&
-                            count($tdata['host_details']['disks']) > 0
+                        !empty($tdata['host_details']['uptime'])
                     ) {
                         ?>
-                        <?php foreach ($tdata['host_details']['disks'] as $disk) : ?>
-                            <label class="disk"><?= $disk['mounted'] ?>:</label>
-                            <progress class="disk" value="<?= $disk['used_percent'] ?>" max="100"></progress>
-                        <?php endforeach; ?>
+                        <div class="" >
+                            <span class="resume_label"><?= $lng['L_UPTIME'] ?>:</span>
+                            <span class="resume_field">
+                                <?= $tdata['host_details']['uptime']?>
+                            </span>
+                        </div>
                     <?php } ?>
-                </div> <!-- progress container -->
+                    <?php if (!empty($tdata['host_details']['latency_ms'])) : ?>
+                        <span class="resume_label"><?= $lng['L_LATENCY'] ?>:</span>
+                        <span class="resume_field"><?= $tdata['host_details']['latency_ms'] ?></span>
+                    <?php endif; ?>
+
+                    <?php
+                    if (
+                            empty($tdata['host_details']['online']) &&
+                            !empty($tdata['host_details']['f_last_seen'])
+                    ) {
+                        ?>
+                        <div>
+                            <span class="resume_label"><?= $lng['L_LAST_SEEN'] ?>:</span>
+                            <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
+                        </div>
+                    <?php } ?>
+                    <?php
+                    if (!empty($tdata['host_details']['ncpu'])) {
+                        ?>
+                        <div>
+                            <span class="cpu_label">CPUs:</span>
+                            <span class="cpu_field"><?= $tdata['host_details']['ncpu'] ?></span>
+                        </div>
+                    <?php } ?>
+                    <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
+                        <div>
+                            <span class="resume_label"><?= $lng['L_LAST_PING_CHECK'] ?>:</span>
+                            <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['agent_last_contact'])) : ?>
+                        <div>
+                            <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>
+                        </div>
+                        <div>
+                            <span class="resume_label"><?= $lng['L_AGENT_LAST_PING'] ?>:</span>
+                            <span class="resume_field"><?= $tdata['host_details']['agent_last_contact'] ?></span>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['access_link'])) : ?>
+                        <div>
+                            <a href="<?= $tdata['host_details']['access_link'] ?>"
+                               target="_blank"><?= $tdata['host_details']['access_link'] ?>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <!-- RIGHT COLUMN -->
+                <div class="resume-right-column">
+                    <?php
+                        if (
+                            !empty($tdata['host_details']['load_avg']) &&
+                            is_string($tdata['host_details']['load_avg'])
+                        ) :
+                            ?>
+                    <div class="load_container">
+                            <?php
+                            print $tdata['host_details']['load_avg'];
+                            ?>
+                    </div>
+                            <?php
+                        endif;
+                        if (
+                            !empty($tdata['host_details']['mem_info']) &&
+                            is_string($tdata['host_details']['mem_info'])
+                        ) :
+                            print $tdata['host_details']['mem_info'];
+                        endif;
+                        if (
+                            !empty($tdata['host_details']['disks_info']) &&
+                            is_string($tdata['host_details']['disks_info'])
+                        ) :
+                            print $tdata['host_details']['disks_info'];
+                        endif;
+                    ?>
+                </div>
             </div>
-        <?php } ?>
-        <!-- /TAB2 -->
+        </div>
+        <!-- /TAB1 RESUME-->
         <!-- TAB3 --><!-- NOTES -->
         <div id="tab3" class="host-details-tab-content">
             <!-- <div class="textarea-bar"></div> -->

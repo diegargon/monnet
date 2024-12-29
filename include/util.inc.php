@@ -205,19 +205,19 @@ function cached_img(User $user, int $id, string $img_url, int $renew = 0): strin
             $img_item_check = new DateTime($img_item_check);
             $img_item_check->modify('+48 hours');
 
-            if ($img_item_check > utc_date_now()) {
+            if ($img_item_check > date_now()) :
                 return $img_url;
-            }
+            endif;
         }
 
         $ctx = stream_context_create(['http' => $http_options]);
         $img_file = @file_get_contents($img_url, false, $ctx);
         if ($img_file !== false) {
-            if (file_put_contents($cache_img_path, $img_file) !== false) {
+            if (file_put_contents($cache_img_path, $img_file) !== false) :
                 return $cache_img_path;
-            }
+            endif;
         } else {
-            $user->setPref($img_url, utc_date_now());
+            $user->setPref($img_url, date_now());
             $error = error_get_last();
             Log::err('Error getting image error msg ' . $error['message']);
         }
@@ -369,3 +369,29 @@ function floatToPercentage(float $value, float $min = 0.0, float $max = 100.0 ):
     // Scale to 0-100
     return max(0, min(100, $normalized * 100));
 }
+
+/**
+ * Seconds to day/hours/minutes/seconds array
+ *
+ * @param int $seconds
+ * @return array
+ */
+function secondsToDHMS(int $seconds): array
+{
+    $days = intdiv($seconds, 86400);
+    $seconds %= 86400;
+
+    $hours = intdiv($seconds, 3600);
+    $seconds %= 3600;
+
+    $minutes = intdiv($seconds, 60);
+    $seconds %= 60;
+
+    return [
+        'days' => $days,
+        'hours' => $hours,
+        'minutes' => $minutes,
+        'seconds' => $seconds,
+    ];
+}
+

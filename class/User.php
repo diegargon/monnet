@@ -181,7 +181,7 @@ class User
             $format = $this->cfg['datatime_format'];
         }
 
-        return formatted_date_now($this->user['timezone'], $format);
+        return format_date_now($this->user['timezone'], $format);
     }
 
     /**

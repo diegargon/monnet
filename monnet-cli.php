@@ -22,23 +22,23 @@ require_once 'include/cron.inc.php';
 
 Log::debug("Starting $APP_NAME");
 
-if (is_locked()) {
+if (is_locked()) :
     Log::debug("CLI Locked skipping");
     die();
-}
+endif;
 
 register_shutdown_function('unlink', CLI_LOCK);
-if ($ctx) {
+if ($ctx) :
     check_known_hosts($ctx);
-#run_cmd_db_tasks($cfg, $db, $hosts);
     cron($ctx);
-}
+endif;
+
 //Log::debug($db->getQueryHistory();
 
-if ($db->isConn()) {
-    $ncfg->set('cli_last_run', utc_date_now());
-    $db->update('prefs', ['uid' => 0, 'pref_value' => utc_date_now()], ['pref_name' => 'cli_last_run'], 'LIMIT 1');
-}
+if ($db->isConn()) :
+    $ncfg->set('cli_last_run', date_now());
+    $db->update('prefs', ['uid' => 0, 'pref_value' => date_now()], ['pref_name' => 'cli_last_run'], 'LIMIT 1');
+endif;
 
 Log::debug("[Finishing] $APP_NAME " . datetime_machine() . "");
 

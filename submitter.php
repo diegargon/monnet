@@ -616,6 +616,26 @@ if ($command === 'host-details' && !empty($target_id)) {
         order_by_name($cfg['manufacture']);
         order_by_name($cfg['system_type']);
         unset($tdata['host_details']['ping_stats']);
+
+        if (!empty($host_details['mem_info']) && is_array($host_details['mem_info'])) :
+            $tdata['host_details']['mem_info'] =  $frontend->getTpl(
+                'progressbar',
+                ['progress_bar_data' => [$host_details['mem_info']]]
+                );
+        endif;
+        if (!empty($host_details['load_avg']) && is_array ($host_details['load_avg'])) :
+            $tdata['host_details']['load_avg'] = $frontend->getTpl(
+                'gauge',
+                ['gauge_graphs' => $host_details['load_avg']]
+                );
+        endif;
+        if (!empty($host_details['disks_info']) && is_array ($host_details['disks_info'])) :
+            $tdata['host_details']['disks_info'] = $frontend->getTpl(
+                'progressbar',
+                ['progress_bar_data' => $host_details['disks_info']]
+                );
+        endif;
+
         $data['host_details']['cfg']['place'] = "#left-container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_success'] = 1;

@@ -42,7 +42,7 @@ function check_known_hosts(AppContext $ctx): bool
                 if ($host_ping_result['online']) {
                     $ping_ports_result['online'] = 1;
                     $ping_ports_result['latency'] = $host_ping_result['latency'];
-                    $ping_ports_result['last_seen'] = utc_date_now();
+                    $ping_ports_result['last_seen'] = date_now();
                 } else {
                     $ping_ports_result['online'] = 0;
                 }
@@ -75,7 +75,7 @@ function check_known_hosts(AppContext $ctx): bool
                 $new_host_status['mac'] = !empty($mac) ? $mac : null;
             }
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
-                $new_host_status['online_change'] = utc_date_now();
+                $new_host_status['online_change'] = date_now();
                 $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON'];
                 Log::logHost('LOG_NOTICE', $host['id'], $log_msg);
                 if (!empty($host['alarm_port_email'])) :
@@ -88,7 +88,7 @@ function check_known_hosts(AppContext $ctx): bool
                     $new_host_status['hostname'] = $hostname;
                 endif;
             } elseif ($host['online'] == 1 && $new_host_status['online'] == 0) {
-                $new_host_status['online_change'] = utc_date_now();
+                $new_host_status['online_change'] = date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout;
                 Log::logHost('LOG_WARNING', $host['id'], $log_msg);
@@ -100,7 +100,7 @@ function check_known_hosts(AppContext $ctx): bool
             $hosts->update($host['id'], $new_host_status);
             if ($new_host_status['online'] == 1 && isset($new_host_status['latency'])) {
                 $ping_latency = $new_host_status['latency'];
-                $set_ping_stats = ['date' => utc_date_now(),
+                $set_ping_stats = ['date' => date_now(),
                     'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
                 $db->insert('stats', $set_ping_stats);
             }
@@ -169,7 +169,7 @@ function ping_nets(AppContext $ctx): void
             }
 
             $set['latency'] = round_latency($latency);
-            $set['last_seen'] = utc_date_now();
+            $set['last_seen'] = date_now();
             $hostname = $hosts->getHostname($ip);
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
             Log::alert($lng['L_NEW_HOST'] . ': ' . $ip);
@@ -269,7 +269,7 @@ function check_macs(Hosts $hosts): void
  */
 function ping_host_ports(AppContext $ctx, array $host): array
 {
-    $time_now = utc_date_now();
+    $time_now = date_now();
 
     $networks = $ctx->get('Networks');
 
@@ -348,7 +348,7 @@ function ping_known_host(AppContext $ctx, array $host): array
 {
     $sec = 0;
     $usec = 500000;
-    $time_now = utc_date_now();
+    $time_now = date_now();
     $networks = $ctx->get('Networks');
 
     if (!empty($host['timeout']) && $host['timeout'] > 0.0) {

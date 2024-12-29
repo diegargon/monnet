@@ -133,7 +133,7 @@ if ($user->getPref('show_termlog_status')) {
                 continue;
             endif;
 
-            $date = datetime_string_format($term_log['date'], $cfg['term_date_format']);
+            $date = format_datetime_from_string($term_log['date'], $cfg['term_date_format']);
             $loglevelname = Log::getLogLevelName($log_level);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
             $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg'] . '<br/>';
@@ -228,13 +228,13 @@ $results = $db->select('prefs', '*', ['uid' => 0]);
 if ($result) :
     $system_prefs = $db->fetchAll($results);
 
-
-    foreach ($system_prefs as $sys_pref) {
+    foreach ($system_prefs as $sys_pref)
+    {
         if ($sys_pref['pref_name'] == 'cli_last_run') {
             if (empty($sys_pref['pref_value'])) {
                 $cli_last = 'Never';
             } else {
-                $cli_last = utc_to_user_tz(
+                $cli_last = utc_to_tz(
                     $sys_pref['pref_value'],
                     $user->getTimezone(),
                     $cfg['datetime_format_min']
@@ -244,7 +244,7 @@ if ($result) :
             if (empty($sys_pref['pref_value'])) {
                 $discovery_last = 'Never';
             } else {
-                $discovery_last = utc_to_user_tz(
+                $discovery_last = utc_to_tz(
                     $sys_pref['pref_value'],
                     $user->getTimezone(),
                     $cfg['datetime_format_min']

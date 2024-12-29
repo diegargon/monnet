@@ -884,6 +884,9 @@ input:checked + .slider:before {
     border: 0px solid #0E9700;
     margin: 0;
     padding: 5px 0px 5px 5px;
+    resize: both;
+    overflow-y: scroll;
+
 }
 
 .host-details-tab-content textarea {
@@ -1381,10 +1384,10 @@ input:checked + .slider:before {
     pointer-events: all;
 }
 
-.config_container {
+.config_container, .resume_container {
     display: flex;
 }
-.left-config-column, .right-config-column {
+.left-config-column, .right-config-column, .resume-left-column, .resume-right-column {
     width: 49%;
 }
 
@@ -1492,6 +1495,28 @@ input:checked + .slider:before {
 
 .ansible_list {
     font-size: 12px;
+}
+
+.load_container {
+    display: inline-flex;
+    gap: 10px;
+}
+
+.pbar_legend {
+    font-size: 11px;
+    font-weight: bold;
+    color: #ffa9a9;
+}
+
+.progress-bar {
+    height: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
 }
 
 @keyframes crt-glow {

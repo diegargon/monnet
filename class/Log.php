@@ -92,7 +92,7 @@ class Log
             }
             if (self::$console) {
                 echo '[' .
-                formatted_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format']) .
+                format_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format']) .
                 '][' . self::$cfg['app_name'] . '][' . $type . '] ' . $msg . "\n";
             }
             if (self::$cfg['log_to_db']) {
@@ -109,7 +109,7 @@ class Log
                 $log_file = self::$cfg['log_file'];
 
                 $content = '['
-                    . formatted_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
+                    . format_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
                     . '][' . self::$cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     if (!touch($log_file)) {

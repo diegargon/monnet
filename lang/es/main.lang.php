@@ -33,6 +33,8 @@ $lng = [
     'L_AGENT_MISSING_PINGS' => 'Agents Pings',
     'L_AVAILABILITY' => 'Disponibilidad',
     'L_ALERTS' => 'Alertas',
+    'L_AGENT_INSTALLED' => 'Agente Instalado',
+    'L_AGENT_LAST_PING' => 'Ultimo contacto agente: ',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -56,6 +58,7 @@ $lng = [
     'L_DISPLAY_NAME' => 'Nombre a mostrar',
     'L_DISABLE_ALL_ALARMS' => 'Deshabilitar todas las Alarmas',
     'L_DISABLE_PER_TYPE' => 'Deshabilitar por tipo',
+    'L_DAYS' => 'Dias',
     //E
 //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
@@ -97,6 +100,7 @@ $lng = [
     'L_HOSTS_ON' => 'Host On',
     'L_HOSTS_OFF' => 'Host Off',
     'L_HYPERVISOR' => 'Hypervisor',
+    'L_HOURS' => 'Horas',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',
@@ -112,7 +116,7 @@ $lng = [
     'L_LOGIN' => 'Identificarse',
     'L_LOGOUT' => 'Salir',
     'L_LAST_SEEN' => 'Ultima vez online:',
-    'L_LAST_CHECK' => 'Ultima comprobación',
+    'L_LAST_PING_CHECK' => 'Ultimo Ping',
     'L_LATENCY' => 'Latencia',
     'L_LOAD' => 'Carga',
     'L_LOCAL_IMAGE' => 'Imagen Local',
@@ -128,6 +132,7 @@ $lng = [
     'L_MAIL' => 'Correo',
     'L_MACHINE_TYPE' => 'Tipo de maquina',
     'L_MAXIMIZE' => 'Maximize',
+    'L_MINUTES' => 'Minutes',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',

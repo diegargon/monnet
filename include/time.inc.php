@@ -10,6 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 /**
+ * Validate timezone
  *
  * @param string $timezone
  * @return bool
@@ -41,22 +42,14 @@ function date_now(string $timezone = 'UTC'): string|false
 }
 
 /**
- *
- * @return string|false
- */
-function utc_date_now(): string|false
-{
-    return date_now();
-}
-
-/**
+ * Covert UTC to Timezone
  *
  * @param string $utc_date
  * @param string $timezone
  * @param string $time_format
  * @return string
  */
-function utc_to_user_tz(string $utc_date, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
+function utc_to_tz(string $utc_date, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
 {
     $date = new DateTime($utc_date, new DateTimeZone('UTC'));
     $date->setTimezone(new DateTimeZone($timezone));
@@ -70,7 +63,7 @@ function utc_to_user_tz(string $utc_date, string $timezone, string $time_format 
  * @param string $time_format
  * @return string|false
  */
-function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s'): string|false
+function format_date_now(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s'): string|false
 {
     if (!valid_timezone($timezone)) {
         return false;
@@ -82,12 +75,13 @@ function formatted_date_now(string $timezone = 'UTC', string $time_format = 'Y-m
 }
 
 /**
+ * Reformat string date
  *
  * @param string $date
  * @param string $time_format
  * @return string|false
  */
-function datetime_string_format(string $date, string $time_format = 'Y-m-d H:i:s'): string|false
+function format_datetime_from_string(string $date, string $time_format = 'Y-m-d H:i:s'): string|false
 {
     $timestamp = strtotime($date);
 
@@ -102,4 +96,26 @@ function datetime_machine(): string
 {
     $now = new DateTime();
     return $now->format('Y-m-d H:i:s');
+}
+
+/**
+ * Convierte un timestamp UNIX a una fecha formateada en la zona horaria deseada.
+ *
+ * @param int $timestamp El timestamp UNIX a convertir.
+ * @param string $timezone La zona horaria destino (ej: 'Europe/Madrid').
+ * @param string $time_format El formato de salida (por defecto: 'Y-m-d H:i:s').
+ * @return string Fecha formateada en la zona horaria especificada.
+ */
+
+function format_timestamp(int $timestamp, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
+{
+    try {
+        $date = new DateTime('@' . $timestamp); // '@' indica un timestamp UNIX
+        $date->setTimezone(new DateTimeZone($timezone)); // Ajustar la zona horaria
+
+        return $date->format($time_format);
+    } catch (Exception $e) {
+
+        return 'Error: ' . $e->getMessage();
+    }
 }

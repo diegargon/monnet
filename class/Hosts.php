@@ -75,7 +75,9 @@ class Hosts
         'agent_last_contact',
         'load_avg',
         'mem_info',
-        'disk_info',
+        'disks_info',
+        'ncpu',
+        'uptime',
     ];
 
     /**

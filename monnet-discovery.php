@@ -29,10 +29,10 @@ register_shutdown_function('unlink', CLI_LOCK);
 ping_nets($ctx);
 
 if ($db->isConn()) :
-    $ncfg->set('discovery_last_run', utc_date_now());
+    $ncfg->set('discovery_last_run', date_now());
     $db->update(
         'prefs',
-        ['uid' => 0, 'pref_value' => utc_date_now()],
+        ['uid' => 0, 'pref_value' => date_now()],
         ['pref_name' => 'discovery_last_run'],
         'LIMIT 1'
     );

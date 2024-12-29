@@ -15,11 +15,8 @@
  */
 /*
   $tdata = [
-    'gauge_elements_width' => 2,
     'gauge_container_width' => 100,
-    'gauge_gap' => 5,
-    'grid_width' => null,
-    'gauge_graph' => [
+    'gauge_graphs' => [
         1 => ['value' => 93, 'legend' => 'Test 1', 'min' => 0, 'max' => 100],
         2 => ['value' => 43, 'legend' => 'Test 2', 'min' => 0, 'max' => 100],
         3 => ['value' => 20, 'legend' => 'Test 3', 'min' => 0, 'max' => 100],
@@ -28,37 +25,28 @@
   ];
  */
 
-$gauge_elements_width = $tdata['gauge_elements_width'] ?? 2;
 $gauge_container_width = $tdata['gauge_container_width'] ?? 100;
-$gauge_gap = $tdata['gauge_gap'] ?? 0;
-$grid_width = $tdata['grid_width'] ?? ($gauge_container_width * $gauge_elements_width) + $gauge_gap;
 $numSize = $tdata['num_size'] ?? round($gauge_container_width / 4);
 $textSize = $tdata['text_size'] ?? round($gauge_container_width / 8);
 ?>
 <style>
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(<?= $gauge_elements_width ?>, 1fr);
-        gap:  <?= $gauge_gap ?>px;
-        width: <?= $grid_width ?>px;
-    }
     .chart-container {
         width: <?= $gauge_container_width ?>px;
         height: <?= $gauge_container_width ?>px;
     }
 </style>
-<div class="grid-container">
-    <?php foreach ($tdata['gauge_graph'] as $id => $graph) : ?>
-        <div class="chart-container">
-            <canvas id="chart_<?= $id ?>" class="border border-gray-600"></canvas>
-        </div>
-    <?php endforeach; ?>
-</div>
+
+<?php foreach($tdata['gauge_graphs'] as $id => $graph) : ?>
+    <div class="chart-container">
+        <canvas id="chart_<?= $id ?>" class="border border-gray-600"></canvas>
+    </div>
+<?php endforeach; ?>
 
 <script>
-    const chartsData = <?= json_encode($tdata['gauge_graph']) ?>;
+    const chartsData = <?= json_encode($tdata['gauge_graphs']) ?>;
     const textSize = <?= $textSize ?>;
     const numSize = <?= $numSize ?>;
+
     Object.keys(chartsData).forEach(id => {
         const graph = chartsData[id];
         const ctx = document.getElementById(`chart_${id}`).getContext("2d");
@@ -101,8 +89,8 @@ $textSize = $tdata['text_size'] ?? round($gauge_container_width / 8);
                 ctx.fillText(needleValue, cx, cy - 0);
 
                 ctx.font = `normal ${textSize}px sans-serif`;
-                ctx.fillStyle = "#333333";
-                ctx.fillText(graph.legend, cx, cy + 25);
+                ctx.fillStyle = "#ffa9a9";
+                ctx.fillText(graph.legend, cx, cy + 15);
             }
         };
 
