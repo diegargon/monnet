@@ -741,7 +741,8 @@ if (
 }
 
 if (
-    ($command == 'removeBookmarkCat' || $command == 'removeHostsCat') && !empty($target_id)
+    ($command == 'removeBookmarkCat' || $command == 'removeHostsCat') &&
+    !empty($target_id)
 ) {
     /*
      * 1 Host Cats 2 Bookmarks Cat
