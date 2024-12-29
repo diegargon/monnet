@@ -347,3 +347,25 @@ function array2Html(array $array, bool $omitEmpty = true): string
     $html .= '</ul>';
     return $html;
 }
+
+/**
+ * Convert a float to a 0-100 representation.
+ *
+ * @param float $value The float value to convert.
+ * @param float $min The minimum value of the range.
+ * @param float $max The maximum value of the range.
+ * @return float The value normalized to the 0-100 range.
+ */
+
+function floatToPercentage(float $value, float $min = 0.0, float $max = 100.0 ): float
+{
+    if ($min >= $max) :
+        throw new InvalidArgumentException("Minimum value must be less than maximum value.");
+    endif;
+
+    // Normalize the value
+    $normalized = ($value - $min) / ($max - $min);
+
+    // Scale to 0-100
+    return max(0, min(100, $normalized * 100));
+}
