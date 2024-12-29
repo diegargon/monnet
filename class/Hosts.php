@@ -73,6 +73,7 @@ class Hosts
         'agent_online',
         'agent_next_report', /* Timesstamp for next report */
         'agent_last_contact',
+        'agent_version',
         'load_avg',
         'mem_info',
         'disks_info',

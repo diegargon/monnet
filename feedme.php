@@ -118,6 +118,10 @@ endif;
 $host_update_values['agent_next_report'] = time() + (int) $agent_default_interval;
 $host_update_values['agent_last_contact'] = time();
 
+if (empty($host['agent_version']) ||  $host['agent_version'] != (string) $request['version']) :
+    $host_update_values['agent_version'] = (string) $request['version'];
+endif;
+
 if ((int) $host['online'] !== 1) :
     $host_update_values['online'] = 1;
 endif;
