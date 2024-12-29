@@ -241,6 +241,11 @@ $cfg['playbooks'] = [
         'cat' => ['posix', 'windows'],
     ],
     [
+        'name' => 'install-monnet-agent-linux',
+        'desc' => 'Install Monnet Agent on Linux',
+        'cat' => ['posix'],
+    ],
+    [
         'name' => 'buildin-cmd-df-linux',
         'desc' => 'Get disk usage',
         'cat' => ['posix'],
@@ -313,11 +318,6 @@ $cfg['playbooks'] = [
     [
         'name' => 'service-facts',
         'desc' => 'Gather service facts',
-        'cat' => ['posix'],
-    ],
-    [
-        'name' => 'setup-system_info',
-        'desc' => 'Get load statistics via setup module',
         'cat' => ['posix'],
     ],
     [
