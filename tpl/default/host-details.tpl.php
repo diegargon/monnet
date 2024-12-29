@@ -243,7 +243,10 @@
                     <?php if (!empty($tdata['host_details']['agent_last_contact'])) : ?>
                         <div>
                             <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>
-                            <span class="resume_field"><?= $tdata['host_details']['agent_version'] ?></span>
+                            <span class="resume_field">
+                                <?= $tdata['host_details']['agent_version'] ?>
+                                (<?= $cfg['agent_latest_version'] ?>)
+                            </span>
                         </div>
                         <div>
                             <span class="resume_label"><?= $lng['L_AGENT_LAST_PING'] ?>:</span>

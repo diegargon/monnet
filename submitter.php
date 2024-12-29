@@ -1056,19 +1056,29 @@ if (
     $command === 'report_alerts' ||
     $command === 'report_warns'
 ) {
-    $keysToShow = ["id", "display_name", "ip" , "online"];
+    $keysToShow = ["id", "display_name", "ip" , 'mac', "online"];
 
     if ($command === 'report_ansible_hosts') :
+        $keysToShow[] = 'agent_installed';
         $tdata['hosts'] = $hosts->getAnsibleHosts();
     elseif ($command === 'report_ansible_hosts_off') :
+        $keysToShow[] = 'agent_installed';
         $tdata['hosts'] = $hosts->getAnsibleHosts(0);
     elseif ($command === 'report_ansible_hosts_fail') :
+        $keysToShow[] = 'agent_installed';
         $tdata['hosts'] = $hosts->getAnsibleHosts(2);
     elseif ($command === 'report_agents_hosts') :
+        $keysToShow[] = 'ansible_enabled';
+        $keysToShow[] = 'agent_version';
         $tdata['hosts'] = $hosts->getAgentsHosts();
     elseif ($command === 'report_agents_hosts_off') :
+        $keysToShow[] = 'ansible_enabled';
+        $keysToShow[] = 'agent_version';
         $tdata['hosts'] = $hosts->getAgentsHosts(0);
     elseif ($command === 'report_agents_hosts_missing_pings') :
+        $keysToShow[] = 'ansible_enabled';
+        $keysToShow[] = 'agent_version';
+        $tdata['hosts'] = $hosts->getAgentsHosts(0);
         $tdata['hosts'] = $hosts->getAgentsHosts(2);
     elseif ($command === 'report_alerts') :
         $keysToShow[] = 'alert_msg';

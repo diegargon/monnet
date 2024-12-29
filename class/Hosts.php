@@ -759,11 +759,13 @@ class Hosts
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
             endif;
             /* Misc field  fields that we keep in JSON format */
-            if (!empty($this->hosts[$id]['misc'])) {
+            if (!isEmpty($this->hosts[$id]['misc'])) {
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
                 foreach ($misc_values as $key => $value) {
                     if (in_array($key, $this->misc_keys, true)) { //Prevent unused/old keys
-                        if (is_numeric($value)) {
+                        if (in_array($key, ['agent_version'], true)) { //Prevent Version numbers to float
+                            $this->hosts[$id][$key] = (string) $value;
+                        } elseif (is_numeric($value)) {
                             $this->hosts[$id][$key] = (int) $value;
                         } elseif (is_bool($value)) {
                             $this->hosts[$id][$key] = (bool) $value;
@@ -822,6 +824,10 @@ class Hosts
                         $this->update($id, ['online' => 0]);
                     endif;
                 endif;
+            endif;
+
+            if (isset($this->hosts[$id]['misc'])) :
+                unset($this->hosts[$id]['misc']);
             endif;
         } // LOOP FIN
 
