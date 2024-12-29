@@ -116,9 +116,8 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
         $mem_info = unserialize($host['mem_info']);
         $total = $mem_info['total'];
         $used = $mem_info['used'];
-        $legend = 'Mem: ' . $used . '('. $mem_info['percent'] .'%)';
+        $legend = 'Mem: ' . $used . '(' . $mem_info['percent'] . '%)';
         $host['mem_info'] =  ['value' => $used, 'legend' => $legend, 'min' => 0, 'max' => $total];
-
     endif;
 
     if (!empty($host['disks_info'])) :
@@ -144,7 +143,10 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
     endif;
 
     if (!empty($host['agent_installed']) && !empty($host['agent_last_contact'])) :
-        $host['agent_last_contact'] = format_timestamp($host['agent_last_contact'], $cfg['timezone'], $cfg['datetime_format']);
+        $host['agent_last_contact'] = format_timestamp(
+                $host['agent_last_contact'],
+                $cfg['timezone'], $cfg['datetime_format']
+            );
     endif;
 
     return $host;

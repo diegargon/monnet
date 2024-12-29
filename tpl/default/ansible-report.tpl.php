@@ -20,10 +20,11 @@
             <tr>
                 <th>Host</th>
                 <?php
-                $keys = array_keys($tdata['stats'][key($tdata['stats'])]); // Tomamos las claves del primer host
+                // Tomamos las claves del primer host
+                $keys = array_keys($tdata['stats'][key($tdata['stats'])]);
                 foreach ($keys as $key) :
                     ?>
-                    <th><?= is_string($key) ? ucwords($key) : $key; ?></th> <!-- Capitalizamos la primera letra de cada palabra -->
+                    <th><?= is_string($key) ? ucwords($key) : $key; ?></th>
                 <?php endforeach; ?>
             </tr>
         </thead>

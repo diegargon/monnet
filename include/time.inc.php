@@ -115,7 +115,6 @@ function format_timestamp(int $timestamp, string $timezone, string $time_format 
 
         return $date->format($time_format);
     } catch (Exception $e) {
-
         return 'Error: ' . $e->getMessage();
     }
 }

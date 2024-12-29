@@ -357,7 +357,7 @@ function array2Html(array $array, bool $omitEmpty = true): string
  * @return float The value normalized to the 0-100 range.
  */
 
-function floatToPercentage(float $value, float $min = 0.0, float $max = 100.0 ): float
+function floatToPercentage(float $value, float $min = 0.0, float $max = 100.0): float
 {
     if ($min >= $max) :
         throw new InvalidArgumentException("Minimum value must be less than maximum value.");
@@ -394,4 +394,3 @@ function secondsToDHMS(int $seconds): array
         'seconds' => $seconds,
     ];
 }
-

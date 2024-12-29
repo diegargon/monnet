@@ -8,7 +8,7 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-function trigger_update(Database $db, float $db_version, float $files_version): void
+function trigger_update_old(Database $db, float $db_version, float $files_version): void
 {
     Log::notice("Triggered updater File version: $files_version DB version: $db_version");
 
@@ -230,7 +230,7 @@ function trigger_update(Database $db, float $db_version, float $files_version): 
             $db_version = $files_version;
         } catch (Exception $e) {
             $db->query("ROLLBACK");
-            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
     // 0.43
@@ -245,7 +245,7 @@ function trigger_update(Database $db, float $db_version, float $files_version): 
             $db_version = $files_version;
         } catch (Exception $e) {
             $db->query("ROLLBACK");
-            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
     // 0.45
@@ -260,7 +260,7 @@ function trigger_update(Database $db, float $db_version, float $files_version): 
             $db_version = $files_version;
         } catch (Exception $e) {
             $db->query("ROLLBACK");
-            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
 
@@ -268,7 +268,7 @@ function trigger_update(Database $db, float $db_version, float $files_version): 
     if ($db_version < 0.00) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version .' successful');
+            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
@@ -276,7 +276,7 @@ function trigger_update(Database $db, float $db_version, float $files_version): 
             $db_version = $files_version;
         } catch (Exception $e) {
             $db->query("ROLLBACK");
-            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
+            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
 }
@@ -294,7 +294,7 @@ if ($db->isConn()) {
             $files_version = $cfg['monnet_version'];
 
             if ($files_version > $db_version) :
-                trigger_update($db, $db_version, $files_version);
+                trigger_update_old($db, $db_version, $files_version);
             endif;
         endif;
     endif;

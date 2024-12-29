@@ -35,6 +35,10 @@ require_once 'include/feedme.inc.php';
 
 $agent_default_interval = $cfg['agent_default_interval'];
 $request_content = file_get_contents('php://input');
+
+if ($request_content === false) :
+    trigger_feedme_error('Error: file_get_contents');
+endif;
 $request = json_decode($request_content, true);
 
 if (json_last_error() !== JSON_ERROR_NONE) :
@@ -142,12 +146,12 @@ endif;
 
 if ($command === 'notification' && isset($rdata['type']) && $rdata['type'] == 'starting') :
     if (!empty($rdata['ncpu'])) :
-        if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu']) ) :
+        if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
             $host_update_values['ncpu'] = $rdata['ncpu'];
         endif;
     endif;
     if (!empty($rdata['uptime'])) :
-        if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime']) ) :
+        if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime'])) :
             $host_update_values['uptime'] = $rdata['uptime'];
         endif;
     endif;

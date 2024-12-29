@@ -620,20 +620,26 @@ if ($command === 'host-details' && !empty($target_id)) {
         if (!empty($host_details['mem_info']) && is_array($host_details['mem_info'])) :
             $tdata['host_details']['mem_info'] =  $frontend->getTpl(
                 'progressbar',
-                ['progress_bar_data' => [$host_details['mem_info']]]
-                );
+                [
+                    'progress_bar_data' => [$host_details['mem_info']]
+                ]
+            );
         endif;
-        if (!empty($host_details['load_avg']) && is_array ($host_details['load_avg'])) :
+        if (!empty($host_details['load_avg']) && is_array($host_details['load_avg'])) :
             $tdata['host_details']['load_avg'] = $frontend->getTpl(
                 'gauge',
-                ['gauge_graphs' => $host_details['load_avg']]
-                );
+                [
+                    'gauge_graphs' => $host_details['load_avg']
+                ]
+            );
         endif;
-        if (!empty($host_details['disks_info']) && is_array ($host_details['disks_info'])) :
+        if (!empty($host_details['disks_info']) && is_array($host_details['disks_info'])) :
             $tdata['host_details']['disks_info'] = $frontend->getTpl(
                 'progressbar',
-                ['progress_bar_data' => $host_details['disks_info']]
-                );
+                [
+                    'progress_bar_data' => $host_details['disks_info']
+                ]
+        );
         endif;
 
         $data['host_details']['cfg']['place'] = "#left-container";

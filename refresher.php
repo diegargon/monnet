@@ -228,8 +228,7 @@ $results = $db->select('prefs', '*', ['uid' => 0]);
 if ($result) :
     $system_prefs = $db->fetchAll($results);
 
-    foreach ($system_prefs as $sys_pref)
-    {
+    foreach ($system_prefs as $sys_pref) {
         if ($sys_pref['pref_name'] == 'cli_last_run') {
             if (empty($sys_pref['pref_value'])) {
                 $cli_last = 'Never';
