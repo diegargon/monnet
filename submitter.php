@@ -252,21 +252,21 @@ if ($command == 'submitCat' && !empty($target_id)) {
 }
 
 if ($command == 'submitManufacture' && !empty($target_id)) {
-    if (isset($value_command) && is_numeric($value_command)) {
+    if (is_numeric($value_command)) {
         $hosts->update($target_id, ['manufacture' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'Manufacture changed to ' . $value_command;
     }
 }
 if ($command == 'submitMachineType' && !empty($target_id)) {
-    if (isset($value_command) && is_numeric($value_command)) {
+    if (is_numeric($value_command)) {
         $hosts->update($target_id, ['machine_type' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'Machine type changed to ' . $value_command;
     }
 }
 if ($command == 'submitSysAval' && !empty($target_id)) {
-    if (isset($value_command) && is_numeric($value_command)) {
+    if (is_numeric($value_command)) {
         $hosts->update($target_id, ['sys_availability' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'System availability changed to ' . $value_command;
@@ -274,7 +274,7 @@ if ($command == 'submitSysAval' && !empty($target_id)) {
 }
 
 if ($command == 'submitOS' && !empty($target_id)) {
-    if (isset($value_command) && is_numeric($value_command)) {
+    if (is_numeric($value_command)) {
         $hosts->update($target_id, ['os' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'OS changed to ' . $value_command;
@@ -282,7 +282,7 @@ if ($command == 'submitOS' && !empty($target_id)) {
 }
 
 if ($command == 'submitOSVersion' && !empty($target_id)) {
-    if (isset($value_command) && is_numeric($value_command)) :
+    if (is_numeric($value_command)) :
         $hosts->update($target_id, ['os_version' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'OS version changed to ' . $value_command;
@@ -290,7 +290,7 @@ if ($command == 'submitOSVersion' && !empty($target_id)) {
 }
 
 if ($command == 'submitSystemType' && !empty($target_id)) {
-    if (isset($value_command) && is_numeric($value_command)) {
+    if (is_numeric($value_command)) {
         $hosts->update($target_id, ['system_type' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'System Type changed to ' . $value_command;
@@ -397,7 +397,7 @@ if (
     $command == 'addNetwork' &&
     !empty($value_command)
 ) {
-    $decodedJson = json_decode($value_command, true);
+    $decodedJson = json_decode((string) $value_command, true);
 
     if ($decodedJson === null) {
         $data['command_error'] = 1;
@@ -465,7 +465,7 @@ if (
     $command == 'addBookmark' &&
     !empty($value_command)
 ) {
-    $decodedJson = json_decode($value_command, true);
+    $decodedJson = json_decode((string) $value_command, true);
 
     if ($decodedJson === null) {
         $data['command_error'] = 1;
