@@ -1232,6 +1232,7 @@ input:checked + .slider:before {
     padding: 1rem 1rem;
     box-sizing: border-box;
     letter-spacing: -1.5px;
+    word-break: break-word;
 }
 .glow {
     animation: crt-glow 60s infinite;
