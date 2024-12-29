@@ -217,15 +217,14 @@ $data['footer_dropdown'][] = [
     'number-color' => 'red'
 ];
 
-//TODO  system_prefs class?
-//TODO2 Move to ncfg (done remove)
+//TODO2 Move to ncfg
 
 $cli_last = 0;
 $discovery_last = 0;
 
 $results = $db->select('prefs', '*', ['uid' => 0]);
 
-if ($result) :
+if ($results) :
     $system_prefs = $db->fetchAll($results);
 
     foreach ($system_prefs as $sys_pref) {
