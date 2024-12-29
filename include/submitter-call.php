@@ -12,7 +12,7 @@
  *
  * @param AppContext $ctx
  * @param int $hid
- * @return array<string, string|int>
+ * @return array<string, mixed>|null
  */
 function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 {

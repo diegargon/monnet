@@ -57,9 +57,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             . "SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL; ");
         $db->query("ALTER TABLE `users` CHANGE `timezone` `timezone` CHAR(32) CHARACTER "
             . "SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL; ");
-
-        Log::info("Update version to 0.34 successful");
         $db->query("UPDATE prefs SET pref_value='0.34' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        Log::info("Update version to 0.34 successful");
         $db_version = 0.34;
     }
 
@@ -86,8 +85,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         $db->query("ALTER TABLE `items` CHANGE `cat_id` `cat_id` INT NOT NULL DEFAULT '50';");
         $db->query("UPDATE `items` SET `uid` = '1' WHERE `items`.`type` = 'bookmarks';");
         $db->query("UPDATE `notes` SET `uid` = '1';");
-        Log::info("Update version to 0.35 successful");
         $db->query("UPDATE prefs SET pref_value='0.35' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
+        Log::info("Update version to 0.35 successful");
         $db_version = 0.35;
     }
 
@@ -101,9 +100,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         $db->query("ALTER TABLE `hosts` DROP `codename`;");
         $db->query("ALTER TABLE `items` DROP `relate_to_host`;");
         $db->query("ALTER TABLE `hosts` ADD `alert_msg` VARCHAR(255) NULL DEFAULT NULL AFTER `warn_mail`;");
-        Log::info("Update version to 0.36 successful");
         $db->query("UPDATE prefs SET pref_value='0.36' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("COMMIT");
+        Log::info("Update version to 0.36 successful");
         $db_version = 0.36;
     }
     // 0.37
@@ -122,19 +120,17 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         $db->query("ALTER TABLE `config` ADD PRIMARY KEY (`id`);");
         $db->query("ALTER TABLE config ADD UNIQUE (ckey);");
         $db->query("ALTER TABLE `config` MODIFY `id` int NOT NULL AUTO_INCREMENT;");
-        Log::info("Update version to 0.37 successful");
         $db->query("UPDATE prefs SET pref_value='0.37' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("COMMIT");
+        Log::info("Update version to 0.37 successful");
         $db_version = 0.37;
     }
     // 0.38
     if ($db_version < 0.38) {
         $db->query("ALTER TABLE `hosts` ADD `alert_msg` CHAR(255) NULL DEFAULT NULL AFTER `warn_mail`;");
         $db->query("DROP TABLE `cmd`;");
-        Log::info("Update version to 0.38 successful");
         $db->query("UPDATE prefs SET pref_value='0.38' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("COMMIT");
         $db_version = 0.38;
+        Log::info("Update version to 0.38 successful");
     }
     // 0.39
     if ($db_version < 0.39) {
@@ -172,9 +168,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 KEY `host_id` (`host_id`)
             );"
         );
-        Log::info("Update version to 0.39 successful");
+
         $db->query("UPDATE prefs SET pref_value='0.39' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("COMMIT");
+        Log::info("Update version to 0.39 successful");
         $db_version = 0.39;
     }
     // 0.40
@@ -196,9 +192,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             ('refreshing', JSON_QUOTE('0'), 1, 0, NULL, 0), /* Track if someone is logged/refreshing */
             ('db_monnet_version', JSON_QUOTE('0.40'), 0, 0, NULL, 0);
         ");
-        Log::info("Update version to 0.40 successful");
         $db->query("UPDATE prefs SET pref_value='0.40' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1");
-        $db->query("COMMIT");
+        Log::info("Update version to 0.40 successful");
         $db_version = 0.40;
     }
 
@@ -206,13 +201,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.42) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
@@ -223,13 +218,14 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
+            $db->query("ALTER TABLE `networks` ADD `pool` TINYINT NOT NULL DEFAULT '0' AFTER `scan`;");
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
@@ -239,13 +235,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
@@ -255,13 +251,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
