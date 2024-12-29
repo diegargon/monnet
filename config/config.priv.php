@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.42;
-$cfg['monnet_revision'] = 26;
+$cfg['monnet_revision'] = 27;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_min_version'] = 0.22;
 $cfg['agent_latest_version'] = 0.52;
@@ -291,7 +291,7 @@ $cfg['playbooks'] = [
         'cat' => ['posix'],
     ],
     [
-        'name' => 'linux-df',
+        'name' => 'cmd-df-linux',
         'desc' => 'Obtener información de particiones reales',
         'cat' => ['posix'],
     ],
@@ -345,11 +345,6 @@ $cfg['playbooks'] = [
         'cat' => ['posix'],
     ],
     [
-        'name' => 'test',
-        'desc' => 'Playbook que no hace nada',
-        'cat' => ['posix', 'windows'],
-    ],
-    [
         'name' => 'uptime-facts',
         'desc' => 'Get uptime facts from all hosts',
         'cat' => ['posix'],
@@ -384,8 +379,8 @@ $cfg['playbooks'] = [
         'cat' => ['posix', 'windows'],
     ],
     [
-        'name' => 'install-monnet-agent-linux',
-        'desc' => 'Install Monnet Agent on Linux',
-        'cat' => ['posix'],
-    ],
+        'name' => 'test',
+        'desc' => 'Playbook que no hace nada',
+        'cat' => ['posix', 'windows'],
+    ]
 ];

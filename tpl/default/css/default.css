@@ -884,8 +884,8 @@ input:checked + .slider:before {
     border: 0px solid #0E9700;
     margin: 0;
     padding: 5px 0px 5px 5px;
-    resize: both;
-    overflow-y: scroll;
+    /* resize: both; */
+    /* overflow-y: scroll; */
 
 }
 
@@ -1485,7 +1485,7 @@ input:checked + .slider:before {
     text-indent: 4em;
 }
 
-#html_lines button {
+#playbook_content button {
     padding: 0;
     font-size: 13px;
     margin: 4px;

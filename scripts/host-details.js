@@ -313,25 +313,20 @@ function requestHostDetails(command, command_values = []) {
                 if (jsonData.command_receive === 'playbook_exec') {
                     if (jsonData.command_success === 1) {
                         if (jsonData.as_html) {
-                            $('#html_lines').html(jsonData.response_msg);
-                            $('#html_lines').css({
-                                "overflow": "auto",
-                                "resize": "both",
-                                "height": "200px",
-                            });
+                            $('#playbook_content').html(jsonData.response_msg);
                         } else {
-                            $('#raw_lines').html(JSON.stringify(jsonData.response_msg, null, 2));
-                            //$('#raw_lines').html(jsonData.response_msg);
-                            $('#raw_lines').css({
-                                "width": "600px",
-                                "overflow": "auto",
-                                "height": "200px",
-                                "resize": "both"
-                            });
+                            // Raw Json
+                            $('#playbook_content').html(`<pre>${JSON.stringify(jsonData.response_msg, null, 2)}</pre>`);
                         }
 
+                        $('#playbook_content').css({
+                            "max-width": "80vw",
+                            "max-height": "50vh",
+                            "overflow": "auto",
+                            "resize": "both"
+                        });
                     } else {
-                        $('#raw_lines').html(jsonData.command_error_msg);
+                        $('#playbook_content').html(jsonData.command_error_msg);
                     }
                 }
             })
