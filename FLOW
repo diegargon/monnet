@@ -1,4 +1,4 @@
-index
+index   (Web UI)
     common
         config.*
         Filters
@@ -14,26 +14,29 @@ index
         User
         Frontend (included)
 
-monnet_cli
+monnet_cli (Do CLI tasks)
     climode
         config (default)
         common
             -
-    cron
+    cron jobs
 
-monnet-discovery
+monnet-discovery (Scan networks)
     climode
-        -
+        - *
     ping_nets
 
-refresher
+refresher (refresh web data)
     common
-        -
+        - *
     usermode
-        -
+        - *
 
-submitter
+submitter (submit web data)
     common
-        -
+        - *
     usermode
         -
+feedme  (submit agents data)
+    common
+        - *
