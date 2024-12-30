@@ -102,13 +102,7 @@
                     if (jsonData.command_receive === 'remove_host' && !jsonData.command_error) {
                         $('#host-details').remove();
                     }
-                    if (jsonData.command_receive === 'addNetwork' ) {
-                        if (!jsonData.command_error) {
-                            $('#add-network-container').remove();
-                        } else {
-                            $('#network_status_msg').append(jsonData.command_error_msg);
-                        }
-                    }
+
                     if (jsonData.command_receive === 'submitHost' ) {
                         if (!jsonData.command_error) {
                           closeStdContainer();
@@ -167,6 +161,7 @@
                             "overflow": "auto"
                         });
                     }
+                    /* Mgmt Bookmark */
                     if (
                             jsonData.command_receive === 'mgmtBookmark' &&
                             jsonData.command_success > 0
@@ -181,6 +176,24 @@
                         var mgmtBookmark = $(position).find("#mgmt-bookmark-container");
                         makeDraggable(mgmtBookmark);
                         mgmtBookmark.css('display', 'block');
+                    }
+                    /* Mgmt Networks */
+                    if (jsonData.command_receive === 'mgmtNetworks') {
+                        if (jsonData.command_success > 0) {
+                            $('#mgmt-network-container').remove();
+                            if ($.isEmptyObject(jsonData.mgmt_networks.cfg)) {
+                                console.log('Error en la solicitud mgmt-bookmark:');
+                                return;
+                            }
+                            let position = jsonData.mgmt_networks.cfg.place;
+                            $(position).prepend(jsonData.mgmt_networks.data);
+                            var mgmtNetwork = $(position).find("#mgmt-network-container");
+                            makeDraggable(mgmtNetwork);
+                            mgmtNetwork.css('display', 'block');
+                        }
+                        if (jsonData.command_error_msg){
+                            $("#network_status_msg").html(jsonData.command_error_msg);
+                        }
                     }
                     /* Success */
                     if (

@@ -1,8 +1,6 @@
 ** HIGH
 
 * Agent: metodo para no spamear los logs si falla un ping
-* No hay forma de borrar una red
-    Añadir opcion y tambien para poder marcar como "proveedor de ips para IPAM"
 * Migrar Mysql a NewDatabase
 * Migrar cfg a Config
 * migrar lng a Lang

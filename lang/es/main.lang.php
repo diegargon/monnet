@@ -101,6 +101,8 @@ $lng = [
     'L_HOSTS_OFF' => 'Host Off',
     'L_HYPERVISOR' => 'Hypervisor',
     'L_HOURS' => 'Horas',
+    //I
+    'L_IP_POOL' => 'Ip Pool',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',
@@ -133,6 +135,7 @@ $lng = [
     'L_MACHINE_TYPE' => 'Tipo de maquina',
     'L_MAXIMIZE' => 'Maximize',
     'L_MINUTES' => 'Minutes',
+    'L_MISC' => 'Misc',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',
@@ -203,6 +206,7 @@ $lng = [
     'L_URLIP' => 'Url o IP',
     'L_UNCATEGORIZED' => 'NoCat',
     'L_UPDATED' => 'Updated',
+    'L_UPDATE' => 'Update',
     //V
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',

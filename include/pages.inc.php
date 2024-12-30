@@ -190,12 +190,6 @@ function page_index(AppContext $ctx): array
         'place' => 'center_col',
     ];
 
-    /* Add Network Item */
-    $page['load_tpl'][] = [
-        'file' => 'add-network',
-        'place' => 'center_col',
-    ];
-
     /* Host Cat */
     $page['load_tpl'][] = [
         'file' => 'categories-host',

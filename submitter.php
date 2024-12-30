@@ -57,25 +57,27 @@ $tdata['theme'] = $cfg['theme'];
 
  */
 $command = Filters::postString('command');
-if (empty($command)) {
+if (empty($command)) :
     $data['command_error'] = 1;
     $data['command_error_msg'] = 'Command is empty or not a string';
-}
+else :
+    $command = trim($command);
+endif;
 
 $command_values = Filters::sanArray('command_values', 'post');
 
-if (empty($command_values)) {
+if (empty($command_values)) :
     $data['command_error'] = 1;
     $data['command_error_msg'] = 'Command values is empty or not an array';
-}
+endif;
 
 //ID is mandatory, must send 0 if not apply
-if (!isset($command_values['id'])) {
+if (!isset($command_values['id'])) :
     $data['command_error'] = 1;
     $data['command_error_msg'] = 'Id field is mandatory';
-} else {
+else :
     $target_id = Filters::varInt($command_values['id']);
-}
+endif;
 
 if ($command == 'saveNote') {
     $value_command = Filters::varUTF8($command_values['value']);
@@ -83,8 +85,10 @@ if ($command == 'saveNote') {
     $value_command = Filters::varCustomString($command_values['value'], ',/', 255);
 } elseif ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
     $value_command = Filters::varInt($command_values['value']);
-} elseif ($command == 'addNetwork') {
-    $value_command = Filters::varJson($command_values['value']);
+} elseif ($command == 'mgmtNetworks') {
+    if (!empty($command_values['value'])):
+        $value_command = Filters::varJson($command_values['value']);
+    endif;
 } elseif ($command == 'addBookmark') {
     $value_command = Filters::varJson($command_values['value']);
 } elseif ($command == 'updateBookmark') {
@@ -143,7 +147,7 @@ endif;
   */
 
 /* Remove host */
-if ($command === 'remove_host' && $target_id) {
+if ($command === 'remove_host' && $target_id) :
     $hosts->remove($target_id);
     //no host_details
     $user->setPref('host_details', 0);
@@ -151,41 +155,40 @@ if ($command === 'remove_host' && $target_id) {
     $data['force_hosts_refresh'] = 1;
     $data['response_msg'] = 'Host removed: ' . $target_id;
     $command = $target_id = '';
-}
+endif;
 
-if ($command === 'network_select' && !empty($value_command)) {
+if ($command === 'network_select' && !empty($value_command)) :
     $pref_name = 'network_select_' . $value_command;
     $user->setPref($pref_name, 1);
     $data['command_success'] = 1;
     $data['force_hosts_refresh'] = 1;
     $data['response_msg'] = 'Network Select';
-}
-if ($command === 'network_unselect' && !empty($value_command)) {
+endif;
+
+if ($command === 'network_unselect' && !empty($value_command)) :
     $pref_name = 'network_select_' . $value_command;
     $user->setPref($pref_name, 0);
     $data['command_success'] = 1;
     $data['force_hosts_refresh'] = 1;
     $data['response_msg'] = 'Network Unselect';
-}
+endif;
 
-if ($command == 'toggleDisablePing' && !empty($target_id)) {
+if ($command == 'toggleDisablePing' && !empty($target_id)) :
     $hosts->update($target_id, ['disable_ping' => $value_command]);
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
     $data['response_msg'] = 'ok';
-}
+endif;
 
-if ($command == 'setCheckPorts' && !empty($value_command) && !empty($target_id)) {
+if ($command == 'setCheckPorts' && !empty($value_command) && !empty($target_id)) :
     // 1 ping 2 TCP/UDP
-//    ($value_command == 0) ? $value = 1 : $value = 2;
-
     $hosts->update($target_id, ['check_method' => $value_command]);
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
     $data['response_msg'] = 'ok';
-}
+endif;
 
-if ($command == 'submitHostToken' && !empty($target_id)) {
+if ($command == 'submitHostToken' && !empty($target_id)) :
     if ($hosts->createHostToken()) :
         $data['response_msg'] = 'Token Created';
         $data['command_success'] = 1;
@@ -193,7 +196,8 @@ if ($command == 'submitHostToken' && !empty($target_id)) {
         $data['command_success'] = 0;
         $data['error_msg'] = 'Error creating token';
     endif;
-}
+endif;
+
 if ($command == 'submitScanPorts' && !empty($target_id)) {
     $success_msg = '';
     if (!empty($value_command)) {
@@ -216,86 +220,88 @@ if ($command == 'submitScanPorts' && !empty($target_id)) {
     $data['response_msg'] = 'ok';
 }
 
-if ($command == 'submitTitle' && !empty($target_id)) {
-    if (!empty($value_command)) {
+if ($command == 'submitTitle' && !empty($target_id)) :
+    if (!empty($value_command)) :
         $hosts->update($target_id, ['title' => $value_command]);
         $data['command_success'] = 1;
         $data['force_hosts_refresh'] = 1;
         $data['response_msg'] = 'ok';
-    }
-}
+    endif;
+endif;
 
-if ($command == 'submitOwner' && !empty($target_id)) {
-    if (!empty($value_command)) {
+if ($command == 'submitOwner' && !empty($target_id)) :
+    if (!empty($value_command)) :
         $hosts->update($target_id, ['owner' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'ok';
-    }
-}
+    endif;
+endif;
 
-if ($command == 'submitHostTimeout' && !empty($target_id)) {
-    if (!empty($value_command)) {
+if ($command == 'submitHostTimeout' && !empty($target_id)) :
+    if (!empty($value_command)) :
         $hosts->update($target_id, ['timeout' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'ok';
-    }
-}
+    endif;
+endif;
 
 // Change Host Cat
-if ($command == 'submitCat' && !empty($target_id)) {
-    if (!empty($value_command)) {
+if ($command == 'submitCat' && !empty($target_id)) :
+    if (!empty($value_command)) :
         $hosts->update($target_id, ['category' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'Category changed to ' . $value_command;
         $data['force_hosts_refresh'] = 1;
-    }
-}
+    endif;
+endif;
 
-if ($command == 'submitManufacture' && !empty($target_id)) {
-    if (is_numeric($value_command)) {
+if ($command == 'submitManufacture' && !empty($target_id)) :
+    if (is_numeric($value_command)) :
         $hosts->update($target_id, ['manufacture' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'Manufacture changed to ' . $value_command;
-    }
-}
-if ($command == 'submitMachineType' && !empty($target_id)) {
-    if (is_numeric($value_command)) {
+    endif;
+endif;
+
+if ($command == 'submitMachineType' && !empty($target_id)) :
+    if (is_numeric($value_command)) :
         $hosts->update($target_id, ['machine_type' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'Machine type changed to ' . $value_command;
-    }
-}
-if ($command == 'submitSysAval' && !empty($target_id)) {
-    if (is_numeric($value_command)) {
+    endif;
+endif;
+
+if ($command == 'submitSysAval' && !empty($target_id)) :
+    if (is_numeric($value_command)) :
         $hosts->update($target_id, ['sys_availability' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'System availability changed to ' . $value_command;
-    }
-}
+    endif;
+endif;
 
-if ($command == 'submitOS' && !empty($target_id)) {
-    if (is_numeric($value_command)) {
+if ($command == 'submitOS' && !empty($target_id)) :
+    if (is_numeric($value_command)) :
         $hosts->update($target_id, ['os' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'OS changed to ' . $value_command;
-    }
-}
+    endif;
+endif;
 
-if ($command == 'submitOSVersion' && !empty($target_id)) {
+if ($command == 'submitOSVersion' && !empty($target_id)) :
     if (is_numeric($value_command)) :
         $hosts->update($target_id, ['os_version' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'OS version changed to ' . $value_command;
     endif;
-}
+endif;
 
-if ($command == 'submitSystemType' && !empty($target_id)) {
-    if (is_numeric($value_command)) {
+if ($command == 'submitSystemType' && !empty($target_id)) :
+    if (is_numeric($value_command)) :
         $hosts->update($target_id, ['system_type' => $value_command]);
         $data['command_success'] = 1;
         $data['response_msg'] = 'System Type changed to ' . $value_command;
-    }
-}
+    endif;
+endif;
 
 if ($command === 'submitAccessLink' && !empty($target_id)) {
     $success = 0;
@@ -312,11 +318,11 @@ if ($command === 'submitAccessLink' && !empty($target_id)) {
         }
     }
     //clear_field
-    if (empty($command_values['value'])) {
+    if (empty($command_values['value'])) :
         $hosts->update($target_id, ['access_link' => $value_command]);
         $data['response_msg'] = "link cleared";
         $success = 1;
-    }
+    endif;
     $data['command_success'] = $success;
 }
 
@@ -334,27 +340,26 @@ if ($command == 'show_host_only_cat' && !empty($target_id)) {
     $categories_state = $user->getHostsCatState();
 
     $ones = 0;
-    foreach ($categories_state as $state) {
-        if ($state == 1) {
-            $ones++;
-        }
-    }
+    foreach ($categories_state as $state) :
+        $state == 1 ?  $ones++ : null;
+    endforeach;
 
-    if (empty($categories_state) || $ones == 1) {
+    if (empty($categories_state) || $ones == 1) :
         $user->turnHostsCatsOn();
-    } else {
+    else :
         $user->turnHostsCatsOff();
         $user->toggleHostsCat($target_id);
-    }
+    endif;
+
     $data['command_success'] = 1;
     $data['force_hosts_refresh'] = 1;
 }
 
-if ($command == 'show_host_cat' && !empty($target_id)) {
+if ($command == 'show_host_cat' && !empty($target_id)) :
     $user->toggleHostsCat($target_id);
     $data['command_success'] = 1;
     $data['force_hosts_refresh'] = 1;
-}
+endif;
 
 if (
     $command == 'show_host_cat' ||
@@ -390,74 +395,6 @@ if (
 
 /* /end Host Cat */
 
-/** @var array<string> $new_network */
-$new_network = [];
-/* ADD NETWORK */
-if (
-    $command == 'addNetwork' &&
-    !empty($value_command)
-) {
-    $decodedJson = json_decode((string) $value_command, true);
-
-    if ($decodedJson === null) {
-        $data['command_error'] = 1;
-        $data['command_error_msg'] .= 'JSON Invalid';
-    } else {
-        foreach ($decodedJson as $key => $dJson) {
-            ($key == 'networkVLAN') ? $key = 'vlan' : null;
-            ($key == 'networkScan') ? $key = 'scan' : null;
-            ($key == 'networkName') ? $key = 'name' : null;
-            $new_network[$key] = trim($dJson);
-        }
-        if ($new_network['networkCIDR'] == 0 && $new_network['network'] != '0.0.0.0') {
-            $data['command_error'] = 1;
-            $data['command_error_msg'] .= $lng['L_MASK'] .
-                ' ' . $new_network['networkCIDR'] .
-                ' ' . $lng['L_NOT_ALLOWED'] . '<br/>';
-        }
-        $network_plus_cidr = $new_network['network'] . '/' . $new_network['networkCIDR'];
-        unset($new_network['networkCIDR']);
-        $new_network['network'] = $network_plus_cidr;
-
-        if (!Filters::varNetwork($network_plus_cidr)) {
-            $data['command_error'] = 1;
-            $data['command_error_msg'] .= $lng['L_NETWORK'] . ' ' . $lng['L_INVALID'] . '<br/>';
-        }
-        if (!is_numeric($new_network['vlan'])) {
-            $data['command_error'] = 1;
-            $data['command_error_msg'] .= 'VLAN ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
-        }
-        if (!is_numeric($new_network['scan'])) {
-            $data['command_error_msg'] .= 'Scan ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
-        }
-
-        $networks_list = $ctx->get('Networks')->getNetworks();
-        foreach ($networks_list as $net) {
-            if ($net['name'] == $new_network['name']) {
-                $data['command_error'] = 1;
-                $data['command_error_msg'] = 'Name must be unique<br/>';
-            }
-            if ($net['network'] == $network_plus_cidr) {
-                $data['command_error'] = 1;
-                $data['command_error_msg'] = 'Network must be unique<br/>';
-            }
-        }
-        if (
-            str_starts_with($new_network['network'], "0") ||
-            !$ctx->get('Networks')->isLocal($new_network['network'])
-        ) {
-            $new_network['vlan'] = 0;
-            $new_network['scan'] = 0;
-        }
-
-        if (empty($data['command_error_msg'])) {
-            $ctx->get('Networks')->addNetwork($new_network);
-            $data['command_success'] = 1;
-            $data['response_msg'] = 'ok';
-        }
-    }
-}
-
 /* ADD Bookmark */
 /** @var array<string> $new_bookmark */
 $new_bookmark = [];
@@ -471,60 +408,60 @@ if (
         $data['command_error'] = 1;
         $data['command_error_msg'] .= 'JSON Invalid<br/>';
     } else {
-        foreach ($decodedJson as $key => $dJson) {
+        foreach ($decodedJson as $key => $dJson) :
             $new_bookmark[$key] = trim($dJson);
-        }
+        endforeach;
 
-        if (!Filters::varString($new_bookmark['name'])) {
+        if (!Filters::varString($new_bookmark['name'])) :
             $data['command_error_msg'] .= "{$lng['L_NAME']}: {$lng['L_ERROR_EMPTY_INVALID']}";
-        }
-        if (!Filters::varString($new_bookmark['image_type'])) {
+        endif;
+        if (!Filters::varString($new_bookmark['image_type'])) :
             $data['command_error'] = 1;
             $data['command_error_msg'] .= "{$lng['L_IMAGE_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}";
-        }
-        if (!Filters::varInt($new_bookmark['cat_id'])) {
+        endif;
+        if (!Filters::varInt($new_bookmark['cat_id'])) :
             $data['command_error_msg'] .= "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}";
-        }
+        endif;
 
         if (
             !Filters::varUrl($new_bookmark['urlip']) ||
             Filters::varIP($new_bookmark['urlip'])
-        ) {
+        ) :
             $data['command_error_msg'] = "{$lng['L_URLIP']}:{$lng['L_ERROR_EMPTY_INVALID']}";
-        }
+        endif;
 
         if (
             (!Filters::varInt($new_bookmark['weight'])) &&
             (Filters::varInt($new_bookmark['weight']) !== 0)
-        ) {
+        ) :
             $data['command_error_msg'] = "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}";
-        }
+        endif;
 
-        if ($new_bookmark['image_type'] === 'local_img') {
-            if (empty($new_bookmark['field_img'])) {
+        if ($new_bookmark['image_type'] === 'local_img') :
+            if (empty($new_bookmark['field_img'])) :
                 $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
-            } else {
-                if (!Filters::varCustomString($new_bookmark['field_img'], '.', 255) || !file_exists('bookmark_img/')) {
+            else :
+                if (!Filters::varCustomString($new_bookmark['field_img'], '.', 255) || !file_exists('bookmark_img/')) :
                     $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
-                }
-            }
-        }
+                endif;
+            endif;
+        endif;
 
-        if ($new_bookmark['image_type'] == 'url' && !empty($new_bookmark['field_img'])) {
-            if (!Filters::varUrl($new_bookmark['field_img'])) {
+        if ($new_bookmark['image_type'] == 'url' && !empty($new_bookmark['field_img'])) :
+            if (!Filters::varUrl($new_bookmark['field_img'])) :
                 $data['command_error_msg'] = "{$lng['L_ERROR_URL_INVALID']}";
-            }
-        }
+            endif;
+        endif;
 
-        if (empty($data['command_error_msg'])) {
-            if ($ctx->get('Items')->addItem('bookmarks', $new_bookmark)) {
+        if (empty($data['command_error_msg'])) :
+            if ($ctx->get('Items')->addItem('bookmarks', $new_bookmark)) :
                 $data['response_msg'] = 'ok';
-            } else {
+            else :
                 $data['response_msg'] = 'error';
-            }
-        } else {
+            endif;
+        else:
             $data['command_error'] = 1;
-        }
+        endif;
 
         $data['command_success'] = 1;
     }
@@ -538,9 +475,9 @@ if ($command == 'updateBookmark' && !empty($value_command) && $target_id > 0) {
         $data['command_error'] = 1;
         $data['command_error_msg'] .= 'JSON Invalid';
     } else {
-        foreach ($decodedJson as $key => $dJson) {
+        foreach ($decodedJson as $key => $dJson) :
             $bookmark[$key] = trim($dJson);
-        }
+        endforeach;
 
         if (!Filters::varString($bookmark['name'])) {
             $data['command_error_msg'] .= "{$lng['L_NAME']}: {$lng['L_ERROR_EMPTY_INVALID']}";
@@ -687,7 +624,7 @@ if ($command == 'removeBookmark' && !empty($target_id)) {
     $data['command_success'] = 1;
 }
 
-if ($command == "mgmtBookmark" && !empty($target_id)) {
+if ($command == 'mgmtBookmark' ) {
     if (empty($categories)) :
         $categories = $ctx->get('Categories');
     endif;
@@ -718,9 +655,39 @@ if ($command == "mgmtBookmark" && !empty($target_id)) {
     $data['response_msg'] = $target_id;
     $data['mgmt_bookmark']['cfg']['place'] = "#left-container";
     $data['mgmt_bookmark']['data'] = $frontend->getTpl('mgmt-bookmark', $tdata);
-    $data['command_success'] = $target_id;
+    $data['command_success'] = 1;
 }
 /* /END Bookmarks */
+
+/* Networks MGMT */
+if ($command == "mgmtNetworks") :
+    $networks = $ctx->get('Networks');
+
+    if (!empty($command_values['action']) && is_numeric($target_id)) :
+        if ($command_values['action'] === 'remove') :
+            $networks->removeNetwork($target_id);
+        endif;
+
+        if ($command_values['action'] === 'update' || $command_values['action'] === 'add') :
+            $decodedJson = json_decode((string) $value_command, true);
+            $append_data = validateNetworkData($ctx, $command_values['action'], $decodedJson);
+            $data = array_merge($data, $append_data);
+        endif;
+
+    endif;
+    $f_networks =  $networks->getNetworks();
+    foreach( $f_networks as $nid => $network):
+        list($ip, $cidr) = explode('/', $network['network']);
+        $f_networks[$nid]['ip'] = $ip;
+        $f_networks[$nid]['cidr'] = $cidr;
+    endforeach;
+    $tdata = [];
+    $tdata['networks'] = $f_networks;
+    $tdata['networks_table'] =  $frontend->getTpl('networks-table', $tdata);
+    $data['mgmt_networks']['cfg']['place'] = "#left-container";
+    $data['mgmt_networks']['data'] = $frontend->getTpl('mgmt-networks', $tdata);
+    $data['command_success'] = 1;
+endif;
 
 /* Host and Bookmarks create category */
 if (

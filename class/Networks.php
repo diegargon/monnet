@@ -38,6 +38,7 @@ class Networks
         if (!isset($this->networks)) {
             $this->loadNetworks();
         }
+
         return $this->networks;
     }
 
@@ -91,6 +92,41 @@ class Networks
     {
         $db = $this->ctx->get('Mysql');
         $db->insert('networks', $set);
+        $id = $db->insertID();
+        $this->networks[$id]['id'] = $id;
+        foreach ($set as $key => $value):
+            $this->networks[$id][$key] = $value;
+        endforeach;
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param array<string|int,string> $set
+     * @return void
+     */
+    public function updateNetwork(int $id, array $set): void
+    {
+        $db = $this->ctx->get('Mysql');
+        $db->upsert('networks', $set, ['id' => $id]);
+        foreach ($set as $key => $value):
+            $this->networks[$id][$key] = $value;
+        endforeach;
+    }
+
+    /**
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function removeNetwork(int $id): bool
+    {
+        $db = $this->ctx->get('Mysql');
+        $query = "DELETE FROM networks WHERE id=$id";
+        $db->query($query);
+        unset($this->networks[$id]);
+
+        return true;
     }
 
     /**
@@ -228,6 +264,7 @@ class Networks
                     'name' => $net['name'],
                     'vlan' => (int) $net['vlan'],
                     'scan' => (int) $net['scan'],
+                    'weight' => (int) $net['weight'],
                     'disable' => (int) $net['disable'],
                 ];
                 if ($fnet['disable'] === 0) {

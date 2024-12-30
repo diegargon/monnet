@@ -17,7 +17,6 @@
 function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 {
     $hosts = $ctx->get('Hosts');
-    $db = $ctx->get('Mysql');
     $cfg = $ctx->get('cfg');
     $user = $ctx->get('User');
     $lng = $ctx->get('lng');
@@ -205,4 +204,98 @@ function get_host_metrics(AppContext $ctx, int $host_id): array
     endif;
 
     return [];
+}
+
+/**
+ *
+ * @param AppContext $ctx
+ * @param string $action
+ * @param array<string,string|int> $network_values
+ * @return array
+ */
+function validateNetworkData(AppContext $ctx, string $action, array $network_values): array
+{
+    $lng = $ctx->get('lng');
+    $data['command_error_msg'] = null;
+
+    if ($network_values === null) {
+        $data['command_error'] = 1;
+        $data['command_error_msg'] .= 'JSON Invalid';
+
+        return $data;
+    }
+
+    foreach ($network_values as $key => $dJson) {
+        ($key == 'networkVLAN') ? $key = 'vlan' : null;
+        ($key == 'networkScan') ? $key = 'scan' : null;
+        ($key == 'networkName') ? $key = 'name' : null;
+        ($key == 'networkDisable') ? $key = 'disable': null;
+        ($key == 'networkPool') ? $key = 'pool' : null;
+        ($key == 'networkWeight') ? $key = 'weight' : null;
+        $new_network[$key] = trim($dJson);
+    }
+    if ($new_network['networkCIDR'] == 0 && $new_network['network'] != '0.0.0.0') {
+        $data['command_error'] = 1;
+        $data['command_error_msg'] .= $lng['L_MASK'] .
+            ' ' . $new_network['networkCIDR'] .
+            ' ' . $lng['L_NOT_ALLOWED'] . '<br/>';
+        return $data;
+    }
+
+    $network_plus_cidr = $new_network['network'] . '/' . $new_network['networkCIDR'];
+    unset($new_network['networkCIDR']);
+    $new_network['network'] = $network_plus_cidr;
+
+    if (!Filters::varNetwork($network_plus_cidr)) :
+        $data['command_error'] = 1;
+        $data['command_error_msg'] .= $lng['L_NETWORK'] . ' ' . $lng['L_INVALID'] . '<br/>';
+    endif;
+    if (!is_numeric($new_network['vlan'])) :
+        $data['command_error'] = 1;
+        $data['command_error_msg'] .= 'VLAN ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
+    endif;
+    if (!is_numeric($new_network['scan'])) :
+        $data['command_error_msg'] .= 'Scan ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
+    endif;
+
+    $networks_list = $ctx->get('Networks')->getNetworks();
+    foreach ($networks_list as $net) {
+        if ($net['name'] == $new_network['name']) {
+            if (
+                $action !== 'update' ||
+                ((int)$net['id'] !== (int)$new_network['id'])
+                ) :
+                $data['command_error'] = 1;
+                $data['command_error_msg'] = 'Name must be unique<br/>';
+            endif;
+        }
+        if ($net['network'] == $network_plus_cidr) {
+            if (
+                $action !== 'update' ||
+                ((int)$net['id'] !== (int)$new_network['id'])
+                ) :
+                $data['command_error'] = 1;
+                $data['command_error_msg'] = 'Network must be unique<br/>';
+            endif;
+        }
+    }
+    if (
+        str_starts_with($new_network['network'], "0") ||
+        !$ctx->get('Networks')->isLocal($new_network['network'])
+    ) :
+        $new_network['vlan'] = 0;
+        $new_network['scan'] = 0;
+    endif;
+
+    if (empty($data['command_error_msg'])) {
+        if ($action === 'add') :
+            $ctx->get('Networks')->addNetwork($new_network);
+        endif;
+        if ($action === 'update') :
+            $ctx->get('Networks')->updateNetwork($new_network['id'], $new_network);
+        endif;
+        $data['response_msg'] = 'ok';
+    }
+
+    return $data;
 }

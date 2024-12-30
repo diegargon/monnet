@@ -46,7 +46,7 @@
         <legend class="ctrl_legend"><?= $lng['L_ADD'] ?></legend>
         <div class="bookmarks_ctrl">
             <button id="submitBookmark"
-                    onclick="submitCommand('mgmtBookmark',{id: 38, action: 'add'})"
+                    onclick="submitCommand('mgmtBookmark',{id: 0, action: 'add'})"
                     class="button-ctrl" type="submit">
                 <img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>">
             </button>
@@ -59,9 +59,11 @@
             <span class="opt_labels"><?= $lng['L_REMOTE_HOST'] ?></span>
         </div>
         <div class="general_ctrl">
-            <button id="addNetwork" class="button-ctrl" type="submit">
+            <button id="addNetwork"
+                    onclick="submitCommand('mgmtNetworks',{id: 0, action: 'mgmt'})"
+                    class="button-ctrl" type="submit">
                 <img class="add_link"
-                     src="./tpl/default/img/add.png" title="<?= $lng['L_NETWORK'] ?>">
+                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_NETWORK'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_NETWORKS'] ?></span>
         </div>

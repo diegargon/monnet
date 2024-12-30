@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -29,7 +29,7 @@
                 <td><label for="networkName"><?= $lng['L_NAME'] ?>:</label></td>
                 <td>
                     <input type="text" id="networkName" name="networkName" size="32"
-                           maxlength="255" required
+                           maxlength="32" required
                            value="<?= !empty($tdata['networkName']) ? $tdata['networkName'] : null ?>"
                     >
                 </td>
@@ -81,7 +81,8 @@
                 </td>
             </tr>
         </table>
-        <button id="submitNetwork" type="submit"/><?= $lng['L_SEND'] ?></button>
+        <button id="submitNetwork" type="submit"><?= $lng['L_SEND'] ?></button>
     </div>
+    <?= !empty($tdata['networks_table']) ? $tdata['networks_table'] : 'hola';?>
 </div>
 

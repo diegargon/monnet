@@ -101,10 +101,6 @@ $(document).ready(function () {
         }
     });
 
-    $("#close_mgmtbookmark").on("click", function () {
-        $("#mgmt-bookmark-container").css("display", "none");
-    });
-
     $("#addHostBox").on("click", function () {
         var title = $(this).data("title");
         $("#stdbox-container").css("display", "block");
@@ -119,13 +115,6 @@ $(document).ready(function () {
         $(".delete_cat_btn").toggle();
         $(".add_cat_btn").toggle();
         $(".edit_bookmark").toggle();
-    });
-    // add network "popup"
-    $("#addNetwork").on("click", function () {
-        $("#add-network-container").css("display", "block");
-    });
-    $("#close_addnetwork").on("click", function () {
-        $("#add-network-container").css("display", "none");
     });
 
     // Show cat
@@ -191,7 +180,10 @@ $(document).ready(function () {
         }
     });
     $(document).on("click", "#close_mgmtbookmark", function () {
-        $("#mgmt-bookmark-container").css("display", "none");
+        $("#mgmt-bookmark-container").remove();
+    });
+    $(document).on("click", "#close_mgmt_network", function () {
+        $("#mgmt-network-container").remove();
     });
     $(document).on("change", "#disable_ping", function () {
         var hostId = $('#host_id').val();
@@ -328,20 +320,48 @@ $(document).ready(function () {
             submitCommand('submitHostTimeout', {id: hostId, value: timeoutValue});
         }
     });
+
     $(document).on("click", "#submitNetwork", function () {
         var fields = {};
-
+        $('#network_status_msg').html('');
         fields.networkName = $('#networkName').val();
         fields.network = $('#network').val();
         fields.networkCIDR = parseInt($('#network_cidr').val());
-        fields.networkScan = parseInt($('input[name="networkScan"]:checked').val() || 0);
-        fields.networkVLAN = parseInt($('#network_vlan').val());
+        fields.networkScan = parseInt($('input[name="networkScan"]:checked').val()) || 0;
+        fields.networkVLAN = parseInt($('#network_vlan').val()) || 0;
+        fields.networkWeight = parseInt($('#network_weight').val()) || 50;
+        fields.networkDisable = $('#networkDisable').is(':checked') ? 1 : 0;
         if (fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {
             json_fields = JSON.stringify(fields);
-            submitCommand('addNetwork', {id: 0, value: json_fields});
+            submitCommand('mgmtNetworks', {id: 0, value: json_fields, action: 'add'});
+        } else {
+            $('#network_status_msg').html('Mandatory fields empty');
         }
-
     });
+
+    $(document).on("click", ".updateNetwork", function () {
+        var fields = {};
+        const id = $(this).data("id");
+        console.log("id->" + id);
+        $('#network_status_msg').html('');
+
+        fields.id = id;
+        fields.networkName = $(`input[name="networkName_${id}"]`).val();
+        fields.network = $(`input[name="network_${id}"]`).val();
+        fields.networkCIDR = parseInt($(`input[name="networkCIDR_${id}"]`).val());
+        fields.networkScan = parseInt($(`input[name="networkScan_${id}"]:checked`).val()) || 0;
+        fields.networkVLAN = parseInt($(`input[name="networkVLAN_${id}"]`).val());
+        fields.networkDisable = $(`input[name="networkDisable_${id}"]`).is(':checked') ? 1 : 0;
+        fields.networkWeight = parseInt($(`input[name="networkWeight_${id}"]`).val()) || 50;
+
+        if (id !== "" && id > 0 && fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {
+            json_fields = JSON.stringify(fields);
+            submitCommand('mgmtNetworks', {id: id, value: json_fields, action: 'update'});
+        } else {
+            $('#network_status_msg').html('Mandatory fields empty');
+        }
+    });
+
     $(document).on("click", "#addBookmark", function () {
         var fields = {};
 
