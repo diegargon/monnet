@@ -108,6 +108,8 @@
                                 link.classList.add("footer-number-blue");
                             } else if (item["number-color"] === "red") {
                                 link.classList.add("footer-number-red");
+                            } else if (item["number-color"] === "orange") {
+                                link.classList.add("footer-number-orange");
                             }
                             numberDiv.appendChild(link);
 

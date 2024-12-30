@@ -63,7 +63,7 @@
                 <img class="add_link"
                      src="./tpl/default/img/add.png" title="<?= $lng['L_NETWORK'] ?>">
             </button>
-            <span class="opt_labels"><?= $lng['L_NETWORK'] ?></span>
+            <span class="opt_labels"><?= $lng['L_NETWORKS'] ?></span>
         </div>
     </fieldset>
     <!--

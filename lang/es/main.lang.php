@@ -138,6 +138,7 @@ $lng = [
     'L_NOTES' => 'Notas',
     'L_NAME' => 'Nombre',
     'L_NETWORK' => 'Red',
+    'L_NETWORKS' => 'Redes',
     'L_NETWORK_NAME' => 'Nombre de la red',
     'L_NUMERIC' => 'numerico',
     'L_NOT_ALLOWED' => 'no permitida',

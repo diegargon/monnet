@@ -664,7 +664,7 @@ class Hosts
         $result_hosts = [];
 
         foreach ($this->hosts as $host) :
-            if ($host['alert']) :
+            if ($host['alert'] && empty($host['disable_alarms'])) :
                 $result_hosts[] = $host;
             endif;
         endforeach;
@@ -681,7 +681,10 @@ class Hosts
         $result_hosts = [];
 
         foreach ($this->hosts as $host) :
-            if ($host['warn']) :
+            if (
+                ($host['warn'] || $host['warn_port']) &&
+                (empty($host['disable_alarms']))
+            ) :
                 $result_hosts[] = $host;
             endif;
         endforeach;
@@ -740,14 +743,6 @@ class Hosts
             $host['highlight'] ? $this->highlight_total++ : null;
             $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
 
-            if (!empty($host['alert'])) :
-                $this->alerts++;
-            endif;
-
-            if (!empty($host['warn'])) :
-                $this->warns++;
-            endif;
-
             //Track host categories
             if (empty($this->host_cat_track[$host['category']])) :
                 $this->host_cat_track[$host['category']] = 1;
@@ -764,18 +759,18 @@ class Hosts
                 foreach ($misc_values as $key => $value) {
                     if (in_array($key, $this->misc_keys, true)) { //Prevent unused/old keys
                         if (in_array($key, ['agent_version'], true)) { //Prevent Version numbers to float
-                            $this->hosts[$id][$key] = (string) $value;
+                            $host[$key] = $this->hosts[$id][$key] = (string) $value;
                         } elseif (is_numeric($value)) {
-                            $this->hosts[$id][$key] = (int) $value;
+                            $host[$key] = $this->hosts[$id][$key] = (int) $value;
                         } elseif (is_bool($value)) {
-                            $this->hosts[$id][$key] = (bool) $value;
+                            $host[$key] = $this->hosts[$id][$key] = (bool) $value;
                         } else {
-                            $this->hosts[$id][$key] = $value;
+                            $host[$key] = $this->hosts[$id][$key] = $value;
                         }
                     }
                 }
             }
-
+            /* Notes */
             if (empty($host['notes_id'])) :
                 $this->db->insert('notes', ['host_id' => $host['id']]);
                 $insert_id = $this->db->insertID();
@@ -787,9 +782,22 @@ class Hosts
              * MISC KEYS EXTRA TASKS
              */
             /* General */
-            if (!empty($this->host['system_type'])) :
-                if ((int) $this->host['system_type'] === 17) :
+            if (!empty($host['system_type'])) :
+                if ((int) $host['system_type'] === 17) :
                     $this->hypervisor_rols++;
+                endif;
+            endif;
+
+            /* ALARMS */
+            if (empty($host['disable_alarms'])) :
+                if (!empty($host['alert'])) :
+                    $this->alerts++;
+                endif;
+
+                if (!empty($host['warn'])) :
+                    $this->warns++;
+                elseif (!empty($host['warn_port'])) :
+                    $this->warns++;
                 endif;
             endif;
 

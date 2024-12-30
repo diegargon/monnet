@@ -562,6 +562,9 @@ input:checked + .slider:before {
 .footer-number-red {
     color: #a42121;
 }
+.footer-number-orange {
+    color: #bf5515;
+}
 .footer-text {
     font-size: 10px;
     margin-top: 5px;

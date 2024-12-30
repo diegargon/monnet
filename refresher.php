@@ -171,7 +171,7 @@ if ($hosts->warns) :
         'value' => $hosts->warns,
         'report_type' => 'warns',
         'desc' => $lng['L_WARNS'],
-        'number-color' => 'yellow'
+        'number-color' => 'orange'
     ];
 endif;
 
