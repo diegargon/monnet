@@ -139,7 +139,8 @@ You can install it manually check the install-agent-linux playbook for steps
 
 ## Ansible Support
 
-Ansible support its a testing feature
+Ansible support its a testing feature, it will help to install the agent and in
+the future, crate and doing other common "ansible tasks"
 
 # Install ansible
 
@@ -154,9 +155,9 @@ git clone https://github.com/diegargon/monnet-ansible.git
 ```
 
 
-## Configure ansible server
+## Ansible server
 
-Ansible server listen in localhost only, due testing feauture without security.
+Ansible server listen in localhost only, it is a testing feature without security.
 You must install ansible in the same Monnet system.
 
 Ansible must output in json format.
@@ -170,7 +171,7 @@ stdout_callback=json
 
 
 
-## Configure ansible client hosts
+## Ansible client hosts
 
 By default the ansible ssh user will be 'ansible'
 
@@ -186,7 +187,7 @@ apt install sudo
 adduser --disabled-password ansible
 usermod -aG sudo ansible
 ```
-visudo and add:
+Start 'visudo' and add:
 
 ```
 ansible ALL=(ALL) NOPASSWD: ALL
@@ -199,7 +200,10 @@ sudo adduser ansible
 sudo usermod -aG wheel ansible
 ```
 
-## CERTS
+You must have checking the "Ansible Support" in General configuration tab and "Ansible Support" in the host configuration
+section (Web UI)
+
+## SSH CERTS
 
 For Ansible server to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via Monnet/Ansible.
 ```
@@ -229,7 +233,7 @@ If the host fingerprint change you must remove first the old one
 ssh-keygen -R
 ```
 
-You can force ansible to ignore the host check
+You can force ansible to ignore the host fingerprint check
 
 ```
 [defaults]
