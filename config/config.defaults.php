@@ -53,7 +53,8 @@ $cfg['datetime_format'] = 'd-m-Y H:i:s';
 $cfg['datetime_format_min'] = 'd/H:i';
 $cfg['datatime_graph_format'] = 'H:i';
 $cfg['datetime_log_format'] = 'd-m H:i:s';
-$cfg['refresher_time'] = 5; //minutes ideally same minutes than monnet-cli (cron config)
+/* Minutes ideally same minutes than monnet-cli (cron config) or less if you have agents) */
+$cfg['refresher_time'] = 5; 
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 $cfg['stats_clear_days'] = 30;
 $cfg['logs_clear_days'] = 30;
