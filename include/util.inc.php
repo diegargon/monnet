@@ -46,6 +46,17 @@ function formatBytes(int $size, int $precision = 2): string
 
 /**
  *
+ * @param float $megabytes
+ * @param int $precision
+ * @return float
+ */
+function mbToGb(float $megabytes, int $precision = 2): float
+{
+    return round($megabytes / 1024, $precision);
+}
+
+/**
+ *
  * @param array<array<string, string>> $ary
  * @param string $sortKey
  * @param string $order
