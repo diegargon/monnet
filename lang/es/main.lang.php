@@ -80,8 +80,9 @@ $lng = [
     'L_EDIT' => 'Editar',
     'L_EMAIL_ALARMS' => 'Alarmas correo',
     'L_ENABLE_PER_TYPE' => 'Habilitar por tipo',
-//F
+    //F
     'L_FIELD' => 'Campo',
+    'L_FREE' => 'Libre',
     //G
     'L_GENERAL' => 'General',
     //H
@@ -133,9 +134,10 @@ $lng = [
     'L_MASK' => 'Mascara',
     'L_MAIL' => 'Correo',
     'L_MACHINE_TYPE' => 'Tipo de maquina',
-    'L_MAXIMIZE' => 'Maximize',
-    'L_MINUTES' => 'Minutes',
+    'L_MAXIMIZE' => 'Maximizar',
+    'L_MINUTES' => 'Minutos',
     'L_MISC' => 'Misc',
+    'L_MEMORY' => 'Memoria',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',
@@ -207,6 +209,7 @@ $lng = [
     'L_UNCATEGORIZED' => 'NoCat',
     'L_UPDATED' => 'Updated',
     'L_UPDATE' => 'Update',
+    'L_USED' => 'Usados',
     //V
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',
