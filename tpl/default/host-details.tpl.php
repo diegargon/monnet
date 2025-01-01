@@ -177,7 +177,9 @@
             <div class="resume_container">
                 <div class="resume-left-column">
                     <!-- LEFT -->
+                <?php if ($tdata['host_details']['agent_installed']) : ?>
                     <button id="auto_reload_host_details">Auto: OFF</button>
+                <?php endif; ?>
                     <div class="">
                         <span class="resume_label"><?= $lng['L_NAME'] ?>:</span>
                         <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
