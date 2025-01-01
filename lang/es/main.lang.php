@@ -210,6 +210,7 @@ $lng = [
     'L_UPDATED' => 'Updated',
     'L_UPDATE' => 'Update',
     'L_USED' => 'Usados',
+    'L_USER' => 'Usuario',
     //V
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',

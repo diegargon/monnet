@@ -20,11 +20,11 @@
         <legend class="ctrl_legend"><?= $lng['L_GENERAL'] ?></legend>
 
         <div class="user_ctrl">
-            <a clasS="ctrl_link" href="/?page=logout">
+            <a class="ctrl_link" href="/?page=user">
                 <img class="settigns_link"
-                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_LOGOUT'] ?>">
+                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_USER'] ?>">
             </a>
-            <span class="opt_labels"><?= $tdata['username'] ?></span>
+            <span class="opt_labels"><?= ucfirst($tdata['username']) ?></span>
         </div>
         <div class="general_ctrl">
             <button id="toggleItemsSettings" class="button-ctrl" type="submit">

@@ -357,3 +357,29 @@ function page_privacy(AppContext $ctx): array
 
     return $page;
 }
+
+/**
+ * TODO: User/Users management
+ * @param AppContext $ctx
+ * @return array<string,string>
+ */
+function page_user(AppContext $ctx): array
+{
+    $page = [];
+
+    $cfg = $ctx->get('cfg');
+
+    $page = page_common_head($ctx);
+    /* Top Buttons */
+    $page['load_tpl'][] = [
+        'file' => 'topbuttoms',
+        'place' => 'head-left',
+    ];
+
+    $page['page'] = 'index';
+    $page['head_name'] = $cfg['web_title'];
+    //$page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
+    //$page['web_main']['scriptlink'][] = './scripts/background.js';
+
+    return $page;
+}

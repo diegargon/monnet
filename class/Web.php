@@ -118,6 +118,7 @@ class Web
             'privacy' => 'page_privacy',
             'index' => 'page_index',
             'settings' => 'page_settings',
+            'user' => 'page_user',
         ];
     }
 }

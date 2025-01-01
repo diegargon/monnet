@@ -22,13 +22,15 @@
 
 [TASKS]->[ID?][HID][TYPE=EVENT][WHAT=EVENTNAME] [LAST_TRIGGERED_DATE][CREATE_DATE]  [JSON_DETAILS] (send mails, exec playbook, generate report)
 [TASKS]->[ID?][HID][TYPE=TRACK][WHAT=SERVICE]   [LAST_TRIGGERE_DATED][CREATE_DATE   [JSON_DETAILS]
+* Hosts: Poder especificar a que device (switch/router) y numero puerto esta conectado.
+    - Ir separando configuracion e inventory.
+    - El rol switch/router seccion de dispositivos conectados.
+    - Si es WiFi poder elegir algo como conectado a dispositivo wifi 'fijo' o 'movable'
+* Auto Rrefresh en host details obtiene los mismos datos que host-details cosa que no es necesaria. separar
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible
 * [DB 0.35v]hosts->scan identificar servicios  [option nmap [0 noscan  - 1 scan - 2 full scan]] - guardar con ports, los ports metidos con el user tienen user=1
-* cambiar diseño barra logout y demás, ver donde poner y quizas meter ahi stop_cli y username
-    Quizas añadir una barra superior con dichos iconos y tambien poder crear folders para bookmarks
-    nombre de usuario en alguna parte
 * Inventory: Checkboxes: Bastionado / Antivirus / Compliant
 * [DB 0.35v] Network weight
 * En el login opcionalmente que se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
@@ -42,10 +44,10 @@
     encripta.
 * Ansible: Opcion para actualizar todos los agentes
 * Alarms: Crear tabla con alarmas y solo dejar en la tabla hosts el alarm/warn para avisar [id:hostid:alarm_type{alert,warn}:alarm_msg]
-    * AlertMsg fecha?
+    * AlertMsg fecha? usar tabla existente?
 * IPAM opcion marca red para permitir solicitar ips, y un boton solicita y entrega ips libres en las redes en cuestion
     con un boton para reservar 8h configurables.
-* Agent Host: Al primer arranque o reinicio realizar/enviar infome
+* Agent Host: Al primer arranque o reinicio realizar/enviar infome (eventos creados)
 * Agent Host/Ansible Reports: nojson reports field , genera un report si hay alguna alarma, ansible y email
 * Split Configuration > Inventory
 * TODO 1111: Filter/check values
@@ -57,7 +59,7 @@
 * Ansible: Hypervisor VMWARE crear vm/contaniner
 * Users management
 * Cuando detecte una mac en otra red copiar los datos de host y quizas advertir de alguna forma
-* Alert/Warn dropdown popup permitir limpiar alarma individual
+* Alert/Warn footer dropdown popup permitir limpiar alarma individual
 * feedme y agente intercambian versiones de agente agent_min_version existe para que en caso de que el agente no cumpla
     min version no haga nada, el feedme deberia de notificarlo (corregir antes el log spam)
 * Ansible/Feedme: Cambiar version a min_version que acepta feedme y configurar una var con agente_version_latest
@@ -79,9 +81,9 @@
 * Agent: Opcion para renovar el token el UI y automaticamente cambiar el token en el host
 * Si agente esta instalado ¿deshabilitar ping? ¿o mantenerlo por la latencia?
 * Crear campo host user*password encoded?
+* ¿Barra bookmarks?
 
 ** Backlog
-* obtener estado, via boton en estado en vez auto, quizas poder activar opción de auto ssh cada X tiempo.
 * registrar por usuario cualquier cambio que se haga.
 * admin user (puede editar) - standard user (solo ver)
 * SNMP get mac
