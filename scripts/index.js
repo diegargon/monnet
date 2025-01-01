@@ -94,10 +94,13 @@ function updateThumbnail(select) {
 $(document).ready(function () {
     $("#hosts_footer_dropdown_btn").on("click", function () {
         const dropdown = $("#footer_hosts_dropdown");
+        const uid = this.getAttribute('data-id');
         if (dropdown.css("display") === "none") {
             dropdown.css("display", "inline-flex");
+            submitCommand('show_footer_dropdown', {id: uid, value: 1});
         } else {
             dropdown.css("display", "none");
+            submitCommand('show_footer_dropdown', {id: uid, value: 0});
         }
     });
 

@@ -108,6 +108,7 @@ class Frontend
         $lng = $this->lng;
         $cfg = $this->cfg;
         $ncfg = $this->ctx->get('Config');
+        $user = $this->ctx->get('User');
 
         ob_start();
         $tpl_file = 'tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php';

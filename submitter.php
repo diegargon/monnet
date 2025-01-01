@@ -1092,4 +1092,10 @@ if (
 
     $data['command_success'] = 1;
 }
+
+if ($command === 'show_footer_dropdown' && is_numeric($value_command)) :
+    $user->setPref('show_footer_status', $value_command);
+    $data['command_success'] = 1;
+endif;
+
 print json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
