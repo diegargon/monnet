@@ -20,9 +20,9 @@
             ¿especicar procesos a monitorizar por nombre?
             crearian un evento especifico event_proc_$name
 
-[TASKS]->[ID?][HID][TYPE=EVENT][WHAT=EVENTNAME] [LAST_TRIGGERED_DATE][CREATE_DATE]  [JSON_DETAILS] (send mails, exec playbook, generate report)
-[TASKS]->[ID?][HID][TYPE=TRACK][WHAT=SERVICE]   [LAST_TRIGGERE_DATED][CREATE_DATE   [JSON_DETAILS]
-* Hosts: Poder especificar a que device (switch/router) y numero puerto esta conectado.
+[TASKS]->[ID?][HID][TYPE=EVENT][WHAT=EVENTNAME]             [LAST_TRIGGERED_DATE][CREATE_DATE]  [JSON_DETAILS] (send mails, exec playbook, generate report)
+[TASKS]->[ID?][HID][TYPE=TRACK][WHAT=PROCESS|SERVICE]       [LAST_TRIGGERE_DATED][CREATE_DATE]  [JSON_DETAILS]
+* Hosts/IPAM: Poder especificar a que device (switch/router) y numero puerto esta conectado.
     - Ir separando configuracion e inventory.
     - El rol switch/router seccion de dispositivos conectados.
     - Si es WiFi poder elegir algo como conectado a dispositivo wifi 'fijo' o 'movable'

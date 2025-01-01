@@ -239,7 +239,15 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 DROP TABLE IF EXISTS load_stats;
             ");
-
+            $db->query("
+                CREATE TABLE `tasks` (
+                  `id` int NOT NULL AUTO_INCREMENT,
+                  `hid` int NOT NULL,
+                  `task` tinyint NOT NULL,
+                  `what` varchar(255) NOT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+            ");
 //            $db->query("
 //            ");
             $db->query("COMMIT");
