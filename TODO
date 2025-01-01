@@ -14,7 +14,7 @@
         hid, event_name, playbook, last_execution
         En cada host se podra crear task por eventos. Los eventos/playbook generara un informe que podria
         consultarse o enviarse. ¿tabla informes?
-* Track:
+* Track:  $cfg['tasks']
         Servicios: Lista de servicios del host
         Procesos especificos: Track create/stoped/restart
             ¿especicar procesos a monitorizar por nombre?
@@ -27,6 +27,7 @@
     - El rol switch/router seccion de dispositivos conectados.
     - Si es WiFi poder elegir algo como conectado a dispositivo wifi 'fijo' o 'movable'
 * Auto Rrefresh en host details obtiene los mismos datos que host-details cosa que no es necesaria. separar
+* Check if need updates
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible

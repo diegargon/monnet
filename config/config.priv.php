@@ -241,6 +241,11 @@ $cfg['agent_notifications'] = [
     6 => "shutdown",
     7 => "system_shutdown",
 ];
+
+$cfg['tasks'] = [
+    1 => 'Events',
+    2 => 'Track',
+];
 /* TODO: Retrieve from monnet-ansible */
 
 $cfg['playbooks'] = [
