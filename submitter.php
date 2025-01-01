@@ -86,7 +86,7 @@ if ($command == 'saveNote') {
 } elseif ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
     $value_command = Filters::varInt($command_values['value']);
 } elseif ($command == 'mgmtNetworks') {
-    if (!empty($command_values['value'])):
+    if (!empty($command_values['value'])) :
         $value_command = Filters::varJson($command_values['value']);
     endif;
 } elseif ($command == 'addBookmark') {
@@ -459,7 +459,7 @@ if (
             else :
                 $data['response_msg'] = 'error';
             endif;
-        else:
+        else :
             $data['command_error'] = 1;
         endif;
 
@@ -581,7 +581,9 @@ if (
             $tdata['host_details']['iowait_graph'] = $frontend->getTpl(
                 'gauge',
                 [
-                    'gauge_graphs' => [['legend' => 'IO Delay', 'min' => 0, 'max' => 100, 'value' => $host_details['iowait']]]
+                    'gauge_graphs' => [
+                        ['legend' => 'IO Delay', 'min' => 0, 'max' => 100, 'value' => $host_details['iowait']]
+                    ]
                 ]
             );
         endif;
@@ -592,7 +594,7 @@ if (
                 [
                     'progress_bar_data' => $host_details['disks_info']
                 ]
-        );
+            );
         endif;
 
         if ($command === 'auto_reload_host_details') :
@@ -696,10 +698,9 @@ if ($command == "mgmtNetworks") :
             $append_data = validateNetworkData($ctx, $command_values['action'], $decodedJson);
             $data = array_merge($data, $append_data);
         endif;
-
     endif;
     $f_networks =  $networks->getNetworks();
-    foreach( $f_networks as $nid => $network):
+    foreach($f_networks as $nid => $network) :
         list($ip, $cidr) = explode('/', $network['network']);
         $f_networks[$nid]['ip'] = $ip;
         $f_networks[$nid]['cidr'] = $cidr;

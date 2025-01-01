@@ -18,9 +18,15 @@
     <table>
         <thead>
             <tr>
-                <?php foreach (['id', 'ip', 'cidr', 'name', 'pool', 'vlan', 'scan', 'weight', 'disable', ''] as $header): ?>
+                <?php
+                foreach (
+                    [
+                        'id', 'ip', 'cidr', 'name', 'pool', 'vlan', 'scan', 'weight', 'disable', ''
+                    ] as $header): ?>
                     <th><?= $header ?></th>
-                <?php endforeach; ?>
+                <?php
+                endforeach;
+                ?>
             </tr>
         </thead>
         <tbody>
@@ -30,17 +36,37 @@
                         <?= $row['id'] ?>
                     </td>
                     <td>
-                        <input type="text" size="13" maxlength="13" name="network_<?= $row['id']?>" required value="<?= $row['ip'] ?>">
+                        <input
+                            type="text"
+                            size="13"
+                            maxlength="13"
+                            name="network_<?= $row['id']?>" required value="<?= $row['ip'] ?>"
+                        >
                     </td>
                     <td>
-                        <input type="text" size="2" maxlength="2" name="networkCIDR_<?= $row['id']?>" required value="<?= $row['cidr'] ?>">
+                        <input
+                            type="text"
+                            size="2"
+                            maxlength="2"
+                            name="networkCIDR_<?= $row['id']?>" required value="<?= $row['cidr'] ?>"
+                        >
                     </td>
                     <td>
-                        <input type="text" size="20" maxlength="32" name="networkName_<?= $row['id']?>" required value="<?= $row['name'] ?>">
+                        <input
+                            type="text"
+                            size="20"
+                            maxlength="32"
+                            name="networkName_<?= $row['id']?>" required value="<?= $row['name'] ?>"
+                        >
                     </td>
                     <td></td>
                     <td>
-                        <input type="text" size="3" maxlength="5" name="networkVLAN_<?= $row['id']?>" required value="<?= $row['vlan'] ?>">
+                        <input
+                            type="text"
+                            size="3"
+                            maxlength="5"
+                            name="networkVLAN_<?= $row['id']?>" required value="<?= $row['vlan'] ?>"
+                        >
                     </td>
                     <td>
                         <input type="hidden" name="networkScan_<?= $row['id']?>" value="0" />
@@ -52,7 +78,12 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        <input type="text" size="3" maxlength="5" name="networkWeight_<?= $row['id']?>" required value="<?= $row['weight'] ?>">
+                        <input
+                            type="text"
+                            size="3"
+                            maxlength="5"
+                            name="networkWeight_<?= $row['id']?>" required value="<?= $row['weight'] ?>"
+                        >
                     </td>
                     <td>
                         <?php $checked = $row['disable'] ? 'checked' : ''; ?>

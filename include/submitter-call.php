@@ -120,7 +120,10 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
         $gfree = mbToGb($mem_info['free'], 0);
         $legend = "{$lng['L_MEMORY']}: ({$mem_info['percent']}%) {$lng['L_TOTAL']}:{$gtotal}GB";
         $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB";
-        $host['mem_info'] =  ['value' => $used, 'legend' => $legend, 'tooltip' => $tooltip, 'min' => 0, 'max' => $total];
+        $host['mem_info'] =
+            [
+                'value' => $used, 'legend' => $legend, 'tooltip' => $tooltip, 'min' => 0, 'max' => $total
+            ];
     endif;
 
     if (!empty($host['disks_info'])) :
@@ -153,9 +156,10 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 
     if (!empty($host['agent_installed']) && !empty($host['agent_last_contact'])) :
         $host['agent_last_contact'] = format_timestamp(
-                $host['agent_last_contact'],
-                $cfg['timezone'], $cfg['datetime_format']
-            );
+            $host['agent_last_contact'],
+            $cfg['timezone'],
+            $cfg['datetime_format']
+        );
     endif;
 
     return $host;
@@ -227,6 +231,7 @@ function validateNetworkData(AppContext $ctx, string $action, array $network_val
 {
     $lng = $ctx->get('lng');
     $data['command_error_msg'] = null;
+    $new_network = [];
 
     if ($network_values === null) {
         $data['command_error'] = 1;
@@ -235,11 +240,12 @@ function validateNetworkData(AppContext $ctx, string $action, array $network_val
         return $data;
     }
 
+
     foreach ($network_values as $key => $dJson) {
         ($key == 'networkVLAN') ? $key = 'vlan' : null;
         ($key == 'networkScan') ? $key = 'scan' : null;
         ($key == 'networkName') ? $key = 'name' : null;
-        ($key == 'networkDisable') ? $key = 'disable': null;
+        ($key == 'networkDisable') ? $key = 'disable' : null;
         ($key == 'networkPool') ? $key = 'pool' : null;
         ($key == 'networkWeight') ? $key = 'weight' : null;
         $new_network[$key] = trim($dJson);
@@ -274,7 +280,7 @@ function validateNetworkData(AppContext $ctx, string $action, array $network_val
             if (
                 $action !== 'update' ||
                 ((int)$net['id'] !== (int)$new_network['id'])
-                ) :
+             ) :
                 $data['command_error'] = 1;
                 $data['command_error_msg'] = 'Name must be unique<br/>';
             endif;
@@ -283,7 +289,7 @@ function validateNetworkData(AppContext $ctx, string $action, array $network_val
             if (
                 $action !== 'update' ||
                 ((int)$net['id'] !== (int)$new_network['id'])
-                ) :
+            ) :
                 $data['command_error'] = 1;
                 $data['command_error_msg'] = 'Network must be unique<br/>';
             endif;

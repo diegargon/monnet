@@ -385,7 +385,7 @@ function floatToPercentage(float $value, float $min = 0.0, float $max = 100.0): 
  * Seconds to day/hours/minutes/seconds array
  *
  * @param int $seconds
- * @return array
+ * @return array<string|int>
  */
 function secondsToDHMS(int $seconds): array
 {

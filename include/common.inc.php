@@ -11,7 +11,7 @@
 
 /**
  *
- * @var array<int|string, mixed> $cfg
+ * @var array<string, mixed> $cfg
  * @var array<string, string> $cfg_db
  */
 if (!file_exists('config/config.defaults.php')) {

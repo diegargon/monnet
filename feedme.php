@@ -52,8 +52,9 @@ define('IN_WEB', true);
  */
 
 /**
+ * @var Database $db
  * @var AppContext $ctx Instance of AppCtx. Init in common.inc
- * @var array<string,string> $cfg common.inc.php
+ * @var array<string,mixed> $cfg common.inc.php
  */
 require_once 'include/common.inc.php';
 require_once 'include/common-call.php';
@@ -189,7 +190,7 @@ endif;
 //TODO: ADD EVENT TYPE 1 to logHost notifications
 if ($command === 'notification' && isset($rdata['name'])) :
     $log_msg = "Receive $command with id: hostid, {$rdata['name']}";
-    isset($rdata['msg']) ? $log_msg .= ':'. $rdata['msg'] : null;
+    isset($rdata['msg']) ? $log_msg .= ':' . $rdata['msg'] : null;
 
     if ($rdata['name'] == 'starting') :
         Log::logHost('LOG_NOTICE', $host_id, $log_msg);
@@ -239,4 +240,3 @@ if ($reply) :
     header('Content-Type: application/json');
     echo json_encode($response);
 endif;
-

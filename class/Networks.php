@@ -94,7 +94,7 @@ class Networks
         $db->insert('networks', $set);
         $id = $db->insertID();
         $this->networks[$id]['id'] = $id;
-        foreach ($set as $key => $value):
+        foreach ($set as $key => $value) :
             $this->networks[$id][$key] = $value;
         endforeach;
     }
@@ -109,7 +109,7 @@ class Networks
     {
         $db = $this->ctx->get('Mysql');
         $db->upsert('networks', $set, ['id' => $id]);
-        foreach ($set as $key => $value):
+        foreach ($set as $key => $value) :
             $this->networks[$id][$key] = $value;
         endforeach;
     }

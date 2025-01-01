@@ -148,7 +148,7 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
                 $hosts_view[$key]['warn_mark'] = 'tpl/' . $theme . '/img/warn-mark.png';
                 if ($vhost['warn']) :
                     $hosts_view[$key]['warn_msg'] .= $vhost['warn_msg'];
-                else:
+                else :
                     $hosts_view[$key]['details'] .= $lng['L_PORT_DOWN'];
                 endif;
             endif;
