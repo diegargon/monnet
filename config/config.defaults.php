@@ -58,7 +58,11 @@ $cfg['refresher_time'] = 5;
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 $cfg['stats_clear_days'] = 30;
 $cfg['logs_clear_days'] = 30;
-$cfg['agent_default_interval'] = 20;
+/*
+ * Agent interval in seconds, inyected in config file, must
+ * reinstall to take efect
+ */
+$cfg['agent_default_interval'] = 30;
 $cfg['agent_allow_selfcerts'] = true;
 
 /* Modules Config */
