@@ -17,8 +17,8 @@
 $tdata = [
     'progress_bar_width' => '175',
     'progress_bar_data' => [
-        1 => ['value' => 93,'legend' => 'Test 3', 'min' => 0, 'max' => 100],
-        2 => ['value' => 33,'legend' => 'Test 4', 'min' => 0, 'max' => 100],
+        1 => ['value' => 93,'legend' => 'Test 3', 'min' => 0, 'max' => 100, 'tooltip' => 'test'],
+        2 => ['value' => 33,'legend' => 'Test 4', ...],
     ]
 ];
 */
@@ -65,7 +65,11 @@ foreach ($tdata['progress_bar_data'] as $pbar) :
     ?>
 <div class="progress-bar-container">
     <div class="pbar_legend"><?= $pbar['legend'] ?></div>
-    <div class="progress-bar" style="background: <?= $gradient ?>;"></div>
+    <div class="progress-bar"
+         style="background: <?= $gradient ?>;"
+         data-tooltip="<?= $pbar['tooltip'] ?? '' ?>"
+         >
+    </div>
 </div>
     <?php
 endforeach;
