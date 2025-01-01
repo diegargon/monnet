@@ -28,6 +28,7 @@
 $gauge_container_width = $tdata['gauge_container_width'] ?? 100;
 $numSize = $tdata['num_size'] ?? round($gauge_container_width / 4);
 $textSize = $tdata['text_size'] ?? round($gauge_container_width / 8);
+$unique_prefix = uniqid('gauge_', true);
 ?>
 <style>
     .chart-container {
@@ -38,18 +39,19 @@ $textSize = $tdata['text_size'] ?? round($gauge_container_width / 8);
 
 <?php foreach ($tdata['gauge_graphs'] as $id => $graph) : ?>
     <div class="chart-container">
-        <canvas id="chart_<?= $id ?>" class="border border-gray-600"></canvas>
+        <canvas id="<?= $unique_prefix ?>_chart_<?= $id ?>" class="border border-gray-600"></canvas>
     </div>
 <?php endforeach; ?>
 
 <script>
     const chartsData = <?= json_encode($tdata['gauge_graphs']) ?>;
+    const uniquePrefix = "<?= $unique_prefix ?>";
     const textSize = <?= $textSize ?>;
     const numSize = <?= $numSize ?>;
 
     Object.keys(chartsData).forEach(id => {
         const graph = chartsData[id];
-        const ctx = document.getElementById(`chart_${id}`).getContext("2d");
+        const ctx = document.getElementById(`${uniquePrefix}_chart_${id}`).getContext("2d");
 
         const gaugeNeedle = {
             id: "gaugeNeedle",
