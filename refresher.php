@@ -175,47 +175,59 @@ if ($hosts->warns) :
     ];
 endif;
 
-if ($ncfg->get('ansible')) {
+if ($ncfg->get('ansible')) :
     $ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
+    if ($hosts->ansible_hosts) :
+        $data['footer_dropdown'][] = [
+            'value' => $hosts->ansible_hosts,
+            'report_type' => 'ansible_hosts',
+            'desc' => $lng['L_ANSIBLE_HOSTS'],
+            'number-color' => 'blue'
+    ];
+    endif;
+    if ($hosts->ansible_hosts_off) :
+        $data['footer_dropdown'][] = [
+            'value' => $hosts->ansible_hosts_off,
+            'report_type' => 'ansible_hosts_off',
+            'desc' => $lng['L_ANSIBLE_HOSTS_OFF'],
+            'number-color' => 'red'
+        ];
+    endif;
+    if ($hosts->ansible_hosts_fail) :
+        $data['footer_dropdown'][] = [
+            'value' => $hosts->ansible_hosts_fail,
+            'report_type' => 'ansible_hosts_fail',
+            'desc' => $lng['L_ANSIBLE_HOSTS_FAIL'],
+            'number-color' => 'red'
+        ];
+    endif;
+endif;
+
+if ($hosts->agents) :
     $data['footer_dropdown'][] = [
-        'value' => $hosts->ansible_hosts,
-        'report_type' => 'ansible_hosts',
-        'desc' => $lng['L_ANSIBLE_HOSTS'],
+        'value' => $hosts->agents,
+        'report_type' => 'agents_hosts',
+        'desc' => $lng['L_AGENT_HOSTS'],
         'number-color' => 'blue'
     ];
+endif;
+if ($hosts->agents_off) :
     $data['footer_dropdown'][] = [
-        'value' => $hosts->ansible_hosts_off,
-        'report_type' => 'ansible_hosts_off',
-        'desc' => $lng['L_ANSIBLE_HOSTS_OFF'],
+        'value' => $hosts->agents_off,
+        'report_type' => 'agents_hosts_off',
+        'desc' => $lng['L_AGENT_HOSTS_OFF'],
         'number-color' => 'red'
     ];
+endif;
+
+if ($hosts->agents_missing_pings) :
     $data['footer_dropdown'][] = [
-        'value' => $hosts->ansible_hosts_fail,
-        'report_type' => 'ansible_hosts_fail',
-        'desc' => $lng['L_ANSIBLE_HOSTS_FAIL'],
+        'value' => $hosts->agents_missing_pings,
+        'report_type' => 'agents_hosts_missing_pings',
+        'desc' => $lng['L_AGENT_MISSING_PINGS'],
         'number-color' => 'red'
     ];
-}
-
-$data['footer_dropdown'][] = [
-    'value' => $hosts->agents,
-    'report_type' => 'agents_hosts',
-    'desc' => $lng['L_AGENT_HOSTS'],
-    'number-color' => 'blue'
-];
-$data['footer_dropdown'][] = [
-    'value' => $hosts->agents_off,
-    'report_type' => 'agents_hosts_off',
-    'desc' => $lng['L_AGENT_HOSTS_OFF'],
-    'number-color' => 'red'
-];
-
-$data['footer_dropdown'][] = [
-    'value' => $hosts->agents_missing_pings,
-    'report_type' => 'agents_hosts_missing_pings',
-    'desc' => $lng['L_AGENT_MISSING_PINGS'],
-    'number-color' => 'red'
-];
+endif;
 
 //TODO2 Move to ncfg
 
