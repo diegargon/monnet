@@ -158,7 +158,7 @@ class Log
      *
      * @return void
      */
-    public static function logHost(string $loglevel, int $host_id, string $msg): void
+    public static function logHost(string $loglevel, int $host_id, string $msg, int $type = 0): void
     {
         $level = self::getLogLevelID($loglevel);
         if (mb_strlen($msg) > self::$max_db_msg) {
@@ -167,6 +167,7 @@ class Log
         } else {
             $msg_db = $msg;
         }
+        //TODO [ 'type' => $type ]
         $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg_db];
         self::$db->insert('hosts_logs', $set);
     }

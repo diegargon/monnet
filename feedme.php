@@ -23,6 +23,32 @@ define('IN_WEB', true);
       refresh: 5 // Inform when is the next update
       data: []
   }
+
+    Notifications
+        {
+            "id": id,
+            "cmd": "notification",
+            "token": token,
+            "version": AGENT_VERSION,
+            "data":  data,
+            "meta": meta
+        }
+            data {
+                "name": "notification name" // Mandatory
+                "msg": "Custom msg" //Optional
+                ... other custom fields ...
+            }
+
+        "high_iowait", "iowait"
+        "high_memory_usage", "memory_usage": meminfo_data
+        "high_disk_usage", stats
+        "high_cpu_usage", "cpu_usage": loadavg_data["usage"]
+        "starting", "msg": "Custom msg"
+        "shutdown", "msg": "Custom msg"
+        "system_shutdown", "msg": "Custom msg"
+ *
+ *
+ *
  */
 
 /**
@@ -140,24 +166,45 @@ if (!isEmpty($rdata)) :
         ];
         $db->insert('stats', $set_stats);
     endif;
+    if (!isEmpty($rdata['iowait_stats'])) :
+        $set_stats = [
+            'date' => date_now(),
+            'type' => 3,   //iowait
+            'host_id' => $host['id'],
+            'value' => $rdata['iowait_stats']
+        ];
+        $db->insert('stats', $set_stats);
+    endif;
     if (!isEmpty($rdata['meminfo'])) :
         $host_update_values['mem_info'] = serialize($rdata['meminfo']);
     endif;
     if (!isEmpty($rdata['disksinfo'])) :
         $host_update_values['disks_info'] = serialize($rdata['disksinfo']);
     endif;
+    if (!isEmpty($rdata['iowait'])) :
+        $host_update_values['iowait'] = $rdata['iowait'];
+    endif;
 endif;
 
-if ($command === 'notification' && isset($rdata['type']) && $rdata['type'] == 'starting') :
-    if (!empty($rdata['ncpu'])) :
-        if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
-            $host_update_values['ncpu'] = $rdata['ncpu'];
+//TODO: ADD EVENT TYPE 1 to logHost notifications
+if ($command === 'notification' && isset($rdata['name'])) :
+    $log_msg = "Receive $command with id: hostid, {$rdata['name']}";
+    isset($rdata['msg']) ? $log_msg .= ':'. $rdata['msg'] : null;
+
+    if ($rdata['name'] == 'starting') :
+        Log::logHost('LOG_NOTICE', $host_id, $log_msg);
+        if (!empty($rdata['ncpu'])) :
+            if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
+                $host_update_values['ncpu'] = $rdata['ncpu'];
+            endif;
         endif;
-    endif;
-    if (!empty($rdata['uptime'])) :
-        if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime'])) :
-            $host_update_values['uptime'] = $rdata['uptime'];
+        if (!empty($rdata['uptime'])) :
+            if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime'])) :
+                $host_update_values['uptime'] = $rdata['uptime'];
+            endif;
         endif;
+    else :
+        Log::logHost('LOG_WARNING', $host_id, $log_msg);
     endif;
 endif;
 
@@ -174,16 +221,22 @@ $response = [
     'data' => []
 ];
 
-switch ($command) {
+$reply = 0;
+switch ($command) :
     case 'ping':
+        $reply = 1;
         $response['cmd'] = 'pong';
         $response['response_msg'] = true;
         break;
     case 'notification':
-        Log::logHost('LOG_NOTICE', $host_id, $agent_logId . $rdata['type'] . ':' . $rdata['msg']);
+        //No response
+        $reply = 0;
         break;
-}
+endswitch;
 
 // Enviar la respuesta JSON
-header('Content-Type: application/json');
-echo json_encode($response);
+if ($reply) :
+    header('Content-Type: application/json');
+    echo json_encode($response);
+endif;
+

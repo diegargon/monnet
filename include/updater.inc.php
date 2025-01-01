@@ -222,6 +222,26 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
             ");
+            $db->query("
+                ALTER TABLE `hosts_logs`
+                ADD `type` VARCHAR(255) NOT NULL DEFAULT '0'
+                COMMENT '0 default, 1 event'
+                AFTER `level`;
+            ");
+            $db->query("
+                ALTER TABLE `stats`
+                    DROP INDEX `date`;
+            ");
+            $db->query("
+                ALTER TABLE `stats`
+                  ADD INDEX `idx_host_date` (`host_id`, `date`);
+            ");
+            $db->query("
+                DROP TABLE IF EXISTS load_stats;
+            ");
+
+//            $db->query("
+//            ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;

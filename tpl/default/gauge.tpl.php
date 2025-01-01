@@ -135,7 +135,8 @@ $unique_prefix = uniqid('gauge_', true);
                     tooltip: {
                         enabled: false
                     }
-                }
+                },
+                animation: false
             },
             plugins: [gaugeNeedle]
         });

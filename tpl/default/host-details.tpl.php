@@ -177,6 +177,7 @@
             <div class="resume_container">
                 <div class="resume-left-column">
                     <!-- LEFT -->
+                    <button id="auto_reload_host_details">Auto: OFF</button>
                     <div class="">
                         <span class="resume_label"><?= $lng['L_NAME'] ?>:</span>
                         <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
@@ -269,19 +270,35 @@
                             is_string($tdata['host_details']['load_avg'])
                         ) :
                             ?>
-                    <div class="load_container">
+                    <div id="load_container" class="load_container">
                             <?php
                             print $tdata['host_details']['load_avg'];
                             ?>
                     </div>
                             <?php
                         endif;
+
+                        if (
+                            !empty($tdata['host_details']['iowait_graph'])
+                        ) :
+                        ?>
+                    <div id="iowait_container" class="iowait_container">
+                        <?php
+                            print $tdata['host_details']['iowait_graph'];
+                        ?>
+                        </div>
+                        <?php
+                        endif;
+                        ?>
+                    <div id="bars_container" class="bars_container">
+                        <?php
                         if (
                             !empty($tdata['host_details']['mem_info']) &&
                             is_string($tdata['host_details']['mem_info'])
                         ) :
                             print $tdata['host_details']['mem_info'];
                         endif;
+
                         if (
                             !empty($tdata['host_details']['disks_info']) &&
                             is_string($tdata['host_details']['disks_info'])
@@ -289,6 +306,7 @@
                             print $tdata['host_details']['disks_info'];
                         endif;
                     ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -309,9 +327,12 @@
         <!-- HOST LOGS -->
         <div id="tab9" class="host-details-tab-content">
             <div class="logs_header">
-                <div><button id="logs_reload_btn">Reload</button></div>
                 <div>
-                    <select id="log_level" name="log_level">
+                    <button id="logs_reload_btn">Reload</button>
+                    <button id="auto_reload_logs">Auto: OFF</button>
+                </div>
+                <div>
+                    <select id="log_level" name="log_level" data-btn="auto_reload_logs">
                         <option value="-1">LOG_ALL</option>
                         <option value="0">LOG_EMERG</option>
                         <option value="1">LOG_ALERT</option>
@@ -325,7 +346,7 @@
                 </div>
             </div>
             <label for="log_size">Nº:</label>
-            <input type="number" id="log_size" name="log_size" step="25" value="25">
+            <input type="number" id="log_size" name="log_size" step="25" value="25" data-btn="auto_reload_logs">
             <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
             <div class="inline"><button id="syslog_btn">Syslog</button></div>
             <div class="inline"><button id="journald_btn">Journald</button></div>

@@ -10,10 +10,10 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.42;
-$cfg['monnet_revision'] = 29;
+$cfg['monnet_revision'] = 34;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
-$cfg['agent_min_version'] = 0.22;
-$cfg['agent_latest_version'] = 0.53;
+$cfg['agent_min_version'] = 0.71;
+$cfg['agent_latest_version'] = 0.71;
 $cfg['app_name'] = 'monnet';
 
 /* Hardware Manufacture */
@@ -232,6 +232,15 @@ $cfg['access_link_types'] = [
     1 => 'www',
 ];
 
+$cfg['agent_notifications'] = [
+    1 => "high_iowait",
+    2 => "high_memory_usage",
+    3 => "high_disk_usage",
+    4 => "high_cpu_usage",
+    5 => "starting",
+    6 => "shutdown",
+    7 => "system_shutdown",
+];
 /* TODO: Retrieve from monnet-ansible */
 
 $cfg['playbooks'] = [

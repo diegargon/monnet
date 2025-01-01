@@ -79,6 +79,7 @@ class Hosts
         'disks_info',
         'ncpu',
         'uptime',
+        'iowait',
     ];
 
     /**
@@ -754,22 +755,24 @@ class Hosts
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
             endif;
             /* Misc field  fields that we keep in JSON format */
-            if (!isEmpty($this->hosts[$id]['misc'])) {
+            if (!isEmpty($this->hosts[$id]['misc'])) :
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
-                foreach ($misc_values as $key => $value) {
-                    if (in_array($key, $this->misc_keys, true)) { //Prevent unused/old keys
-                        if (in_array($key, ['agent_version'], true)) { //Prevent Version numbers to float
+                foreach ($misc_values as $key => $value) :
+                    if (in_array($key, $this->misc_keys, true)) : //Prevent unused/old keys
+                        if (in_array($key, ['agent_version'], true)) : //Prevent Version numbers to float
                             $host[$key] = $this->hosts[$id][$key] = (string) $value;
-                        } elseif (is_numeric($value)) {
+                        elseif (is_float($value)) :
+                            $host[$key] = $this->hosts[$id][$key] = (float) $value;
+                        elseif (is_numeric($value)) :
                             $host[$key] = $this->hosts[$id][$key] = (int) $value;
-                        } elseif (is_bool($value)) {
+                        elseif (is_bool($value)) :
                             $host[$key] = $this->hosts[$id][$key] = (bool) $value;
-                        } else {
+                        else :
                             $host[$key] = $this->hosts[$id][$key] = $value;
-                        }
-                    }
-                }
-            }
+                        endif;
+                    endif;
+                endforeach;
+            endif;
             /* Notes */
             if (empty($host['notes_id'])) :
                 $this->db->insert('notes', ['host_id' => $host['id']]);

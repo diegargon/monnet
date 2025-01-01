@@ -10,6 +10,18 @@
         Migrate cron keys.
 * creada config key allow_save_passwords para permitir guardar los password como de ansible y otros, ver mecanismo
 * cron, submitter: borrar duplicidades cfg/ncfg
+* Tabla Event Tasks: Cuando recive un evento ejecuta un playbook establecido
+        hid, event_name, playbook, last_execution
+        En cada host se podra crear task por eventos. Los eventos/playbook generara un informe que podria
+        consultarse o enviarse. ¿tabla informes?
+* Track:
+        Servicios: Lista de servicios del host
+        Procesos especificos: Track create/stoped/restart
+            ¿especicar procesos a monitorizar por nombre?
+            crearian un evento especifico event_proc_$name
+
+[TASKS]->[ID?][HID][TYPE=EVENT][WHAT=EVENTNAME] [LAST_TRIGGERED_DATE][CREATE_DATE]  [JSON_DETAILS] (send mails, exec playbook, generate report)
+[TASKS]->[ID?][HID][TYPE=TRACK][WHAT=SERVICE]   [LAST_TRIGGERE_DATED][CREATE_DATE   [JSON_DETAILS]
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible
@@ -51,6 +63,7 @@
 * Ansible/Feedme: Cambiar version a min_version que acepta feedme y configurar una var con agente_version_latest
     Configuracion: Automatic agent updates (si feedme detecta un agente en version antigua actualizarlo automaticamente
 * Agent: El agente deberia enviar los logs al servidor.
+* Ansible Raw: Al lanzar un ansible bloquear la interaccion hasta recibir la respuesta
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario

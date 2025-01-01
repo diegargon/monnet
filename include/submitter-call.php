@@ -115,8 +115,12 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
         $mem_info = unserialize($host['mem_info']);
         $total = $mem_info['total'];
         $used = $mem_info['used'];
-        $legend = 'Mem: ' . $used . '(' . $mem_info['percent'] . '%)';
-        $host['mem_info'] =  ['value' => $used, 'legend' => $legend, 'min' => 0, 'max' => $total];
+        $gtotal = mbToGb($total, 0);
+        $gused = mbToGb($used, 0);
+        $gfree = mbToGb($mem_info['free'], 0);
+        $legend = "{$lng['L_MEMORY']}: ({$mem_info['percent']}%) {$lng['L_TOTAL']}:{$gtotal}GB";
+        $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB";
+        $host['mem_info'] =  ['value' => $used, 'legend' => $legend, 'tooltip' => $tooltip, 'min' => 0, 'max' => $total];
     endif;
 
     if (!empty($host['disks_info'])) :
@@ -125,10 +129,16 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
 
         foreach ($disksinfo as $disk) :
             $disk_percent = round($disk['percent']);
-            $legend =  "($disk_percent%) : {$disk['mountpoint']} : {$disk['device']} {$disk['fstype']}";
+            $name = substr($disk['mountpoint'], strrpos($disk['mountpoint'], '/'));
+            $legend = "($disk_percent%): $name";
+            $gused = mbToGb($disk['used'], 0);
+            $gfree = mbToGb($disk['free'], 0);
+            $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB\n{$disk['device']} {$disk['fstype']}";
+
             $host['disks_info'][] = [
                 'value' => $disk['used'],
                 'legend' => $legend,
+                'tooltip' => $tooltip,
                 'min' => 0,
                 'max' => $disk['total']
             ];

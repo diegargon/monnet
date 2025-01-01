@@ -533,9 +533,15 @@ if ($command == 'updateBookmark' && !empty($value_command) && $target_id > 0) {
     }
 }
 
-/* Set show/hide host-details */
+/*
+ * Set show/hide host-details
+ * TODO: Separate auto_reload_host_details to get only what need
+ */
 
-if ($command === 'host-details' && !empty($target_id)) {
+if (
+    ($command === 'host-details' || $command === 'auto_reload_host_details') &&
+    !empty($target_id)
+) {
     $host_details = [];
     $tdata['host_details'] = [];
 
@@ -570,6 +576,16 @@ if ($command === 'host-details' && !empty($target_id)) {
                 ]
             );
         endif;
+
+        if (isset($host_details['iowait']) && is_numeric($host_details['iowait'])) :
+            $tdata['host_details']['iowait_graph'] = $frontend->getTpl(
+                'gauge',
+                [
+                    'gauge_graphs' => [['legend' => 'IO Delay', 'min' => 0, 'max' => 100, 'value' => $host_details['iowait']]]
+                ]
+            );
+        endif;
+
         if (!empty($host_details['disks_info']) && is_array($host_details['disks_info'])) :
             $tdata['host_details']['disks_info'] = $frontend->getTpl(
                 'progressbar',
@@ -579,6 +595,13 @@ if ($command === 'host-details' && !empty($target_id)) {
         );
         endif;
 
+        if ($command === 'auto_reload_host_details') :
+            $data['host_details'] = $tdata['host_details'];
+            $data['command_success'] = 1;
+        else :
+            $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
+            $data['command_success'] = 1;
+        endif;
         $data['host_details']['cfg']['place'] = "#left-container";
         $data['host_details']['data'] = $frontend->getTpl('host-details', $tdata);
         $data['command_success'] = 1;
@@ -790,7 +813,8 @@ if ($command == 'change_bookmarks_tab') {
 /* Logs Host */
 if (
     $command === 'logs-reload' ||
-    ($command === 'changeHDTab' && $value_command == 'tab9')
+    $command === 'auto_reload_logs' ||
+    ($command === 'changeHDTab' && $value_command === 'tab9')
 ) {
     if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) :
         $opts['max_lines'] = $command_values['log_size'];

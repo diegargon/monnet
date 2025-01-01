@@ -801,6 +801,7 @@ input:checked + .slider:before {
     z-index: 1;
     background-color: rgb(55, 50, 37);
     resize: both;
+    padding-bottom: 8px;
 }
 .host-details-bar {
     display: inline-block;
@@ -1519,6 +1520,17 @@ input:checked + .slider:before {
     color: #ffa9a9;
 }
 
+.bars_container {
+    border: 0px black;
+    max-width: 355px;
+}
+
+.progress-bar-container {
+    position: relative;
+
+    display: inline-block;
+}
+
 .progress-bar {
     height: 12px;
     border-radius: 5px;
@@ -1544,7 +1556,8 @@ input:checked + .slider:before {
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
-    white-space: nowrap;
+    white-space: pre;
+    text-align: center;
 }
 .progress-bar:hover::after {
     opacity: 1;

@@ -7,6 +7,52 @@
  */
 
 $(document).ready(function () {
+let autoReloadStates = {}; // Guardar el estado de cada botón
+let autoReloadIntervals = {}; // Guardar los intervalos de cada botón
+
+    $(document).off("click", "button[id^='auto_reload_']").on("click", "button[id^='auto_reload_']", function () {
+        const buttonId = $(this).attr('id'); // Obtener el ID del botón
+        autoReloadStates[buttonId] = !autoReloadStates[buttonId]; // Alternar estado
+
+        if (autoReloadStates[buttonId]) {
+            // Activar AutoReload
+            const currentText = $(this).text(); // Texto actual del botón
+            const baseText = currentText.replace(/: ON|: OFF/, ''); // Eliminar ON/OFF
+            $(this).text(`${baseText}: ON`);
+
+            autoReloadIntervals[buttonId] = setInterval(() => {
+                const hostId = $('#host_id').val();
+
+                // Detenemos el intervalo si hostId ya no existe  (se cierra la ventana)
+                if (!hostId || isNaN(hostId) || !Number.isInteger(Number(hostId))) {
+                    // Detener AutoReload si hostId no es un entero válido
+                    clearInterval(autoReloadIntervals[buttonId]);
+                    delete autoReloadIntervals[buttonId];
+                    autoReloadStates[buttonId] = false;
+                    $(this).text(`${baseText}: OFF`);
+                    return;
+                }
+                // Obtener las variables dinámicas
+                const params = {};
+                $(`input[data-btn="${buttonId}"]`).each(function () {
+                    const key = $(this).attr('name'); // Nombre del parámetro
+                    const value = $(this).val(); // Valor del parámetro
+                    params[key] = value;
+                });
+                // Enviar solicitud con ID del botón como acción
+                requestHostDetails(buttonId, { id: hostId, ...params });
+            }, 5000); // Cada 5 segundos
+        } else {
+            // Desactivar AutoReload
+            const currentText = $(this).text(); // Texto actual del botón
+            const baseText = currentText.replace(/: ON|: OFF/, ''); // Eliminar ON/OFF
+            $(this).text(`${baseText}: OFF`);
+
+            clearInterval(autoReloadIntervals[buttonId]); // Limpiar el intervalo
+        }
+    });
+
+
     $(document).off("click", "#logs_reload_btn").on("click", "#logs_reload_btn", function () {
         var hostId = $('#host_id').val();
         var logLevel = $('#log_level').val();
@@ -276,11 +322,32 @@ function requestHostDetails(command, command_values = []) {
                 if (jsonData.login === "fail") {
                     location.href = '';
                 }
+
+                if (jsonData.command_receive === 'auto_reload_host_details') {
+                    host_details = jsonData.host_details;
+
+                    if (host_details['disk_info'] || host_details['mem_info']) {
+                        $('#bars_container').html('');
+                    }
+                    if (host_details['iowait_graph']) {
+                        $('#iowait_container').html(host_details['iowait_graph']);
+                    }
+                    if (host_details['load_avg']) {
+                        $('#load_container').html(host_details['load_avg']);
+                    }
+                    if (host_details['mem_info']) {
+                        $('#bars_container').append(host_details['mem_info']);
+                    }
+                    if (host_details['disks_info']) {
+                        $('#bars_container').append(host_details['disks_info']);
+                    }
+                }
                 /* Logs reload */
                 if (
-                        jsonData.command_receive === 'logs-reload' ||
-                        jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'tab9'
-                        ) {
+                    jsonData.command_receive === 'logs-reload' ||
+                    jsonData.command_receive === 'auto_reload_logs' ||
+                    (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'tab9')
+                    ) {
                     if (jsonData.command_success === 1) {
                         $('#term_output').html(jsonData.response_msg);
                     } else {
@@ -290,9 +357,9 @@ function requestHostDetails(command, command_values = []) {
 
                 /* Syslog Journald load */
                 if (
-                        jsonData.command_receive === 'syslog-load' ||
-                        jsonData.command_receive === 'journald-load'
-                        ) {
+                    jsonData.command_receive === 'syslog-load' ||
+                    jsonData.command_receive === 'journald-load'
+                    ) {
                     if (jsonData.command_success === 1) {
                         $('#term_output').html(jsonData.response_msg);
                     } else {

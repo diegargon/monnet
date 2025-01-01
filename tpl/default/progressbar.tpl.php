@@ -26,9 +26,7 @@ $progress_bar_width = $tdata['progress_bar_width'] ?? '175'
 ?>
 <style>
 .progress-bar-container {
-    width: 100%;
-    max-width: <?= $progress_bar_width?>px;
-    position: relative;
+    width: <?= $progress_bar_width?>px;
 }
 </style>
 

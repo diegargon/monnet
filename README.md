@@ -136,6 +136,7 @@ repo/sources and his own playbook to install.
 
 You can install it manually check the install-agent-linux playbook for steps
 
+Python Extras: Automatic process will install: psutils
 
 ## Ansible Support
 
