@@ -187,7 +187,7 @@ function initializePlaybookForm() {
                 playbook.string_vars.forEach(function (varName) {
                     $('#vars_container').append(`
                         <label for="${varName}">${varName}:</label>
-                        <input type="text" id="${varName}" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
+                        <input type="text" id="${varName}" size="10" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
                     `);
                 });
             }
@@ -196,7 +196,7 @@ function initializePlaybookForm() {
                     $('#vars_container').append(`
                         <div class="password-container">
                         <label for="${varName}">${varName}:</label>
-                        <input type="password" id="${varName}" name="extra_vars[${varName}]"  class="password-input" placeholder="Enter ${varName}">
+                        <input type="password" id="${varName}" size="10" name="extra_vars[${varName}]"  class="password-input" placeholder="Enter ${varName}">
                         <span class="toggle-password">👁️</span>
                         </div>
                     `);

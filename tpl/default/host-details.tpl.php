@@ -63,7 +63,7 @@
                     <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
                     <button id="tab20_btn" class="host-details-tabs-head" data-tab="20"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab20')">
-                            Ansible Raw
+                            Ansible
                     </button>
                     <?php endif; ?>
                 </div>
@@ -723,15 +723,26 @@
         <div id="tab20" class="host-details-tab-content">
             <div id="ansible_container" class="ansible_container"
                  data-playbooks='<?= json_encode($cfg['playbooks']); ?>'>
-                <div><button id="playbook_btn">Exec</button></div>
-                <select id="playbook_select">
-                    <option value="">Select Playbook</option>
-                </select>
-                <label for="as_html">HTML</label>
-                <input id="as_html" type="checkbox" checked>
-                <div id="playbook_desc"></div>
-                <div id="vars_container"></div>
-                <div id="playbook_content"></div>
+                <div class="left-details-column">
+                    <div>
+                        <button id="playbook_btn">Exec</button>
+                        <select id="playbook_select">
+                            <option value="">Select Playbook</option>
+                        </select>
+                        <label for="as_html">HTML</label>
+                        <input id="as_html" type="checkbox" checked>
+                        <div id="playbook_desc"></div>
+                        <div id="vars_container"></div>
+                    </div>
+                </div>
+                <!-- /left config column -->
+                <!-- right config column -->
+                <div class="right-details-column">
+                    <div></div>
+                </div>
+                <div class="bottom-details-row">
+                    <div id="playbook_content" style="border:0px solid blue"><p></p></div>
+                </div>
             </div>
         </div>
         <!-- /TAB20 -->

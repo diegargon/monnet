@@ -59,6 +59,7 @@ $lng = [
     'L_DISABLE_ALL_ALARMS' => 'Deshabilitar todas las Alarmas',
     'L_DISABLE_PER_TYPE' => 'Deshabilitar por tipo',
     'L_DAYS' => 'Dias',
+    'L_DETAIL_VIEW' => 'Vista detallada',
     //E
 //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
@@ -192,6 +193,7 @@ $lng = [
     'L_SCAN' => 'Scan',
     'L_SYSTEM_TYPE' => 'Tipo sistema',
     'L_STATS' => 'Estadisticas',
+    'L_SUMMARY' => 'Resumen',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',

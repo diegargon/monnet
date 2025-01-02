@@ -354,16 +354,6 @@ $cfg['playbooks'] = [
         'cat' => ['posix'],
     ],
     [
-        'name' => 'system-info',
-        'desc' => 'Get load statistics via setup module',
-        'cat' => ['posix'],
-    ],
-    [
-        'name' => 'uptime-facts',
-        'desc' => 'Get uptime facts from all hosts',
-        'cat' => ['posix'],
-    ],
-    [
         'name' => 'win-facts',
         'desc' => 'Gather facts from Windows hosts',
         'cat' => ['windows'],
@@ -377,7 +367,7 @@ $cfg['playbooks'] = [
         'name' => 'mysql-dblocks',
         'desc' => 'Ensure MySQL is running and check database locks',
         'string_vars' => ['database_service', 'database_name', 'db_username'],
-        'passwd_vars' => ['db_passwordd'],
+        'passwd_vars' => ['db_password'],
         'cat' => ['posix'],
     ],
     [

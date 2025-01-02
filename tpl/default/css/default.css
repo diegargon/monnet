@@ -54,7 +54,7 @@ button, button-submit {
     text-align: center; /* Centrar el texto */
     text-decoration: none;
     display: inline-block;
-    font-size: 16px; /* Tamaño del texto */
+    font-size: 12px; /* Tamaño del texto */
     margin: 4px 2px; /* Margen exterior */
     cursor: pointer; /* Cursor al pasar por encima */
     border-radius: 5px; /* Bordes redondeados */
@@ -884,7 +884,7 @@ input:checked + .slider:before {
 }
 .host-details-tab-content.active {
     display: inline-block;
-    width: 100%;
+    width: 99%;
     border: 0px solid #0E9700;
     margin: 0;
     padding: 5px 0px 5px 5px;
@@ -1399,10 +1399,28 @@ input:checked + .slider:before {
 .config_container, .resume_container {
     display: flex;
 }
+.ansible_container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
 .left-config-column, .right-config-column, .resume-left-column, .resume-right-column {
+    border: 0px solid red;
     width: 49%;
 }
-
+.left-details-column, .right-details-column {
+    border: 0px solid red;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 2px;
+    border: 0px solid #ccc;
+}
+.bottom-details-row {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 2px;
+    border: 0px solid #aaa;
+}
 .logs_header {
     display: inline-flex;
 }
