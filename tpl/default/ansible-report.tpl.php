@@ -13,6 +13,7 @@
  * @var array<mixed> $tdata
  */
 ?>
+
 <?php if (isset($tdata['stats']) && is_array($tdata['stats'])) : ?>
     <h2><?= $lng['L_STATS'] ?></h2>
     <table>
@@ -44,9 +45,51 @@
         </tbody>
     </table>
 <?php endif; ?>
-<button onclick="expandAll()">Expand All</button>
-<button onclick="collapseAll()">Collapse All</button>
+
 <?php
+$messages = [];
+
+foreach ($tdata['plays'] as $play) {
+    foreach ($play['tasks'] as $task) {
+        foreach ($task['hosts'] as $ip => $hostData) {
+            if (!empty($hostData['msg'])) {
+                $messages[] = [
+                    'ip' => $ip,
+                    'msg' => $hostData['msg']
+                ];
+            }
+        }
+    }
+}
+?>
+<?php
+    if (!empty($messages)) :
+?>
+    <h2><?= $lng['L_SUMMARY']?>:</h2>
+<?php
+    foreach ($messages as $msg) {
+?>
+    <div><?= $msg['ip'] ?></div>
+    <pre>
+    <?php
+        if (is_array($msg['msg'])) :
+            echo implode('<br>', $msg['msg']);
+        else :
+            echo $msg['msg'];
+        endif
+
+    ?>
+    </pre>
+<?php
+    }
+    endif;
+?>
+    <h2><?= $lng['L_DETAIL_VIEW'] ?></h2>
+    <button onclick="expandAll()">Expand All</button>
+    <button onclick="collapseAll()">Collapse All</button>
+<?php
+$messages = [];
+
 foreach ($tdata['plays'] as $playIndex => $play) : ?>
     <h2>Play: <?= $play['play']['name'] ?? "Play sin nombre" ?></h2>
     <div class="ansible_list">
