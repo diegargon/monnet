@@ -188,9 +188,9 @@ class Database
      *
      * @param string $query
      *
-     * @return mysqli_result|false
+     * @return mysqli_result|bool  query returns true on inserts and similar
      */
-    public function query(string $query): mysqli_result|false
+    public function query(string $query): mysqli_result|bool
     {
         $this->query_stats++;
         $this->query_history[] = $query;
@@ -644,9 +644,9 @@ class Database
      * @param string $table
      * @param array<string, int|string> $insert_data
      * @param string $extra
-     * @return mysqli_result|false
+     * @return mysqli_result|bool
      */
-    public function insert(string $table, array $insert_data, string $extra = null): mysqli_result|false
+    public function insert(string $table, array $insert_data, string $extra = null): mysqli_result|bool
     {
 
         if (empty($table) || empty($insert_data)) {
@@ -667,9 +667,9 @@ class Database
      * @param array<string, mixed> $where
      * @param string $extra
      * @param string $logic
-     * @return mysqli_result|false
+     * @return mysqli_result|bool
      */
-    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): mysqli_result|false
+    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): mysqli_result|bool
     {
 
         if (empty($table) || empty($where)) {
