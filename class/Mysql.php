@@ -127,6 +127,7 @@ class Database
         //$this->query('SET NAMES ' . $this->charset);
         $this->isConnected = true;
         $this->dblink->query('SET NAMES ' . $this->charset);
+
         return true;
     }
 
@@ -187,16 +188,20 @@ class Database
      *
      * @param string $query
      *
-     * @return mysqli_result|bool
+     * @return mysqli_result|false
      */
-    public function query(string $query): mysqli_result|bool
+    public function query(string $query): mysqli_result|false
     {
         $this->query_stats++;
         $this->query_history[] = $query;
         $result = $this->dblink->query($query);
-        if (!$result && !$this->silent) {
-            $this->dbdie($query);
-        }
+        if (!$result) :
+            if (!$this->silent) :
+                $this->dbdie($query);
+            else:
+                return false;
+            endif;
+        endif;
         $this->query_affected = $this->dblink->affected_rows;
 
         return $result;
@@ -215,9 +220,9 @@ class Database
      *
      * @param mysqli_result $result
      *
-     * @return array<string,string>|bool
+     * @return array<string,string>|false
      */
-    public function fetch(mysqli_result $result): array|bool
+    public function fetch(mysqli_result $result): array|false
     {
         $row = $result->fetch_assoc();
 
@@ -396,9 +401,9 @@ class Database
      *
      * @param string $table
      * @param string $field
-     * @return int|boolean
+     * @return int|false
      */
-    public function getNextNum(string $table, string $field): int|bool
+    public function getNextNum(string $table, string $field): int|false
     {
 
         if (empty($table) || empty($field)) {
@@ -425,7 +430,7 @@ class Database
      * @param array<string, mixed> $where
      * @param string $extra
      * @param string $logic
-     * @return mysqli_result|bool
+     * @return mysqli_result|false
      */
     public function selectAll(
         string $table,
@@ -455,7 +460,7 @@ class Database
      * @param array<string, mixed> $where
      * @param string $extra
      * @param string $logic
-     * @return mysqli_result|bool
+     * @return mysqli_result|false
      */
     public function select(
         string $table,
@@ -497,7 +502,7 @@ class Database
     }
 
     /**
-     * Search databse
+     * Search database
      *
      * @param string $table
      * @param string $s_fields
@@ -639,9 +644,9 @@ class Database
      * @param string $table
      * @param array<string, int|string> $insert_data
      * @param string $extra
-     * @return mysqli_result|bool
+     * @return mysqli_result|false
      */
-    public function insert(string $table, array $insert_data, string $extra = null): mysqli_result|bool
+    public function insert(string $table, array $insert_data, string $extra = null): mysqli_result|false
     {
 
         if (empty($table) || empty($insert_data)) {
@@ -662,9 +667,9 @@ class Database
      * @param array<string, mixed> $where
      * @param string $extra
      * @param string $logic
-     * @return mysqli_result|bool
+     * @return mysqli_result|false
      */
-    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): mysqli_result|bool
+    public function delete(string $table, array $where, string $extra = null, string $logic = 'AND'): mysqli_result|false
     {
 
         if (empty($table) || empty($where)) {

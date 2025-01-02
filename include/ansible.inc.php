@@ -55,7 +55,7 @@ function ansible_playbook(AppContext $ctx, array $host, string $playbook, ?array
 
     $encoded_send_data = json_encode($send_data);
 
-    if ($encoded_send_data === false):
+    if ($encoded_send_data === false) :
         return ['status' => 'error', 'error_msg' => 'Json returns fasle'];
     endif;
 

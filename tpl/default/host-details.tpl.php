@@ -277,21 +277,19 @@
                             print $tdata['host_details']['load_avg'];
                         ?>
                     </div>
-                            <?php
-                        endif;
+                        <?php
+                    endif;
 
-                        if (
-                            !empty($tdata['host_details']['iowait_graph'])
-                        ) :
+                    if (!empty($tdata['host_details']['iowait_graph'])) :
                         ?>
                     <div id="iowait_container" class="iowait_container">
-                    <?php
+                        <?php
                             print $tdata['host_details']['iowait_graph'];
-                    ?>
+                        ?>
                         </div>
-                    <?php
+                        <?php
                         endif;
-                    ?>
+                        ?>
                     <div id="bars_container" class="bars_container">
                         <?php
                         if (

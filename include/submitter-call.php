@@ -225,7 +225,8 @@ function get_host_metrics(AppContext $ctx, int $host_id): array
  * @param AppContext $ctx
  * @param string $action
  * @param array<string,string|int> $network_values
- * @return array
+ * 
+ * @return array<string,string|int>
  */
 function validateNetworkData(AppContext $ctx, string $action, array $network_values): array
 {
@@ -280,7 +281,7 @@ function validateNetworkData(AppContext $ctx, string $action, array $network_val
             if (
                 $action !== 'update' ||
                 ((int)$net['id'] !== (int)$new_network['id'])
-             ) :
+            ) :
                 $data['command_error'] = 1;
                 $data['command_error_msg'] = 'Name must be unique<br/>';
             endif;

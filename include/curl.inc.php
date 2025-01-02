@@ -11,7 +11,7 @@
 
 function curl_get(string $url): mixed
 {
-    if (!is_string($url)) :
+    if (empty($url)) :
         return false;
     endif;
     $agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; Monnet)';

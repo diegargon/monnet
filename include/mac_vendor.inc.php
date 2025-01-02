@@ -70,20 +70,25 @@ function get_mac_vendor_local(string $mac): array|bool
         $details = [];
         preg_match('/\{([^{}]+)\}\{([^{}]+)\}/', $info, $details);
 
-        $company = isset($details[1]) ? trim($details[1]) : "";
-        if (empty($company)) {
+        $company = !empty($details[1]) ? trim($details[1]) : '';
+
+        if (empty($company)) :
             Log::debug('Mac Lookup fail: Empty mac vendor company');
             return false;
-        }
+        endif;
 
         ///obtain country codes
-        $country_pattern = '/\b([A-Z]{2})\b/';
-        $country_matches = [];
-        if (preg_match_all($country_pattern, trim($details[2]), $country_matches)) {
-            $country = implode('/', $country_matches[1]);
-        } else {
+        if (!empty($details[2])) :
+            $country_pattern = '/\b([A-Z]{2})\b/';
+            $country_matches = [];
+            if (preg_match_all($country_pattern, $details[2], $country_matches)) {
+                $country = implode('/', $country_matches[1]);
+            } else {
+                $country = '';
+            }
+        else:
             $country = '';
-        }
+        endif;
         $vendor = trim($company) . " (" . trim($country) . ")";
         Log::debug('Mac vendor DB result is ' . $vendor);
 

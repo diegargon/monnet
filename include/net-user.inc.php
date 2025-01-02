@@ -26,6 +26,10 @@ function sendWOL(string $host_mac): bool
     }
 
     $macAddressBinary = hex2bin($host_mac);
+    if ($macAddressBinary === false) :
+        Log::err("MAC address is not correct \"{$host_mac}\"");
+        return false;
+    endif;
     $magicPacket = str_repeat(chr(255), 6) . str_repeat($macAddressBinary, 16);
     $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     if ($socket === false) {

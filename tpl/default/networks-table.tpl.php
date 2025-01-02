@@ -22,15 +22,15 @@
                 foreach (
                     [
                         'id', 'ip', 'cidr', 'name', 'pool', 'vlan', 'scan', 'weight', 'disable', ''
-                    ] as $header): ?>
+                    ] as $header) : ?>
                     <th><?= $header ?></th>
-                <?php
+                    <?php
                 endforeach;
                 ?>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($tdata['networks'] as $row): ?>
+            <?php foreach ($tdata['networks'] as $row) : ?>
                 <tr>
                     <td>
                         <?= $row['id'] ?>
@@ -70,12 +70,14 @@
                     </td>
                     <td>
                         <input type="hidden" name="networkScan_<?= $row['id']?>" value="0" />
-                        <?php
-                            if (strpos($row['ip'], '0') !== 0) :
-                                $checked = $row['scan'] ? 'checked' : '';
+                    <?php
+                        if (strpos($row['ip'], '0') !== 0) :
+                            $checked = $row['scan'] ? 'checked' : '';
                         ?>
-                            <input type="checkbox" name="networkScan_<?= $row['id']?>" value="1" <?= $checked ?> />
-                        <?php endif; ?>
+                        <input type="checkbox" name="networkScan_<?= $row['id']?>" value="1" <?= $checked ?> />
+                    <?php
+                        endif;
+                        ?>
                     </td>
                     <td>
                         <input

@@ -183,7 +183,7 @@ if ($ncfg->get('ansible')) :
             'report_type' => 'ansible_hosts',
             'desc' => $lng['L_ANSIBLE_HOSTS'],
             'number-color' => 'blue'
-    ];
+        ];
     endif;
     if ($hosts->ansible_hosts_off) :
         $data['footer_dropdown'][] = [

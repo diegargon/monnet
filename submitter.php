@@ -649,7 +649,7 @@ if ($command == 'removeBookmark' && !empty($target_id)) {
     $data['command_success'] = 1;
 }
 
-if ($command == 'mgmtBookmark' ) {
+if ($command == 'mgmtBookmark') {
     if (empty($categories)) :
         $categories = $ctx->get('Categories');
     endif;
@@ -700,7 +700,7 @@ if ($command == "mgmtNetworks") :
         endif;
     endif;
     $f_networks =  $networks->getNetworks();
-    foreach($f_networks as $nid => $network) :
+    foreach ($f_networks as $nid => $network) :
         list($ip, $cidr) = explode('/', $network['network']);
         $f_networks[$nid]['ip'] = $ip;
         $f_networks[$nid]['cidr'] = $cidr;
