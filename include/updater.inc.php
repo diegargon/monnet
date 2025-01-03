@@ -215,16 +215,28 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
     // 0.43
-    if ($db_version < 0.00) {
+    if ($db_version < 0.43) {
         try {
+            $ncfg->set('db_monnet_version', $files_version, 1);
+            $db->query("START TRANSACTION");
+            $db->query("COMMIT");
+            $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
+        }
+    }
+    // 0.44
+    if ($db_version < 0.44) {
+        try {
+            $ncfg->set('db_monnet_version', $files_version, 1);
             $db->query("START TRANSACTION");
             $db->query("ALTER TABLE `networks` ADD `pool` TINYINT NOT NULL DEFAULT '0' AFTER `scan`;");
             $db->query("
-                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
-            ");
-            $db->query("
                 ALTER TABLE `hosts_logs`
-                ADD `type` VARCHAR(255) NOT NULL DEFAULT '0'
+                ADD `log_type` VARCHAR(255) NOT NULL DEFAULT '0'
                 COMMENT '0 default, 1 event'
                 AFTER `level`;
             ");
@@ -240,72 +252,58 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 DROP TABLE IF EXISTS load_stats;
             ");
             $db->query("
-                CREATE TABLE `tasks` (
+                CREATE TABLE IF NOT EXISTS `tasks` (
                   `id` int NOT NULL AUTO_INCREMENT,
                   `hid` int NOT NULL,
                   `task` tinyint NOT NULL,
                   `what` varchar(255) NOT NULL,
+                  `next_task` int DEFAULT '0',
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+                ) ENGINE=InnoDB;
             ");
-//            $db->query("
-//            ");
-            $db->query("COMMIT");
-            $ncfg->set('db_monnet_version', $files_version);
-            $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
-        } catch (Exception $e) {
-            $db->query("ROLLBACK");
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
-        }
-    }
-    // 0.43
-    if ($db_version < 0.00) {
-        try {
-            $db->query("START TRANSACTION");
             $db->query("
-                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
+                CREATE TABLE IF NOT EXISTS `ports` (
+                  `id` int NOT NULL AUTO_INCREMENT,
+                  `hid` int NOT NULL,
+                  `scan_type` tinyint NOT NULL DEFAULT '0' COMMENT '0 None 1 remote scan 2 agent provided',
+                  `protocol` tinyint NOT NULL COMMENT '1 tcp 2 udp',
+                  `pnumber` smallint UNSIGNED NOT NULL,
+                  `online` tinyint(1) NOT NULL DEFAULT '0',
+                  `interface` varchar(45) DEFAULT NULL,
+                  `last_change` datetime NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `idx_hid` (`hid`)
+                ) ENGINE=InnoDB;
             ");
-            $db->query("COMMIT");
-            $ncfg->set('db_monnet_version', $files_version);
-            $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
-        } catch (Exception $e) {
-            $db->query("ROLLBACK");
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
-        }
-    }
-    // 0.45
-    if ($db_version < 0.00) {
-        try {
-            $db->query("START TRANSACTION");
             $db->query("
-                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
+                DELETE FROM prefs
+                WHERE uid = '0' AND pref_name = 'monnet_version'
+                LIMIT 1
             ");
             $db->query("COMMIT");
-            $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
             Log::info('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
+            //$ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
 
-    // Template
+   // 0.00 Template
     if ($db_version < 0.00) {
         try {
+            $ncfg->set('db_monnet_version', $files_version, 1);
             $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
-            $db->query("
-                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
-            ");
+            //$db->query("
+            //");
             $db->query("COMMIT");
-            $ncfg->set('db_monnet_version', $files_version);
             $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
 }
@@ -315,16 +313,17 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
  * @var Database $db
  */
 if ($db->isConn()) {
-    $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
-    if ($query) :
-        $result = $db->fetchAll($query);
-        if ($result) :
-            $db_version = (float) $result[0]['pref_value'];
-            $files_version = $cfg['monnet_version'];
+    $lockFile = '/tmp/monnet_update.lock';
+    //$query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
+    $db_version = (float) $ncfg->get('db_monnet_version');
+    if ($db_version) :
+        $files_version = (float) $cfg['monnet_version'];
 
-            if ($files_version > $db_version) :
-                trigger_update($ncfg, $db, $db_version, $files_version);
-            endif;
+        if (($files_version > $db_version) && !file_exists($lockFile) ) :
+            file_put_contents($lockFile, 'locked');
+            Log::info("Triggered");
+            trigger_update($ncfg, $db, $db_version, $files_version);
+            unlink ($lockFile);
         endif;
     endif;
 }
