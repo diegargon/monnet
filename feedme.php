@@ -189,7 +189,7 @@ endif;
 
 //TODO: ADD EVENT TYPE 1 to logHost notifications
 if ($command === 'notification' && isset($rdata['name'])) :
-    $log_msg = "Receive $command with id: hostid, {$rdata['name']}";
+    $log_msg = "Receive $command with id: $hostid, {$rdata['name']}";
     isset($rdata['msg']) ? $log_msg .= ':' . $rdata['msg'] : null;
 
     if ($rdata['name'] == 'starting') :
