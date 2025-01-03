@@ -187,9 +187,10 @@ class Config
      *
      * @param string|int $key Clave de configuración.
      * @param mixed $value Valor de configuración.
+     * @param int force_save
      * @return int 1 if field change
      */
-    public function set($key, $value): int
+    public function set($key, $value, $force_save = 0): int
     {
         if (isset($this->cfg[$key])) {
             $config = &$this->cfg[$key];
@@ -214,6 +215,9 @@ class Config
                 return 1;
             }
         }
+        if ($force_save) :
+            $this->saveChanges();
+        endif;
 
         return 0;
     }
