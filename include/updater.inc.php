@@ -234,12 +234,14 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $ncfg->set('db_monnet_version', $files_version, 1);
             $db->query("START TRANSACTION");
             $db->query("ALTER TABLE `networks` ADD `pool` TINYINT NOT NULL DEFAULT '0' AFTER `scan`;");
+            //DONE log_type para guarda diferentes tipos de logs referentes a host, events, alerts etch
             $db->query("
                 ALTER TABLE `hosts_logs`
                 ADD `log_type` VARCHAR(255) NOT NULL DEFAULT '0'
                 COMMENT '0 default, 1 event'
                 AFTER `level`;
             ");
+            //DONE Drop wrong UNIQUE index date  y crear un index normal
             $db->query("
                 ALTER TABLE `stats`
                     DROP INDEX `date`;
@@ -248,9 +250,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ALTER TABLE `stats`
                   ADD INDEX `idx_host_date` (`host_id`, `date`);
             ");
+            //DONE No la necesitamos utilizamos stats
             $db->query("
                 DROP TABLE IF EXISTS load_stats;
             ");
+            // Se usara para guardar tareas referentes a eventos
             $db->query("
                 CREATE TABLE IF NOT EXISTS `tasks` (
                   `id` int NOT NULL AUTO_INCREMENT,
@@ -261,6 +265,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB;
             ");
+            //DONE Usamos tabla ports en vez hosts->ports
             $db->query("
                 CREATE TABLE IF NOT EXISTS `ports` (
                   `id` int NOT NULL AUTO_INCREMENT,
@@ -275,6 +280,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   KEY `idx_hid` (`hid`)
                 ) ENGINE=InnoDB;
             ");
+            //DONE Utilizamos ncfg y db_monnet_version
             $db->query("
                 DELETE FROM prefs
                 WHERE uid = '0' AND pref_name = 'monnet_version'
@@ -295,18 +301,19 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $ncfg->set('db_monnet_version', $files_version, 1);
             $db->query("START TRANSACTION");
-            //ACK Review
+            //ACK Review, filtrar y no mostrar logs vistos
             $db->query("
                 ALTER TABLE `hosts_logs` ADD `ack` BOOLEAN NOT NULL DEFAULT FALSE AFTER `msg`;
             ");
-            //Service Name
+            //DONE Service Name, el agente los puertos guarda el nombre del servicio
             $db->query("
                 ALTER TABLE `ports` ADD `service` VARCHAR(255) NOT NULL AFTER `interface`;
             ");
-            //Custom Service name
+            //Custom Service name por si el usuario quiere cambiar el nombre a mostrar
             $db->query("
                 ALTER TABLE `ports` ADD `custom_service` VARCHAR(255) NULL AFTER `interface`;
             ");
+            //DONE el agente envia ip_version ipv4 1 ipv6 2
             $db->query("
                 ALTER TABLE `ports` ADD `ip_version` VARCHAR(5) NOT NULL AFTER `interface`;
             ");
@@ -327,7 +334,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $ncfg->set('db_monnet_version', $files_version, 1);
             $db->query("START TRANSACTION");
-            // DROP hosts->alert_msg host->warn_msg $host->warn_port
             //$db->query("
             //");
             $db->query("COMMIT");
@@ -345,7 +351,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $ncfg->set('db_monnet_version', $files_version, 1);
             $db->query("START TRANSACTION");
-            // DROP hosts->alert_msg host->warn_msg $host->warn_port
+            // DROP hosts->alert_msg host->warn_msg $host->warn_port hosts->ports
             //$db->query("
             //");
             $db->query("COMMIT");
