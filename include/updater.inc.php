@@ -290,6 +290,56 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
+   // 0.45 Template
+    if ($db_version < 0.00) {
+        try {
+            $ncfg->set('db_monnet_version', $files_version, 1);
+            $db->query("START TRANSACTION");
+            //ACK Review
+            $db->query("
+                ALTER TABLE `hosts_logs` ADD `ack` BOOLEAN NOT NULL DEFAULT FALSE AFTER `msg`;
+            ");
+            //Service Name
+            $db->query("
+                ALTER TABLE `ports` ADD `service` VARCHAR(255) NOT NULL AFTER `interface`;
+            ");
+            //Custom Service name
+            $db->query("
+                ALTER TABLE `ports` ADD `custom_service` VARCHAR(255) NOT NULL AFTER `interface`;
+            ");
+            $db->query("
+                ALTER TABLE `ports` ADD `ip_version` VARCHAR(5) NOT NULL AFTER `interface`;
+            ");
+            //$db->query("
+            //");
+            $db->query("COMMIT");
+            $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+  // 0.00 Template
+    if ($db_version < 0.00) {
+        try {
+            $ncfg->set('db_monnet_version', $files_version, 1);
+            $db->query("START TRANSACTION");
+            // DROP hosts->alert_msg host->warn_msg $host->warn_port
+            //$db->query("
+            //");
+            $db->query("COMMIT");
+            $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
    // 0.00 Template
     if ($db_version < 0.00) {
         try {
