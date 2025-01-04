@@ -83,6 +83,6 @@
         </table>
         <button id="submitNetwork" type="submit"><?= $lng['L_SEND'] ?></button>
     </div>
-    <?= !empty($tdata['networks_table']) ? $tdata['networks_table'] : 'hola';?>
+    <?= !empty($tdata['networks_table']) ? $tdata['networks_table'] : '';?>
 </div>
 
