@@ -145,13 +145,21 @@ let autoReloadIntervals = {}; // Guardar los intervalos de cada botón
         }
     });
 
-    $(document).on("click", "#deleteHostPort", function () {
-        var portId = $('#current_ports').val();
+    $(document).on("click", ".deleteRemoteHostPort", function () {
+        var portId = $('.current_remote_ports').val();
+
         if (portId) {
             requestHostDetails('deleteHostPort', {id: portId});
         }
     });
 
+    $(document).on("click", ".deleteAgentHostPort", function () {
+        var portId = $('.current_agent_ports').val();
+        if (portId) {
+            requestHostDetails('deleteHostPort', {id: portId});
+        }
+    });
+    
     $(document).on("input", "#alarm_emails", function () {
         var hostId = $('#host_id').val();
 

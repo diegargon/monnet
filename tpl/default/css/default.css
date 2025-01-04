@@ -802,6 +802,7 @@ input:checked + .slider:before {
     background-color: rgb(55, 50, 37);
     resize: both;
     padding-bottom: 8px;
+    width: 50vw;
 }
 .host-details-bar {
     display: inline-block;
@@ -915,7 +916,7 @@ input:checked + .slider:before {
 }
 .host_port_container {
     text-align: center;
-    font-size: 0.8em;
+    font-size: 0.9em;
     border: 0px solid blue;
     overflow: auto;
 }
@@ -1580,6 +1581,38 @@ input:checked + .slider:before {
 .progress-bar:hover::after {
     opacity: 1;
 }
+
+.port_container {
+    position: relative;
+    cursor: pointer;
+}
+
+.port_container:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px;
+    z-index: 10;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s;
+}
+
+.port_container:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.port_container::after {
+    opacity: 0;
+    visibility: hidden;
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

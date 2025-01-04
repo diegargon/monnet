@@ -153,11 +153,11 @@
         </div>
         <!-- THIRD HEADED BAR -->
         <?php
-        if ($tdata['host_details']['check_method'] == 2 && !empty($tdata['host_details']['ports'])) {
+        if (!empty($tdata['host_details']['remote_ports'])) {
             ?>
             <div class="host_port_container">
                 <?php
-                foreach ($tdata['host_details']['ports'] as $port) {
+                foreach ($tdata['host_details']['remote_ports'] as $port) {
                     ?>
                     <div class="port_container">
                         <?php if ($port['online']) : ?>
@@ -166,7 +166,35 @@
                             <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
                         <?php endif; ?>
                         <!-- <div class="host_port_name"></div> -->
-                        <div class="host_port">(<?= $port['pnumber'] ?>)</div>
+                        <div class="host_port">
+                            (<?= $port['pnumber'] ?>)
+                        </div>
+                    </div> <!-- port container -->
+                <?php } ?>
+            </div> <!-- host port container -->
+        <?php } ?>
+        <?php
+        if (!empty($tdata['host_details']['agent_ports'])) {
+            ?>
+            <div class="host_port_container">
+                <?php
+                foreach ($tdata['host_details']['agent_ports'] as $port) {
+                    $port['protocol'] = $port['protocol'] == 1 ? 'TCP' : 'UDP';
+                    $port_name = !empty($port['custom_service']) ? $port['custom_service'] : $port['service'];
+                    ?>
+                    <div class="port_container"
+                         data-tooltip="<?= $port['pnumber'] . ' ' . $port['protocol'] . '(' . $port['ip_version']?>)">
+                        <?php if ($port['online']) : ?>
+                            <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
+                        <?php else : ?>
+                            <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
+                        <?php endif; ?>
+                        <!-- <div class="host_port_name"></div> -->
+                        <div class="host_port">
+                            <div class="port_status">
+                                <?=  $port_name  ?>
+                            </div>
+                        </div>
                     </div> <!-- port container -->
                 <?php } ?>
             </div> <!-- host port container -->
@@ -664,11 +692,11 @@
                         </select>
                         <button id="submitHostPort"><?= $lng['L_SEND'] ?></button>
                         <?php
-                        if (!empty($tdata['host_details']['ports'])) :
+                        if (!empty($tdata['host_details']['remote_ports'])) :
                         ?>
-                        <select id="current_ports">
+                        <select class="current_remote_ports">
                             <?php
-                            foreach ($tdata['host_details']['ports'] as $port) :
+                            foreach ($tdata['host_details']['remote_ports'] as $port) :
                                 $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
                                 $port_name = "{$port['pnumber']}($port_protocol)"
                              ?>
@@ -677,7 +705,7 @@
                             endforeach;
                             ?>
                         </select>
-                        <button id="deleteHostPort"><?= $lng['L_DELETE'] ?></button>
+                        <button class="deleteRemoteHostPort"><?= $lng['L_DELETE'] ?></button>
                         <?php
                         endif;
                         ?>
@@ -698,36 +726,53 @@
                 <div class="right-config-column">
                     <div class="">
                         <div>Agent</div>
+                        <?php
+                        if (!empty($tdata['host_details']['agent_ports'])) :
+                        ?>
+                        <select class="current_agent_ports">
+                            <?php
+                            foreach ($tdata['host_details']['agent_ports'] as $port) :
+                                $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
+                                $port_name = "{$port['pnumber']}($port_protocol)"
+                             ?>
+                            <option value="<?= $port['id'] ?>"><?= $port_name ?></option>
+                            <?php
+                            endforeach;
+                            ?>
+                        </select>
+                        <button class="deleteAgentHostPort"><?= $lng['L_DELETE'] ?></button>
+                        <?php
+                        endif;
+                        ?>
+
                         <div>
-                        <label for="reports_stats">Report Stats</label>
-                        <input type="checkbox" id="report_stats"</input>
+                        <label for="reports_stats">Disable Stats</label>
+                        <input type="checkbox" id="disable_stats" disabled/>
                         </div>
                         <div>
-                        <label for="reports_ports">Report Ports</label>
-                        <input type="checkbox" id="report_ports"</input>
-                        <label for="monitor_ports">Monitor Ports</label>
-                        <input type="text" id="monitor_ports" name="checkports" value=""/>
+                        <label for="reports_ports">Disable Report Ports</label>
+                        <input type="checkbox" id="disable_report_ports" disabled/>
                         </div>
                         <div>
                         <label for="reports_services">Report Services</label>
-                        <input type="checkbox" id="report_services"</input>
+                        <input type="checkbox" id="report_services" disabled/>
                         <label for="monitor_services">Monitor Services</label>
-                        <select id="monitor_services"></select>
+                        <select id="monitor_services" disabled></select>
                         </div>
                         <div>Ansible</div>
                         <div>
                         <label for="ansible_recovery">Recovery Services</label>
-                        <input type="checkbox" id="ansible_recovery"</input>
+                        <input type="checkbox" id="ansible_recovery" disabled/>
                         <label for="ansible_recovery_service">Recovery Service</label>
-                        <select id="ansible_recovery_service"></select>
+                        <select id="ansible_recovery_service" disabled></select>
                         <label for="ansible_recovery_service_playbook">Recovery Playbook</label>
-                        <select id="ansible_recovery_service_playbook"></select>
+                        <select id="ansible_recovery_service_playbook" disabled></select>
                         <!-- Mutliple services check? -->
                         <div>Ansible Reports</div>
                         <label for="ansible_boot_report">Boot Report</label>
-                        <input type="checkbox" id="ansible_boot_report"</input>
+                        <input type="checkbox" id="ansible_boot_report" disabled />
                         <label for="ansible_boot_report_playbook">Boot Report Playbook</label>
-                        <select id="ansible_boot_report_playbook"></select>
+                        <select id="ansible_boot_report_playbook" disabled></select>
                         </div>
                     </div>
                 </div>

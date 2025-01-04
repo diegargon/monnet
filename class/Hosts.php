@@ -670,7 +670,7 @@ class Hosts
                 $alert_logs_items = [];
 
                 foreach ($alert_logs as $item):
-                    if (!in_array($alog['msg'], $alert_logs_msgs)) :
+                    if (!in_array($log['msg'], $alert_logs_msgs)) :
                         $alert_logs_msgs = $item['msg'];
                         $alert_logs_items = $item;
                     endif;
@@ -775,12 +775,16 @@ class Hosts
      */
     public function addRemoteScanHostPort(int $hid, array $details): void
     {
+        empty($details['ip_version']) ? $details['ip_version'] = 1 : null;
+        empty($details['service']) ? $details['service'] = 'unknown' : null;
         $insert = [
             'hid' => $hid,
             'scan_type' => 1,
             'protocol' => $details['protocol'],
             'pnumber' => $details['pnumber'],
-            'last_change' => date_now()
+            'last_change' => date_now(),
+            'ip_version' => $details['ip_version'],
+            'service' => $details['service'],
         ];
         //TODO check if exists
         $this->db->insert('ports', $insert);
@@ -871,7 +875,6 @@ class Hosts
                 $this->hosts[$id]['ports'] = '';
             endif;
             /* END REMOVE */
-            $this->hosts[$id]['ports'] = $this->getHostScanPorts($id, $remote_scan=1);
 
             /* Misc field  fields that we keep in JSON format */
             if (!isEmpty($this->hosts[$id]['misc'])) :

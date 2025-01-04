@@ -544,8 +544,21 @@ if (
     $tdata['host_details'] = [];
 
     $host_details = get_host_detail_view_data($ctx, $target_id);
+
     if (valid_array($host_details)) {
         $tdata['host_details'] = $host_details;
+
+        /* Add ports */
+        if ($host_details['check_method'] == 2) :
+            $remote_ports = $hosts->getHostScanPorts($target_id, $remote_scan=1);
+            !empty($remote_ports) ? $tdata['host_details']['remote_ports'] = $remote_ports : null;
+        endif;
+
+        if (!empty($host_details['agent_installed'])) :
+            $agent_ports = $hosts->getHostScanPorts($target_id, $remote_scan=2);
+            !empty($agent_ports) ? $tdata['host_details']['agent_ports'] = $agent_ports : null;
+        endif;
+
         $tdata['host_details']['host_logs'] = $frontend->getTpl(
             'term',
             [
