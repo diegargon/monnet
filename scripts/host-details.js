@@ -126,6 +126,32 @@ let autoReloadIntervals = {}; // Guardar los intervalos de cada botón
         submitCommand(command, {id: hostId, value: value});
     });
 
+    $(document).on("change", "#checkports_enabled", function () {
+        var hostId = $('#host_id').val();
+        var value = 1;
+
+        if (this.checked) {
+            value = 2;
+        }
+        requestHostDetails('setCheckPorts', {id: hostId, value: value});
+    });
+
+    $(document).on("click", "#submitHostPort", function () {
+        var portProtocol = $('#port_protocol').val();
+        var portNumber = $('#port_number').val();
+        var hostId = $('#host_id').val();
+        if (portNumber && portProtocol && hostId) {
+            requestHostDetails('submitHostPort', {id: hostId, value: portNumber, protocol: portProtocol});
+        }
+    });
+
+    $(document).on("click", "#deleteHostPort", function () {
+        var portId = $('#current_ports').val();
+        if (portId) {
+            requestHostDetails('deleteHostPort', {id: portId});
+        }
+    });
+
     $(document).on("input", "#alarm_emails", function () {
         var hostId = $('#host_id').val();
 

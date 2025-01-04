@@ -30,27 +30,26 @@ function check_known_hosts(AppContext $ctx): bool
     foreach ($db_hosts as $host) {
         $new_host_status = [];
         /* Port Scan */
-        if ($host['check_method'] == 2 && valid_array($host['ports'])) { //TCP
+        if ($host['check_method'] == 2) { //Ports
             Log::debug("Pinging host ports {$host['ip']}");
-            $ping_ports_result = ping_host_ports($ctx, $host);
-            if ($host['online'] == 1 && $ping_ports_result['online'] == 0) { //recheck
-                $ping_ports_result = ping_host_ports($ctx, $host);
-            }
-            //Ports are down, check host with ping
-            if ($ping_ports_result['online'] == 0) {
-                $host_ping_result = ping($host['ip'], ['sec' => 0, 'usec' => 100000]);
-                if ($host_ping_result['online']) {
-                    $ping_ports_result['online'] = 1;
-                    $ping_ports_result['latency'] = $host_ping_result['latency'];
-                    $ping_ports_result['last_seen'] = date_now();
-                } else {
-                    $ping_ports_result['online'] = 0;
-                }
-            }
-            (valid_array($ping_ports_result)) ? $new_host_status = $ping_ports_result : null;
+            $check_ports_result = check_host_ports($ctx, $host);
 
-            /* Ping Scan */
-        } else {
+            // If host change status to off  we check again
+            if ($host['online'] == 1 && $check_ports_result['online'] == 0) :
+                $check_ports_result = check_host_ports($ctx, $host);
+            endif;
+
+            $new_host_status = [
+                'online' => $check_ports_result['online'],
+                'warn' =>  $check_ports_result['warn'],
+                'latency' => $check_ports_result['latency']
+            ];
+            $ports_status = $check_ports_result['ports'];
+            foreach ($ports_status as $portid => $new_port_status) :
+                $db->update('ports', $new_port_status, ['id' => $portid]);
+            endforeach;
+
+        } else { /* Ping Scan */
             if (!empty($host['disable_ping'])) :
                 continue;
             endif;
@@ -59,7 +58,7 @@ function check_known_hosts(AppContext $ctx): bool
                 Log::warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
             endif;
             $ping_host_result = ping_known_host($ctx, $host);
-            //recheck
+            //recheck if was online
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) :
                 $ping_host_result = ping_known_host($ctx, $host);
             endif;
@@ -91,7 +90,7 @@ function check_known_hosts(AppContext $ctx): bool
                 $new_host_status['online_change'] = date_now();
                 $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout;
-                Log::logHost('LOG_WARNING', $host['id'], $log_msg);
+                Log::logHost('LOG_WARNING', $host['id'], $log_msg, 3);
                 if (!empty($host['alarm_ping_email'])) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;
@@ -100,8 +99,12 @@ function check_known_hosts(AppContext $ctx): bool
             $hosts->update($host['id'], $new_host_status);
             if ($new_host_status['online'] == 1 && isset($new_host_status['latency'])) {
                 $ping_latency = $new_host_status['latency'];
-                $set_ping_stats = ['date' => date_now(),
-                    'type' => 1, 'host_id' => $host['id'], 'value' => $ping_latency];
+                $set_ping_stats = [
+                    'date' => date_now(),
+                    'type' => 1,
+                    'host_id' => $host['id'],
+                    'value' => $ping_latency
+                ];
                 $db->insert('stats', $set_ping_stats);
             }
         } else {
@@ -156,8 +159,7 @@ function ping_nets(AppContext $ctx): void
             }
             $set['ip'] = $ip;
             $set['online'] = 1;
-            $set['alert'] = 1;
-            $set['alert_msg'] = $lng['L_NEW_HOST'];
+            $set['warn'] = 1;
 
             $network_id = $networks->getNetworkIDbyIP($ip);
             if ($network_id == false) {
@@ -172,7 +174,6 @@ function ping_nets(AppContext $ctx): void
             $set['last_seen'] = date_now();
             $hostname = $hosts->getHostname($ip);
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
-            Log::alert($lng['L_NEW_HOST'] . ': ' . $ip);
             $hosts->insert($set);
         }
     }
@@ -262,61 +263,70 @@ function check_macs(Hosts $hosts): void
 
 /**
  * Scan Host Ports
- * port_type = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping
+ * protocol = 2 (udp) only work for non DGRAM sockets, dgram need wait for response/ ping
  * @param AppContext $ctx
  * @param array<string, mixed> $host
  * @return array<string, mixed>
  */
-function ping_host_ports(AppContext $ctx, array $host): array
+function check_host_ports(AppContext $ctx, array $host): array
 {
-    $time_now = date_now();
+    $log_type = 2; // ports related
+    $latency = [];
+
+    $host_result = [
+        'online' => 0,
+        'latency' => null,
+        'warn' => 0,
+        'ports' => [],
+    ];
+    !empty($host['warn']) ? $host_result['warn'] = 1 : null;
 
     $networks = $ctx->get('Networks');
+    $db = $ctx->get('Mysql');
 
-    $err_code = $err_msg = '';
+    $result = $db->selectAll('ports', ['hid' => $host['id'], 'scan_type' => 1 ]);
+    $ports = $db->fetchAll($result);
 
-    //Custom timeout for host
+
     if (!empty($host['timeout'])) :
         $timeout = $host['timeout'];
     else :
         $timeout = $networks->isLocal($host['ip']) ? 0.6 : 1;
     endif;
 
-    $host_status = [];
-    $host_status['online'] = 0;
-    $host_status['warn_port'] = 0;
-    $host_status['warn_msg'] = '';
-    $host_status['last_check'] = $time_now;
-
-    foreach ($host['ports'] as $kport => $port) {
-        $host_status['ports'][$kport] = $port;
-        $host_status['ports'][$kport]['online'] = 0;
-        $host_status['ports'][$kport]['user'] = !empty($port['user'] ? 1 : 0);
+    foreach ($ports as $port) :
+        $error_code = $error_msg = '';
+        $port_status = [];
+        $port_status['last_change'] = date_now();
 
         $tim_start = microtime(true);
-        $ip = $host['ip'];
-        $port['port_type'] == 2 ? $ip = 'udp://' . $ip : null;
-        $conn = @fsockopen($ip, $port['n'], $err_code, $err_msg, $timeout);
+        $ip = trim($host['ip']);
+        $port['protocol'] == 2 ? $ip = 'udp://' . $ip : null;
 
-        if (is_resource($conn)) {
-            $host_status['online'] = 1;
-            $host_status['last_seen'] = $time_now;
-            $host_status['ports'][$kport]['online'] = 1;
+        $conn = @fsockopen($ip, $port['pnumber'], $error_code, $error_msg, $timeout);
+
+        if (is_resource($conn)) :
+            $host_result['online'] = 1; // Host is online
+            $port_status['online'] = 1;
+            $latency[] = round_latency(microtime(true) - $tim_start);
+            if ((int) $port['online'] === 0) :
+                Log::logHost('LOG_NOTICE', 'Port become Online');
+            endif;
             fclose($conn);
-            $latency = round_latency(microtime(true) - $tim_start);
-            $host_status['ports'][$kport]['latency'] = $latency;
-            $host_status['latency'] = $latency;
-        } else {
-            $warn_msg = 'Port ' . $port['n'] . ' down' . "\n";
-            $host_status['warn_port'] = 1;
-            $host_status['warn_msg'] .= $warn_msg;
-            $host['ports'][$kport]['warn_port_msg'] = $warn_msg;
-            $host['ports'][$kport]['err_code'] = $err_code;
-            $host['ports'][$kport]['err_msg'] = $err_msg;
-        }
-    }
+        elseif (empty($host['alarm_port_disable'])) :
+            $log_msg = "Port {$port['pnumber']} down: $error_msg ($error_code)";
+            Log::logHost('LOG_WARNING', $host['id'], $log_msg, $log_type);
+            $host_result['warn'] = 1;
+        endif;
 
-    if ($host_status['online'] == 0) {
+        $host_result['ports'][$port['id']] = $port_status;
+    endforeach;
+
+    if ($host_result['online'] === 0) :
+        /*
+         * Todos los puertos caidos probamos si el host esta online
+         * con ping
+         */
         if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
             $sec = intval($host['timeout']);
             $usec = ($host['timeout'] - $sec);
@@ -325,17 +335,22 @@ function ping_host_ports(AppContext $ctx, array $host): array
             $sec = 0;
             $usec = 100000;
         }
-
         $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
         if ($host_ping['online']) :
-            $host_status['online'] = 1;
+            $host_result['online'] = 1;
+            $host_result['latency'] = $host_ping['latency'];
+        else :
+            Log::logHost('LOG_WARNING', 'All Ports down and not response to the host ping');
         endif;
-    }
-    if (valid_array($host_status['ports'])) :
-        $host_status['ports'] = json_encode($host_status['ports']);
+    else :
+        // Calculamos la media latencia puertos
+        if (count($latency) > 0) :
+            $average_latency = array_sum($latency) / count($latency);
+            $host_result['latency'] = $average_latency;
+        endif;
     endif;
 
-    return $host_status;
+    return $host_result;
 }
 
 /**
@@ -366,7 +381,6 @@ function ping_known_host(AppContext $ctx, array $host): array
 
     $set = [];
     $set['online'] = 0;
-    $set['warn_port'] = 0;
     $set['latency'] = $ip_status['latency'];
     $set['last_check'] = $time_now;
     if ($ip_status['online']) {

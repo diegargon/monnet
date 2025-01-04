@@ -198,27 +198,25 @@ if ($command == 'submitHostToken' && !empty($target_id)) :
     endif;
 endif;
 
-if ($command == 'submitScanPorts' && !empty($target_id)) {
-    $success_msg = '';
-    if (!empty($value_command)) {
-        $valid_ports = validatePortsInput($value_command);
-        if (valid_array($valid_ports)) {
-            if (($encoded_ports = json_encode($valid_ports))) {
-                $db->update('hosts', ['ports' => $encoded_ports], ['id' => $target_id]);
-                $total_elements = count($valid_ports) - 1;
-                foreach ($valid_ports as $index => $port) {
-                    $success_msg .= $port['n'] . '/';
-                    $success_msg .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
-                    $success_msg .= '/' . $port['name'];
-                    $success_msg .= ($index === $total_elements) ? '' : ',';
-                }
-            }
-        }
-    }
+if(
+    !empty($command == 'submitHostPort') &&
+    $target_id > 0 &&
+    is_numeric($value_command) &&
+    (isset($command_values['protocol']) && is_numeric($command_values['protocol']))
+) {
+    $port_details = [
+        'pnumber' => $value_command,
+        'protocol' => $command_values['protocol'],
+    ];
+    $hosts->addRemoteScanHostPort($target_id, $port_details);
     $data['command_success'] = 1;
-    $data['response_msg'] = $success_msg;
-    $data['response_msg'] = 'ok';
+    $data['response_msg'] = 'Port Added';
 }
+
+if ($command == 'deleteHostPort' && $target_id > 0) :
+    $hosts->deletePortById($target_id);
+    $data['command_success'] = 1;
+endif;
 
 if ($command == 'submitTitle' && !empty($target_id)) :
     if (!empty($value_command)) :

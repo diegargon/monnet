@@ -155,10 +155,11 @@ class Log
      * @param string $loglevel
      * @param int $host_id
      * @param string $msg
+     * @param int $log_type
      *
      * @return void
      */
-    public static function logHost(string $loglevel, int $host_id, string $msg, int $type = 0): void
+    public static function logHost(string $loglevel, int $host_id, string $msg, int $log_type = 0): void
     {
         $level = self::getLogLevelID($loglevel);
         if (mb_strlen($msg) > self::$max_db_msg) {
@@ -167,13 +168,12 @@ class Log
         } else {
             $msg_db = $msg;
         }
-        //TODO [ 'type' => $type ]
-        $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg_db];
+        $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg_db, 'log_type' => $log_type];
         self::$db->insert('hosts_logs', $set);
     }
 
     /**
-     *
+     * Return logs from ALL hosts
      * @param int $limit
      * @return array<int, array<string, string>>
      */
@@ -189,13 +189,13 @@ class Log
     }
 
     /**
-     *
+     * Return logs from a host(id)
      * @param int $host_id
      * @param array<string, mixed> $opts
      *
      * @return array<int, array<string, string>>
      */
-    public static function getLoghost(int $host_id, array $opts): array
+    public static function getLoghost(int $host_id, array $opts = []): array
     {
         $lines = [];
         if (!isset($opts['log_level']) || !is_numeric($opts['log_level'])) :
@@ -205,7 +205,22 @@ class Log
         endif;
 
         $query = 'SELECT * FROM hosts_logs WHERE level <= ' . $log_level .
-            ' AND host_id = ' . $host_id . ' ORDER BY date DESC';
+            ' AND host_id =' . $host_id;
+
+        if (isset($opts['log_type'])) :
+            if (is_array($opts['log_type'])) :
+                $query .= ' AND (';
+                foreach ($opts['log_type'] as $idx => $l_types) :
+                    $idx > 0 ? $query .= ' OR ' : null;
+                    $query .= 'log_type=' . $l_types;
+                endforeach;
+                $query .= ')';
+            else :
+                $query .= ' AND log_type=' . (int) $opts['log_type'];
+            endif;
+        endif;
+
+        $query .= ' ORDER BY date DESC';
 
         if (!empty($opts['max_lines'])) :
             $query .= ' LIMIT ' . $opts['max_lines'];

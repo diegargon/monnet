@@ -185,15 +185,17 @@ if (!isEmpty($rdata)) :
     if (!isEmpty($rdata['iowait'])) :
         $host_update_values['iowait'] = $rdata['iowait'];
     endif;
+    if (!isEmpty($rdata['listen_ports_info'])):
+        //feed_update_listen_ports($hosts, $host_id, $rdata['listen_ports_info']);
+    endif;
 endif;
 
-//TODO: ADD EVENT TYPE 1 to logHost notifications
 if ($command === 'notification' && isset($rdata['name'])) :
     $log_msg = "Receive $command with id: $host_id, {$rdata['name']}";
     isset($rdata['msg']) ? $log_msg .= ':' . $rdata['msg'] : null;
 
     if ($rdata['name'] == 'starting') :
-        Log::logHost('LOG_NOTICE', $host_id, $log_msg);
+        Log::logHost('LOG_NOTICE', $host_id, $log_msg, 1);
         if (!empty($rdata['ncpu'])) :
             if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
                 $host_update_values['ncpu'] = $rdata['ncpu'];
@@ -205,7 +207,7 @@ if ($command === 'notification' && isset($rdata['name'])) :
             endif;
         endif;
     else :
-        Log::logHost('LOG_WARNING', $host_id, $log_msg);
+        Log::logHost('LOG_WARNING', $host_id, $log_msg, 1);
     endif;
 endif;
 

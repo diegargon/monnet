@@ -88,35 +88,36 @@ if ($user->getPref('show_termlog_status')) {
 
     $host_logs = Log::getLoghosts($cfg['term_max_lines']);
 
-    if (!empty($host_logs)) {
-        foreach ($host_logs as &$log) {
-            $log['type_mark'] = '[H]';
-        }
+    if (!empty($host_logs)) :
+        foreach ($host_logs as &$log) :
+            $host = $hosts->getHostById($log['host_id']);
+            $log['type_mark'] = '[H][' . $host['display_name'] .']';
+        endforeach;
         $logs = $host_logs;
-    }
+    endif;
 
 
-    if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) {
+    if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) :
         $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
-        if (!empty($system_logs)) {
-            foreach ($system_logs as &$system_log) {
+        if (!empty($system_logs)) :
+            foreach ($system_logs as &$system_log) :
                 $system_log['type_mark'] = '[S]';
-            }
+            endforeach;
             $logs = array_merge($logs, $system_logs);
-        }
-    }
+        endif;
+    endif;
 
-    foreach ($logs as &$log) {
+    foreach ($logs as &$log) :
         $log['timestamp'] = strtotime($log['date']);
-    }
+    endforeach;
 
     usort($logs, function ($a, $b) {
         return $b['timestamp'] <=> $a['timestamp'];
     });
 
-    foreach ($logs as &$log) {
+    foreach ($logs as &$log) :
         unset($log['timestamp']);
-    }
+    endforeach;
 
     //If we add systems logs probably we exceed the max
     if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {

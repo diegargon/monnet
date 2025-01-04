@@ -47,8 +47,8 @@ $lng = [
     'L_CATEGORIES' => 'Categorias',
     'L_CREATE' => 'Crear',
     'L_COMMA_SEPARATED' => '(Separado por coma)',
-    'L_CLEAR_ALARMS' => 'Limpiar alarmas',
-    'L_CLEAR_ALARMS_BY' => 'Alarms Cleared by user',
+    'L_CLEAR_ALARMS_BITS' => 'Limpiar Alertas',
+    'L_CLEAR_ALARMS_BITS_BY' => 'Alertas eliminadas por el usuario',
     'L_CHECKS' => 'Checks',
     //D
     'L_DELETE' => 'Borrar',
@@ -179,6 +179,7 @@ $lng = [
     'L_REFRESHED' => 'Refrescado',
     'L_REMOTE_HOST' => 'Host Remoto',
     'L_ROL' => 'Rol',
+    'L_REMOTE_PORT_CHECK' => 'Comprobacion remota de puertos',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',

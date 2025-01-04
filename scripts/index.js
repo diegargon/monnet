@@ -199,16 +199,7 @@ $(document).ready(function () {
         submitCommand('toggleDisablePing', {id: hostId, value: value});
     });
 
-    $(document).on("change", "#checkports_enabled", function () {
-        var hostId = $('#host_id').val();
-        var value = 1;
-
-        if (this.checked) {
-            value = 2;
-        }
-        submitCommand('setCheckPorts', {id: hostId, value: value});
-    });
-
+    //TODO Borrar
     $(document).on("click", "#submitPorts", function () {
         var portsValue = $('#checkports').val();
         var hostId = $('#host_id').val();
@@ -216,6 +207,8 @@ $(document).ready(function () {
             submitCommand('submitScanPorts', {id: hostId, value: portsValue});
         }
     });
+    //
+
     $(document).on("click", "#submitTitle", function () {
         var titleValue = $('#host-title').val();
         var hostId = $('#host_id').val();

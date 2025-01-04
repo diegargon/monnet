@@ -223,7 +223,7 @@ class Hosts
                     if ($kvalue === 'hostname') :
                         $alert_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'];
                     endif;
-                    $this->hosts[$id]['alert_msg'] = $alert_msg;
+                    Log::loghost('LOG_ALERT', $alert_msg, 3);
                     if (!empty($this->hosts[$id]['alarm_macchange_email'])) :
                         $this->sendHostMail($id, $alert_msg, $alert_msg);
                     endif;
@@ -312,8 +312,8 @@ class Hosts
         $host['display_name'] = $this->getDisplayName($host);
         $this->hosts[$host_id] = $host;
         $network_name = $this->ctx->get('Networks')->getNetworkNameByID($host_id);
-        Log::logHost('LOG_NOTICE', $host_id, 'Found new host: '
-            . $host['display_name'] . ' on network ' . $network_name);
+        Log::logHost('LOG_WARNING', $host_id, 'Found new host: '
+            . $host['display_name'] . ' on network ' . $network_name, 4);
     }
 
     /**
@@ -343,6 +343,7 @@ class Hosts
             return null;
         endif;
         $host = $this->hosts[$id];
+        //TODO: Load notes on changetab
         $result = $this->db->select('notes', '*', ['id' => $host['notes_id']], 'LIMIT 1');
         $notes = $this->db->fetch($result);
         $host['notes'] = $notes['content'];
@@ -437,11 +438,10 @@ class Hosts
         $values = [
             'alert' => 0,
             'warn' => 0,
-            'warn_port' => 0,
             'ansible_fail' => 0,
             ];
         $this->update($id, $values);
-        Log::logHost('LOG_NOTICE', $id, $this->lng['L_CLEAR_ALARMS_BY'] . ': ' . $username);
+        Log::logHost('LOG_NOTICE', $id, $this->lng['L_CLEAR_ALARMS_BITS_BY'] . ': ' . $username);
 
         return true;
     }
@@ -467,9 +467,8 @@ class Hosts
      */
     public function setAlarmOn(int $id, string $msg): void
     {
-        $this->hosts[$id]['alert'] = 1;
-        $this->hosts[$id]['alert_msg'] = $msg;
-        $this->update($id, ['alert' => 1, 'alert_msg' => $msg]);
+        Log::logHost('LOG_WARNING', $id, $msg, 3);
+        $this->update($id, ['alert' => 1]);
     }
 
     /**
@@ -481,10 +480,9 @@ class Hosts
     public function setAnsibleAlarm(int $id, string $msg): void
     {
 
-        $this->hosts[$id]['alert'] = 1;
-        $this->hosts[$id]['alert_msg'] = 'Ansible Alert';
-        $this->hosts[$id]['ansible_fail'] = 1;
-        $this->update($id, ['alert' => 1, 'alert_msg' => $msg, 'ansible_fail' => 1]);
+        $log_msg = 'Ansible alert: '. $msg;
+        Log::logHost('LOG_WARNING', $id, $log_msg, 3);
+        $this->update($id, ['alert' => 1, 'ansible_fail' => 1]);
         $this->db->query("INSERT INTO `ansible_msg` ('host_id', 'msg') VALUES ($id, $msg)");
     }
 
@@ -657,7 +655,7 @@ class Hosts
     }
 
     /**
-     *
+     * Recogemos las alertas, quitamos duplicados y mostramos las 4 ultimas
      * @return array<int,array<string,string>>
      */
     public function getAlertHosts(): array
@@ -666,6 +664,68 @@ class Hosts
 
         foreach ($this->hosts as $host) :
             if ($host['alert'] && empty($host['disable_alarms'])) :
+                //TODO add !ACK
+                $alert_logs = Log::getLogHost($host['id'], ['log_type' => 3]);
+                $alert_logs_msgs = [];
+                $alert_logs_items = [];
+
+                foreach ($alert_logs as $item):
+                    if (!in_array($alog['msg'], $alert_logs_msgs)) :
+                        $alert_logs_msgs = $item['msg'];
+                        $alert_logs_items = $item;
+                    endif;
+                endforeach;
+                $alert_logs = array_slice($alert_logs_msgs, 0, 4);
+                $timezone = $this->ncfg->get('timezone');
+                $timeformat = $this->ncfg->get('datetime_format_min');
+                foreach($alert_logs_items as $item):
+                    $date = utc_to_tz($item['date'], $timezone, $timeformat);
+                    $host['alert_msg'] .= "{$item['msg']} - $date<br/>";
+                endforeach;
+            endif;
+            $result_hosts[] = $host;
+        endforeach;
+
+        return $result_hosts;
+    }
+
+    /**
+     * Recogemos los warnings, quitamos duplicados y mostramos las 4 ultimas
+     * 2 port_wartn, 4 warn
+     * @return array<int,array<string,string>>
+     */
+    public function getWarnHosts(): array
+    {
+        $result_hosts = [];
+
+        foreach ($this->hosts as $host) :
+            if ( $host['warn'] && empty($host['disable_alarms'])) :
+                //TODO add !ACK
+                $log_type[] = 2;
+                $log_type[] = 4;
+                $opt = [
+                    'log_type' => $log_type,
+                ];
+                $warn_logs = Log::getLogHost($host['id'], $opt);
+
+                $warn_logs_msgs = [];
+                $warn_logs_items = [];
+
+                if (!empty($warn_logs)) :
+                    foreach ($warn_logs as $item) :
+                        if (!in_array($item['msg'], $warn_logs_msgs)) :
+                            $warn_logs_msgs[] = $item['msg'];
+                            $warn_logs_items[] = $item;
+                        endif;
+                    endforeach;
+                    $warn_logs_items = array_slice($warn_logs_items, 0, 4);
+                    $timezone = $this->ncfg->get('timezone');
+                    $timeformat = $this->ncfg->get('datetime_format_min');
+                    foreach ($warn_logs_items as $item) :
+                        $date = utc_to_tz($item['date'], $timezone, $timeformat);
+                        $host['warn_msg'] .= "{$item['msg']} - $date<br/>";
+                    endforeach;
+                endif;
                 $result_hosts[] = $host;
             endif;
         endforeach;
@@ -674,23 +734,65 @@ class Hosts
     }
 
     /**
-     *
-     * @return array<int,array<string,string>>
+     * Return all ports associate with this host id
+     * @param int $hid
+     * @return array<int,array<string,string|int>>
      */
-    public function getWarnHosts(): array
+    public function getAllHostPorts(int $hid): array
     {
-        $result_hosts = [];
+        $result = $this->db->selectAll('ports', ['hid' => $hid]);
 
-        foreach ($this->hosts as $host) :
-            if (
-                ($host['warn'] || $host['warn_port']) &&
-                (empty($host['disable_alarms']))
-            ) :
-                $result_hosts[] = $host;
-            endif;
-        endforeach;
+        return $this->db->fetchAll($result);
+    }
 
-        return $result_hosts;
+    public function getHostScanPorts(int $hid, int $scan_type = 0): array
+    {
+
+        $result = $this->db->selectAll(
+            'ports', [
+                'hid' => $hid,
+                'scan_type' => $scan_type
+                ]
+        );
+
+        return $this->db->fetchAll($result);
+    }
+
+    public function updatePort(int $port_id, array $set): void
+    {
+        $this->db->update('ports', $set, ['id' => $port_id]);
+    }
+
+    public function addPort(array $insert_data): void
+    {
+        $this->db->insert('ports', $insert_data);
+    }
+    /**
+     *
+     * @param int $hid
+     * @param array<string,string|int> $details
+     * @return void
+     */
+    public function addRemoteScanHostPort(int $hid, array $details): void
+    {
+        $insert = [
+            'hid' => $hid,
+            'scan_type' => 1,
+            'protocol' => $details['protocol'],
+            'pnumber' => $details['pnumber'],
+            'last_change' => date_now()
+        ];
+        //TODO check if exists
+        $this->db->insert('ports', $insert);
+    }
+    /**
+     *
+     * @param int $port_id
+     * @return void
+     */
+    public function deletePortById(int $port_id): void
+    {
+        $this->db->delete('ports', ['id' => $port_id]);
     }
     /**
      *
@@ -750,10 +852,27 @@ class Hosts
             else :
                 $this->host_cat_track[$host['category']]++;
             endif;
-            /* Port Field JSON TODO Need rethink */
+            /* Port Field JSON TODO remove  */
             if (!empty($this->hosts[$id]['ports'])) :
                 $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
+                //upgrade remove later
+                foreach ($this->hosts[$id]['ports'] as $port) :
+                    $set = [
+                        "hid" => $id,
+                        "pnumber" => $port['n'],
+                        "scan_type" => 1,
+                        "protocol" => $port['port_type'],
+                        "online" => $port['online'],
+                        "last_change" => date_now()
+                    ];
+                    $this->db->insert('ports', $set);
+                    $this->db->update('hosts', ['ports' => '{}'], ['id' => $id]);
+                endforeach;
+                $this->hosts[$id]['ports'] = '';
             endif;
+            /* END REMOVE */
+            $this->hosts[$id]['ports'] = $this->getHostScanPorts($id, $remote_scan=1);
+
             /* Misc field  fields that we keep in JSON format */
             if (!isEmpty($this->hosts[$id]['misc'])) :
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
@@ -798,8 +917,6 @@ class Hosts
                 endif;
 
                 if (!empty($host['warn'])) :
-                    $this->warns++;
-                elseif (!empty($host['warn_port'])) :
                     $this->warns++;
                 endif;
             endif;

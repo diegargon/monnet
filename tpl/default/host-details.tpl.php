@@ -165,8 +165,8 @@
                         <?php else : ?>
                             <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
                         <?php endif; ?>
-                        <div class="host_port_name"><?= $port['name'] ?></div>
-                        <div class="host_port">(<?= $port['n'] ?>)</div>
+                        <!-- <div class="host_port_name"></div> -->
+                        <div class="host_port">(<?= $port['pnumber'] ?>)</div>
                     </div> <!-- port container -->
                 <?php } ?>
             </div> <!-- host port container -->
@@ -453,12 +453,9 @@
                     <div id="email_feedback" style="color: red; font-size: 0.9em;"></div>
                 </div>
                 <div>
-                    <div><?= $lng['L_ALARMS_LAST'] ?> :</div>
-                    <div><?= $tdata['host_details']['alert_msg'] ?? '' ?></div>
-                    <div><?= $tdata['host_details']['warn_msg'] ?? '' ?></div>
                     <button id="clear_alarms"
                              onclick="submitCommand('clearHostAlarms',{id: <?= $tdata['host_details']['id'] ?>})">
-                            <?= $lng['L_CLEAR_ALARMS'] ?>
+                            <?= $lng['L_CLEAR_ALARMS_BITS'] ?>
                     </button>
                 </div>
             </div>
@@ -657,18 +654,37 @@
                                <?= !empty($tdata['host_details']['disable_ping']) ? 'checked' : null ?>><br />
                     </div>
                     <div class="">
-                        <label for="checkport"><?= $lng['L_PORT_CHECK'] ?>: </label>
+                        <label for="checkport"><?= $lng['L_REMOTE_PORT_CHECK'] ?>: </label>
                         <input type="checkbox" id="checkports_enabled"
                                <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
-                        <label for="checkports"><?= $lng['L_PORT_LIST'] ?>
-                            (ex: 53/udp/name,443/tcp/name): </label><br />
-                        <input type="text" id="checkports" name="checkports"
-                               value="<?= $tdata['host_details']['ports_formated'] ?>"/>
-                        <button id="submitPorts"><?= $lng['L_SEND'] ?></button>
+                        <input type="number" id="port_number" name="port_number" size="5", min="0" max="65535">
+                        <select id="port_protocol">
+                            <option value="1">TCP</option>
+                            <option value="2">UDP</option>
+                        </select>
+                        <button id="submitHostPort"><?= $lng['L_SEND'] ?></button>
+                        <?php
+                        if (!empty($tdata['host_details']['ports'])) :
+                        ?>
+                        <select id="current_ports">
+                            <?php
+                            foreach ($tdata['host_details']['ports'] as $port) :
+                                $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
+                                $port_name = "{$port['pnumber']}($port_protocol)"
+                             ?>
+                            <option value="<?= $port['id'] ?>"><?= $port_name ?></option>
+                            <?php
+                            endforeach;
+                            ?>
+                        </select>
+                        <button id="deleteHostPort"><?= $lng['L_DELETE'] ?></button>
+                        <?php
+                        endif;
+                        ?>
                     </div>
                     <div class="">
                         <label for="host_timeout"><?= $lng['L_TIMEOUT'] ?>(0.0): </label><br />
-                        <input size="12" max-size="12" type="number" id="host_timeout" name="host_timeout"
+                        <input size="4" max-size="4" type="number" id="host_timeout" name="host_timeout"
                                value="<?=
                                 !empty($tdata['host_details']['timeout']) ?
                                 $tdata['host_details']['timeout'] : null

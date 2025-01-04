@@ -41,11 +41,11 @@ if (empty($tdata['hosts'])) {
                          alt="online_status" title="<?= $host['title_online'] ?>"/>
                 <?php if (!empty($host['alert_mark'])) : ?>
                     <img class="hosts-online" src="<?= $host['alert_mark'] ?>"
-                        alt="online_status" title="<?= $host['alert_msg'] ?>"/>
+                        alt="online_status" title=""/>
                 <?php endif; ?>
                 <?php if (!empty($host['warn_mark']) && empty($host['alert_mark'])) : ?>
                     <img class="hosts-online" src="<?= $host['warn_mark'] ?>"
-                        alt="online_status" title="<?= $host['warn_msg'] ?>"/>
+                        alt="online_status" title=""/>
                 <?php endif; ?>
 
                 <?php if (!empty($host['system_type_image'])) : ?>

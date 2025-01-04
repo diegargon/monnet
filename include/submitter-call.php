@@ -80,19 +80,6 @@ function get_host_detail_view_data(AppContext $ctx, int $hid): ?array
         $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
     endif;
 
-    //formatted ports
-    $host['ports_formated'] = '';
-    if (valid_array($host['ports'])) {
-        $total_elements = count($host['ports']) - 1;
-
-        foreach ($host['ports'] as $index => $port) :
-            $host['ports_formated'] .= $port['n'] . '/';
-            $host['ports_formated'] .= ($port['port_type'] === 1) ? 'tcp' : 'udp';
-            $host['ports_formated'] .= '/' . $port['name'];
-            $host['ports_formated'] .= ($index === $total_elements) ? '' : ',';
-        endforeach;
-    }
-
     if (!empty($host['load_avg'])) :
         $loadavg = unserialize($host['load_avg']);
         (!empty($host['ncpu'])) ? $ncpu = (float)$host['ncpu'] : (float)$ncpu = 1;
@@ -225,7 +212,7 @@ function get_host_metrics(AppContext $ctx, int $host_id): array
  * @param AppContext $ctx
  * @param string $action
  * @param array<string,string|int> $network_values
- * 
+ *
  * @return array<string,string|int>
  */
 function validateNetworkData(AppContext $ctx, string $action, array $network_values): array
