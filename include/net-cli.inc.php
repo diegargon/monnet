@@ -310,7 +310,7 @@ function check_host_ports(AppContext $ctx, array $host): array
             $port_status['online'] = 1;
             $latency[] = round_latency(microtime(true) - $tim_start);
             if ((int) $port['online'] === 0) :
-                Log::logHost('LOG_NOTICE', 'Port become Online');
+                Log::logHost('LOG_NOTICE', $host['id'], 'Port become Online');
             endif;
             fclose($conn);
         elseif (empty($host['alarm_port_disable'])) :
@@ -340,7 +340,7 @@ function check_host_ports(AppContext $ctx, array $host): array
             $host_result['online'] = 1;
             $host_result['latency'] = $host_ping['latency'];
         else :
-            Log::logHost('LOG_WARNING', 'All Ports down and not response to the host ping');
+            Log::logHost('LOG_WARNING', $host['id'], 'All Ports down and not response to the host ping');
         endif;
     else :
         // Calculamos la media latencia puertos

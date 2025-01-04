@@ -223,7 +223,7 @@ class Hosts
                     if ($kvalue === 'hostname') :
                         $alert_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'];
                     endif;
-                    Log::loghost('LOG_ALERT', $alert_msg, 3);
+                    Log::loghost('LOG_ALERT', $id, $alert_msg, 3);
                     if (!empty($this->hosts[$id]['alarm_macchange_email'])) :
                         $this->sendHostMail($id, $alert_msg, $alert_msg);
                     endif;

@@ -91,7 +91,14 @@ if ($user->getPref('show_termlog_status')) {
     if (!empty($host_logs)) :
         foreach ($host_logs as &$log) :
             $host = $hosts->getHostById($log['host_id']);
-            $log['type_mark'] = '[H][' . $host['display_name'] .']';
+            $log['type_mark'] = '[H]';
+            if (!empty($host['display_name'])) :
+                $log['type_mark'] = '[H]' . '[' . $host['display_name'] .']';
+            elseif (!empty($host['ip'])) :
+                $log['type_mark'] = '[H]' . '[' . $host['ip'] .']';
+            else :
+                $log['type_mark'] = '[H]' . '[' . $log['host_id'] .']';
+            endif;
         endforeach;
         $logs = $host_logs;
     endif;

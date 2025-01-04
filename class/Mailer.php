@@ -125,7 +125,7 @@ class Mailer
         $ncfg = $this->ncfg;
         if ($this->phpMailer != null) {
             $this->phpMailer->isSMTP();
-            $this->phpMailer->SMTPDebug = 4;
+            //$this->phpMailer->SMTPDebug = 4;
             $this->phpMailer->Host = $ncfg->get('mail_host');
             $this->phpMailer->SMTPAuth = (bool) $ncfg->get('mail_auth');
             if ($ncfg->get('mail_auth')) :
