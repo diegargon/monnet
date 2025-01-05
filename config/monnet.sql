@@ -223,8 +223,9 @@ CREATE TABLE `networks` (
 --
 
 INSERT INTO `networks` (`id`, `network`, `name`, `vlan`, `scan`, `weight`, `disable`) VALUES
-(1, '0.0.0.0/0', 'INTERNET', 0, 0, 50, 0),
-(2, '192.168.1.0/24', 'Main Network', 1, 1, 50, 0);
+(1, '255.255.255.0/24', 'INTERNET', 0, 0, 50, 0),
+(2, '0.0.0.0/0', 'INTERNET', 0, 0, 50, 0),
+(3, '192.168.1.0/24', 'Main Network', 1, 1, 50, 0);
 
 
 
