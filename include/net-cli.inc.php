@@ -124,7 +124,6 @@ function ping_nets(AppContext $ctx): void
 {
     $hosts = $ctx->get('Hosts');
     $networks = $ctx->get('Networks');
-    $lng = $ctx->get('lng');
 
     $ping_net_time = microtime(true);
     $timeout = ['sec' => 0, 'usec' => 100000];
@@ -133,30 +132,29 @@ function ping_nets(AppContext $ctx): void
     $iplist = $networks->buildIpScanList();
 
     //We remove known hosts since we checked in other functions
-    foreach ($iplist as $kip => $vip) {
-        $vip = trim($vip);
-        $iplist[$kip] = $vip;
-        foreach ($db_hosts as $host) {
-            if ($host['ip'] == $vip) {
+    foreach ($iplist as $kip => $vip) :
+        $iplist[$kip] = trim($vip);
+        foreach ($db_hosts as $host) :
+            if ($host['ip'] == $vip) :
                 unset($iplist[$kip]);
-            }
-        }
-    }
+            endif;
+        endforeach;
+    endforeach;
 
-    foreach ($iplist as $ip) {
+    foreach ($iplist as $ip) :
         $latency = microtime(true);
 
         $ip_status = ping($ip, $timeout);
         $set = [];
 
-        if ($ip_status['online']) {
+        if ($ip_status['online']) :
             //New host
             $mac = get_mac($ip);
-            if ($mac) {
+            if ($mac) :
                 $set['mac'] = trim($mac);
                 $mac_info = get_mac_vendor($mac);
                 $set['mac_vendor'] = (!empty($mac_info['company'])) ? $mac_info['company'] : '-';
-            }
+            endif;
             $set['ip'] = $ip;
             $set['online'] = 1;
             $set['warn'] = 1;
@@ -175,8 +173,8 @@ function ping_nets(AppContext $ctx): void
             $hostname = $hosts->getHostname($ip);
             !empty($hostname) && ($hostname != $ip) ? $set['hostname'] = $hostname : null;
             $hosts->insert($set);
-        }
-    }
+        endif;
+    endforeach;
 
     Log::info('Ping net took ' . (intval(microtime(true) - $ping_net_time)) . ' seconds');
 }
@@ -414,24 +412,26 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
         'latency' => null,
     ];
 
-    $tim_start = microtime(true);
 
-    if (count($timeout) < 2 || !isset($timeout['sec']) || !isset($timeout['usec'])) {
+    if (!isset($timeout['sec'], $timeout['usec']) || !is_int($timeout['sec']) || !is_int($timeout['usec'])) {
         $timeout = ['sec' => 0, 'usec' => 200000];
     }
     $protocolNumber = getprotobyname('icmp');
 
     while ($attempts < $retries) {
         $attempts++;
+        $tim_start = microtime(true);
+
         $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
         if (!$socket) {
             $status['error'] = 'socket_create';
             $status['latency'] = $ERROR_SOCKET_CREATE;
-            return $status;
+            socket_close($socket);
+            usleep(200000);
+            continue;
         }
 
         socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
-
 
         if (!socket_connect($socket, $ip, 0)) {
             $status['error'] = 'socket_connect';
@@ -441,19 +441,39 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
             continue;
         }
 
-        $package = "\x08\x00\x19\x2f\x00\x00\x00\x00\x70\x69\x6e\x67";
+        $type = "\x08"; // Echo Request
+        $code = "\x00";
+        $checksum = "\x00\x00"; // Placeholder for checksum
+        $identifier = "\x00\x01"; // Identifier
+        $sequence = "\x00\x01"; // Sequence number
+        $payload = "ping";
+
+        //$package = "\x08\x00\x19\x2f\x00\x00\x00\x00\x70\x69\x6e\x67";
+        $package = $type . $code . $checksum . $identifier . $sequence . $payload;
+        $checksum = calculateChecksum($package);
+        $package = $type . $code . $checksum . $identifier . $sequence . $payload;
+
         socket_send($socket, $package, strlen($package), 0);
 
-        if (socket_read($socket, 255)) {
-            $status['online'] = 1;
-            $status['latency'] = round_latency(microtime(true) - $tim_start);
-            socket_close($socket);
-            return $status;
-        } else {
-            $status['error'] = 'timeout';
-            $status['latency'] = $ERROR_TIMEOUT;
+        $buffer = '';
+        $from_ip = '';
+        $port = 0;
+        $response = socket_recvfrom($socket, $buffer, 255, 0, $from_ip, $port);
+        if ($response !== false && $from_ip === $ip) {
+            $icmp = substr($buffer, 20);
+            $type = ord($icmp[0]);
+            $code = ord($icmp[1]);
+
+            if ($type === 0 && $code === 0 && verifyChecksum($icmp)) {
+                $status['online'] = 1;
+                $status['latency'] = round_latency(microtime(true) - $tim_start);
+                socket_close($socket);
+                return $status;
+            }
         }
 
+        $status['error'] = 'timeout';
+        $status['latency'] = $ERROR_TIMEOUT;
         socket_close($socket);
         usleep(200000);
     }
@@ -491,4 +511,28 @@ function get_mac(string $ip): string|bool
     } else {
         return $result;
     }
+}
+
+/**
+ * To ping()
+ * @param string $data
+ * @return string
+ */
+function calculateChecksum(string $data): string {
+    $sum = array_sum(unpack('n*', $data));
+    $sum = ($sum >> 16) + ($sum & 0xFFFF);
+    $sum += ($sum >> 16);
+    return pack('n*', ~$sum);
+}
+
+/**
+ * To ping()
+ * @param string $icmp
+ * @return bool
+ */
+function verifyChecksum(string $icmp): bool {
+    $sum = array_sum(unpack('n*', $icmp));
+    $sum = ($sum >> 16) + ($sum & 0xFFFF);
+    $sum += ($sum >> 16);
+    return (~$sum & 0xFFFF) === 0;
 }
