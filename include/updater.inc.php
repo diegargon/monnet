@@ -233,7 +233,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $ncfg->set('db_monnet_version', $files_version, 1);
             $db->query("START TRANSACTION");
-            // Poder marcar network como pool 
+            // DONE Poder marcar network como pool
             $db->query("ALTER TABLE `networks` ADD `pool` TINYINT NOT NULL DEFAULT '0' AFTER `scan`;");
             //DONE log_type para guarda diferentes tipos de logs referentes a host, events, alerts etch
             $db->query("
