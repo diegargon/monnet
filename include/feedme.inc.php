@@ -67,10 +67,10 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
                     "last_change" => date_now()
                 ];
                 if ($db_port['online'] == 0) :
-                    Log::logHost('LOG_NOTICE', $host_id, "Port UP deteced: {$port['pnumber']} ({$port['service']})");
+                    Log::logHost('LOG_NOTICE', $host_id, "Port UP detected: {$port['pnumber']} ({$port['service']})");
                 endif;
                 if ($db_port['service'] !== $port['service']) :
-                    Log::logHost('LOG_NOTICE', $host_id, "Service name change deteced: {$port['pnumber']} ({$port['service']})");
+                    Log::logHost('LOG_NOTICE', $host_id, "Service name change detected: {$port['pnumber']} ({$port['service']})");
                 endif;
                 $hosts->updatePort($db_port['id'], $set);
             }
@@ -88,7 +88,7 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
                 'ip_version' => $ip_version,
                 'last_change' => date_now(),
             ];
-            Log::logHost('LOG_ALERT', $host_id, "New listing port deteced: $pnumber ({$port['service']})");
+            Log::logHost('LOG_ALERT', $host_id, "New listing port detected: $pnumber ({$port['service']})");
             $hosts->addPort($insert_values);
         }
     }
@@ -100,7 +100,7 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
                 'online' => 0,
                 'last_change' => date_now(),
             ];
-            Log::logHost('LOG_NOTICE', $host_id, "Port DOWN deteced: {$db_port['pnumber']} ({$db_port['service']})");
+            Log::logHost('LOG_NOTICE', $host_id, "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})");
             $hosts->updatePort($db_port['id'], $set);
         }
     }
