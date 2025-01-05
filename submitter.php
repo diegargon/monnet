@@ -79,26 +79,28 @@ else :
     $target_id = Filters::varInt($command_values['id']);
 endif;
 
-if ($command == 'saveNote') {
+if ($command === 'saveNote') {
     $value_command = Filters::varUTF8($command_values['value']);
-} elseif ($command == 'submitScanPorts') {
+} elseif ($command === 'submitScanPorts') {
     $value_command = Filters::varCustomString($command_values['value'], ',/', 255);
-} elseif ($command == 'setCheckPorts' || $command == 'submitHostTimeout') {
+} elseif ($command === 'setCheckPorts' || $command == 'submitHostTimeout') {
     $value_command = Filters::varInt($command_values['value']);
-} elseif ($command == 'mgmtNetworks') {
+} elseif ($command === 'mgmtNetworks') {
     if (!empty($command_values['value'])) :
         $value_command = Filters::varJson($command_values['value']);
     endif;
-} elseif ($command == 'addBookmark') {
+} elseif ($command === 'addBookmark') {
     $value_command = Filters::varJson($command_values['value']);
-} elseif ($command == 'updateBookmark') {
+} elseif ($command === 'updateBookmark') {
     $value_command = Filters::varJson($command_values['value']);
-} elseif ($command == 'submitHost') {
+} elseif ($command === 'submitPoolReserver') {
+    $value_command = Filters::varIP($command_values['value']);
+} elseif ($command === 'submitHost') {
     $value_command = Filters::varIP($command_values['value']);
     if (empty($value_command)) {
         $value_command = Filters::varDomain($command_values['value']);
     }
-} elseif ($command == 'updateAlertEmailList') {
+} elseif ($command === 'updateAlertEmailList') {
     //TODO filter array of emails
     $value_command = $command_values['value'];
 } else {
@@ -710,7 +712,7 @@ if ($command == "mgmtNetworks") :
             $data = array_merge($data, $append_data);
         endif;
     endif;
-    $f_networks =  $networks->getNetworks();
+    $f_networks = $networks->getNetworks();
     foreach ($f_networks as $nid => $network) :
         list($ip, $cidr) = explode('/', $network['network']);
         $f_networks[$nid]['ip'] = $ip;
@@ -722,6 +724,32 @@ if ($command == "mgmtNetworks") :
     $data['mgmt_networks']['cfg']['place'] = "#left-container";
     $data['mgmt_networks']['data'] = $frontend->getTpl('mgmt-networks', $tdata);
     $data['command_success'] = 1;
+endif;
+
+/* Request Pool */
+if ($command == 'requestPool') :
+    $networks = $ctx->get('Networks');
+    $tdata['networks'] = $networks->getPoolIPs(2) ?? [];
+    if (empty($tdata['networks'])) :
+        $tdata['status_msg'] = $lng['L_NO_POOLS'];
+    endif;
+    $data['pool']['cfg']['place'] = "#left-container";
+    $data['pool']['data'] = $frontend->getTpl('pool', $tdata);
+    $data['command_success'] = 1;
+endif;
+
+if ($command === 'submitPoolReserver' && is_numeric($target_id) && !empty($value_command)) :
+    $reserved_host = [
+        'title' => 'Reserved',
+        'ip' => $value_command,
+        'network' => $target_id
+    ];
+    if ($hosts->addHost($reserved_host)) :
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'Rerserved';
+    else :
+        $data['command_error_msg'] = $response['msg'];
+    endif;
 endif;
 
 /* Host and Bookmarks create category */

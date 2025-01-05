@@ -195,6 +195,38 @@
                             $("#network_status_msg").html(jsonData.command_error_msg);
                         }
                     }
+                    if (jsonData.command_receive === 'requestPool') {
+                        if (jsonData.command_success > 0) {
+                            $('#pool-container').remove();
+                            if ($.isEmptyObject(jsonData.pool.cfg)) {
+                                console.log('Error en la solicitud pool:');
+                                return;
+                            }
+                            let position = jsonData.pool.cfg.place;
+                            $(position).prepend(jsonData.pool.data);
+                            var requestPool = $(position).find("#pool-container");
+                            makeDraggable(requestPool);
+                            requestPool.css('display', 'block');
+                        }
+                        if (jsonData.command_error_msg){
+                            $("#pool_status_msg").html(jsonData.command_error_msg);
+                        }
+                    }
+                    if (jsonData.command_receive === 'submitPoolReserver') {
+                        if (jsonData.command_success > 0) {
+                            const ip = jsonData.command_value;
+                            const msg = jsonData.response_msg + ' ' + ip;
+                            const button = $(`.submitPoolReserver[data-ip="${ip}"]`);
+                            button.prop('disabled', true)
+                                .text('Reserved')
+                                .css('background-color', 'darkred')
+                                .css('color', 'white');
+                            $("#pool_status_msg").html(msg);
+                        }
+                        if (jsonData.command_error_msg){
+                            $("#pool_status_msg").html(jsonData.command_error_msg);
+                        }
+                    }
                     /* Success */
                     if (
                             (jsonData.command_receive === 'updateBookmark' ||

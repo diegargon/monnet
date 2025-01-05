@@ -148,6 +148,70 @@ class Networks
 
     /**
      *
+     * @param int $hostsPerNetwork
+     * @return array<int,<string,mixed>>|false
+     */
+    public function getPoolIPs(int $hostsPerNetwork = 1): array|false
+    {
+        $networks = $this->getNetworks();
+        $hosts = $this->ctx->get('Hosts');
+
+        $pool_networks = [];
+
+        foreach ($networks as $network) :
+            if ((int) $network['pool'] === 1 && empty($network['disable'])) :
+                $pool_networks[] = $network;
+            endif;
+        endforeach;
+
+        if (empty($pool_networks)) :
+            return false;
+        endif;
+
+        $free_ips = [];
+
+
+        foreach ($pool_networks as $netpool) :
+            // Get known hosts
+            $hosts_list = $hosts->getHostsByNetworkId($netpool['id']);
+
+            // Get known hosts ips
+            $used_ips = array_filter($hosts_list, function ($host) use ($netpool) {
+                return $host['network'] == $netpool['id'];
+            });
+            $used_ips = array_column($used_ips, 'ip');
+
+            // Generate Ips
+            [$network_address, $cidr] = explode('/', $netpool['network']);
+            $subnet_mask = 32 - (int) $cidr;
+            $total_hosts = pow(2, $subnet_mask);
+            $network_base = ip2long($network_address);
+            $network_free_ips = [];
+
+            for ($i = 1; $i < $total_hosts - 1; $i++) :
+                $current_ip = long2ip($network_base + $i);
+
+                // if free we add to the pool
+                if (!in_array($current_ip, $used_ips)) :
+                    $network_free_ips[] = $current_ip;
+                    if (count($network_free_ips) >= $hostsPerNetwork) :
+                        break;
+                    endif;
+                endif;
+            endfor;
+
+            if (!empty($network_free_ips)) :
+                $netpool['pool'] = $network_free_ips;
+                $free_ips[] = $netpool;
+            endif;
+
+        endforeach;
+
+        return !empty($free_ips) ? $free_ips : false;
+    }
+
+    /**
+     *
      * @param string $ip
      * @return array<string, mixed>|false
      */
@@ -244,7 +308,7 @@ class Networks
     private function loadNetworks(): void
     {
         $db = $this->ctx->get('Mysql');
-        $query = $db->selectAll('networks',);
+        $query = $db->selectAll('networks');
         $networks = $db->fetchAll($query);
         if (valid_array($networks)) {
             /**
@@ -262,6 +326,7 @@ class Networks
                     'id' => $id,
                     'network' => $net['network'],
                     'name' => $net['name'],
+                    'pool' => $net['pool'],
                     'vlan' => (int) $net['vlan'],
                     'scan' => (int) $net['scan'],
                     'weight' => (int) $net['weight'],

@@ -67,6 +67,15 @@
             </button>
             <span class="opt_labels"><?= $lng['L_NETWORKS'] ?></span>
         </div>
+        <div class="general_ctrl">
+            <button id="requestPool"
+                    onclick="submitCommand('requestPool',{id: 0, action: 'mgmt'})"
+                    class="button-ctrl" type="submit">
+                <img class="add_link"
+                     src="./tpl/default/img/add.png" title="<?= $lng['L_NETWORK'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_IP_POOL'] ?></span>
+        </div>
     </fieldset>
     <!--
             <div class="system_ctrl">

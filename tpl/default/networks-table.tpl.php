@@ -59,7 +59,11 @@
                             name="networkName_<?= $row['id']?>" required value="<?= $row['name'] ?>"
                         >
                     </td>
-                    <td></td>
+                    <td>
+                        <?php $checked = $row['pool'] ? 'checked' : ''; ?>
+                        <input type="hidden" name="networkPool_<?= $row['id']?>" value="0" />
+                        <input type="checkbox" name="networkPool_<?= $row['id']?>" value="1" <?= $checked ?> />
+                    </td>
                     <td>
                         <input
                             type="text"

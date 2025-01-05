@@ -429,6 +429,20 @@ class Hosts
 
     /**
      *
+     * @param int $network_id
+     * @return array<string,mixed>
+     */
+    public function getHostsByNetworkId(int $network_id): array
+    {
+        $hosts = [];
+        foreach($this->hosts as $host) :
+            $host['network'] == $network_id ? $hosts[] = $host : null;
+        endforeach;
+
+        return $hosts;
+    }
+    /**
+     *
      * @param string $username
      * @param int $id
      * @return bool

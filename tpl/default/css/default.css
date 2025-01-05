@@ -1075,7 +1075,7 @@ input:checked + .slider:before {
     background: none;
     cursor: pointer;
 }
-#stdbox-container, #mgmt-bookmark-container, #mgmt-network-container {
+#stdbox-container, #mgmt-bookmark-container, #mgmt-network-container, #pool-container {
     display: none;
     position: absolute;
     top: 20%;
@@ -1131,7 +1131,7 @@ input:checked + .slider:before {
     border-radius: 4px;
     box-sizing: border-box;
 }
-#close_addbookmark, #close_mgmtbookmark, #close_mgmt_network{
+#close_addbookmark, #close_mgmtbookmark, #close_mgmt_network, #close_pool {
     float:left;
 }
 #weight {

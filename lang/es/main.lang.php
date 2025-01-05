@@ -149,6 +149,7 @@ $lng = [
     'L_NUMERIC' => 'numerico',
     'L_NOT_ALLOWED' => 'no permitida',
     'L_NEW_HOST' => 'Nuevo host descubierto',
+    'L_NO_POOLS' => 'No hay pool o no quedan ips',
     //O
     'L_OK' => 'Ok',
     'L_ONLINE' => 'Online',
@@ -171,6 +172,7 @@ $lng = [
     'L_PRINTERS' => 'Impresoras',
     'L_PING_CHECK_DISABLE' => 'Deshabilitar Ping',
     'L_PROVIDER' => 'Proveedor',
+    'L_POOL' => 'Pool',
     //Q
     'L_QUICK_CONFIG' => 'Quick Config',
     //R
@@ -180,6 +182,7 @@ $lng = [
     'L_REMOTE_HOST' => 'Host Remoto',
     'L_ROL' => 'Rol',
     'L_REMOTE_PORT_CHECK' => 'Comprobacion remota de puertos',
+    'L_RESERVE' => 'Reservar',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',

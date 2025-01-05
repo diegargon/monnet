@@ -188,6 +188,10 @@ $(document).ready(function () {
     $(document).on("click", "#close_mgmt_network", function () {
         $("#mgmt-network-container").remove();
     });
+    $(document).on("click", "#close_pool", function () {
+        $("#pool-container").remove();
+    });
+
     $(document).on("change", "#disable_ping", function () {
         var hostId = $('#host_id').val();
 
@@ -197,6 +201,15 @@ $(document).ready(function () {
             value = 0;
         }
         submitCommand('toggleDisablePing', {id: hostId, value: value});
+    });
+
+    $(document).on("click", ".submitPoolReserver", function () {
+        const id = $(this).data('id');
+        const ip = $(this).data('ip');
+
+        if (id && ip) {
+            submitCommand('submitPoolReserver', {id: id, value: ip});
+        }
     });
 
     //TODO Borrar
@@ -324,6 +337,7 @@ $(document).ready(function () {
         fields.network = $('#network').val();
         fields.networkCIDR = parseInt($('#network_cidr').val());
         fields.networkScan = parseInt($('input[name="networkScan"]:checked').val()) || 0;
+        fields.networkPool = parseInt($('input[name="pool_mark"]:checked').val()) || 0;
         fields.networkVLAN = parseInt($('#network_vlan').val()) || 0;
         fields.networkWeight = parseInt($('#network_weight').val()) || 50;
         fields.networkDisable = $('#networkDisable').is(':checked') ? 1 : 0;
@@ -347,6 +361,7 @@ $(document).ready(function () {
         fields.networkCIDR = parseInt($(`input[name="networkCIDR_${id}"]`).val());
         fields.networkScan = parseInt($(`input[name="networkScan_${id}"]:checked`).val()) || 0;
         fields.networkVLAN = parseInt($(`input[name="networkVLAN_${id}"]`).val());
+        fields.networkPool = parseInt($(`input[name="networkPool_${id}"]:checked`).val()) || 0;
         fields.networkDisable = $(`input[name="networkDisable_${id}"]`).is(':checked') ? 1 : 0;
         fields.networkWeight = parseInt($(`input[name="networkWeight_${id}"]`).val()) || 50;
 
