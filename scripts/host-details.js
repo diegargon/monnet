@@ -7,8 +7,8 @@
  */
 
 $(document).ready(function () {
-let autoReloadStates = {}; // Guardar el estado de cada botón
-let autoReloadIntervals = {}; // Guardar los intervalos de cada botón
+    let autoReloadStates = {}; // Guardar el estado de cada botón
+    let autoReloadIntervals = {}; // Guardar los intervalos de cada botón
 
     $(document).off("click", "button[id^='auto_reload_']").on("click", "button[id^='auto_reload_']", function () {
         const buttonId = $(this).attr('id'); // Obtener el ID del botón
@@ -52,6 +52,14 @@ let autoReloadIntervals = {}; // Guardar los intervalos de cada botón
         }
     });
 
+    $('#display_ipv6').on('change', function () {
+        $('.port_ipv6').css('display', this.checked ? 'inline-flex' : 'none');
+    });
+
+    // Toggle para Local Ports
+    $('#display_local').on('change', function () {
+        $('.port_local').css('display', this.checked ? 'inline-flex' : 'none');
+    });
 
     $(document).off("click", "#logs_reload_btn").on("click", "#logs_reload_btn", function () {
         var hostId = $('#host_id').val();
@@ -159,7 +167,7 @@ let autoReloadIntervals = {}; // Guardar los intervalos de cada botón
             requestHostDetails('deleteHostPort', {id: portId});
         }
     });
-    
+
     $(document).on("input", "#alarm_emails", function () {
         var hostId = $('#host_id').val();
 

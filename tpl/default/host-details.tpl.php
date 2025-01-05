@@ -151,57 +151,71 @@
                 <div class="host-item"><?= $tdata['host_details']['mac_vendor'] ?> </div>
             <?php } ?>
         </div>
-        <!-- THIRD HEADED BAR -->
-        <?php
-        if (!empty($tdata['host_details']['remote_ports'])) {
-            ?>
-            <div class="host_port_container">
-                <?php
-                foreach ($tdata['host_details']['remote_ports'] as $port) {
-                    ?>
-                    <div class="port_container">
-                        <?php if ($port['online']) : ?>
-                            <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
-                        <?php else : ?>
-                            <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
-                        <?php endif; ?>
-                        <!-- <div class="host_port_name"></div> -->
-                        <div class="host_port">
-                            (<?= $port['pnumber'] ?>)
-                        </div>
-                    </div> <!-- port container -->
-                <?php } ?>
-            </div> <!-- host port container -->
-        <?php } ?>
-        <?php
-        if (!empty($tdata['host_details']['agent_ports'])) {
-            ?>
-            <div class="host_port_container">
-                <?php
-                foreach ($tdata['host_details']['agent_ports'] as $port) {
-                    $port['protocol'] = $port['protocol'] == 1 ? 'TCP' : 'UDP';
-                    $port_name = !empty($port['custom_service']) ? $port['custom_service'] : $port['service'];
-                    ?>
-                    <div class="port_container"
-                         data-tooltip="<?= $port['pnumber'] . ' ' . $port['protocol'] . '(' . $port['ip_version']?>)">
-                        <?php if ($port['online']) : ?>
-                            <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
-                        <?php else : ?>
-                            <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
-                        <?php endif; ?>
-                        <!-- <div class="host_port_name"></div> -->
-                        <div class="host_port">
-                            <div class="port_status">
-                                <?=  $port_name  ?>
-                            </div>
-                        </div>
-                    </div> <!-- port container -->
-                <?php } ?>
-            </div> <!-- host port container -->
-        <?php } ?>
+
         <!-- /HOST COMMON BAR -->
         <!-- TAB1  RESUME -->
         <div id="tab1" class="host-details-tab-content">
+            <!-- PORTS -->
+            <?php if (!empty($tdata['host_details']['agent_installed'])) : ?>
+                <div class="ports_control">
+                    <label for="display_ipv6">IPV6</label>
+                    <input type="checkbox" id="display_ipv6" value="0">
+                    <label for="display_local">Local Ports</label>
+                    <input type="checkbox" id="display_local" value="0">
+                </div>
+            <?php endif; ?>
+            <?php
+            if (!empty($tdata['host_details']['remote_ports'])) {
+                ?>
+                <div class="host_port_container">
+                    <?php
+                    foreach ($tdata['host_details']['remote_ports'] as $port) {
+                        ?>
+                        <div class="port_container">
+                            <?php if ($port['online']) : ?>
+                                <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
+                            <?php else : ?>
+                                <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
+                            <?php endif; ?>
+                            <!-- <div class="host_port_name"></div> -->
+                            <div class="host_port">
+                                (<?= $port['pnumber'] ?>)
+                            </div>
+                        </div> <!-- port container -->
+                    <?php } ?>
+                </div> <!-- host port container -->
+            <?php } ?>
+            <?php
+            if (!empty($tdata['host_details']['agent_ports'])) {
+                ?>
+                <div class="host_port_container">
+                    <?php
+                    foreach ($tdata['host_details']['agent_ports'] as $port) {
+                        $port['protocol'] = $port['protocol'] == 1 ? 'TCP' : 'UDP';
+                        $port_name = !empty($port['custom_service']) ? $port['custom_service'] : $port['service'];
+                        ?>
+                        <div class="port_container <?= !empty($port['class']) ? $port['class'] : null ?> "
+                             data-tooltip="<?= $port['pnumber'] .
+                            '/' . $port['protocol'] .
+                            ' ' . $port['ip_version'] .
+                            ' ' . $port['interface']?>">
+                            <?php if ($port['online']) : ?>
+                                <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
+                            <?php else : ?>
+                                <img class="port-offline" src="tpl/<?= $tdata['theme'] ?>/img/red2.png" alt=""/>
+                            <?php endif; ?>
+                            <!-- <div class="host_port_name"></div> -->
+                            <div class="host_port">
+                                <div class="port_status">
+                                    <?=  $port_name  ?>
+                                </div>
+                            </div>
+                        </div> <!-- port container -->
+                    <?php } ?>
+                </div> <!-- host port container -->
+            <?php } ?>
+
+            <!-- END PORTS -->
             <div class="resume_container">
                 <div class="resume-left-column">
                     <!-- LEFT -->
@@ -733,7 +747,7 @@
                             <?php
                             foreach ($tdata['host_details']['agent_ports'] as $port) :
                                 $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
-                                $port_name = "{$port['pnumber']}($port_protocol)"
+                                $port_name = "{$port['pnumber']}/$port_protocol {$port['interface']}"
                              ?>
                             <option value="<?= $port['id'] ?>"><?= $port_name ?></option>
                             <?php

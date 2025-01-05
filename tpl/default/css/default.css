@@ -918,7 +918,7 @@ input:checked + .slider:before {
     text-align: center;
     font-size: 0.9em;
     border: 0px solid blue;
-    overflow: auto;
+    overflow: visible;
 }
 .port_container {
     display: inline-flex;
@@ -1587,6 +1587,15 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
+.port_ipv6 {
+    display: none;
+    color: #00bfff;
+}
+.port_local {
+    display: none;
+    color: #bf5515;
+}
+
 .port_container:hover::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -1613,6 +1622,9 @@ input:checked + .slider:before {
     visibility: hidden;
 }
 
+.ports_control {
+    border: 0px solid blue;
+}
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

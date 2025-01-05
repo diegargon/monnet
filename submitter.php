@@ -558,7 +558,21 @@ if (
 
         if (!empty($host_details['agent_installed'])) :
             $agent_ports = $hosts->getHostScanPorts($target_id, $remote_scan=2);
-            !empty($agent_ports) ? $tdata['host_details']['agent_ports'] = $agent_ports : null;
+            if (!empty($agent_ports)) :
+                foreach ($agent_ports as $key_port => $port) :
+                    if (isset($port['interface'])) :
+                        if (strpos($port['interface'], '[') === 0) {
+                            $agent_ports[$key_port]['class'] = 'port_ipv6';
+                            if (strpos($port['interface'], '[::]') === 0) :
+                                $agent_ports[$key_port]['class'] .= ' port_local';
+                            endif;
+                        } elseif (strpos($port['interface'], '127') === 0) {
+                            $agent_ports[$key_port]['class'] = 'port_local';
+                        }
+                    endif;
+                endforeach;
+                $tdata['host_details']['agent_ports'] = $agent_ports;
+            endif;
         endif;
 
         $tdata['host_details']['host_logs'] = $frontend->getTpl(
