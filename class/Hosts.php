@@ -717,22 +717,33 @@ class Hosts
     {
         $result_hosts = [];
 
+        $log_type_constants = $this->ncfg->get('log_type_constants');
+
         foreach ($this->hosts as $host) :
+            $alert_logs_msgs = [];
+            $alert_logs_items = [];
+            $min_host = [
+                'id' => $host['id'],
+                'display_name' => $host['display_name'],
+                'mac' => $host['mac'],
+                'ip' => $host['ip'],
+                'online' => $host['online'],
+            ];
+
             if ($host['alert'] && empty($host['disable_alarms'])) :
                 $log_type = [3, 5];
 
                 $opt = [
                     'log_type' => $log_type,
+                    'host_id' => $host['id'],
                 ];
-                $alert_logs = Log::getLogHost($host['id'], $opt);
-                $alert_logs_msgs = [];
-                $alert_logs_items = [];
+                $alert_logs = Log::getLogsHosts($opt);
 
                 if (!empty($alert_logs)) :
                     foreach ($alert_logs as $item) :
                         if (!in_array($item['msg'], $alert_logs_msgs)) :
-                            $alert_logs_msgs = $item['msg'];
-                            $alert_logs_items = $item;
+                            $alert_logs_msgs[] = $item['msg'];
+                            $alert_logs_items[] = $item;
                         endif;
                     endforeach;
                     $alert_logs = array_slice($alert_logs_msgs, 0, 4);
@@ -740,17 +751,18 @@ class Hosts
                     $timeformat = $this->ncfg->get('datetime_format_min');
                     foreach ($alert_logs_items as $item) :
                         $date = utc_to_tz($item['date'], $timezone, $timeformat);
-                        $host['log_msgs'][] = [
+                        $min_host['log_msgs'][] = [
                             'log_id' => $item['id'],
+                            'log_type' => array_search($item['log_type'], $log_type_constants),
                             'msg' => "{$item['msg']} - $date",
                             'ack_state' => $item['ack']
                         ];
                     endforeach;
+                    $result_hosts[] = $min_host;
                 else :
-                    $host['alert_msg']  .= 'Alert logs are empty';
+                    $min_host['alert_msg']  .= 'Alert logs are empty';
                 endif;
             endif;
-            $result_hosts[] = $host;
         endforeach;
 
         return $result_hosts;
@@ -765,14 +777,25 @@ class Hosts
     {
         $result_hosts = [];
 
+        $log_type_constants = $this->ncfg->get('log_type_constants');
+
         foreach ($this->hosts as $host) :
+            $min_host = [
+                'id' => $host['id'],
+                'display_name' => $host['display_name'],
+                'mac' => $host['mac'],
+                'ip' => $host['ip'],
+                'online' => $host['online'],
+            ];
+
             if ($host['warn'] && empty($host['disable_alarms'])) :
                 $log_type = [2, 4, 6];
 
                 $opt = [
                     'log_type' => $log_type,
+                    'host_id' => $host['id'],
                 ];
-                $warn_logs = Log::getLogHost($host['id'], $opt);
+                $warn_logs = Log::getLogsHosts($opt);
                 $warn_logs_msgs = [];
                 $warn_logs_items = [];
 
@@ -788,16 +811,17 @@ class Hosts
                     $timeformat = $this->ncfg->get('datetime_format_min');
                     foreach ($warn_logs_items as $item) :
                         $date = utc_to_tz($item['date'], $timezone, $timeformat);
-                        $host['log_msgs'][] = [
+                        $min_host['log_msgs'][] = [
                             'log_id' => $item['id'],
+                            'log_type' => array_search($item['log_type'], $log_type_constants),
                             'msg' => "{$item['msg']} - $date",
                             'ack_state' => $item['ack']
                         ];
                     endforeach;
+                    $result_hosts[] = $min_host;
                 else :
-                    $host['warn_msg']  .= 'Warn logs are empty';
+                    $min_host['warn_msg']  .= 'Warn logs are empty';
                 endif;
-                $result_hosts[] = $host;
             endif;
         endforeach;
 

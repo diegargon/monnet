@@ -15,16 +15,18 @@
  */
 function check_known_hosts(AppContext $ctx): bool
 {
+    $ping_known_time = microtime(true);
+
     $lng = $ctx->get('lng');
     $db = $ctx->get('Mysql');
     $hosts = $ctx->get('Hosts');
 
-    if (!is_object($hosts)) {
+    if (!is_object($hosts)) :
         Log::err("hosts is not a object");
         return false;
-    }
-    Log::debug("Pinging known host");
+    endif;
 
+    Log::debug('Pinging known host');
     $db_hosts = $hosts->getknownEnabled();
 
     foreach ($db_hosts as $host) {
@@ -52,10 +54,7 @@ function check_known_hosts(AppContext $ctx): bool
             if (!empty($host['disable_ping'])) :
                 continue;
             endif;
-
-            if ($host['check_method'] == 2 && !valid_array($host['ports'])) :
-                Log::warning("No check ports for host {$host['id']}:{$host['display_name']}, pinging.");
-            endif;
+            Log::debug("Pinging {$host['ip']}");
             $ping_host_result = ping_known_host($ctx, $host);
             //recheck if was online
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) :
@@ -89,7 +88,7 @@ function check_known_hosts(AppContext $ctx): bool
                 $new_host_status['online_change'] = date_now();
                 //$host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'];
-                Log::logHost('LOG_WARNING', $host['id'], $log_msg, LT_ALERT);
+                $hosts->setAlertOn($host['id'], $log_msg, LT_ALERT);
                 if (!empty($host['alarm_ping_email'])) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;
@@ -110,7 +109,7 @@ function check_known_hosts(AppContext $ctx): bool
             Log::warning("Known host ping status error {$host['id']}:{$host['display_name']}");
         }
     }
-    Log::debug('Finish check_known_hosts');
+    Log::info('Finish ping known host, took ' . (intval(microtime(true) - $ping_known_time)) . ' seconds');
 
     return true;
 }
@@ -284,6 +283,9 @@ function check_host_ports(AppContext $ctx, array $host): array
     $result = $db->selectAll('ports', ['hid' => $host['id'], 'scan_type' => 1 ]);
     $ports = $db->fetchAll($result);
 
+    if (empty($ports)) :
+         Log::warning("Port checking is on but not ports on {$host['id']}:{$host['display_name']} pinging host.");
+    endif;
 
     if (!empty($host['timeout'])) :
         $timeout = $host['timeout'];
@@ -321,8 +323,8 @@ function check_host_ports(AppContext $ctx, array $host): array
 
     if ($host_result['online'] === 0) :
         /*
-         * Todos los puertos caidos probamos si el host esta online
-         * con ping
+         * Todos los puertos caidos o no puertos especificados
+         * probamos si el host esta online con ping normal
          */
         if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
             $sec = intval($host['timeout']);
@@ -403,79 +405,77 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
     $ERROR_SOCKET_CONNECT = -0.002;
     $ERROR_TIMEOUT = -0.001;
 
-    $retries = 2;
-    $attempts = 0;
-
     $status = [
         'online' => 0,
         'latency' => null,
     ];
 
-
-    if (!isset($timeout['sec'], $timeout['usec']) || !is_int($timeout['sec']) || !is_int($timeout['usec'])) {
+    if (
+        !isset($timeout['sec'], $timeout['usec']) ||
+        !is_int($timeout['sec']) ||
+        !is_int($timeout['usec'])
+    ) :
         $timeout = ['sec' => 0, 'usec' => 200000];
-    }
+    endif;
+    
+    $tim_start = microtime(true);
     $protocolNumber = getprotobyname('icmp');
+    $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
 
-    while ($attempts < $retries) {
-        $attempts++;
-        $tim_start = microtime(true);
+    if (!$socket) :
+        $status['error'] = 'socket_create';
+        $status['latency'] = $ERROR_SOCKET_CREATE;
+        Log::notice("Pinging error socket creating: $ip");
+        usleep(100000);
+        return $status;
+    endif;
 
-        $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
-        if (!$socket) {
-            $status['error'] = 'socket_create';
-            $status['latency'] = $ERROR_SOCKET_CREATE;
-            socket_close($socket);
-            usleep(200000);
-            continue;
-        }
+    socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
 
-        socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
+    $type = "\x08"; // Echo Request
+    $code = "\x00";
+    $checksum = "\x00\x00"; // Placeholder for checksum
+    $identifier = "\x00\x01"; // Identifier
+    $sequence = "\x00\x01"; // Sequence number
+    $payload = "ping";
 
-        if (!socket_connect($socket, $ip, 0)) {
-            $status['error'] = 'socket_connect';
-            $status['latency'] = $ERROR_SOCKET_CONNECT;
-            socket_close($socket);
-            usleep(200000);
-            continue;
-        }
+    $package = $type . $code . $checksum . $identifier . $sequence . $payload;
+    $checksum = calculateChecksum($package);
+    $package = $type . $code . $checksum . $identifier . $sequence . $payload;
 
-        $type = "\x08"; // Echo Request
-        $code = "\x00";
-        $checksum = "\x00\x00"; // Placeholder for checksum
-        $identifier = "\x00\x01"; // Identifier
-        $sequence = "\x00\x01"; // Sequence number
-        $payload = "ping";
-
-        //$package = "\x08\x00\x19\x2f\x00\x00\x00\x00\x70\x69\x6e\x67";
-        $package = $type . $code . $checksum . $identifier . $sequence . $payload;
-        $checksum = calculateChecksum($package);
-        $package = $type . $code . $checksum . $identifier . $sequence . $payload;
-
-        socket_send($socket, $package, strlen($package), 0);
-
-        $buffer = '';
-        $from_ip = '';
-        $port = 0;
-        $response = socket_recvfrom($socket, $buffer, 255, 0, $from_ip, $port);
-        if ($response !== false && $from_ip === $ip) {
-            $icmp = substr($buffer, 20);
-            $type = ord($icmp[0]);
-            $code = ord($icmp[1]);
-
-            if ($type === 0 && $code === 0 && verifyChecksum($icmp)) {
-                $status['online'] = 1;
-                $status['latency'] = round_latency(microtime(true) - $tim_start);
-                socket_close($socket);
-                return $status;
-            }
-        }
-
-        $status['error'] = 'timeout';
-        $status['latency'] = $ERROR_TIMEOUT;
+    if (!socket_sendto($socket, $package, strlen($package), 0, $ip, 0)) :
+        $status['error'] = 'socket_sendto';
+        $status['latency'] = $ERROR_SOCKET_CONNECT;
+        Log::notice("Pinging error socket connect: $ip");
         socket_close($socket);
-        usleep(200000);
+        usleep(100000);
+        return $status;
+    endif;
+
+    $buffer = '';
+    $from_ip = '';
+    $port = 0;
+    $response = socket_recvfrom($socket, $buffer, 255, 0, $from_ip, $port);
+    if ($response !== false && $from_ip === $ip) {
+        $icmp = substr($buffer, 20);
+        $type = ord($icmp[0]);
+        $code = ord($icmp[1]);
+
+        // Type 8 is returned when host ping himself
+        if ( ($type === 0 || $type === 8) && $code === 0 && verifyChecksum($icmp)) {
+            $status['online'] = 1;
+            $status['latency'] = round_latency(microtime(true) - $tim_start);
+            socket_close($socket);
+            return $status;
+        } else {
+            Log::debug("Response verify $type $code ". verifyChecksum($icmp));
+        }
     }
+
+    $status['error'] = 'timeout';
+    $status['latency'] = $ERROR_TIMEOUT;
+    socket_close($socket);
+    usleep(100000);
 
     return $status;
 }
@@ -519,9 +519,19 @@ function get_mac(string $ip): string|bool
  */
 function calculateChecksum(string $data): string
 {
+    // Asegurar longitud par
+    if (strlen($data) % 2 !== 0) {
+        $data .= "\x00";
+    }
+
+    // Suma de palabras de 16 bits
     $sum = array_sum(unpack('n*', $data));
+
+    // Ajustar carry bits
     $sum = ($sum >> 16) + ($sum & 0xFFFF);
     $sum += ($sum >> 16);
+
+    // Invertir bits y empaquetar en formato binario
     return pack('n*', ~$sum);
 }
 

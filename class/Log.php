@@ -173,7 +173,7 @@ class Log
     }
 
     /**
-     *
+     * Return logs based on [$opt]ions
      * @param array<string,string|int> $opts
      * @return array<string,string>
      */
@@ -190,6 +190,12 @@ class Log
 
         if (isset($opts['ack'])) :
             $conditions[] = 'ack = ' . (int)$opts['ack'];
+        else : // By default we not include ACK items
+            $conditions[] = 'ack != 1';
+        endif;
+
+        if (isset($opts['host_id'])):
+            $conditions[] = 'host_id = ' . (int)$opts['host_id'];
         endif;
 
         if (isset($opts['log_type'])) {
@@ -213,7 +219,6 @@ class Log
         if (!empty($opts['limit'])) :
             $query .= ' LIMIT ' . (int)$opts['limit'];
         endif;
-
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 

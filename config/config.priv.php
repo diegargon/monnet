@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.46;
-$cfg['monnet_revision'] = 43;
+$cfg['monnet_revision'] = 44;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_min_version'] = 0.105;
 $cfg['agent_latest_version'] = 0.112;
@@ -26,7 +26,7 @@ $cfg['log_type_constants'] = [
     'LT_EVENT_WARN' => 6,
 ];
 
-foreach ($cfg['$log_type_constants'] as $key => $value) {
+foreach ($cfg['log_type_constants'] as $key => $value) {
     define($key, $value);
 }
 /* Hardware Manufacture */

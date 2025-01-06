@@ -872,18 +872,18 @@ if (
     ($command === 'changeHDTab' && $value_command === 'tab9')
 ) {
     if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) :
-        $opts['max_lines'] = $command_values['log_size'];
+        $opts['limit'] = $command_values['log_size'];
     else :
-        $opts['max_lines'] = $cfg['term_max_lines'];
+        $opts['limit'] = $cfg['term_max_lines'];
     endif;
 
     if (isset($command_values['log_level']) && is_numeric($command_values['log_level'])) :
         if ($command_values['log_level'] >= 0) :
-            $opts['log_level'] = $command_values['log_level'];
+            $opts['level'] = $command_values['log_level'];
         endif;
     endif;
-
-    $logs = Log::getLoghost((int) $target_id, $opts);
+    $opts['host_id'] = $target_id;
+    $logs = Log::getLogsHosts($opts);
     if (!empty($logs)) {
         $data['response_msg'] = format_host_logs($ctx, $logs);
     }
@@ -1124,19 +1124,20 @@ if (
         $tdata['hosts'] = $hosts->getAgentsHosts(0);
         $tdata['hosts'] = $hosts->getAgentsHosts(2);
     elseif ($command === 'report_alerts') :
-        array_push($keysToShow, 'alert_msg', 'ack_state');
+        array_push($keysToShow, 'log_msgs');
         $tdata['table_btn'] = 'clear_alerts';
-        $tdata['hosts'] = $hosts->getAlertHosts();
         $tdata['table_btn_name'] = $lng['L_CLEAR_ALERTS'];
+        $tdata['hosts'] = $hosts->getAlertHosts();
     elseif ($command === 'report_warns') :
-        $keysToShow[] = 'log_msgs';
+        array_push($keysToShow, 'log_msgs');
         $tdata['table_btn'] = 'clear_warns';
         $tdata['table_btn_name'] = $lng['L_CLEAR_WARNS'];
         $tdata['hosts'] = $hosts->getWarnHosts();
     endif;
 
-    $availableKeys = array_keys($tdata['hosts'][0] ?? []);
-    $tdata['keysToShow'] = array_intersect($keysToShow, $availableKeys);
+    //$availableKeys = array_keys($tdata['hosts'][0] ?? []);
+    //$tdata['keysToShow'] = array_intersect($keysToShow, $availableKeys);
+    $tdata['keysToShow'] = $keysToShow;
 
     if (empty($tdata['hosts'])) :
         $data['response_msg'] = "No results";
