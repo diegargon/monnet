@@ -130,8 +130,11 @@ $(document).ready(function () {
         var hostId = $('#host_id').val();
         var value = this.checked ? 1 : 0;
         var command = $(this).data('command');
-
-        submitCommand(command, {id: hostId, value: value});
+        if (hostId) {
+            submitCommand(command, {id: hostId, value: value});
+        } else {
+            submitCommand(command, {id: 0, value: value});
+        }
     });
 
     $(document).on("change", "#checkports_enabled", function () {

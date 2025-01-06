@@ -519,7 +519,7 @@
                     </div>
                     <?php if ($ncfg->get('ansible')) : ?>
                     <div class="">
-                        <label for=""><?= $lng['L_ANSIBLE_SUPPORT'] ?></label>
+                        <label for="ansible_enabled"><?= $lng['L_ANSIBLE_SUPPORT'] ?></label>
                         <input type="hidden" id="ansible_enabled" value="0">
                         <input
                             type="checkbox"
@@ -528,8 +528,17 @@
                     </div>
                     <?php endif; ?>
                     <div class="">
+                        <label for="always_on"><?= $lng['L_ALWAYS_ON'] ?></label>
+                        <input type="hidden" id="always_on" value="0">
+                        <input
+                            type="checkbox"
+                            id="always_on"
+                            data-command="setAlwaysOn"
+                            <?= !empty($tdata['host_details']['always_on']) ? ' checked' : '' ?>>
+                    </div>
+                    <div class="">
                         <label for="host-title"><?= $lng['L_DISPLAY_NAME'] ?></label><br />
-                        <input type="text" id="host-title" size="32" name="host-title"
+                        <input type="text" id="host-title" size="12" max-size="15" name="host-title"
                                value="<?= $tdata['host_details']['title'] ?>"/>
                         <button id="submitTitle"><?= $lng['L_SEND'] ?></button>
                     </div>

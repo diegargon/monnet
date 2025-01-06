@@ -77,7 +77,7 @@ function check_known_hosts(AppContext $ctx): bool
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
                 $new_host_status['online_change'] = date_now();
                 $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_ON'];
-                Log::logHost('LOG_NOTICE', $host['id'], $log_msg);
+                Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LT_EVENT);
                 if (!empty($host['alarm_port_email'])) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;
@@ -91,7 +91,13 @@ function check_known_hosts(AppContext $ctx): bool
                 $new_host_status['online_change'] = date_now();
                 //$host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'];
-                $hosts->setAlertOn($host['id'], $log_msg, LT_ALERT);
+                // Create alert when always on is set
+                if (!empty($host['always_on'])) :
+                    $hosts->setAlertOn($host['id'], $log_msg, LT_EVENT_ALERT);
+                else:
+                    Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LT_EVENT);
+                endif;
+
                 if (!empty($host['alarm_ping_email'])) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;

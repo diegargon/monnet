@@ -49,6 +49,15 @@
             </button>
             <span class="opt_labels"><?= $lng['L_ALARMS'] ?></span>
         </div>
+        <div class="general_ctrl">
+            <button id="events"
+                    onclick="submitCommand('showEvents',{id: 0, action: 'show'})"
+                    class="button-ctrl" type="submit">
+                <img class="settings_link"
+                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_ALARMS'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_EVENTS'] ?></span>
+        </div>
     </fieldset>
     <!-- Add Items -->
     <fieldset class="ctrl_fieldset">

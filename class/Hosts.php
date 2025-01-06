@@ -80,6 +80,7 @@ class Hosts
         'ncpu',
         'uptime',
         'iowait',
+        'always_on',
     ];
 
     /**

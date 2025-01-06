@@ -968,7 +968,7 @@ if ($command === 'submitform') {
 }
 
 /* Ansible */
-if ($command == 'setHostAnsible' && !empty($value_command) && !empty($target_id)) {
+if ($command == 'setHostAnsible' && is_numeric($value_command) && is_numeric($target_id)) {
     $hosts->update($target_id, ['ansible_enabled' => $value_command]);
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
@@ -1148,12 +1148,17 @@ if (
     $data['command_success'] = 1;
 }
 
-if ($command === 'showAlarms') :
+if ($command === 'showAlarms' || $command === 'showEvents') :
     $log_opts = [
-        'log_type' => [1, 2, 3, 4, 5],
         'limit' => 400,
         'ack' => 0,
     ];
+    if ($command === 'showAlarms') :
+        $log_opts['log_type'] = [3, 4, 5];
+    else :
+        $log_opts['log_type'] = [1, 2];
+    endif;
+
     $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'msg', 'ack', 'date' ];
     $tdata['logs'] = Log::getLogsHosts($log_opts);
     foreach ($tdata['logs'] as &$log) :
@@ -1163,7 +1168,7 @@ if ($command === 'showAlarms') :
     endforeach;
 
     if (!empty($tdata['logs'])) :
-        $data['response_msg'] = $frontend->getTpl("alarms-report", $tdata);
+        $data['response_msg'] = $frontend->getTpl("events-report", $tdata);
     else :
         $data['response_msg'] = "No results";
     endif;
@@ -1196,4 +1201,11 @@ if ($command === 'show_footer_dropdown' && is_numeric($value_command)) :
     $data['command_success'] = 1;
 endif;
 
+if ($command == 'setAlwaysOn' && is_numeric($value_command) && is_numeric($target_id)) :
+    $hosts->update($target_id, ['always_on' => $value_command]);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $value_command;
+endif;
+
 print json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+

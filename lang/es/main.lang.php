@@ -36,6 +36,7 @@ $lng = [
     'L_AGENT_INSTALLED' => 'Agente Instalado',
     'L_AGENT_LAST_PING' => 'Ultimo contacto agente: ',
     'L_ALARMS_DISABLE' => 'Alarmas deshabilitadas',
+    'L_ALWAYS_ON' => 'Always On',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -84,6 +85,7 @@ $lng = [
     'L_EDIT' => 'Editar',
     'L_EMAIL_ALARMS' => 'Alarmas correo',
     'L_ENABLE_PER_TYPE' => 'Habilitar por tipo',
+    'L_EVENTS' => 'Eventos',
     //F
     'L_FIELD' => 'Campo',
     'L_FREE' => 'Libre',
