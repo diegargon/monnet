@@ -52,7 +52,6 @@ INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `disable`, `weight`) VAL
 (51, 2, 'L_WEBS', 0, 0),
 (52, 2, 'L_INTERNAL', 0, 0),
 (100, 3, 'L_SEARCH_ENGINE', 0, 0),
-(108, 1, 'test', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -99,7 +98,7 @@ INSERT INTO `config` (`id`, `ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) V
 (121, 'cron_five', '\"0\"', 1, 0, NULL, 0),
 (122, 'cron_daily', '\"0\"', 1, 0, NULL, 0),
 (123, 'refreshing', '\"0\"', 1, 0, NULL, 0),
-(124, 'db_monnet_version', '0.42', 0, 0, NULL, 0),
+(124, 'db_monnet_version', '0.45', 0, 0, NULL, 0),
 (125, 'discoveery_last_run', '\"0\"', 1, 0, NULL, 0);
 
 -- --------------------------------------------------------
@@ -158,7 +157,9 @@ CREATE TABLE `hosts_logs` (
   `id` int NOT NULL,
   `host_id` int NOT NULL,
   `level` tinyint NOT NULL DEFAULT '7',
+  `log_type` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '0' COMMENT '0 default, 1 event 2 remote_port_status 3 Alert 4 Warn 5 Alert/Event 6 Warn/Event',
   `msg` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `ack` tinyint(1) NOT NULL DEFAULT '0',
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -193,18 +194,6 @@ INSERT INTO `items` (`id`, `uid`, `cat_id`, `type`, `title`, `conf`, `weight`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `load_stats`
---
-
-CREATE TABLE `load_stats` (
-  `timestamp` timestamp NOT NULL,
-  `host` int NOT NULL,
-  `value` tinyint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `networks`
 --
 
@@ -214,6 +203,7 @@ CREATE TABLE `networks` (
   `name` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `vlan` smallint DEFAULT '1',
   `scan` tinyint(1) NOT NULL DEFAULT '1',
+  `pool` tinyint NOT NULL DEFAULT '0',
   `weight` tinyint NOT NULL DEFAULT '50',
   `disable` tinyint NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -222,10 +212,10 @@ CREATE TABLE `networks` (
 -- Dumping data for table `networks`
 --
 
-INSERT INTO `networks` (`id`, `network`, `name`, `vlan`, `scan`, `weight`, `disable`) VALUES
-(1, '255.255.255.0/24', 'INTERNET', 0, 0, 50, 0),
-(2, '0.0.0.0/0', 'INTERNET', 0, 0, 50, 0),
-(3, '192.168.1.0/24', 'Main Network', 1, 1, 50, 0);
+INSERT INTO `networks` (`id`, `network`, `name`, `vlan`, `scan`, `pool`, `weight`, `disable`) VALUES
+(1, '255.255.255.0/24', 'default', 1, 0, 0, 50, 0),
+(2, '0.0.0.0/0', 'INTERNET', 0, 0, 0, 50, 0),
+(3, '192.168.1.0/24', 'Main Network', 1, 1, 1, 50, 0);
 
 
 
@@ -241,6 +231,26 @@ CREATE TABLE `notes` (
   `host_id` int NOT NULL,
   `update` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ports`
+--
+
+CREATE TABLE `ports` (
+  `id` int NOT NULL,
+  `hid` int NOT NULL,
+  `scan_type` tinyint NOT NULL DEFAULT '0' COMMENT '0 None 1 remote scan 2 agent provided',
+  `protocol` tinyint NOT NULL COMMENT '1 tcp 2 udp',
+  `pnumber` smallint UNSIGNED NOT NULL,
+  `online` tinyint(1) NOT NULL DEFAULT '0',
+  `interface` varchar(45) DEFAULT NULL,
+  `ip_version` varchar(5) NOT NULL,
+  `custom_service` varchar(255) DEFAULT NULL,
+  `service` varchar(255) NOT NULL,
+  `last_change` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -280,7 +290,7 @@ INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES
 
 CREATE TABLE `stats` (
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `type` tinyint UNSIGNED NOT NULL COMMENT '1 ping',
+  `type` tinyint UNSIGNED NOT NULL COMMENT '1 ping 2 load avg 3 iowait',
   `host_id` int NOT NULL,
   `value` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -296,6 +306,20 @@ CREATE TABLE `system_logs` (
   `level` tinyint UNSIGNED NOT NULL,
   `msg` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tasks`
+--
+
+CREATE TABLE `tasks` (
+  `id` int NOT NULL,
+  `hid` int NOT NULL,
+  `task` tinyint NOT NULL,
+  `what` varchar(255) NOT NULL,
+  `next_task` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -369,13 +393,6 @@ ALTER TABLE `items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `load_stats`
---
-ALTER TABLE `load_stats`
-  ADD PRIMARY KEY (`timestamp`),
-  ADD KEY `host` (`host`);
-
---
 -- Indexes for table `networks`
 --
 ALTER TABLE `networks`
@@ -390,6 +407,13 @@ ALTER TABLE `notes`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `ports`
+--
+ALTER TABLE `ports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_hid` (`hid`);
+
+--
 -- Indexes for table `prefs`
 --
 ALTER TABLE `prefs`
@@ -400,7 +424,7 @@ ALTER TABLE `prefs`
 -- Indexes for table `stats`
 --
 ALTER TABLE `stats`
-  ADD UNIQUE KEY `date` (`date`,`host_id`);
+  ADD KEY `idx_host_date` (`host_id`,`date`);
 
 --
 -- Indexes for table `system_logs`
@@ -408,6 +432,12 @@ ALTER TABLE `stats`
 ALTER TABLE `system_logs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_level_host_date` (`level`,`date`);
+
+--
+-- Indexes for table `tasks`
+--
+ALTER TABLE `tasks`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -469,15 +499,27 @@ ALTER TABLE `notes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `ports`
+--
+ALTER TABLE `ports`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `prefs`
 --
 ALTER TABLE `prefs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `system_logs`
 --
 ALTER TABLE `system_logs`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tasks`
+--
+ALTER TABLE `tasks`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
