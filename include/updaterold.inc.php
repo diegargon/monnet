@@ -217,68 +217,6 @@ function trigger_update_old(Database $db, float $db_version, float $files_versio
             Log::error('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
-
-    // 0.43
-    if ($db_version < 0.00) {
-        try {
-            $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
-            $db->query("
-                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
-            ");
-            $db->query("COMMIT");
-            $db_version = $files_version;
-        } catch (Exception $e) {
-            $db->query("ROLLBACK");
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
-        }
-    }
-    // 0.43
-    if ($db_version < 0.00) {
-        try {
-            $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
-            $db->query("
-                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
-            ");
-            $db->query("COMMIT");
-            $db_version = $files_version;
-        } catch (Exception $e) {
-            $db->query("ROLLBACK");
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
-        }
-    }
-    // 0.45
-    if ($db_version < 0.00) {
-        try {
-            $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
-            $db->query("
-                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
-            ");
-            $db->query("COMMIT");
-            $db_version = $files_version;
-        } catch (Exception $e) {
-            $db->query("ROLLBACK");
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
-        }
-    }
-
-    // Template
-    if ($db_version < 0.00) {
-        try {
-            $db->query("START TRANSACTION");
-            Log::info('Update version to ' . $files_version . ' successful');
-            $db->query("
-                UPDATE prefs SET pref_value='$files_version' WHERE uid='0' AND pref_name='monnet_version' LIMIT 1
-            ");
-            $db->query("COMMIT");
-            $db_version = $files_version;
-        } catch (Exception $e) {
-            $db->query("ROLLBACK");
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
-        }
-    }
 }
 
 /**
