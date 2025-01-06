@@ -59,6 +59,9 @@ function check_known_hosts(AppContext $ctx): bool
             //recheck if was online
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) :
                 $ping_host_result = ping_known_host($ctx, $host);
+                if ($ping_host_result['online'] == 1) :
+                    Log::info('Retry ping works for ' . $host['display_name']);
+                endif;
             endif;
 
             (valid_array($ping_host_result)) ? $new_host_status = $ping_host_result : null;
@@ -417,7 +420,7 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
     ) :
         $timeout = ['sec' => 0, 'usec' => 200000];
     endif;
-    
+
     $tim_start = microtime(true);
     $protocolNumber = getprotobyname('icmp');
     $socket = socket_create(AF_INET, SOCK_RAW, $protocolNumber);
@@ -468,7 +471,7 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
             socket_close($socket);
             return $status;
         } else {
-            Log::debug("Response verify $type $code ". verifyChecksum($icmp));
+            Log::notice("Response verify fail $type $code ". verifyChecksum($icmp));
         }
     }
 
