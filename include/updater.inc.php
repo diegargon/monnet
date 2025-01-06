@@ -330,7 +330,21 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-  // 0.46 Template
+    // 0.46 do nothing
+    if ($db_version < 0.46) {
+        try {
+            $ncfg->set('db_monnet_version', $files_version, 1);
+
+            $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // 0.47 Template
     if ($db_version < 0.00) {
         try {
             $ncfg->set('db_monnet_version', $files_version, 1);
