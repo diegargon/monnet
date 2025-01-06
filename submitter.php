@@ -83,8 +83,10 @@ if ($command === 'saveNote') {
     $value_command = Filters::varUTF8($command_values['value']);
 } elseif ($command === 'submitScanPorts') {
     $value_command = Filters::varCustomString($command_values['value'], ',/', 255);
-} elseif ($command === 'setCheckPorts' || $command == 'submitHostTimeout') {
+} elseif ($command === 'setCheckPorts') {
     $value_command = Filters::varInt($command_values['value']);
+} elseif ($command === 'submitHostTimeout' && is_float($command_values['value'])) {
+    $value_command = $command_values['value'];
 } elseif ($command === 'mgmtNetworks') {
     if (!empty($command_values['value'])) :
         $value_command = Filters::varJson($command_values['value']);
@@ -104,7 +106,9 @@ if ($command === 'saveNote') {
     //TODO filter array of emails
     $value_command = $command_values['value'];
 } else {
-    if (isset($command_values['value']) && is_numeric($command_values['value'])) {
+    if (isset($command_values['value']) && is_float($command_values['value'])) {
+        $value_command = $command_values['value'];
+    } elseif (isset($command_values['value']) && is_numeric($command_values['value'])) {
         $value_command = Filters::varInt($command_values['value']);
     } elseif (
         empty($value_command) &&

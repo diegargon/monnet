@@ -145,9 +145,16 @@ class Filters
             if (is_array($value)) {
                 $var_ary[$key] = self::sanArray($value, 'var');
             } else {
-                if (is_numeric($value)) {
-                    // Cast to int if it's a valid integer
-                    $var_ary[$key] = (int) $value;
+                if (is_float($value)) {
+                    $var_ary[$key] = (float) $value;
+                } else if (is_numeric($value)) {
+                    //String float is numeric but not float is_float  not work
+                    if (strpos((string) $value, '.') !== false) {
+                        $var_ary[$key] = (float) $value;
+                    } else {
+                         // Cast to int if it's a valid integer
+                        $var_ary[$key] = (int) $value;
+                    }
                 } else {
                     // Verifica si el valor es JSON válido
                     $decodedJson = json_decode($value, true);

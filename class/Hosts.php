@@ -990,10 +990,13 @@ class Hosts
                     if (in_array($key, $this->misc_keys, true)) : //Prevent unused/old keys
                         if (in_array($key, ['agent_version'], true)) : //Prevent Version numbers to float
                             $host[$key] = $this->hosts[$id][$key] = (string) $value;
-                        elseif (is_float($value)) :
-                            $host[$key] = $this->hosts[$id][$key] = (float) $value;
                         elseif (is_numeric($value)) :
-                            $host[$key] = $this->hosts[$id][$key] = (int) $value;
+                            //String float is numeric but not float is_float not work
+                            if (strpos((string) $value, '.') !== false) {
+                                $host[$key] = $this->hosts[$id][$key] = (float) $value;
+                            } else {
+                                $host[$key] = $this->hosts[$id][$key] = (int) $value;
+                            }
                         elseif (is_bool($value)) :
                             $host[$key] = $this->hosts[$id][$key] = (bool) $value;
                         else :

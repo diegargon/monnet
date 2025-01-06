@@ -13,7 +13,6 @@
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
-//var_dump($tdata['host_details']);
 ?>
 
 <div id="host-details" class="host-details draggable" style="display:block">
@@ -745,8 +744,8 @@
                         ?>
                     </div>
                     <div class="">
-                        <label for="host_timeout"><?= $lng['L_TIMEOUT'] ?>(0.0): </label><br />
-                        <input size="4" max-size="4" type="number" id="host_timeout" name="host_timeout"
+                        <label for="host_timeout"><?= $lng['L_TIMEOUT'] ?> (0.0): </label><br />
+                        <input size="4" max-size="4" step="0.1" min="0.1" max="5" type="number" id="host_timeout" name="host_timeout"
                                value="<?=
                                 !empty($tdata['host_details']['timeout']) ?
                                 $tdata['host_details']['timeout'] : null
