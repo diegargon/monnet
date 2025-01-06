@@ -956,7 +956,6 @@ class Hosts
             $this->hosts[$id] = $host;
             $host['online'] == 1 ? ++$this->total_on : ++$this->total_off;
             $host['highlight'] ? $this->highlight_total++ : null;
-            $this->hosts[$id]['disable'] = empty($host['disable']) ? 0 : 1;
 
             //Track host categories
             if (empty($this->host_cat_track[$host['category']])) :

@@ -332,7 +332,7 @@
                         ?>
                         </div>
                         <?php
-                        endif;
+                    endif;
                     ?>
                     <div id="bars_container" class="bars_container">
                         <?php
@@ -535,6 +535,15 @@
                             id="always_on"
                             data-command="setAlwaysOn"
                             <?= !empty($tdata['host_details']['always_on']) ? ' checked' : '' ?>>
+                    </div>
+                    <div class="">
+                        <label for="disable_host"><?= $lng['L_DISABLE'] ?></label>
+                        <input type="hidden" id="host_disable" value="0">
+                        <input
+                            type="checkbox"
+                            id="host_on"
+                            data-command="setHostDisable"
+                            <?= !empty($tdata['host_details']['disable']) ? ' checked' : '' ?>>
                     </div>
                     <div class="">
                         <label for="host-title"><?= $lng['L_DISPLAY_NAME'] ?></label><br />

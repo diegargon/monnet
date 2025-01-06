@@ -194,7 +194,7 @@ class Log
             $conditions[] = 'ack != 1';
         endif;
 
-        if (isset($opts['host_id'])):
+        if (isset($opts['host_id'])) :
             $conditions[] = 'host_id = ' . (int)$opts['host_id'];
         endif;
 

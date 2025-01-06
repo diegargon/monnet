@@ -1207,5 +1207,11 @@ if ($command == 'setAlwaysOn' && is_numeric($value_command) && is_numeric($targe
     $data['response_msg'] = $value_command;
 endif;
 
+if ($command == 'setHostDisable' && is_numeric($value_command) && is_numeric($target_id)) :
+    $hosts->update($target_id, ['disable' => $value_command]);
+    $data['command_success'] = 1;
+    $data['response_msg'] = $value_command;
+endif;
+
 print json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 

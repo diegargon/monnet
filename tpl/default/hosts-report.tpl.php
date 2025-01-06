@@ -47,7 +47,7 @@
                                 title="Off">
                             <?php
                         elseif ($key === 'log_msgs') :
-                            foreach ($host['log_msgs'] as $log_msg ) :
+                            foreach ($host['log_msgs'] as $log_msg) :
                                 ?>
                             <div>
                                 <input
@@ -71,12 +71,12 @@
         </tbody>
     </table>
         <?php
-        if  (!empty($tdata['table_btn'])) :
-        ?>
+        if (!empty($tdata['table_btn'])) :
+            ?>
         <button id="<?= $tdata['table_btn'] ?>" onclick="submitCommand('<?= $tdata['table_btn']?>', {id: 0})">
-        <?= $tdata['table_btn_name'] ?>
+            <?= $tdata['table_btn_name'] ?>
         </button>
-        <?php
+            <?php
         endif;
         ?>
 </div>

@@ -64,6 +64,7 @@ $lng = [
     'L_DISABLE_PER_TYPE' => 'Deshabilitar por tipo',
     'L_DAYS' => 'Dias',
     'L_DETAIL_VIEW' => 'Vista detallada',
+    'L_DISABLE' => 'Deshabilitar',
     //E
 //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',

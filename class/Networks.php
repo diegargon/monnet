@@ -309,7 +309,7 @@ class Networks
         $db = $this->ctx->get('Mysql');
         $query = $db->selectAll('networks');
         $networks = $db->fetchAll($query);
-        if (valid_array($networks)) {
+        if (valid_array($networks)) :
             /**
              * prevent getNetworkByIP return the first match on a big cidr like /0
              */
@@ -319,7 +319,7 @@ class Networks
                 return $cidrB <=> $cidrA; // Orden descendente
             });
 
-            foreach ($networks as $net) {
+            foreach ($networks as $net) :
                 $id = (int) $net['id'];
                 $fnet = [
                     'id' => $id,
@@ -331,13 +331,13 @@ class Networks
                     'weight' => (int) $net['weight'],
                     'disable' => (int) $net['disable'],
                 ];
-                if ($fnet['disable'] === 0) {
+                if ($fnet['disable'] === 0) :
                     $this->networks[$id] = $fnet;
-                }
+                endif;
                 //else {
                 //    $this->networks_disabled[$id] = $fnet;
                 //}
-            }
-        }
+            endforeach;
+        endif;
     }
 }

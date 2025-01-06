@@ -64,23 +64,23 @@ foreach ($tdata['plays'] as $play) {
 ?>
     <?php
     if (!empty($messages)) :
-    ?>
+        ?>
     <h2><?= $lng['L_SUMMARY']?>:</h2>
-    <?php
-    foreach ($messages as $msg) {
-    ?>
+        <?php
+        foreach ($messages as $msg) {
+        ?>
     <div><?= $msg['ip'] ?></div>
     <pre>
-    <?php
-        if (is_array($msg['msg'])) :
-            echo implode('<br>', $msg['msg']);
-        else :
-            echo $msg['msg'];
-        endif
-    ?>
+        <?php
+            if (is_array($msg['msg'])) :
+                echo implode('<br>', $msg['msg']);
+            else :
+                echo $msg['msg'];
+            endif
+        ?>
     </pre>
-    <?php
-    }
+        <?php
+        }
     endif;
     ?>
     <h2><?= $lng['L_DETAIL_VIEW'] ?></h2>
