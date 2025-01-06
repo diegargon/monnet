@@ -76,7 +76,9 @@
                     <td>
                         <input type="hidden" name="networkScan_<?= $row['id']?>" value="0" />
                         <?php
-                        if (strpos($row['ip'], '0') !== 0) :
+                        if (
+                            (strpos($row['ip'], '0') !== 0) && 
+                            (strpos($row['ip'], '255.') !== 0)) :
                             $checked = $row['scan'] ? 'checked' : '';
                         ?>
                         <input type="checkbox" name="networkScan_<?= $row['id']?>" value="1" <?= $checked ?> />
