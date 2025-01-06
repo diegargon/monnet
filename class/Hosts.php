@@ -760,7 +760,7 @@ class Hosts
                     endforeach;
                     $result_hosts[] = $min_host;
                 else :
-                    $min_host['alert_msg']  .= 'Alert logs are empty';
+                    $min_host['alert_msg']  = 'Alert logs are empty';
                 endif;
             endif;
         endforeach;
@@ -820,7 +820,7 @@ class Hosts
                     endforeach;
                     $result_hosts[] = $min_host;
                 else :
-                    $min_host['warn_msg']  .= 'Warn logs are empty';
+                    $min_host['warn_msg']  = 'Warn logs are empty';
                 endif;
             endif;
         endforeach;
