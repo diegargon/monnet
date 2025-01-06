@@ -119,7 +119,8 @@
                         jsonData.command_receive === 'report_agents_hosts_off' ||
                         jsonData.command_receive === 'report_agents_hosts_missing_pings' ||
                         jsonData.command_receive === 'report_alerts' ||
-                        jsonData.command_receive === 'report_warns'
+                        jsonData.command_receive === 'report_warns' ||
+                        jsonData.command_receive === 'showAlarms' 
                     ) {
                         closeStdContainer();
                         if(jsonData.response_msg) {

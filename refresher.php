@@ -86,7 +86,11 @@ if ($user->getPref('show_termlog_status')) {
     $logs = [];
     $type_mark = '';
 
-    $host_logs = Log::getLoghosts($cfg['term_max_lines']);
+    $logs_opt = [
+        'limit' => $cfg['term_max_lines'],
+        'level' => $cfg['term_log_level']
+    ];
+    $host_logs = Log::getLogsHosts($logs_opt);
 
     if (!empty($host_logs)) :
         foreach ($host_logs as &$log) :

@@ -154,7 +154,8 @@ if ((int) $host['online'] !== 1) :
 endif;
 $host_update_values['agent_online'] = 1;
 
-if (!isEmpty($rdata)) :
+// Process additional data sending with ping request
+if ($command === 'ping' && !isEmpty($rdata)) :
     if (!isEmpty($rdata['loadavg'])) :
         $host_update_values['load_avg'] = serialize($rdata['loadavg']);
     endif;
@@ -191,23 +192,9 @@ if (!isEmpty($rdata)) :
 endif;
 
 if ($command === 'notification' && isset($rdata['name'])) :
-    $log_msg = "Receive $command with id: $host_id, {$rdata['name']}";
-    isset($rdata['msg']) ? $log_msg .= ':' . $rdata['msg'] : null;
-
-    if ($rdata['name'] == 'starting') :
-        Log::logHost('LOG_NOTICE', $host_id, $log_msg, 1);
-        if (!empty($rdata['ncpu'])) :
-            if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
-                $host_update_values['ncpu'] = $rdata['ncpu'];
-            endif;
-        endif;
-        if (!empty($rdata['uptime'])) :
-            if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime'])) :
-                $host_update_values['uptime'] = $rdata['uptime'];
-            endif;
-        endif;
-    else :
-        Log::logHost('LOG_WARNING', $host_id, $log_msg, 1);
+    $notification_update = notification_process($hosts, $host, $rdata);
+    if (!empty($notification_update)) :
+        $host_update_values = array_merge($host_update_values, $notification_update);
     endif;
 endif;
 

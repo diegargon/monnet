@@ -30,7 +30,7 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
     $scan_type = 2; // Agent Based
     $online = 1;
 
-    // Obtener los puertos actuales de la base de datos, organizados en un mapa para fácil comparación
+    // Obtener los puertos actuales de la base de datos, organizados en un mapa para comparación
     $actual_host_ports = $hosts->getHostScanPorts($host_id, $scan_type);
     $actual_ports_map = [];
     foreach ($actual_host_ports as $port) {
@@ -67,10 +67,12 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
                     "last_change" => date_now()
                 ];
                 if ($db_port['online'] == 0) :
-                    Log::logHost('LOG_NOTICE', $host_id, "Port UP detected: {$port['pnumber']} ({$port['service']})");
+                    $alertmsg = "Port UP detected: {$port['pnumber']} ({$port['service']})";
+                    $hosts->setAlertOn($host_id, $alertmsg);
                 endif;
                 if ($db_port['service'] !== $port['service']) :
-                    Log::logHost('LOG_NOTICE', $host_id, "Service name change detected: {$port['pnumber']} ({$port['service']})");
+                    $warnmsg = "Service name change detected: {$port['pnumber']} ({$port['service']})";
+                    $hosts->setWarnOn($host_id, $warnmsg);
                 endif;
                 $hosts->updatePort($db_port['id'], $set);
             }
@@ -88,7 +90,7 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
                 'ip_version' => $ip_version,
                 'last_change' => date_now(),
             ];
-            Log::logHost('LOG_ALERT', $host_id, "New listing port detected: $pnumber ({$port['service']})");
+            Log::logHost('LOG_NOTICE', $host_id, "New listing port detected: $pnumber ({$port['service']})");
             $hosts->addPort($insert_values);
         }
     }
@@ -100,8 +102,56 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
                 'online' => 0,
                 'last_change' => date_now(),
             ];
-            Log::logHost('LOG_NOTICE', $host_id, "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})");
+            $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
+            $hosts->setAlertOn($host_id, $alertmsg);
             $hosts->updatePort($db_port['id'], $set);
         }
     }
+}
+
+/**
+ *
+ * @param Hosts $hosts
+ * @param array<string,mixed> $host
+ * @param array<string,mixed> $rdata
+ * @return array<string,mixed>
+ */
+function notification_process(Hosts $hosts, array $host, array $rdata): array
+{
+    $host_id = $host['id'];
+    $host_update_values = [];
+
+    $log_msg = "Receive notification with id: $host_id, {$rdata['name']}";
+    isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
+
+    if ($rdata['name'] === 'starting') :
+        Log::logHost('LOG_NOTICE', $host_id, $log_msg, LT_EVENT);
+        if (!empty($rdata['ncpu'])) :
+            if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
+                $host_update_values['ncpu'] = $rdata['ncpu'];
+            endif;
+        endif;
+        if (!empty($rdata['uptime'])) :
+            if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime'])) :
+                $host_update_values['uptime'] = $rdata['uptime'];
+            endif;
+        endif;
+    else :
+        if (!empty($rdata['event_value'])) :
+            $log_msg .= ' Event value: '. $rdata['event_value'];
+        else :
+            $rdata['event_value'] = '';
+        endif;
+        if (empty($rdata['event_type'])) :
+            Log::logHost('LOG_NOTICE', $host_id, $log_msg, LT_EVENT);
+        else :
+            if (in_array($rdata['event_value'], [3, 5])):
+                $hosts->setAlertOn($host_id, $log_msg, $rdata['event_type']);
+            else:
+                $hosts->setWarnOn($host_id, $log_msg, $rdata['event_type']);
+            endif;
+        endif;
+    endif;
+
+    return $host_update_values;
 }

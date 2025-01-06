@@ -1065,7 +1065,7 @@ input:checked + .slider:before {
     text-align: center;
     vertical-align: middle;
 }
-.add_link, .close_link, .settigns_link{
+.add_link, .close_link, .settings_link{
     width: 16px;
     padding-left: 0px;
 }
@@ -1624,6 +1624,10 @@ input:checked + .slider:before {
 
 .ports_control {
     border: 0px solid blue;
+}
+
+.td-host-logs {
+    text-align: left !important;
 }
 @keyframes crt-glow {
     0% {

@@ -10,12 +10,25 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.45;
-$cfg['monnet_revision'] = 41;
+$cfg['monnet_revision'] = 43;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
-$cfg['agent_min_version'] = 0.71;
-$cfg['agent_latest_version'] = 0.104;
+$cfg['agent_min_version'] = 0.105;
+$cfg['agent_latest_version'] = 0.112;
 $cfg['app_name'] = 'monnet';
 
+$log_type_constants = [
+    'LT_DEFAULT' => 0,
+    'LT_EVENT' => 1,
+    'LT_REMOTE_PORT_STATUS' => 2,
+    'LT_ALERT' => 3,
+    'LT_WARN' => 4,
+    'LT_EVENT_ALERT' => 5,
+    'LT_EVENT_WARN' => 6,
+];
+
+foreach ($log_type_constants as $key => $value) {
+    define($key, $value);
+}
 /* Hardware Manufacture */
 $cfg['manufacture'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
@@ -255,8 +268,8 @@ $cfg['playbooks'] = [
         'cat' => ['posix', 'windows'],
     ],
     [
-        'name' => 'install-monnet-agent-linux',
-        'desc' => 'Install Monnet Agent on Linux',
+        'name' => 'install-monnet-agent-systemd',
+        'desc' => 'Install Monnet Agent on systemd devices',
         'cat' => ['posix'],
     ],
     [

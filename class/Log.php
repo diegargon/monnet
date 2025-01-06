@@ -173,15 +173,47 @@ class Log
     }
 
     /**
-     * Return logs from ALL hosts
-     * @param int $limit
-     * @return array<int, array<string, string>>
+     *
+     * @param array<string,string|int> $opts
+     * @return array<string,string>
      */
-    public static function getLoghosts(int $limit): array
+    public static function getLogsHosts(array $opts = []): array
     {
         $lines = [];
-        $query = 'SELECT * FROM hosts_logs WHERE level <= ' .
-            self::$cfg['term_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
+        $conditions = [];
+
+        $query = 'SELECT * FROM hosts_logs';
+
+        if (!empty($opts['level'])) :
+            $conditions[] = 'level <= ' . (int)$opts['level'];
+        endif;
+
+        if (isset($opts['ack'])) :
+            $conditions[] = 'ack = ' . (int)$opts['ack'];
+        endif;
+
+        if (isset($opts['log_type'])) {
+            if (is_array($opts['log_type'])) {
+                $logConditions = [];
+                foreach ($opts['log_type'] as $l_types) {
+                    $logConditions[] = 'log_type=' . (int)$l_types;
+                }
+                $conditions[] = '(' . implode(' OR ', $logConditions) . ')';
+            } else {
+                $conditions[] = 'log_type=' . (int)$opts['log_type'];
+            }
+        }
+
+        if (!empty($conditions)) :
+            $query .= ' WHERE ' . implode(' AND ', $conditions);
+        endif;
+
+        $query .= ' ORDER BY date DESC';
+
+        if (!empty($opts['limit'])) :
+            $query .= ' LIMIT ' . (int)$opts['limit'];
+        endif;
+
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 
@@ -219,7 +251,9 @@ class Log
                 $query .= ' AND log_type=' . (int) $opts['log_type'];
             endif;
         endif;
-
+        if (empty($opts['ack'])) : //If set we include ACK msgs
+            $query .= ' AND ack != 1';
+        endif;
         $query .= ' ORDER BY date DESC';
 
         if (!empty($opts['max_lines'])) :

@@ -192,6 +192,17 @@ $(document).ready(function () {
         $("#pool-container").remove();
     });
 
+    $(document).on('change', 'input[type="checkbox"][name="ack_host_log"]', function () {
+        let logId = $(this).data('id');
+        if (this.checked) {
+            value = 1;
+        } else {
+            value = 0;
+        }
+        if (logId !== undefined && logId !== null) {
+            submitCommand('ack_host_log', {id: logId, value: value});
+        }
+    });
     $(document).on("change", "#disable_ping", function () {
         var hostId = $('#host_id').val();
 

@@ -88,9 +88,9 @@ function check_known_hosts(AppContext $ctx): bool
                 endif;
             } elseif ($host['online'] == 1 && $new_host_status['online'] == 0) {
                 $new_host_status['online_change'] = date_now();
-                $host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
-                $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'] . $host_timeout;
-                Log::logHost('LOG_WARNING', $host['id'], $log_msg, 3);
+                //$host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
+                $log_msg = $host['display_name'] . ': ' . $lng['L_HOST_BECOME_OFF'];
+                Log::logHost('LOG_WARNING', $host['id'], $log_msg, LT_ALERT);
                 if (!empty($host['alarm_ping_email'])) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;
@@ -338,7 +338,7 @@ function check_host_ports(AppContext $ctx, array $host): array
             $host_result['online'] = 1;
             $host_result['latency'] = $host_ping['latency'];
         else :
-            Log::logHost('LOG_WARNING', $host['id'], 'All Ports down and not response to the host ping');
+            Log::logHost('LOG_WARNING', $host['id'], 'All Ports down and no ping response from the host');
         endif;
     else :
         // Calculamos la media latencia puertos

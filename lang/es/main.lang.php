@@ -35,6 +35,7 @@ $lng = [
     'L_ALERTS' => 'Alertas',
     'L_AGENT_INSTALLED' => 'Agente Instalado',
     'L_AGENT_LAST_PING' => 'Ultimo contacto agente: ',
+    'L_ALARMS_DISABLE' => 'Alarmas deshabilitadas',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -50,6 +51,8 @@ $lng = [
     'L_CLEAR_ALARMS_BITS' => 'Limpiar Alertas',
     'L_CLEAR_ALARMS_BITS_BY' => 'Alertas eliminadas por el usuario',
     'L_CHECKS' => 'Checks',
+    'L_CLEAR_ALERTS' => 'Limpiar alertas',
+    'L_CLEAR_WARNS' => 'Limpiar avisos',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',

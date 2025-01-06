@@ -495,7 +495,7 @@
                     <div id="email_feedback" style="color: red; font-size: 0.9em;"></div>
                 </div>
                 <div>
-                    <button id="clear_alarms"
+                    <button id="clear_host_alarms"
                              onclick="submitCommand('clearHostAlarms',{id: <?= $tdata['host_details']['id'] ?>})">
                             <?= $lng['L_CLEAR_ALARMS_BITS'] ?>
                     </button>

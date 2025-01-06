@@ -123,6 +123,7 @@ if ($command === 'saveNote') {
 if (!empty($command)) :
     $data['command_receive'] = $command;
 endif;
+
 if (!isEmpty($value_command)) :
     $value_command = trim($value_command);
     $data['command_value'] = $value_command;
@@ -907,7 +908,7 @@ if ($command === 'clearHostAlarms' && $target_id > 0) {
     }
 }
 if ($command === 'setHostAlarms' && $target_id > 0) {
-    $msg = $hosts->setAlarms($target_id, $value_command);
+    $msg = $hosts->setAlarmState($target_id, $value_command);
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
 }
@@ -989,7 +990,7 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
             $extra_vars = $command_values['extra_vars'];
         }
 
-        if ($playbook == 'install-monnet-agent-linux') :
+        if ($playbook == 'install-monnet-agent-systemd') :
             if (empty($host['token'])) :
                 $token = $hosts->createHostToken($target_id);
             else :
@@ -1113,26 +1114,26 @@ if (
         $keysToShow[] = 'agent_installed';
         $tdata['hosts'] = $hosts->getAnsibleHosts(2);
     elseif ($command === 'report_agents_hosts') :
-        $keysToShow[] = 'ansible_enabled';
-        $keysToShow[] = 'agent_version';
+        array_push($keysToShow, 'ansible_enabled', 'agent_version');
         $tdata['hosts'] = $hosts->getAgentsHosts();
     elseif ($command === 'report_agents_hosts_off') :
-        $keysToShow[] = 'ansible_enabled';
-        $keysToShow[] = 'agent_version';
+        array_push($keysToShow, 'ansible_enabled', 'agent_version');
         $tdata['hosts'] = $hosts->getAgentsHosts(0);
     elseif ($command === 'report_agents_hosts_missing_pings') :
-        $keysToShow[] = 'ansible_enabled';
-        $keysToShow[] = 'agent_version';
+        array_push($keysToShow, 'ansible_enabled', 'agent_version');
         $tdata['hosts'] = $hosts->getAgentsHosts(0);
         $tdata['hosts'] = $hosts->getAgentsHosts(2);
     elseif ($command === 'report_alerts') :
-        $keysToShow[] = 'alert_msg';
+        array_push($keysToShow, 'alert_msg', 'ack_state');
+        $tdata['table_btn'] = 'clear_alerts';
         $tdata['hosts'] = $hosts->getAlertHosts();
+        $tdata['table_btn_name'] = $lng['L_CLEAR_ALERTS'];
     elseif ($command === 'report_warns') :
-        $keysToShow[] = 'warn_msg';
+        $keysToShow[] = 'log_msgs';
+        $tdata['table_btn'] = 'clear_warns';
+        $tdata['table_btn_name'] = $lng['L_CLEAR_WARNS'];
         $tdata['hosts'] = $hosts->getWarnHosts();
     endif;
-
 
     $availableKeys = array_keys($tdata['hosts'][0] ?? []);
     $tdata['keysToShow'] = array_intersect($keysToShow, $availableKeys);
@@ -1145,6 +1146,49 @@ if (
 
     $data['command_success'] = 1;
 }
+
+if ($command === 'showAlarms') :
+    $log_opts = [
+        'log_type' => [1, 2, 3, 4, 5],
+        'limit' => 400,
+        'ack' => 0,
+    ];
+    $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'msg', 'ack', 'date' ];
+    $tdata['logs'] = Log::getLogsHosts($log_opts);
+    foreach ($tdata['logs'] as &$log) :
+            $log['host'] = $hosts->getDisplayNameById($log['host_id']);
+            $log['date'] = format_date_now($cfg['timezone'], $cfg['datetime_log_format']);
+            $log['log_type'] = array_search($log['log_type'], $log_type_constants);
+    endforeach;
+
+    if (!empty($tdata['logs'])) :
+        $data['response_msg'] = $frontend->getTpl("alarms-report", $tdata);
+    else :
+        $data['response_msg'] = "No results";
+    endif;
+    $data['command_success'] = 1;
+endif;
+
+
+if ($command === 'ack_host_log') :
+    $db->update('hosts_logs', ['ack' => $value_command], [ 'id' => $target_id]);
+    $data['command_success'] = 1;
+    $data['response_msg'] = 'id: ' . $target_id . ' to ' . $value_command;
+endif;
+
+if ($command === 'clear_warns') :
+    $hosts->clear_warns();
+    $data['command_success'] = 1;
+    $data['response_msg'] = 'warns cleared';
+    $data['force_hosts_refresh'] = 1;
+endif;
+
+if ($command === 'clear_alerts') :
+    $hosts->clear_alerts();
+    $data['command_success'] = 1;
+    $data['response_msg'] = 'alerts cleared';
+    $data['force_hosts_refresh'] = 1;
+endif;
 
 if ($command === 'show_footer_dropdown' && is_numeric($value_command)) :
     $user->setPref('show_footer_status', $value_command);

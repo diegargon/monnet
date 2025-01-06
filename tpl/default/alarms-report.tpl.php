@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($tdata['hosts'] as $host) : ?>
+            <?php foreach ($tdata['logs'] as $log) : ?>
                 <tr>
                     <?php foreach ($tdata['keysToShow'] as $key) : ?>
                         <td class="td-host-logs">
@@ -46,21 +46,18 @@
                                 alt="online_status"
                                 title="Off">
                             <?php
-                        elseif ($key === 'log_msgs') :
-                            foreach($host['log_msgs'] as $log_msg ) :
-                            ?>
+                        elseif ($key === 'ack') :
+                             ?>
                             <div>
                                 <input
                                     type="checkbox"
                                     name="ack_host_log"
-                                    data-id="<?= $log_msg['log_id']?>"<?= $log_msg['ack_state'] ? 'checked' : null; ?>
+                                    data-id="<?= $log['id']?>"<?= $log['ack'] ? 'checked' : null; ?>
                                     />
-                                <?= $log_msg['msg'] ?>
                             </div>
-                            <?php
-                            endforeach;
+                        <?php
                         else :
-                            echo $host[$key] ?? '.';
+                            echo $log[$key] ?? '.';
                         endif;
 
                         ?>

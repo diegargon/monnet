@@ -21,24 +21,33 @@
 
         <div class="user_ctrl">
             <a class="ctrl_link" href="/?page=user">
-                <img class="settigns_link"
+                <img class="settings_link"
                      src="./tpl/default/img/settings-items.png" title="<?= $lng['L_USER'] ?>">
             </a>
             <span class="opt_labels"><?= ucfirst($tdata['username']) ?></span>
         </div>
         <div class="general_ctrl">
             <button id="toggleItemsSettings" class="button-ctrl" type="submit">
-                <img class="settigns_link"
+                <img class="settings_link"
                      src="./tpl/default/img/settings-items.png" title="<?= $lng['L_EDIT'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_QUICK_CONFIG'] ?></span>
         </div>
         <div class="general_ctrl">
             <a class="ctrl_link" href="?page=settings">
-                <img class="settigns_link"
+                <img class="settings_link"
                      src="./tpl/default/img/settings-items.png" title="<?= $lng['L_CONFIG'] ?>">
             </a>
             <span class="opt_labels"><?= $lng['L_CONFIG'] ?></span>
+        </div>
+        <div class="general_ctrl">
+            <button id="alarms"
+                    onclick="submitCommand('showAlarms',{id: 0, action: 'show'})"
+                    class="button-ctrl" type="submit">
+                <img class="settings_link"
+                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_ALARMS'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_ALARMS'] ?></span>
         </div>
     </fieldset>
     <!-- Add Items -->

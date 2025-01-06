@@ -466,10 +466,10 @@ class Hosts
      * @param bool $value
      * @return bool
      */
-    public function setAlarms(int $id, bool $value): bool
+    public function setAlarmState(int $id, bool $value): bool
     {
         $this->update($id, ['disable_alarms' => $value]);
-
+        Log::logHost('LOG_NOTICE', $id, $this->lng['L_ALARMS_DISABLE']);
         return true;
     }
 
@@ -477,14 +477,52 @@ class Hosts
      *
      * @param int $id
      * @param string $msg
+     * @param int $log_type
      * @return void
      */
-    public function setAlarmOn(int $id, string $msg): void
+    public function setAlertOn(int $id, string $msg, int $log_type = LT_ALERT): void
     {
-        Log::logHost('LOG_WARNING', $id, $msg, 3);
+        Log::logHost('LOG_ALERT', $id, $msg, $log_type);
         $this->update($id, ['alert' => 1]);
     }
 
+    /**
+     *
+     * @param int $id
+     * @param string $msg
+     * @param int $log_type
+     * @return void
+     */
+    public function setWarnOn(int $id, string $msg, int $log_type = LT_WARN): void
+    {
+        Log::logHost('LOG_WARNING', $id, $msg, $log_type);
+        $this->update($id, ['warn' => 1]);
+    }
+
+    public function clear_alerts(): bool
+    {
+        foreach ($this->hosts as $host) :
+            $id = $host['id'];
+            if (!empty($host['alert'])) :
+                $this->db->update('hosts', ['alert' => 0], ['id' => $id]);
+                $this->hosts[$id]['alert'] = 0;
+            endif;
+        endforeach;
+
+        return true;
+    }
+    public function clear_warns(): bool
+    {
+        foreach ($this->hosts as $host) :
+            $id = $host['id'];
+            if (!empty($host['warn'])) :
+                $this->db->update('hosts', ['warn' => 0], ['id' => $id]);
+                $this->hosts[$id]['warn'] = 0;
+            endif;
+        endforeach;
+
+        return true;
+    }
     /**
      *
      * @param int $id
@@ -678,24 +716,36 @@ class Hosts
 
         foreach ($this->hosts as $host) :
             if ($host['alert'] && empty($host['disable_alarms'])) :
-                //TODO add !ACK
-                $alert_logs = Log::getLogHost($host['id'], ['log_type' => 3]);
+                $log_type = [3, 5];
+
+                $opt = [
+                    'log_type' => $log_type,
+                ];
+                $alert_logs = Log::getLogHost($host['id'], $opt);
                 $alert_logs_msgs = [];
                 $alert_logs_items = [];
 
-                foreach ($alert_logs as $item):
-                    if (!in_array($log['msg'], $alert_logs_msgs)) :
-                        $alert_logs_msgs = $item['msg'];
-                        $alert_logs_items = $item;
-                    endif;
-                endforeach;
-                $alert_logs = array_slice($alert_logs_msgs, 0, 4);
-                $timezone = $this->ncfg->get('timezone');
-                $timeformat = $this->ncfg->get('datetime_format_min');
-                foreach($alert_logs_items as $item):
-                    $date = utc_to_tz($item['date'], $timezone, $timeformat);
-                    $host['alert_msg'] .= "{$item['msg']} - $date<br/>";
-                endforeach;
+                if (!empty($alert_logs)) :
+                    foreach ($alert_logs as $item):
+                        if (!in_array($item['msg'], $alert_logs_msgs)) :
+                            $alert_logs_msgs = $item['msg'];
+                            $alert_logs_items = $item;
+                        endif;
+                    endforeach;
+                    $alert_logs = array_slice($alert_logs_msgs, 0, 4);
+                    $timezone = $this->ncfg->get('timezone');
+                    $timeformat = $this->ncfg->get('datetime_format_min');
+                    foreach($alert_logs_items as $item):
+                        $date = utc_to_tz($item['date'], $timezone, $timeformat);
+                        $host['log_msgs'][] = [
+                            'log_id' => $item['id'],
+                            'msg' => "{$item['msg']} - $date",
+                            'ack_state' => $item['ack']
+                        ];
+                    endforeach;
+                else :
+                    $host['alert_msg']  .= 'Alert logs are empty';
+                endif;
             endif;
             $result_hosts[] = $host;
         endforeach;
@@ -714,14 +764,12 @@ class Hosts
 
         foreach ($this->hosts as $host) :
             if ( $host['warn'] && empty($host['disable_alarms'])) :
-                //TODO add !ACK
-                $log_type[] = 2;
-                $log_type[] = 4;
+                $log_type = [2, 4, 6];
+
                 $opt = [
                     'log_type' => $log_type,
                 ];
                 $warn_logs = Log::getLogHost($host['id'], $opt);
-
                 $warn_logs_msgs = [];
                 $warn_logs_items = [];
 
@@ -737,8 +785,14 @@ class Hosts
                     $timeformat = $this->ncfg->get('datetime_format_min');
                     foreach ($warn_logs_items as $item) :
                         $date = utc_to_tz($item['date'], $timezone, $timeformat);
-                        $host['warn_msg'] .= "{$item['msg']} - $date<br/>";
+                        $host['log_msgs'][] = [
+                            'log_id' => $item['id'],
+                            'msg' => "{$item['msg']} - $date",
+                            'ack_state' => $item['ack']
+                        ];
                     endforeach;
+                else:
+                    $host['warn_msg']  .= 'Warn logs are empty';
                 endif;
                 $result_hosts[] = $host;
             endif;
@@ -812,6 +866,17 @@ class Hosts
     {
         $this->db->delete('ports', ['id' => $port_id]);
     }
+
+    /**
+     *
+     * @param int $host_id
+     * @return string
+     */
+    public function getDisplayNameById(int $host_id): string
+    {
+        return $this->getDisplayName($this->hosts[$host_id]);
+    }
+
     /**
      *
      * @param array<string, mixed> $host
