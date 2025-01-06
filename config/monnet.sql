@@ -51,7 +51,7 @@ INSERT INTO `categories` (`id`, `cat_type`, `cat_name`, `disable`, `weight`) VAL
 (50, 2, 'L_OTHERS', 0, 0),
 (51, 2, 'L_WEBS', 0, 0),
 (52, 2, 'L_INTERNAL', 0, 0),
-(100, 3, 'L_SEARCH_ENGINE', 0, 0),
+(100, 3, 'L_SEARCH_ENGINE', 0, 0);
 
 -- --------------------------------------------------------
 
