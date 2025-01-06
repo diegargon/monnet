@@ -33,6 +33,7 @@ $cfg['log_level'] = 'LOG_WARN';
 $cfg['log_file'] = 'logs/monnet.log';
 $cfg['log_to_syslog'] = 0;
 $cfg['log_to_db'] = 1;
+$cfg['log_to_db_debug'] = 0; //Beware
 $cfg['log_to_file'] = 1;
 $cfg['log_file_owner'] = 'www-data';
 $cfg['log_file_owner_group'] = 'www-data';

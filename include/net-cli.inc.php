@@ -118,7 +118,7 @@ function check_known_hosts(AppContext $ctx): bool
             Log::warning("Known host ping status error {$host['id']}:{$host['display_name']}");
         }
     }
-    Log::info('Finish ping known host, took ' . (intval(microtime(true) - $ping_known_time)) . ' seconds');
+    Log::debug('Finish ping known host, took ' . (intval(microtime(true) - $ping_known_time)) . ' seconds');
 
     return true;
 }
@@ -183,7 +183,7 @@ function ping_nets(AppContext $ctx): void
         endif;
     endforeach;
 
-    Log::info('Ping net took ' . (intval(microtime(true) - $ping_net_time)) . ' seconds');
+    Log::debug('Ping net took ' . (intval(microtime(true) - $ping_net_time)) . ' seconds');
 }
 
 /**

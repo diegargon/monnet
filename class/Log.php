@@ -33,6 +33,9 @@ class Log
      * @var array<int|string, mixed> $cfg
      */
     private static array $cfg;
+    /**
+     * @var Database $db
+     */
     private static Database $db;
 
     /**
@@ -97,13 +100,15 @@ class Log
             }
             if (self::$cfg['log_to_db']) {
                 $level = self::getLogLevelId($type);
-                if (mb_strlen($msg) > self::$max_db_msg) {
-                    self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
-                    $msg_db = substr($msg, 0, 254);
-                } else {
-                    $msg_db = $msg;
-                }
-                self::$db->insert('system_logs', ['level' => $level, 'msg' => $msg_db]);
+                if ($level < 7 || self::$cfg['log_to_db_debug']) :
+                    if (mb_strlen($msg) > self::$max_db_msg) {
+                        self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
+                        $msg_db = substr($msg, 0, 254);
+                    } else {
+                        $msg_db = $msg;
+                    }
+                    self::$db->insert('system_logs', ['level' => $level, 'msg' => $msg_db]);
+                endif;
             }
             if (self::$cfg['log_to_file']) {
                 $log_file = self::$cfg['log_file'];
