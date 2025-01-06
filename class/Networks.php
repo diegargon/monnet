@@ -204,7 +204,6 @@ class Networks
                 $netpool['pool'] = $network_free_ips;
                 $free_ips[] = $netpool;
             endif;
-
         endforeach;
 
         return !empty($free_ips) ? $free_ips : false;

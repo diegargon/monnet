@@ -201,7 +201,7 @@ if ($command == 'submitHostToken' && !empty($target_id)) :
     endif;
 endif;
 
-if(
+if (
     !empty($command == 'submitHostPort') &&
     $target_id > 0 &&
     is_numeric($value_command) &&
@@ -553,12 +553,12 @@ if (
 
         /* Add ports */
         if ($host_details['check_method'] == 2) :
-            $remote_ports = $hosts->getHostScanPorts($target_id, $remote_scan=1);
+            $remote_ports = $hosts->getHostScanPorts($target_id, $remote_scan = 1);
             !empty($remote_ports) ? $tdata['host_details']['remote_ports'] = $remote_ports : null;
         endif;
 
         if (!empty($host_details['agent_installed'])) :
-            $agent_ports = $hosts->getHostScanPorts($target_id, $remote_scan=2);
+            $agent_ports = $hosts->getHostScanPorts($target_id, $remote_scan = 2);
             if (!empty($agent_ports)) :
                 foreach ($agent_ports as $key_port => $port) :
                     if (isset($port['interface'])) :
@@ -1158,7 +1158,7 @@ if ($command === 'showAlarms') :
     foreach ($tdata['logs'] as &$log) :
             $log['host'] = $hosts->getDisplayNameById($log['host_id']);
             $log['date'] = format_date_now($cfg['timezone'], $cfg['datetime_log_format']);
-            $log['log_type'] = array_search($log['log_type'], $log_type_constants);
+            $log['log_type'] = array_search($log['log_type'], $cfg['log_type_constants']);
     endforeach;
 
     if (!empty($tdata['logs'])) :
@@ -1177,14 +1177,14 @@ if ($command === 'ack_host_log') :
 endif;
 
 if ($command === 'clear_warns') :
-    $hosts->clear_warns();
+    $hosts->clearWarns();
     $data['command_success'] = 1;
     $data['response_msg'] = 'warns cleared';
     $data['force_hosts_refresh'] = 1;
 endif;
 
 if ($command === 'clear_alerts') :
-    $hosts->clear_alerts();
+    $hosts->clearAlerts();
     $data['command_success'] = 1;
     $data['response_msg'] = 'alerts cleared';
     $data['force_hosts_refresh'] = 1;

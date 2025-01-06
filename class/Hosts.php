@@ -435,7 +435,7 @@ class Hosts
     public function getHostsByNetworkId(int $network_id): array
     {
         $hosts = [];
-        foreach($this->hosts as $host) :
+        foreach ($this->hosts as $host) :
             $host['network'] == $network_id ? $hosts[] = $host : null;
         endforeach;
 
@@ -499,7 +499,7 @@ class Hosts
         $this->update($id, ['warn' => 1]);
     }
 
-    public function clear_alerts(): bool
+    public function clearAlerts(): bool
     {
         foreach ($this->hosts as $host) :
             $id = $host['id'];
@@ -511,7 +511,11 @@ class Hosts
 
         return true;
     }
-    public function clear_warns(): bool
+    /**
+     *
+     * @return bool
+     */
+    public function clearWarns(): bool
     {
         foreach ($this->hosts as $host) :
             $id = $host['id'];
@@ -531,8 +535,7 @@ class Hosts
      */
     public function setAnsibleAlarm(int $id, string $msg): void
     {
-
-        $log_msg = 'Ansible alert: '. $msg;
+        $log_msg = 'Ansible alert: ' . $msg;
         Log::logHost('LOG_WARNING', $id, $log_msg, 3);
         $this->update($id, ['alert' => 1, 'ansible_fail' => 1]);
         $this->db->query("INSERT INTO `ansible_msg` ('host_id', 'msg') VALUES ($id, $msg)");
@@ -726,7 +729,7 @@ class Hosts
                 $alert_logs_items = [];
 
                 if (!empty($alert_logs)) :
-                    foreach ($alert_logs as $item):
+                    foreach ($alert_logs as $item) :
                         if (!in_array($item['msg'], $alert_logs_msgs)) :
                             $alert_logs_msgs = $item['msg'];
                             $alert_logs_items = $item;
@@ -735,7 +738,7 @@ class Hosts
                     $alert_logs = array_slice($alert_logs_msgs, 0, 4);
                     $timezone = $this->ncfg->get('timezone');
                     $timeformat = $this->ncfg->get('datetime_format_min');
-                    foreach($alert_logs_items as $item):
+                    foreach ($alert_logs_items as $item) :
                         $date = utc_to_tz($item['date'], $timezone, $timeformat);
                         $host['log_msgs'][] = [
                             'log_id' => $item['id'],
@@ -763,7 +766,7 @@ class Hosts
         $result_hosts = [];
 
         foreach ($this->hosts as $host) :
-            if ( $host['warn'] && empty($host['disable_alarms'])) :
+            if ($host['warn'] && empty($host['disable_alarms'])) :
                 $log_type = [2, 4, 6];
 
                 $opt = [
@@ -791,7 +794,7 @@ class Hosts
                             'ack_state' => $item['ack']
                         ];
                     endforeach;
-                else:
+                else :
                     $host['warn_msg']  .= 'Warn logs are empty';
                 endif;
                 $result_hosts[] = $host;
@@ -817,9 +820,10 @@ class Hosts
     {
 
         $result = $this->db->selectAll(
-            'ports', [
-                'hid' => $hid,
-                'scan_type' => $scan_type
+            'ports',
+                [
+                    'hid' => $hid,
+                    'scan_type' => $scan_type
                 ]
         );
 

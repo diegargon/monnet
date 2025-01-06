@@ -29,25 +29,8 @@
                     <?php foreach ($tdata['keysToShow'] as $key) : ?>
                         <td class="td-host-logs">
                         <?php
-                        if ($key === 'online' && (int) $host['online'] === 1) :
+                        if ($key === 'ack') :
                             ?>
-                            <img
-                                class="hosts-online"
-                                src="tpl/<?= $cfg['theme']?>/img/green2.png"
-                                alt="online_status"
-                                title="On"
-                            >
-                            <?php
-                        elseif ($key === 'online' && (int) $host['online'] === 0) :
-                            ?>
-                            <img
-                                class="hosts-offline"
-                                src="tpl/<?= $cfg['theme']?>/img/red2.png"
-                                alt="online_status"
-                                title="Off">
-                            <?php
-                        elseif ($key === 'ack') :
-                             ?>
                             <div>
                                 <input
                                     type="checkbox"
@@ -55,7 +38,7 @@
                                     data-id="<?= $log['id']?>"<?= $log['ack'] ? 'checked' : null; ?>
                                     />
                             </div>
-                        <?php
+                            <?php
                         else :
                             echo $log[$key] ?? '.';
                         endif;
@@ -68,12 +51,12 @@
         </tbody>
     </table>
     <?php
-        if  (!empty($tdata['table_btn'])) :
-    ?>
+    if  (!empty($tdata['table_btn'])) :
+        ?>
         <button id="<?= $tdata['table_btn'] ?>" onclick="submitCommand('<?= $tdata['table_btn']?>', {id: 0})">
         <?= $tdata['table_btn_name'] ?>
         </button>
-     <?php
-        endif;
+        <?php
+    endif;
     ?>
 </div>

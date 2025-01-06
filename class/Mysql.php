@@ -198,7 +198,7 @@ class Database
         if (!$result) :
             if (!$this->silent) :
                 $this->dbdie($query);
-            else:
+            else :
                 return false;
             endif;
         endif;

@@ -62,13 +62,13 @@ foreach ($tdata['plays'] as $play) {
     }
 }
 ?>
-<?php
+    <?php
     if (!empty($messages)) :
-?>
+    ?>
     <h2><?= $lng['L_SUMMARY']?>:</h2>
-<?php
+    <?php
     foreach ($messages as $msg) {
-?>
+    ?>
     <div><?= $msg['ip'] ?></div>
     <pre>
     <?php
@@ -77,13 +77,12 @@ foreach ($tdata['plays'] as $play) {
         else :
             echo $msg['msg'];
         endif
-
     ?>
     </pre>
-<?php
+    <?php
     }
     endif;
-?>
+    ?>
     <h2><?= $lng['L_DETAIL_VIEW'] ?></h2>
     <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>

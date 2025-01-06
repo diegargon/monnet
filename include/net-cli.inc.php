@@ -48,7 +48,6 @@ function check_known_hosts(AppContext $ctx): bool
             foreach ($ports_status as $portid => $new_port_status) :
                 $db->update('ports', $new_port_status, ['id' => $portid]);
             endforeach;
-
         } else { /* Ping Scan */
             if (!empty($host['disable_ping'])) :
                 continue;
@@ -518,7 +517,8 @@ function get_mac(string $ip): string|bool
  * @param string $data
  * @return string
  */
-function calculateChecksum(string $data): string {
+function calculateChecksum(string $data): string
+{
     $sum = array_sum(unpack('n*', $data));
     $sum = ($sum >> 16) + ($sum & 0xFFFF);
     $sum += ($sum >> 16);
@@ -530,7 +530,8 @@ function calculateChecksum(string $data): string {
  * @param string $icmp
  * @return bool
  */
-function verifyChecksum(string $icmp): bool {
+function verifyChecksum(string $icmp): bool
+{
     $sum = array_sum(unpack('n*', $icmp));
     $sum = ($sum >> 16) + ($sum & 0xFFFF);
     $sum += ($sum >> 16);

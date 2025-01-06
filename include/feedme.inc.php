@@ -25,6 +25,13 @@ function trigger_feedme_error(string $msg): void
     exit;
 }
 
+/**
+ *
+ * @param Hosts $hosts
+ * @param int $host_id
+ * @param array<string,string|int> $listen_ports
+ * @return void
+ */
 function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_ports): void
 {
     $scan_type = 2; // Agent Based
@@ -138,16 +145,16 @@ function notification_process(Hosts $hosts, array $host, array $rdata): array
         endif;
     else :
         if (!empty($rdata['event_value'])) :
-            $log_msg .= ' Event value: '. $rdata['event_value'];
+            $log_msg .= ' Event value: ' . $rdata['event_value'];
         else :
             $rdata['event_value'] = '';
         endif;
         if (empty($rdata['event_type'])) :
             Log::logHost('LOG_NOTICE', $host_id, $log_msg, LT_EVENT);
         else :
-            if (in_array($rdata['event_value'], [3, 5])):
+            if (in_array($rdata['event_value'], [3, 5])) :
                 $hosts->setAlertOn($host_id, $log_msg, $rdata['event_type']);
-            else:
+            else :
                 $hosts->setWarnOn($host_id, $log_msg, $rdata['event_type']);
             endif;
         endif;

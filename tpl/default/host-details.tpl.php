@@ -196,9 +196,11 @@
                         ?>
                         <div class="port_container <?= !empty($port['class']) ? $port['class'] : null ?> "
                              data-tooltip="<?= $port['pnumber'] .
-                            '/' . $port['protocol'] .
-                            ' ' . $port['ip_version'] .
-                            ' ' . $port['interface']?>">
+                                '/' . $port['protocol'] .
+                                ' ' . $port['ip_version'] .
+                                ' ' . $port['interface']
+                                ?>
+                        ">
                             <?php if ($port['online']) : ?>
                                 <img class="port-online" src="tpl/<?= $tdata['theme'] ?>/img/green2.png" alt=""/>
                             <?php else : ?>
@@ -331,7 +333,7 @@
                         </div>
                         <?php
                         endif;
-                        ?>
+                    ?>
                     <div id="bars_container" class="bars_container">
                         <?php
                         if (
@@ -707,20 +709,20 @@
                         <button id="submitHostPort"><?= $lng['L_SEND'] ?></button>
                         <?php
                         if (!empty($tdata['host_details']['remote_ports'])) :
-                        ?>
+                            ?>
                         <select class="current_remote_ports">
                             <?php
                             foreach ($tdata['host_details']['remote_ports'] as $port) :
                                 $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
                                 $port_name = "{$port['pnumber']}($port_protocol)"
-                             ?>
+                                ?>
                             <option value="<?= $port['id'] ?>"><?= $port_name ?></option>
-                            <?php
+                                <?php
                             endforeach;
                             ?>
                         </select>
                         <button class="deleteRemoteHostPort"><?= $lng['L_DELETE'] ?></button>
-                        <?php
+                            <?php
                         endif;
                         ?>
                     </div>
@@ -742,20 +744,20 @@
                         <div>Agent</div>
                         <?php
                         if (!empty($tdata['host_details']['agent_ports'])) :
-                        ?>
+                            ?>
                         <select class="current_agent_ports">
                             <?php
                             foreach ($tdata['host_details']['agent_ports'] as $port) :
                                 $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
                                 $port_name = "{$port['pnumber']}/$port_protocol {$port['interface']}"
-                             ?>
+                                ?>
                             <option value="<?= $port['id'] ?>"><?= $port_name ?></option>
-                            <?php
+                                <?php
                             endforeach;
                             ?>
                         </select>
                         <button class="deleteAgentHostPort"><?= $lng['L_DELETE'] ?></button>
-                        <?php
+                            <?php
                         endif;
                         ?>
 

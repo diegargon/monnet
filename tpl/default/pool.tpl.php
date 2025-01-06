@@ -27,10 +27,10 @@
         <?php
         foreach ($tdata['networks'] as $network_pool) :
             foreach ($network_pool['pool'] as $pool_ip) :
-        ?>
+            ?>
             <tr>
                 <td>
-                    <div class="network-name"><?= $network_pool['name'] . ' (' . $network_pool['network'] .')'?> </div>
+                    <div class="network-name"><?= $network_pool['name'] . ' (' . $network_pool['network'] . ')'?> </div>
                 </td>
                 <td>
                     <div class="network-ip">
@@ -48,7 +48,7 @@
                     </button>
                 </td>
             </tr>
-        <?php
+            <?php
             endforeach;
         endforeach;
         ?>

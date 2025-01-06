@@ -47,8 +47,8 @@
                                 title="Off">
                             <?php
                         elseif ($key === 'log_msgs') :
-                            foreach($host['log_msgs'] as $log_msg ) :
-                            ?>
+                            foreach ($host['log_msgs'] as $log_msg ) :
+                                ?>
                             <div>
                                 <input
                                     type="checkbox"
@@ -57,7 +57,7 @@
                                     />
                                 <?= $log_msg['msg'] ?>
                             </div>
-                            <?php
+                                <?php
                             endforeach;
                         else :
                             echo $host[$key] ?? '.';
@@ -70,13 +70,13 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-    <?php
+        <?php
         if  (!empty($tdata['table_btn'])) :
-    ?>
+        ?>
         <button id="<?= $tdata['table_btn'] ?>" onclick="submitCommand('<?= $tdata['table_btn']?>', {id: 0})">
         <?= $tdata['table_btn_name'] ?>
         </button>
-     <?php
+        <?php
         endif;
-    ?>
+        ?>
 </div>
