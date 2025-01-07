@@ -1056,7 +1056,7 @@ class Hosts
 
                 if (
                     !empty($this->hosts[$id]['agent_next_report']) &&
-                    $this->hosts[$id]['agent_next_report'] < time()
+                    $this->hosts[$id]['agent_next_report'] < (time() - 5) # minus grace period
                 ) :
                     $this->agents_missing_pings++;
                     $this->hosts[$id]['agent_missing_pings'] = 1;

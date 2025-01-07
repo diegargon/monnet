@@ -97,22 +97,22 @@ if ($user->getPref('show_termlog_status')) {
             $host = $hosts->getHostById($log['host_id']);
             $log['type_mark'] = '[H]';
             if (!empty($host['display_name'])) :
-                $log['type_mark'] = '[H]' . '[' . $host['display_name'] . ']';
+                $log['display_name'] = '[' . $host['display_name'] . ']';
             elseif (!empty($host['ip'])) :
-                $log['type_mark'] = '[H]' . '[' . $host['ip'] . ']';
+                $log['display_name'] = '[' . $host['ip'] . ']';
             else :
-                $log['type_mark'] = '[H]' . '[' . $log['host_id'] . ']';
+                $log['display_name'] = '[' . $log['host_id'] . ']';
             endif;
         endforeach;
         $logs = $host_logs;
     endif;
-
 
     if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) :
         $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
         if (!empty($system_logs)) :
             foreach ($system_logs as &$system_log) :
                 $system_log['type_mark'] = '[S]';
+                $system_log['display_name'] = '';
             endforeach;
             $logs = array_merge($logs, $system_logs);
         endif;
@@ -148,6 +148,7 @@ if ($user->getPref('show_termlog_status')) {
             $date = format_datetime_from_string($term_log['date'], $cfg['term_date_format']);
             $loglevelname = Log::getLogLevelName($log_level);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
+            $loglevelname = substr($loglevelname, 0, 4);
             if ($log_level <= 2) :
                 $loglevelname = '<span class="color-red">' . $loglevelname . '</span>';
             elseif ($log_level === 3 ) :
@@ -155,7 +156,9 @@ if ($user->getPref('show_termlog_status')) {
             elseif ($log_level === 4 ) :
                 $loglevelname = '<span class="color-yellow">' . $loglevelname . '</span>';
             endif;
-            $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg'] . '<br/>';
+            $log_lines[] = $date . $term_log['type_mark'] .
+                '[' . $loglevelname . ']' . $term_log['display_name'] . $term_log['msg'] .
+                '<br/>';
         }
         $data['term_logs']['cfg']['place'] = '#center-container';
         $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);

@@ -97,7 +97,7 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
                 'ip_version' => $ip_version,
                 'last_change' => date_now(),
             ];
-            Log::logHost('LOG_NOTICE', $host_id, "New listing port detected: $pnumber ({$port['service']})");
+            Log::logHost('LOG_NOTICE', $host_id, "New port detected: $pnumber ({$port['service']})");
             $hosts->addPort($insert_values);
         }
     }
@@ -128,7 +128,7 @@ function notification_process(Hosts $hosts, array $host, array $rdata): array
     $host_id = $host['id'];
     $host_update_values = [];
 
-    $log_msg = "Receive notification with id: $host_id, {$rdata['name']}";
+    $log_msg = "Notification from id: $host_id, {$rdata['name']}";
     isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
 
     if ($rdata['name'] === 'starting') :
