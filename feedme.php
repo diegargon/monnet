@@ -180,9 +180,6 @@ if ($command === 'ping' && !isEmpty($rdata)) :
     if (!isEmpty($rdata['iowait'])) :
         $host_update_values['iowait'] = $rdata['iowait'];
     endif;
-    if (!isEmpty($rdata['listen_ports_info'])) :
-        feed_update_listen_ports($hosts, $host_id, $rdata['listen_ports_info']);
-    endif;
 endif;
 
 /* Update host */
