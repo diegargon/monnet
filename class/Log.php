@@ -231,52 +231,6 @@ class Log
     }
 
     /**
-     * Return logs from a host(id)
-     * @param int $host_id
-     * @param array<string, mixed> $opts
-     *
-     * @return array<int, array<string, string>>
-     */
-    public static function getLoghost(int $host_id, array $opts = []): array
-    {
-        $lines = [];
-        if (!isset($opts['log_level']) || !is_numeric($opts['log_level'])) :
-            $log_level = self::$cfg['term_log_level'];
-        else :
-            $log_level = $opts['log_level'];
-        endif;
-
-        $query = 'SELECT * FROM hosts_logs WHERE level <= ' . $log_level .
-            ' AND host_id =' . $host_id;
-
-        if (isset($opts['log_type'])) :
-            if (is_array($opts['log_type'])) :
-                $query .= ' AND (';
-                foreach ($opts['log_type'] as $idx => $l_types) :
-                    $idx > 0 ? $query .= ' OR ' : null;
-                    $query .= 'log_type=' . $l_types;
-                endforeach;
-                $query .= ')';
-            else :
-                $query .= ' AND log_type=' . (int) $opts['log_type'];
-            endif;
-        endif;
-        if (empty($opts['ack'])) : //If set we include ACK msgs
-            $query .= ' AND ack != 1';
-        endif;
-        $query .= ' ORDER BY date DESC';
-
-        if (!empty($opts['max_lines'])) :
-            $query .= ' LIMIT ' . $opts['max_lines'];
-        endif;
-
-        $result = self::$db->query($query);
-        $lines = self::$db->fetchAll($result);
-
-        return $lines;
-    }
-
-    /**
      *
      * @param string $loglevel
      * @return int|bool
