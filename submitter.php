@@ -1167,7 +1167,7 @@ if ($command === 'showAlarms' || $command === 'showEvents') :
     $tdata['logs'] = Log::getLogsHosts($log_opts);
     foreach ($tdata['logs'] as &$log) :
             $log['host'] = $hosts->getDisplayNameById($log['host_id']);
-            $log['date'] = format_date_now($cfg['timezone'], $cfg['datetime_log_format']);
+            $log['date'] = format_datetime_from_string($log['date'], $cfg['datetime_log_format']);
             $log['log_type'] = array_search($log['log_type'], $cfg['log_type_constants']);
     endforeach;
 

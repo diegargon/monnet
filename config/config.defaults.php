@@ -53,7 +53,7 @@ $cfg['time_format'] = 'H:i:s';
 $cfg['datetime_format'] = 'd-m-Y H:i:s';
 $cfg['datetime_format_min'] = 'd/H:i';
 $cfg['datatime_graph_format'] = 'H:i';
-$cfg['datetime_log_format'] = 'd-m H:i:s';
+$cfg['datetime_log_format'] = 'd-m-y H:i:s';
 /* TIMEOUTS */
 # Seconds
 $cfg['port_timeout_local'] = 0.5;
