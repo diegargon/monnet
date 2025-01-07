@@ -204,6 +204,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
 /**
  * @var array<int|string, mixed> $cfg
+ * @var Config $ncfg
  * @var Database $db
  */
 if ($db->isConn()) {
@@ -213,11 +214,11 @@ if ($db->isConn()) {
     if ($db_version) :
         $files_version = (float) $cfg['monnet_version'];
 
-        if (($files_version > $db_version) && !file_exists($lockFile) ) :
+        if (($files_version > $db_version) && !file_exists($lockFile)) :
             file_put_contents($lockFile, 'locked');
             Log::info("Triggered");
             trigger_update($ncfg, $db, $db_version, $files_version);
-            unlink ($lockFile);
+            unlink($lockFile);
         endif;
     endif;
 }

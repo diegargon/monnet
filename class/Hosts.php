@@ -846,10 +846,10 @@ class Hosts
 
         $result = $this->db->selectAll(
             'ports',
-                [
-                    'hid' => $hid,
-                    'scan_type' => $scan_type
-                ]
+            [
+                'hid' => $hid,
+                'scan_type' => $scan_type
+            ]
         );
 
         return $this->db->fetchAll($result);

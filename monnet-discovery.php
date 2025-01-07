@@ -14,6 +14,7 @@ $APP_NAME = 'monnet-discovery';
 /**
  *
  * @var Database $db
+ * @var Config $ncfg
  * @var AppContext|null $ctx An instance of AppCtx or null if not defined
  */
 require_once 'include/climode.inc.php';

@@ -81,9 +81,9 @@
                             (strpos($row['ip'], '255.') !== 0)
                         ) :
                             $checked = $row['scan'] ? 'checked' : '';
-                        ?>
+                            ?>
                         <input type="checkbox" name="networkScan_<?= $row['id']?>" value="1" <?= $checked ?> />
-                        <?php
+                            <?php
                         endif;
                         ?>
                     </td>

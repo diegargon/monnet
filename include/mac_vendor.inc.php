@@ -86,7 +86,7 @@ function get_mac_vendor_local(string $mac): array|bool
             } else {
                 $country = '';
             }
-        else:
+        else :
             $country = '';
         endif;
         $vendor = trim($company) . " (" . trim($country) . ")";

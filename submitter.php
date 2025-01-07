@@ -1218,4 +1218,3 @@ if ($command == 'setHostDisable' && is_numeric($value_command) && is_numeric($ta
 endif;
 
 print json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-

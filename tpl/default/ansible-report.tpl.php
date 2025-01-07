@@ -68,18 +68,18 @@ foreach ($tdata['plays'] as $play) {
     <h2><?= $lng['L_SUMMARY']?>:</h2>
         <?php
         foreach ($messages as $msg) {
-        ?>
+            ?>
     <div><?= $msg['ip'] ?></div>
     <pre>
-        <?php
+            <?php
             if (is_array($msg['msg'])) :
                 echo implode('<br>', $msg['msg']);
             else :
                 echo $msg['msg'];
             endif
-        ?>
+            ?>
     </pre>
-        <?php
+            <?php
         }
     endif;
     ?>

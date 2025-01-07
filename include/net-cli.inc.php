@@ -94,7 +94,7 @@ function check_known_hosts(AppContext $ctx): bool
                 // Create alert when always on is set
                 if (!empty($host['always_on'])) :
                     $hosts->setAlertOn($host['id'], $log_msg, LT_EVENT_ALERT);
-                else:
+                else :
                     Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LT_EVENT);
                 endif;
 
@@ -471,13 +471,13 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
         $code = ord($icmp[1]);
 
         // Type 8 is returned when host ping himself
-        if ( ($type === 0 || $type === 8) && $code === 0 && verifyChecksum($icmp)) {
+        if (($type === 0 || $type === 8) && $code === 0 && verifyChecksum($icmp)) {
             $status['online'] = 1;
             $status['latency'] = round_latency(microtime(true) - $tim_start);
             socket_close($socket);
             return $status;
         } else {
-            Log::notice("Response verify fail $type $code ". verifyChecksum($icmp));
+            Log::notice("Response verify fail $type $code " . verifyChecksum($icmp));
         }
     }
 

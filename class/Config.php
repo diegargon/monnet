@@ -187,7 +187,7 @@ class Config
      *
      * @param mixed $key Clave de configuración.
      * @param mixed $value Valor de configuración.
-     * @param int force_save
+     * @param int $force_save
      * @return int 1 if field change
      */
     public function set($key, $value, int $force_save = 0): int

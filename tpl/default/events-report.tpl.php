@@ -51,7 +51,7 @@
         </tbody>
     </table>
     <?php
-    if  (!empty($tdata['table_btn'])) :
+    if (!empty($tdata['table_btn'])) :
         ?>
         <button id="<?= $tdata['table_btn'] ?>" onclick="submitCommand('<?= $tdata['table_btn']?>', {id: 0})">
         <?= $tdata['table_btn_name'] ?>
