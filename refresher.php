@@ -148,6 +148,13 @@ if ($user->getPref('show_termlog_status')) {
             $date = format_datetime_from_string($term_log['date'], $cfg['term_date_format']);
             $loglevelname = Log::getLogLevelName($log_level);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
+            if ($log_level <= 2) :
+                $loglevelname = '<span class="color-red">' . $loglevelname . '</span>';
+            elseif ($log_level === 3 ) :
+                $loglevelname = '<span class="color-orange">' . $loglevelname . '</span>';
+            elseif ($log_level === 4 ) :
+                $loglevelname = '<span class="color-yellow">' . $loglevelname . '</span>';
+            endif;
             $log_lines[] = $date . $term_log['type_mark'] . '[' . $loglevelname . ']' . $term_log['msg'] . '<br/>';
         }
         $data['term_logs']['cfg']['place'] = '#center-container';

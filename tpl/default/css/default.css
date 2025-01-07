@@ -1235,16 +1235,18 @@ input:checked + .slider:before {
     overflow: auto;
 }
 .term_output {
-    color: #00fa00;
-    font-family: 'VT323';
-    font-size: 17px;
-    font-weight: 400;
+    /* color: #00fa00; */
+    color: #fff;
+    font-family: "DejaVu Sans Mono", "Liberation Mono", "Courier New", monospace;
+    font-size: 11px;
+    font-weight: bold;
     animation: crt-output 10ms infinite;
     background-color: transparent;
     padding: 1rem 1rem;
     box-sizing: border-box;
-    letter-spacing: -1.5px;
+    /* letter-spacing: -1.5px; */
     word-break: break-word;
+    width: 30vw;
 }
 .glow {
     animation: crt-glow 60s infinite;
@@ -1629,6 +1631,19 @@ input:checked + .slider:before {
 .td-host-logs {
     text-align: left !important;
 }
+
+.color-red {
+    color: red;
+}
+
+.color-orange {
+    color: #bf5515;
+}
+
+.color-yellow {
+    color: yellow;
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;
