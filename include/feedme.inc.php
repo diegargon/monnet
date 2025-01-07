@@ -26,6 +26,7 @@ function trigger_feedme_error(string $msg): void
 }
 
 /**
+ * Deal with the listen ports report
  *
  * @param Hosts $hosts
  * @param int $host_id
@@ -117,14 +118,18 @@ function feed_update_listen_ports(Hosts $hosts, int $host_id, array $listen_port
 }
 
 /**
+ * Notify notifiations
  *
- * @param Hosts $hosts
- * @param array<string,mixed> $host
+ * @param AppContext $ctx
+ * @param int $host_id
  * @param array<string,mixed> $rdata
  * @return array<string,mixed>
  */
-function notification_process(Hosts $hosts, array $host, array $rdata): array
+function notification_process(AppContext $ctx, int $host_id, array $rdata): array
 {
+    $hosts = $ctx->get('Hosts');
+    $host = $hosts->getHostById($host_id);
+
     $host_id = $host['id'];
     $host_update_values = [];
 
@@ -149,7 +154,7 @@ function notification_process(Hosts $hosts, array $host, array $rdata): array
         else :
             $rdata['event_value'] = '';
         endif;
-        if (empty($rdata['event_type'])) :
+        if (empty($rdata['event_type']) || $rdata['event_type'] == LT_EVENT) :
             Log::logHost('LOG_NOTICE', $host_id, $log_msg, LT_EVENT);
         else :
             if (in_array($rdata['event_type'], [3, 5])) :
@@ -161,4 +166,37 @@ function notification_process(Hosts $hosts, array $host, array $rdata): array
     endif;
 
     return $host_update_values;
+}
+
+/**
+ * Deal with notifications data
+ *
+ * @param AppContext $ctx
+ * @param int $host_id
+ * @param array<string,mixed> $rdata
+*/
+function notification_data_process(AppContext $ctx, int $host_id, array $rdata): void
+{
+    $db = $ctx->get('Mysql');
+
+    if ($rdata['name'] === 'send_stats') :
+        if (!isEmpty($rdata['loadavg_stats'])) :
+            $set_stats = [
+                'date' => date_now(),
+                'type' => 2,   //loadavg
+                'host_id' => $host_id,
+                'value' => $rdata['loadavg_stats']
+            ];
+            $db->insert('stats', $set_stats);
+        endif;
+        if (!isEmpty($rdata['iowait_stats'])) :
+            $set_stats = [
+                'date' => date_now(),
+                'type' => 3,   //iowait
+                'host_id' => $host_id,
+                'value' => $rdata['iowait_stats']
+            ];
+            $db->insert('stats', $set_stats);
+        endif;
+    endif;
 }

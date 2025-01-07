@@ -154,28 +154,22 @@ if ((int) $host['online'] !== 1) :
 endif;
 $host_update_values['agent_online'] = 1;
 
-// Process additional data sending with ping request
+/* Notification: Notify */
+if ($command === 'notification' && isset($rdata['name'])) :
+    $notification_update = notification_process($ctx, $host_id, $rdata);
+    if (!empty($notification_update)) :
+        $host_update_values = array_merge($host_update_values, $notification_update);
+    endif;
+    /* Notification: Deal with data */
+    if (!isEmpty($rdata)) :
+        notification_data_process($ctx, $host_id, $rdata);
+    endif;
+endif;
+
+/*  Ping: Deal with ping extra data */
 if ($command === 'ping' && !isEmpty($rdata)) :
     if (!isEmpty($rdata['loadavg'])) :
         $host_update_values['load_avg'] = serialize($rdata['loadavg']);
-    endif;
-    if (!isEmpty($rdata['loadavg_stats'])) :
-        $set_stats = [
-            'date' => date_now(),
-            'type' => 2,   //loadavg
-            'host_id' => $host['id'],
-            'value' => $rdata['loadavg_stats']
-        ];
-        $db->insert('stats', $set_stats);
-    endif;
-    if (!isEmpty($rdata['iowait_stats'])) :
-        $set_stats = [
-            'date' => date_now(),
-            'type' => 3,   //iowait
-            'host_id' => $host['id'],
-            'value' => $rdata['iowait_stats']
-        ];
-        $db->insert('stats', $set_stats);
     endif;
     if (!isEmpty($rdata['meminfo'])) :
         $host_update_values['mem_info'] = serialize($rdata['meminfo']);
@@ -188,13 +182,6 @@ if ($command === 'ping' && !isEmpty($rdata)) :
     endif;
     if (!isEmpty($rdata['listen_ports_info'])) :
         feed_update_listen_ports($hosts, $host_id, $rdata['listen_ports_info']);
-    endif;
-endif;
-
-if ($command === 'notification' && isset($rdata['name'])) :
-    $notification_update = notification_process($hosts, $host, $rdata);
-    if (!empty($notification_update)) :
-        $host_update_values = array_merge($host_update_values, $notification_update);
     endif;
 endif;
 
