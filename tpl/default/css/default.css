@@ -75,7 +75,7 @@ table, td {
 }
 
 td {
-    padding: 8px;
+    padding: 4px;
     text-align: left;
 }
 
@@ -1644,6 +1644,12 @@ input:checked + .slider:before {
     color: yellow;
 }
 
+.ack_log_label {
+    display: inherit;
+    border:0px solid red;
+    padding: 3px;
+    cursor: pointer;
+}
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

@@ -31,13 +31,14 @@
                         <?php
                         if ($key === 'ack') :
                             ?>
-                            <div>
+
+                                <label class="ack_log_label">
                                 <input
                                     type="checkbox"
                                     name="ack_host_log"
                                     data-id="<?= $log['id']?>"<?= $log['ack'] ? 'checked' : null; ?>
                                     />
-                            </div>
+                                </label>
                             <?php
                         else :
                             echo $log[$key] ?? '.';
