@@ -54,6 +54,15 @@ $cfg['datetime_format'] = 'd-m-Y H:i:s';
 $cfg['datetime_format_min'] = 'd/H:i';
 $cfg['datatime_graph_format'] = 'H:i';
 $cfg['datetime_log_format'] = 'd-m H:i:s';
+/* TIMEOUTS */
+# Seconds
+$cfg['port_timeout_local'] = 0.5;
+$cfg['port_timeout'] = 0.8;
+# usec
+$cfg['ping_nets_timeout'] = 100000;
+$cfg['ping_hosts_timeout'] = 300000;
+$cfg['ping_local_hosts_timeout'] = 200000;
+
 /* Minutes ideally same minutes than monnet-cli (cron config) or less if you have agents) */
 $cfg['refresher_time'] = 5;
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];

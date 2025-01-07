@@ -131,9 +131,10 @@ function ping_nets(AppContext $ctx): void
 {
     $hosts = $ctx->get('Hosts');
     $networks = $ctx->get('Networks');
+    $cfg = $ctx->get('cfg');
 
     $ping_net_time = microtime(true);
-    $timeout = ['sec' => 0, 'usec' => 100000];
+    $timeout = ['sec' => 0, 'usec' => $cfg['ping_nets_timeout']];
 
     $db_hosts = $hosts->getAll();
     $iplist = $networks->buildIpScanList();
@@ -275,6 +276,7 @@ function check_macs(Hosts $hosts): void
  */
 function check_host_ports(AppContext $ctx, array $host): array
 {
+    $cfg = $ctx->get('cfg');
     $log_type = 2; // ports related
     $latency = [];
 
@@ -299,7 +301,7 @@ function check_host_ports(AppContext $ctx, array $host): array
     if (!empty($host['timeout'])) :
         $timeout = $host['timeout'];
     else :
-        $timeout = $networks->isLocal($host['ip']) ? 0.6 : 1;
+        $timeout = $networks->isLocal($host['ip']) ? $cfg['port_local_timeout'] : $cfg['port_timeout'];
     endif;
 
     foreach ($ports as $port) :
@@ -341,7 +343,7 @@ function check_host_ports(AppContext $ctx, array $host): array
             $usec = $usec > 0 ? $usec * 1000000 : 0;
         } else {
             $sec = 0;
-            $usec = 100000;
+            $usec = $cfg['ping_hosts_timeout'];
         }
         $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
         if ($host_ping['online']) :
@@ -369,8 +371,8 @@ function check_host_ports(AppContext $ctx, array $host): array
  */
 function ping_known_host(AppContext $ctx, array $host): array
 {
-    $sec = 0;
-    $usec = 500000;
+    $cfg = $ctx->get('cfg');
+
     $time_now = date_now();
     $networks = $ctx->get('Networks');
 
@@ -380,7 +382,10 @@ function ping_known_host(AppContext $ctx, array $host): array
         $usec = $usec > 0 ? $usec * 1000000 : 0;
     } elseif ($networks->isLocal($host['ip'])) {
         $sec = 0;
-        $usec = ($host['online']) ? 400000 : 300000;
+        $usec = $cfg['ping_local_hosts_timeout'];
+    } else {
+        $sec = 0;
+        $usec = $cfg['ping_hosts_timeout'];
     }
 
     $timeout = ['sec' => $sec, 'usec' => $usec];
@@ -405,7 +410,7 @@ function ping_known_host(AppContext $ctx, array $host): array
  * @param array<string, int> $timeout
  * @return array<string, float|string|int>
  */
-function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
+function ping(string $ip, array $timeout = ['sec' => 0, 'usec' => 200000]): array
 {
     /**
      * Track errors for graph
@@ -419,11 +424,7 @@ function ping(string $ip, array $timeout = ['sec' => 1, 'usec' => 0]): array
         'latency' => null,
     ];
 
-    if (
-        !isset($timeout['sec'], $timeout['usec']) ||
-        !is_int($timeout['sec']) ||
-        !is_int($timeout['usec'])
-    ) :
+    if (!is_int($timeout['sec']) || !is_int($timeout['usec'])) :
         $timeout = ['sec' => 0, 'usec' => 200000];
     endif;
 
