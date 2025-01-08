@@ -68,6 +68,7 @@ $cfg['refresher_time'] = 5;
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 $cfg['stats_clear_days'] = 30;
 $cfg['logs_clear_days'] = 30;
+$cfg['glow_time'] = 15; // Minutes. Glow host time
 /*
  * Agent interval in seconds, inyected in config file, must
  * reinstall to take efect
