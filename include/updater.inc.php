@@ -15,8 +15,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     // 0.43
     if ($db_version < 0.43) {
         try {
-            $ncfg->set('db_monnet_version', 0.43, 1);
             $db->query("START TRANSACTION");
+            $ncfg->set('db_monnet_version', 0.43, 1);
             $db->query("COMMIT");
             $db_version = $files_version;
             Log::info('Update version to ' . $files_version . ' successful');
@@ -24,14 +24,12 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
-            exit(0);
         }
     }
     // 0.44
     if ($db_version < 0.44) {
         try {
             $ncfg->set('db_monnet_version', 0.44, 1);
-            $db->query("START TRANSACTION");
             // DONE Poder marcar network como pool
             $db->query("ALTER TABLE `networks` ADD `pool` TINYINT NOT NULL DEFAULT '0' AFTER `scan`;");
             //DONE log_type para guarda diferentes tipos de logs referentes a host, events, alerts etch
@@ -81,6 +79,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ) ENGINE=InnoDB;
             ");
             //DONE Utilizamos ncfg y db_monnet_version
+            $db->query("START TRANSACTION");
             $db->query("
                 DELETE FROM prefs
                 WHERE uid = '0' AND pref_name = 'monnet_version'
@@ -93,7 +92,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ROLLBACK");
             //$ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
-            exit(0);
         }
     }
 
@@ -101,7 +99,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.45) {
         try {
             $ncfg->set('db_monnet_version', 0.45, 1);
-            $db->query("START TRANSACTION");
             //DONE CK Review, filtrar y no mostrar logs vistos
             $db->query("
                 ALTER TABLE `hosts_logs` ADD `ack` BOOLEAN NOT NULL DEFAULT FALSE AFTER `msg`;
@@ -118,6 +115,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 ALTER TABLE `ports` ADD `ip_version` VARCHAR(5) NOT NULL AFTER `interface`;
             ");
+            $db->query("START TRANSACTION");
             //$db->query("
             //");
             $db->query("COMMIT");
@@ -127,7 +125,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
-            exit(0);
         }
     }
 
@@ -141,7 +138,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
-            exit(0);
         }
     }
 
@@ -149,9 +145,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $ncfg->set('db_monnet_version', 0.47, 1);
-            $db->query("START TRANSACTION");
             $db->query("
-                CREATE TABLE `reports` (
+                CREATE TABLE IF NOT EXISTS `reports` (
                   `reports` int NOT NULL AUTO_INCREMENT,
                   `host_id` int NOT NULL,
                   `rtype` tinyint NOT NULL,
@@ -160,7 +155,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   PRIMARY KEY (`reports`)
                 ) ENGINE=InnoDB
             ");
-
+            $db->query("START TRANSACTION");
             $db->query("
                 INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_external_host', null, 0, 103, NULL, 0),
