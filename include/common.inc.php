@@ -46,6 +46,8 @@ require_once 'class/AppContext.php';
 
 if ($cfg_db['dbtype'] == 'mysqli') {
     require_once 'class/Mysql.php';
+} else {
+    exit('Only support mysqli db type');
 }
 
 $ctx = new AppContext();
