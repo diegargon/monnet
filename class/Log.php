@@ -193,10 +193,11 @@ class Log
             $conditions[] = 'level <= ' . (int)$opts['level'];
         endif;
 
-        if (isset($opts['ack'])) :
-            $conditions[] = 'ack = ' . (int)$opts['ack'];
-        else : // By default we not include ACK items
-            $conditions[] = 'ack != 1';
+        /* if ack is set show all if not hidde ack */
+        if (!empty($opts['ack'])) :
+            $conditions[] = ' ack >= 0';
+        else :
+            $conditions[] = ' ack != 1';
         endif;
 
         if (isset($opts['host_id'])) :
