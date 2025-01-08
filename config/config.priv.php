@@ -10,7 +10,8 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.46;
-$cfg['monnet_revision'] = 49;
+
+$cfg['monnet_revision'] = 50;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_min_version'] = 0.105;
 $cfg['agent_latest_version'] = 0.114;
@@ -221,13 +222,12 @@ $cfg['sys_availability'] = [
     1 => ['id' => 1, 'name' => 'HA Active-Passive'],
     2 => ['id' => 1, 'name' => 'HA Active-Active'],
     3 => ['id' => 3, 'name' => 'Fault Tolerant'],
-    4 => ['id' => 4, 'name' => 'Disaster Recovery'],
-    5 => ['id' => 5, 'name' => 'Load Balancer'],
-    7 => ['id' => 7, 'name' => 'Cold Storage'],
-    8 => ['id' => 8, 'name' => 'Scalable'],
-    9 => ['id' => 9, 'name' => 'Geographical Redundancy'],
-   10 => ['id' => 10, 'name' => 'Real-Time'],
-   11 => ['id' => 11, 'name' => 'Maintainable'],
+    4 => ['id' => 4, 'name' => 'Standalone/SPOF'],
+    5 => ['id' => 5, 'name' => 'Clustered'],
+    6 => ['id' => 6, 'name' => 'Cold Standby'],
+    7 => ['id' => 7, 'name' => 'Warm Standby'],
+    8 => ['id' => 8, 'name' => 'Geo-Redundant'],
+    9 => ['id' => 9, 'name' => 'Disaster Recovery']
 ];
 
 $cfg['check_method'] = [
