@@ -11,7 +11,7 @@
 
 $cfg['monnet_version'] = 0.47;
 
-$cfg['monnet_revision'] = 52;
+$cfg['monnet_revision'] = 53;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_min_version'] = 0.105;
 $cfg['agent_latest_version'] = 0.114;
@@ -93,6 +93,7 @@ $cfg['manufacture'] = [
    100 => ['id' => 100, 'name' => 'AWS', 'img' => 'unknown.png'],
    101 => ['id' => 101, 'name' => 'Azure', 'img' => 'unknown.png'],
    102 => ['id' => 102, 'name' => 'Google Cloud', 'img' => 'unknown.png'],
+   103 => ['id' => 103, 'name' => 'ArubaCloud', 'img' => 'unknown.png'],
    /* Hypervisors */
    150 => ['id' => 150, 'name' => 'Proxmox VE', 'img' => 'proxmox.png'],
    151 => ['id' => 151, 'name' => 'VMWare ESXI', 'img' => 'vmware.png'],
@@ -114,10 +115,23 @@ $cfg['manufacture'] = [
    205 => ['id' => 205, 'name' => 'Nomad', 'img' => 'unknown.png'],
    206 => ['id' => 206, 'name' => 'Rancher', 'img' => 'unknown.png'],
    207 => ['id' => 207, 'name' => 'OpenShift', 'img' => 'unknown.png'],
-
+   /* Other Datacenters */
+   300 => ['id' => 300, 'name' => 'Hetzner', 'img' => 'unknown.png'],
+   301 => ['id' => 301, 'name' => 'OVH', 'img' => 'unknown.png'],
+   302 => ['id' => 302, 'name' => 'DigitalOcean', 'img' => 'unknown.png'],
+   304 => ['id' => 304, 'name' => 'Netcup', 'img' => 'unknown.png'],
+   305 => ['id' => 305, 'name' => 'Cantabo', 'img' => 'unknown.png'],
+   306 => ['id' => 306, 'name' => 'Altia', 'img' => 'unknown.png'],
+   307 => ['id' => 307, 'name' => 'Vultr', 'img' => 'unknown.png'],
+   /* Networking */
+   500 => ['id' => 500, 'name' => 'Cloudflare', 'img' => 'unknown.png'],
+   501 => ['id' => 501, 'name' => 'Akamai', 'img' => 'unknown.png'],
+   502 => ['id' => 502, 'name' => 'Fastly', 'img' => 'unknown.png'],
+   503 => ['id' => 503, 'name' => 'Amazon CloudFront', 'img' => 'unknown.png'],
+   504 => ['id' => 504, 'name' => 'Google Cloud CDN', 'img' => 'unknown.png'],
 ];
 
-/* Macbhine Type */
+/* Machine Type */
 $cfg['machine_type'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
     1 => ['id' => 1, 'name' => 'Physical/On-Premises', 'img' => 'unknown.png'],
