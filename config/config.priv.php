@@ -185,6 +185,7 @@ $cfg['os'] = [
     41 => ['id' => 41, 'name' => 'VyOS', 'img' => 'unknown.png'],
     42 => ['id' => 42, 'name' => 'AMI', 'img' => 'unknown.png'],
     43 => ['id' => 43, 'name' => 'Opnsense', 'img' => 'opnsense.png'],
+    44 => ['id' => 44, 'name' => 'Proxmox VE', 'img' => 'proxmox.png'],
 ];
 
 /* System ROL */
