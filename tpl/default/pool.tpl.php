@@ -25,32 +25,34 @@
         <div id="pool_status_msg"><?= isset($tdata['status_msg']) ? $tdata['status_msg'] : null ?></div>
         <table class="table-pool">
         <?php
-        foreach ($tdata['networks'] as $network_pool) :
-            foreach ($network_pool['pool'] as $pool_ip) :
-                ?>
-            <tr>
-                <td>
-                    <div class="network-name"><?= $network_pool['name'] . ' (' . $network_pool['network'] . ')'?> </div>
-                </td>
-                <td>
-                    <div class="network-ip">
-                        <?= $pool_ip ?>
-                    </div>
-                </td>
-                <td>
-                    <button
-                        class="submitPoolReserver"
-                        type="submit"
-                        data-id="<?= $network_pool['id']?>"
-                        data-ip="<?= $pool_ip ?>"
-                        >
-                        <?= $lng['L_RESERVE'] ?>
-                    </button>
-                </td>
-            </tr>
-                <?php
+        if (!empty($tdata['networks']) && !empty($network_pool)) :
+            foreach ($tdata['networks'] as $network_pool) :
+                foreach ($network_pool['pool'] as $pool_ip) :
+                    ?>
+                <tr>
+                    <td>
+                        <div class="network-name"><?= $network_pool['name'] . ' (' . $network_pool['network'] . ')'?> </div>
+                    </td>
+                    <td>
+                        <div class="network-ip">
+                            <?= $pool_ip ?>
+                        </div>
+                    </td>
+                    <td>
+                        <button
+                            class="submitPoolReserver"
+                            type="submit"
+                            data-id="<?= $network_pool['id']?>"
+                            data-ip="<?= $pool_ip ?>"
+                            >
+                            <?= $lng['L_RESERVE'] ?>
+                        </button>
+                    </td>
+                </tr>
+                    <?php
+                endforeach;
             endforeach;
-        endforeach;
+        endif;
         ?>
         </table>
     </div>
