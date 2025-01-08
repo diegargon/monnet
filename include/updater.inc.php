@@ -15,7 +15,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     // 0.43
     if ($db_version < 0.43) {
         try {
-            $ncfg->set('db_monnet_version', $files_version, 1);
+            $ncfg->set('db_monnet_version', 0.43, 1);
             $db->query("START TRANSACTION");
             $db->query("COMMIT");
             $db_version = $files_version;
@@ -30,7 +30,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     // 0.44
     if ($db_version < 0.44) {
         try {
-            $ncfg->set('db_monnet_version', $files_version, 1);
+            $ncfg->set('db_monnet_version', 0.44, 1);
             $db->query("START TRANSACTION");
             // DONE Poder marcar network como pool
             $db->query("ALTER TABLE `networks` ADD `pool` TINYINT NOT NULL DEFAULT '0' AFTER `scan`;");
@@ -100,7 +100,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
    // 0.45 Template
     if ($db_version < 0.45) {
         try {
-            $ncfg->set('db_monnet_version', $files_version, 1);
+            $ncfg->set('db_monnet_version', 0.45, 1);
             $db->query("START TRANSACTION");
             //DONE CK Review, filtrar y no mostrar logs vistos
             $db->query("
@@ -134,7 +134,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     // 0.46 do nothing
     if ($db_version < 0.46) {
         try {
-            $ncfg->set('db_monnet_version', $files_version, 1);
+            $ncfg->set('db_monnet_version', 0.46, 1);
             $db_version = $files_version;
             Log::info('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
@@ -148,7 +148,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     // 0.47 Template
     if ($db_version < 0.00) {
         try {
-            $ncfg->set('db_monnet_version', $files_version, 1);
+            $ncfg->set('db_monnet_version', 0.47, 1);
             $db->query("START TRANSACTION");
             $db->query("
                 CREATE TABLE `reports` (
@@ -180,7 +180,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
   // 0.00 Template
     if ($db_version < 0.00) {
         try {
-            $ncfg->set('db_monnet_version', $files_version, 1);
+            //$ncfg->set('db_monnet_version', 0.00 , 1);
             $db->query("START TRANSACTION");
             // DROP hosts->alert_msg host->warn_msg $host->warn_port hosts->ports
             //$db->query("
