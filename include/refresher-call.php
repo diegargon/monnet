@@ -129,9 +129,9 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
         //$id = $vhost['id'];
         if ($minutes_diff > 0 && ($minutes_diff <= $cfg['refresher_time'])) {
             if ($vhost['online']) {
-                $hosts_view[$key]['glow'] = 'host-glow-green';
+                $hosts_view[$key]['glow'] = ' host-glow-green';
             } else {
-                $hosts_view[$key]['glow'] = 'host-glow-red';
+                $hosts_view[$key]['glow'] = ' host-glow-red';
             }
         }
 
