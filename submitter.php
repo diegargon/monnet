@@ -747,7 +747,7 @@ endif;
 
 /* Request Pool */
 if ($command == 'requestPool') :
-    $networks = $ctx->get('Networks');
+    empty($networks) ? $networks = $ctx->get('Networks') : null;
     $tdata['networks'] = $networks->getPoolIPs(2) ?? [];
     if (empty($tdata['networks'])) :
         $tdata['status_msg'] = $lng['L_NO_POOLS'];
@@ -886,7 +886,11 @@ if (
             $opts['level'] = $command_values['log_level'];
         endif;
     endif;
-    $opts['host_id'] = $target_id;
+    $opts = [
+        'host_id' => $target_id,
+        'ack' => 1,
+    ];
+
     $logs = Log::getLogsHosts($opts);
     if (!empty($logs)) {
         $data['response_msg'] = format_host_logs($ctx, $logs);
@@ -1000,6 +1004,7 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
             else :
                 $token = $host['token'];
             endif;
+            /* Set default config */
             $agent_config = [
                 "id" => $host['id'],
                 "token" => $token,
@@ -1010,6 +1015,14 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
                 "server_endpoint" => "/feedme.php",
             ];
 
+            empty($networks) ? $networks = $ctx->get('Networks') : null;
+
+            if (!empty($ncfg->get('agent_external_host')) && !$networks->isLocal($host['ip'])) {
+               $agent_config['server_host'] = $ncfg->get('agent_external_host');
+            }
+            if (!empty($ncfg->get('agent_default_interval'))) {
+               $agent_config['agent_default_interval'] = $ncfg->get('agent_default_interval');
+            }
             $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         endif;
         $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
@@ -1154,7 +1167,7 @@ if (
 
 if ($command === 'showAlarms' || $command === 'showEvents') :
     $log_opts = [
-        'limit' => 400,
+        'limit' => 100,
         'ack' => 0,
     ];
     if ($command === 'showAlarms') :
