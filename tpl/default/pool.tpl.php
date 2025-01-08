@@ -25,7 +25,7 @@
         <div id="pool_status_msg"><?= isset($tdata['status_msg']) ? $tdata['status_msg'] : null ?></div>
         <table class="table-pool">
         <?php
-        if (!empty($tdata['networks']) && !empty($network_pool)) :
+        if (!empty($tdata['networks'])) :
             foreach ($tdata['networks'] as $network_pool) :
                 foreach ($network_pool['pool'] as $pool_ip) :
                     ?>
