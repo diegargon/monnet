@@ -115,7 +115,7 @@ function notification_data_process(AppContext $ctx, int $host_id, array $rdata):
 
 /**
  * Deal with the listen ports report
- *  
+ *
  * @param AppContext $ctx
  * @param int $host_id
  * @param array<string,string|int> $listen_ports
@@ -163,12 +163,14 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                     "service" => $port['service'],
                     "last_change" => date_now()
                 ];
+                //Port was down
                 if ($db_port['online'] == 0) :
-                    $alertmsg = "Port UP detected: {$port['pnumber']} ({$port['service']})";
+                    $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber)";
                     $hosts->setAlertOn($host_id, $alertmsg);
                 endif;
                 if ($db_port['service'] !== $port['service']) :
-                    $warnmsg = "Service name change detected: {$port['pnumber']} ({$port['service']})";
+                    $warnmsg = 'Service name change detected: '
+                        . "({$db_port['service']}->{$port['service']}) ($pnumber)";
                     $hosts->setWarnOn($host_id, $warnmsg);
                 endif;
                 $hosts->updatePort($db_port['id'], $set);
