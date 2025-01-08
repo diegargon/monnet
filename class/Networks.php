@@ -325,12 +325,18 @@ class Networks
                     'id' => $id,
                     'network' => $net['network'],
                     'name' => $net['name'],
-                    'pool' => $net['pool'],
                     'vlan' => (int) $net['vlan'],
                     'scan' => (int) $net['scan'],
                     'weight' => (int) $net['weight'],
                     'disable' => (int) $net['disable'],
                 ];
+
+                #temp fix for upgrade
+                $cfg = $this->ctx->get('cfg');
+                if ($cfg['monnet_version'] >= 0.44) {
+                    $fnet['pool'] = $net['pool'];
+                }
+
                 if ($fnet['disable'] === 0) :
                     $this->networks[$id] = $fnet;
                 endif;
