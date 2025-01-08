@@ -17,12 +17,14 @@
  *          3(float)
  *          4(date)
  *          5(url)
- *          6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
+ *          6(dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
  *          7(password
  *          8(email) ?
  *
- * ccat = 0 (hidden), 1 (general) 101 (mail) 102 Ansible
+ *
  * ('keyname', JSON_QUOTE('key_value'), ctype, ccat, cdesc, cuid=0);
+ *
+ * ccat = 0 (hidden), 1 (general) 101 (mail) 102 Ansible 103 (Agent)
  */
 class Config
 {

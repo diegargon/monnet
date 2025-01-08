@@ -328,6 +328,7 @@ class Networks
                     'vlan' => (int) $net['vlan'],
                     'scan' => (int) $net['scan'],
                     'weight' => (int) $net['weight'],
+                    'only_online' => (int) $net['only_online'],
                     'disable' => (int) $net['disable'],
                 ];
 

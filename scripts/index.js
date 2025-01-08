@@ -373,6 +373,7 @@ $(document).ready(function () {
         fields.networkScan = parseInt($(`input[name="networkScan_${id}"]:checked`).val()) || 0;
         fields.networkVLAN = parseInt($(`input[name="networkVLAN_${id}"]`).val());
         fields.networkPool = parseInt($(`input[name="networkPool_${id}"]:checked`).val()) || 0;
+        fields.networkOnlyOnline = parseInt($(`input[name="networkOnlyOnline_${id}"]:checked`).val()) || 0;
         fields.networkDisable = $(`input[name="networkDisable_${id}"]`).is(':checked') ? 1 : 0;
         fields.networkWeight = parseInt($(`input[name="networkWeight_${id}"]`).val()) || 50;
 

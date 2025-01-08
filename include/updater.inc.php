@@ -157,16 +157,15 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   KEY `idx_host_id_id` (`host_id`, `id`)
                 ) ENGINE=InnoDB
             ");
-            // Usar glow en vez de online_change
-            // Borrar online_change
+            // DONE Usar glow en vez de online_change
             $db->query("ALTER TABLE `hosts` ADD `glow` "
             . "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `online`;");
             $db->query("ALTER TABLE hosts MODIFY COLUMN mac CHAR(17) DEFAULT NULL;");
             $db->query("ALTER TABLE hosts DROP COLUMN version;");
-            //si 1 los host de esa red no se mostraran si esta off
+            //DONE si 1 los host de esa red no se mostraran si esta off
             $db->query("ALTER TABLE networks ADD COLUMN only_online TINYINT(1) NOT NULL DEFAULT 0;");
             $db->query("START TRANSACTION");
-            // Permitir configurar una url externa para el agente
+            // DONE Permitir configurar una url externa para el agente
             $db->query("
                 INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_external_host', null, 0, 103, NULL, 0),

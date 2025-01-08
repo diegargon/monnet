@@ -21,6 +21,7 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
     $user = $ctx->get('User');
     $lng = $ctx->get('lng');
     $hosts_view = [];
+    $networks = $ctx->get('Networks');
 
     if ($highlight) {
         $hosts_view = $hosts->getHighLight($highlight);
@@ -58,7 +59,13 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
             if ($pref_value === '0') { //pref_value is string
                 unset($hosts_view[$key]);
             }
-
+            //Filter Networks tagged
+            if (!empty($host['network'])) {
+                $network = $networks->getNetworkById($host['network']);
+                if ((int)$host['online'] === 0 && (int)$network['only_online'] === 1) {
+                    unset($hosts_view[$key]);
+                }
+            }
             //DUP TO DELETE
             //Discard hidden networks
             /*
@@ -118,20 +125,19 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
             endif;
         }
 
-        $hosts_view[$key]['glow'] = '';
+        $hosts_view[$key]['glow_tag'] = '';
 
         // Glow
 
-        $change_time = new DateTime($vhost['online_change'], new DateTimeZone('UTC'));
+        $change_time = new DateTime($vhost['glow'], new DateTimeZone('UTC'));
         $diff = $date_now->diff($change_time);
         $minutes_diff = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
 
-        //$id = $vhost['id'];
-        if ($minutes_diff > 0 && ($minutes_diff <= $cfg['refresher_time'])) {
+        if ($minutes_diff > 0 && ($minutes_diff <= $cfg['glow_time'])) {
             if ($vhost['online']) {
-                $hosts_view[$key]['glow'] = ' host-glow-green';
+                $hosts_view[$key]['glow_tag'] = ' host-glow-green';
             } else {
-                $hosts_view[$key]['glow'] = ' host-glow-red';
+                $hosts_view[$key]['glow_tag'] = ' host-glow-red';
             }
         }
 

@@ -236,6 +236,7 @@ function validateNetworkData(AppContext $ctx, string $action, array $network_val
         ($key == 'networkDisable') ? $key = 'disable' : null;
         ($key == 'networkPool') ? $key = 'pool' : null;
         ($key == 'networkWeight') ? $key = 'weight' : null;
+        ($key == 'networkOnlyOnline') ? $key = 'only_online' : null;
         $new_network[$key] = trim($dJson);
     }
     if ($new_network['networkCIDR'] == 0 && $new_network['network'] != '0.0.0.0') {

@@ -33,6 +33,7 @@ $lng = [
     'L_AGENT_MISSING_PINGS' => 'Agents Pings',
     'L_AVAILABILITY' => 'Disponibilidad',
     'L_ALERTS' => 'Alertas',
+    'L_AGENT' => 'Agente',
     'L_AGENT_INSTALLED' => 'Agente Instalado',
     'L_AGENT_LAST_PING' => 'Ultimo contacto agente: ',
     'L_ALARMS_DISABLE' => 'Alarmas deshabilitadas',

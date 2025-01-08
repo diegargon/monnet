@@ -31,6 +31,11 @@
             class="settings-tabs-head">Ansible
         </button>
         <?php endif; ?>
+        <button
+            id="settings_tab_103"
+            onclick="changeSettingsTab(103)"
+            class="settings-tabs-head"><?= $lng['L_AGENT'];?>
+        </button>
         <?php if ($ncfg->get('mail')) : ?>
         <button
             id="settings_tab_101" onclick="changeSettingsTab(101)"

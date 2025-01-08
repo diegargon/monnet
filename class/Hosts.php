@@ -202,7 +202,6 @@ class Hosts
 
         foreach ($values as $kvalue => $vvalue) {
             if (!empty($kvalue) && isset($vvalue)) {
-                //TODO warning signs
                 //Log change
                 if (
                         empty($this->hosts[$id]['disable_alarms']) &&

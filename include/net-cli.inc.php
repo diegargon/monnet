@@ -62,6 +62,14 @@ function check_known_hosts(AppContext $ctx): bool
                 if ($ping_host_result['online'] == 1) :
                     Log::info('Retry ping works for ' . $host['display_name']);
                 endif;
+                //recheck one last time if is a IOT
+                if ($host['system_type'] == 22 || $host['system_type'] == 11) :
+                    usleep(500000);
+                    $ping_host_result = ping_known_host($ctx, $host);
+                    if ($ping_host_result['online'] == 1) :
+                        Log::info('IOT Retry ping works for ' . $host['display_name']);
+                    endif;
+                endif;
             endif;
 
             (valid_array($ping_host_result)) ? $new_host_status = $ping_host_result : null;
@@ -75,7 +83,7 @@ function check_known_hosts(AppContext $ctx): bool
                 $new_host_status['mac'] = !empty($mac) ? $mac : null;
             }
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
-                $new_host_status['online_change'] = date_now();
+                $new_host_status['glow'] = date_now(); //Glow Time Mark
                 $log_msg = $lng['L_HOST_BECOME_ON'];
                 Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LT_EVENT);
                 if (!empty($host['alarm_port_email'])) :
@@ -88,7 +96,7 @@ function check_known_hosts(AppContext $ctx): bool
                     $new_host_status['hostname'] = $hostname;
                 endif;
             } elseif ($host['online'] == 1 && $new_host_status['online'] == 0) {
-                $new_host_status['online_change'] = date_now();
+                $new_host_status['glow'] = date_now(); //Glow Time Mark
                 //$host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 $log_msg = $lng['L_HOST_BECOME_OFF'];
                 // Create alert when always on is set

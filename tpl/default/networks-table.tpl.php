@@ -21,7 +21,7 @@
                 <?php
                 foreach (
                     [
-                        'id', 'ip', 'cidr', 'name', 'pool', 'vlan', 'scan', 'weight', 'disable', ''
+                        'id', 'ip', 'cidr', 'name', 'pool', 'only_online', 'vlan', 'scan', 'weight', 'disable', ''
                     ] as $header
                 ) : ?>
                     <th><?= $header ?></th>
@@ -64,6 +64,11 @@
                         <?php $checked = $row['pool'] ? 'checked' : ''; ?>
                         <input type="hidden" name="networkPool_<?= $row['id']?>" value="0" />
                         <input type="checkbox" name="networkPool_<?= $row['id']?>" value="1" <?= $checked ?> />
+                    </td>
+                    <td>
+                        <?php $checked = $row['only_online'] ? 'checked' : ''; ?>
+                        <input type="hidden" name="networkOnlyOnline_<?= $row['id']?>" value="0" />
+                        <input type="checkbox" name="networkOnlyOnline_<?= $row['id']?>" value="1" <?= $checked ?> />
                     </td>
                     <td>
                         <input
