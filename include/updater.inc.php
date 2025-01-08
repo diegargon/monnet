@@ -142,26 +142,36 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
     // 0.47 Template
-    if ($db_version < 0.00) {
+    if ($db_version < 0.47) {
         try {
             $ncfg->set('db_monnet_version', 0.47, 1);
+            // Guardar reports json como los de ansible
             $db->query("
                 CREATE TABLE IF NOT EXISTS `reports` (
-                  `reports` int NOT NULL AUTO_INCREMENT,
+                  `id` int NOT NULL AUTO_INCREMENT,
                   `host_id` int NOT NULL,
                   `rtype` tinyint NOT NULL,
-                  `date` datetime NOT NULL,
+                  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `report` json NOT NULL,
-                  PRIMARY KEY (`reports`)
+                  PRIMARY KEY (`id`),
+                  KEY `idx_host_id_id` (`host_id`, `id`)
                 ) ENGINE=InnoDB
             ");
+            // Usar glow en vez de online_change
+            // Borrar online_change
+            $db->query("ALTER TABLE `hosts` ADD `glow` "
+            . "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `online`;");
+            $db->query("ALTER TABLE hosts MODIFY COLUMN mac CHAR(17) DEFAULT NULL;");
+            $db->query("ALTER TABLE hosts DROP COLUMN version;");
+            //si 1 los host de esa red no se mostraran si esta off
+            $db->query("ALTER TABLE networks ADD COLUMN only_online TINYINT(1) NOT NULL DEFAULT 0;");
             $db->query("START TRANSACTION");
+            // Permitir configurar una url externa para el agente
             $db->query("
                 INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_external_host', null, 0, 103, NULL, 0),
                 ('agent_default_interval', JSON_QUOTE('30'), 1, 103, NULL, 0);
             ");
-
             $db->query("COMMIT");
             $db_version = $files_version;
             Log::info('Update version to ' . $files_version . ' successful');
@@ -172,12 +182,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-  // 0.00 Template
+  // 0.48 Template
     if ($db_version < 0.00) {
         try {
-            //$ncfg->set('db_monnet_version', 0.00 , 1);
+            $ncfg->set('db_monnet_version',0.00 , 1);
             $db->query("START TRANSACTION");
             // DROP hosts->alert_msg host->warn_msg $host->warn_port hosts->ports
+            // DROP host->online_change
             //$db->query("
             //");
             $db->query("COMMIT");
@@ -193,7 +204,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
    // 0.00 Template
     if ($db_version < 0.00) {
         try {
-            $ncfg->set('db_monnet_version', $files_version, 1);
+            $ncfg->set('db_monnet_version', 0.00, 1);
             $db->query("START TRANSACTION");
             //$db->query("
             //");
