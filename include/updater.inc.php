@@ -24,6 +24,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
+            exit(0);
         }
     }
     // 0.44
@@ -92,6 +93,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ROLLBACK");
             //$ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, rolling back: ' . $e->getMessage());
+            exit(0);
         }
     }
 
@@ -125,6 +127,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+            exit(0);
         }
     }
 
@@ -138,6 +141,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+            exit(0);
         }
     }
 
@@ -156,6 +160,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   PRIMARY KEY (`reports`)
                 ) ENGINE=InnoDB
             ");
+
+            $db->query("
+                INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('agent_external_host', null, 0, 103, NULL, 0),
+                ('agent_default_interval', JSON_QUOTE('30'), 1, 103, NULL, 0);
+            ");
+
             $db->query("COMMIT");
             $db_version = $files_version;
             Log::info('Update version to ' . $files_version . ' successful');
