@@ -45,7 +45,7 @@
                     onclick="submitCommand('showAlarms',{id: 0, action: 'show'})"
                     class="button-ctrl" type="submit">
                 <img class="settings_link"
-                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_ALARMS'] ?>">
+                     src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_ALARMS'] ?></span>
         </div>
@@ -54,7 +54,7 @@
                     onclick="submitCommand('showEvents',{id: 0, action: 'show'})"
                     class="button-ctrl" type="submit">
                 <img class="settings_link"
-                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_ALARMS'] ?>">
+                     src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_EVENTS'] ?></span>
         </div>
