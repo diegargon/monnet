@@ -25,7 +25,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 COMMENT '0 default, 1 event'
                 AFTER `level`;
             ");
-            //DONE Drop wrong UNIQUE index date  y crear un index normal
+            // DONE Drop wrong UNIQUE index date  y crear un index normal
             $db->query("
                 ALTER TABLE `stats`
                     DROP INDEX `date`;
@@ -34,7 +34,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ALTER TABLE `stats`
                   ADD INDEX `idx_host_date` (`host_id`, `date`);
             ");
-            //DONE No la necesitamos utilizamos stats
+            // DONE No la necesitamos utilizamos stats
             $db->query("
                 DROP TABLE IF EXISTS load_stats;
             ");
@@ -49,7 +49,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB;
             ");
-            //DONE Usamos tabla ports en vez hosts->ports
+            // DONE Usamos tabla ports en vez hosts->ports
             $db->query("
                 CREATE TABLE IF NOT EXISTS `ports` (
                   `id` int NOT NULL AUTO_INCREMENT,
@@ -64,7 +64,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   KEY `idx_hid` (`hid`)
                 ) ENGINE=InnoDB;
             ");
-            //DONE Utilizamos ncfg y db_monnet_version
+            // DONE Utilizamos ncfg y db_monnet_version
             $db->query("START TRANSACTION");
             $db->query("
                 DELETE FROM prefs
@@ -85,19 +85,19 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.45) {
         try {
             $ncfg->set('db_monnet_version', 0.45, 1);
-            //DONE CK Review, filtrar y no mostrar logs vistos
+            // DONE CK Review, filtrar y no mostrar logs vistos
             $db->query("
                 ALTER TABLE `hosts_logs` ADD `ack` BOOLEAN NOT NULL DEFAULT FALSE AFTER `msg`;
             ");
-            //DONE Service Name, el agente los puertos guarda el nombre del servicio
+            // DONE Service Name, el agente los puertos guarda el nombre del servicio
             $db->query("
                 ALTER TABLE `ports` ADD `service` VARCHAR(255) NOT NULL AFTER `interface`;
             ");
-            //Custom Service name por si el usuario quiere cambiar el nombre a mostrar
+            // DONE Custom Service name por si el usuario quiere cambiar el nombre a mostrar
             $db->query("
                 ALTER TABLE `ports` ADD `custom_service` VARCHAR(255) NULL AFTER `interface`;
             ");
-            //DONE el agente envia ip_version ipv4 1 ipv6 2
+            // DONE el agente envia ip_version ipv4 1 ipv6 2
             $db->query("
                 ALTER TABLE `ports` ADD `ip_version` VARCHAR(5) NOT NULL AFTER `interface`;
             ");
@@ -130,7 +130,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             . "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `online`;");
             $db->query("ALTER TABLE hosts MODIFY COLUMN mac CHAR(17) DEFAULT NULL;");
             $db->query("ALTER TABLE hosts DROP COLUMN version;");
-            //DONE si 1 los host de esa red no se mostraran si esta off
+            // DONE si 1 los host de esa red no se mostraran si esta off
             $db->query("ALTER TABLE networks ADD COLUMN only_online TINYINT(1) NOT NULL DEFAULT 0;");
             $db->query("START TRANSACTION");
             // DONE Permitir configurar una url externa para el agente
