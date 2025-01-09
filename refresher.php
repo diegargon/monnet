@@ -151,9 +151,9 @@ if ($user->getPref('show_termlog_status')) {
             $loglevelname = substr($loglevelname, 0, 4);
             if ($log_level <= 2) :
                 $loglevelname = '<span class="color-red">' . $loglevelname . '</span>';
-            elseif ($log_level === 3 ) :
+            elseif ($log_level === 3) :
                 $loglevelname = '<span class="color-orange">' . $loglevelname . '</span>';
-            elseif ($log_level === 4 ) :
+            elseif ($log_level === 4) :
                 $loglevelname = '<span class="color-yellow">' . $loglevelname . '</span>';
             endif;
             $log_lines[] = $date . $term_log['type_mark'] .

@@ -239,11 +239,14 @@ class Database
     public function fetchAll(mysqli_result $result): array
     {
         $return_ary = [];
-        if ($this->numRows($result) > 0) {
-            while ($row = $this->fetch($result)) {
-                $return_ary[] = $row;
-            }
+
+        if ($this->numRows($result) <= 0) {
+            return [];
         }
+        while ($row = $this->fetch($result)) {
+            $return_ary[] = $row;
+        }
+
         return $return_ary;
     }
 

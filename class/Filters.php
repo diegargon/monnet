@@ -147,7 +147,7 @@ class Filters
             } else {
                 if (is_float($value)) {
                     $var_ary[$key] = (float) $value;
-                } else if (is_numeric($value)) {
+                } elseif (is_numeric($value)) {
                     //String float is numeric but not float is_float  not work
                     if (strpos((string) $value, '.') !== false) {
                         $var_ary[$key] = (float) $value;

@@ -1025,10 +1025,10 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
             empty($networks) ? $networks = $ctx->get('Networks') : null;
 
             if (!empty($ncfg->get('agent_external_host')) && !$networks->isLocal($host['ip'])) {
-               $agent_config['server_host'] = $ncfg->get('agent_external_host');
+                $agent_config['server_host'] = $ncfg->get('agent_external_host');
             }
             if (!empty($ncfg->get('agent_default_interval'))) {
-               $agent_config['agent_default_interval'] = $ncfg->get('agent_default_interval');
+                $agent_config['agent_default_interval'] = $ncfg->get('agent_default_interval');
             }
             $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         endif;

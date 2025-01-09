@@ -31,7 +31,9 @@
                     ?>
                 <tr>
                     <td>
-                        <div class="network-name"><?= $network_pool['name'] . ' (' . $network_pool['network'] . ')'?> </div>
+                        <div class="network-name">
+                            <?= $network_pool['name'] . ' (' . $network_pool['network'] . ')'?>
+                        </div>
                     </td>
                     <td>
                         <div class="network-ip">

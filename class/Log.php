@@ -100,7 +100,7 @@ class Log
             }
             if (self::$cfg['log_to_db']) {
                 $level = self::getLogLevelId($type);
-                if ($level < 7 || self::$cfg['log_to_db_debug']) :
+                if (is_numeric($level) && $level < 7 || self::$cfg['log_to_db_debug']) :
                     if (mb_strlen($msg) > self::$max_db_msg) {
                         self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
                         $msg_db = substr($msg, 0, 254);
@@ -166,7 +166,9 @@ class Log
      */
     public static function logHost(string $loglevel, int $host_id, string $msg, int $log_type = 0): void
     {
-        $level = self::getLogLevelID($loglevel);
+        $level = self::getLogLevelId($loglevel);
+        !is_numeric($level) ? $level = 7 : null;
+
         if (mb_strlen($msg) > self::$max_db_msg) {
             self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
             $msg_db = substr($msg, 0, 254);
@@ -234,13 +236,13 @@ class Log
     /**
      *
      * @param string $loglevel
-     * @return int|bool
+     * @return int|null
      */
-    public static function getLogLevelId(string $loglevel): int|bool
+    public static function getLogLevelId(string $loglevel): ?int
     {
         if (!isset(self::$LOG_TYPE[$loglevel])) {
             self::debug('Wrong Log Level name used');
-            return false;
+            return null;
         }
         return self::$LOG_TYPE[$loglevel];
     }
