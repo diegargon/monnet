@@ -112,6 +112,7 @@ $lng = [
     'L_HOURS' => 'Horas',
     //I
     'L_IP_POOL' => 'Ip Pool',
+    'L_INFO' => 'Info',
     //O
     'L_ON' => 'On',
     'L_OFF' => 'Off',
