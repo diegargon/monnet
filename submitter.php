@@ -888,15 +888,18 @@ if (
         $opts['limit'] = $cfg['term_max_lines'];
     endif;
 
-    if (isset($command_values['log_level']) && is_numeric($command_values['log_level'])) :
-        if ($command_values['log_level'] >= 0) :
-            $opts['level'] = $command_values['log_level'];
-        endif;
-    endif;
     $opts = [
         'host_id' => $target_id,
         'ack' => 1,
     ];
+
+    if (
+        isset($command_values['log_level']) &&
+        is_numeric($command_values['log_level']) &&
+        $command_values['log_level'] >= 0
+    ) :
+        $opts['level'] = $command_values['log_level'];
+    endif;
 
     $logs = Log::getLogsHosts($opts);
     if (!empty($logs)) {
