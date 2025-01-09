@@ -73,7 +73,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             ");
             $db->query("COMMIT");
             $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
+            Log::notice('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             //$ncfg->set('db_monnet_version', $db_version, 1);
@@ -102,7 +102,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ALTER TABLE `ports` ADD `ip_version` VARCHAR(5) NOT NULL AFTER `interface`;
             ");
             $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
+            Log::notice('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
@@ -141,7 +141,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             ");
             $db->query("COMMIT");
             $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
+            Log::notice('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -159,7 +159,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ('discovery_last_run', JSON_QUOTE('0'), 1, 0, NULL, 0)");
             $db->query("COMMIT");
             $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
+            Log::notice('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -177,7 +177,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("DELETE FROM `prefs` WHERE `uid` = 0;");
             $db->query("COMMIT");
             $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
+            Log::notice('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -197,7 +197,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             //");
             $db->query("COMMIT");
             $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
+            Log::notice('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -214,7 +214,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             //");
             $db->query("COMMIT");
             $db_version = $files_version;
-            Log::info('Update version to ' . $files_version . ' successful');
+            Log::notice('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -226,7 +226,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 /**
  * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
- * @var Database $db
+  * @var Database $db
  */
 if ($db->isConn()) {
     $lockFile = '/tmp/monnet_update.lock';
@@ -237,7 +237,7 @@ if ($db->isConn()) {
 
         if (($files_version > $db_version) && !file_exists($lockFile)) :
             file_put_contents($lockFile, 'locked');
-            Log::info("Triggered");
+            Log::notice('Triggered');
             trigger_update($ncfg, $db, $db_version, $files_version);
             unlink($lockFile);
         endif;
