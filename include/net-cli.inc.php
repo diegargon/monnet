@@ -310,7 +310,7 @@ function check_host_ports(AppContext $ctx, array $host): array
     if (!empty($host['timeout'])) :
         $timeout = $host['timeout'];
     else :
-        $timeout = $networks->isLocal($host['ip']) ? $cfg['port_local_timeout'] : $cfg['port_timeout'];
+        $timeout = $networks->isLocal($host['ip']) ? $cfg['port_timeout_local'] : $cfg['port_timeout'];
     endif;
 
     foreach ($ports as $port) :
