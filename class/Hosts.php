@@ -885,15 +885,6 @@ class Hosts
         //TODO check if exists
         $this->db->insert('ports', $insert);
     }
-    /**
-     *
-     * @param int $port_id
-     * @return void
-     */
-    public function deletePortById(int $port_id): void
-    {
-        $this->db->delete('ports', ['id' => $port_id]);
-    }
 
     /**
      *

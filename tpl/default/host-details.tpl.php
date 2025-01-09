@@ -745,11 +745,14 @@
                     </div>
                     <div class="">
                         <label for="host_timeout"><?= $lng['L_TIMEOUT'] ?> (0.0): </label><br />
-                        <input size="4" max-size="4" step="0.1" min="0.1" max="5" type="number" id="host_timeout" name="host_timeout"
+                        <input
+                            size="4" max-size="4" step="0.1" min="0.1" max="5"
+                            type="number" id="host_timeout" name="host_timeout"
                                value="<?=
                                 !empty($tdata['host_details']['timeout']) ?
                                 $tdata['host_details']['timeout'] : null
-                                ?>"/>
+                                ?>"
+                        />
                         <button id="submitHostTimeout"><?= $lng['L_SEND'] ?></button>
                     </div>
 
@@ -758,26 +761,42 @@
                 <!-- right config column -->
                 <div class="right-config-column">
                     <div class="">
-                        <div>Agent</div>
-                        <?php
-                        if (!empty($tdata['host_details']['agent_ports'])) :
-                            ?>
-                        <select class="current_agent_ports">
+                        <?php if (!empty($tdata['host_details']['agent_installed'])) : ?>
+                            <div>Agent</div>
                             <?php
-                            foreach ($tdata['host_details']['agent_ports'] as $port) :
-                                $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
-                                $port_name = "{$port['pnumber']}/$port_protocol {$port['interface']}"
+                            if (!empty($tdata['host_details']['agent_ports'])) :
                                 ?>
-                            <option value="<?= $port['id'] ?>"><?= $port_name ?></option>
+                            <select class="current_agent_ports">
                                 <?php
-                            endforeach;
+                                foreach ($tdata['host_details']['agent_ports'] as $port) :
+                                    !isset($first_service) ? $first_service = $port['custom_service'] : null;
+                                    $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
+                                    $port_name = "{$port['pnumber']}/$port_protocol"
+                                        . " {$port['interface']} {$port['service']}"
+                                    ?>
+                                <option
+                                    value="<?= $port['id'] ?>"
+                                    data-cservice="<?= $port['custom_service'] ?>"
+                                >
+                                    <?= $port_name ?>
+                                </option>
+                                    <?php
+                                endforeach;
+                                ?>
+                            </select>
+                            <button class="deleteAgentHostPort"><?= $lng['L_DELETE'] ?></button>
+                            <br/>
+                            <input
+                                id="custom_service_name"
+                                type="text"
+                                size="12"
+                                value="<?= !empty($first_service) ? $first_service : null; ?>"
+                            />
+                            <button class="submitCustomServiceName"><?= $lng['L_SEND'] ?></button>
+                                <?php
+                            endif;
                             ?>
-                        </select>
-                        <button class="deleteAgentHostPort"><?= $lng['L_DELETE'] ?></button>
-                            <?php
-                        endif;
-                        ?>
-
+                        <?php endif; ?>
                         <div>
                         <label for="reports_stats">Disable Stats</label>
                         <input type="checkbox" id="disable_stats" disabled/>

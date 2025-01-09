@@ -221,8 +221,15 @@ if (
 }
 
 if ($command == 'deleteHostPort' && $target_id > 0) :
-    $hosts->deletePortById($target_id);
+    $db->delete('ports', ['id' => $target_id]);
     $data['command_success'] = 1;
+endif;
+
+if ($command == 'submitCustomServiceName' && $target_id > 0) :
+    if (!empty($value_command)) :
+        $db->update('ports', ['custom_service' => $value_command], ['id' => $target_id]);
+        $data['command_success'] = 1;
+    endif;
 endif;
 
 if ($command == 'submitTitle' && !empty($target_id)) :

@@ -164,10 +164,27 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("change", ".current_agent_ports", function () {
+        var selectedOption = $(this).find('option:selected');
+        var customService = selectedOption.data('cservice');
+
+        $("#custom_service_name").val(customService);
+    });
+
+
     $(document).on("click", ".deleteAgentHostPort", function () {
         var portId = $('.current_agent_ports').val();
+
         if (portId) {
             requestHostDetails('deleteHostPort', {id: portId});
+        }
+    });
+
+    $(document).on("click", ".submitCustomServiceName", function () {
+        var portId = $('.current_agent_ports').val();
+        var portCustomServiceName = $('#custom_service_name').val();
+        if (portId && portCustomServiceName) {
+            requestHostDetails('submitCustomServiceName', {id: portId, value: portCustomServiceName});
         }
     });
 
