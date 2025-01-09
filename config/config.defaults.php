@@ -63,8 +63,8 @@ $cfg['ping_nets_timeout'] = 200000;
 $cfg['ping_hosts_timeout'] = 400000;
 $cfg['ping_local_hosts_timeout'] = 300000;
 
-/* Minutes ideally same minutes than monnet-cli (cron config) or less if you have agents) */
-$cfg['refresher_time'] = 5;
+//Web UI refresh time
+$cfg['refresher_time'] = 2;
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 $cfg['stats_clear_days'] = 30;
 $cfg['logs_clear_days'] = 30;
