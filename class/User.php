@@ -165,9 +165,14 @@ class User
      *
      * @return string
      */
-    public function getTimezone(): string
+    public function getTimeZone(): string
     {
-        return $this->user['timezone'];
+
+        $timezone = $this->user['timezone'];
+        if (empty($timezone)) {
+            $timezone = $this->cfg['timezone'];
+        }
+        return $timezone;
     }
 
     /**

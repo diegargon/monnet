@@ -59,9 +59,9 @@ $cfg['datetime_log_format'] = 'd-m-y H:i:s';
 $cfg['port_timeout_local'] = 0.5;
 $cfg['port_timeout'] = 0.8;
 # usec
-$cfg['ping_nets_timeout'] = 100000;
-$cfg['ping_hosts_timeout'] = 300000;
-$cfg['ping_local_hosts_timeout'] = 200000;
+$cfg['ping_nets_timeout'] = 200000;
+$cfg['ping_hosts_timeout'] = 400000;
+$cfg['ping_local_hosts_timeout'] = 300000;
 
 /* Minutes ideally same minutes than monnet-cli (cron config) or less if you have agents) */
 $cfg['refresher_time'] = 5;

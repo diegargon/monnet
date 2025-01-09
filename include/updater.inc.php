@@ -168,9 +168,28 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
   // 0.49 Template
+    if ($db_version < 0.49) {
+        try {
+            $ncfg->set('db_monnet_version', 0.49, 1);
+            $db->query("START TRANSACTION");
+            $db->query("UPDATE `config` SET `ctype` = '0' WHERE `ckey` = 'discovery_last_run';");
+            $db->query("UPDATE `config` SET `ctype` = '0' WHERE `ckey` = 'cli_last_run';");
+            $db->query("DELETE FROM `prefs` WHERE `uid` = 0;");
+            $db->query("COMMIT");
+            $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+
+  // 0.50 Template
     if ($db_version < 0.00) {
         try {
-            $ncfg->set('db_monnet_version',0.00 , 1);
+            $ncfg->set('db_monnet_version', 0.00, 1);
             $db->query("START TRANSACTION");
             // DROP hosts->alert_msg host->warn_msg $host->warn_port hosts->ports
             // DROP host->online_change
@@ -189,7 +208,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
    // 0.00 Template
     if ($db_version < 0.00) {
         try {
-            $ncfg->set('db_monnet_version',0.00 , 1);
+            $ncfg->set('db_monnet_version', 0.00, 1);
             $db->query("START TRANSACTION");
             //$db->query("
             //");

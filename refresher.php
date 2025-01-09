@@ -253,9 +253,17 @@ endif;
 
 //TODO2 Move to ncfg
 
-$cli_last = 0;
-$discovery_last = 0;
-
+$cli_last_run = 'Never';
+$discovery_last_run = 'Never';
+if ($ncfg->get('cli_last_run')) {
+    $cli_last_run = $ncfg->get('cli_last_run');
+    $cli_last_run = utc_to_tz($cli_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+}
+if ($ncfg->get('discovery_last_run')) {
+    $discovery_last_run = $ncfg->get('discovery_last_run');
+    $discovery_last_run = utc_to_tz($discovery_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+}
+/*
 $results = $db->select('prefs', '*', ['uid' => 0]);
 
 if ($results) :
@@ -268,7 +276,7 @@ if ($results) :
             } else {
                 $cli_last = utc_to_tz(
                     $sys_pref['pref_value'],
-                    $user->getTimezone(),
+                    $user->getTimeZone(),
                     $cfg['datetime_format_min']
                 );
             }
@@ -278,18 +286,20 @@ if ($results) :
             } else {
                 $discovery_last = utc_to_tz(
                     $sys_pref['pref_value'],
-                    $user->getTimezone(),
+                    $user->getTimeZone(),
                     $cfg['datetime_format_min']
                 );
             }
         }
     }
 endif;
+ *
+ */
 
 /* Usado para saber si hay alguien conectado */
 $ncfg->set('refreshing', time());
 
-$data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last;
-$data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last;
+$data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;
+$data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last_run;
 
 print json_encode($data, JSON_UNESCAPED_UNICODE);
