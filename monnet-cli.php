@@ -18,7 +18,6 @@ $APP_NAME = 'monnet-cli';
  * @var AppContext|null $ctx An instance of AppCtx or null if not defined
  */
 require_once 'include/climode.inc.php';
-require_once 'include/phpsec_helper.inc.php';
 require_once 'include/cron.inc.php';
 
 Log::debug("Starting $APP_NAME");
