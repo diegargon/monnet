@@ -20,7 +20,6 @@ function page_index_post(AppContext $ctx): bool
 
     $profile_type = Filters::postString('profile_type');
     $show_bookmarks = Filters::postInt('show_bookmarks');
-    $show_this_system = Filters::postInt('show_this_system');
     $show_highlight_hosts = Filters::postInt('show_highlight_hosts');
     $show_other_hosts = Filters::postInt('show_rest_hosts');
     $show_termlog = Filters::postInt('show_termlog');
@@ -31,9 +30,6 @@ function page_index_post(AppContext $ctx): bool
     }
     if ($show_bookmarks !== null) {
         $user->setPref('show_bookmarks_status', $show_bookmarks);
-    }
-    if ($show_this_system !== null) {
-        $user->setPref('show_this_system_status', $show_this_system);
     }
     if ($show_highlight_hosts !== null) {
         $user->setPref('show_highlight_hosts_status', $show_highlight_hosts);

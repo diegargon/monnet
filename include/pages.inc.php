@@ -140,7 +140,6 @@ function page_index(AppContext $ctx): array
 
     /* Controls */
     $show_bookmarks_status = $user->getPref('show_bookmarks_status');
-    $show_this_system = $user->getPref('show_this_system_status');
     $show_highlight_hosts_status = $user->getPref('show_highlight_hosts_status');
     $show_other_hosts_status = $user->getPref('show_other_hosts_status');
     $show_termlog_status = $user->getPref('show_termlog_status');
@@ -150,8 +149,6 @@ function page_index(AppContext $ctx): array
             $page['controls']['show_highlight_hosts_status'] = 0;
     $show_other_hosts_status ? $page['controls']['show_other_hosts_status'] = 1 :
             $page['controls']['show_other_hosts_status'] = 0;
-    $show_this_system ? $page['controls']['show_this_system_status'] = 1 :
-            $page['controls']['show_this_system_status'] = 0;
     $show_termlog_status ? $page['controls']['show_termlog_status'] = 1 :
             $page['controls']['show_termlog_status'] = 0;
 

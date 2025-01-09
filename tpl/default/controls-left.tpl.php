@@ -95,20 +95,4 @@
             <span class="opt_labels"><?= $lng['L_IP_POOL'] ?></span>
         </div>
     </fieldset>
-    <!--
-            <div class="system_ctrl">
-                <input type="hidden" name="show_this_system" value="0" />
-                <input class="check" type="checkbox" value="1" name="show_this_system"
-                         $tdata['controls']['show_this_system_status'] ? ' checked ' : null
-                onchange="this.form.submit()" />
-                <span class="opt_labels">This</span>
-            </div>
-    -->
 </div>
-<!--
-<div class="profile_box">
-    <select class="place_profile" name="profile_type" onchange="this.form.submit()">
-    </select>
-    <span class="opt_labels">Profile</span>
-</div>
--->
