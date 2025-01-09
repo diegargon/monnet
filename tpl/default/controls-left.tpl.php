@@ -41,22 +41,13 @@
             <span class="opt_labels"><?= $lng['L_CONFIG'] ?></span>
         </div>
         <div class="general_ctrl">
-            <button id="alarms"
-                    onclick="submitCommand('showAlarms',{id: 0, action: 'show'})"
+            <button id="addNetwork"
+                    onclick="submitCommand('mgmtNetworks',{id: 0, action: 'mgmt'})"
                     class="button-ctrl" type="submit">
-                <img class="settings_link"
-                     src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
+                <img class="add_link"
+                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_NETWORK'] ?>">
             </button>
-            <span class="opt_labels"><?= $lng['L_ALARMS'] ?></span>
-        </div>
-        <div class="general_ctrl">
-            <button id="events"
-                    onclick="submitCommand('showEvents',{id: 0, action: 'show'})"
-                    class="button-ctrl" type="submit">
-                <img class="settings_link"
-                     src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
-            </button>
-            <span class="opt_labels"><?= $lng['L_EVENTS'] ?></span>
+            <span class="opt_labels"><?= $lng['L_NETWORKS'] ?></span>
         </div>
     </fieldset>
     <!-- Add Items -->
@@ -77,15 +68,6 @@
             <span class="opt_labels"><?= $lng['L_REMOTE_HOST'] ?></span>
         </div>
         <div class="general_ctrl">
-            <button id="addNetwork"
-                    onclick="submitCommand('mgmtNetworks',{id: 0, action: 'mgmt'})"
-                    class="button-ctrl" type="submit">
-                <img class="add_link"
-                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_NETWORK'] ?>">
-            </button>
-            <span class="opt_labels"><?= $lng['L_NETWORKS'] ?></span>
-        </div>
-        <div class="general_ctrl">
             <button id="requestPool"
                     onclick="submitCommand('requestPool',{id: 0, action: 'mgmt'})"
                     class="button-ctrl" type="submit">
@@ -93,6 +75,27 @@
                      src="./tpl/default/img/add.png" title="<?= $lng['L_NETWORK'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_IP_POOL'] ?></span>
+        </div>
+    </fieldset>
+    <fieldset class="ctrl_fieldset">
+        <legend class="ctrl_legend"><?= $lng['L_INFO'] ?></legend>
+        <div class="general_ctrl">
+            <button id="alarms"
+                    onclick="submitCommand('showAlarms',{id: 0, action: 'show'})"
+                    class="button-ctrl" type="submit">
+                <img class="settings_link"
+                     src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_ALARMS'] ?></span>
+        </div>
+        <div class="general_ctrl">
+            <button id="events"
+                    onclick="submitCommand('showEvents',{id: 0, action: 'show'})"
+                    class="button-ctrl" type="submit">
+                <img class="settings_link"
+                     src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_EVENTS'] ?></span>
         </div>
     </fieldset>
 </div>
