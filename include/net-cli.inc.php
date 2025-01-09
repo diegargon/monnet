@@ -64,7 +64,7 @@ function check_known_hosts(AppContext $ctx): bool
                     Log::info('Retry ping works for ' . $host['display_name']);
                 endif;
                 //recheck one last time if is a IOT
-                if (!empty($host['system_type']) && $host['system_type'] == 22 || $host['system_type'] == 11) :
+                if (!empty($host['system_type']) && ($host['system_type'] == 22 || $host['system_type'] == 11)) :
                     usleep(500000);
                     $ping_host_result = ping_known_host($ctx, $host);
                     if ($ping_host_result['online'] == 1) :
