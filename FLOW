@@ -18,8 +18,9 @@ monnet_cli (Do CLI tasks)
     climode
         config (default)
         common
-            -
+            - *
     cron jobs
+        ping_known_host
 
 monnet-discovery (Scan networks)
     climode
@@ -40,3 +41,4 @@ submitter (submit web data)
 feedme  (submit agents data)
     common
         - *
+    feedme.inc
