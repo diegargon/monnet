@@ -58,6 +58,7 @@ function check_known_hosts(AppContext $ctx): bool
             $ping_host_result = ping_known_host($ctx, $host);
             //recheck if was online
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) :
+                usleep(300000);
                 $ping_host_result = ping_known_host($ctx, $host);
                 if ($ping_host_result['online'] == 1) :
                     Log::info('Retry ping works for ' . $host['display_name']);
