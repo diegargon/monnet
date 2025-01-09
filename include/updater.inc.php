@@ -150,6 +150,24 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
   // 0.48 Template
+    if ($db_version < 0.48) {
+        try {
+            $ncfg->set('db_monnet_version', 0.48, 1);
+            $db->query("START TRANSACTION");
+            $db->query("DELETE FROM `config` WHERE `ckey` IN ('discover_last_run', 'discoveery_last_run');");
+            $db->query("INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('discovery_last_run', JSON_QUOTE('0'), 1, 0, NULL, 0)");
+            $db->query("COMMIT");
+            $db_version = $files_version;
+            Log::info('Update version to ' . $files_version . ' successful');
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+  // 0.49 Template
     if ($db_version < 0.00) {
         try {
             $ncfg->set('db_monnet_version',0.00 , 1);
@@ -171,7 +189,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
    // 0.00 Template
     if ($db_version < 0.00) {
         try {
-            $ncfg->set('db_monnet_version', 0.00, 1);
+            $ncfg->set('db_monnet_version',0.00 , 1);
             $db->query("START TRANSACTION");
             //$db->query("
             //");
