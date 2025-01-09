@@ -20,6 +20,7 @@ function check_known_hosts(AppContext $ctx): bool
     $lng = $ctx->get('lng');
     $db = $ctx->get('Mysql');
     $hosts = $ctx->get('Hosts');
+    $cfg = $ctx->get('cfg');
 
     if (!is_object($hosts)) :
         Log::err("hosts is not a object");
@@ -37,10 +38,18 @@ function check_known_hosts(AppContext $ctx): bool
             $check_ports_result = check_host_ports($ctx, $host);
 
             // If host change status to off  we check again
-            if ($host['online'] == 1 && $check_ports_result['online'] == 0) :
-                $check_ports_result = check_host_ports($ctx, $host);
-            endif;
+            $retries = $cfg['check_retries'] - 1;
+            if ($host['online'] == 1 && $check_ports_result['online'] == 0) {
+                for ($i = 0; $i < $retries; $i++) {
+                    usleep($cfg['check_retries_usleep']);
+                    $check_ports_result = check_host_ports($ctx, $host);
 
+                    if ($check_ports_result['online'] == 1) :
+                      Log::info("Retry ($i) port check works for {$host['display_name']}");
+                      break;
+                    endif;
+                }
+            }
             $new_host_status = [
                 'online' => $check_ports_result['online'],
                 'warn' =>  $check_ports_result['warn'],
@@ -57,22 +66,18 @@ function check_known_hosts(AppContext $ctx): bool
             Log::debug("Pinging {$host['ip']}");
             $ping_host_result = ping_known_host($ctx, $host);
             //recheck if was online
-            if ($host['online'] == 1 && $ping_host_result['online'] == 0) :
-                usleep(300000);
-                $ping_host_result = ping_known_host($ctx, $host);
-                if ($ping_host_result['online'] == 1) :
-                    Log::info('Retry ping works for ' . $host['display_name']);
-                endif;
-                //recheck one last time if is a IOT
-                if (!empty($host['system_type']) && ($host['system_type'] == 22 || $host['system_type'] == 11)) :
-                    usleep(500000);
+            $attemps = $cfg['check_retries'] - 1;
+            if ($host['online'] == 1 && $ping_host_result['online'] == 0) {
+                for ($i = 0; $i < $attemps; $i++) {
+                    usleep($cfg['check_retries_usleep']);
                     $ping_host_result = ping_known_host($ctx, $host);
-                    if ($ping_host_result['online'] == 1) :
-                        Log::info('IOT Retry ping works for ' . $host['display_name']);
-                    endif;
-                endif;
-            endif;
 
+                    if ($ping_host_result['online'] == 1) :
+                        Log::info("Retry ($i) ping works for {$host['display_name']}");
+                        break;
+                    endif;
+                }
+            }
             (valid_array($ping_host_result)) ? $new_host_status = $ping_host_result : null;
         }
 

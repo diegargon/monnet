@@ -19,7 +19,6 @@ $cfg_db['dbprefix'] = '';
 $cfg_db['dbcharset'] = 'utf8';
 
 /* General  Config */
-
 $cfg['web_title'] = 'MonNet';
 $cfg['path'] = '/var/www/html';
 $cfg['rel_path'] = '/';
@@ -29,6 +28,9 @@ $cfg['theme'] = 'default';
 $cfg['css'] = 'default';
 $cfg['charset'] = 'utf-8';
 $cfg['graph_charset'] = 'es-ES';
+$cfg['check_retries'] = 3;                # Ping/Port retrys to  mark host down
+$cfg['check_retries_usleep'] = 500000;    # Next attempt wait usec
+/* Log and Term */
 $cfg['log_level'] = 'LOG_WARN';
 $cfg['log_file'] = 'logs/monnet.log';
 $cfg['log_to_syslog'] = 0;
@@ -46,6 +48,7 @@ $cfg['term_log_level'] = 7;
 $cfg['term_system_log_level'] = 5;
 $cfg['term_max_lines'] = 100;
 $cfg['term_show_system_logs'] = 'LOG_ERR'; // Empty for no or LOG_LEVEL, need log_to_db
+/* Date */
 $cfg['term_date_format'] = '[d][H:i]';
 $cfg['timezone'] = 'UTC';
 $cfg['date_format'] = 'd-m-Y';
@@ -54,14 +57,13 @@ $cfg['datetime_format'] = 'd-m-Y H:i:s';
 $cfg['datetime_format_min'] = 'd/H:i';
 $cfg['datatime_graph_format'] = 'H:i';
 $cfg['datetime_log_format'] = 'd-m-y H:i:s';
+
 /* TIMEOUTS */
-# Seconds
-$cfg['port_timeout_local'] = 0.5;
-$cfg['port_timeout'] = 0.8;
-# usec
-$cfg['ping_nets_timeout'] = 200000;
-$cfg['ping_hosts_timeout'] = 400000;
-$cfg['ping_local_hosts_timeout'] = 300000;
+$cfg['port_timeout_local'] = 0.5;           # sec
+$cfg['port_timeout'] = 0.8;                 #sec
+$cfg['ping_nets_timeout'] = 200000;         # usec
+$cfg['ping_hosts_timeout'] = 400000;        # usec
+$cfg['ping_local_hosts_timeout'] = 300000;  # usec
 
 //Web UI refresh time
 $cfg['refresher_time'] = 2;
