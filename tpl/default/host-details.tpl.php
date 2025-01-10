@@ -227,6 +227,10 @@
                         <span class="resume_label"><?= $lng['L_NAME'] ?>:</span>
                         <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
                     </div>
+                    <div class="">
+                        <span class="resume_label"><?= $lng['L_HOSTNAME'] ?>:</span>
+                        <span class="display_name"><?= $tdata['host_details']['hostname'] ?></span>
+                    </div>
                     <div class"">
                         <div><?= $lng['L_NETWORK'] ?>: <?= $tdata['host_details']['net_cidr'] ?></div>
                         <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
