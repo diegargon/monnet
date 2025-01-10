@@ -60,6 +60,10 @@
                         <?= $lng['L_CHECKS'] ?>
                     </button>
                     <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
+                    <button id="tab15_btn" class="host-details-tabs-head" data-tab="15"
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab15')">
+                            <?= $lng['L_TASKS'] ?>
+                    </button>
                     <button id="tab20_btn" class="host-details-tabs-head" data-tab="20"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab20')">
                             Ansible
@@ -836,7 +840,11 @@
 
             </div>
         </div>
+        <!-- TAB15 --><!-- Tasks -->
         <!-- TAB20 --><!-- Ansible -->
+        <div id="tab15" class="host-details-tab-content">
+
+        </div>
         <div id="tab20" class="host-details-tab-content">
             <div id="ansible_container" class="ansible_container"
                  data-playbooks='<?= json_encode($cfg['playbooks']); ?>'>
