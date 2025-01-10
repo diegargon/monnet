@@ -88,7 +88,8 @@ if ($user->getPref('show_termlog_status')) {
 
     $logs_opt = [
         'limit' => $cfg['term_max_lines'],
-        'level' => $cfg['term_log_level']
+        'level' => $cfg['term_log_level'],
+        'ack' => 1,
     ];
     $host_logs = Log::getLogsHosts($logs_opt);
 
