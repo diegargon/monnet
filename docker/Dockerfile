@@ -19,6 +19,15 @@ RUN ls -al .
 
 RUN ls -al /var/www/html
 
+# Crear el archivo de configuración en /etc/monnet
+RUN mkdir -p /etc/monnet && \
+    echo "<?php" > /etc/monnet/config.inc.php && \
+    echo "\$cfg_db['dbtype'] = 'mysqli';" >> /etc/monnet/config.inc.php && \
+    echo "\$cfg_db['dbhost'] = 'mysql_container';" >> /etc/monnet/config.inc.php && \
+    echo "\$cfg_db['dbname'] = 'monnet';" >> /etc/monnet/config.inc.php && \
+    echo "\$cfg_db['dbuser'] = 'root';" >> /etc/monnet/config.inc.php && \
+    echo "\$cfg_db['dbpassword'] = 'monnetadmin';" >> /etc/monnet/config.inc.php
+
 # Copiar script de inicialización
 COPY docker/init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
