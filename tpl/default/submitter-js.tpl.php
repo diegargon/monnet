@@ -291,6 +291,7 @@
 
                 .fail(function (xhr, status, error) {
                     console.error('Error en la solicitud AJAX: submiter-js.tpl', status, error);
+                    console.error('Respuesta completa:', xhr.responseText);
                 });
     }
 
