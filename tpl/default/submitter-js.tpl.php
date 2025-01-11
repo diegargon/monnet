@@ -41,7 +41,7 @@
                 .done(function (data, textStatus, xhr) {
                     var contentType = xhr.getResponseHeader('Content-Type');
                     var jsonData;
-
+                    console.log(data);
                     // Verificamos si el Content-Type contiene "application/json"
                     if (contentType && contentType.toLowerCase().includes('application/json')) {
                         jsonData = (typeof data === 'object') ? data : JSON.parse(data);
