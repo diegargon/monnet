@@ -190,11 +190,38 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.00) {
         try {
             $ncfg->set('db_monnet_version', 0.00, 1);
+            // DROP columnas que no necesitamos
+            $db->query("ALTER TABLE hosts DROP COLUMN alert_msg;");
+            $db->query("ALTER TABLE hosts DROP COLUMN warn_msg;");
+            $db->query("ALTER TABLE hosts DROP COLUMN warn_port;");
+            $db->query("ALTER TABLE hosts DROP COLUMN ports;");
+            $db->query("ALTER TABLE tasks DROP COLUMN what;");
+            $db->query("ALTER TABLE tasks DROP COLUMN task;");
+            // El source puede ser (rtype/manual(1) source_id (0)
+            // rtype/task(2) source_id task_id
+            $db->query("
+                ALTER TABLE `reports` ADD `source_id` INT DEDFAULT '0' AFTER `host_id`;
+            ");
+            // Permitir deshabilitar la tarea
+            $db->query("
+                ALTER TABLE `tasks` ADD `disable` TINYINT(1) DEFAULT '0' AFTER `next_task`;
+            ");
+            // Nombre de la tarea
+            $db->query("
+                ALTER TABLE `tasks` ADD `task_name` VARCHAR(100) NOT NULL AFTER `hid`;
+            ");
+            // Id del tipo de triger config.priv
+            $db->query("
+                ALTER TABLE `tasks` ADD `trigger_type` SMALLINT NOT NULL AFTER `hid`;
+            ");
+            // Id del playbook a ejecutar config.priv
+            $db->query("
+                ALTER TABLE `tasks` ADD `pb_id` SMALLINT NOT NULL AFTER `hid`;
+            ");
+            $db->query("
+                ALTER TABLE `tasks` ADD `last_triggered` DATETIME NULL AFTER `trigger_type`;
+            ");
             $db->query("START TRANSACTION");
-            // DROP hosts->alert_msg host->warn_msg $host->warn_port hosts->ports
-            // DROP host->online_change
-            //$db->query("
-            //");
             $db->query("COMMIT");
             $db_version = $files_version;
             Log::notice('Update version to ' . $files_version . ' successful');

@@ -11,7 +11,7 @@
 
 $cfg['monnet_version'] = 0.49;
 
-$cfg['monnet_revision'] = 57;
+$cfg['monnet_revision'] = 58;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_min_version'] = 0.106;
 $cfg['agent_latest_version'] = 0.120;
@@ -260,138 +260,169 @@ $cfg['access_link_types'] = [
     1 => 'www',
 ];
 
-$cfg['agent_notifications'] = [
-    1 => "high_iowait",
-    2 => "high_memory_usage",
-    3 => "high_disk_usage",
-    4 => "high_cpu_usage",
-    5 => "starting",
-    6 => "shutdown",
-    7 => "system_shutdown",
+$cfg['events_items'] = [
+    1       => 'high_iowait',
+    2       => 'high_memory_usage',
+    3       => 'high_disk_usage',
+    4       => 'high_cpu_usage',
+    5       => 'starting',
+    6       => 'shutdown',
+    7       => 'system_shutdown',
+    100     => 'port_down',
+    101     => 'port_new',
+    102     => 'port_up',
+    500     => 'send_stats'
+
 ];
 
-$cfg['tasks'] = [
-    1 => 'Events',
-    2 => 'Track',
+$cfg['task_trigger'] = [
+    1 => ['name' => 'L_EVENT_RESPONSE', 'id' => 1],
+    2 => ['name' => 'L_OTHER_TASK', 'id' => 2],
+    //3 => ['name' => 'L_SCHEDULER', 'id' => 3],
 ];
+
 /* TODO: Retrieve from monnet-ansible */
 
 $cfg['playbooks'] = [
     [
+        'id' => 1,
         'name' => 'ansible-facts',
         'desc' => 'Display gathered facts',
         'cat' => ['posix', 'windows'],
     ],
     [
+        'id' => 2,
         'name' => 'install-monnet-agent-systemd',
         'desc' => 'Install Monnet Agent on systemd devices',
         'cat' => ['posix'],
     ],
     [
+        'id' => 3,
         'name' => 'buildin-cmd-df-linux',
         'desc' => 'Get disk usage',
         'cat' => ['posix'],
     ],
     [
+        'id' => 4,
         'name' => 'buildin-shell-free-linux',
         'desc' => 'Get memory usage',
         'cat' => ['posix'],
     ],
     [
+        'id' => 5,
         'name' => 'cmd-df-linux',
         'desc' => 'Obtener información de particiones reales',
         'cat' => ['posix'],
     ],
     [
+        'id' => 6,
         'name' => 'cmd-sstuln',
         'desc' => 'Get network socket information',
         'cat' => ['posix'],
     ],
     [
+        'id' => 7,
         'name' => 'cmd-topbn1',
         'desc' => 'Gather system load information',
         'cat' => ['posix'],
     ],
     [
+        'id' => 8,
         'name' => 'cmd-uptime',
         'desc' => 'Gather uptime information',
         'cat' => ['posix'],
     ],
     [
+        'id' => 9,
         'name' => 'gather-facts',
         'desc' => 'Minimal fact gathering',
         'cat' => ['posix', 'windows'],
     ],
     [
+        'id' => 10,
         'name' => 'ip-info',
         'desc' => 'Gather IP address and routes',
         'cat' => ['posix'],
     ],
     [
+        'id' => 11,
         'name' => 'iptables-facts',
         'desc' => 'Gather iptables facts',
         'cat' => ['posix'],
     ],
     [
+        'id' => 12,
         'name' => 'journald-linux',
         'desc' => 'Get the last lines from the system journal',
         'cat' => ['posix'],
     ],
     [
+        'id' => 13,
         'name' => 'cmd-df-linux',
         'desc' => 'Obtener información de particiones reales',
         'cat' => ['posix'],
     ],
     [
+        'id' => 14,
         'name' => 'load-linux',
         'desc' => 'Get load statistics',
         'cat' => ['posix'],
     ],
     [
+        'id' => 15,
         'name' => 'reboot-linux',
         'desc' => 'Reboot a Linux system',
         'cat' => ['posix'],
     ],
     [
+        'id' => 16,
         'name' => 'reboot-win',
         'desc' => 'Reboot a Windows system',
         'cat' => ['windows'],
     ],
     [
+        'id' => 17,
         'name' => 'service-facts',
         'desc' => 'Gather service facts',
         'cat' => ['posix'],
     ],
     [
+        'id' => 18,
         'name' => 'setup',
         'desc' => 'Gather system information',
         'cat' => ['posix', 'windows'],
     ],
     [
+        'id' => 19,
         'name' => 'shutdown-linux',
         'desc' => 'Shutdown a Linux system',
         'cat' => ['posix'],
     ],
     [
+        'id' => 20,
         'name' => 'shutdown-win',
         'desc' => 'Shutdown a Windows system',
     ],
     [
+        'id' => 21,
         'name' => 'syslog-linux',
         'desc' => 'Get the last lines of syslog',
         'cat' => ['posix'],
     ],
     [
+        'id' => 22,
         'name' => 'win-facts',
         'desc' => 'Gather facts from Windows hosts',
         'cat' => ['windows'],
     ],
     [
+        'id' => 23,
         'name' => 'mysql-keepalive',
         'desc' => 'Check and ensure MySQL service is running',
         'cat' => ['posix'],
     ],
     [
+        'id' => 24,
         'name' => 'mysql-dblocks',
         'desc' => 'Ensure MySQL is running and check database locks',
         'string_vars' => ['database_service', 'database_name', 'db_username'],
@@ -399,6 +430,7 @@ $cfg['playbooks'] = [
         'cat' => ['posix'],
     ],
     [
+        'id' => 25,
         'name' => 'mysql-performance',
         'desc' => 'Monitor MySQL performance and resource usage',
         'string_vars' => ['db_username'],
@@ -406,13 +438,16 @@ $cfg['playbooks'] = [
         'cat' => ['posix'],
     ],
     [
+        'id' => 26,
+        'name' => 'clean-logs-systemd',
+        'desc' => 'Manage journald and log cleanup',
+        'cat' => ['posix', 'windows'],
+        'numeric_vars' => ['log_retention_days']
+    ],
+    [
+        'id' => 27,
         'name' => 'ansible-ping',
         'desc' => 'Test Ansible connectivity',
         'cat' => ['posix', 'windows'],
     ],
-    [
-        'name' => 'test',
-        'desc' => 'Playbook que no hace nada',
-        'cat' => ['posix', 'windows'],
-    ]
 ];

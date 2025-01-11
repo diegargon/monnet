@@ -918,6 +918,13 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
     $data['command_success'] = 1;
 }
 
+/* Tasks */
+if ($command === 'changeHDTab' && $value_command == 'tab15') {
+
+
+    $data['command_success'] = 1;
+}
+
 /* Alarms */
 if ($command === 'clearHostAlarms' && $target_id > 0) {
     if ($hosts->clearHostAlarms($user->getUsername(), $target_id)) {

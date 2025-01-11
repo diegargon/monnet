@@ -20,6 +20,7 @@
 function ansible_playbook(AppContext $ctx, array $host, string $playbook, ?array $extra_vars = []): array
 {
     $ncfg = $ctx->get('Config');
+    $db = $ctx->get('Mysql');
 
     $server_ip = $ncfg->get('ansible_server_ip');
     $server_port = $ncfg->get('ansible_server_port');
@@ -114,14 +115,27 @@ function ansible_playbook(AppContext $ctx, array $host, string $playbook, ?array
     }
 
     if (isset($responseArray['status']) && $responseArray['status'] === 'success' && isset($responseArray['result'])) {
-        /* OUTPUT SUCCESS */
-        return $responseArray;
-    } else {
-        $error_msg = 'Ansible status error: ';
-        if (isset($responseArray['message'])) {
-            $error_msg .= $responseArray['message'];
-        }
+        /* SUCCESS */
 
-        return ['status' => 'error', 'error_msg' => $error_msg, 'response' => $response];
+        //keep report
+        //TODO need update 0.50
+        /*
+        $insert_data = [
+            'host_id' => $host['id'],
+            'pb_name' => $playbook,
+            'rtype' => 1,
+            'report' => $response,
+        ];
+
+        $db->insert('reports', $insert_data);
+        */
+        return $responseArray;
     }
+
+    $error_msg = 'Ansible status error: ';
+    if (isset($responseArray['message'])) {
+        $error_msg .= $responseArray['message'];
+    }
+
+    return ['status' => 'error', 'error_msg' => $error_msg, 'response' => $response];
 }

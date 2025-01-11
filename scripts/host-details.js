@@ -224,7 +224,40 @@ $(document).ready(function () {
         }
     });
 
-});
+ });
+
+function initTasks() {
+   $('#task_trigger').change(function() {
+      const selectedValue = $(this).val();
+      const eventData = document.getElementById("event_data");
+      const conditionalField = document.getElementById("conditional_field");
+
+      console.log("Triggered");
+      // Replace the content of the "what" container based on the selected value
+      if (selectedValue == 1) {
+        const events = JSON.parse(eventData.getAttribute("data-input-events"));
+        conditionalField.innerHTML = "";
+
+        const dynamicSelect = document.createElement("select");
+        dynamicSelect.id = "what";
+        dynamicSelect.name = "what";
+
+        // Agregar las opciones al <select>
+        for (const [key, value] of Object.entries(events)) {
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = value;
+          dynamicSelect.appendChild(option);
+        }
+
+        conditionalField.appendChild(dynamicSelect);
+      } else if (selectedValue == 2) {
+        $('#conditional_field').html('');
+      } else if (selectedValue == 3) {
+        $('#conditional_field').html('');
+      }
+    });
+}
 
 function initializePlaybookForm() {
     // Obtener el array de playbooks directamente desde el atributo data-playbooks
@@ -250,6 +283,14 @@ function initializePlaybookForm() {
                     $('#vars_container').append(`
                         <label for="${varName}">${varName}:</label>
                         <input type="text" id="${varName}" size="10" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
+                    `);
+                });
+            }
+            if (playbook.numeric_vars) {
+                playbook.numeric_vars.forEach(function (varName) {
+                    $('#vars_container').append(`
+                        <label for="${varName}">${varName}:</label>
+                        <input type="number" id="${varName}" size="5" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
                     `);
                 });
             }
@@ -345,6 +386,9 @@ function changeHDTab(id, tabId) {
     }
     if (['tab20'].includes(tabId)) {
         initializePlaybookForm();
+    }
+    if (['tab15'].includes(tabId)) {
+        initTasks();
     }
 }
 

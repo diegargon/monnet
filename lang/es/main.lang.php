@@ -88,6 +88,8 @@ $lng = [
     'L_EMAIL_ALARMS' => 'Alarmas correo',
     'L_ENABLE_PER_TYPE' => 'Habilitar por tipo',
     'L_EVENTS' => 'Eventos',
+    'L_EVENT' => 'Evento',
+    'L_EVENT_RESPONSE' => 'Respuesta Evento',
     //F
     'L_FIELD' => 'Campo',
     'L_FREE' => 'Libre',
@@ -166,6 +168,7 @@ $lng = [
     'L_OTHERS' => 'Otros',
     'L_OVERVIEW' => 'Resumen',
     'L_OWNER' => 'Responsable',
+    'L_OTHER_TASK' => 'Otra tarea',
     //P
     'L_PASSWORD' => 'Contraseña',
     'L_PROFILE' => 'Perfil',
@@ -206,6 +209,7 @@ $lng = [
     'L_SYSTEM_TYPE' => 'Tipo sistema',
     'L_STATS' => 'Estadisticas',
     'L_SUMMARY' => 'Resumen',
+    'L_SCHEDULER' => 'Tiempo',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',
@@ -214,6 +218,9 @@ $lng = [
     'L_TOKEN' => 'Token',
     'L_TIMEOUT' => 'Timeout',
     'L_TERMLOG' => 'Term Log',
+    'L_TASKS' => 'Tareas',
+    'L_TASK' => 'Tarea',
+    'L_TRACK' => 'Seguimiento',
     //U
     'L_USERS' => 'Usuarios',
     'L_USERNAME' => 'Usuario',
