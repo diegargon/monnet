@@ -16,7 +16,7 @@ RUN chown -R www-data:www-data /var/www/html
 RUN a2enmod rewrite
 
 # Copiar script de inicialización
-COPY init.sh /usr/local/bin/init.sh
+COPY docker/init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
 
 # Ejecutar el script al iniciar el contenedor
