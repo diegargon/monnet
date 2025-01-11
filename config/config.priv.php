@@ -30,6 +30,23 @@ $cfg['log_type_constants'] = [
 foreach ($cfg['log_type_constants'] as $key => $value) {
     define($key, $value);
 }
+
+$cfg['event_types'] = [
+    1       => 'high_iowait',
+    2       => 'high_memory_usage',
+    3       => 'high_disk_usage',
+    4       => 'high_cpu_usage',
+    5       => 'starting',
+    6       => 'shutdown',
+    7       => 'system_shutdown',
+    100     => 'port_down',
+    101     => 'port_new',
+    102     => 'port_up',
+    500     => 'send_stats'
+
+];
+
+
 /* Hardware Manufacture */
 $cfg['manufacture'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
@@ -258,21 +275,6 @@ $cfg['cat_types'] = [
 
 $cfg['access_link_types'] = [
     1 => 'www',
-];
-
-$cfg['events_items'] = [
-    1       => 'high_iowait',
-    2       => 'high_memory_usage',
-    3       => 'high_disk_usage',
-    4       => 'high_cpu_usage',
-    5       => 'starting',
-    6       => 'shutdown',
-    7       => 'system_shutdown',
-    100     => 'port_down',
-    101     => 'port_new',
-    102     => 'port_up',
-    500     => 'send_stats'
-
 ];
 
 $cfg['task_trigger'] = [
