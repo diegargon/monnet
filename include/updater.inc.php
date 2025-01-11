@@ -200,7 +200,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             // El source puede ser (rtype/manual(1) source_id (0)
             // rtype/task(2) source_id task_id
             $db->query("
-                ALTER TABLE `reports` ADD `source_id` INT DEDFAULT '0' AFTER `host_id`;
+                ALTER TABLE `reports` ADD `source_id` INT DEFAULT '0' AFTER `host_id`;
             ");
             // Permitir deshabilitar la tarea
             $db->query("
@@ -220,6 +220,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             ");
             $db->query("
                 ALTER TABLE `tasks` ADD `last_triggered` DATETIME NULL AFTER `trigger_type`;
+            ");
+            $db->query("
+                ALTER TABLE `hosts_logs` ADD `event_type` SMALLINT DEFAULT '0' AFTER `log_type`;
             ");
             $db->query("START TRANSACTION");
             $db->query("COMMIT");
