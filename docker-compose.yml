@@ -4,10 +4,10 @@ services:
     container_name: mysql_container
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_ROOT_PASSWORD: monnetadmin
       MYSQL_DATABASE: monnet
-      MYSQL_USER: monnet_user
-      MYSQL_PASSWORD: monnet_password
+      MYSQL_USER: monnet
+      MYSQL_PASSWORD: monnetadmin
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
@@ -19,8 +19,8 @@ services:
       dockerfile: docker/Dockerfile
     container_name: apache_container
     restart: always
-    volumes:
-      - ./monnet:/var/www/html
+#    volumes:
+#      - ./monnet:/var/www/html
     ports:
       - "8080:80"
 
