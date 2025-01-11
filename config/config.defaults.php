@@ -28,7 +28,7 @@ $cfg['theme'] = 'default';
 $cfg['css'] = 'default';
 $cfg['charset'] = 'utf-8';
 $cfg['graph_charset'] = 'es-ES';
-$cfg['check_retries'] = 3;                # Ping/Port retrys to  mark host down
+$cfg['check_retries'] = 4;                # Ping/Port retrys to  mark host down
 $cfg['check_retries_usleep'] = 500000;    # Next attempt wait usec
 /* Log and Term */
 $cfg['log_level'] = 'LOG_WARN';
