@@ -15,7 +15,7 @@ RUN touch /var/log/cron.log
 RUN mkdir /opt/monnet-ansible
 RUN git clone https://github.com/diegargon/monnet-ansible.git /opt/monnet-ansible
 RUN ls -al /opt/monnet-ansible
-COPY /opt/monnet-ansible/files/monnet-ansible.service /etc/systemd/system
+#COPY /opt/monnet-ansible/files/monnet-ansible.service /etc/systemd/system
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html
