@@ -7,11 +7,11 @@ DB_PASS="monnetadmin"
 DB_NAME="monnet"
 SQL_FILE="/var/www/html/config/monnet.sql"
 ANSIBLE_SCRIPT="/usr/bin/python3 /opt/monnet-ansible/src/monnet_ansible.py"
-CRON_LINE_1="*/5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php"
-CRON_LINE_2="*/15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php"
+CRON_LINE_1="*/5 * * * * root php /var/www/html/monnet-cli.php"
+CRON_LINE_2="*/15 * * * * root php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V.13";
+echo "V.14";
 
 # Configurar trabajos cron
 echo "Configurando trabajos cron..."
@@ -35,7 +35,7 @@ service cron start
 service cron status
 
 whereis php
-/usr/bin/php -v
+whereis php | awk '{print $2}' | xargs -I {} {} -v
 
 mkdir -p "/etc/ansible"
 touch /etc/ansible/ansible.cfg
