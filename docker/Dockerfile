@@ -4,7 +4,7 @@ FROM php:8.2-apache
 RUN apt-get update
 RUN apt-get install -y git mariadb-client
 RUN apt-get install -y docker-php-ext-install mysqli && docker-php-ext-install sockets
-RUN apt-get install -y ansible cron
+RUN apt-get install -y net-tools ansible cron
 
 # Clonar el repositorio en /var/www/html
 RUN git clone https://github.com/diegargon/monnet.git /var/www/html

@@ -40,6 +40,10 @@ Resume:
 
 # MonNet Install
 
+The fast method is using the docker-compose.yml
+
+Here the manual process
+
 ## Deps
 
 LAMP
