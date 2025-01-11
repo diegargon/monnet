@@ -11,7 +11,7 @@ CRON_LINE_1="*/5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php"
 CRON_LINE_2="*/15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V.12";
+echo "V.13";
 
 # Configurar trabajos cron
 echo "Configurando trabajos cron..."
@@ -34,6 +34,7 @@ cat /etc/crontab
 service cron start
 service cron status
 
+whereis php
 /usr/bin/php -v
 
 mkdir -p "/etc/ansible"

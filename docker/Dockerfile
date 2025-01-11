@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     mariadb-client \
     && docker-php-ext-install mysqli
 
-RUN apt-get install -y ansible cron
+RUN apt-get install -y ansible cron php-cli
 # Clonar el repositorio en /var/www/html
 RUN git clone https://github.com/diegargon/monnet.git /var/www/html
 
