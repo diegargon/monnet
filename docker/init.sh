@@ -29,3 +29,6 @@ if [ -z "$DB_EXISTS" ]; then
 else
   echo "La base de datos ya existe. No se realizaron cambios."
 fi
+
+echo "Mostrando las bases de datos actuales:"
+mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -e "SHOW DATABASES;"
