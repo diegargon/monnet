@@ -163,7 +163,7 @@ class Filters
                         $var_ary[$key] = $value;
                     } else {
                         // Si no es JSON, sanitiza como cadena
-                        $var_ary[$key] = filter_var($value, FILTER_SANITIZE_STRING) ?: null;
+                        $var_ary[$key] = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: null;
                     }
                 }
             }
