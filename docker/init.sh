@@ -3,7 +3,7 @@
 # Variables de conexión a MySQL
 DB_HOST="mysql_container"
 DB_USER="root"
-DB_PASS="root_password"
+DB_PASS="monnetadmin"
 DB_NAME="monnet"
 SQL_FILE="/var/www/html/config/monnet.sql"
 
