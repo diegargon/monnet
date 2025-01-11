@@ -6,19 +6,22 @@ DB_USER="root"
 DB_PASS="monnetadmin"
 DB_NAME="monnet"
 SQL_FILE="/var/www/html/config/monnet.sql"
-CRONTAB_FILE="/etc/cron.d/monnet-jobs"
 ANSIBLE_SCRIPT="/usr/bin/python3 /opt/monnet-ansible/src/monnet_ansible.py"
+CRON_LINE_1="*/5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php"
+CRON_LINE_2="*/15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php"
+CRONTAB_FILE="/etc/crontab"
 
-echo "V7";
+echo "V8";
 
 # Configurar trabajos cron
 echo "Configurando trabajos cron..."
-cat > "$CRONTAB_FILE" <<EOF
-*/5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
-*/15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
-EOF
+if ! grep -Fxq "$CRON_LINE_2" "$CRONTAB_FILE"; then
+  echo "$CRON_LINE_2" >> "$CRONTAB_FILE"
+  echo "Añadido: $CRON_LINE_2"
+else
+  echo "La línea ya existe: $CRON_LINE_2"
+fi
 
-chmod 0644 "$CRONTAB_FILE"
 service cron restart
 
 mkdir -p "/etc/ansible"
@@ -29,7 +32,7 @@ cat > /etc/ansible/ansible.cfg <<EOF
 stdout_callback=json
 EOF
 
-cat "$ANSIBLE_FILE"
+cat /etc/ansible/ansible.cfg
 
 ls -al /opt/monnet-ansible
 
