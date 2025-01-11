@@ -11,16 +11,25 @@ CRON_LINE_1="*/5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php"
 CRON_LINE_2="*/15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V8";
+echo "V.10";
 
 # Configurar trabajos cron
 echo "Configurando trabajos cron..."
+if ! grep -Fxq "$CRON_LINE_1" "$CRONTAB_FILE"; then
+  echo "$CRON_LINE_1" >> "$CRONTAB_FILE"
+  echo "Añadido: $CRON_LINE_1"
+else
+  echo "La línea ya existe: $CRON_LINE_1"
+fi
+
 if ! grep -Fxq "$CRON_LINE_2" "$CRONTAB_FILE"; then
   echo "$CRON_LINE_2" >> "$CRONTAB_FILE"
   echo "Añadido: $CRON_LINE_2"
 else
   echo "La línea ya existe: $CRON_LINE_2"
 fi
+
+cat /etc/crontab
 
 service cron restart
 
