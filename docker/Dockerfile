@@ -1,12 +1,11 @@
 FROM php:8.2-apache
 
 # Instalar dependencias
-RUN apt-get update && apt-get install -y \
-    git \
-    mariadb-client \
-    && docker-php-ext-install mysqli
-
+RUN apt-get update
+RUN apt-get install -y git mariadb-client
+RUN apt-get install -y docker-php-ext-install mysqli && docker-php-ext-install sockets
 RUN apt-get install -y ansible cron
+
 # Clonar el repositorio en /var/www/html
 RUN git clone https://github.com/diegargon/monnet.git /var/www/html
 
@@ -33,6 +32,7 @@ RUN mkdir -p /etc/monnet && \
     echo "\$cfg_db['dbname'] = 'monnet';" >> /etc/monnet/config.inc.php && \
     echo "\$cfg_db['dbuser'] = 'root';" >> /etc/monnet/config.inc.php && \
     echo "\$cfg_db['dbpassword'] = 'monnetadmin';" >> /etc/monnet/config.inc.php
+    echo "\$cfg['path'] = '/var/www/html';" >> /etc/monnet/config.inc.php
 
 # Copiar script de inicialización
 COPY docker/init.sh /usr/local/bin/init.sh

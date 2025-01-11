@@ -85,12 +85,18 @@ Do not rename or modify config.defaults.php directly, as it will be overwritten.
 
 These are the main config keywords you must check/change and copy to the /etc file.
 
+Warning: path config must included even if the default is valid
+
+Mandatory
 ```
 $cfg_db['dbhost']
 $cfg_db['dbname']
 $cfg_db['dbuser']
 $cfg_db['dbpassword']
 $cfg['path'] = '/var/www/html';
+
+Optional
+```
 $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
 ```

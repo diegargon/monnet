@@ -10,10 +10,12 @@
 !defined('IN_CLI') ? exit : true;
 
 if (!file_exists('/etc/monnet/config.inc.php')) {
-    print 'Missing config.inc.php. Leaving';
-    exit(1);
+    exit('Missing config.inc.php. Leaving');
 } else {
     include_once '/etc/monnet/config.inc.php';
+    if(!isset($cfg['path'])) {
+        exit('You must set $cfg["path" in /etc/monnet/config.inc.php');
+    }
 }
 
 /**  @var string $APP_NAME defined in monnet-cli or monnet-discovery */

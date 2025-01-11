@@ -66,7 +66,7 @@
                         <input type="checkbox" name="networkPool_<?= $row['id']?>" value="1" <?= $checked ?> />
                     </td>
                     <td>
-                        <?php $checked = $row['only_online'] ? 'checked' : ''; ?>
+                        <?php $checked = !empty($row['only_online']) ? 'checked' : ''; ?>
                         <input type="hidden" name="networkOnlyOnline_<?= $row['id']?>" value="0" />
                         <input type="checkbox" name="networkOnlyOnline_<?= $row['id']?>" value="1" <?= $checked ?> />
                     </td>
