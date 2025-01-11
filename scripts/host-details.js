@@ -245,8 +245,8 @@ function initTasks() {
         // Agregar las opciones al <select>
         for (const [key, value] of Object.entries(events)) {
           const option = document.createElement("option");
-          option.value = key;
-          option.textContent = value;
+          option.value = value;
+          option.textContent = key;
           dynamicSelect.appendChild(option);
         }
 

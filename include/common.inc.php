@@ -30,6 +30,8 @@ if (!file_exists('/etc/monnet/config.inc.php')) {
 require_once 'config/config.priv.php';
 require_once 'config/config.defaults.php';
 
+require_once('Constants/EventType.php');
+require_once('Constants/LogLevel.php');
 /*
  * FIXME: climode.inc.php need include this file before for acccess 'path'
  * This include cant be include_once because climode rewrite with defaults

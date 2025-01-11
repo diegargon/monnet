@@ -898,7 +898,7 @@
                       </td>
                     </tr>
                   </table>
-                  <input type="hidden" id="event_data" data-input-events="<?= htmlspecialchars(json_encode($cfg['event_types']))?>"/>
+                  <input type="hidden" id="event_data" data-input-events="<?= htmlspecialchars(json_encode(EventType::getConstants()))?>"/>
                 </fieldset>
 
             </div>

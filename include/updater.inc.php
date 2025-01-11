@@ -187,9 +187,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
 
   // 0.50 Template
-    if ($db_version < 0.00) {
+    if ($db_version < 0.50) {
         try {
-            $ncfg->set('db_monnet_version', 0.00, 1);
+            $ncfg->set('db_monnet_version', 0.50, 1);
             // DROP columnas que no necesitamos
             $db->query("ALTER TABLE hosts DROP COLUMN alert_msg;");
             $db->query("ALTER TABLE hosts DROP COLUMN warn_msg;");
@@ -218,9 +218,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 ALTER TABLE `tasks` ADD `pb_id` SMALLINT NOT NULL AFTER `hid`;
             ");
+            // Ultima vez que se ejecuto
             $db->query("
                 ALTER TABLE `tasks` ADD `last_triggered` DATETIME NULL AFTER `trigger_type`;
             ");
+            // Guarda el event type 
             $db->query("
                 ALTER TABLE `hosts_logs` ADD `event_type` SMALLINT DEFAULT '0' AFTER `log_type`;
             ");
