@@ -23,8 +23,6 @@ services:
       - ./monnet:/var/www/html
     ports:
       - "8080:80"
-    depends_on:
-      - mysql
 
 volumes:
   mysql_data:
