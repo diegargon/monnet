@@ -6,12 +6,16 @@ RUN apt-get update && apt-get install -y \
     mariadb-client \
     && docker-php-ext-install mysqli
 
+RUN apt-get install -y ansible cron
 # Clonar el repositorio en /var/www/html
 RUN git clone https://github.com/diegargon/monnet.git /var/www/html
 
-# Copiar el archivo monnet.sql al directorio de inicialización de MySQL
-RUN mkdir -p /docker-entrypoint-initdb.d && \
-    cp /var/www/html/config/monnet.sql /docker-entrypoint-initdb.d/monnet.sql
+RUN touch /var/log/cron.log
+
+RUN mkdir /opt/monnet-ansible
+RUN git clone https://github.com/diegargon/monnet-ansible.git /opt/monnet-ansible
+RUN ls -al /opt/monnet-ansible
+COPY /opt/monnet-ansible/files/monnet-ansible.service /etc/systemd/system
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html
