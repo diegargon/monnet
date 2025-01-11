@@ -15,13 +15,17 @@ done
 
 echo "MySQL está listo."
 
-# Verificar si la base de datos ya existe
 echo "Verificando si la base de datos '$DB_NAME' ya existe..."
-if ! mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -e "USE $DB_NAME" > /dev/null 2>&1; then
+DB_EXISTS=$(mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -e "SHOW DATABASES LIKE '$DB_NAME';" | grep "$DB_NAME" || true)
+
+if [ -z "$DB_EXISTS" ]; then
   echo "La base de datos no existe. Inicializando..."
-  mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" < "$SQL_FILE"
-  echo "Base de datos inicializada correctamente."
+  if mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" < "$SQL_FILE"; then
+    echo "Base de datos inicializada correctamente."
+  else
+    echo "Error al inicializar la base de datos. Verifica el archivo SQL."
+    exit 1
+  fi
 else
   echo "La base de datos ya existe. No se realizaron cambios."
 fi
-

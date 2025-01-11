@@ -15,6 +15,8 @@ RUN chown -R www-data:www-data /var/www/html
 # Habilitar módulos de Apache
 RUN a2enmod rewrite
 
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Copiar script de inicialización
 COPY docker/init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
