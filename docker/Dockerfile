@@ -17,7 +17,7 @@ RUN a2enmod rewrite
 
 # Copiar script de inicialización
 COPY init.sh /usr/local/bin/init.sh
-RUN chmod +x /usr/local/bin/init_db.sh
+RUN chmod +x /usr/local/bin/init.sh
 
 # Ejecutar el script al iniciar el contenedor
 CMD ["sh", "-c", "/usr/local/bin/init.sh && apache2-foreground"]
