@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y \
 # Clonar el repositorio en /var/www/html
 RUN git clone https://github.com/diegargon/monnet.git /var/www/html
 
+# Copiar el archivo monnet.sql al directorio de inicialización de MySQL
+RUN mkdir -p /docker-entrypoint-initdb.d && \
+    cp /var/www/html/config/monnet.sql /docker-entrypoint-initdb.d/monnet.sql
+
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html
 
