@@ -58,15 +58,19 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
     $log_type = 0;
     $log_level = 7;
 
-    if (!empty($rdata['event_type'])) :
-        $event_type = $rdata['event_type'];
-        $log_type = LogType::EVENT;
+    if (isset($rdata['log_type'])) :
+        $log_type = $rdata['log_type'];
     else :
-        $log_type = LogType::DEFAULT;
+        if(!empty($rdata['event_type'])) :
+            $log_type = LogType::EVENT;
+        endif;
     endif;
 
+    if (!empty($rdata['event_type'])) :
+        $event_type = $rdata['event_type'];
+    endif;
 
-    if (!empty($rdata['log_level'])) :
+    if (isset($rdata['log_level'])) :
         $log_level = $rdata['log_level'];
     endif;
 
