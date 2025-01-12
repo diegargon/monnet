@@ -9,6 +9,8 @@
 
 class LogLevel
 {
+    use ConstantUtils;
+
     public const DEBUG = 7;
     public const INFO = 6;
     public const NOTICE = 5;
@@ -17,12 +19,4 @@ class LogLevel
     public const CRITICAL = 2;
     public const ALERT = 1;
     public const EMERGENCY = 0;
-
-    public static function getName(int $value): ?string
-    {
-        $constants = (new ReflectionClass(self::class))->getConstants();
-        $flipped = array_flip($constants);
-
-        return $flipped[$value] ?? null;
-    }
 }

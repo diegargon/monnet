@@ -9,6 +9,8 @@
 
 class EventType
 {
+    use ConstantUtils;
+
     public const HIGH_IOWAIT = 1;
     public const HIGH_MEMORY_USAGE = 2;
     public const HIGH_DISK_USAGE = 3;
@@ -25,17 +27,4 @@ class EventType
     public const HOST_BECOME_ON = 14;
     public const HOST_BECOME_OFF = 15;
     public const NEW_HOST_DISCOVERY = 16;
-
-    public static function getConstants(): array
-    {
-        return (new ReflectionClass(self::class))->getConstants();
-    }
-
-    public static function getName(int $value): ?string
-    {
-        $constants = (new ReflectionClass(self::class))->getConstants();
-        $flipped = array_flip($constants);
-
-        return $flipped[$value] ?? null;
-    }
-}
+ }
