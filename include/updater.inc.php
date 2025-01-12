@@ -242,8 +242,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $ncfg->set('db_monnet_version', 0.51, 1);
             $db->query("START TRANSACTION");
-            //$db->query("
-            //");
+            $db->query("ALTER TABLE `reports` ADD `pb_id` INT NOT NULL AFTER `host_id`;");
             $db->query("COMMIT");
             $db_version = $files_version;
             Log::notice('Update version to ' . $files_version . ' successful');

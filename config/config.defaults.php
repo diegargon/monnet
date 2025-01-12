@@ -48,6 +48,10 @@ $cfg['term_log_level'] = 7;
 $cfg['term_system_log_level'] = 5;
 $cfg['term_max_lines'] = 100;
 $cfg['term_show_system_logs'] = 'LOG_ERROR'; // Empty for no or LOG_LEVEL, need log_to_db
+/* Clear (days) */
+$cfg['clear_logs_intvl'] = 30;
+$cfg['clear_stats_intvl'] = 15;
+$cfg['clear_reports_intvl'] = 30;
 /* Date */
 $cfg['term_date_format'] = '[d][H:i]';
 $cfg['timezone'] = 'UTC';

@@ -62,9 +62,10 @@ function cron(AppContext $ctx): void
     }
     if (($ncfg->get('cron_daily') + 8640) < $time_now) {
         $cron_task_track .= '[24]';
-        clear_stats($db);
-        clear_system_logs($db);
-        clear_hosts_logs($db);
+        clear_stats($ctx);
+        clear_system_logs($ctx);
+        clear_hosts_logs($ctx);
+        clear_reports($ctx);
         //$db->update('prefs', ['pref_value' => $time_now], ['pref_name' => ['value' => 'cron_daily']], 'LIMIT 1');
         $ncfg->set('cron_daily', $time_now);
     }
@@ -92,34 +93,68 @@ function cron(AppContext $ctx): void
 
 /**
  *
- * @param Database $db
+ * @param AppContext $ctx
  * @return void
  */
-function clear_stats(Database $db): void
+function clear_stats(AppContext $ctx): void
 {
-    $db->query("DELETE FROM stats WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
+    $cfg = $ctx->get('cfg');
+    $db = $ctx->get('Mysql');
+    $intvl = $cfg['clear_stats_intvl'];
+
+    $query = "DELETE FROM stats WHERE date < DATE_SUB(CURDATE(), INTERVAL $intvl DAY)";
+    $db->query($query);
     $affected = $db->getAffected();
     Log::info('Clear stats, affected rows ' . $affected);
 }
+
 /**
  *
- * @param Database $db
+ * @param AppContext $ctx
  * @return void
  */
-function clear_system_logs(Database $db): void
+function clear_system_logs(AppContext $ctx): void
 {
-    $db->query("DELETE FROM system_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
+    $cfg = $ctx->get('cfg');
+    $db = $ctx->get('Mysql');
+    $intvl = $cfg['clear_logs_intvl'];
+
+    $query = "DELETE FROM system_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL $intvl DAY)";
+    $db->query($query);
     $affected = $db->getAffected();
     Log::info('Clear system logs, affected rows ' . $affected);
 }
+
 /**
  *
- * @param Database $db
+ * @param AppContext $ctx
  * @return void
  */
-function clear_hosts_logs(Database $db): void
+function clear_hosts_logs(AppContext $ctx): void
 {
-    $db->query("DELETE FROM hosts_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
+    $cfg = $ctx->get('cfg');
+    $db = $ctx->get('Mysql');
+    $intvl = $cfg['clear_logs_intvl'];
+
+    $query = "DELETE FROM hosts_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL $intvl DAY)";
+    $db->query($query);
+    $affected = $db->getAffected();
+    Log::info('Clear host logs, affected rows ' . $affected);
+}
+
+/**
+ *
+ * @param AppContext $ctx
+ * @return void
+ */
+function clear_reports(AppContext $ctx): void
+{
+    $cfg = $ctx->get('cfg');
+    $db = $ctx->get('Mysql');
+    $intvl = $cfg['clear_reports_intvl'];
+
+    $query = "DELETE FROM reports WHERE date < DATE_SUB(CURDATE(), INTERVAL $intvl DAY)";
+    $db->query($query);
     $affected = $db->getAffected();
     Log::info('Clear host logs, affected rows ' . $affected);
 }
