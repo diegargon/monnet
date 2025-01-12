@@ -149,6 +149,7 @@ $lng = [
     'L_MINUTES' => 'Minutos',
     'L_MISC' => 'Misc',
     'L_MEMORY' => 'Memoria',
+    'L_MANUAL' => 'Manual',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',

@@ -234,7 +234,7 @@ function initTasks() {
 
       console.log("Triggered");
       // Replace the content of the "what" container based on the selected value
-      if (selectedValue == 1) {
+      if (selectedValue == 2) {
         const events = JSON.parse(eventData.getAttribute("data-input-events"));
         conditionalField.innerHTML = "";
 
@@ -251,9 +251,7 @@ function initTasks() {
         }
 
         conditionalField.appendChild(dynamicSelect);
-      } else if (selectedValue == 2) {
-        $('#conditional_field').html('');
-      } else if (selectedValue == 3) {
+      } else {
         $('#conditional_field').html('');
       }
     });
