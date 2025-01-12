@@ -45,7 +45,7 @@
         </tbody>
     </table>
 <?php endif; ?>
-
+<!-- SUMMARY BUILD -->
 <?php
 $messages = [];
 
@@ -53,15 +53,30 @@ foreach ($tdata['plays'] as $play) {
     foreach ($play['tasks'] as $task) {
         foreach ($task['hosts'] as $ip => $hostData) {
             if (!empty($hostData['msg'])) {
+                $msg = $hostData['msg'];
+
+                if (!empty($hostData['results']) && is_array($hostData['results'])) {
+                    foreach($hostData['results'] as $result) {
+                        if (!empty($result['msg'])) {
+                            if (!is_array($result['msg'])) {
+                                $msg .= "\n\t" . $result['msg'];
+                            } else {
+                                $msg .= implode("\n", $result['msg']);
+                            }
+                        }
+                    }
+                }
+
                 $messages[] = [
                     'ip' => $ip,
-                    'msg' => $hostData['msg']
+                    'msg' => $msg,
                 ];
             }
         }
     }
 }
 ?>
+<!-- SUMMARY -->
     <?php
     if (!empty($messages)) :
         ?>
@@ -83,6 +98,7 @@ foreach ($tdata['plays'] as $play) {
         }
     endif;
     ?>
+<!-- DETAIL VIEW -->
     <h2><?= $lng['L_DETAIL_VIEW'] ?></h2>
     <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>

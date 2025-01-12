@@ -11,10 +11,10 @@
 
 $cfg['monnet_version'] = 0.51;
 
-$cfg['monnet_revision'] = 67;
+$cfg['monnet_revision'] = 68;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_min_version'] = 0.125;
-$cfg['agent_latest_version'] = 0.125;
+$cfg['agent_latest_version'] = 0.128;
 $cfg['app_name'] = 'monnet';
 
 /* Hardware Manufacture */
@@ -422,5 +422,20 @@ $cfg['playbooks'] = [
         'name' => 'ansible-ping',
         'desc' => 'Test Ansible connectivity',
         'cat' => ['posix', 'windows'],
+    ],
+    [
+        'id' => 28,
+        'name' => 'mysql-check-repair',
+        'desc' => 'Check and optimize/repair MySQL tables',
+        'req' => 'Python3: PyMySQL or mysqlclient Python2: MySQL-python',
+        'string_vars' => ['db_name', 'db_username' ],
+        'password_vars' => ['db_password'],
+        'cat' => ['posix'],
+    ],
+    [
+        'id' => 29,
+        'name' => 'python-mysql-install',
+        'desc' => 'Install MySQL library on Debian/Redhat os',
+        'cat' => ['posix'],
     ],
 ];
