@@ -17,20 +17,6 @@ $cfg['agent_min_version'] = 0.106;
 $cfg['agent_latest_version'] = 0.125;
 $cfg['app_name'] = 'monnet';
 
-$cfg['log_type_constants'] = [
-    'LT_DEFAULT' => 0,
-    'LT_EVENT' => 1,
-    'LT_REMOTE_PORT_STATUS' => 2,
-    'LT_ALERT' => 3,
-    'LT_WARN' => 4,
-    'LT_EVENT_ALERT' => 5,
-    'LT_EVENT_WARN' => 6,
-];
-
-foreach ($cfg['log_type_constants'] as $key => $value) {
-    define($key, $value);
-}
-
 /* Hardware Manufacture */
 $cfg['manufacture'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],

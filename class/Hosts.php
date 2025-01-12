@@ -723,8 +723,6 @@ class Hosts
     {
         $result_hosts = [];
 
-        $log_type_constants = $this->ncfg->get('log_type_constants');
-
         foreach ($this->hosts as $host) :
             $alert_logs_msgs = [];
             $alert_logs_items = [];
@@ -783,8 +781,6 @@ class Hosts
     public function getWarnHosts(): array
     {
         $result_hosts = [];
-
-        $log_type_constants = $this->ncfg->get('log_type_constants');
 
         foreach ($this->hosts as $host) :
             $min_host = [
