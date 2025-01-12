@@ -318,8 +318,8 @@ class Hosts
         $host['display_name'] = $this->getDisplayName($host);
         $this->hosts[$host_id] = $host;
         $network_name = $this->ctx->get('Networks')->getNetworkNameByID($host_id);
-        Log::logHost('LOG_WARNING', $host_id, 'Found new host: '
-            . $host['display_name'] . ' on network ' . $network_name, 4);
+        $log_msg = 'Found new host: ' . $host['display_name'] . ' on network ' . $network_name;
+        Log::logHost('LOG_WARNING', $host_id, $log_msg, LogType::EVENT_WARN, EventType::NEW_HOST_DISCOVERY);
     }
 
     /**
