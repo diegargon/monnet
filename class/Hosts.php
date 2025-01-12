@@ -329,11 +329,17 @@ class Hosts
      */
     public function remove(int $hid): void
     {
+        //TODO: Claves foraneas ON CASCADE
         Log::notice('Deleted host: ' . $this->hosts[$hid]['display_name']);
         $this->db->delete('hosts', ['id' => $hid], 'LIMIT 1');
         $this->db->delete('notes', ['host_id' => $hid], 'LIMIT 1');
-        $this->db->delete('stats', ['host_id' => $hid], 'LIMIT 1');
-        $this->db->delete('hosts_logs', ['host_id' => $hid], 'LIMIT 1');
+        $this->db->delete('stats', ['host_id' => $hid]);
+        $this->db->delete('hosts_logs', ['host_id' => $hid]);
+        $this->db->delete('reports', ['host_id' => $hid]);
+        $this->db->delete('hid', ['hid' => $hid]);
+        $this->db->delete('ansible_msg', ['host_id' => $hid]);
+        $this->db->delete('ports', ['hid' => $hid]);
+
         unset($this->hosts[$hid]);
     }
 
