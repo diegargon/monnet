@@ -86,13 +86,15 @@ if ($user->getPref('show_termlog_status')) {
     $logs = [];
     $type_mark = '';
 
+    // Get Host Relate Logs for termlog
     $logs_opt = [
         'limit' => $cfg['term_max_lines'],
-        'level' => $cfg['term_log_level'],
+        'level' => $cfg['term_hosts_log_level'],
         'ack' => 1,
     ];
     $host_logs = Log::getLogsHosts($logs_opt);
 
+    // Formatting
     if (!empty($host_logs)) :
         foreach ($host_logs as &$log) :
             $host = $hosts->getHostById($log['host_id']);
@@ -108,8 +110,10 @@ if ($user->getPref('show_termlog_status')) {
         $logs = $host_logs;
     endif;
 
-    if ($cfg['term_show_system_logs'] && $cfg['log_to_db']) :
+    // Get System Logs for termlog
+    if ($cfg['term_show_system_logs'] && $cfg['system_log_to_db']) :
         $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
+        // Formatting
         if (!empty($system_logs)) :
             foreach ($system_logs as &$system_log) :
                 $system_log['type_mark'] = '[S]';
@@ -147,7 +151,7 @@ if ($user->getPref('show_termlog_status')) {
             endif;
 
             $date = format_datetime_from_string($term_log['date'], $cfg['term_date_format']);
-            $loglevelname = Log::getLogLevelName($log_level);
+            $loglevelname = LogLevel::getName($log_level);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
             $loglevelname = substr($loglevelname, 0, 4);
             if ($log_level <= 2) :

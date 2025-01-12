@@ -166,7 +166,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
             $interface = "[{$interface}]"; // Normalizar IPv6
         }
         $ip_version = $port['ip_version'] ?? '';
-        $port['service'] = trim($port['serviec']);
+        $port['service'] = trim($port['service']);
 
         $key = "{$protocol}:{$pnumber}:{$interface}:{$ip_version}";
 
@@ -205,7 +205,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 'ip_version' => $ip_version,
                 'last_change' => date_now(),
             ];
-            $log_msg = "New port detected: $pnumber ({$port['service']}))";
+            $log_msg = "New port detected: $pnumber ({$port['service']})";
             $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_NEW);
             $hosts->addPort($insert_values);
         }

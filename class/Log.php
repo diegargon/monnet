@@ -30,7 +30,7 @@ class Log
     private static bool $console = false;
 
     /**
-     * @var array<int|string, mixed> $cfg
+     * @var array<string, mixed> $cfg
      */
     private static array $cfg;
     /**
@@ -39,27 +39,14 @@ class Log
     private static Database $db;
 
     /**
-     * @var array<string> $lng
+     * @var array<string,string> $lng
      */
     private static array $lng = [];
 
     /**
-     * @var array<string, int> $LOG_TYPE
-     */
-    private static $LOG_TYPE = [
-        'LOG_EMERGENCY' => 0, // system is unusable
-        'LOG_ALERT' => 1, // action must be taken immediately UNUSED
-        'LOG_CRITICAL' => 2, // critical conditions
-        'LOG_ERROR' => 3, // error conditions
-        'LOG_WARNING' => 4, // warning conditions
-        'LOG_NOTICE' => 5, // normal, but significant, condition
-        'LOG_INFO' => 6, // informational message
-        'LOG_DEBUG' => 7, // debug-level message
-    ];
-
-    /**
-     * @param array<string, string> $lng
      * @param array<string, mixed> $cfg
+     * @param Database $db
+     * @param array<string, string> $lng
      */
     public static function init(array &$cfg, Database &$db, array &$lng): void
     {
@@ -70,16 +57,14 @@ class Log
 
     /**
      *
-     * @param string $type
+     * @param int $log_level
      * @param mixed $msg
      * @param int|null $self_caller
      *
      * @return void
      */
-    public static function logged(string $type, mixed $msg, ?int $self_caller = null): void
+    public static function logged(int $log_level, mixed $msg, ?int $self_caller = null): void
     {
-        $LOG_TYPE = self::$LOG_TYPE;
-
         if ($self_caller === null) {
             self::$recursionCount = 0;
         } else {
@@ -89,25 +74,24 @@ class Log
             }
         }
 
-        if (isset($LOG_TYPE[self::$cfg['log_level']]) && $LOG_TYPE[$type] <= $LOG_TYPE[self::$cfg['log_level']]) {
+        if ($log_level <= self::$cfg['log_level']) {
             if (is_array($msg)) {
                 $msg = print_r($msg, true);
             }
             if (self::$console) {
                 echo '[' .
                 format_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format']) .
-                '][' . self::$cfg['app_name'] . '][' . $type . '] ' . $msg . "\n";
+                '][' . self::$cfg['app_name'] . '][' . $log_level . '] ' . $msg . "\n";
             }
-            if (self::$cfg['log_to_db']) {
-                $level = self::getLogLevelId($type);
-                if (is_numeric($level) && $level < 7 || self::$cfg['log_to_db_debug']) :
+            if (self::$cfg['system_log_to_db']) {
+                if (is_numeric($log_level) && $log_level < 7 || self::$cfg['system_log_to_db_debug']) :
                     if (mb_strlen($msg) > self::$max_db_msg) {
                         self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
                         $msg_db = substr($msg, 0, 254);
                     } else {
                         $msg_db = $msg;
                     }
-                    self::$db->insert('system_logs', ['level' => $level, 'msg' => $msg_db]);
+                    self::$db->insert('system_logs', ['level' => $log_level, 'msg' => $msg_db]);
                 endif;
             }
             if (self::$cfg['log_to_file']) {
@@ -115,7 +99,7 @@ class Log
 
                 $content = '['
                     . format_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
-                    . '][' . self::$cfg['app_name'] . ']:[' . $type . '] ' . $msg . "\n";
+                    . '][' . self::$cfg['app_name'] . ']:[' . $log_level . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     if (!touch($log_file)) {
                         self::err(self::$lng['L_ERR_FILE_CREATE']
@@ -138,9 +122,9 @@ class Log
                     self::err('Error opening/writing log to file', 1);
                 }
             }
-            if (self::$cfg['log_to_syslog'] === 1) {
+            if (self::$cfg['system_log_to_syslog'] === 1) {
                 openlog(self::$cfg['app_name'] . ' ' . self::$cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG);
-                syslog($LOG_TYPE[$type], $msg);
+                syslog($log_level, $msg);
             }
         }
     }
@@ -157,7 +141,7 @@ class Log
 
     /**
      *
-     * @param string $loglevel
+     * @param int $log_level
      * @param int $host_id
      * @param string $msg
      * @param int $log_type
@@ -165,16 +149,13 @@ class Log
      * @return void
      */
     public static function logHost(
-        string $loglevel,
+        int $log_level,
         int $host_id,
         string $msg,
         int $log_type = 0,
         int $event_type = 0
     ): void
     {
-        $level = self::getLogLevelId($loglevel);
-        !is_numeric($level) ? $level = 7 : null;
-
         if (mb_strlen($msg) > self::$max_db_msg) {
             self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
             $msg_db = substr($msg, 0, 254);
@@ -183,7 +164,7 @@ class Log
         }
         $set = [
             'host_id' => $host_id,
-            'level' => $level,
+            'level' => $log_level,
             'msg' => $msg_db,
             'log_type' => $log_type,
             'event_type' => $event_type
@@ -247,36 +228,6 @@ class Log
 
     /**
      *
-     * @param string $loglevel
-     * @return int|null
-     */
-    public static function getLogLevelId(string $loglevel): ?int
-    {
-        if (!isset(self::$LOG_TYPE[$loglevel])) {
-            self::debug('Wrong Log Level name used');
-            return null;
-        }
-        return self::$LOG_TYPE[$loglevel];
-    }
-
-    /**
-     *
-     * @param int $logvalue
-     *
-     * @return string|bool
-     */
-    public static function getLogLevelName(int $logvalue): string|bool
-    {
-        foreach (self::$LOG_TYPE as $ktype => $vtype) {
-            if ($vtype == $logvalue) {
-                return $ktype;
-            }
-        }
-        return false;
-    }
-
-    /**
-     *
      * @param int $limit
      *
      * @return array<int, array<string, string>>
@@ -301,7 +252,7 @@ class Log
      */
     public static function debug(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_DEBUG', $msg, $self_caller);
+        self::logged(LogLevel::DEBUG, $msg, $self_caller);
     }
 
     /**
@@ -313,7 +264,7 @@ class Log
      */
     public static function info(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_INFO', $msg, $self_caller);
+        self::logged(LogLevel::INFO, $msg, $self_caller);
     }
 
     /**
@@ -325,7 +276,7 @@ class Log
      */
     public static function notice(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_NOTICE', $msg, $self_caller);
+        self::logged(LogLevel::NOTICE, $msg, $self_caller);
     }
 
     /**
@@ -336,7 +287,7 @@ class Log
      */
     public static function warning(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_WARNING', $msg, $self_caller);
+        self::logged(LogLevel::WARNING, $msg, $self_caller);
     }
 
     /**
@@ -348,7 +299,7 @@ class Log
      */
     public static function error(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_ERROR', $msg, $self_caller);
+        self::logged(LogLevel::ERROR, $msg, $self_caller);
     }
 
     /**
@@ -360,7 +311,7 @@ class Log
      */
     public static function alert(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_ALERT', $msg, $self_caller);
+        self::logged(LogLevel::ALERT, $msg, $self_caller);
     }
 
     /**
@@ -371,7 +322,7 @@ class Log
      */
     public static function critical(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_CRITICAL', $msg, $self_caller);
+        self::logged(LogLevel::CRITICAL, $msg, $self_caller);
     }
 
     /**
@@ -383,6 +334,6 @@ class Log
      */
     public static function emergency(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_EMERGENCY', $msg, $self_caller);
+        self::logged(LogLevel::EMERGENCY, $msg, $self_caller);
     }
 }

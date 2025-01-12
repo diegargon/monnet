@@ -30,6 +30,8 @@ function check_known_hosts(AppContext $ctx): bool
     Log::debug('Pinging known host');
     $db_hosts = $hosts->getknownEnabled();
 
+    $retries = $cfg['check_retries'];
+
     foreach ($db_hosts as $host) {
         $new_host_status = [];
         /* Port Scan */
@@ -38,15 +40,16 @@ function check_known_hosts(AppContext $ctx): bool
             $check_ports_result = check_host_ports($ctx, $host);
 
             // If host change status to off  we check again
-            $retries = $cfg['check_retries'] - 1;
             if ($host['online'] == 1 && $check_ports_result['online'] == 0) {
-                for ($i = 0; $i < $retries; $i++) {
+                for ($i = 2; $i <= $retries; $i++) {
                     usleep($cfg['check_retries_usleep']);
                     $check_ports_result = check_host_ports($ctx, $host);
 
                     if ($check_ports_result['online'] == 1) :
-                      Log::info("Retry ($i) port check works for {$host['display_name']}");
-                      break;
+                        Log::debug("Retry $i port check works for {$host['display_name']}");
+                        break;
+                    elseif ($i === $retries) :
+                        Log::debug("Retry $i ping port not work for {$host['display_name']}");
                     endif;
                 }
             }
@@ -70,15 +73,16 @@ function check_known_hosts(AppContext $ctx): bool
             Log::debug("Pinging {$host['ip']}");
             $ping_host_result = ping_known_host($ctx, $host);
             //recheck if was online
-            $attemps = $cfg['check_retries'] - 1;
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) {
-                for ($i = 0; $i < $attemps; $i++) {
+                for ($i = 2; $i <= $retries; $i++) {
                     usleep($cfg['check_retries_usleep']);
                     $ping_host_result = ping_known_host($ctx, $host);
 
                     if ($ping_host_result['online'] == 1) :
-                        Log::info("Retry ($i) ping works for {$host['display_name']}");
+                        Log::debug("Retry $i ping works for {$host['display_name']}");
                         break;
+                    elseif ($i === $retries) :
+                        Log::debug("Retry $i ping not work for {$host['display_name']}");
                     endif;
                 }
             }
@@ -95,7 +99,7 @@ function check_known_hosts(AppContext $ctx): bool
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
                 $new_host_status['glow'] = date_now(); //Glow Time Mark
                 $log_msg = $lng['L_HOST_BECOME_ON'];
-                Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LogType::EVENT, EventType::HOST_BECOME_ON);
+                Log::logHost(LogLevel::NOTICE, $host['id'], $log_msg, LogType::EVENT, EventType::HOST_BECOME_ON);
 
                 //Try get hostname when a host become on
                 $hostname = $hosts->getHostname($host['ip']);
@@ -110,7 +114,7 @@ function check_known_hosts(AppContext $ctx): bool
                 if (!empty($host['always_on'])) :
                     $hosts->setAlertOn($host['id'], $log_msg, LogType::EVENT_ALERT, EventType::SYSTEM_SHUTDOWN);
                 else :
-                    Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LogType::EVENT, EventType::SYSTEM_SHUTDOWN);
+                    Log::logHost(LogLevel::NOTICE, $host['id'], $log_msg, LogType::EVENT, EventType::SYSTEM_SHUTDOWN);
                 endif;
 
                 if (!empty($host['alarm_ping_email'])) :
@@ -335,12 +339,12 @@ function check_host_ports(AppContext $ctx, array $host): array
             $port_status['online'] = 1;
             $latency[] = round_latency(microtime(true) - $tim_start);
             if ((int) $port['online'] === 0) :
-                Log::logHost('LOG_NOTICE', $host['id'], 'Port become Online', LogType::EVENT, EventType::PORT_UP);
+                Log::logHost(LogLevel::NOTICE, $host['id'], 'Port become Online', LogType::EVENT, EventType::PORT_UP);
             endif;
             fclose($conn);
         elseif (empty($host['alarm_port_disable'])) :
             $log_msg = "Port {$port['pnumber']} down: $error_msg ($error_code)";
-            Log::logHost('LOG_WARNING', $host['id'], $log_msg, LogType::EVENT_WARN, EventType::PORT_DOWN );
+            Log::logHost(LogLevel::WARNING, $host['id'], $log_msg, LogType::EVENT_WARN, EventType::PORT_DOWN );
             $host_result['warn'] = 1;
         endif;
 
@@ -365,7 +369,7 @@ function check_host_ports(AppContext $ctx, array $host): array
             $host_result['online'] = 1;
             $host_result['latency'] = $host_ping['latency'];
         else :
-            Log::logHost('LOG_WARNING', $host['id'], ' Ports down and no ping response');
+            Log::logHost(LogLevel::WARNING, $host['id'], ' Ports down and no ping response');
         endif;
     else :
         // Calculamos la media latencia puertos

@@ -227,7 +227,7 @@ class Hosts
                     } elseif ($warn)  {
                         $this->setWarnOn($id, $log_msg, LogType::EVENT_WARN, EventType::HOST_INFO_CHANGE);
                     } else {
-                        Log::logHost('LOG_NOTICE', $id, $log_msg);
+                        Log::logHost(LogLevel::NOTICE, $id, $log_msg);
                     }
 
                     if (!empty($this->hosts[$id]['alarm_macchange_email'])) :
@@ -236,7 +236,7 @@ class Hosts
                 }
                 //Log category change
                 if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
-                    Log::logHost('LOG_NOTICE', $id, 'Host ' . $this->hosts[$id]['display_name']
+                    Log::logHost(LogLevel::NOTICE, $id, 'Host ' . $this->hosts[$id]['display_name']
                         . ' change category ' . $this->hosts[$id]['category'] . '->' . $vvalue);
                     $this->host_cat_track[$this->hosts[$id]['category']]--;
                     $this->host_cat_track[$vvalue]++;
@@ -319,7 +319,7 @@ class Hosts
         $this->hosts[$host_id] = $host;
         $network_name = $this->ctx->get('Networks')->getNetworkNameByID($host_id);
         $log_msg = 'Found new host: ' . $host['display_name'] . ' on network ' . $network_name;
-        Log::logHost('LOG_WARNING', $host_id, $log_msg, LogType::EVENT_WARN, EventType::NEW_HOST_DISCOVERY);
+        Log::logHost(LogLevel::WARNING, $host_id, $log_msg, LogType::EVENT_WARN, EventType::NEW_HOST_DISCOVERY);
     }
 
     /**
@@ -467,7 +467,7 @@ class Hosts
             'ansible_fail' => 0,
             ];
         $this->update($id, $values);
-        Log::logHost('LOG_NOTICE', $id, $this->lng['L_CLEAR_ALARMS_BITS_BY'] . ': ' . $username);
+        Log::logHost(LogLevel::NOTICE, $id, $this->lng['L_CLEAR_ALARMS_BITS_BY'] . ': ' . $username);
 
         return true;
     }
@@ -481,7 +481,7 @@ class Hosts
     public function setAlarmState(int $id, bool $value): bool
     {
         $this->update($id, ['disable_alarms' => $value]);
-        Log::logHost('LOG_NOTICE', $id, $this->lng['L_ALARMS_DISABLE']);
+        Log::logHost(LogLevel::NOTICE, $id, $this->lng['L_ALARMS_DISABLE']);
         return true;
     }
 
@@ -494,7 +494,7 @@ class Hosts
      */
     public function setAlertOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        Log::logHost('LOG_ALERT', $id, $msg, $log_type, $event_type);
+        Log::logHost(LogLevel::ALERT, $id, $msg, $log_type, $event_type);
         $this->update($id, ['alert' => 1]);
     }
 
@@ -507,7 +507,7 @@ class Hosts
      */
     public function setWarnOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        Log::logHost('LOG_WARNING', $id, $msg, $log_type, $event_type);
+        Log::logHost(LogLevel::WARNING, $id, $msg, $log_type, $event_type);
         $this->update($id, ['warn' => 1]);
     }
 
@@ -548,7 +548,7 @@ class Hosts
     public function setAnsibleAlarm(int $id, string $msg): void
     {
         $log_msg = 'Ansible alert: ' . $msg;
-        Log::logHost('LOG_WARNING', $id, $log_msg, 3);
+        Log::logHost(LogLevel::WARNING, $id, $log_msg, 3);
         $this->update($id, ['alert' => 1, 'ansible_fail' => 1]);
         $this->db->query("INSERT INTO `ansible_msg` ('host_id', 'msg') VALUES ($id, $msg)");
     }

@@ -30,12 +30,12 @@ $cfg['charset'] = 'utf-8';
 $cfg['graph_charset'] = 'es-ES';
 $cfg['check_retries'] = 4;                # Ping/Port retrys to  mark host down
 $cfg['check_retries_usleep'] = 500000;    # Next attempt wait usec
-/* Log and Term */
-$cfg['log_level'] = 'LOG_WARN';
+/* Log and Term Logs */
+$cfg['log_level'] = 5;
 $cfg['log_file'] = 'logs/monnet.log';
-$cfg['log_to_syslog'] = 0;
-$cfg['log_to_db'] = 1;
-$cfg['log_to_db_debug'] = 0; //Beware
+$cfg['system_log_to_syslog'] = 0;
+$cfg['system_log_to_db'] = 1;
+$cfg['system_log_to_db_debug'] = 0; //Beware
 $cfg['log_to_file'] = 1;
 $cfg['log_file_owner'] = 'www-data';
 $cfg['log_file_owner_group'] = 'www-data';
@@ -44,10 +44,10 @@ $cfg['log_file_owner_group'] = 'www-data';
   'LOG_ERROR' => 3      'LOG_WARNING' => 4  'LOG_NOTICE' => 5
   'LOG_INFO' => 6     'LOG_DEBUG' => 7
  */
-$cfg['term_log_level'] = 7;
+$cfg['term_hosts_log_level'] = 5;
 $cfg['term_system_log_level'] = 5;
 $cfg['term_max_lines'] = 100;
-$cfg['term_show_system_logs'] = 'LOG_ERROR'; // Empty for no or LOG_LEVEL, need log_to_db
+$cfg['term_show_system_logs'] = 1;
 /* Clear (days) */
 $cfg['clear_logs_intvl'] = 30;
 $cfg['clear_stats_intvl'] = 15;

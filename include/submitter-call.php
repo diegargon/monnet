@@ -168,7 +168,7 @@ function format_host_logs(AppContext $ctx, array $logs, string $nl = '<br/>'): a
         if (is_numeric($term_log['level'])) :
             $log_level = (int) $term_log['level'];
             $date = format_datetime_from_string($term_log['date'], $cfg['term_date_format']);
-            $loglevelname = Log::getLogLevelName((int) $term_log['level']);
+            $loglevelname = LogLevel::getName($term_log['level']);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
             $loglevelname = substr($loglevelname, 0, 4);
             if ($log_level <= 2) :
