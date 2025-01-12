@@ -70,7 +70,7 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
         $log_level = $rdata['log_level'];
     endif;
 
-    $log_msg = "Notification from id: $host_id, {$rdata['name']}";
+    $log_msg = "Notification: {$rdata['name']}";
     isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
     if (!empty($rdata['event_value'])) :
         $log_msg .= ' Event value: ' . $rdata['event_value'];
@@ -163,7 +163,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
         }
         $ip_version = $port['ip_version'] ?? '';
         $port['service'] = trim($port['serviec']);
-        
+
         $key = "{$protocol}:{$pnumber}:{$interface}:{$ip_version}";
 
         if (isset($actual_ports_map[$key])) {
