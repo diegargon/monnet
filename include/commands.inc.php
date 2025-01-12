@@ -46,7 +46,7 @@ function run_cmd(string $cmd, array $params, string $stdin = null): array|bool
         $return['stderr'] = trim(stream_get_contents($pipes[2]));
         fclose($pipes[2]);
     } else {
-        Log::err('Error run command ');
+        Log::error('Error run command ');
         $return = false;
     }
     proc_close($proc);

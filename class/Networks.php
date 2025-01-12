@@ -264,7 +264,7 @@ class Networks
 
         foreach ($networks as $net) {
             if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
-                Log::err("Invalid network detected " . $net['network']);
+                Log::error("Invalid network detected " . $net['network']);
                 continue;
             }
             /*
@@ -279,7 +279,7 @@ class Networks
             $prefix = (int) $parts[1];
             $count = pow(2, (32 - $prefix));
             if (!filter_var($network, FILTER_VALIDATE_IP)) {
-                Log::err("Invalid  ip build network for scan");
+                Log::error("Invalid  ip build network for scan");
                 continue;
             }
             // Obtener la dirección de red

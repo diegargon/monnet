@@ -47,7 +47,7 @@ class Items
             $en_conf = json_encode($conf);
 
             if ($en_conf === false) :
-                Log::err("Error adding item: json_encode conf");
+                Log::error("Error adding item: json_encode conf");
                 return false;
             endif;
 

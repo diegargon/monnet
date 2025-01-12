@@ -21,19 +21,19 @@ function sendWOL(string $host_mac): bool
     $host_mac = str_replace([':', '-'], '', $host_mac);
 
     if (strlen($host_mac) % 2 !== 0) {
-        Log::err("MAC address must be even \"{$host_mac}\"");
+        Log::error("MAC address must be even \"{$host_mac}\"");
         return false;
     }
 
     $macAddressBinary = hex2bin($host_mac);
     if ($macAddressBinary === false) :
-        Log::err("MAC address is not correct \"{$host_mac}\"");
+        Log::error("MAC address is not correct \"{$host_mac}\"");
         return false;
     endif;
     $magicPacket = str_repeat(chr(255), 6) . str_repeat($macAddressBinary, 16);
     $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     if ($socket === false) {
-        Log::err("Error creating socket " . socket_strerror(socket_last_error()));
+        Log::error("Error creating socket " . socket_strerror(socket_last_error()));
         return false;
     }
 

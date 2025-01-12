@@ -77,7 +77,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             //$ncfg->set('db_monnet_version', $db_version, 1);
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
+            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
 
@@ -105,7 +105,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::notice('Update version to ' . $files_version . ' successful');
         } catch (Exception $e) {
             $ncfg->set('db_monnet_version', $db_version, 1);
-            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
 
@@ -145,7 +145,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
-            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
 
@@ -163,7 +163,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
-            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
 
@@ -181,7 +181,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
-            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
 
@@ -222,7 +222,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 ALTER TABLE `tasks` ADD `last_triggered` DATETIME NULL AFTER `trigger_type`;
             ");
-            // Guarda el event type 
+            // Guarda el event type
             $db->query("
                 ALTER TABLE `hosts_logs` ADD `event_type` SMALLINT DEFAULT '0' AFTER `log_type`;
             ");
@@ -233,9 +233,44 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
-            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+
+   // 0.51 do nothing test
+    if ($db_version < 0.51) {
+        try {
+            $ncfg->set('db_monnet_version', 0.51, 1);
+            $db->query("START TRANSACTION");
+            //$db->query("
+            //");
+            $db->query("COMMIT");
+            $db_version = $files_version;
+            Log::notice('Update version to ' . $files_version . ' successful');
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+   // 0.52
+    if ($db_version < 0.00) {
+        try {
+            $ncfg->set('db_monnet_version', 0.00, 1);
+            $db->query("START TRANSACTION");
+            //$db->query("
+            //");
+            $db->query("COMMIT");
+            $db_version = $files_version;
+            Log::notice('Update version to ' . $files_version . ' successful');
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
 
    // 0.00 Template
     if ($db_version < 0.00) {
@@ -250,7 +285,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
-            Log::err('Transaction failed, trying rolling back: ' . $e->getMessage());
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
 }

@@ -20,9 +20,22 @@ class EventType
     public const PORT_DOWN = 9;
     public const PORT_NEW = 10;
     public const SEND_STATS = 11;
+    public const SERVICE_NAME_CHANGE = 12;
+    public const HOST_INFO_CHANGE = 13;
+    public const HOST_BECOME_ON = 14;
+    public const HOST_BECOME_OFF = 15;
+    public const NEW_HOST_DISCOVERY = 16;
 
     public static function getConstants(): array
     {
         return (new ReflectionClass(self::class))->getConstants();
+    }
+
+    public static function getName(int $value): ?string
+    {
+        $constants = (new ReflectionClass(self::class))->getConstants();
+        $flipped = array_flip($constants);
+
+        return $flipped[$value] ?? null;
     }
 }

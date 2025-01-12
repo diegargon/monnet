@@ -48,12 +48,12 @@ class Mailer
             $this->phpMailer = new PHPMailer(true);
             $this->phpMailer->setLanguage($this->ncfg->get('lang'));
         } else {
-            Log::err($lang->get('L_ERR_MAILER'));
+            Log::error($lang->get('L_ERR_MAILER'));
             return;
         }
         if (!Filters::varIp($this->ncfg->get('mail_host'))) {
             if (!Filters::varHostname($this->ncfg->get('mail_host'))) :
-                Log::err($lang->get('L_ERR_MAIL_HOST'));
+                Log::error($lang->get('L_ERR_MAIL_HOST'));
                 return;
             endif;
         }
@@ -62,11 +62,11 @@ class Mailer
             empty($this->ncfg->get('mail_username')) ||
             empty($this->ncfg->get('mail_password'))
         ) :
-            Log::err($lang->get('L_ERR_USERPASS_INVALID'));
+            Log::error($lang->get('L_ERR_USERPASS_INVALID'));
             return;
         endif;
         if (!empty($this->ncfg->get('mail_port')) && !is_numeric($this->ncfg->get('mail_port'))) :
-            Log::err($lang->get('L_ERR_PORT_INVALID'));
+            Log::error($lang->get('L_ERR_PORT_INVALID'));
             return;
         endif;
         $this->configure();
@@ -84,7 +84,7 @@ class Mailer
     {
         foreach ($emails as $email) {
             if (!$this->sendMail($email, $subject, $body)) :
-                Log::err('L_ERR_SENDING_EMAILS ' . $email);
+                Log::error('L_ERR_SENDING_EMAILS ' . $email);
                 break;
             endif;
         }
@@ -111,7 +111,7 @@ class Mailer
             $this->phpMailer->send();
             return true;
         } catch (Exception $e) {
-            Log::err('Mail: ' . $e->getMessage());
+            Log::error('Mail: ' . $e->getMessage());
             return false;
         }
     }

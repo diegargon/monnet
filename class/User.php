@@ -296,7 +296,7 @@ class User
     {
         $json_cats_state = json_encode($this->categories_state);
         if (mb_strlen($json_cats_state, 'UTF-8') > 255) {
-            Log::err('Max cats state reached');
+            Log::error('Max cats state reached');
             return false;
         }
         $this->setPref('hosts_cats_state', $json_cats_state);

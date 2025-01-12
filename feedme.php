@@ -112,7 +112,7 @@ $rdata = $request['data'];
 
 
 if (!$host) :
-    Log::err("Host not found, requested id:", $host_id);
+    Log::error("Host not found, requested id:", $host_id);
     echo json_encode([
         'error' => 'Host not found'
     ]);

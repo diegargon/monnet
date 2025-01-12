@@ -208,24 +208,30 @@ class Hosts
                         ($kvalue === 'mac' || $kvalue === 'mac_vendor' || $kvalue === 'hostname') &&
                         ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
-                    $loghostmsg = $this->lng['L_HOST_MSG_DIFF'] . ' ( '
-                            . $this->hosts[$id]['display_name'] . ' )([' . $kvalue . '])'
-                            . $this->hosts[$id][$kvalue] . '->' . $vvalue;
-                    Log::logHost('LOG_ALERT', $id, $loghostmsg);
-                    $this->hosts[$id]['alert'] = 1;
-                    $alert_msg = '';
+                    $alert = 0;
+                    $warn = 0;
+
+                    $log_msg = '';
                     if ($kvalue === 'mac') :
-                        $alert_msg = 'Mac ' . $this->lng['L_HAS_CHANGED'] . " to $vvalue" ;
+                        $log_msg = 'Mac ' . $this->lng['L_HAS_CHANGED'] . " to $vvalue" ;
+                        $alert = 1;
+                    elseif ($kvalue === 'mac_vendor') :
+                        $log_msg = 'Mac vendor ' . $this->lng['L_HAS_CHANGED'] . " to $vvalue";
+                    elseif ($kvalue === 'hostname') :
+                        $log_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'] . " to $vvalue";
+                        $warn = 1;
                     endif;
-                    if ($kvalue === 'mac_vendor') :
-                        $alert_msg = 'Mac vendor ' . $this->lng['L_HAS_CHANGED'] . " to $vvalue";
-                    endif;
-                    if ($kvalue === 'hostname') :
-                        $alert_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'] . " to $vvalue";
-                    endif;
-                    Log::loghost('LOG_ALERT', $id, $alert_msg, 3);
+
+                    if ($alert) {
+                        $this->setAlertOn($id, $log_msg, LogType::EVENT_ALERT, EventType::HOST_INFO_CHANGE);
+                    } elseif ($warn)  {
+                        $this->setWarnOn($id, $log_msg, LogType::EVENT_WARN, EventType::HOST_INFO_CHANGE);
+                    } else {
+                        Log::logHost('LOG_NOTICE', $id, $log_msg);
+                    }
+
                     if (!empty($this->hosts[$id]['alarm_macchange_email'])) :
-                        $this->sendHostMail($id, $alert_msg, $alert_msg);
+                        $this->sendHostMail($id, $log_msg, $log_msg);
                     endif;
                 }
                 //Log category change
@@ -480,9 +486,9 @@ class Hosts
      * @param int $log_type
      * @return void
      */
-    public function setAlertOn(int $id, string $msg, int $log_type = LT_ALERT): void
+    public function setAlertOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        Log::logHost('LOG_ALERT', $id, $msg, $log_type);
+        Log::logHost('LOG_ALERT', $id, $msg, $log_type, $event_type);
         $this->update($id, ['alert' => 1]);
     }
 
@@ -493,9 +499,9 @@ class Hosts
      * @param int $log_type
      * @return void
      */
-    public function setWarnOn(int $id, string $msg, int $log_type = LT_WARN): void
+    public function setWarnOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        Log::logHost('LOG_WARNING', $id, $msg, $log_type);
+        Log::logHost('LOG_WARNING', $id, $msg, $log_type, $event_type);
         $this->update($id, ['warn' => 1]);
     }
 
@@ -731,7 +737,7 @@ class Hosts
             ];
 
             if ($host['alert'] && empty($host['disable_alarms'])) :
-                $log_type = [3, 5];
+                $log_type = [ LogType::EVENT_ALERT ];
 
                 $opt = [
                     'log_type' => $log_type,
@@ -746,14 +752,15 @@ class Hosts
                             $alert_logs_items[] = $item;
                         endif;
                     endforeach;
-                    $alert_logs = array_slice($alert_logs_msgs, 0, 4);
+
                     $timezone = $this->ncfg->get('timezone');
                     $timeformat = $this->ncfg->get('datetime_format_min');
                     foreach ($alert_logs_items as $item) :
                         $date = utc_to_tz($item['date'], $timezone, $timeformat);
                         $min_host['log_msgs'][] = [
                             'log_id' => $item['id'],
-                            'log_type' => array_search($item['log_type'], $log_type_constants),
+                            'log_type' => LogType::getName($item['log_type']),
+                            'event_type' => EventType::getName($item['event_type']),
                             'msg' => "{$item['msg']} - $date",
                             'ack_state' => $item['ack']
                         ];
@@ -789,7 +796,7 @@ class Hosts
             ];
 
             if ($host['warn'] && empty($host['disable_alarms'])) :
-                $log_type = [2, 4, 6];
+                $log_type = [ LogType::EVENT_WARN ];
 
                 $opt = [
                     'log_type' => $log_type,
@@ -806,14 +813,14 @@ class Hosts
                             $warn_logs_items[] = $item;
                         endif;
                     endforeach;
-                    $warn_logs_items = array_slice($warn_logs_items, 0, 4);
                     $timezone = $this->ncfg->get('timezone');
                     $timeformat = $this->ncfg->get('datetime_format_min');
                     foreach ($warn_logs_items as $item) :
                         $date = utc_to_tz($item['date'], $timezone, $timeformat);
                         $min_host['log_msgs'][] = [
                             'log_id' => $item['id'],
-                            'log_type' => array_search($item['log_type'], $log_type_constants),
+                            'log_type' => LogType::getName($item['log_type']),
+                            'event_type' => EventType::getName($item['event_type']),
                             'msg' => "{$item['msg']} - $date",
                             'ack_state' => $item['ack']
                         ];

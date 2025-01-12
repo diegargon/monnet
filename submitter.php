@@ -1188,17 +1188,27 @@ if ($command === 'showAlarms' || $command === 'showEvents') :
         'ack' => 0,
     ];
     if ($command === 'showAlarms') :
-        $log_opts['log_type'] = [3, 4, 5];
+        $log_opts['log_type'] = [
+            LogType::EVENT_ALERT,
+            LogType::EVENT_WARN,
+        ];
     else :
-        $log_opts['log_type'] = [1, 2];
+        $log_opts['log_type'] = [
+            LogType::EVENT,
+            LogType::EVENT_ALERT,
+            LogType::EVENT_WARN,
+        ];
     endif;
 
-    $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'msg', 'ack', 'date' ];
+    $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'event_type', 'msg', 'ack', 'date' ];
     $tdata['logs'] = Log::getLogsHosts($log_opts);
     foreach ($tdata['logs'] as &$log) :
             $log['host'] = $hosts->getDisplayNameById($log['host_id']);
             $log['date'] = format_datetime_from_string($log['date'], $cfg['datetime_log_format']);
-            $log['log_type'] = array_search($log['log_type'], $cfg['log_type_constants']);
+            $log['log_type'] = LogType::getName($log['log_type']);
+            if (EventType::getName($log['event_type'])) :
+                $log['event_type'] = EventType::getName($log['event_type']);
+            endif;
     endforeach;
 
     if (!empty($tdata['logs'])) :

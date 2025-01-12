@@ -214,7 +214,7 @@ function trigger_update_old(Database $db, float $db_version, float $files_versio
             $db_version = $files_version;
         } catch (Exception $e) {
             $db->query("ROLLBACK");
-            Log::err('Transaction failed, rolling back: ' . $e->getMessage());
+            Log::error('Transaction failed, rolling back: ' . $e->getMessage());
         }
     }
 }

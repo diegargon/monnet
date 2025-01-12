@@ -230,7 +230,7 @@ function cached_img(User $user, int $id, string $img_url, int $renew = 0): strin
         } else {
             $user->setPref($img_url, date_now());
             $error = error_get_last();
-            Log::err('Error getting image error msg ' . $error['message']);
+            Log::error('Error getting image error msg ' . $error['message']);
         }
     }
 

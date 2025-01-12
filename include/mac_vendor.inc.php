@@ -51,7 +51,7 @@ function get_mac_vendor_local(string $mac): array|bool
     $file = './config/macvendors.txt';
 
     if (!file_exists($file)) {
-        Log::err('File not found: ' . $file);
+        Log::error('File not found: ' . $file);
         return false;
     }
 

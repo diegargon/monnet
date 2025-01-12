@@ -40,14 +40,14 @@ $cfg['log_to_file'] = 1;
 $cfg['log_file_owner'] = 'www-data';
 $cfg['log_file_owner_group'] = 'www-data';
 /*
-  'LOG_EMERG' => 0    'LOG_ALERT' => 1    'LOG_CRIT' => 2
-  'LOG_ERR' => 3      'LOG_WARNING' => 4  'LOG_NOTICE' => 5
+  'LOG_EMERGENCY' => 0    'LOG_ALERT' => 1    'LOG_CRITICAL' => 2
+  'LOG_ERROR' => 3      'LOG_WARNING' => 4  'LOG_NOTICE' => 5
   'LOG_INFO' => 6     'LOG_DEBUG' => 7
  */
 $cfg['term_log_level'] = 7;
 $cfg['term_system_log_level'] = 5;
 $cfg['term_max_lines'] = 100;
-$cfg['term_show_system_logs'] = 'LOG_ERR'; // Empty for no or LOG_LEVEL, need log_to_db
+$cfg['term_show_system_logs'] = 'LOG_ERROR'; // Empty for no or LOG_LEVEL, need log_to_db
 /* Date */
 $cfg['term_date_format'] = '[d][H:i]';
 $cfg['timezone'] = 'UTC';

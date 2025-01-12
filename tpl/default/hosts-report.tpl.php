@@ -55,7 +55,7 @@
                                     name="ack_host_log"
                                     data-id="<?= $log_msg['log_id']?>"<?= $log_msg['ack_state'] ? 'checked' : null; ?>
                                     />
-                                <?= $log_msg['msg'] . ' ' . $log_msg['log_type'] ?>
+                                <?= $log_msg['msg'] . ' ' . $log_msg['event_type'] . ' '. $log_msg['log_type'] ?>
                             </div>
                                 <?php
                             endforeach;

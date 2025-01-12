@@ -47,10 +47,10 @@ class Log
      * @var array<string, int> $LOG_TYPE
      */
     private static $LOG_TYPE = [
-        'LOG_EMERG' => 0, // system is unusable
+        'LOG_EMERGENCY' => 0, // system is unusable
         'LOG_ALERT' => 1, // action must be taken immediately UNUSED
-        'LOG_CRIT' => 2, // critical conditions
-        'LOG_ERR' => 3, // error conditions
+        'LOG_CRITICAL' => 2, // critical conditions
+        'LOG_ERROR' => 3, // error conditions
         'LOG_WARNING' => 4, // warning conditions
         'LOG_NOTICE' => 5, // normal, but significant, condition
         'LOG_INFO' => 6, // informational message
@@ -164,7 +164,13 @@ class Log
      *
      * @return void
      */
-    public static function logHost(string $loglevel, int $host_id, string $msg, int $log_type = 0): void
+    public static function logHost(
+        string $loglevel,
+        int $host_id,
+        string $msg,
+        int $log_type = 0,
+        int $event_type = 0
+    ): void
     {
         $level = self::getLogLevelId($loglevel);
         !is_numeric($level) ? $level = 7 : null;
@@ -175,7 +181,13 @@ class Log
         } else {
             $msg_db = $msg;
         }
-        $set = ['host_id' => $host_id, 'level' => $level, 'msg' => $msg_db, 'log_type' => $log_type];
+        $set = [
+            'host_id' => $host_id,
+            'level' => $level,
+            'msg' => $msg_db,
+            'log_type' => $log_type,
+            'event_type' => $event_type
+        ];
         self::$db->insert('hosts_logs', $set);
     }
 
@@ -334,9 +346,9 @@ class Log
      *
      * @return void
      */
-    public static function err(mixed $msg, ?int $self_caller = null): void
+    public static function error(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_ERR', $msg, $self_caller);
+        self::logged('LOG_ERROR', $msg, $self_caller);
     }
 
     /**
@@ -355,11 +367,22 @@ class Log
      *
      * @param mixed $msg
      * @param int|null $self_caller
+     * @return void
+     */
+    public static function critical(mixed $msg, ?int $self_caller = null): void
+    {
+        self::logged('LOG_CRITICAL', $msg, $self_caller);
+    }
+
+    /**
+     *
+     * @param mixed $msg
+     * @param int|null $self_caller
      *
      * @return void
      */
-    public static function emerg(mixed $msg, ?int $self_caller = null): void
+    public static function emergency(mixed $msg, ?int $self_caller = null): void
     {
-        self::logged('LOG_EMERG', $msg, $self_caller);
+        self::logged('LOG_EMERGENCY', $msg, $self_caller);
     }
 }

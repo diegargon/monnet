@@ -23,7 +23,7 @@ function check_known_hosts(AppContext $ctx): bool
     $cfg = $ctx->get('cfg');
 
     if (!is_object($hosts)) :
-        Log::err("hosts is not a object");
+        Log::error("hosts is not a object");
         return false;
     endif;
 
@@ -57,6 +57,10 @@ function check_known_hosts(AppContext $ctx): bool
             ];
             $ports_status = $check_ports_result['ports'];
             foreach ($ports_status as $portid => $new_port_status) :
+                //TODO Alarm if port changes
+                //if (!empty($host['alarm_port_email'])) :
+                //    $hosts->sendHostMail($host['id'], $log_msg);
+                //endif;
                 $db->update('ports', $new_port_status, ['id' => $portid]);
             endforeach;
         } else { /* Ping Scan */
@@ -91,10 +95,7 @@ function check_known_hosts(AppContext $ctx): bool
             if ($host['online'] == 0 && $new_host_status['online'] == 1) {
                 $new_host_status['glow'] = date_now(); //Glow Time Mark
                 $log_msg = $lng['L_HOST_BECOME_ON'];
-                Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LT_EVENT);
-                if (!empty($host['alarm_port_email'])) :
-                    $hosts->sendHostMail($host['id'], $log_msg);
-                endif;
+                Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LogType::EVENT, EventType::HOST_BECOME_ON);
 
                 //Try get hostname when a host become on
                 $hostname = $hosts->getHostname($host['ip']);
@@ -107,9 +108,9 @@ function check_known_hosts(AppContext $ctx): bool
                 $log_msg = $lng['L_HOST_BECOME_OFF'];
                 // Create alert when always on is set
                 if (!empty($host['always_on'])) :
-                    $hosts->setAlertOn($host['id'], $log_msg, LT_EVENT_ALERT);
+                    $hosts->setAlertOn($host['id'], $log_msg, LogType::EVENT_ALERT, EventType::SYSTEM_SHUTDOWN);
                 else :
-                    Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LT_EVENT);
+                    Log::logHost('LOG_NOTICE', $host['id'], $log_msg, LogType::EVENT, EventType::SYSTEM_SHUTDOWN);
                 endif;
 
                 if (!empty($host['alarm_ping_email'])) :
@@ -334,12 +335,12 @@ function check_host_ports(AppContext $ctx, array $host): array
             $port_status['online'] = 1;
             $latency[] = round_latency(microtime(true) - $tim_start);
             if ((int) $port['online'] === 0) :
-                Log::logHost('LOG_NOTICE', $host['id'], 'Port become Online');
+                Log::logHost('LOG_NOTICE', $host['id'], 'Port become Online', LogType::EVENT, EventType::PORT_UP);
             endif;
             fclose($conn);
         elseif (empty($host['alarm_port_disable'])) :
             $log_msg = "Port {$port['pnumber']} down: $error_msg ($error_code)";
-            Log::logHost('LOG_WARNING', $host['id'], $log_msg, $log_type);
+            Log::logHost('LOG_WARNING', $host['id'], $log_msg, LogType::EVENT_WARN, EventType::PORT_DOWN );
             $host_result['warn'] = 1;
         endif;
 
@@ -364,7 +365,7 @@ function check_host_ports(AppContext $ctx, array $host): array
             $host_result['online'] = 1;
             $host_result['latency'] = $host_ping['latency'];
         else :
-            Log::logHost('LOG_WARNING', $host['id'], ' Ports down and mo ping response');
+            Log::logHost('LOG_WARNING', $host['id'], ' Ports down and no ping response');
         endif;
     else :
         // Calculamos la media latencia puertos

@@ -16,7 +16,7 @@
  */
 function trigger_feedme_error(string $msg): void
 {
-    Log::err($msg);
+    Log::error($msg);
     http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode([
@@ -41,11 +41,7 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
     $host_id = $host['id'];
     $host_update_values = [];
 
-    $log_msg = "Notification from id: $host_id, {$rdata['name']}";
-    isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
-
     if ($rdata['name'] === 'starting') :
-        Log::logHost('LOG_NOTICE', $host_id, $log_msg, LT_EVENT);
         if (!empty($rdata['ncpu'])) :
             if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
                 $host_update_values['ncpu'] = $rdata['ncpu'];
@@ -56,21 +52,36 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
                 $host_update_values['uptime'] = $rdata['uptime'];
             endif;
         endif;
+    endif;
+
+    $event_type = 0;
+    $log_type = 0;
+    $log_level = 7;
+
+    if (!empty($rdata['event_type'])) :
+        $event_type = $rdata['event_type'];
+        $log_type = LogType::EVENT;
     else :
-        if (!empty($rdata['event_value'])) :
-            $log_msg .= ' Event value: ' . $rdata['event_value'];
-        else :
-            $rdata['event_value'] = '';
-        endif;
-        if (empty($rdata['event_type']) || $rdata['event_type'] == LT_EVENT) :
-            Log::logHost('LOG_NOTICE', $host_id, $log_msg, LT_EVENT);
-        else :
-            if (in_array($rdata['event_type'], [3, 5])) :
-                $hosts->setAlertOn($host_id, $log_msg, $rdata['event_type']);
-            else :
-                $hosts->setWarnOn($host_id, $log_msg, $rdata['event_type']);
-            endif;
-        endif;
+        $log_type = LogType::DEFAULT;
+    endif;
+
+
+    if (!empty($rdata['log_level'])) :
+        $log_level = $rdata['log_level'];
+    endif;
+
+    $log_msg = "Notification from id: $host_id, {$rdata['name']}";
+    isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
+    if (!empty($rdata['event_value'])) :
+        $log_msg .= ' Event value: ' . $rdata['event_value'];
+    endif;
+
+    if ($log_level <= LogLevel::CRITICAL) :
+        $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, $event_type);
+    elseif ($log_level == LogLevel::ERROR || $log_level == LogLevel::WARNING ) :
+        $hosts->setWarnOn($host_id, $log_msg, LogType::EVENT_WARN, $event_type);
+    else :
+        Log::logHost($log_level, $host_id, $log_msg, $log_type);
     endif;
 
     return $host_update_values;
@@ -166,12 +177,12 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 //Port was down
                 if ($db_port['online'] == 0) :
                     $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber)";
-                    $hosts->setAlertOn($host_id, $alertmsg);
+                    $hosts->setWarnOn($host_id, $alertmsg, LogType::EVENT_WARN, EventType::PORT_UP);
                 endif;
                 if ($db_port['service'] !== $port['service']) :
                     $warnmsg = 'Service name change detected: '
                         . "({$db_port['service']}->{$port['service']}) ($pnumber)";
-                    $hosts->setWarnOn($host_id, $warnmsg);
+                    $hosts->setWarnOn($host_id, $warnmsg, LogType::EVENT_WARN, EventType::SERVICE_NAME_CHANGE);
                 endif;
                 $hosts->updatePort($db_port['id'], $set);
             }
@@ -189,7 +200,8 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 'ip_version' => $ip_version,
                 'last_change' => date_now(),
             ];
-            Log::logHost('LOG_NOTICE', $host_id, "New port detected: $pnumber ({$port['service']})");
+            $log_msg = "New port detected: $pnumber ({$port['service']}))";
+            $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_NEW);
             $hosts->addPort($insert_values);
         }
     }
@@ -202,7 +214,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 'last_change' => date_now(),
             ];
             $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
-            $hosts->setAlertOn($host_id, $alertmsg);
+            $hosts->setAlertOn($host_id, $alertmsg, LogType::EVENT_ALERT, EventType::PORT_DOWN);
             $hosts->updatePort($db_port['id'], $set);
         }
     }
