@@ -5,11 +5,7 @@
 * Migrar cfg a Config
 * migrar lng a Lang
     $lang['L_'] to $lang::get['L_'] ? o lang::get['WORD'] and the L_
-* Move system_prefs to cfg
-        Migrate updating system (usar db_monnet_version en ncfg)
-        Migrate cron keys.
 * creada config key allow_save_passwords para permitir guardar los password como de ansible y otros, ver mecanismo
-* cron, submitter: borrar duplicidades cfg/ncfg
 * Tabla Event Tasks: Cuando recive un evento ejecuta un playbook establecido
         hid, event_name, playbook, last_execution
         En cada host se podra crear task por eventos. Los eventos/playbook generara un informe que podria
@@ -19,24 +15,29 @@
         Procesos especificos: Track create/stoped/restart
             ¿especicar procesos a monitorizar por nombre?
             crearian un evento especifico event_proc_$name
+* TABLA TASK
+  `id`
+  `hid`             host id, ver posibilidad de rango en el futuro
+  `pb_id`           playbook a ejecutar
+  `trigger_type`    tipo de trigger manual/otra task/evento
+  `last_triggered`  ultima vez que se ejecuto
+  `task_name`       nombre comun
+  `next_task`       encadena tareas por id
+  `disable`         deshabilita la tarea
 
-[TASKS]->[ID?][HID][TYPE=EVENT][WHAT=EVENTNAME]             [LAST_TRIGGERED_DATE][CREATE_DATE]  [JSON_DETAILS] (send mails, exec playbook, generate report)
-[TASKS]->[ID?][HID][TYPE=TRACK][WHAT=PROCESS|SERVICE]       [LAST_TRIGGERE_DATED][CREATE_DATE]  [JSON_DETAILS]
 * Hosts/IPAM: Poder especificar a que device (switch/router) y numero puerto esta conectado.
     - Ir separando configuracion e inventory.
     - El rol switch/router seccion de dispositivos conectados.
     - Si es WiFi poder elegir algo como conectado a dispositivo wifi 'fijo' o 'movable'
 * Auto Rrefresh en host details obtiene los mismos datos que host-details cosa que no es necesaria. separar
-* Check if need updates
+* Comprobar via ansible o agente si los equipos necesitan actualizarse.
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible
-* [DB 0.35v]hosts->scan identificar servicios  [option nmap [0 noscan  - 1 scan - 2 full scan]] - guardar con ports, los ports metidos con el user tienen user=1
 * Inventory: Checkboxes: Bastionado / Antivirus / Compliant
 * [DB 0.35v] Network weight
 * En el login opcionalmente que se puede adjuntar clave de descifrado, se guarda en COOKIE o SESSION
 * Refrescado/Cli Update/Discovery Update: En vez de la fecha bola roja/verde si se pasa mas del tiempo configurado
-* El scan ports especificados por el usuario solo debe escaner los user=1
 * Ansible: Tema almacenar passwords
     Todos los passwd almacenados cifrados con maestra
     Variable mpass en /etc/monnet/  con el pass maestro permisos root
@@ -44,11 +45,7 @@
     Para encriptar una contraseña introducida por el usuario se la tiene que pasar al gateway y esta la
     encripta.
 * Ansible: Opcion para actualizar todos los agentes
-* Alarms: Crear tabla con alarmas y solo dejar en la tabla hosts el alarm/warn para avisar [id:hostid:alarm_type{alert,warn}:alarm_msg]
-    * AlertMsg fecha? usar tabla existente?
-* IPAM opcion marca red para permitir solicitar ips, y un boton solicita y entrega ips libres en las redes en cuestion
-    con un boton para reservar 8h configurables.
-* Agent Host: Al primer arranque o reinicio realizar/enviar infome (eventos creados)
+* Agent Host: Opcion despues del boot realizar/enviar infome (eventos creados)
 * Agent Host/Ansible Reports: nojson reports field , genera un report si hay alguna alarma, ansible y email
 * Split Configuration > Inventory
 * TODO 1111: Filter/check values
@@ -67,6 +64,11 @@
     Configuracion: Automatic agent updates (si feedme detecta un agente en version antigua actualizarlo automaticamente
 * Agent: El agente deberia enviar los logs al servidor.
 * Ansible Raw: Al lanzar un ansible bloquear la interaccion hasta recibir la respuesta
+* Upgrade system: Rewrite, mas robusto
+* Puertos: Monitor field y solo monitorizar los especificos? tipos de monitorizacion "aviso" "crear evento para task"
+    o opcion contraria, deshabilitar avisos por puerto
+* cambiar alert y warn en host de tiny a int y guardar el id del log, cuando se hace ack comprobar si el id es
+    el mismo y borrar la alarma.
 
 ** Undecided
 * Private Notes config? el campo uid ya esta creado por si se quiere separar notas por usuario
