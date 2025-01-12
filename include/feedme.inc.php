@@ -162,7 +162,8 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
             $interface = "[{$interface}]"; // Normalizar IPv6
         }
         $ip_version = $port['ip_version'] ?? '';
-
+        $port['service'] = trim($port['serviec']);
+        
         $key = "{$protocol}:{$pnumber}:{$interface}:{$ip_version}";
 
         if (isset($actual_ports_map[$key])) {
