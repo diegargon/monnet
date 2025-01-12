@@ -15,7 +15,6 @@
  */
 function cron(AppContext $ctx): void
 {
-    $db = $ctx->get('Mysql');
     $hosts = $ctx->get('Hosts');
     $ncfg = $ctx->get('Config');
 
