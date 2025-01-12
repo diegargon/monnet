@@ -113,7 +113,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.47) {
         try {
             $ncfg->set('db_monnet_version', 0.47, 1);
-            // Guardar reports json como los de ansible
+            // DONE Guardar reports json como los de ansible
             $db->query("
                 CREATE TABLE IF NOT EXISTS `reports` (
                   `id` int NOT NULL AUTO_INCREMENT,
@@ -172,8 +172,10 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $ncfg->set('db_monnet_version', 0.49, 1);
             $db->query("START TRANSACTION");
+            // DONE Adjust type
             $db->query("UPDATE `config` SET `ctype` = '0' WHERE `ckey` = 'discovery_last_run';");
             $db->query("UPDATE `config` SET `ctype` = '0' WHERE `ckey` = 'cli_last_run';");
+            // DONE clean system_prefs now in Config
             $db->query("DELETE FROM `prefs` WHERE `uid` = 0;");
             $db->query("COMMIT");
             $db_version = $files_version;
@@ -190,15 +192,15 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < 0.50) {
         try {
             $ncfg->set('db_monnet_version', 0.50, 1);
-            // DROP columnas que no necesitamos
+            // DONE DROP columnas que no necesitamos
             $db->query("ALTER TABLE hosts DROP COLUMN alert_msg;");
             $db->query("ALTER TABLE hosts DROP COLUMN warn_msg;");
             $db->query("ALTER TABLE hosts DROP COLUMN warn_port;");
             $db->query("ALTER TABLE hosts DROP COLUMN ports;");
             $db->query("ALTER TABLE tasks DROP COLUMN what;");
             $db->query("ALTER TABLE tasks DROP COLUMN task;");
-            // El source puede ser (rtype/manual(1) source_id (0)
-            // rtype/task(2) source_id task_id
+
+            // DONE source_id: uid if rtype=manual task_id if rtype=task
             $db->query("
                 ALTER TABLE `reports` ADD `source_id` INT DEFAULT '0' AFTER `host_id`;
             ");
@@ -222,7 +224,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 ALTER TABLE `tasks` ADD `last_triggered` DATETIME NULL AFTER `trigger_type`;
             ");
-            // Guarda el event type
+            // DONNE Guarda el event type
             $db->query("
                 ALTER TABLE `hosts_logs` ADD `event_type` SMALLINT DEFAULT '0' AFTER `log_type`;
             ");
@@ -242,6 +244,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $ncfg->set('db_monnet_version', 0.51, 1);
             $db->query("START TRANSACTION");
+            // DONE playbook id for the report
             $db->query("ALTER TABLE `reports` ADD `pb_id` INT NOT NULL AFTER `host_id`;");
             $db->query("COMMIT");
             $db_version = $files_version;
