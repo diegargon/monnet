@@ -72,8 +72,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 LIMIT 1
             ");
             $db->query("COMMIT");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = 0.44;
+            Log::notice('Update version to 0.44 successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             //$ncfg->set('db_monnet_version', $db_version, 1);
@@ -101,8 +101,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 ALTER TABLE `ports` ADD `ip_version` VARCHAR(5) NOT NULL AFTER `interface`;
             ");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = 0.45;
+            Log::notice('Update version to 0.45 successful');
         } catch (Exception $e) {
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
@@ -140,8 +140,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ('agent_default_interval', JSON_QUOTE('30'), 1, 103, NULL, 0);
             ");
             $db->query("COMMIT");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = 0.47;
+            Log::notice('Update version to 0.47 successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -158,8 +158,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('discovery_last_run', JSON_QUOTE('0'), 1, 0, NULL, 0)");
             $db->query("COMMIT");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = 0.48;
+            Log::notice('Update version to 0.48 successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -178,8 +178,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             // DONE clean system_prefs now in Config
             $db->query("DELETE FROM `prefs` WHERE `uid` = 0;");
             $db->query("COMMIT");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = 0.49;
+            Log::notice('Update version to 0.49 successful');
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -188,10 +188,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
 
-  // 0.50 Template
-    if ($db_version < 0.50) {
+    // 0.50 Template
+    $update = 0.50;
+    if ($db_version < $update) {
         try {
-            $ncfg->set('db_monnet_version', 0.50, 1);
+            $ncfg->set('db_monnet_version', $update, 1);
             // DONE DROP columnas que no necesitamos
             $db->query("ALTER TABLE hosts DROP COLUMN alert_msg;");
             $db->query("ALTER TABLE hosts DROP COLUMN warn_msg;");
@@ -230,8 +231,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             ");
             $db->query("START TRANSACTION");
             $db->query("COMMIT");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -239,16 +240,16 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-   // 0.51 do nothing test
-    if ($db_version < 0.51) {
+    $update = 0.51;
+    if ($db_version < $update) {
         try {
-            $ncfg->set('db_monnet_version', 0.51, 1);
+            $ncfg->set('db_monnet_version', $update, 1);
             $db->query("START TRANSACTION");
             // DONE playbook id for the report
             $db->query("ALTER TABLE `reports` ADD `pb_id` INT NOT NULL AFTER `host_id`;");
             $db->query("COMMIT");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -256,16 +257,16 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-   // 0.52
-    if ($db_version < 0.00) {
+    $update = 0.00;
+    if ($db_version < $update) {
         try {
-            $ncfg->set('db_monnet_version', 0.00, 1);
+            $ncfg->set('db_monnet_version', $update, 1);
             $db->query("START TRANSACTION");
             //$db->query("
             //");
             $db->query("COMMIT");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
@@ -274,16 +275,16 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
 
-   // 0.00 Template
-    if ($db_version < 0.00) {
+    $update = 0.00;
+    if ($db_version < $update) {
         try {
-            $ncfg->set('db_monnet_version', 0.00, 1);
+            $ncfg->set('db_monnet_version', $update, 1);
             $db->query("START TRANSACTION");
             //$db->query("
             //");
             $db->query("COMMIT");
-            $db_version = $files_version;
-            Log::notice('Update version to ' . $files_version . ' successful');
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
         } catch (Exception $e) {
             $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
