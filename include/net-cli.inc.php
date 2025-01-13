@@ -53,6 +53,29 @@ function check_known_hosts(AppContext $ctx): bool
                     endif;
                 }
             }
+            if ($host['online'] == 0) {
+                /*
+                 * Todos los puertos caidos o no puertos especificados
+                 * probamos si el host esta online con ping normal
+                 */
+                if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
+                    $sec = intval($host['timeout']);
+                    $usec = ($host['timeout'] - $sec);
+                    $usec = $usec > 0 ? $usec * 1000000 : 0;
+                } else {
+                    $sec = 0;
+                    $usec = $cfg['ping_hosts_timeout'];
+                }
+                $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
+                if ($host_ping['online']) :
+                    //Ports down but we got ping
+                    $check_ports_result['online'] = 1;
+                    $check_ports_result['latency'] = $host_ping['latency'];
+                else :
+                    Log::logHost(LogLevel::WARNING, $host['id'], ' Ports down and no ping response');
+                endif;
+            }
+
             $new_host_status = [
                 'online' => $check_ports_result['online'],
                 'warn' =>  $check_ports_result['warn'],
@@ -351,27 +374,7 @@ function check_host_ports(AppContext $ctx, array $host): array
         $host_result['ports'][$port['id']] = $port_status;
     endforeach;
 
-    if ($host_result['online'] === 0) :
-        /*
-         * Todos los puertos caidos o no puertos especificados
-         * probamos si el host esta online con ping normal
-         */
-        if (!empty($host['timeout']) && $host['timeout'] > 0.0) {
-            $sec = intval($host['timeout']);
-            $usec = ($host['timeout'] - $sec);
-            $usec = $usec > 0 ? $usec * 1000000 : 0;
-        } else {
-            $sec = 0;
-            $usec = $cfg['ping_hosts_timeout'];
-        }
-        $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
-        if ($host_ping['online']) :
-            $host_result['online'] = 1;
-            $host_result['latency'] = $host_ping['latency'];
-        else :
-            Log::logHost(LogLevel::WARNING, $host['id'], ' Ports down and no ping response');
-        endif;
-    else :
+    if ($host_result['online'] === 1) :
         // Calculamos la media latencia puertos
         if (count($latency) > 0) :
             $average_latency = array_sum($latency) / count($latency);
