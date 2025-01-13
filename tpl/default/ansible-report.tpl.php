@@ -52,9 +52,13 @@ $messages = [];
 foreach ($tdata['plays'] as $play) {
     foreach ($play['tasks'] as $task) {
         foreach ($task['hosts'] as $ip => $hostData) {
+            $msg = '';
             if (!empty($hostData['msg'])) {
-                $msg = $hostData['msg'];
-
+                if (is_array($hostData['msg'])) {
+                    $msg .= "\n\t" . $hostData['msg'];
+                } else {
+                    $msg .= $hostData['msg'];
+                }
                 if (!empty($hostData['results']) && is_array($hostData['results'])) {
                     foreach ($hostData['results'] as $result) {
                         if (!empty($result['msg'])) {
