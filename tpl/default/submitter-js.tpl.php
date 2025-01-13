@@ -55,8 +55,7 @@
                         console.warn("Tipo de contenido inesperado:", contentType);
                         return;
                     }
-                    console.log(jsonData);
-                    // Procesamiento de jsonData
+
                     if (jsonData.login === "fail") {
                         location.href = '';
                     }
