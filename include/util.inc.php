@@ -405,3 +405,29 @@ function secondsToDHMS(int $seconds): array
         'seconds' => $seconds,
     ];
 }
+
+
+function extractMessages(array $data): array
+{
+    $messages = [];
+
+    foreach ($data as $key => $value) {
+        if ($key === 'msg') {
+            // If the value is an array, recursively process each sub-array and implode it.
+            if (is_array($value)) {
+                $flattened = [];
+                array_walk_recursive($value, function ($item) use (&$flattened) {
+                    $flattened[] = $item;
+                });
+                $messages[] = "\n\t" . implode("\n", $flattened);
+            } else {
+                $messages[] = "\n\t" . $value;
+            }
+        } elseif (is_array($value)) {
+            // Recursively extract messages from nested arrays.
+            $messages = array_merge($messages, extractMessages($value));
+        }
+    }
+
+    return $messages;
+}
