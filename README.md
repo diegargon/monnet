@@ -54,7 +54,7 @@ LAMP
     apt install apache2 php-fpm php-mysqli php-curl php-mbstring
 
 Mysql/MariaDB:
-    You can install or use a remote machine
+    You can install or use a remote machine with mysql
 
 arp
     Optional for get mac's address, only work same network (other method will added in the future)
@@ -64,6 +64,7 @@ arp
 ```
 
 ## Initial database settings
+
 ```
 mysql -u root -p
 mysql> CREATE DATABASE monnet;
@@ -72,9 +73,9 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 ```
 
 ## Clone repo
+
 ```
 /var/www/html# git clone https://github.com/diegargon/monnet .
-
 /var/www/html# chown -R www-data:www-data *
 /var/www/html# chmod 755 cache logs
 ```
@@ -92,14 +93,17 @@ These are the main config keywords you must check/change and copy to the /etc fi
 Warning: path config must included even if the default is valid
 
 Mandatory
+
 ```
 $cfg_db['dbhost']
 $cfg_db['dbname']
 $cfg_db['dbuser']
 $cfg_db['dbpassword']
 $cfg['path'] = '/var/www/html';
+```
 
 Optional
+
 ```
 $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
@@ -198,6 +202,7 @@ apt install sudo
 adduser --disabled-password ansible
 usermod -aG sudo ansible
 ```
+
 Start 'visudo' and add:
 
 ```
@@ -217,6 +222,7 @@ section (Web UI)
 ## SSH CERTS
 
 For Ansible server to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via Monnet/Ansible.
+
 ```
 $ ssh-keygen -m PEM -t rsa -b 4096
 $ ssh-copy-id -i ~/.ssh/id_rsa.pub root@ip.ip.ip.ip
@@ -230,6 +236,7 @@ On the client host:
 runuser -u ansible mkdir /home/ansible/.ssh
 runuser -u ansible nano /home/ansible/.ssh/authorized_keys
 ```
+
 and paste the ssh pub key
 
 If you don't use ssh-copy-id you must add manually the known_host (Monnet server side)
