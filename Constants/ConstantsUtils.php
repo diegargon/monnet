@@ -9,11 +9,20 @@
 
 trait ConstantUtils
 {
-   public static function getConstants(): array
+    /**
+     *
+     * @return array<int,string>
+     */
+    public static function getConstants(): array
     {
         return (new ReflectionClass(self::class))->getConstants();
     }
 
+    /**
+     *
+     * @param int $value
+     * @return string|null
+     */
     public static function getName(int $value): ?string
     {
         $constants = (new ReflectionClass(self::class))->getConstants();

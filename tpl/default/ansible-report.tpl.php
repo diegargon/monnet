@@ -56,7 +56,7 @@ foreach ($tdata['plays'] as $play) {
                 $msg = $hostData['msg'];
 
                 if (!empty($hostData['results']) && is_array($hostData['results'])) {
-                    foreach($hostData['results'] as $result) {
+                    foreach ($hostData['results'] as $result) {
                         if (!empty($result['msg'])) {
                             if (!is_array($result['msg'])) {
                                 $msg .= "\n\t" . $result['msg'];

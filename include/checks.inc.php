@@ -53,13 +53,10 @@ function common_checks(array $cfg_db, array $cfg): void
 
     if (empty($cfg['path'])) :
         exit('path' . $err_empty_msg);
-    endif;
-    if (!is_dir($cfg['path'])) :
-        if (is_string($cfg['path'])) :
-            exit($cfg['path'] . $err_nofile_msg);
-        else :
-            exit('Undefinided path');
-        endif;
+    elseif (!is_string($cfg['path'])) :
+        exit('path is not a valid string');
+    elseif (!is_dir($cfg['path'])) :
+        exit($cfg['path'] . $err_nofile_msg);
     endif;
 }
 /**

@@ -13,7 +13,7 @@ if (!file_exists('/etc/monnet/config.inc.php')) {
     exit('Missing config.inc.php. Leaving');
 } else {
     include_once '/etc/monnet/config.inc.php';
-    if(!isset($cfg['path'])) {
+    if (!isset($cfg['path'])) {
         exit('You must set $cfg["path" in /etc/monnet/config.inc.php');
     }
 }

@@ -55,6 +55,7 @@ define('IN_WEB', true);
  * @var Database $db
  * @var AppContext $ctx Instance of AppCtx. Init in common.inc
  * @var array<string,mixed> $cfg common.inc.php
+ * @var Config $ncfg;
  */
 require_once 'include/common.inc.php';
 require_once 'include/common-call.php';

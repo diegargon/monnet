@@ -18,6 +18,7 @@ header('Content-Type: application/json; charset=UTF-8');
  * @var array<string,string> $lng
  * @var Database|null $db An instance of Database or null if not defined
  * @var array<int|string, mixed> $cfg
+ * @var Config $ncfg
  */
 require_once 'include/common.inc.php';
 require_once 'include/common-call.php';
@@ -920,8 +921,6 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
 
 /* Tasks */
 if ($command === 'changeHDTab' && $value_command == 'tab15') {
-
-
     $data['command_success'] = 1;
 }
 
@@ -1203,12 +1202,12 @@ if ($command === 'showAlarms' || $command === 'showEvents') :
     $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'event_type', 'msg', 'ack', 'date' ];
     $tdata['logs'] = Log::getLogsHosts($log_opts);
     foreach ($tdata['logs'] as &$log) :
-            $log['host'] = $hosts->getDisplayNameById($log['host_id']);
-            $log['date'] = format_datetime_from_string($log['date'], $cfg['datetime_log_format']);
-            $log['log_type'] = LogType::getName($log['log_type']);
-            if (EventType::getName($log['event_type'])) :
-                $log['event_type'] = EventType::getName($log['event_type']);
-            endif;
+        $log['host'] = $hosts->getDisplayNameById($log['host_id']);
+        $log['date'] = format_datetime_from_string($log['date'], $cfg['datetime_log_format']);
+        $log['log_type'] = LogType::getName($log['log_type']);
+        if (EventType::getName($log['event_type'])) :
+            $log['event_type'] = EventType::getName($log['event_type']);
+        endif;
     endforeach;
 
     if (!empty($tdata['logs'])) :

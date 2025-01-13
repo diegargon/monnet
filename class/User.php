@@ -30,7 +30,7 @@ class User
 
     /**
      *
-     * @var array<string,string|int>
+     * @var array<string,string|int|null>
      */
     private $user = [];
 
@@ -91,7 +91,7 @@ class User
 
     /**
      *
-     * @return array<string,string>
+     * @return array<string,string|int|null>
      */
     public function getUser(): array
     {
@@ -100,44 +100,44 @@ class User
 
     /**
      *
-     * @return string
+     * @return string|null
      */
-    public function getLang(): string
+    public function getLang(): ?string
     {
-        return $this->user['lang'];
+        return is_string($this->user['lang']) ? $this->user['lang'] : null;
     }
 
     /**
      *
-     * @return string
+     * @return string|null
      */
     public function getTheme(): string
     {
-        return $this->user['theme'];
+        return is_string($this->user['theme']) ? $this->user['theme'] : null;
     }
     /**
      *
-     * @return string
+     * @return string|null
      */
     public function getEmail(): ?string
     {
-        return $this->user['email'] ?? null;
+        return is_string($this->user['email']) ? $this->user['email'] : null;
     }
     /**
      *
-     * @return string
+     * @return string|null
      */
     public function getUsername(): ?string
     {
-        return $this->user['username'] ?? null;
+        return is_string($this->user['username']) ? $this->user['username'] : null;
     }
     /**
      *
-     * @return string
+     * @return string|null
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
-        return $this->user['password'] ? $this->user['password'] : false;
+        return is_string($this->user['password']) ? $this->user['password'] : null;
     }
     /**
      *
@@ -163,16 +163,16 @@ class User
     }
     /**
      *
-     * @return string
+     * @return string|null
      */
-    public function getTimeZone(): string
+    public function getTimeZone(): ?string
     {
 
         $timezone = $this->user['timezone'];
         if (empty($timezone)) {
             $timezone = $this->cfg['timezone'];
         }
-        return $timezone;
+        return is_string($timezone) ? $timezone : null;
     }
 
     /**
@@ -295,6 +295,9 @@ class User
     public function saveHostsCatsState(): bool
     {
         $json_cats_state = json_encode($this->categories_state);
+        if ($json_cats_state === false) {
+            return false;
+        }
         if (mb_strlen($json_cats_state, 'UTF-8') > 255) {
             Log::error('Max cats state reached');
             return false;

@@ -224,7 +224,7 @@ class Hosts
 
                     if ($alert) {
                         $this->setAlertOn($id, $log_msg, LogType::EVENT_ALERT, EventType::HOST_INFO_CHANGE);
-                    } elseif ($warn)  {
+                    } elseif ($warn) {
                         $this->setWarnOn($id, $log_msg, LogType::EVENT_WARN, EventType::HOST_INFO_CHANGE);
                     } else {
                         Log::logHost(LogLevel::NOTICE, $id, $log_msg);

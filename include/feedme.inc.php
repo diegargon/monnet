@@ -12,7 +12,7 @@
 /**
  *
  * @param string $msg
- * @return void
+ * @return never
  */
 function trigger_feedme_error(string $msg): void
 {
@@ -61,7 +61,7 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
     if (isset($rdata['log_type'])) :
         $log_type = $rdata['log_type'];
     else :
-        if(!empty($rdata['event_type'])) :
+        if (!empty($rdata['event_type'])) :
             $log_type = LogType::EVENT;
         endif;
     endif;
@@ -82,7 +82,7 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
 
     if ($log_level <= LogLevel::CRITICAL) :
         $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, $event_type);
-    elseif ($log_level == LogLevel::ERROR || $log_level == LogLevel::WARNING ) :
+    elseif ($log_level == LogLevel::ERROR || $log_level == LogLevel::WARNING) :
         $hosts->setWarnOn($host_id, $log_msg, LogType::EVENT_WARN, $event_type);
     else :
         Log::logHost($log_level, $host_id, $log_msg, $log_type);

@@ -84,7 +84,7 @@ class Log
                 '][' . self::$cfg['app_name'] . '][' . $log_level . '] ' . $msg . "\n";
             }
             if (self::$cfg['system_log_to_db']) {
-                if (is_numeric($log_level) && $log_level < 7 || self::$cfg['system_log_to_db_debug']) :
+                if ($log_level < 7 || self::$cfg['system_log_to_db_debug']) :
                     if (mb_strlen($msg) > self::$max_db_msg) {
                         self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
                         $msg_db = substr($msg, 0, 254);
@@ -101,25 +101,27 @@ class Log
                     . format_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
                     . '][' . self::$cfg['app_name'] . ']:[' . $log_level . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
+                    $effectiveUser = posix_getpwuid(getmyuid());
+                    $userName = $effectiveUser !== false ? $effectiveUser['name'] : 'Unknown';
                     if (!touch($log_file)) {
-                        self::err(self::$lng['L_ERR_FILE_CREATE']
-                            . ' effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
+                        self::error(self::$lng['L_ERR_FILE_CREATE']
+                            . ' effective User: ' . $userName, 1);
                         self::debug(getcwd(), 1);
                     } else {
                         if (!chown($log_file, self::$cfg['log_file_owner'])) {
-                            self::err(self::$lng['L_ERR_FILE_CHOWN'], 1);
+                            self::error(self::$lng['L_ERR_FILE_CHOWN'], 1);
                         }
                         if (!chgrp($log_file, self::$cfg['log_file_owner_group'])) {
-                            self::err('L_ERR_FILE_CHGRP', 1);
+                            self::error('L_ERR_FILE_CHGRP', 1);
                         }
                         if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
                             self::err('Error opening/writing log to file '
-                                . 'effective User: ' . posix_getpwuid(getmyuid())['name'], 1);
+                                . 'effective User: ' . $userName, 1);
                         }
                     }
                 }
                 if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
-                    self::err('Error opening/writing log to file', 1);
+                    self::error('Error opening/writing log to file', 1);
                 }
             }
             if (self::$cfg['system_log_to_syslog'] === 1) {
@@ -154,8 +156,7 @@ class Log
         string $msg,
         int $log_type = 0,
         int $event_type = 0
-    ): void
-    {
+    ): void {
         if (mb_strlen($msg) > self::$max_db_msg) {
             self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
             $msg_db = substr($msg, 0, 254);
@@ -211,10 +212,7 @@ class Log
             }
         }
 
-        if (!empty($conditions)) :
-            $query .= ' WHERE ' . implode(' AND ', $conditions);
-        endif;
-
+        $query .= ' WHERE ' . implode(' AND ', $conditions);
         $query .= ' ORDER BY date DESC';
 
         if (!empty($opts['limit'])) :
