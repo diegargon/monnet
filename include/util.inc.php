@@ -406,14 +406,18 @@ function secondsToDHMS(int $seconds): array
     ];
 }
 
-
+/**
+ * Used in ansible report template to extract data msg recursiively
+ *
+ * @param array<string,string> $data
+ * @return array<string, string>
+ */
 function extractMessages(array $data): array
 {
     $messages = [];
 
     foreach ($data as $key => $value) {
         if ($key === 'msg') {
-            // If the value is an array, recursively process each sub-array and implode it.
             if (is_array($value)) {
                 $flattened = [];
                 array_walk_recursive($value, function ($item) use (&$flattened) {
@@ -424,7 +428,6 @@ function extractMessages(array $data): array
                 $messages[] = "\n\t" . $value;
             }
         } elseif (is_array($value)) {
-            // Recursively extract messages from nested arrays.
             $messages = array_merge($messages, extractMessages($value));
         }
     }

@@ -11,7 +11,7 @@
 
 $cfg['monnet_version'] = 0.51;
 
-$cfg['monnet_revision'] = 71;
+$cfg['monnet_revision'] = 72;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_min_version'] = 0.125;
 $cfg['agent_latest_version'] = 0.130;
@@ -435,7 +435,7 @@ $cfg['playbooks'] = [
     [
         'id' => 29,
         'name' => 'python-mysql-install',
-        'desc' => 'Install MySQL library on Debian/Redhat os',
+        'desc' => 'Install Python MySQL library on Debian/Redhat os',
         'cat' => ['posix'],
     ],
 ];

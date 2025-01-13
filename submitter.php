@@ -923,7 +923,17 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
 if ($command === 'changeHDTab' && $value_command == 'tab15') {
     $data['command_success'] = 1;
 }
-
+/* Ansible Raw */
+if ($command === 'changeHDTab' && $value_command == 'tab20') {
+    $opts = [ 'rtype' => 1 ];
+    $tdata['reports'] = $hosts->getReports($target_id, $opts);
+    if (!empty($tdata['reports'])) {
+        $data['response_msg'] = $frontend->getTpl('ansible-head-reports', $tdata);
+    } else {
+        $data['response_msg'] = 'Nothing to show';
+    }
+    $data['command_success'] = 1;
+}
 /* Alarms */
 if ($command === 'clearHostAlarms' && $target_id > 0) {
     if ($hosts->clearHostAlarms($user->getUsername(), $target_id)) {
@@ -1254,6 +1264,21 @@ if ($command == 'setHostDisable' && is_numeric($value_command) && is_numeric($ta
     $hosts->update($target_id, ['disable' => $value_command]);
     $data['command_success'] = 1;
     $data['response_msg'] = $value_command;
+endif;
+
+if ($command == 'submitViewReport' && is_numeric($target_id)) :
+    $data['command_success'] = 1;
+    $report = $hosts->getReportById($target_id);
+    $tdata = json_decode($report['report'], true);
+    $data['response_msg'] = $frontend->getTpl('ansible-report', $tdata);
+endif;
+
+if ($command == 'submitDeleteReport' && is_numeric($target_id)) :
+    if ($db->delete('reports', ['id' => $target_id])) :
+        $data['command_success'] = 1;
+        $data['response_msg'] = "Deleted";
+        $data['response_id'] = $target_id;
+    endif;
 endif;
 
 print json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

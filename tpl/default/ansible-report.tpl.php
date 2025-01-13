@@ -53,24 +53,12 @@ foreach ($tdata['plays'] as $play) {
     foreach ($play['tasks'] as $task) {
         foreach ($task['hosts'] as $ip => $hostData) {
             $msg = '';
-            if (!empty($hostData['msg'])) {
-                if (is_array($hostData['msg'])) {
-                    $msg .= "\n\t" . $hostData['msg'];
-                } else {
-                    $msg .= $hostData['msg'];
-                }
-                if (!empty($hostData['results']) && is_array($hostData['results'])) {
-                    foreach ($hostData['results'] as $result) {
-                        if (!empty($result['msg'])) {
-                            if (!is_array($result['msg'])) {
-                                $msg .= "\n\t" . $result['msg'];
-                            } else {
-                                $msg .= implode("\n", $result['msg']);
-                            }
-                        }
-                    }
-                }
+            $extractedMessages = extractMessages($hostData);
+            if (!empty($extractedMessages)) {
+                $msg .= implode("", $extractedMessages);
+            }
 
+            if (!empty($msg)) {
                 $messages[] = [
                     'ip' => $ip,
                     'msg' => $msg,
@@ -87,18 +75,18 @@ foreach ($tdata['plays'] as $play) {
     <h2><?= $lng['L_SUMMARY']?>:</h2>
         <?php
         foreach ($messages as $msg) {
+            // Seems catch blank characters
+            $msg['msg'] = trim($msg['msg']);
+            if(!empty($msg['msg'])) {
             ?>
     <div><?= $msg['ip'] ?></div>
     <pre>
             <?php
-            if (is_array($msg['msg'])) :
-                echo implode('<br>', $msg['msg']);
-            else :
                 echo $msg['msg'];
-            endif
             ?>
     </pre>
             <?php
+            }
         }
     endif;
     ?>

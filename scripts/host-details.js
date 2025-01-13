@@ -379,7 +379,7 @@ function changeHDTab(id, tabId) {
     // Resaltar el botón de la pestaña seleccionada
     const selectedTab = document.querySelector(`button[onclick="changeHDTab(${id}, '${tabId}')"]`);
     selectedTab.classList.add('active');
-    if (['tab9', 'tab10','tab15'].includes(tabId)) {
+    if (['tab9', 'tab10','tab15', 'tab20'].includes(tabId)) {
         requestHostDetails('changeHDTab', {id: id, value: tabId});
     }
     if (['tab20'].includes(tabId)) {
@@ -479,7 +479,37 @@ function requestHostDetails(command, command_values = []) {
                         $('#ping_graph_container').html('Error');
                     }
                 }
+                if (jsonData.command_receive === 'changeHDTab'  && jsonData.command_value === 'tab20') {
+                    if (jsonData.command_success === 1) {
+                        $('#reports-table').html(jsonData.response_msg);
+                    } else {
+                        $('#reports-table').html(jsonData.command_error_msg);
+                    }
+                }
 
+                if (jsonData.command_receive === 'submitDeleteReport') {
+                    if (jsonData.command_success === 1 && jsonData.response_id) {
+                        $('#report_status_msg').html(jsonData.response_msg);
+                        let rowId = `#report_row_${jsonData.response_id}`;
+                        $(rowId).remove();
+                    } else {
+                        $('#report_status_msg').html(jsonData.command_error_msg);
+                    }
+                }
+
+                if (jsonData.command_receive === 'submitViewReport') {
+                    if (jsonData.command_success === 1) {
+                        $('#playbook_content').css({
+                            "width": "50vw",
+                            "max-height": "50vh",
+                            "overflow-x": "auto",
+                            "overflow-y": "auto",
+                            "resize": "both"
+                        });
+                        $('#playbook_content').html(jsonData.response_msg);
+
+                    }
+                }
                 /* Playbacks exec */
                 if (jsonData.command_receive === 'playbook_exec') {
                     if (jsonData.command_success === 1) {
@@ -493,7 +523,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#playbook_content').css({
                             "max-width": "80vw",
                             "max-height": "50vh",
-                            "overflow": "auto",
+                            "overflow-y": "auto",
                             "resize": "both"
                         });
                     } else {

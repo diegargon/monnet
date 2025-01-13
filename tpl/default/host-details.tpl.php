@@ -925,6 +925,7 @@
                 <div class="right-details-column">
                     <div></div>
                 </div>
+                <div id="reports-table" class="reports-table"></div>
                 <div class="bottom-details-row">
                     <div id="playbook_content" style="border:0px solid blue"><p></p></div>
                 </div>

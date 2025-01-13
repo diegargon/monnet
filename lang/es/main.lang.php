@@ -195,6 +195,7 @@ $lng = [
     'L_ROL' => 'Rol',
     'L_REMOTE_PORT_CHECK' => 'Comprobacion remota de puertos',
     'L_RESERVE' => 'Reservar',
+    'L_REPORTS' => 'Reports',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',
@@ -241,6 +242,7 @@ $lng = [
     'L_VISIBILITY' => 'Visibilidad',
     'L_VIRTUAL_MACHINE' => 'Maquina virtual',
     'L_VERSION' => 'Version',
+    'L_VIEW' => 'Ver',
     //W
     'L_WINDSPEED' => 'Viento',
     'L_WEIGHT' => 'Peso',

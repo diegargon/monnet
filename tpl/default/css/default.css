@@ -1650,6 +1650,14 @@ input:checked + .slider:before {
     padding: 3px;
     cursor: pointer;
 }
+
+#reports-container {
+    width: 50vw;
+    height: 30vh;
+    overflow-y: auto;
+    resize: vertical;
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;
