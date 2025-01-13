@@ -11,7 +11,7 @@
 
 $cfg['monnet_version'] = 0.51;
 
-$cfg['monnet_revision'] = 69;
+$cfg['monnet_revision'] = 70;
 $cfg['monnet_homepage'] = "https://github.com/diegargon/monnet";
 $cfg['agent_min_version'] = 0.125;
 $cfg['agent_latest_version'] = 0.130;
