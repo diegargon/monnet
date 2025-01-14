@@ -934,6 +934,9 @@ class Hosts
             $query .= ' AND rtype = ' . $opts['rtype'];
         }
 
+        if (!empty($opts['order']) && ($opts['order'] == 'ASC' || $opts['order'] == 'DESC')) {
+            $query .= ' ORDER BY date '. $opts['order'];
+        }
         $results = $this->db->query($query);
         if (!$results) {
             return [];

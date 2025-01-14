@@ -925,7 +925,7 @@ if ($command === 'changeHDTab' && $value_command == 'tab15') {
 }
 /* Ansible Raw */
 if ($command === 'changeHDTab' && $value_command == 'tab20') {
-    $opts = [ 'rtype' => 1 ];
+    $opts = [ 'rtype' => 1, 'order' => 'DESC' ];
     $tdata['reports'] = $hosts->getReports($target_id, $opts);
     if (!empty($tdata['reports'])) {
         $data['response_msg'] = $frontend->getTpl('ansible-head-reports', $tdata);
