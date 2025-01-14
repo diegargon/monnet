@@ -76,7 +76,7 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
 
     $log_msg = "Notification: {$rdata['name']}";
     isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
-    if (!isset($rdata['event_value'])) :
+    if (!empty($rdata['event_value'])) :
         $log_msg .= ' Event value: ' . $rdata['event_value'];
     endif;
 

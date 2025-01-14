@@ -1132,7 +1132,7 @@ class Hosts
                     if (!empty($this->hosts[$id]['disable_pings'])) :
                         $this->update($id, ['online' => 0]);
                     elseif (
-                        ((int) $this->hosts[$id]['agent_next_report'] + $this->cfg['agent_default_interval'])  < time()
+                        ((int) $this->hosts[$id]['agent_next_report'] + $this->ncfg->get('agent_default_interval'))  < time()
                     ):
                         //Two pings missed
                         $this->update($id, ['online' => 0]);
