@@ -749,7 +749,7 @@ class Hosts
                 ];
                 $alert_logs = Log::getLogsHosts($opt);
 
-                if (is_array($alert_logs && !empty($alert_logs))) :
+                if (is_array($alert_logs) && !empty($alert_logs)) :
                     foreach ($alert_logs as $item) :
                         if (!in_array($item['msg'], $alert_logs_msgs)) :
                             $alert_logs_msgs[] = $item['msg'];
