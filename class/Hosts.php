@@ -749,7 +749,7 @@ class Hosts
                 ];
                 $alert_logs = Log::getLogsHosts($opt);
 
-                if (!empty($alert_logs)) :
+                if (is_array($alert_logs && !empty($alert_logs))) :
                     foreach ($alert_logs as $item) :
                         if (!in_array($item['msg'], $alert_logs_msgs)) :
                             $alert_logs_msgs[] = $item['msg'];
@@ -955,9 +955,16 @@ class Hosts
             $row['user_date'] = utc_to_tz($row['date'], $timezone, $this->ncfg->get('datetime_format'));
             unset($row['date']);
         }
-        return $rows ?? [];
+        return $rows;
     }
-    function getReportById(int $id) {
+
+    /**
+     *
+     * @param int $id
+     * @return array<int,string|int>
+     */
+    public function getReportById(int $id)
+    {
         $query = 'SELECT * FROM reports WHERE id=' . $id;
         $results = $this->db->query($query);
         if (!$results) {

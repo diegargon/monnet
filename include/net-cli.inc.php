@@ -367,7 +367,7 @@ function check_host_ports(AppContext $ctx, array $host): array
             fclose($conn);
         elseif (empty($host['alarm_port_disable'])) :
             $log_msg = "Port {$port['pnumber']} down: $error_msg ($error_code)";
-            Log::logHost(LogLevel::WARNING, $host['id'], $log_msg, LogType::EVENT_WARN, EventType::PORT_DOWN );
+            Log::logHost(LogLevel::WARNING, $host['id'], $log_msg, LogType::EVENT_WARN, EventType::PORT_DOWN);
             $host_result['warn'] = 1;
         endif;
 

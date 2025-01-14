@@ -866,7 +866,7 @@
                                 <select id="task_trigger" name="task_trigger" required>
                                     <option value="" disabled selected>Select Trigger</option>
                                     <?php
-                                    foreach($cfg['task_trigger'] as $task) :
+                                    foreach ($cfg['task_trigger'] as $task) :
                                         print("<option value={$task['id']}>{$lng[$task['name']]}</option>");
                                     endforeach;
                                     ?>
@@ -877,7 +877,7 @@
                                 <select id="playbooks" name="playbooks">
                                     <option value="" disable selected>No select</option>
                                     <?php
-                                    foreach($cfg['playbooks'] as $playbook) :
+                                    foreach ($cfg['playbooks'] as $playbook) :
                                         print("<option value={$playbook['name']}>{$playbook['name']}</option>");
                                     endforeach;
                                     ?>

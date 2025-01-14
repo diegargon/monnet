@@ -74,20 +74,20 @@ foreach ($tdata['plays'] as $play) {
         ?>
     <h2><?= $lng['L_SUMMARY']?>:</h2>
         <?php
-        foreach ($messages as $msg) {
+        foreach ($messages as $msg) :
             // Seems catch blank characters
             $msg['msg'] = trim($msg['msg']);
-            if(!empty($msg['msg'])) {
-            ?>
-    <div><?= $msg['ip'] ?></div>
-    <pre>
-            <?php
-                echo $msg['msg'];
-            ?>
-    </pre>
-            <?php
-            }
-        }
+            if (!empty($msg['msg'])) :
+                ?>
+                <div><?= $msg['ip'] ?></div>
+                <pre>
+                    <?php
+                        echo $msg['msg'];
+                    ?>
+                </pre>
+                <?php
+            endif;
+        endforeach;
     endif;
     ?>
 <!-- DETAIL VIEW -->

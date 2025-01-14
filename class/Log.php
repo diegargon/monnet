@@ -101,7 +101,10 @@ class Log
                     . format_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
                     . '][' . self::$cfg['app_name'] . ']:[' . $log_level . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
-                    $effectiveUser = posix_getpwuid(getmyuid());
+                    $effectiveUser = false;
+                    if (is_numeric($sysuid = getmyuid())) {
+                        $effectiveUser = posix_getpwuid($sysuid);
+                    }
                     $userName = $effectiveUser !== false ? $effectiveUser['name'] : 'Unknown';
                     if (!touch($log_file)) {
                         self::error(self::$lng['L_ERR_FILE_CREATE']

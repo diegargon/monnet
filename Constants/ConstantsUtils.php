@@ -11,7 +11,7 @@ trait ConstantUtils
 {
     /**
      *
-     * @return array<int,string>
+     * @return array<string, int>
      */
     public static function getConstants(): array
     {

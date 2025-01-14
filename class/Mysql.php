@@ -645,7 +645,7 @@ class Database
      * Insert
      *
      * @param string $table
-     * @param array<string, int|string> $insert_data
+     * @param array<string, mixed> $insert_data
      * @param string $extra
      * @return mysqli_result|bool
      */

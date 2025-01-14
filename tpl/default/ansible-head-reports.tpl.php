@@ -21,7 +21,7 @@
         <table class="table-report">
         <?php
         foreach ($tdata['reports'] as $report) :
-                ?>
+            ?>
             <tr id="report_row_<?= $report['id']?>">
                 <td>
                     <div class="report-name">
@@ -47,14 +47,14 @@
                         <?= $lng['L_VIEW'] ?>
                     </button>
                     <button id="submitDeleteReport"
-                            onclick="requestHostDetails('submitDeleteReport',{id: <?= $report['id'] ?>, action: 'delete'})"
-                            type="submit">
-                            <?= $lng['L_DELETE'] ?>
+                        onclick="requestHostDetails('submitDeleteReport',{id: <?= $report['id'] ?>, action: 'delete'})"
+                        type="submit">
+                        <?= $lng['L_DELETE'] ?>
                     </button>
                 </td>
             </tr>
-                <?php
-            endforeach;
+            <?php
+        endforeach;
         ?>
         </table>
     </div>

@@ -21,11 +21,34 @@ The English language (EN/US) is AI generated.
 
 I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts.
 
+# Features
+
+    - Track Host In your network and have and inventory
+    - Alarms/Events (Agent)
+    - A simple bookmarks dashboard
+    - Basic IPAM
+    - Basic Hosts Stats (Agent)
+    - Linux Support (Ansible/Agent)
+    - Host Notes
+    - Get Host Logs (Ansible)
+    - Email Alerts
+
+    Partially working Features
+
+    - Execute Playbooks (Ansible)
+    - Respond to events in hosts with playbooks ((Agent/Ansible)
+
+    Future Features:
+
+    - Windows hosts support
+
+
 ## Versions Convention
 
 v0.0.0 Mayor.Minor.Revision
 
-Mayor/Minor implies database changes or other code mayor changes
+Mayor/Minor implies database changes or other code mayor changes.
+
 Revision version implied only code changes, never database changes.
 
 ## LICENSE
@@ -52,6 +75,9 @@ LAMP
 
     That mean in Debian:
     apt install apache2 php-fpm php-mysqli php-curl php-mbstring
+
+Python
+    Tested with >3
 
 Mysql/MariaDB:
     You can install or use a remote machine with mysql
@@ -80,11 +106,18 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 /var/www/html# chmod 755 cache logs
 ```
 
+Ansible support with the agent
+
+```
+git clone https://github.com/diegargon/monnet-ansible /opt/monnet-ansible
+```
+
 ## Config
 
-Check config/config.defaults.php and add the keywords you want to change to /etc/monnet/config.inc.php.
+Check config/config.defaults.php and add  the keywords you want to change
+to /etc/monnet/config.inc.php.
 
-If you copy the file, it’s better to remove all unchanged config entries.
+it’s better not copy the files just add the keywords you want change
 
 Do not rename or modify config.defaults.php directly, as it will be overwritten.
 
@@ -133,9 +166,11 @@ $ nano /etc/crontab
 */15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
 
+In the future we will migrating that cli tools to python.
+
 ## Composer
 
-Necessary if you want support for send mail
+Necessary if you want support for send mails
 
 ```
 apt install composer
@@ -145,12 +180,13 @@ apt install composer
 
 ## Monne Agent
 
-Testing a basic linux agent (python based) for reports. Shipping with monnet-ansbile
-repo/sources and his own playbook to install.
+I am testing a basic linux agent (python based) for reports.
+The agent is the  monnet-ansbile repo/sources and has his own
+playbook to automatically install if you want.
 
 You can install it manually check the install-agent-linux playbook for steps
 
-Python Extras: Automatic process will install: psutils
+Python: Automatic process will install on the hosts: psutils
 
 ## Ansible Support
 
@@ -173,7 +209,7 @@ git clone https://github.com/diegargon/monnet-ansible.git
 ## Ansible server
 
 Ansible server listen in localhost only, it is a testing feature without security.
-You must install ansible in the same Monnet system.
+You must install ansible in the same system.
 
 Ansible must output in json format.
 
@@ -225,8 +261,10 @@ For Ansible server to connect to the hosts, you need to generate an SSH key and 
 
 ```
 $ ssh-keygen -m PEM -t rsa -b 4096
-$ ssh-copy-id -i ~/.ssh/id_rsa.pub root@ip.ip.ip.ip
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub ansible@ip.ip.ip.ip
 ```
+The user must exists and must be allowed log with standard credentials to install de key (you can disable it after)
+
 
 Or do it manually
 
