@@ -1128,8 +1128,13 @@ class Hosts
                 ) :
                     $this->agents_missing_pings++;
                     $this->hosts[$id]['agent_missing_pings'] = 1;
-                    //With pings disabled, agent pings missing change state to off
+                    //With pings disabled, if agent  missing a ping change state to off
                     if (!empty($this->hosts[$id]['disable_pings'])) :
+                        $this->update($id, ['online' => 0]);
+                    elseif (
+                        ((int) $this->hosts[$id]['agent_next_report'] + $this->cfg['agent_default_interval'])  < time()
+                    ):
+                        //Two pings missed
                         $this->update($id, ['online' => 0]);
                     endif;
                 endif;
