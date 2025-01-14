@@ -148,11 +148,13 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
     foreach ($actual_host_ports as $port) {
         // Normalizar interface para IPv6
         $interface = $port['interface'];
+        $pnumber = (int) $port['port'];
+        $protocol = (int) $port['protocol'];
         if ($port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
             $interface = "[{$interface}]";
         }
 
-        $key = "{$port['protocol']}:{$port['pnumber']}:{$interface}:{$port['ip_version']}";
+        $key = "{$protocol}:$pnumber:{$interface}:{$port['ip_version']}";
         $actual_ports_map[$key] = $port;
     }
 
@@ -168,7 +170,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
         $ip_version = $port['ip_version'] ?? '';
         $port['service'] = trim($port['service']);
 
-        $key = "{$protocol}:{$pnumber}:{$interface}:{$ip_version}";
+        $key = "{$protocol}:{$pnumber}:{$interface}:{$port['ip_version']}";
 
         if (isset($actual_ports_map[$key])) {
             $db_port = $actual_ports_map[$key];
