@@ -76,7 +76,7 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
 
     $log_msg = "Notification: {$rdata['name']}";
     isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
-    if (!empty($rdata['event_value'])) :
+    if (!isset($rdata['event_value'])) :
         $log_msg .= ' Event value: ' . $rdata['event_value'];
     endif;
 
@@ -85,7 +85,7 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
     elseif ($log_level == LogLevel::ERROR || $log_level == LogLevel::WARNING) :
         $hosts->setWarnOn($host_id, $log_msg, LogType::EVENT_WARN, $event_type);
     else :
-        Log::logHost($log_level, $host_id, $log_msg, $log_type);
+        Log::logHost($log_level, $host_id, $log_msg, $log_type, $event_type);
     endif;
 
     return $host_update_values;
@@ -171,30 +171,35 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
         $key = "{$protocol}:{$pnumber}:{$interface}:{$ip_version}";
 
         if (isset($actual_ports_map[$key])) {
-            // Port exists check changes and update
             $db_port = $actual_ports_map[$key];
-            if ($db_port['online'] == 0 || $db_port['service'] !== $port['service']) {
-                $set = [
-                    "online" => $online,
+
+            // Si el servicio cambia, actualiza en lugar de insertar un nuevo registro
+            if ($db_port['service'] !== $port['service']) {
+                $warnmsg = 'Service name change detected: '
+                    . "({$db_port['service']}->{$port['service']}) ({$pnumber})";
+                $hosts->setWarnOn($host_id, $warnmsg, LogType::EVENT_WARN, EventType::SERVICE_NAME_CHANGE);
+
+                // Actualizamos
+                $hosts->updatePort($db_port['id'], [
                     "service" => $port['service'],
-                    "last_change" => date_now()
-                ];
-                //Port was down
-                if ($db_port['online'] == 0) :
-                    $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber)";
-                    $hosts->setWarnOn($host_id, $alertmsg, LogType::EVENT_WARN, EventType::PORT_UP);
-                endif;
-                if ($db_port['service'] !== $port['service']) :
-                    $warnmsg = 'Service name change detected: '
-                        . "({$db_port['service']}->{$port['service']}) ($pnumber)";
-                    $hosts->setWarnOn($host_id, $warnmsg, LogType::EVENT_WARN, EventType::SERVICE_NAME_CHANGE);
-                endif;
-                $hosts->updatePort($db_port['id'], $set);
+                    "online" => $online,
+                    "last_change" => date_now(),
+                ]);
+            } elseif ($db_port['online'] == 0) {
+                // Si el puerto estaba offline, actualizar a online
+                $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber)";
+                $hosts->setWarnOn($host_id, $alertmsg, LogType::EVENT_WARN, EventType::PORT_UP);
+
+                $hosts->updatePort($db_port['id'], [
+                    "online" => $online,
+                    "last_change" => date_now(),
+                ]);
             }
-            unset($actual_ports_map[$key]); // Marcar como procesado
+
+            unset($actual_ports_map[$key]); // Quitar procesado
         } else {
-            // Port not exist. Create.
-            $insert_values = [
+            // Crear nuevo puerto si no existe
+            $hosts->addPort([
                 'hid' => $host_id,
                 'scan_type' => $scan_type,
                 'protocol' => $protocol,
@@ -204,10 +209,10 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 'interface' => $interface,
                 'ip_version' => $ip_version,
                 'last_change' => date_now(),
-            ];
+            ]);
+
             $log_msg = "New port detected: $pnumber ({$port['service']})";
             $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_NEW);
-            $hosts->addPort($insert_values);
         }
     }
 
