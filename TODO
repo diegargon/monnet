@@ -31,6 +31,9 @@
     - Si es WiFi poder elegir algo como conectado a dispositivo wifi 'fijo' o 'movable'
 * Auto Rrefresh en host details obtiene los mismos datos que host-details cosa que no es necesaria. separar
 * Comprobar via ansible o agente si los equipos necesitan actualizarse.
+* Playbook dmesg output actual y anterior para una posible petada. journalctl -k -b -1
+    o /etc/systemd/journald.conf Storage=persistent
+* Port test with http request
 
 ** LOW
 * refresher: Si determinados elemento UI no esta visible saltarse la parte que procesa lo no visible

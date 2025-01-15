@@ -347,17 +347,36 @@ function check_host_ports(AppContext $ctx, array $host): array
     endif;
 
     foreach ($ports as $port) :
+        $conn = null;
         $error_code = $error_msg = '';
         $port_status = [];
         $port_status['last_change'] = date_now();
 
         $tim_start = microtime(true);
         $ip = trim($host['ip']);
-        $port['protocol'] == 2 ? $ip = 'udp://' . $ip : null;
+        if ($port['protocol'] == 2) {
+            $ip = 'udp://' . $ip;
+        } else if ($port['protocol'] == 3) {
+            $ip = 'https://' . $ip;
+        }
 
-        $conn = @fsockopen($ip, $port['pnumber'], $error_code, $error_msg, $timeout);
+        if ($port['protocol'] == 3) {
+            $response = https_get_https($ip, $timeout);
+             if (
+                 $response !== false &&
+                 $response['http_code'] >= 200 &&
+                 $response['http_code'] < 400
+             ) {
+                 $conn = true;
+             } else {
+                 $error_code = $response['errno'];
+                 $error_msg = $response['error'];
+             }
+        } else if ($port['protocol'] == 1 || $port['protocol'] == 2) {
+            $conn = @fsockopen($ip, $port['pnumber'], $error_code, $error_msg, $timeout);
+        }
 
-        if (is_resource($conn)) :
+        if (is_resource($conn) || $conn === true) :
             $host_result['online'] = 1; // Host is online
             $port_status['online'] = 1;
             $latency[] = round_latency(microtime(true) - $tim_start);

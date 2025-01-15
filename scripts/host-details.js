@@ -68,7 +68,11 @@ $(document).ready(function () {
         requestHostDetails('logs-reload', {id: hostId, log_level: logLevel, log_size: logSize});
     });
 
-    $(document).off("click", "#playbook_btn").on("click", "#playbook_btn", function () {
+    $(document).off("click", "#pbqueue_btn").on("click", "#pbexec_btn", function () {
+
+    });
+
+    $(document).off("click", "#pbexec_btn").on("click", "#pbexec_btn", function () {
         var hostId = $('#host_id').val();
         var as_html = $('#as_html').prop('checked');
 

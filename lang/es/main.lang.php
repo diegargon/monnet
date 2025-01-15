@@ -90,6 +90,7 @@ $lng = [
     'L_EVENTS' => 'Eventos',
     'L_EVENT' => 'Evento',
     'L_EVENT_RESPONSE' => 'Respuesta Evento',
+    'L_ENQUEUE' => 'Encolar',
     //F
     'L_FIELD' => 'Campo',
     'L_FREE' => 'Libre',
@@ -187,6 +188,7 @@ $lng = [
     'L_POOL' => 'Pool',
     //Q
     'L_QUICK_CONFIG' => 'Quick Config',
+    'L_QUEUE' => 'Cola',
     //R
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',
@@ -212,6 +214,7 @@ $lng = [
     'L_STATS' => 'Estadisticas',
     'L_SUMMARY' => 'Resumen',
     'L_SCHEDULER' => 'Tiempo',
+    'L_SEL_PLAYBOOK' => 'Selecciona Playbook',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',

@@ -564,10 +564,8 @@ if (
         $tdata['host_details'] = $host_details;
 
         /* Add ports */
-        if ($host_details['check_method'] == 2) :
-            $remote_ports = $hosts->getHostScanPorts($target_id, $remote_scan = 1);
-            !empty($remote_ports) ? $tdata['host_details']['remote_ports'] = $remote_ports : null;
-        endif;
+        $remote_ports = $hosts->getHostScanPorts($target_id, $remote_scan = 1);
+        !empty($remote_ports) ? $tdata['host_details']['remote_ports'] = $remote_ports : null;
 
         if (!empty($host_details['agent_installed'])) :
             $agent_ports = $hosts->getHostScanPorts($target_id, $remote_scan = 2);

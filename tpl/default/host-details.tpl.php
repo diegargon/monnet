@@ -728,8 +728,9 @@
                                <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
                         <input type="number" id="port_number" name="port_number" size="5", min="0" max="65535">
                         <select id="port_protocol">
-                            <option value="1">TCP</option>
-                            <option value="2">UDP</option>
+                            <option value="1">TCP Socket</option>
+                            <option value="2">UDP Socket</option>
+                            <option value="3">HTTPS Request</option>
                         </select>
                         <button id="submitHostPort"><?= $lng['L_SEND'] ?></button>
                         <?php
@@ -758,7 +759,7 @@
                             type="number" id="host_timeout" name="host_timeout"
                                value="<?=
                                 !empty($tdata['host_details']['timeout']) ?
-                                $tdata['host_details']['timeout'] : null
+                                $tdata['host_details']['timeout'] : $ncfg->get('port_timeout_local');
                                 ?>"
                         />
                         <button id="submitHostTimeout"><?= $lng['L_SEND'] ?></button>
@@ -910,9 +911,10 @@
                  data-playbooks='<?= json_encode($cfg['playbooks']); ?>'>
                 <div class="left-details-column">
                     <div>
-                        <button id="playbook_btn">Exec</button>
+                        <button id="playbook_btn"><?= $lng['L_ENQUEUE'] ?></button>
+                        <button id="pbexec_btn">Exec</button>
                         <select id="playbook_select">
-                            <option value="">Select Playbook</option>
+                            <option value=""><?= $lng['L_SEL_PLAYBOOK']?></option>
                         </select>
                         <label for="as_html">HTML</label>
                         <input id="as_html" type="checkbox" checked>
