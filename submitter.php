@@ -616,7 +616,7 @@ if (
         endif;
 
         if (isset($host_details['iowait']) && is_numeric($host_details['iowait'])) :
-            $tdata['host_details']['iowait_graph'] = $frontend->getTpl(
+            $tdata['host_details']['iowait_stats'] = $frontend->getTpl(
                 'gauge',
                 [
                     'gauge_graphs' => [
@@ -909,9 +909,42 @@ if (
 
 /* Metrics */
 if ($command === 'changeHDTab' && $value_command == 'tab10') {
-    $ping_stats = get_host_metrics($ctx, (int) $target_id);
-    if (!empty($ping_stats)) {
-        $data['response_msg'] = $frontend->getTpl('chart-time-js', $ping_stats);
+    $data['response_msg'] = '';
+
+    $tdata = [];
+    $graph_type = 1;
+    $stats = '';
+    $stats = host_metrics($ctx, $target_id, $graph_type);
+    if (!empty($stats)) {
+        $tdata['graph_name'] = $lng['L_LATENCY'];
+        $tdata['type'] = $graph_type;
+        $tdata['host_id'] = $target_id;
+        $tdata['data'] = $stats;
+        $data['response_msg'] .= $frontend->getTpl('chart-time-js', $tdata);
+    }
+
+    $tdata = [];
+    $graph_type = 2;
+    $stats = '';
+    $stats = host_metrics($ctx, $target_id, $graph_type);
+    if (!empty($stats)) {
+        $tdata['graph_name'] = "LoadAVG";
+        $tdata['type'] = $graph_type;
+        $tdata['host_id'] = $target_id;
+        $tdata['data'] = $stats;
+        $data['response_msg'] .= $frontend->getTpl('chart-time-js', $tdata);
+    }
+
+    $tdata = [];
+    $stats = '';
+    $graph_type = 3;
+    $stats = host_metrics($ctx, $target_id, $graph_type);
+    if (!empty($stats)) {
+        $tdata['type'] = $graph_type;
+        $tdata['graph_name'] = "Iowait";
+        $tdata['host_id'] = $target_id;
+        $tdata['data'] = $stats;
+        $data['response_msg'] .= $frontend->getTpl('chart-time-js', $tdata);
     }
 
     $data['command_success'] = 1;

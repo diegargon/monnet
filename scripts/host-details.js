@@ -437,8 +437,8 @@ function requestHostDetails(command, command_values = []) {
                     if (host_details['disk_info'] || host_details['mem_info']) {
                         $('#bars_container').html('');
                     }
-                    if (host_details['iowait_graph']) {
-                        $('#iowait_container').html(host_details['iowait_graph']);
+                    if (host_details['iowait_stats']) {
+                        $('#iowait_container').html(host_details['iowait_stats']);
                     }
                     if (host_details['load_avg']) {
                         $('#load_container').html(host_details['load_avg']);
@@ -478,9 +478,9 @@ function requestHostDetails(command, command_values = []) {
                 /* Change Host Details Tab */
                 if (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'tab10') {
                     if (jsonData.command_success === 1) {
-                        $('#ping_graph_container').html(jsonData.response_msg);
+                        $('#graphs_container').html(jsonData.response_msg);
                     } else {
-                        $('#ping_graph_container').html('Error');
+                        $('#graphs_container').html('Error');
                     }
                 }
                 if (jsonData.command_receive === 'changeHDTab'  && jsonData.command_value === 'tab20') {

@@ -331,11 +331,11 @@
                         <?php
                     endif;
 
-                    if (!empty($tdata['host_details']['iowait_graph'])) :
+                    if (!empty($tdata['host_details']['iowait_stats'])) :
                         ?>
                     <div id="iowait_container" class="iowait_container">
                         <?php
-                            print $tdata['host_details']['iowait_graph'];
+                            print $tdata['host_details']['iowait_stats'];
                         ?>
                         </div>
                         <?php
@@ -407,8 +407,8 @@
         <!-- /TAB9 -->
         <!-- TAB10 --><!-- Graphs / PING -->
         <div id="tab10" class="host-details-tab-content">
-            <div id="ping_graph_container" class="ping_graph_container">
-                <?= $tdata['host_details']['ping_graph'] ?? '' ?>
+            <div id="graphs_container" class="graphs_container">
+                <?= !empty($tdata['host_details']['ping_graph']) ? $tdata['host_details']['ping_graph'] : null ?>
             </div>
         </div>
         <!-- /TAB10 -->

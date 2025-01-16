@@ -103,12 +103,12 @@ function notification_data_process(AppContext $ctx, int $host_id, array $rdata):
     $db = $ctx->get('Mysql');
 
     if ($rdata['name'] === 'send_stats') :
-        if (!isEmpty($rdata['loadavg_stats'])) :
+        if (!isEmpty($rdata['load_avg_stats'])) :
             $set_stats = [
                 'date' => date_now(),
                 'type' => 2,   //loadavg
                 'host_id' => $host_id,
-                'value' => $rdata['loadavg_stats']
+                'value' => $rdata['load_avg_stats']
             ];
             $db->insert('stats', $set_stats);
         endif;

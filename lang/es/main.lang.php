@@ -139,6 +139,7 @@ $lng = [
     'L_LINK_HELP' => 'Server image name, favicon path, http link',
     'L_LOG' => 'Log',
     'L_LOGMSG_TOO_LONG' => 'Mensaje log demasiado largo. Cortado!',
+    'L_LATENCY' => 'Latencia',
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',
@@ -251,4 +252,7 @@ $lng = [
     'L_WEIGHT' => 'Peso',
     'L_WEBS' => 'Webs',
     'L_WARNS' => 'Advertencias',
+    //Z
+    'L_ZOOM_IN' => 'Zoom +',
+    'L_ZOOM_OUT' => 'Zoom -',
 ];

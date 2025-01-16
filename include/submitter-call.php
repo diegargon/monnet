@@ -189,21 +189,25 @@ function format_host_logs(AppContext $ctx, array $logs, string $nl = '<br/>'): a
  * TODO: To Hosts?
  * @param AppContext $ctx
  * @param int $host_id
+ * @param int $metric_type 1 ping 2 loadavg 3 iowait
  * @return array<int|string, mixed>
  */
-function get_host_metrics(AppContext $ctx, int $host_id): array
+function host_metrics(AppContext $ctx, int $host_id, int $metric_type): array
 {
     $cfg = $ctx->get('cfg');
     $db = $ctx->get('Mysql');
 
-    $ping_states_query = 'SELECT *
+    $query = 'SELECT date, value
         FROM stats
         WHERE host_id = ' . $host_id . ' AND
-        type = 1
+        type = ' . $metric_type . '
         AND date >= NOW() - INTERVAL 1 DAY
         ORDER BY date DESC;';
 
-    $result = $db->query($ping_states_query);
+    $result = $db->query($query);
+    if (!$result) {
+        return [];
+    }
     $ping_stats = $db->fetchAll($result);
     if (valid_array($ping_stats)) :
         foreach ($ping_stats as &$ping) :

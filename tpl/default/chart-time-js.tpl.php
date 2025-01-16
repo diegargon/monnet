@@ -13,19 +13,22 @@
  * @var array<mixed> $tdata
  */
 !defined('IN_WEB') ? exit : true;
+
+$id = $tdata['type'] . '_' . $tdata['host_id'];
 ?>
 
-<canvas id="graficoLatencia" width="400" height="200"></canvas>
-<button id="zoomInButton">Ampliar</button>
-<button id="zoomOutButton">Reducir</button>
+<canvas id="graph_<?= $id ?>" width="400" height="200"></canvas>
+<button id="zoomInButton_<?= $id ?>"><?= $lng['L_ZOOM_IN'] ?></button>
+<button id="zoomOutButton_<?= $id ?>"><?= $lng['L_ZOOM_IN'] ?></button>
 <script>
     var datatime_graph_format = "<?= $cfg['datatime_graph_format'] ?>";
     var timezone = "<?= $cfg['timezone'] ?>";
     var charset = "<?= $cfg['graph_charset'] ?>";
+    var graph_name = "<?= !empty($tdata['graph_name']) ? $tdata['graph_name'] : 'test';?>";
 
-    var ctx = document.getElementById('graficoLatencia').getContext('2d');
+    var ctx = document.getElementById('graph_<?= $id ?>').getContext('2d');
 
-    var data = <?php echo json_encode($tdata); ?>;
+    var data = <?php echo json_encode($tdata['data']); ?>;
 
     var fechas = data.map(function (item) {
         return new Date(item.date).getTime();
@@ -41,7 +44,7 @@
         data: {
             labels: fechas,
             datasets: [{
-                    label: 'Latencia',
+                    label: graph_name,
                     data: valores,
                     borderWidth: 2
                 }]
@@ -116,7 +119,7 @@
     var zoomLevel = 0;
     var removedData = [];
 
-    document.getElementById('zoomOutButton').addEventListener('click', function () {
+    document.getElementById('zoomOutButton_<?= $id ?>').addEventListener('click', function () {
         if (zoomLevel < 50) {
             zoomLevel++;
 
@@ -130,7 +133,7 @@
         }
     });
 
-    document.getElementById('zoomInButton').addEventListener('click', function () {
+    document.getElementById('zoomInButton_<?= $id ?>').addEventListener('click', function () {
         if (zoomLevel > 0 && removedData.length > 0) {
             zoomLevel--;
 

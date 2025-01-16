@@ -993,9 +993,10 @@ input:checked + .slider:before {
     min-height: 25px;
     border: 1px solid red;
 }
-.ping_graph_container {
+.graphs_container {
     height: 300px;
     padding-bottom: 40px;
+    overflow: auto;
 }
 .profile_box {
     display: block;
