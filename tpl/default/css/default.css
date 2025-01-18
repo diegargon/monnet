@@ -152,13 +152,12 @@ footer {
 }
 
 .weather-container {
-    border: 0px solid grey;
+    border: 1px solid #514d4d;
+    border-radius: 5px;
     padding: 0px 5px 0px 5px;
     margin: auto;
+    background-color: #2d3331;
     width: 120px;
-    /* float: left; */
-    /* margin-top: 15px; */
-    /* margin-bottom: 10px; */
 }
 .options-container {
     display: flex;
