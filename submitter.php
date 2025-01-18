@@ -103,6 +103,8 @@ if ($command === 'saveNote') {
     if (empty($value_command)) {
         $value_command = Filters::varDomain($command_values['value']);
     }
+} elseif ($command === 'submitHostname') {
+    $value_command = Filters::varDomain($command_values['value']);
 } elseif ($command === 'updateAlertEmailList') {
     //TODO filter array of emails
     $value_command = $command_values['value'];
@@ -239,6 +241,16 @@ if ($command == 'submitTitle' && !empty($target_id)) :
         $data['command_success'] = 1;
         $data['force_hosts_refresh'] = 1;
         $data['response_msg'] = 'ok';
+    endif;
+endif;
+
+if ($command == 'submitHostname' && !empty($target_id)) :
+    if (!empty($value_command)) :
+        $hosts->update($target_id, ['hostname' => $value_command]);
+        $data['command_success'] = 1;
+        $data['response_msg'] = 'ok';
+    else :
+        $data['command_error_msg'] = "Invalid or empty hostname";
     endif;
 endif;
 

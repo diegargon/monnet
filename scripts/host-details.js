@@ -115,6 +115,21 @@ $(document).ready(function () {
         requestHostDetails('journald-load', {id: hostId, value: logSize});
     });
 
+    $(document).on("click", "#submitTitle", function () {
+        var titleValue = $('#host-title').val();
+        var hostId = $('#host_id').val();
+        if (titleValue && hostId) {
+            submitCommand('submitTitle', {id: hostId, value: titleValue});
+        }
+    });
+    $(document).on("click", "#submitHostname", function () {
+        var titleValue = $('#host-name').val();
+        var hostId = $('#host_id').val();
+        if (titleValue && hostId) {
+            submitCommand('submitHostname', {id: hostId, value: titleValue});
+        }
+    });
+
     $(document).on("change", "#chkHighlight", function () {
         var hostId = $('#host_id').val();
         var value = this.checked ? 1 : 0;
@@ -475,6 +490,13 @@ function requestHostDetails(command, command_values = []) {
                     }
                 }
 
+                if (jsonData.command_receive === 'submitHostname') {
+                    if (jsonData.command_success === 1) {
+                        $('#config_status_msg').html(jsonData.response_msg);
+                    } else if (jsonData.command_error_msg) {
+                        $('#config_status_msg').html(jsonData.command_error_msg);
+                    }
+                }
                 /* Change Host Details Tab */
                 if (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'tab10') {
                     if (jsonData.command_success === 1) {

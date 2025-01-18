@@ -231,16 +231,6 @@ $(document).ready(function () {
             submitCommand('submitScanPorts', {id: hostId, value: portsValue});
         }
     });
-    //
-
-    $(document).on("click", "#submitTitle", function () {
-        var titleValue = $('#host-title').val();
-        var hostId = $('#host_id').val();
-        if (titleValue && hostId) {
-            submitCommand('submitTitle', {id: hostId, value: titleValue});
-        }
-    });
-
     $(document).on("click", "#submitCat", function () {
         var catValue = $('#hostcat_id').val();
         var hostId = $('#host_id').val();

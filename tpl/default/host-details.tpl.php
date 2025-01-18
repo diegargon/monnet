@@ -232,6 +232,10 @@
                         <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
                     </div>
                     <div class="">
+                        <span class="resume_label"><?= $lng['L_IP'] ?>:</span>
+                        <span class="display_name"><?= $tdata['host_details']['ip'] ?></span>
+                    </div>
+                    <div class="">
                         <span class="resume_label"><?= $lng['L_HOSTNAME'] ?>:</span>
                         <span class="display_name"><?= $tdata['host_details']['hostname'] ?></span>
                     </div>
@@ -557,6 +561,12 @@
                         <input type="text" id="host-title" size="12" max-size="15" name="host-title"
                                value="<?= $tdata['host_details']['title'] ?>"/>
                         <button id="submitTitle"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
+                        <label for="host-name"><?= $lng['L_HOSTNAME'] ?></label><br />
+                        <input type="text" id="host-name" size="30" max-size="40" name="host-title"
+                               value="<?= $tdata['host_details']['hostname'] ?>"/>
+                        <button id="submitHostname"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
                         <label for="host-cat"><?= $lng['L_CATEGORY'] ?></label><br />
