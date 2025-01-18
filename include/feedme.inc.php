@@ -140,43 +140,38 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
 {
     $hosts = $ctx->get('Hosts');
     $scan_type = 2; // Agent Based
-    $online = 1;
 
     // Obtener los puertos actuales de la base de datos, organizados en un mapa para comparación
-    $actual_host_ports = $hosts->getHostScanPorts($host_id, $scan_type);
-    $actual_ports_map = [];
-    foreach ($actual_host_ports as $port) {
+    $db_host_ports = $hosts->getHostScanPorts($host_id, $scan_type);
+    $db_ports_map = [];
+    foreach ($db_host_ports as $db_port) {
         // Normalizar interface para IPv6
-        $interface = $port['interface'];
-        $pnumber = (int) $port['port'];
-        $protocol = (int) $port['protocol'];
-        if ($port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
+        $interface = $db_port['interface'] ?? '';
+        $pnumber = (int) $db_port['pnumber'];
+        $protocol = (int) $db_port['protocol'];
+        if ($db_port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
             $interface = "[{$interface}]";
         }
 
-        $key = "{$protocol}:$pnumber:{$interface}:{$port['ip_version']}";
-        $actual_ports_map[$key] = $port;
+        $key = "{$protocol}:$pnumber:{$interface}:{$db_port['ip_version']}";
+        $db_ports_map[$key] = $db_port;
     }
-
     // Procesar los puertos reportados en $listen_ports
     foreach ($listen_ports as $port) {
         // Validar y normalizar datos de entrada
-        $protocol = ($port['protocol'] === 'tcp') ? 1 : 2;
+        $interface = $port['interface'] ?? '';
         $pnumber = (int)$port['port'];
-        $interface = (string) $port['interface'] ?? '';
+        $protocol = ($port['protocol'] === 'tcp') ? 1 : 2;
+
         if ($port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
             $interface = "[{$interface}]"; // Normalizar IPv6
         }
         $ip_version = $port['ip_version'] ?? '';
-        if (is_string($port['service'])) {
-            $port['service'] = trim($port['service']);
-        }
 
         $key = "{$protocol}:{$pnumber}:{$interface}:{$port['ip_version']}";
 
-        if (isset($actual_ports_map[$key])) {
-            $db_port = $actual_ports_map[$key];
-
+        if (isset($db_ports_map[$key])) {
+            $db_port = $db_ports_map[$key];
             // Si el servicio cambia, actualiza en lugar de insertar un nuevo registro
             if ($db_port['service'] !== $port['service']) {
                 $warnmsg = 'Service name change detected: '
@@ -186,7 +181,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 // Actualizamos
                 $hosts->updatePort($db_port['id'], [
                     "service" => $port['service'],
-                    "online" => $online,
+                    "online" => 1,
                     "last_change" => date_now(),
                 ]);
             } elseif ($db_port['online'] == 0) {
@@ -195,33 +190,35 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 $hosts->setWarnOn($host_id, $alertmsg, LogType::EVENT_WARN, EventType::PORT_UP);
 
                 $hosts->updatePort($db_port['id'], [
-                    "online" => $online,
+                    "online" => 1,
                     "last_change" => date_now(),
                 ]);
             }
 
-            unset($actual_ports_map[$key]); // Quitar procesado
+            unset($db_ports_map[$key]); // Quitar procesado
         } else {
+            Log::warning($key);
             // Crear nuevo puerto si no existe
             $hosts->addPort([
                 'hid' => $host_id,
                 'scan_type' => $scan_type,
                 'protocol' => $protocol,
                 'pnumber' => $pnumber,
-                'online' => $online,
+                'online' => 1,
                 'service' => $port['service'],
                 'interface' => $interface,
                 'ip_version' => $ip_version,
                 'last_change' => date_now(),
             ]);
 
-            $log_msg = "New port detected: $pnumber ({$port['service']})";
+            $log_msg = "New port dsetected: $pnumber ({$port['service']})";
             $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_NEW);
+            unset($db_ports_map[$key]); // Quitamos procesado
         }
     }
 
     // Missing existing ports tag offline
-    foreach ($actual_ports_map as $db_port) {
+    foreach ($db_ports_map as $db_port) {
         if ($db_port['online'] == 1) {
             $set = [
                 'online' => 0,
