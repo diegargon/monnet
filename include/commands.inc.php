@@ -42,14 +42,16 @@ function run_cmd(string $cmd, array $params, string $stdin = null): array|bool
             fclose($pipes[0]);
         }
         $stdout = stream_get_contents($pipes[1]);
-        $stdout ? trim($return['stdout']) : $return['stdout'] = false;
+        is_string($stdout) ? $stdout = $stdout : null;
+        $return['stdout'] = $stdout;
         fclose($pipes[1]);
         $stderr = stream_get_contents($pipes[2]);
-        $stderr ? trim($return['stderr']) : $return['stderr'] = false;
+        is_string($stderr) ? $stderr = trim($stderr)  : null;
+        $return['stderr'] = $stderr;
         fclose($pipes[2]);
         proc_close($proc);
     } else {
-        Log::error('Error run command ');
+        Log::error('Error run command');
         $return = false;
     }
 
