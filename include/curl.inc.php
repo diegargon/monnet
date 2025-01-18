@@ -9,6 +9,11 @@
  */
 !defined('IN_CLI') ? exit : true;
 
+/**
+ *
+ * @param string $url
+ * @return mixed
+ */
 function curl_get(string $url): mixed
 {
     if (empty($url)) :
@@ -26,26 +31,45 @@ function curl_get(string $url): mixed
     return curl_exec($ch);
 }
 
-function curl_get_https($url, $timeout = 1) {
-    $ret = [];
+/**
+ *
+ * @param string $url
+ * @param bool $https
+ * @param bool $allowSelfSigned
+ * @param float $timeout
+ * @return int
+ */
+function curl_check_webport(string $url, bool $https = true, bool $allowSelfSigned = false, float $timeout = 5) {
+    $result = [];
 
+    Log::debug('curl_check_webport'. $url);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, ($timeout * 2));
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_NOBODY, true);
 
+    if ($https) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, !$allowSelfSigned);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $allowSelfSigned ? 0 : 2);
+    } else {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    }
     $response = curl_exec($ch);
     if ($response === false) {
-        return false;
+        $result['error'] = curl_error($ch);
+        $result['errno'] = curl_errno($ch);
+        $result['http_code'] = 0;
+    } else {
+        $result['msg'] = $response;
+        $result['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $result['error'] = null;
+        $result['errno'] = 0;
     }
 
-    $ret['msg'] = $response;
-    $ret['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $ret['error'] = curl_error($ch);
-    $ret['errno'] = curl_errno($ch);
-
-    return $ret;
+    return $result;
 }

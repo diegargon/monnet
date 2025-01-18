@@ -53,7 +53,7 @@ function check_known_hosts(AppContext $ctx): bool
                     endif;
                 }
             }
-            if ($host['online'] == 0) {
+            if ($check_ports_result['online'] == 0) {
                 /*
                  * Todos los puertos caidos o no puertos especificados
                  * probamos si el host esta online con ping normal
@@ -319,7 +319,6 @@ function check_macs(Hosts $hosts): void
 function check_host_ports(AppContext $ctx, array $host): array
 {
     $cfg = $ctx->get('cfg');
-    $log_type = 2; // ports related
     $latency = [];
 
     $host_result = [
@@ -348,20 +347,38 @@ function check_host_ports(AppContext $ctx, array $host): array
 
     foreach ($ports as $port) :
         $conn = null;
+        $https = $selSigned = false;
         $error_code = $error_msg = '';
         $port_status = [];
         $port_status['last_change'] = date_now();
-
+        $port['protocol'] = (int) $port['protocol'];
         $tim_start = microtime(true);
         $ip = trim($host['ip']);
-        if ($port['protocol'] == 2) {
+
+        if ($port['protocol'] === 2) {
             $ip = 'udp://' . $ip;
-        } else if ($port['protocol'] == 3) {
-            $ip = 'https://' . $ip;
+        } else if ($port['protocol'] === 3 || $port['protocol'] === 4) {
+            /*
+             *  (3) HTTPS check cert
+             *  (4) HTTPS SS Not drop error with self-signed cert
+             */
+            $https = true;
+            $ip = 'https://';
+            !empty($host['hostname']) ? $ip .= $host['hostname'] : $ip .= $ip;
+            ($port['protocol'] === 4) ? $selfSigned = true : null;
+        } else if ($port['protocol'] === 5) {
+            $ip = 'http://' . $ip;
         }
 
-        if ($port['protocol'] == 3) {
-            $response = https_get_https($ip, $timeout);
+        if ($port['protocol'] > 2) {
+            if ($https && ((int) $port['pnumber'] !== 443)) {
+                $ip = $ip . ':'. $port['pnumber'];
+            }
+            if (!$https && (int) $port['pnumber'] !== 80) {
+                $ip = $ip . ':'. $port['pnumber'];
+
+            }
+            $response = curl_check_webport($ip, $https, $selfSigned, $timeout);
              if (
                  $response !== false &&
                  $response['http_code'] >= 200 &&
@@ -371,8 +388,9 @@ function check_host_ports(AppContext $ctx, array $host): array
              } else {
                  $error_code = $response['errno'];
                  $error_msg = $response['error'];
+                 $conn = false;
              }
-        } else if ($port['protocol'] == 1 || $port['protocol'] == 2) {
+        } else if ($port['protocol'] === 1 || $port['protocol'] === 2) {
             $conn = @fsockopen($ip, $port['pnumber'], $error_code, $error_msg, $timeout);
         }
 
@@ -383,7 +401,8 @@ function check_host_ports(AppContext $ctx, array $host): array
             if ((int) $port['online'] === 0) :
                 Log::logHost(LogLevel::NOTICE, $host['id'], 'Port become Online', LogType::EVENT, EventType::PORT_UP);
             endif;
-            fclose($conn);
+
+            (!is_bool($conn)) ? fclose($conn) : null;
         elseif (empty($host['alarm_port_disable'])) :
             $log_msg = "Port {$port['pnumber']} down: $error_msg ($error_code)";
             Log::logHost(LogLevel::WARNING, $host['id'], $log_msg, LogType::EVENT_WARN, EventType::PORT_DOWN);

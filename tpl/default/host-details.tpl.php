@@ -731,6 +731,8 @@
                             <option value="1">TCP Socket</option>
                             <option value="2">UDP Socket</option>
                             <option value="3">HTTPS Request</option>
+                            <option value="4">HTTPS Request (SS)</option>
+                            <option value="5">HTTP Request</option>
                         </select>
                         <button id="submitHostPort"><?= $lng['L_SEND'] ?></button>
                         <?php
@@ -739,8 +741,14 @@
                         <select class="current_remote_ports">
                             <?php
                             foreach ($tdata['host_details']['remote_ports'] as $port) :
-                                $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
-                                $port_name = "{$port['pnumber']}($port_protocol)"
+                                $port_proto = match ((int)$port['protocol']) {
+                                    1 => 'TCP Socket',
+                                    2 => 'UDP Socket',
+                                    3 => 'HTTPS Request',
+                                    4 => 'HTTPS Request(SS)',
+                                    5 => 'HTTP Request',
+                                };
+                                $port_name = "{$port['pnumber']}($port_proto)";
                                 ?>
                             <option value="<?= $port['id'] ?>"><?= $port_name ?></option>
                                 <?php
