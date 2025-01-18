@@ -347,7 +347,7 @@ function check_host_ports(AppContext $ctx, array $host): array
 
     foreach ($ports as $port) :
         $conn = null;
-        $https = $selSigned = false;
+        $https = $selfSigned = false;
         $error_code = $error_msg = '';
         $port_status = [];
         $port_status['last_change'] = date_now();
