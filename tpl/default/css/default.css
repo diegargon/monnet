@@ -985,8 +985,9 @@ input:checked + .slider:before {
     font-size: 15px;
 }
 .ctrl_fieldset {
-    border: 1px solid white;
+    border: 1px solid #514d4d;
     border-radius: 5px;
+    background-color: #2d3331;
 }
 
 .textarea-bar {
