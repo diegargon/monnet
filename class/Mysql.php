@@ -220,13 +220,13 @@ class Database
      *
      * @param mysqli_result $result
      *
-     * @return array<string,string>|false
+     * @return array<string, mixed>
      */
-    public function fetch(mysqli_result $result): array|false
+    public function fetch(mysqli_result $result): array
     {
         $row = $result->fetch_assoc();
 
-        return $row ? $row : false;
+        return $row ?: [];
     }
 
     /**

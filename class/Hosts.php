@@ -357,6 +357,9 @@ class Hosts
         $host = $this->hosts[$id];
         //TODO: Load notes on changetab
         $result = $this->db->select('notes', '*', ['id' => $host['notes_id']], 'LIMIT 1');
+        if(is_bool($result)) {
+            return [];
+        }
         $notes = $this->db->fetch($result);
         $host['notes'] = $notes['content'];
         $host['notes_date'] = $notes['update'];
@@ -749,7 +752,7 @@ class Hosts
                 ];
                 $alert_logs = Log::getLogsHosts($opt);
 
-                if (is_array($alert_logs) && !empty($alert_logs)) :
+                if (!empty($alert_logs)) :
                     foreach ($alert_logs as $item) :
                         if (!in_array($item['msg'], $alert_logs_msgs)) :
                             $alert_logs_msgs[] = $item['msg'];
@@ -846,9 +849,18 @@ class Hosts
     {
         $result = $this->db->selectAll('ports', ['hid' => $hid]);
 
+        if (is_bool($result)) {
+            return [];
+        }
         return $this->db->fetchAll($result);
     }
 
+    /**
+     *
+     * @param int $hid
+     * @param int $scan_type
+     * @return array<string,string|int>
+     */
     public function getHostScanPorts(int $hid, int $scan_type = 0): array
     {
 
@@ -859,15 +871,28 @@ class Hosts
                 'scan_type' => $scan_type
             ]
         );
-
+        if (is_bool($result)) {
+            return [];
+        }
         return $this->db->fetchAll($result);
     }
 
+    /**
+     *
+     * @param int $port_id
+     * @param array<string,string|int> $set
+     * @return void
+     */
     public function updatePort(int $port_id, array $set): void
     {
         $this->db->update('ports', $set, ['id' => $port_id]);
     }
 
+    /**
+     *
+     * @param array<string,string|int> $insert_data
+     * @return void
+     */
     public function addPort(array $insert_data): void
     {
         $this->db->insert('ports', $insert_data);
@@ -909,7 +934,7 @@ class Hosts
      *
      * @param int $id
      * @param array<string|int> $opts
-     * @return array<string,string|int>
+     * @return array<int, array<string, string>>
      */
     public function getReports(int $id, array $opts = []): array
     {
@@ -968,14 +993,14 @@ class Hosts
      */
     public function getReportById(int $id)
     {
-        $query = 'SELECT * FROM reports WHERE id=' . $id;
+        $query = 'SELECT * FROM reports WHERE id=' . $id . ' LIMIT 1';
         $results = $this->db->query($query);
-        if (!$results) {
+        if (is_bool($results)) {
             return [];
         }
-        $rows = $this->db->fetchAll($results);
+        $row = $this->db->fetch($results);
 
-        return $rows[0];
+        return $row;
     }
     /**
      *
@@ -1005,7 +1030,7 @@ class Hosts
         $networks = $this->ctx->get('Networks');
         $query_hosts = 'SELECT * FROM hosts';
         $results = $this->db->query($query_hosts);
-        if (!$results) :
+        if (is_bool($results)) :
             return false;
         endif;
         $hosts = $this->db->fetchAll($results);

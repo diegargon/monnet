@@ -133,7 +133,7 @@ function notification_data_process(AppContext $ctx, int $host_id, array $rdata):
  *
  * @param AppContext $ctx
  * @param int $host_id
- * @param array<string,string|int> $listen_ports
+ * @param array<array<string, int|string>> $listen_ports
  * @return void
  */
 function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_ports): void

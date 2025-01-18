@@ -54,7 +54,7 @@ function curl_check_webport(string $url, bool $https = true, bool $allowSelfSign
 {
     $result = [];
 
-    Log::debug('curl_check_webport'. $url);
+    Log::debug('curl_check_webport:' . $url);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

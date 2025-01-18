@@ -178,7 +178,7 @@ class Log
 
     /**
      * Return logs based on [$opt]ions
-     * @param array<string,string|int> $opts
+     * @param array<string,mixed> $opts
      * @return array<string,mixed>
      */
     public static function getLogsHosts(array $opts = []): array
