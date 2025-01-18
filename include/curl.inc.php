@@ -7,14 +7,14 @@
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
-!defined('IN_CLI') ? exit : true;
+!defined('IN_WEB') ? exit : true;
 
 /**
  *
  * @param string $url
  * @return mixed
  */
-function curl_get(string $url): mixed
+function curl_get(string $url, int $timeout = 2): mixed
 {
     if (empty($url)) :
         return false;
@@ -25,10 +25,21 @@ function curl_get(string $url): mixed
     curl_setopt($ch, CURLOPT_USERAGENT, $agent);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2); // Try connect (s)
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Return (s)
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout * 2);
 
-    return curl_exec($ch);
+    $response = curl_exec($ch);
+
+    if ($response == false) {
+        $error = curl_error($ch);
+        $errno = curl_errno($ch);
+        $error = "Curl Error ($errno): $error";
+        Log::warning($error);
+    }
+
+    curl_close($ch);
+
+    return $response;
 }
 
 /**
@@ -71,6 +82,7 @@ function curl_check_webport(string $url, bool $https = true, bool $allowSelfSign
         $result['error'] = null;
         $result['errno'] = 0;
     }
+    curl_close($ch);
 
     return $result;
 }
