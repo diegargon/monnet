@@ -334,7 +334,7 @@ if ($command === 'submitAccessLink' && !empty($target_id)) {
     if (!empty($command_values['value'])) {
         $value_command = Filters::varUrl($command_values['value']);
         if (!empty($value_command)) {
-            $hosts->update($target_id, ['access_link' => trim($value_command)]);
+            $hosts->update($target_id, ['access_link' => $value_command]);
             $data['response_msg'] = "link updated";
             $success = 1;
         } else {
@@ -493,7 +493,10 @@ if (
 }
 
 if ($command == 'updateBookmark' && !empty($value_command) && $target_id > 0) {
-    $decodedJson = json_decode($value_command, true);
+    $decodedJson = null;
+    if (is_string($value_command)) {
+        $decodedJson = json_decode($value_command, true);
+    }
     $bookmark = [];
     $bookmark['id'] = $target_id;
     if ($decodedJson === null) {

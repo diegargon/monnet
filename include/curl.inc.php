@@ -37,9 +37,10 @@ function curl_get(string $url): mixed
  * @param bool $https
  * @param bool $allowSelfSigned
  * @param float $timeout
- * @return int
+ * @return array<string,string>
  */
-function curl_check_webport(string $url, bool $https = true, bool $allowSelfSigned = false, float $timeout = 5) {
+function curl_check_webport(string $url, bool $https = true, bool $allowSelfSigned = false, float $timeout = 5): array
+{
     $result = [];
 
     Log::debug('curl_check_webport'. $url);

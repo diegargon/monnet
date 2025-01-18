@@ -118,7 +118,7 @@ class Log
                             self::error('L_ERR_FILE_CHGRP', 1);
                         }
                         if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
-                            self::err('Error opening/writing log to file '
+                            self::error('Error opening/writing log to file '
                                 . 'effective User: ' . $userName, 1);
                         }
                     }
@@ -179,7 +179,7 @@ class Log
     /**
      * Return logs based on [$opt]ions
      * @param array<string,string|int> $opts
-     * @return array<string,string>
+     * @return array<string,mixed>
      */
     public static function getLogsHosts(array $opts = []): array
     {
@@ -204,15 +204,11 @@ class Log
         endif;
 
         if (isset($opts['log_type'])) {
-            if (is_array($opts['log_type'])) {
-                $logConditions = [];
-                foreach ($opts['log_type'] as $l_types) {
-                    $logConditions[] = 'log_type=' . (int)$l_types;
-                }
-                $conditions[] = '(' . implode(' OR ', $logConditions) . ')';
-            } else {
-                $conditions[] = 'log_type=' . (int)$opts['log_type'];
+            $logConditions = [];
+            foreach ($opts['log_type'] as $l_types) {
+                $logConditions[] = 'log_type=' . (int)$l_types;
             }
+            $conditions[] = '(' . implode(' OR ', $logConditions) . ')';
         }
 
         $query .= ' WHERE ' . implode(' AND ', $conditions);

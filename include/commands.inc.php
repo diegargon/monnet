@@ -41,15 +41,17 @@ function run_cmd(string $cmd, array $params, string $stdin = null): array|bool
             fwrite($pipes[0], $stdin);
             fclose($pipes[0]);
         }
-        $return['stdout'] = trim(stream_get_contents($pipes[1]));
+        $stdout = stream_get_contents($pipes[1]);
+        $stdout ? trim($return['stdout']) : $return['stdout'] = false;
         fclose($pipes[1]);
-        $return['stderr'] = trim(stream_get_contents($pipes[2]));
+        $stderr = stream_get_contents($pipes[2]);
+        $stderr ? trim($return['stderr']) : $return['stderr'] = false;
         fclose($pipes[2]);
+        proc_close($proc);
     } else {
         Log::error('Error run command ');
         $return = false;
     }
-    proc_close($proc);
 
     return $return;
 }

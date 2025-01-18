@@ -106,20 +106,20 @@ endif;
 
 /* Setting Vars */
 $command = $request['cmd'];
-$host_id = $request['id'];
+$host_id = (int) $request['id'];
 $hosts = $ctx->get('Hosts');
 $host = $hosts->getHostById($request['id']);
 $rdata = $request['data'];
 
 
 if (!$host) :
-    Log::error("Host not found, requested id:", $host_id);
+    Log::error("Host not found, requested id:" . $host_id);
     echo json_encode([
         'error' => 'Host not found'
     ]);
     exit();
 elseif (empty($host['token']) || $host['token'] !== $request['token']) :
-    Log::warning("Invalid Token receive from id:", $host_id);
+    Log::warning("Invalid Token receive from id:" . $host_id);
     echo json_encode([
         'error' => 'Invalid Token'
     ]);

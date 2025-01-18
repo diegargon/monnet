@@ -124,10 +124,19 @@ if ($user->getPref('show_termlog_status')) {
     endif;
 
     foreach ($logs as &$log) :
-        $log['timestamp'] = strtotime($log['date']);
+        if (!empty($log['date'])) {
+            $log['timestamp'] = strtotime($log['date']);
+        }
     endforeach;
 
     usort($logs, function ($a, $b) {
+        if (!is_array($a) || !is_array($b)) {
+            return 0;
+        }
+        if (!isset($a['timestamp'], $b['timestamp'])) {
+            return 0;
+        }
+
         return $b['timestamp'] <=> $a['timestamp'];
     });
 
@@ -144,7 +153,7 @@ if ($user->getPref('show_termlog_status')) {
     if (valid_array($term_logs)) {
         $log_lines = [];
         foreach ($term_logs as $term_log) {
-            if (is_numeric($term_log['level'])) :
+            if (isset($term_log['level']) && is_numeric($term_log['level'])) :
                 $log_level = (int) $term_log['level'];
             else :
                 continue;

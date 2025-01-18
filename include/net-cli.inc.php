@@ -18,7 +18,11 @@ function check_known_hosts(AppContext $ctx): bool
     $ping_known_time = microtime(true);
 
     $lng = $ctx->get('lng');
+
+    /** @var Database $db */
     $db = $ctx->get('Mysql');
+
+    /** @var Hosts $hosts */
     $hosts = $ctx->get('Hosts');
     $cfg = $ctx->get('cfg');
 
@@ -357,7 +361,7 @@ function check_host_ports(AppContext $ctx, array $host): array
 
         if ($port['protocol'] === 2) {
             $ip = 'udp://' . $ip;
-        } else if ($port['protocol'] === 3 || $port['protocol'] === 4) {
+        } elseif ($port['protocol'] === 3 || $port['protocol'] === 4) {
             /*
              *  (3) HTTPS check cert
              *  (4) HTTPS SS Not drop error with self-signed cert
@@ -372,24 +376,23 @@ function check_host_ports(AppContext $ctx, array $host): array
 
         if ($port['protocol'] > 2) {
             if ($https && ((int) $port['pnumber'] !== 443)) {
-                $ip = $ip . ':'. $port['pnumber'];
+                $ip = $ip . ':' . $port['pnumber'];
             }
             if (!$https && (int) $port['pnumber'] !== 80) {
-                $ip = $ip . ':'. $port['pnumber'];
-
+                $ip = $ip . ':' . $port['pnumber'];
             }
             $response = curl_check_webport($ip, $https, $selfSigned, $timeout);
-             if (
+            if (
                 $response !== false &&
                 $response['http_code'] >= 200 &&
                 $response['http_code'] < 400
-             ) {
+            ) {
                 $conn = true;
-             } else {
+            } else {
                 $error_code = $response['errno'];
                 $error_msg = $response['error'];
                 $conn = false;
-             }
+            }
         } elseif ($port['protocol'] === 1 || $port['protocol'] === 2) {
             $conn = @fsockopen($ip, $port['pnumber'], $error_code, $error_msg, $timeout);
         }

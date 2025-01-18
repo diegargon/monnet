@@ -139,7 +139,6 @@ $lng = [
     'L_LINK_HELP' => 'Server image name, favicon path, http link',
     'L_LOG' => 'Log',
     'L_LOGMSG_TOO_LONG' => 'Mensaje log demasiado largo. Cortado!',
-    'L_LATENCY' => 'Latencia',
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',

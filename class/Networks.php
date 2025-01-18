@@ -285,6 +285,9 @@ class Networks
             // Obtener la dirección de red
             $network_long = ip2long($network);
             $network_address = long2ip($network_long & ((-1 << (32 - $prefix))));
+            if (!$network_address) {
+                return [];
+            }
             $network_long = ip2long($network_address);
             $broadcast_address = long2ip($network_long | ((1 << (32 - $prefix)) - 1));
 

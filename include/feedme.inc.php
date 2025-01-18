@@ -163,12 +163,14 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
         // Validar y normalizar datos de entrada
         $protocol = ($port['protocol'] === 'tcp') ? 1 : 2;
         $pnumber = (int)$port['port'];
-        $interface = $port['interface'] ?? '';
+        $interface = (string) $port['interface'] ?? '';
         if ($port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
             $interface = "[{$interface}]"; // Normalizar IPv6
         }
         $ip_version = $port['ip_version'] ?? '';
-        $port['service'] = trim($port['service']);
+        if (is_string($port['service'])) {
+            $port['service'] = trim($port['service']);
+        }
 
         $key = "{$protocol}:{$pnumber}:{$interface}:{$port['ip_version']}";
 
