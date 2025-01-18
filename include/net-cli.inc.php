@@ -366,7 +366,7 @@ function check_host_ports(AppContext $ctx, array $host): array
             $ip = 'https://';
             !empty($host['hostname']) ? $ip .= $host['hostname'] : $ip .= $ip;
             ($port['protocol'] === 4) ? $selfSigned = true : null;
-        } else if ($port['protocol'] === 5) {
+        } elseif ($port['protocol'] === 5) {
             $ip = 'http://' . $ip;
         }
 
@@ -380,17 +380,17 @@ function check_host_ports(AppContext $ctx, array $host): array
             }
             $response = curl_check_webport($ip, $https, $selfSigned, $timeout);
              if (
-                 $response !== false &&
-                 $response['http_code'] >= 200 &&
-                 $response['http_code'] < 400
+                $response !== false &&
+                $response['http_code'] >= 200 &&
+                $response['http_code'] < 400
              ) {
-                 $conn = true;
+                $conn = true;
              } else {
-                 $error_code = $response['errno'];
-                 $error_msg = $response['error'];
-                 $conn = false;
+                $error_code = $response['errno'];
+                $error_msg = $response['error'];
+                $conn = false;
              }
-        } else if ($port['protocol'] === 1 || $port['protocol'] === 2) {
+        } elseif ($port['protocol'] === 1 || $port['protocol'] === 2) {
             $conn = @fsockopen($ip, $port['pnumber'], $error_code, $error_msg, $timeout);
         }
 
