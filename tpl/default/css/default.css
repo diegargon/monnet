@@ -155,7 +155,7 @@ footer {
     border: 1px solid #514d4d;
     border-radius: 5px;
     padding: 0px 5px 0px 5px;
-    margin: auto;
+    margin: 11px 0px 5px 0px;
     background-color: #2d3331;
     width: 120px;
 }
@@ -1240,7 +1240,7 @@ input:checked + .slider:before {
     /* color: #00fa00; */
     color: #fff;
     font-family: "DejaVu Sans Mono", "Liberation Mono", "Courier New", monospace;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
     animation: crt-output 10ms infinite;
     background-color: transparent;
@@ -1537,7 +1537,7 @@ input:checked + .slider:before {
 }
 
 .pbar_legend {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
     color: #ffa9a9;
 }
