@@ -68,7 +68,7 @@ function page_common_head(AppContext $ctx): array
 
 
     $weather = weather_widget($cfg, $lng);
-    if ($weather) {
+    if (!empty($weather)) {
         $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
         $page['weather_widget'] = $weather;
         $page['load_tpl'][] = [

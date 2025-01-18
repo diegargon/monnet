@@ -50,25 +50,7 @@ function request_weather(array $cfg): mixed
             . '&appid=' . $cfg['weather_widget']['weather_api']
             . '&lang=es&units=metric';
 
-    $ch = curl_init();
-
-    curl_setopt($ch, CURLOPT_HEADER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL, $ApiUrl);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_VERBOSE, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    if ($response === false || $httpCode !== 200) {
-        $error = curl_error($ch) ?: "HTTP code: $httpCode";
-        curl_close($ch);
-        Log::warning($error);
-        return null;
-    }
-
-    curl_close($ch);
+    $response = curl_get($ApiUrl);
 
     $data = json_decode($response);
 

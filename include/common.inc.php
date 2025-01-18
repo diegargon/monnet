@@ -117,3 +117,5 @@ if (isset($db_version) && $db_version  < 0.42) {
 if (!empty($ncfg) && $ncfg->get('ansible')) {
     require_once('include/ansible.inc.php');
 }
+
+require_once 'include/curl.inc.php';
