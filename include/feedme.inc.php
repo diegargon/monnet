@@ -211,7 +211,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 'last_change' => date_now(),
             ]);
 
-            $log_msg = "New port dsetected: $pnumber ({$port['service']})";
+            $log_msg = "New port detected: $pnumber ({$port['service']})";
             $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_NEW);
             unset($db_ports_map[$key]); // Quitamos procesado
         }
