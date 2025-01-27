@@ -17,9 +17,8 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 MonNet is currently in an early version. It is possible that issues may arise between versions. The compatibility is not guaranteed.
 
-The English language (EN/US) is AI generated.
-
-I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts.
+I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts, automate installations and
+other tasks
 
 # Features
 
@@ -30,7 +29,7 @@ I started implementing Ansible as a replacement for phpseclib as a method to con
     - Basic Hosts Stats (Agent)
     - Linux Support (Ansible/Agent)
     - Host Notes
-    - Get Host Logs (Ansible)
+    - Get Host Logs (Via Ansible)
     - Email Alerts
 
     Partially working Features
@@ -59,7 +58,7 @@ Resume:
 
     Non-Commercial Use = Allowed
 
-    Commercial Use = License
+    Commercial Use = Ask
 
 # MonNet Install
 
@@ -180,7 +179,7 @@ apt install composer
 
 ## Monne Agent
 
-I am testing a basic linux agent (python based) for reports.
+Actually i am testing a basic linux agent (python based) for reports.
 The agent is the  monnet-ansbile repo/sources and has his own
 playbook to automatically install if you want.
 
@@ -205,6 +204,7 @@ apt install ansible
 git clone https://github.com/diegargon/monnet-ansible.git
 ```
 
+Note: I change name/repo to monnet-core.git and will be use that repo near in the future
 
 ## Ansible server
 
