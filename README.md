@@ -167,6 +167,9 @@ $ nano /etc/crontab
 
 In the future we will migrating that cli tools to python.
 
+After that you must configure your network/s clicking on"Netwrok" on the 
+top left panel
+
 ## Composer
 
 Necessary if you want support for send mails

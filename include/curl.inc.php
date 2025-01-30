@@ -33,7 +33,7 @@ function curl_get(string $url, int $timeout = 2): mixed
     if ($response == false) {
         $error = curl_error($ch);
         $errno = curl_errno($ch);
-        $error = "Curl Error ($errno): $error";
+        $error = "Curl Error ($errno): $error on $url";
         Log::warning($error);
     }
 
@@ -53,7 +53,6 @@ function curl_get(string $url, int $timeout = 2): mixed
 function curl_check_webport(string $url, bool $https = true, bool $allowSelfSigned = false, float $timeout = 5): array
 {
     $result = [];
-
     Log::debug('curl_check_webport:' . $url);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -62,7 +61,7 @@ function curl_check_webport(string $url, bool $https = true, bool $allowSelfSign
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_HEADER, true);
-    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_setopt($ch, CURLOPT_RANGE, '0-100'); // Partial Download
 
     if ($https) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, !$allowSelfSigned);
@@ -75,7 +74,7 @@ function curl_check_webport(string $url, bool $https = true, bool $allowSelfSign
     if ($response === false) {
         $result['error'] = curl_error($ch);
         $result['errno'] = curl_errno($ch);
-        $result['http_code'] = 0;
+        $result['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     } else {
         $result['msg'] = $response;
         $result['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);

@@ -27,4 +27,5 @@ class EventType
     public const HOST_BECOME_ON = 14;
     public const HOST_BECOME_OFF = 15;
     public const NEW_HOST_DISCOVERY = 16;
+    public const CERT_ERROR = 17;
 }
