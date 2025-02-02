@@ -38,7 +38,7 @@ Class TaskAnsible
      * @param array<string,string> $extra_vars
      * @return array<string,string>
      */
-    public static function create(AppContext $ctx, int $trigger_type, int $hid, string $playbook, array $extra_vars = []): array
+    public function createTask(AppContext $ctx, int $trigger_type, int $hid, string $playbook, array $extra_vars = []): array
     {
 
         $db = $ctx->get('Mysql');
@@ -68,7 +68,7 @@ Class TaskAnsible
         return $status;
     }
 
-    public static function delete()
+    public function deleteTask()
     {
 
     }
@@ -82,7 +82,7 @@ Class TaskAnsible
      *
      * @return array<mixed,mixed>
      */
-    public static function runPlaybook(AppContext $ctx, array $host, string $playbook, ?array $extra_vars = []): array
+    public function runPlaybook(AppContext $ctx, array $host, string $playbook, ?array $extra_vars = []): array
     {
         $ncfg = $ctx->get('Config');
         $user = $ctx->get('User');
@@ -213,4 +213,54 @@ Class TaskAnsible
         return ['status' => 'error', 'error_msg' => $error_msg, 'response' => $response];
     }
 
+    public function n_runPlaybook(array $host, string $playbook, ?array $extraVars = []): array {
+        try {
+            $payload = $this->buildPayload($host, $playbook, $extraVars);
+            $response = $this->socketClient->sendCommand($payload);
+            return $this->handleResponse($host, $playbook, $response);
+        } catch (RuntimeException $e) {
+            return ['status' => 'error', 'error_msg' => $e->getMessage()];
+        }
+    }
+
+    private function buildPayload(array $host, string $playbook, array $extraVars): array {
+        return [
+            'command' => 'playbook',
+            'data' => [
+                'playbook' => $playbook . '.yml',
+                'extra_vars' => $extraVars,
+                'ip' => $host['ip'],
+                'user' => $this->config->get('ansible_user') ?? 'default_user'
+            ]
+        ];
+    }
+
+    private function handleResponse(array $host, string $playbook, array $response): array {
+        if ($response['status'] === 'success') {
+            $this->n_createTask($host, $playbook, $response);
+        }
+        return $response;
+    }
+
+    private function n_createTask(array $host, string $playbook, array $response): void {
+        $playbookId = $this->findPlaybookId($playbook);
+        if ($playbookId) {
+            $this->db->insert('reports', [
+                'host_id' => $host['id'],
+                'source_id' => $this->user->getId(),
+                'pb_id' => $playbookId,
+                'rtype' => 1,
+                'report' => json_encode($response)
+            ]);
+        }
+    }
+
+    private function findPlaybookId(string $playbook): ?int {
+        foreach ($this->playbooksConfig as $pb) {
+            if ($pb['name'] === $playbook) {
+                return $pb['id'];
+            }
+        }
+        return null;
+    }
 }

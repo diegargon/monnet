@@ -1105,7 +1105,8 @@ if (
             $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         endif;
         if ($command === 'playbook_exec') {
-            $response = TaskAnsible::runPlaybook($ctx, $host, $playbook, $extra_vars);
+            $taskAnsible = new TaskAnsible();
+            $response = $taskAnsible->runPlaybook($ctx, $host, $playbook, $extra_vars);
             if ($response['status'] === "success") {
                 $data['command_success'] = 1;
                 if ($command_values['as_html'] === "true") :
@@ -1121,7 +1122,8 @@ if (
             }
         }
         if ($command === 'pbqueue') {
-            $result = TaskAnsible::create($ctx, 1, $host['id'], $playbook, $extra_vars);
+            $taskAnsible = new TaskAnsible();
+            $result = $taskAnsible->createTask($ctx, 1, $host['id'], $playbook, $extra_vars);
             if ($result['status'] === 'success') {
                 $data['command_success'] = 1;
                 $data['response_msg'] = $result['msg'];
@@ -1171,7 +1173,8 @@ if (
         if (is_numeric($value_command)) {
             $extra_vars['num_lines'] = $value_command;
         }
-        $response = TaskAnsible::runPlaybook($ctx, $host, $playbook, $extra_vars);
+        $taskAnsible = new TaskAnsible();
+        $response = $taskAnsible->runPlaybook($ctx, $host, $playbook, $extra_vars);
         if ($response['status'] === "success") {
             $debug_lines = [];
             $host_ip = $host['ip'];
