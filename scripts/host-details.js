@@ -3,7 +3,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
 $(document).ready(function () {
@@ -68,39 +68,12 @@ $(document).ready(function () {
         requestHostDetails('logs-reload', {id: hostId, log_level: logLevel, log_size: logSize});
     });
 
-    $(document).off("click", "#pbqueue_btn").on("click", "#pbexec_btn", function () {
-
+    $(document).off("click", "#pbqueue_btn").on("click", "#pbqueue_btn", function () {
+        executePlaybookAction('pbqueue');
     });
 
     $(document).off("click", "#pbexec_btn").on("click", "#pbexec_btn", function () {
-        var hostId = $('#host_id').val();
-        var as_html = $('#as_html').prop('checked');
-
-        var command = $('#playbook_select').val();
-
-        var extraVars = {};
-
-        $('#vars_container input').each(function () {
-            var name = $(this).attr('name').match(/\[([^\]]+)\]/)[1]; // Extraer el nombre dentro de los corchetes
-            var value = $(this).val();
-            if (value) { // Solo añadir si hay un valor
-                extraVars[name] = value;
-            }
-        });
-        // Preparar el objeto de datos
-        var requestData = {
-            id: hostId,
-            value: command,
-            as_html: as_html
-        };
-
-        // Añadir extra_vars solo si tiene valores
-        if (Object.keys(extraVars).length > 0) {
-            requestData.extra_vars = extraVars;
-        }
-
-        // Llamar a requestHostDetails
-        requestHostDetails('playbook_exec', requestData);
+        executePlaybookAction('playbook_exec');
     });
 
     $(document).off("click", "#syslog_btn").on("click", "#syslog_btn", function () {
@@ -407,6 +380,34 @@ function changeHDTab(id, tabId) {
     if (['tab15'].includes(tabId)) {
         initTasks();
     }
+}
+
+function executePlaybookAction(pb_cmd) {
+    const hostId = $('#host_id').val();
+    const as_html = $('#as_html').prop('checked');
+    const command = $('#playbook_select').val();
+
+    const extraVars = {};
+
+    $('#vars_container input').each(function() {
+        const nameMatch = $(this).attr('name').match(/\[([^\]]+)\]/);
+        if (nameMatch && nameMatch[1]) {
+            const value = $(this).val();
+            if (value) extraVars[nameMatch[1]] = value;
+        }
+    });
+
+    const requestData = {
+        id: hostId,
+        value: command,
+        as_html: as_html
+    };
+
+    if (Object.keys(extraVars).length > 0) {
+        requestData.extra_vars = extraVars;
+    }
+
+    requestHostDetails(pb_cmd, requestData);
 }
 
 function requestHostDetails(command, command_values = []) {

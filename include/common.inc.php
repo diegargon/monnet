@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -112,10 +112,6 @@ if (isset($db_version) && $db_version  < 0.42) {
     $ncfg = $ctx->set('Config', new Config($ctx));
     $ncfg->init($cfg);
     require_once 'include/updater.inc.php';
-}
-
-if (!empty($ncfg) && $ncfg->get('ansible')) {
-    require_once('include/ansible.inc.php');
 }
 
 require_once 'include/curl.inc.php';

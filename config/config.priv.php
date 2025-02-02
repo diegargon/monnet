@@ -5,13 +5,13 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
-$cfg['monnet_version'] = 0.51;
+$cfg['monnet_version'] = 0.52;
 
-$cfg['monnet_revision'] = 78;
+$cfg['monnet_revision'] = 1;
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.126;
 $cfg['agent_latest_version'] = 0.135;

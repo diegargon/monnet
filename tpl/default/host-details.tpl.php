@@ -4,7 +4,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -929,7 +929,7 @@
                  data-playbooks='<?= json_encode($cfg['playbooks']); ?>'>
                 <div class="left-details-column">
                     <div>
-                        <button id="playbook_btn"><?= $lng['L_ENQUEUE'] ?></button>
+                        <button id="pbqueue_btn"><?= $lng['L_ENQUEUE'] ?></button>
                         <button id="pbexec_btn">Exec</button>
                         <select id="playbook_select">
                             <option value=""><?= $lng['L_SEL_PLAYBOOK']?></option>

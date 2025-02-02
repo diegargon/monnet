@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 function trigger_update(Config $ncfg, Database $db, float $db_version, float $files_version): void
@@ -38,7 +38,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 DROP TABLE IF EXISTS load_stats;
             ");
-            // Se usara para guardar tareas referentes a eventos
+            // DONE Se usara para guardar tareas referentes a eventos
             $db->query("
                 CREATE TABLE IF NOT EXISTS `tasks` (
                   `id` int NOT NULL AUTO_INCREMENT,
@@ -225,7 +225,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 ALTER TABLE `tasks` ADD `last_triggered` DATETIME NULL AFTER `trigger_type`;
             ");
-            // DONNE Guarda el event type
+            // DONE Guarda el event type
             $db->query("
                 ALTER TABLE `hosts_logs` ADD `event_type` SMALLINT DEFAULT '0' AFTER `log_type`;
             ");
@@ -257,18 +257,20 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    $update = 0.00;
+    $update = 0.52;
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            $db->query("START TRANSACTION");
-            //$db->query("
-            //");
-            $db->query("COMMIT");
+            /* Usado para extra_vars u otros en JSON format */
+            $db->query("ALTER TABLE `tasks` ADD `extra` JSON NULL DEFAULT NULL");
+            /* Task scheduler */
+            $db->query("ALTER TABLE `tasks` ADD `task_interval` VARCHAR(10) DEFAULT NULL");
+            $db->query("ALTER TABLE `tasks` ADD `interval_seconds` INT DEFAULT NULL");
+            $db->query("ALTER TABLE `tasks` ADD `next_trigger` DATETIME NULL AFTER `last_triggered`;");
+            $db->query("ALTER TABLE `tasks` ADD `created` DATETIME DEFAULT CURRENT_TIMESTAMP;");
             $db_version = $update;
             Log::notice("Update version to $update successful");
         } catch (Exception $e) {
-            $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }

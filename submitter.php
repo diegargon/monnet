@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 define('IN_WEB', true);
 
@@ -24,6 +24,10 @@ require_once 'include/common.inc.php';
 require_once 'include/common-call.php';
 require_once 'include/usermode.inc.php';
 require_once 'include/submitter-call.php';
+
+if (!empty($ncfg) && $ncfg->get('ansible')) {
+    require_once 'class/TaskAnsible.php';
+}
 
 $tdata = [];
 $hosts = $ctx->get('Hosts');
@@ -50,11 +54,11 @@ $frontend = new Frontend($ctx);
 $tdata['theme'] = $cfg['theme'];
 
 /*
- Receive:
- command string filtered
- command_values array
- command_values['value'] to value_command filtered
- rest command_values unfiltered
+  Receive:
+  command string filtered
+  command_values array
+  command_values['value'] to value_command filtered
+  rest command_values unfiltered
 
  */
 $command = Filters::postString('command');
@@ -154,7 +158,7 @@ endif;
 
 /*
  *  END FILTERS(SANITIZE)
-  */
+ */
 
 /* Remove host */
 if ($command === 'remove_host' && $target_id) :
@@ -366,7 +370,7 @@ if ($command == 'show_host_only_cat' && !empty($target_id)) {
 
     $ones = 0;
     foreach ($categories_state as $state) :
-        $state == 1 ?  $ones++ : null;
+        $state == 1 ? $ones++ : null;
     endforeach;
 
     if (empty($categories_state) || $ones == 1) :
@@ -392,7 +396,6 @@ if (
     $target_id
 ) {
     $hosts_categories = $user->getHostsCats();
-
 
     foreach ($hosts_categories as $key => $host_cat) {
         if (!$hosts->catHaveHosts($host_cat['id'])) {
@@ -614,7 +617,7 @@ if (
         unset($tdata['host_details']['ping_stats']);
 
         if (!empty($host_details['mem_info']) && is_array($host_details['mem_info'])) :
-            $tdata['host_details']['mem_info'] =  $frontend->getTpl(
+            $tdata['host_details']['mem_info'] = $frontend->getTpl(
                 'progressbar',
                 [
                     'progress_bar_data' => [$host_details['mem_info']]
@@ -760,7 +763,7 @@ if ($command == "mgmtNetworks") :
     endforeach;
     $tdata = [];
     $tdata['networks'] = $f_networks;
-    $tdata['networks_table'] =  $frontend->getTpl('networks-table', $tdata);
+    $tdata['networks_table'] = $frontend->getTpl('networks-table', $tdata);
     $data['mgmt_networks']['cfg']['place'] = "#left-container";
     $data['mgmt_networks']['data'] = $frontend->getTpl('mgmt-networks', $tdata);
     $data['command_success'] = 1;
@@ -971,7 +974,7 @@ if ($command === 'changeHDTab' && $value_command == 'tab15') {
 }
 /* Ansible Raw */
 if ($command === 'changeHDTab' && $value_command == 'tab20') {
-    $opts = [ 'rtype' => 1, 'order' => 'DESC' ];
+    $opts = ['rtype' => 1, 'order' => 'DESC'];
     $tdata['reports'] = $hosts->getReports($target_id, $opts);
     if (!empty($tdata['reports'])) {
         $data['response_msg'] = $frontend->getTpl('ansible-head-reports', $tdata);
@@ -1015,10 +1018,10 @@ if (
 if (
     $target_id > 0 &&
     in_array($command, [
-    "alarm_ping_email",
-    "alarm_port_email",
-    "alarm_macchange_email",
-    "alarm_newport_email",
+        "alarm_ping_email",
+        "alarm_port_email",
+        "alarm_macchange_email",
+        "alarm_newport_email",
     ])
 ) {
     $msg = $hosts->toggleEmailAlarmType($target_id, $command, $value_command);
@@ -1054,7 +1057,11 @@ if ($command == 'setHostAnsible' && is_numeric($value_command) && is_numeric($ta
     $data['response_msg'] = $value_command;
 }
 
-if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command)) {
+if (
+    ($command === 'playbook_exec' || $command === 'pbqueue') &&
+    !empty($target_id) &&
+    !empty($value_command)
+) {
     $host = $hosts->getHostById($target_id);
     $playbook = $value_command;
 
@@ -1067,7 +1074,7 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
         if (!isEmpty($command_values['extra_vars'])) {
             $extra_vars = $command_values['extra_vars'];
         } else {
-            $extra_vars = $command_values['extra_vars'];
+            $extra_vars = [];
         }
 
         if ($playbook == 'install-monnet-agent-systemd') :
@@ -1097,19 +1104,30 @@ if ($command == 'playbook_exec' && !empty($target_id) && !empty($value_command))
             }
             $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         endif;
-        $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
-        if ($response['status'] === "success") {
-            $data['command_success'] = 1;
-            if ($command_values['as_html'] === "true") :
-                $data['response_msg'] = $frontend->getTpl('ansible-report', $response);
-                $data['as_html'] = 1;
-            else :
-                $data['response_msg'] = $response;
-                $data['as_html'] = 0;
-            endif;
-        } else {
-            $data['command_error'] = 1;
-            $data['command_error_msg'] = $response['error_msg'];
+        if ($command === 'playbook_exec') {
+            $response = TaskAnsible::runPlaybook($ctx, $host, $playbook, $extra_vars);
+            if ($response['status'] === "success") {
+                $data['command_success'] = 1;
+                if ($command_values['as_html'] === "true") :
+                    $data['response_msg'] = $frontend->getTpl('ansible-report', $response);
+                    $data['as_html'] = 1;
+                else :
+                    $data['response_msg'] = $response;
+                    $data['as_html'] = 0;
+                endif;
+            } else {
+                $data['command_error'] = 1;
+                $data['command_error_msg'] = $response['error_msg'];
+            }
+        }
+        if ($command === 'pbqueue') {
+            $result = TaskAnsible::create($ctx, 1, $host['id'], $playbook, $extra_vars);
+            if ($result['status'] === 'success') {
+                $data['command_success'] = 1;
+                $data['response_msg'] = $result['msg'];
+            } else {
+                $data['response_msg'] = $result['status'];
+            }
         }
     } else {
         $data['command_error'] = 1;
@@ -1124,7 +1142,7 @@ if (
     $host = $hosts->getHostById($target_id);
     $playbook = $command . '-linux';
     if (valid_array($host) && $host['ansible_enabled']) {
-        $response = ansible_playbook($ctx, $host, $playbook);
+        $response = TaskAsnsible::runPlaybook($ctx, $host, $playbook);
         if ($response['status'] === "success") {
             $data['command_success'] = 1;
             $data['response_msg'] = $response;
@@ -1153,7 +1171,7 @@ if (
         if (is_numeric($value_command)) {
             $extra_vars['num_lines'] = $value_command;
         }
-        $response = ansible_playbook($ctx, $host, $playbook, $extra_vars);
+        $response = TaskAnsible::runPlaybook($ctx, $host, $playbook, $extra_vars);
         if ($response['status'] === "success") {
             $debug_lines = [];
             $host_ip = $host['ip'];
@@ -1191,7 +1209,7 @@ if (
     $command === 'report_alerts' ||
     $command === 'report_warns'
 ) {
-    $keysToShow = ["id", "display_name", "ip" , 'mac', "online"];
+    $keysToShow = ["id", "display_name", "ip", 'mac', "online"];
 
     if ($command === 'report_ansible_hosts') :
         $keysToShow[] = 'agent_installed';
@@ -1255,7 +1273,7 @@ if ($command === 'showAlarms' || $command === 'showEvents') :
         ];
     endif;
 
-    $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'event_type', 'msg', 'ack', 'date' ];
+    $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'event_type', 'msg', 'ack', 'date'];
     $tdata['logs'] = Log::getLogsHosts($log_opts);
     foreach ($tdata['logs'] as &$log) :
         $log['host'] = $hosts->getDisplayNameById($log['host_id']);
@@ -1274,9 +1292,8 @@ if ($command === 'showAlarms' || $command === 'showEvents') :
     $data['command_success'] = 1;
 endif;
 
-
 if ($command === 'ack_host_log') :
-    $db->update('hosts_logs', ['ack' => $value_command], [ 'id' => $target_id]);
+    $db->update('hosts_logs', ['ack' => $value_command], ['id' => $target_id]);
     $data['command_success'] = 1;
     $data['response_msg'] = 'id: ' . $target_id . ' to ' . $value_command;
 endif;
