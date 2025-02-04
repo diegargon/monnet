@@ -1,10 +1,10 @@
 <?php
 
 /*
- * replacement class
+ * replacement Dabase class
  */
 
-class NewDatabase
+class Database
 {
     private ?\PDO $connection = null;
     private string $dsn;

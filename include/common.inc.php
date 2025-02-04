@@ -14,7 +14,7 @@
  * @var array<string, mixed> $cfg
  * @var array<string, string> $cfg_db
  */
-require 'src/App/Autoloader.php';
+require 'App/Autoloader.php';
 App\Autoloader::register();
 
 if (!file_exists('config/config.defaults.php')) {
