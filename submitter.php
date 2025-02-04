@@ -29,6 +29,16 @@ if (!empty($ncfg) && $ncfg->get('ansible')) {
     require_once 'class/TaskAnsible.php';
 }
 
+/*
+use App\Controllers\CommandController;
+$cmdController = new CommandController();
+
+$command = Filters::postString('command');
+$command_values = Filters::sanArray('command_values', 'post');
+$response = $cmdController->handleCommand($command, $command_values);
+echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+*/
+
 $tdata = [];
 $hosts = $ctx->get('Hosts');
 $target_id = 0;
