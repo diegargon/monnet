@@ -27,7 +27,7 @@
     TODO: Field temporizador ¿formato? horas? fecha?
  */
 
-Class TaskAnsible
+class TaskAnsible
 {
     /**
      *
@@ -181,7 +181,11 @@ Class TaskAnsible
             return ['status' => 'error', 'error_msg' => $error_msg, 'response' => $response];
         }
 
-        if (isset($responseArray['status']) && $responseArray['status'] === 'success' && isset($responseArray['result'])) {
+        if (
+                isset($responseArray['status']) &&
+                $responseArray['status'] === 'success' &&
+                isset($responseArray['result'])
+        ){
             /* SUCCESS */
             $playbook_id = 0;
 
@@ -213,7 +217,8 @@ Class TaskAnsible
         return ['status' => 'error', 'error_msg' => $error_msg, 'response' => $response];
     }
 
-    public function n_runPlaybook(array $host, string $playbook, ?array $extraVars = []): array {
+    public function n_runPlaybook(array $host, string $playbook, ?array $extraVars = []): array
+    {
         try {
             $payload = $this->buildPayload($host, $playbook, $extraVars);
             $response = $this->socketClient->sendCommand($payload);
@@ -223,7 +228,8 @@ Class TaskAnsible
         }
     }
 
-    private function buildPayload(array $host, string $playbook, array $extraVars): array {
+    private function buildPayload(array $host, string $playbook, array $extraVars): array
+    {
         return [
             'command' => 'playbook',
             'data' => [
@@ -235,14 +241,16 @@ Class TaskAnsible
         ];
     }
 
-    private function handleResponse(array $host, string $playbook, array $response): array {
+    private function handleResponse(array $host, string $playbook, array $response): array
+    {
         if ($response['status'] === 'success') {
             $this->n_createTask($host, $playbook, $response);
         }
         return $response;
     }
 
-    private function n_createTask(array $host, string $playbook, array $response): void {
+    private function n_createTask(array $host, string $playbook, array $response): void
+    {
         $playbookId = $this->findPlaybookId($playbook);
         if ($playbookId) {
             $this->db->insert('reports', [
@@ -255,7 +263,13 @@ Class TaskAnsible
         }
     }
 
-    private function findPlaybookId(string $playbook): ?int {
+    /**
+     *
+     * @param string $playbook
+     * @return int|null
+     */
+    private function findPlaybookId(string $playbook): ?int
+    {
         foreach ($this->playbooksConfig as $pb) {
             if ($pb['name'] === $playbook) {
                 return $pb['id'];

@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 /**
@@ -91,11 +91,11 @@ function check_known_hosts(AppContext $ctx): bool
                 foreach ($ports_status as $port):
                     if ($port['old_online_status'] == 0 && $port['online'] == 1) {
                         Log::logHost(
-                                LogLevel::NOTICE,
-                                $host['id'],
-                                "Port {$port['pnumber']} become Online",
-                                LogType::EVENT,
-                                EventType::PORT_UP
+                            LogLevel::NOTICE,
+                            $host['id'],
+                            "Port {$port['pnumber']} become Online",
+                            LogType::EVENT,
+                            EventType::PORT_UP
                         );
                     } elseif ($port['old_online_status'] == 1 && $port['online'] == 0) {
                         if (empty($host['alarm_port_disable'])) {
@@ -104,7 +104,7 @@ function check_known_hosts(AppContext $ctx): bool
                             $log_type = LogType::EVENT;
                         }
 
-                        if (in_array($check_ports_result['error_code'],[58, 59, 60],true)) {
+                        if (in_array($check_ports_result['error_code'], [58, 59, 60], true)) {
                             $event_type = EventType::CERT_ERROR;
                         } else {
                             $event_type = EventType::PORT_DOWN;
@@ -114,11 +114,11 @@ function check_known_hosts(AppContext $ctx): bool
                         $log_msg .= " {$check_ports_result['error_msg']}";
                         $log_msg .= " ({$check_ports_result['error_code']})";
                         Log::logHost(
-                                LogLevel::WARNING,
-                                $host['id'],
-                                $log_msg,
-                                $log_type,
-                                $event_type
+                            LogLevel::WARNING,
+                            $host['id'],
+                            $log_msg,
+                            $log_type,
+                            $event_type
                         );
                     }
                 endforeach;
@@ -241,7 +241,7 @@ function ping_nets(AppContext $ctx): void
     endforeach;
 
     foreach ($iplist as $ip) :
-        ping_nets_ip ($ctx, $ip);
+        ping_nets_ip($ctx, $ip);
     endforeach;
 
     Log::debug('Ping net took ' . (intval(microtime(true) - $ping_net_time)) . ' seconds');

@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -357,7 +357,7 @@ class Hosts
         $host = $this->hosts[$id];
         //TODO: Load notes on changetab
         $result = $this->db->select('notes', '*', ['id' => $host['notes_id']], 'LIMIT 1');
-        if(is_bool($result)) {
+        if (is_bool($result)) {
             return [];
         }
         $notes = $this->db->fetch($result);

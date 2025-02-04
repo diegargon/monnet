@@ -791,7 +791,7 @@ if ($command === 'submitPoolReserver' && is_numeric($target_id) && !empty($value
         $data['command_success'] = 1;
         $data['response_msg'] = 'Rerserved';
     else :
-        $data['command_error_msg'] = $response['msg'];
+        $data['command_error_msg'] = 'Add reserved fail';
     endif;
 endif;
 
@@ -932,7 +932,7 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
     $tdata = [];
     $graph_type = 1;
     $stats = '';
-    $stats = host_metrics($ctx, $target_id, $graph_type);
+    $stats = host_metrics($ctx, (int) $target_id, $graph_type);
     if (!empty($stats)) {
         $tdata['graph_name'] = $lng['L_LATENCY'];
         $tdata['type'] = $graph_type;
@@ -944,7 +944,7 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
     $tdata = [];
     $graph_type = 2;
     $stats = '';
-    $stats = host_metrics($ctx, $target_id, $graph_type);
+    $stats = host_metrics($ctx, (int) $target_id, $graph_type);
     if (!empty($stats)) {
         $tdata['graph_name'] = "LoadAVG";
         $tdata['type'] = $graph_type;
@@ -956,7 +956,7 @@ if ($command === 'changeHDTab' && $value_command == 'tab10') {
     $tdata = [];
     $stats = '';
     $graph_type = 3;
-    $stats = host_metrics($ctx, $target_id, $graph_type);
+    $stats = host_metrics($ctx, (int) $target_id, $graph_type);
     if (!empty($stats)) {
         $tdata['type'] = $graph_type;
         $tdata['graph_name'] = "Iowait";
@@ -1037,7 +1037,7 @@ if ($command === 'updateAlertEmailList' && $target_id > 0) {
 
 /* Submit Forms */
 if ($command === 'submitform') {
-    if (!isset($ncfg)) :
+    if (empty($ncfg)) :
         $ncfg = $ctx->get('Config');
     endif;
 
@@ -1144,7 +1144,8 @@ if (
     $host = $hosts->getHostById($target_id);
     $playbook = $command . '-linux';
     if (valid_array($host) && $host['ansible_enabled']) {
-        $response = TaskAsnsible::runPlaybook($ctx, $host, $playbook);
+        $taskAnsible = new TaskAnsible();
+        $response = $taskAsnsible->runPlaybook($ctx, $host, $playbook);
         if ($response['status'] === "success") {
             $data['command_success'] = 1;
             $data['response_msg'] = $response;
