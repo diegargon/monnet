@@ -9,7 +9,7 @@
 
 namespace App\Controllers;
 
-use App\Models\cmdBookmarkModel;
+use App\Models\CmdBookmarkModel;
 
 
 class CmdBookmarksController
@@ -19,7 +19,7 @@ class CmdBookmarksController
 
     public function __construct(\AppContext $ctx)
     {
-        $this->cmdBookmarkModel = new cmdBookmarkModel($ctx);
+        $this->cmdBookmarkModel = new CmdBookmarkModel($ctx);
         $this->ctx = $ctx;
     }
 

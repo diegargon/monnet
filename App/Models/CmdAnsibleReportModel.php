@@ -21,7 +21,7 @@ class CmdAnsibleReportModel
 
     public function getAnsibleReport($target_id, $report_type)
     {
-        $db = $this-ctx->get('Mysql');
+        $db = $this-ctx->get('Database');
         $query = "SELECT * FROM reports WHERE id = :id AND type = :type";
         $params = [
             'id' => $target_id,
@@ -32,7 +32,7 @@ class CmdAnsibleReportModel
 
     public function delete($target_id)
     {
-        $db = $this-ctx->get('Mysql');
+        $db = $this-ctx->get('Database');
         return $db->delete('reports', ['id' => $target_id]);
     }
 }

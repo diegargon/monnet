@@ -11,7 +11,7 @@
 
 namespace App\Controllers;
 
-use App\Models\cmdNetworkModel;
+use App\Models\CmdNetworkModel;
 
 class CmdNetworkController
 {
@@ -20,9 +20,8 @@ class CmdNetworkController
 
     public function __construct(\AppContext $ctx)
     {
-        $this->cmdNetworkModel = new cmdNetworkModel($ctx);
+        $this->cmdNetworkModel = new CmdNetworkModel($ctx);
         $this->ctx = $ctx;
-
     }
 
     public function manageNetworks($command_values)

@@ -9,6 +9,8 @@
 
 namespace App\Controllers;
 
+use App\Models\CmdHostModel;
+
 class CmdHostController
 {
 
@@ -17,8 +19,40 @@ class CmdHostController
 
     public function __construct(\AppContext $ctx)
     {
-        $this->cmdHostModel = new cmdHostModel($ctx);
+        $this->cmdHostModel = new CmdHostModel($ctx);
         $this->ctx = $ctx;
+    }
+
+    /**
+     * Obtiene los detalles de un host.
+     *
+     * @param array $command_values Los valores del comando.
+     * @return array Respuesta en formato JSON.
+     */
+    public function getHostDetails($command_values) {
+        $target_id = $this->filterService->varInt($command_values['id']);
+
+        if (!$target_id) {
+            return [
+                'command_error' => 1,
+                'command_error_msg' => 'ID de host no válido',
+            ];
+        }
+
+        // Obtener los detalles del host
+        $hostDetails = $this->hostModel->getHostDetails($target_id);
+
+        if ($hostDetails) {
+            return [
+                'command_success' => 1,
+                'response_msg' => $hostDetails,
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'command_error_msg' => 'No se encontraron detalles para el host',
+            ];
+        }
     }
 
     /**

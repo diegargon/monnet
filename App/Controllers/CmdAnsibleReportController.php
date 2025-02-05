@@ -10,7 +10,7 @@
 
 namespace App\Controllers;
 
-use App\Models\cmdAnsibleReportModel;
+use App\Models\CmdAnsibleReportModel;
 
 
 class CmdAnsibleReportController {
@@ -20,7 +20,7 @@ class CmdAnsibleReportController {
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->reportModel = new cmdAnsibleReportModel($ctx);
+        $this->reportModel = new CmdAnsibleReportModel($ctx);
     }
 
     public function generateAnsibleReport($command_values)

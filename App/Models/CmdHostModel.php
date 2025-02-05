@@ -17,6 +17,15 @@ class CmdHostModel
     {
         $this->ctx = $ctx;
     }
+
+    public function getHostDetails($target_id) {
+        global $db;
+
+        $query = "SELECT * FROM hosts WHERE id = :id";
+        $params = ['id' => $target_id];
+
+        return $db->fetch($query, $params);
+    }
     /**
      * Elimina un host.
      *
@@ -25,7 +34,7 @@ class CmdHostModel
      */
     public function remove($target_id)
     {
-        $db = $this-ctx->get('Mysql');
+        $db = $this-ctx->get('Database');
         return $db->delete('hosts', ['id' => $target_id]);
     }
 
@@ -38,7 +47,7 @@ class CmdHostModel
      */
     public function update($target_id, $data)
     {
-        $db = $this-ctx->get('Mysql');
+        $db = $this-ctx->get('Database');
         return $db->update('hosts', $data, ['id' => $target_id]);
     }
 
@@ -50,7 +59,7 @@ class CmdHostModel
      */
     public function createHostToken($target_id)
     {
-        $db = $this-ctx->get('Mysql');
+        $db = $this-ctx->get('Database');
         $token = bin2hex(random_bytes(16));
         return $db->update('hosts', ['token' => $token], ['id' => $target_id]);
     }
@@ -64,7 +73,7 @@ class CmdHostModel
      */
     public function addRemoteScanHostPort($target_id, $port_details)
     {
-        $db = $this-ctx->get('Mysql');
+        $db = $this-ctx->get('Database');
         $port_details['host_id'] = $target_id;
         return $db->insert('ports', $port_details);
     }
@@ -77,7 +86,7 @@ class CmdHostModel
      */
     public function deletePort($target_id)
     {
-        $db = $this-ctx->get('Mysql');
+        $db = $this-ctx->get('Database');
         return $db->delete('ports', ['id' => $target_id]);
     }
 
@@ -90,7 +99,7 @@ class CmdHostModel
      */
     public function updatePort($target_id, $data)
     {
-        $db = $this-ctx->get('Mysql');
+        $db = $this-ctx->get('Database');
         return $db->update('ports', $data, ['id' => $target_id]);
     }
 }
