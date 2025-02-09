@@ -336,7 +336,6 @@ class Hosts
         $this->db->delete('stats', ['host_id' => $hid]);
         $this->db->delete('hosts_logs', ['host_id' => $hid]);
         $this->db->delete('reports', ['host_id' => $hid]);
-        $this->db->delete('hid', ['hid' => $hid]);
         $this->db->delete('ansible_msg', ['host_id' => $hid]);
         $this->db->delete('ports', ['hid' => $hid]);
 
