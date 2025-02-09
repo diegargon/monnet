@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author diego/@/envigo.net
@@ -37,5 +38,20 @@ class AnsibleService
                 'command_error_msg' => $response['error_msg'],
             ];
         }
+    }
+
+    /**
+     * Obtiene los informes de Ansible para un host.
+     *
+     * @param int $host_id El ID del host.
+     * @return array Los informes de Ansible.
+     */
+    public function getAnsibleReports($host_id) {
+        global $db;
+
+        $query = "SELECT * FROM ansible_reports WHERE host_id = :host_id ORDER BY date DESC";
+        $params = ['host_id' => $host_id];
+
+        return $db->fetchAll($query, $params);
     }
 }

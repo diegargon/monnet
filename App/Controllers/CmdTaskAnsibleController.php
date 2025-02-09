@@ -11,19 +11,21 @@
 class CmdTaskAnsibleController
 {
     private \AppContext $ctx;
-    private $ansibleService;
+    private Filter $filter;
+    private \App\Services\AnsibleService $ansibleService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ansibleService = new AnsibleService($ctx);
+        $this->filter = new Filter();
         $this->ctx = $ctx;
     }
 
     public function executePlaybook($command_values)
     {
-        $target_id = $this->taskModel->varInt($command_values['id']);
-        $playbook = $this->taskModel->varString($command_values['value']);
-        $extra_vars = $this->taskModel->varJson($command_values['extra_vars']);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $playbook = $this->filter->varString($command_values['value']);
+        $extra_vars = $this->filter->varJson($command_values['extra_vars']);
 
         $response = $this->ansibleService->runPlaybook($target_id, $playbook, $extra_vars);
 

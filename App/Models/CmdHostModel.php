@@ -19,12 +19,24 @@ class CmdHostModel
     }
 
     public function getHostDetails($target_id) {
-        global $db;
-
+        $db = $this->ctx->get('DBManager');
         $query = "SELECT * FROM hosts WHERE id = :id";
         $params = ['id' => $target_id];
 
-        return $db->fetch($query, $params);
+        $hostDetails = $db->fetch($query, $params);
+
+        if ($hostDetails) {
+            if (isset($hostDetails['misc'])) {
+                $hostDetails['misc'] = json_decode($hostDetails['misc'], true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    $hostDetails['misc'] = [];
+                }
+            } else {
+                $hostDetails['misc'] = [];
+            }
+        }
+
+        return $hostDetails;
     }
     /**
      * Elimina un host.
@@ -34,7 +46,7 @@ class CmdHostModel
      */
     public function remove($target_id)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->delete('hosts', ['id' => $target_id]);
     }
 
@@ -47,7 +59,7 @@ class CmdHostModel
      */
     public function update($target_id, $data)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->update('hosts', $data, ['id' => $target_id]);
     }
 
@@ -59,7 +71,7 @@ class CmdHostModel
      */
     public function createHostToken($target_id)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         $token = bin2hex(random_bytes(16));
         return $db->update('hosts', ['token' => $token], ['id' => $target_id]);
     }
@@ -73,7 +85,7 @@ class CmdHostModel
      */
     public function addRemoteScanHostPort($target_id, $port_details)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         $port_details['host_id'] = $target_id;
         return $db->insert('ports', $port_details);
     }
@@ -86,7 +98,7 @@ class CmdHostModel
      */
     public function deletePort($target_id)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->delete('ports', ['id' => $target_id]);
     }
 
@@ -99,7 +111,129 @@ class CmdHostModel
      */
     public function updatePort($target_id, $data)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->update('ports', $data, ['id' => $target_id]);
+    }
+
+    /**
+     * Obtiene los puertos remotos de un host.
+     *
+     * @param int $target_id El ID del host.
+     * @return array Los puertos remotos del host.
+     */
+    public function getRemotePorts($target_id) {
+        $db = $this->ctx->get('DBManager');
+
+        $query = "SELECT * FROM ports WHERE host_id = :host_id AND remote_scan = 1";
+        $params = ['host_id' => $target_id];
+
+        return $db->fetchAll($query, $params);
+    }
+
+    /**
+     * Obtiene las estadísticas de memoria de un host.
+     *
+     * @param int $target_id El ID del host.
+     * @return array Las estadísticas de memoria.
+     */
+    public function getMemoryInfo($target_id) {
+        $db = $this->ctx->get('DBManager');
+
+        $query = "SELECT mem_total, mem_used, mem_free FROM stats WHERE host_id = :host_id";
+        $params = ['host_id' => $target_id];
+
+        return $db->fetch($query, $params);
+    }
+
+    /**
+     * Obtiene la carga promedio de un host.
+     *
+     * @param int $target_id El ID del host.
+     * @return array La carga promedio.
+     */
+    public function getLoadAverage($target_id) {
+        $db = $this->ctx->get('DBManager');
+
+        $query = "SELECT load_avg_1min, load_avg_5min, load_avg_15min FROM stats WHERE host_id = :host_id";
+        $params = ['host_id' => $target_id];
+
+        return $db->fetch($query, $params);
+    }
+
+    /**
+     * Obtiene las estadísticas de I/O de un host.
+     *
+     * @param int $target_id El ID del host.
+     * @return array Las estadísticas de I/O.
+     */
+    public function getIOWaitStats($target_id) {
+        $db = $this->ctx->get('DBManager');
+
+        $query = "SELECT iowait FROM host_metrics WHERE host_id = :host_id";
+        $params = ['host_id' => $target_id];
+
+        return $db->fetch($query, $params);
+    }
+
+    /**
+     * Obtiene la información de discos de un host.
+     *
+     * @param int $target_id El ID del host.
+     * @return array La información de discos.
+     */
+    public function getDisksInfo($target_id) {
+        $db = $this->ctx->get('DBManager');
+
+        $query = "SELECT disk_name, disk_total, disk_used, disk_free FROM host_disks WHERE host_id = :host_id";
+        $params = ['host_id' => $target_id];
+
+        return $db->fetchAll($query, $params);
+    }
+
+    /**
+     * Actualiza el campo misc de un host.
+     *
+     * @param int $target_id El ID del host.
+     * @param array $misc_data Los datos misc en formato array.
+     * @return bool True si se actualizó correctamente, False en caso contrario.
+     */
+    public function updateMisc($target_id, $misc_data) {
+        $db = $this->ctx->get('DBManager');
+
+        // Validar que los datos sean un array
+        if (!is_array($misc_data)) {
+            throw new \InvalidArgumentException('Los datos misc deben ser un array');
+        }
+
+        // Convertir el array a JSON
+        $misc_json = json_encode($misc_data);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \InvalidArgumentException('Error al codificar los datos misc a JSON');
+        }
+
+        // Actualizar el campo misc
+        return $db->update('hosts', ['misc' => $misc_json], ['id' => $target_id]);
+    }
+
+    /**
+     * Obtiene el campo misc de un host.
+     *
+     * @param int $target_id El ID del host.
+     * @return array Los datos misc en formato array.
+     */
+    public function getMisc($target_id) {
+        $db = $this->ctx->get('DBManager');
+
+        $query = "SELECT misc FROM hosts WHERE id = :id";
+        $params = ['id' => $target_id];
+
+        $result = $db->fetch($query, $params);
+
+        if ($result && isset($result['misc'])) {
+            return json_decode($result['misc'], true);
+        }
+
+        return [];
     }
 }

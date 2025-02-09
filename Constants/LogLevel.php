@@ -9,7 +9,7 @@
 
 class LogLevel
 {
-    use ConstantUtils;
+    use ConstantsUtils;
 
     public const DEBUG = 7;
     public const INFO = 6;

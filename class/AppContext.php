@@ -44,6 +44,21 @@ class AppContext
     {
         $this->cfg = &$cfg;
     }
+
+    /*
+     * @param array<string,mixed> $cfg
+     * @return void
+     */
+    public function setCfgDb(array $cfg_db): void
+    {
+        $this->cfg['dbtype'] = $cfg_db['dbtype'];
+        $this->cfg['dbhost'] = $cfg_db['dbhost'];
+        $this->cfg['dbname'] = $cfg_db['dbname'];
+        $this->cfg['dbuser'] = $cfg_db['dbuser'];
+        $this->cfg['dbpassword'] = $cfg_db['dbpassword'];
+        $this->cfg['dbprefix'] = $cfg_db['dbprefix'];
+        $this->cfg['dbcharset'] = $cfg_db['dbcharset'];
+    }
     /**
      * autoload class method TODO: Change autoload
      *

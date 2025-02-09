@@ -15,20 +15,22 @@ use App\Models\CmdNetworkModel;
 
 class CmdNetworkController
 {
-    private $networkModel;
+    private CmdNetworkModel $networkModel;
+    private Filter $filter;
     private \AppContext $ctx;
 
     public function __construct(\AppContext $ctx)
     {
         $this->cmdNetworkModel = new CmdNetworkModel($ctx);
+        $this->filter = new Filter();
         $this->ctx = $ctx;
     }
 
     public function manageNetworks($command_values)
     {
-        $action = $this->filterService->varString($command_values['action']);
-        $target_id = $this->filterService->varInt($command_values['id']);
-        $value_command = $this->filterService->varJson($command_values['value']);
+        $action = $this->filter->varString($command_values['action']);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value_command = $this->filter->varJson($command_values['value']);
 
         if ($action === 'remove') {
             $this->networkModel->removeNetwork($target_id);
@@ -68,8 +70,8 @@ class CmdNetworkController
     {
         // Validar y sanitizar los datos de la red
         return [
-            'network' => $this->filterService->varString($data['network']),
-            'description' => $this->filterService->varString($data['description']),
+            'network' => $this->filter->varString($data['network']),
+            'description' => $this->filter->varString($data['description']),
         ];
     }
 }

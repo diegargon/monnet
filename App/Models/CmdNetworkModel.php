@@ -20,19 +20,19 @@ class CmdNetworkModel
     }
     public function removeNetwork($target_id)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->delete('networks', ['id' => $target_id]);
     }
 
     public function updateNetwork($target_id, $network_data)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->update('networks', $network_data, ['id' => $target_id]);
     }
 
     public function addNetwork($network_data)
     {
-        $db = $this - ctx->get('Database');
+        $db = $this - ctx->get('DBManager');
         return $db->insert('networks', $network_data);
     }
 }

@@ -9,7 +9,7 @@
 
 class EventType
 {
-    use ConstantUtils;
+    use ConstantsUtils;
 
     public const HIGH_IOWAIT = 1;
     public const HIGH_MEMORY_USAGE = 2;

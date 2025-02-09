@@ -21,19 +21,19 @@ class CmdBookmarksModel
 
     public function add($bookmark)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->insert('bookmarks', $bookmark);
     }
 
     public function update($bookmark)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->update('bookmarks', $bookmark, ['id' => $bookmark['id']]);
     }
 
     public function remove($target_id)
     {
-        $db = $this-ctx->get('Database');
+        $db = $this->ctx->get('DBManager');
         return $db->delete('bookmarks', ['id' => $target_id]);
     }
 }

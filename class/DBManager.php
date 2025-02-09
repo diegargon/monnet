@@ -1,23 +1,31 @@
 <?php
 
-/*
- * replacement Dabase class
+/**
+ *
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-class Database
+class DBManager
 {
+    private AppContext $ctx;
     private ?\PDO $connection = null;
     private string $dsn;
     private string $username;
     private string $password;
 
     /**
-     * @param array<string,string> $config Arreglo de configuración de la base de datos
      *
-     * @throws InvalidArgumentException Si el tipo de base de datos no es soportado
+     * @param AppContext $ctx
+     * @throws \InvalidArgumentException
      */
-    public function __construct(array $config)
+    public function __construct(AppContext $ctx)
     {
+        $this->ctx = $ctx;
+        $config = $ctx->get('cfg');
+
         $dbType = $config['dbtype'];
         $host = $config['dbhost'];
         $port = $config['dbport'] ?? null; // Puerto opcional
@@ -46,6 +54,7 @@ class Database
 
         $this->username = $username;
         $this->password = $password;
+        $this->connect();
     }
 
     /**
@@ -93,7 +102,7 @@ class Database
      *
      * @return array<int, array<string, mixed>>
      */
-    public function fetchOne(string $sql, array $params = []): ?array
+    public function fetch(string $sql, array $params = []): ?array
     {
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($params);

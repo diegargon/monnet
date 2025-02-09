@@ -10,22 +10,24 @@
 namespace App\Controllers;
 
 use App\Models\CmdBookmarkModel;
-
+use App\Services\Filter;
 
 class CmdBookmarksController
 {
-    private $cmdBookmarkModel;
+    private CmdBookmarksController $cmdBookmarkModel;
+    private Filter $filter;
     private \AppContext $ctx;
 
     public function __construct(\AppContext $ctx)
     {
         $this->cmdBookmarkModel = new CmdBookmarkModel($ctx);
+        $this->filter = new Filter();
         $this->ctx = $ctx;
     }
 
     public function addBookmark($command_values)
     {
-        $value_command = $this->filterService->varJson($command_values['value']);
+        $value_command = $this->filter->varJson($command_values['value']);
         $decodedJson = json_decode($value_command, true);
 
         if ($decodedJson === null) {
@@ -41,7 +43,7 @@ class CmdBookmarksController
         }
 
         // Validar campos del bookmark
-        if (!$this->filterService->varString($new_bookmark['name'])) {
+        if (!$this->filter->varString($new_bookmark['name'])) {
             return [
                 'command_error' => 1,
                 'command_error_msg' => 'Name is empty or invalid',
@@ -66,8 +68,8 @@ class CmdBookmarksController
 
     public function updateBookmark($command_values)
     {
-        $target_id = $this->filterService->varInt($command_values['id']);
-        $value_command = $this->filterService->varJson($command_values['value']);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value_command = $this->filter->varJson($command_values['value']);
         $decodedJson = json_decode($value_command, true);
 
         if ($decodedJson === null) {
@@ -83,7 +85,7 @@ class CmdBookmarksController
         }
 
         // Validar campos del bookmark
-        if (!$this->filterService->varString($bookmark['name'])) {
+        if (!$this->filter->varString($bookmark['name'])) {
             return [
                 'command_error' => 1,
                 'command_error_msg' => 'Name is empty or invalid',
@@ -108,7 +110,7 @@ class CmdBookmarksController
 
     public function removeBookmark($command_values)
     {
-        $target_id = $this->filterService->varInt($command_values['id']);
+        $target_id = $this->filter->varInt($command_values['id']);
 
         if ($this->cmdBookmarkModel->remove($target_id)) {
             return [

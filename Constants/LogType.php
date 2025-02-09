@@ -9,7 +9,7 @@
 
 class LogType
 {
-    use ConstantUtils;
+    use ConstantsUtils;
 
     public const DEFAULT = 0;
     public const EVENT = 1;

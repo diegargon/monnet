@@ -56,6 +56,7 @@ if ($cfg_db['dbtype'] == 'mysqli') {
 
 $ctx = new AppContext();
 $ctx->setCfg($cfg);
+$ctx->setCfgDb($cfg_db);
 
 try {
     $db = $ctx->set('Mysql', new Database($cfg_db));
