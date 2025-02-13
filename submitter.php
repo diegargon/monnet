@@ -30,12 +30,12 @@ if (!empty($ncfg) && $ncfg->get('ansible')) {
 }
 
 /*
-use App\Controllers\CommandController;
-$cmdController = new CommandController($ctx);
+use App\Router\CommandRouter;
+$cmdRouter = new CommandRouter($ctx);
 
 $command = Filters::postString('command');
 $command_values = Filters::sanArray('command_values', 'post');
-$response = $cmdController->handleCommand($command, $command_values);
+$response = $cmdRouter->handleCommand($command, $command_values);
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 exit();
 */

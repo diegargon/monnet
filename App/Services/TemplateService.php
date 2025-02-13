@@ -26,15 +26,19 @@ class TemplateService {
      * @param array $data Los datos para renderizar la plantilla.
      * @return string El HTML renderizado.
      */
-    public function getTpl($templateName, $data = []) {
-        $templateFile = $this->templatesPath . $templateName . 'tpl.php';
+    public function getTpl($templateName, $tdata = []) {
+        $lng = $this->ctx->get('lng');
+        $cfg = $this->ctx->get('cfg');
+        $ncfg = $this->ctx->get('Config');
+
+        $templateFile = $this->templatesPath . $templateName . '.tpl.php';
 
         if (!file_exists($templateFile)) {
             throw new \Exception("Plantilla no encontrada: $templateName");
         }
 
-        // Extraer los datos para que estén disponibles en la plantilla
-        extract($data);
+        // Extraer el array
+        //extract($tdata);
 
         // Capturar la salida del archivo de plantilla
         ob_start();

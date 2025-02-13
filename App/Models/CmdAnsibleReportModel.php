@@ -19,7 +19,7 @@ class CmdAnsibleReportModel
         $this->ctx = $ctx;
     }
 
-    public function getAnsibleReport($target_id, $report_type)
+    public function getAnsibleReport(int $target_id)
     {
         $db = $this->ctx->get('DBManager');
         $query = "SELECT * FROM reports WHERE id = :id AND type = :type";

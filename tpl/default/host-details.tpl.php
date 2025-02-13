@@ -406,7 +406,11 @@
             <div class="inline"><button id="syslog_btn">Syslog</button></div>
             <div class="inline"><button id="journald_btn">Journald</button></div>
             <?php endif; ?>
-            <?= $tdata['host_details']['host_logs'] ?>
+            <?php
+                if (!empty($tdata['host_details']['host_logs'])):
+                    $tdata['host_details']['host_logs'];
+                endif;
+            ?>
         </div>
         <!-- /TAB9 -->
         <!-- TAB10 --><!-- Graphs / PING -->

@@ -18,7 +18,8 @@ class CmdHostModel
         $this->ctx = $ctx;
     }
 
-    public function getHostDetails($target_id) {
+    public function getHostDetails($target_id)
+    {
         $db = $this->ctx->get('DBManager');
         $query = "SELECT * FROM hosts WHERE id = :id";
         $params = ['id' => $target_id];
@@ -121,7 +122,8 @@ class CmdHostModel
      * @param int $target_id El ID del host.
      * @return array Los puertos remotos del host.
      */
-    public function getRemotePorts($target_id) {
+    public function getRemotePorts($target_id)
+    {
         $db = $this->ctx->get('DBManager');
 
         $query = "SELECT * FROM ports WHERE host_id = :host_id AND remote_scan = 1";
@@ -136,6 +138,8 @@ class CmdHostModel
      * @param int $target_id El ID del host.
      * @return array Las estadísticas de memoria.
      */
+
+    /*
     public function getMemoryInfo($target_id) {
         $db = $this->ctx->get('DBManager');
 
@@ -144,6 +148,7 @@ class CmdHostModel
 
         return $db->fetch($query, $params);
     }
+    */
 
     /**
      * Obtiene la carga promedio de un host.
@@ -151,7 +156,8 @@ class CmdHostModel
      * @param int $target_id El ID del host.
      * @return array La carga promedio.
      */
-    public function getLoadAverage($target_id) {
+    public function getLoadAverage($target_id)
+    {
         $db = $this->ctx->get('DBManager');
 
         $query = "SELECT load_avg_1min, load_avg_5min, load_avg_15min FROM stats WHERE host_id = :host_id";
@@ -166,7 +172,8 @@ class CmdHostModel
      * @param int $target_id El ID del host.
      * @return array Las estadísticas de I/O.
      */
-    public function getIOWaitStats($target_id) {
+    public function getIOWaitStats($target_id)
+    {
         $db = $this->ctx->get('DBManager');
 
         $query = "SELECT iowait FROM host_metrics WHERE host_id = :host_id";
@@ -181,7 +188,8 @@ class CmdHostModel
      * @param int $target_id El ID del host.
      * @return array La información de discos.
      */
-    public function getDisksInfo($target_id) {
+    public function getDisksInfo($target_id)
+    {
         $db = $this->ctx->get('DBManager');
 
         $query = "SELECT disk_name, disk_total, disk_used, disk_free FROM host_disks WHERE host_id = :host_id";
@@ -197,7 +205,8 @@ class CmdHostModel
      * @param array $misc_data Los datos misc en formato array.
      * @return bool True si se actualizó correctamente, False en caso contrario.
      */
-    public function updateMisc($target_id, $misc_data) {
+    public function updateMisc($target_id, $misc_data)
+    {
         $db = $this->ctx->get('DBManager');
 
         // Validar que los datos sean un array
@@ -222,7 +231,8 @@ class CmdHostModel
      * @param int $target_id El ID del host.
      * @return array Los datos misc en formato array.
      */
-    public function getMisc($target_id) {
+    public function getMisc($target_id)
+    {
         $db = $this->ctx->get('DBManager');
 
         $query = "SELECT misc FROM hosts WHERE id = :id";
@@ -235,5 +245,33 @@ class CmdHostModel
         }
 
         return [];
+    }
+
+    public function getAlertOn() {
+        $db = $this->ctx->get('DBManager');
+
+        $query = "SELECT * FROM hosts WHERE alert = :alert";
+        $params = ['alert' => 1];
+
+        $results = $db->fetchAll($query, $params);
+
+        if (is_bool($results)) {
+            return [];
+        }
+
+    }
+
+    public function getWarnOn() {
+        $db = $this->ctx->get('DBManager');
+
+        $query = "SELECT * FROM hosts WHERE warn = :warn";
+        $params = ['warn' => 1];
+
+        $results = $db->fetchAll($query, $params);
+
+        if (is_bool($results)) {
+            return [];
+        }
+
     }
 }

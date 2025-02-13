@@ -5,6 +5,15 @@
  * @package
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ *
+CommandRouter       Recibe el comando y los valores.
+CommandRouter       Redirige la solicitud al método correspondiente en HostController.
+CmdHostController   Valida los datos de entrada y llama a HostService para obtener los datos.
+HostService         Se comunica con HostModel para obtener los datos y realiza cualquier lógica de negocio necesaria.
+HostService         Devuelve los datos a HostController.
+CmdHostController   Formatea los datos (opcionalmente usando HostFormatted) y prepara la respuesta.
+CmdHostController   Devuelve la respuesta a CommandRouter.
+CommandRouter       Devuelve la respuesta final al cliente.
  */
 
 namespace App\Controllers;
@@ -14,6 +23,8 @@ use App\Services\Filter;
 use App\Services\LogService;
 use App\Services\AnsibleService;
 use App\Services\TemplateService;
+use App\Services\HostFormatter;
+use App\Services\HostService;
 
 class CmdHostController
 {
@@ -26,8 +37,12 @@ class CmdHostController
     private $ansibleService;
     private $templateService;
 
+    private $reportKeysToShow = ["id", "display_name", "ip", 'mac', "online"];
+
     public function __construct(\AppContext $ctx)
     {
+        $this->hostService = new HostService($ctx);
+        $this->hostFormatter = new HostFormatter($ctx);
         $this->cmdHostModel = new CmdHostModel($ctx);
         $this->logService = new LogService($ctx);
         $this->ansibleService = new AnsibleService($ctx);
@@ -42,7 +57,8 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function getHostDetails($command_values) {
+    public function getHostDetails(array $command_values): array
+    {
         $target_id = $this->filter->varInt($command_values['id']);
 
         if (!$target_id) {
@@ -52,8 +68,7 @@ class CmdHostController
             ];
         }
 
-        // Obtener los detalles del host
-        $hostDetails = $this->cmdHostModel->getHostDetails($target_id);
+        $hostDetails = $this->hostService->getDetails($target_id);
 
         if (!$hostDetails) {
             return [
@@ -62,31 +77,18 @@ class CmdHostController
             ];
         }
 
-        // Obtener puertos remotos
-        //$hostDetails['remote_ports'] = $this->cmdHostModel->getRemotePorts($target_id);
+        $tdata['host_details'] = $hostDetails;
+        $hostDetailsTpl = $this->templateService->getTpl('host-details', $tdata);
 
-        // Obtener logs del host
-        //$hostDetails['logs'] = $this->logService->getHostLogs($target_id);
-
-        // Obtener métricas del host
-        $hostDetails['metrics'] = $this->getHostMetrics($target_id);
-
-        // Obtener detalles de Ansible (si está habilitado)
-        if ($hostDetails['ansible_enabled']) {
-            $hostDetails['ansible_reports'] = $this->ansibleService->getAnsibleReports($target_id);
-        }
-
-        $tpl = $this->templateService->getTpl('host-details', [
-            'hostDetails' => $hostDetails,
-            'remotePorts' => $hostDetails['remote_ports'],
-            'logs' => $hostDetails['logs'],
-            'metrics' => $hostDetails['metrics'],
-            'ansibleReports' => $hostDetails['ansible_reports'],
-        ]);
+        $host_data = [
+            'cfg' => ['place' => "#left-container"],
+            'data' => $hostDetailsTpl,
+        ];
 
         return [
             'command_success' => 1,
-            'response_msg' => $tpl
+            'host_details' => $host_data,
+            'response_msg' => "ok",
         ];
 
     }
@@ -97,7 +99,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function removeHost($command_values)
+    public function removeHost(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
 
@@ -121,7 +123,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function updateHost($command_values)
+    public function updateHost(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $field = $this->filter->varString($command_values['field']);
@@ -146,7 +148,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function toggleDisablePing($command_values)
+    public function toggleDisablePing(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varBool($command_values['value']);
@@ -170,7 +172,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function setCheckPorts($command_values)
+    public function setCheckPorts(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varInt($command_values['value']);
@@ -194,7 +196,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function submitHostToken($command_values)
+    public function submitHostToken(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
 
@@ -217,7 +219,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function addRemotePort($command_values)
+    public function addRemotePort(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $port_details = [
@@ -244,7 +246,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function deleteHostPort($command_values)
+    public function deleteHostPort(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
 
@@ -267,7 +269,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function submitCustomServiceName($command_values)
+    public function submitCustomServiceName(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varString($command_values['value']);
@@ -291,7 +293,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function submitTitle($command_values)
+    public function submitTitle(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varString($command_values['value']);
@@ -316,7 +318,7 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function submitHostname($command_values)
+    public function submitHostname(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varDomain($command_values['value']);
@@ -340,7 +342,8 @@ class CmdHostController
      * @param int $target_id El ID del host.
      * @return array Las métricas del host.
      */
-    private function getHostMetrics($target_id) {
+    private function getHostMetrics(int $target_id): array
+    {
         $metrics = [];
 
         // Obtener estadísticas de memoria
@@ -364,7 +367,8 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function updateMisc($command_values) {
+    public function updateMisc(array $command_values): array
+    {
         $target_id = $this->filter->varInt($command_values['id']);
         $misc_data = $this->filter->varArray($command_values['misc']);
 
@@ -387,14 +391,45 @@ class CmdHostController
      * @param array $command_values Los valores del comando.
      * @return array Respuesta en formato JSON.
      */
-    public function getMisc($command_values) {
+    public function getMisc(array $command_values): array
+    {
         $target_id = $this->filter->varInt($command_values['id']);
-        
+
         $misc_data = $this->cmdHostModel->getMisc($target_id);
 
         return [
             'command_success' => 1,
             'response_msg' => $misc_data,
+        ];
+    }
+
+    public function getAlertHosts(): array
+    {
+        $tdata['hosts'] = $this->hostService->getAlertHosts();
+        $keysToShow = $this->reportKeysToShow;
+        array_push($keysToShow, 'log_msgs');
+        $tdata['keysToShow'] = $keysToShow;
+
+        $alertHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
+
+        return [
+            'command_success' => 1,
+            'response_msg' => $alertHostsTpl,
+        ];
+    }
+
+    public function getWarnHosts(): array
+    {
+        $tdata['hosts'] = $this->hostService->getWarnHosts();
+        $keysToShow = $this->reportKeysToShow;
+        array_push($keysToShow, 'log_msgs');
+        $tdata['keysToShow'] = $keysToShow;
+
+        $warnHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
+
+        return [
+            'command_success' => 1,
+            'response_msg' => $warnHostsTpl,
         ];
     }
 }

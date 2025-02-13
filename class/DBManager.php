@@ -86,7 +86,7 @@ class DBManager
      * @param string $sql Consulta SQL a ejecutar
      * @param array<string, mixed> $params Parámetros de consulta
      *
-     * @return bool
+     * @return array<string, mixed>|null
      */
     public function query(string $sql, array $params = []): bool
     {
@@ -95,7 +95,7 @@ class DBManager
     }
 
     /**
-     * Obtener una fila de resultados
+     * Retrieve a single result row
      *
      * @param string $sql Consulta SQL para obtener datos
      * @param array<string, mixed> $params Parámetros de consulta
@@ -110,7 +110,7 @@ class DBManager
     }
 
     /**
-     * Obtener múltiples filas de resultados
+     * Retrieve multiple result rows
      *
      * @param string $sql Consulta SQL para obtener datos
      * @param array<string,mixed> $params Parámetros de consulta

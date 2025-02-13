@@ -10,25 +10,27 @@
 
 namespace App\Controllers;
 
+use App\Services\Filter;
 use App\Models\CmdAnsibleReportModel;
-
 
 class CmdAnsibleReportController {
     private $reportModel;
     private \AppContext $ctx;
+    private Filter $filter;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->filter = new Filter();
         $this->reportModel = new CmdAnsibleReportModel($ctx);
     }
 
     public function generateAnsibleReport($command_values)
     {
-        $target_id = $this->filterService->varInt($command_values['id']);
-        $report_type = $this->filterService->varString($command_values['type']);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $report_type = $this->filter->varString($command_values['type']);
 
-        $report_data = $this->reportModel->getAnsibleReport($target_id, $report_type);
+        $report_data = $this->reportModel->getReport($target_id, $report_type);
 
         if ($report_data) {
             return [
@@ -45,7 +47,7 @@ class CmdAnsibleReportController {
 
     public function deleteReport($command_values)
     {
-        $target_id = $this->filterService->varInt($command_values['id']);
+        $target_id = $this->filter->varInt($command_values['id']);
 
         if ($this->reportModel->delete($target_id)) {
             return [

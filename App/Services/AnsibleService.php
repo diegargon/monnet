@@ -46,7 +46,7 @@ class AnsibleService
      * @param int $host_id El ID del host.
      * @return array Los informes de Ansible.
      */
-    public function getAnsibleReports($host_id) {
+    public function getReports(int $host_id) {
         global $db;
 
         $query = "SELECT * FROM ansible_reports WHERE host_id = :host_id ORDER BY date DESC";

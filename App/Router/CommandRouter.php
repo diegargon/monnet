@@ -8,15 +8,15 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-namespace App\Controllers;
+namespace App\Router;
 
 use App\Controllers\CmdHostController;
 use App\Controllers\CmdBookmarksController;
 use App\Controllers\CmdNetworkController;
-use App\Controllers\CmdTaskController;
+use App\Controllers\CmdTaskAnsibleController;
 use App\Controllers\CmdAnsibleReportController;
 
-class CommandController {
+class CommandRouter {
 
     private \AppContext $ctx;
 
@@ -116,8 +116,8 @@ class CommandController {
 
             // Ansible
             case 'playbook_exec':
-                $taskController = new CmdTaskController($this->ctx);
-                $response = $taskController->executePlaybook($command_values);
+                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
+                $response = $taskAnsibleController->executePlaybook($command_values);
                 break;
             case 'pbqueue':
                 $taskController = new CmdTaskController($this->ctx);
@@ -128,13 +128,19 @@ class CommandController {
             case 'report_ansible_hosts':
             case 'report_ansible_hosts_off':
             case 'report_ansible_hosts_fail':
+                //$ansibleReportController = new CmdAnsibleReportController($this->ctx);
+                //$response = $ansibleReportController->generateAnsibleReport($command, $command_values);
+                break;
             case 'report_agents_hosts':
             case 'report_agents_hosts_off':
             case 'report_agents_hosts_missing_pings':
             case 'report_alerts':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->getAlertHosts();
+                break;
             case 'report_warns':
-                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
-                $response = $ansibleReportController->generateReport($command, $command_values);
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->getWarnHosts();
                 break;
 
             // Comando no reconocido
