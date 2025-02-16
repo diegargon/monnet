@@ -95,7 +95,7 @@ class HostService
         return $result_hosts;
     }
     /**
-     * Status (null All) (0 Off) (1 Missing Pings)
+     * Status (null All) (0 Off) (1 On) (2 Missing Pings)
      * @param int|null $status
      * @return list<array<string, mixed>>
      */

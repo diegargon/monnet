@@ -371,7 +371,7 @@ function changeHDTab(id, tabId) {
     // Resaltar el botón de la pestaña seleccionada
     const selectedTab = document.querySelector(`button[onclick="changeHDTab(${id}, '${tabId}')"]`);
     selectedTab.classList.add('active');
-    if (['tab9', 'tab10','tab15', 'tab20'].includes(tabId)) {
+    if (['tab3', 'tab9', 'tab10','tab15', 'tab20'].includes(tabId)) {
         requestHostDetails('changeHDTab', {id: id, value: tabId});
     }
     if (['tab20'].includes(tabId)) {

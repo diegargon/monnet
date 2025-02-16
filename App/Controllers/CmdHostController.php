@@ -432,4 +432,24 @@ class CmdHostController
             'response_msg' => $warnHostsTpl,
         ];
     }
+
+    public function handleTabChange(array $command_values)
+    {
+        $tabName = $this->filter->varString($command_values['value']);
+
+        switch($tabName):
+            case 'tab3':    # Notes
+                return [];
+            case 'tab9':    # Log
+                return [];
+            case 'tab10':   # Metrics
+                return [];
+            case 'tab15':   # Tasks
+                return [];
+            case 'tab20':   # Ansible
+                return [];
+            default:
+                return [];
+        endswitch;
+    }
 }

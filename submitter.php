@@ -1243,7 +1243,6 @@ if (
         $tdata['hosts'] = $hosts->getAgentsHosts(0);
     elseif ($command === 'report_agents_hosts_missing_pings') :
         array_push($keysToShow, 'ansible_enabled', 'agent_version');
-        $tdata['hosts'] = $hosts->getAgentsHosts(0);
         $tdata['hosts'] = $hosts->getAgentsHosts(2);
     elseif ($command === 'report_alerts') :
         array_push($keysToShow, 'log_msgs');

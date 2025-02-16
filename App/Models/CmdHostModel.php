@@ -272,6 +272,20 @@ class CmdHostModel
         if (is_bool($results)) {
             return [];
         }
+    }
 
+    public function getAgentsByStatus(int $status) {
+        $db = $this->ctx->get('DBManager');
+
+        $query = 'SELECT * FROM hosts WHERE agent_installed = :true AND online = :online';
+        if ($status === 1 || $status === 2) {
+            $params = ['true' => 1, 'online' => $status];
+        }
+        //TODO: agent_missing_pings [misc]
+        $results = $db->fetchAll($query, $params);
+
+        if (is_bool($results)) {
+            return [];
+        }
     }
 }

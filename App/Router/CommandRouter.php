@@ -132,11 +132,18 @@ class CommandRouter {
                 //$response = $ansibleReportController->generateAnsibleReport($command, $command_values);
                 break;
             case 'report_agents_hosts':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->getAgentsHosts(1);
+                break;
             case 'report_agents_hosts_off':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->getAgentsHosts(0);
+                break;
             case 'report_agents_hosts_missing_pings':
+                break;
             case 'report_alerts':
                 $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getAlertHosts();
+                $response = $hostController->getAlertHosts(2);
                 break;
             case 'report_warns':
                 $hostController = new CmdHostController($this->ctx);
