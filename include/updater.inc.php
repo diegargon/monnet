@@ -276,11 +276,26 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
+    $update = 0.53;
+    if ($db_version < $update) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db->query("ALTER TABLE `hosts` ADD `agent_installed` TINYINT(1) NOT NULL DEFAULT 0;");
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
 
+    // Template
     $update = 0.00;
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
+            //$db->query("
+            //");
             $db->query("START TRANSACTION");
             //$db->query("
             //");
@@ -309,7 +324,7 @@ if ($db->isConn()) {
 
         if (($files_version > $db_version) && !file_exists($lockFile)) :
             file_put_contents($lockFile, 'locked');
-            Log::notice('Triggered');
+            Log::notice('Triggered Update');
             trigger_update($ncfg, $db, $db_version, $files_version);
             unlink($lockFile);
         endif;

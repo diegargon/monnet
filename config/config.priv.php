@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-$cfg['monnet_version'] = 0.52;
+$cfg['monnet_version'] = 0.53;
 
 $cfg['monnet_revision'] = 2;
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
