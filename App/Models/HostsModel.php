@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *
+ * @author diego/@/envigo.net
+ * @package
+ * @subpackage
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ */
+
 namespace App\Models;
 
 class HostsModel
@@ -44,7 +52,7 @@ class HostsModel
 
         $query = "SELECT * FROM hosts";
 
-        $results = $db->fetchAll($query);
+        $results = $db->qfetchAll($query);
 
         if (is_bool($results)) {
             return [];

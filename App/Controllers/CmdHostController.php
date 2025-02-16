@@ -19,8 +19,8 @@ CommandRouter       Devuelve la respuesta final al cliente.
 namespace App\Controllers;
 
 use App\Models\CmdHostModel;
+use App\Models\CmdHostLogsModel;
 use App\Services\Filter;
-use App\Services\LogService;
 use App\Services\AnsibleService;
 use App\Services\TemplateService;
 use App\Services\HostFormatter;
@@ -30,23 +30,22 @@ class CmdHostController
 {
 
     private CmdHostModel $cmdHostModel;
+    private CmdHostLogsModel $cmdHostLogsModel;
     private Filter $filter;
     private \AppContext $ctx;
-
-    private $logService;
     private $ansibleService;
     private $templateService;
-
     private $reportKeysToShow = ["id", "display_name", "ip", 'mac', "online"];
 
     public function __construct(\AppContext $ctx)
     {
         $this->hostService = new HostService($ctx);
+        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
         $this->hostFormatter = new HostFormatter($ctx);
         $this->cmdHostModel = new CmdHostModel($ctx);
-        $this->logService = new LogService($ctx);
         $this->ansibleService = new AnsibleService($ctx);
         $this->templateService = new TemplateService($ctx);
+
         $this->filter = new Filter();
         $this->ctx = $ctx;
     }
@@ -336,6 +335,24 @@ class CmdHostController
         }
     }
 
+    public function ackHostLog(array $command_values) {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varBool($command_values['value']);
+
+        if ($this->cmdHostLogsModel->update($target_id, ['ack' => $value])) {
+            return [
+                'command_success' => 1,
+                'response_msg' => 'Ack updated successfully',
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'command_error_msg' => 'Error updating hostname',
+            ];
+        }
+
+    }
+
     /**
      * Obtiene las métricas de un host.
      *
@@ -405,14 +422,18 @@ class CmdHostController
 
     public function getAlertHosts(): array
     {
+        $lng = $this->ctx->get('lng');
         $tdata['hosts'] = $this->hostService->getAlertHosts();
         $keysToShow = $this->reportKeysToShow;
         array_push($keysToShow, 'log_msgs');
         $tdata['keysToShow'] = $keysToShow;
+        $tdata['table_btn'] = 'clear_alerts';
+        $tdata['table_btn_name'] = $lng['L_CLEAR_ALERTS'];
 
         $alertHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
 
         return [
+            'command_receive' => 'report_alerts',
             'command_success' => 1,
             'response_msg' => $alertHostsTpl,
         ];
@@ -420,14 +441,50 @@ class CmdHostController
 
     public function getWarnHosts(): array
     {
+        $lng = $this->ctx->get('lng');
         $tdata['hosts'] = $this->hostService->getWarnHosts();
         $keysToShow = $this->reportKeysToShow;
         array_push($keysToShow, 'log_msgs');
+        $tdata['keysToShow'] = $keysToShow;
+        $tdata['table_btn'] = 'clear_warns';
+        $tdata['table_btn_name'] = $lng['L_CLEAR_WARNS'];
+
+        $warnHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
+
+        return [
+            'command_receive' => 'report_warns',
+            'command_success' => 1,
+            'response_msg' => $warnHostsTpl,
+        ];
+    }
+
+    public function getAgentsHosts(?int $status = null): array {
+        $hosts = $this->hostService->getAgentsHosts($status);
+        $tdata['hosts'] = $hosts;
+        $keysToShow = $this->reportKeysToShow;
+        array_push($keysToShow, 'ansible_enabled', 'agent_version');
+        $tdata['keysToShow'] = $keysToShow;
+
+        $agentHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
+
+        return [
+            'command_receive' => 'report_warns',
+            'command_success' => 1,
+            'response_msg' => $agentHostsTpl,
+        ];
+    }
+
+    public function getAnsibleHosts(?int $status = null): array
+    {
+        $tdata['hosts'] = $this->hostService->getAnsibleHosts($status);
+        $keysToShow = $this->reportKeysToShow;
+        array_push($keysToShow, 'ansible_enabled', 'agent_version');
         $tdata['keysToShow'] = $keysToShow;
 
         $warnHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
 
         return [
+            'command_receive' => 'report_ansible',
             'command_success' => 1,
             'response_msg' => $warnHostsTpl,
         ];

@@ -11,20 +11,25 @@
 namespace App\Services;
 
 use App\Models\CmdHostModel;
+use App\Models\CmdHostLogsModel;
 
 class HostService
 {
     private CmdHostModel $cmdHostModel;
+    private CmdHostLogsModel $cmdHostLogsModel;
     private HostFormatter $hostFormatter;
-    private LogService $logService;
     private AnsibleService $ansibleService;
+
+    private \Config $ncfg;
 
     public function __construct(\AppContext $ctx)
     {
         $this->cmdHostModel = new CmdHostModel($ctx);
+        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
         $this->hostFormatter = new HostFormatter($ctx);
-        $this->logService = new LogService($ctx);
         $this->ansibleService = new AnsibleService($ctx);
+        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
+        $this->ncfg = $ctx->get('Config');
     }
 
     public function getDetails(int $target_id): array
@@ -64,16 +69,20 @@ class HostService
      */
     public function getAnsibleHosts(?int $status = null): array
     {
+        $hosts = $this->cmdHostModel->getAnsibleHosts();
         $result_hosts = [];
 
         if (!$this->ncfg->get('ansible')) :
             return [];
         endif;
 
-        foreach ($this->hosts as $host) :
-            if (empty($host['ansible_enabled'])) :
-                continue;
-            endif;
+        foreach ($hosts as $host) :
+            $host['display_name'] = $this->hostFormatter->getDisplayName($host);
+            $misc = $this->hostFormatter->fMisc($host['misc']);
+            $host['misc'] = $misc;
+            // TODO: misc array must be in misc key this merge is temporary for compatibility
+            $host = array_merge($host, $misc);
+
             // All
             if ($status === null) :
                 $result_hosts[] = $host;
@@ -101,12 +110,17 @@ class HostService
      */
     public function getAgentsHosts(?int $status = null): array
     {
+        $hosts = $this->cmdHostModel->getAgentsHosts();
         $result_hosts = [];
 
-        foreach ($this->hosts as $host) :
-            if (empty($host['agent_installed'])) :
-                continue;
-            endif;
+        foreach ($hosts as $host) :
+            $host['display_name'] = $this->hostFormatter->getDisplayName($host);
+
+            $misc = $this->hostFormatter->fMisc($host['misc']);
+            $host['misc'] = $misc;
+            // TODO: misc array must be in misc key this merge is temporary for compatibility
+            $host = array_merge($host, $misc);
+
             // All
             if ($status === null) :
                 $result_hosts[] = $host;
@@ -140,6 +154,7 @@ class HostService
 
         foreach ($hosts as $host) :
             $alert_logs_msgs = [];
+            $host['display_name'] = $this->hostFormatter->getDisplayName($host);
             $alert_logs_items = [];
             $min_host = [
                 'id' => $host['id'],
@@ -150,34 +165,16 @@ class HostService
             ];
 
             if ($host['alert'] && empty($host['disable_alarms'])) :
-                $log_type = [ LogType::EVENT_ALERT ];
+                $log_type = [ \LogType::EVENT_ALERT ];
 
-                $opt = [
+                $logs_opt = [
                     'log_type' => $log_type,
                     'host_id' => $host['id'],
                 ];
-                $alert_logs = Log::getLogsHosts($opt);
+                $alert_logs = $this->cmdHostLogsModel->getLogsHosts($logs_opt);
 
                 if (!empty($alert_logs)) :
-                    foreach ($alert_logs as $item) :
-                        if (!in_array($item['msg'], $alert_logs_msgs)) :
-                            $alert_logs_msgs[] = $item['msg'];
-                            $alert_logs_items[] = $item;
-                        endif;
-                    endforeach;
-
-                    $timezone = $this->ncfg->get('timezone');
-                    $timeformat = $this->ncfg->get('datetime_format_min');
-                    foreach ($alert_logs_items as $item) :
-                        $date = utc_to_tz($item['date'], $timezone, $timeformat);
-                        $min_host['log_msgs'][] = [
-                            'log_id' => $item['id'],
-                            'log_type' => LogType::getName($item['log_type']),
-                            'event_type' => EventType::getName($item['event_type']),
-                            'msg' => "{$item['msg']} - $date",
-                            'ack_state' => $item['ack']
-                        ];
-                    endforeach;
+                    $min_host['log_msgs'] = $this->hostFormatter->fHostLogsMsgs($alert_logs);
                     $result_hosts[] = $min_host;
                 else :
                     $min_host['alert_msg']  = 'Alert logs are empty';
@@ -198,7 +195,8 @@ class HostService
         $hosts = $this->cmdHostModel->getWarnOn();
         $result_hosts = [];
 
-        foreach ($this->hosts as $host) :
+        foreach ($hosts as $host) :
+            $host['display_name'] = $this->hostFormatter->getDisplayName($host);
             $min_host = [
                 'id' => $host['id'],
                 'display_name' => $host['display_name'],
@@ -208,35 +206,16 @@ class HostService
             ];
 
             if ($host['warn'] && empty($host['disable_alarms'])) :
-                $log_type = [ LogType::EVENT_WARN ];
+                $log_type = [ \LogType::EVENT_WARN ];
 
-                $opt = [
+                $logs_opt = [
                     'log_type' => $log_type,
                     'host_id' => $host['id'],
                 ];
-                $warn_logs = Log::getLogsHosts($opt);
-                $warn_logs_msgs = [];
-                $warn_logs_items = [];
+                $warn_logs = $this->cmdHostLogsModel->getLogsHosts($logs_opt);
 
                 if (!empty($warn_logs)) :
-                    foreach ($warn_logs as $item) :
-                        if (!in_array($item['msg'], $warn_logs_msgs)) :
-                            $warn_logs_msgs[] = $item['msg'];
-                            $warn_logs_items[] = $item;
-                        endif;
-                    endforeach;
-                    $timezone = $this->ncfg->get('timezone');
-                    $timeformat = $this->ncfg->get('datetime_format_min');
-                    foreach ($warn_logs_items as $item) :
-                        $date = utc_to_tz($item['date'], $timezone, $timeformat);
-                        $min_host['log_msgs'][] = [
-                            'log_id' => $item['id'],
-                            'log_type' => LogType::getName($item['log_type']),
-                            'event_type' => EventType::getName($item['event_type']),
-                            'msg' => "{$item['msg']} - $date",
-                            'ack_state' => $item['ack']
-                        ];
-                    endforeach;
+                    $min_host['log_msgs'] = $this->hostFormatter->fHostLogsMsgs($warn_logs);
                     $result_hosts[] = $min_host;
                 else :
                     $min_host['warn_msg']  = 'Warn logs are empty';

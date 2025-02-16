@@ -94,7 +94,7 @@ class HostFormatter
         }
 
         if (!empty($host['misc']['disks_info'])) :
-            $disksinfo = unserialize($host['disks_info']);
+            $disksinfo = unserialize($host['misc']['disks_info']);
             $host['disks_info'] = [];
 
             foreach ($disksinfo as $disk) :
@@ -124,7 +124,7 @@ class HostFormatter
      *
      * @return string
      */
-    private function getDisplayName(array $host): string
+    public function getDisplayName(array $host): string
     {
         if (!empty($host['title'])) {
             return $host['title'];
@@ -133,5 +133,43 @@ class HostFormatter
         }
 
         return $host['ip'];
+    }
+
+    public function fMisc(string $misc): array
+    {
+        if (!empty ($misc)) {
+            return json_decode($misc, true);
+        }
+
+        return [];
+    }
+
+    public function fHostLogsMsgs(array $logs_items): array
+    {
+        $log_msg = [];
+        $flogs_msgs = [];
+        $flogs_items = [];
+        $ncfg = $this->ctx->get('Config');
+
+        foreach ($logs_items as $item) :
+            if (!in_array($item['msg'], $flogs_msgs)) :
+                $flogs_msgs[] = $item['msg'];
+                $flogs_items[] = $item;
+            endif;
+        endforeach;
+        $timezone = $ncfg->get('timezone');
+        $timeformat = $ncfg->get('datetime_format_min');
+        foreach ($flogs_items as $item) :
+            $date = utc_to_tz($item['date'], $timezone, $timeformat);
+            $log_msg[] = [
+                'log_id' => $item['id'],
+                'log_type' => \LogType::getName($item['log_type']),
+                'event_type' => \EventType::getName($item['event_type']),
+                'msg' => "{$item['msg']} - $date",
+                'ack_state' => $item['ack']
+            ];
+        endforeach;
+
+        return $log_msg;
     }
  }

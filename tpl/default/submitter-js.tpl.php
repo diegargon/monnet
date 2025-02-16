@@ -4,7 +4,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -111,6 +111,7 @@
                     }
 
                     if (
+                        jsonData.command_receive === 'report_ansible' ||
                         jsonData.command_receive === 'report_ansible_hosts' ||
                         jsonData.command_receive === 'report_ansible_hosts_off' ||
                         jsonData.command_receive === 'report_ansible_hosts_fail' ||

@@ -24,7 +24,7 @@ class CmdHostModel
         $query = "SELECT * FROM hosts WHERE id = :id";
         $params = ['id' => $target_id];
 
-        $hostDetails = $db->fetch($query, $params);
+        $hostDetails = $db->qfetch($query, $params);
 
         if ($hostDetails) {
             if (isset($hostDetails['misc'])) {
@@ -129,7 +129,7 @@ class CmdHostModel
         $query = "SELECT * FROM ports WHERE host_id = :host_id AND remote_scan = 1";
         $params = ['host_id' => $target_id];
 
-        return $db->fetchAll($query, $params);
+        return $db->qfetchAll($query, $params);
     }
 
     /**
@@ -163,7 +163,7 @@ class CmdHostModel
         $query = "SELECT load_avg_1min, load_avg_5min, load_avg_15min FROM stats WHERE host_id = :host_id";
         $params = ['host_id' => $target_id];
 
-        return $db->fetch($query, $params);
+        return $db->qfetch($query, $params);
     }
 
     /**
@@ -179,7 +179,7 @@ class CmdHostModel
         $query = "SELECT iowait FROM host_metrics WHERE host_id = :host_id";
         $params = ['host_id' => $target_id];
 
-        return $db->fetch($query, $params);
+        return $db->qfetch($query, $params);
     }
 
     /**
@@ -195,7 +195,7 @@ class CmdHostModel
         $query = "SELECT disk_name, disk_total, disk_used, disk_free FROM host_disks WHERE host_id = :host_id";
         $params = ['host_id' => $target_id];
 
-        return $db->fetchAll($query, $params);
+        return $db->qfetchAll($query, $params);
     }
 
     /**
@@ -238,7 +238,7 @@ class CmdHostModel
         $query = "SELECT misc FROM hosts WHERE id = :id";
         $params = ['id' => $target_id];
 
-        $result = $db->fetch($query, $params);
+        $result = $db->qfetch($query, $params);
 
         if ($result && isset($result['misc'])) {
             return json_decode($result['misc'], true);
@@ -253,12 +253,13 @@ class CmdHostModel
         $query = "SELECT * FROM hosts WHERE alert = :alert";
         $params = ['alert' => 1];
 
-        $results = $db->fetchAll($query, $params);
+        $results = $db->qfetchAll($query, $params);
 
         if (is_bool($results)) {
             return [];
         }
 
+        return $results;
     }
 
     public function getWarnOn() {
@@ -267,11 +268,28 @@ class CmdHostModel
         $query = "SELECT * FROM hosts WHERE warn = :warn";
         $params = ['warn' => 1];
 
-        $results = $db->fetchAll($query, $params);
+        $results = $db->qfetchAll($query, $params);
 
         if (is_bool($results)) {
             return [];
         }
+
+        return $results;
+    }
+
+    public function getAgentsHosts() {
+        $db = $this->ctx->get('DBManager');
+
+        $query = 'SELECT * FROM hosts WHERE agent_installed = :true';
+        $params = ['true' => 1];
+
+        $results = $db->qfetchAll($query, $params);
+
+        if (is_bool($results)) {
+            return [];
+        }
+
+        return $results;
     }
 
     public function getAgentsByStatus(int $status) {
@@ -282,10 +300,27 @@ class CmdHostModel
             $params = ['true' => 1, 'online' => $status];
         }
         //TODO: agent_missing_pings [misc]
-        $results = $db->fetchAll($query, $params);
+        $results = $db->qfetchAll($query, $params);
 
         if (is_bool($results)) {
             return [];
         }
+
+        return $results;
+    }
+
+    public function getAnsibleHosts() {
+        $db = $this->ctx->get('DBManager');
+
+        $query = 'SELECT * FROM hosts WHERE ansible_enabled = :true';
+        $params = ['true' => 1];
+
+        $results = $db->qfetchAll($query, $params);
+
+        if (is_bool($results)) {
+            return [];
+        }
+
+        return $results;
     }
 }

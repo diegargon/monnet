@@ -43,6 +43,13 @@ class TemplateService {
         // Capturar la salida del archivo de plantilla
         ob_start();
         include $templateFile;
-        return ob_get_clean();
+        //TODO if not give problems mixit
+        $content = ob_get_clean();
+        $content = preg_replace('/>\n\s+/', '>', $content);
+        $content = preg_replace('/\s+</', '<', $content);
+        $content = preg_replace('/\n\s+/', ' ', $content);
+        $content = preg_replace('/"\s+\/>/', '"\/>', $content);
+        return $content;
+
     }
 }

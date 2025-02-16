@@ -85,24 +85,50 @@ class DBManager
      *
      * @param string $sql Consulta SQL a ejecutar
      * @param array<string, mixed> $params Parámetros de consulta
-     *
+     * @return bool True on success, false on failure.
      * @return array<string, mixed>|null
+     * @throws \RuntimeException If the statement preparation fails.
      */
     public function query(string $sql, array $params = []): bool
     {
         $stmt = $this->connection->prepare($sql);
+        if (!$stmt) {
+            throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
+        }
         return $stmt->execute($params);
     }
 
     /**
-     * Retrieve a single result row
+     * Fetch a single result row
+     *
+     *
+     * @param \PDOStatement $stmt The prepared statement to fetch data from.
+     * @return array|null The fetched row as an associative array, or null if no data is found.
+    */
+    public function fetch(\PDOStatement $stmt): ?array
+    {
+        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+    }
+
+    /**
+     * Retrieve multiple result rows
+     * @param \PDOStatement $stmt The prepared statement to fetch data from.
+     * @return array|null
+     */
+    public function fetchAll(\PDOStatement $stmt): array
+    {
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Query and Retrieve a single result row
      *
      * @param string $sql Consulta SQL para obtener datos
      * @param array<string, mixed> $params Parámetros de consulta
      *
      * @return array<int, array<string, mixed>>
      */
-    public function fetch(string $sql, array $params = []): ?array
+    public function qfetch(string $sql, array $params = []): ?array
     {
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($params);
@@ -110,14 +136,14 @@ class DBManager
     }
 
     /**
-     * Retrieve multiple result rows
+     * Query and Retrieve multiple result rows
      *
      * @param string $sql Consulta SQL para obtener datos
      * @param array<string,mixed> $params Parámetros de consulta
      *
      * @return array<int, array<string, mixed>>
      */
-    public function fetchAll(string $sql, array $params = []): array
+    public function qfetchAll(string $sql, array $params = []): array
     {
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($params);
@@ -143,4 +169,76 @@ class DBManager
     {
         return $this->connection;
     }
+
+    /**
+     * Update records in a table
+     *
+     * @param string $table Table name
+     * @param array<string, mixed> $data Key-value pairs of columns and their new values
+     * @param string $condition WHERE clause (without "WHERE")
+     * @param array<string, mixed> $params Parameters for the WHERE clause
+     * @return bool True on success, false on failure
+     */
+    public function update(string $table, array $data, string $condition, array $params = []): bool
+    {
+        // Convert bool to int to avoid fail (why need?)
+        $data = array_map(function($value) {
+            return is_bool($value) ? (int) $value : $value;
+        }, $data);
+
+        $columns = array_keys($data);
+        $setClause = implode(", ", array_map(fn($col) => "$col = :$col", $columns));
+
+        $sql = "UPDATE $table SET $setClause WHERE $condition";
+        $stmt = $this->connection->prepare($sql);
+
+        if (!$stmt) {
+            throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
+        }
+
+        return $stmt->execute(array_merge($data, $params));
+    }
+
+    /**
+     * Delete records from a table
+     *
+     * @param string $table Table name
+     * @param string $condition WHERE clause (without "WHERE")
+     * @param array<string, mixed> $params Parameters for the WHERE clause
+     * @return bool True on success, false on failure
+     */
+    public function delete(string $table, string $condition, array $params = []): bool
+    {
+        $sql = "DELETE FROM $table WHERE $condition";
+        $stmt = $this->connection->prepare($sql);
+
+        if (!$stmt) {
+            throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
+        }
+
+        return $stmt->execute($params);
+    }
+
+    /**
+     * Insert a new record into a table
+     *
+     * @param string $table Table name
+     * @param array<string, mixed> $data Key-value pairs of columns and values to insert
+     * @return bool True on success, false on failure
+     */
+    public function insert(string $table, array $data): bool
+    {
+        $columns = array_keys($data);
+        $placeholders = array_map(fn($col) => ":$col", $columns);
+
+        $sql = "INSERT INTO $table (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $placeholders) . ")";
+        $stmt = $this->connection->prepare($sql);
+
+        if (!$stmt) {
+            throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
+        }
+
+        return $stmt->execute($data);
+    }
+
 }

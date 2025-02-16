@@ -14,7 +14,6 @@ use App\Controllers\CmdHostController;
 use App\Controllers\CmdBookmarksController;
 use App\Controllers\CmdNetworkController;
 use App\Controllers\CmdTaskAnsibleController;
-use App\Controllers\CmdAnsibleReportController;
 
 class CommandRouter {
 
@@ -126,10 +125,16 @@ class CommandRouter {
 
             // Ansible Reports
             case 'report_ansible_hosts':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->getAnsibleHosts();
+                break;
             case 'report_ansible_hosts_off':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->getAnsibleHosts(0);
+                break;
             case 'report_ansible_hosts_fail':
-                //$ansibleReportController = new CmdAnsibleReportController($this->ctx);
-                //$response = $ansibleReportController->generateAnsibleReport($command, $command_values);
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->getAnsibleHosts(2);
                 break;
             case 'report_agents_hosts':
                 $hostController = new CmdHostController($this->ctx);
@@ -149,7 +154,10 @@ class CommandRouter {
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->getWarnHosts();
                 break;
-
+            case 'ack_host_log':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->ackHostLog($command_values);
+                break;
             // Comando no reconocido
             default:
                 $response = [

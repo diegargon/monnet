@@ -27,7 +27,7 @@ class CmdAnsibleReportModel
             'id' => $target_id,
             'type' => $report_type,
         ];
-        return $db->fetch($query, $params);
+        return $db->qfetch($query, $params);
     }
 
     public function delete($target_id)

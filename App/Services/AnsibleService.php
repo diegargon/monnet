@@ -52,6 +52,6 @@ class AnsibleService
         $query = "SELECT * FROM ansible_reports WHERE host_id = :host_id ORDER BY date DESC";
         $params = ['host_id' => $host_id];
 
-        return $db->fetchAll($query, $params);
+        return $db->qfetchAll($query, $params);
     }
 }
