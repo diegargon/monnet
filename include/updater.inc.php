@@ -280,6 +280,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
+            /* DONE Move to row for easy select on db */
             $db->query("ALTER TABLE `hosts` ADD `agent_installed` TINYINT(1) NOT NULL DEFAULT 0;");
             $db_version = $update;
             Log::notice("Update version to $update successful");
