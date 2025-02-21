@@ -32,6 +32,11 @@ class HostService
         $this->ncfg = $ctx->get('Config');
     }
 
+    /**
+     *
+     * @param int $target_id
+     * @return array<string, string|int>
+     */
     public function getDetails(int $target_id): array
     {
         $hostDetails = $this->cmdHostModel->getHostDetails($target_id);

@@ -26,7 +26,7 @@ class CmdHostLogsModel
      * @param array $data Los datos a actualizar.
      * @return bool True si se actualizó correctamente, False en caso contrario.
      */
-    public function update(int $target_id, array $data): bool
+    public function updateByID(int $target_id, array $data): bool
     {
         $db = $this->ctx->get('DBManager');
         return $db->update('hosts_logs', $data, 'id = :id', ['id' => $target_id]);

@@ -182,9 +182,11 @@ class DBManager
     public function update(string $table, array $data, string $condition, array $params = []): bool
     {
         // Convert bool to int to avoid fail (why need?)
-        $data = array_map(function($value) {
-            return is_bool($value) ? (int) $value : $value;
-        }, $data);
+        foreach ($data as $key => $value) {
+            if (is_bool($value)) {
+                $data[$key] = (int) $value;
+            }
+        }
 
         $columns = array_keys($data);
         $setClause = implode(", ", array_map(fn($col) => "$col = :$col", $columns));
@@ -196,7 +198,11 @@ class DBManager
             throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
         }
 
-        return $stmt->execute(array_merge($data, $params));
+        if (!$stmt->execute($data + $params)) {
+            throw new \RuntimeException("Failed to execute SQL statement: " . $sql);
+        }
+
+        return true;
     }
 
     /**
@@ -239,6 +245,105 @@ class DBManager
         }
 
         return $stmt->execute($data);
+    }
+
+    /**
+     * Actualiza valores específicos dentro de un campo JSON sin sobrescribirlo.
+     *
+     * @param string $table  Nombre de la tabla
+     * @param string $json_column  Nombre de la columna JSON
+     * @param array  $json_data  Datos a actualizar dentro del JSON
+     * @param string $condition  Condición WHERE
+     * @param array  $params  Parámetros de la condición WHERE
+     * @return bool  `true` si se actualizó correctamente, `false` si no
+     */
+    public function updateJson(string $table, string $json_column, array $json_data, string $condition, array $params): bool
+    {
+        if (empty($json_data)) {
+            throw new \InvalidArgumentException('Los datos JSON no pueden estar vacíos');
+        }
+
+        $json_updates = [];
+        foreach ($json_data as $key => $value) {
+            $json_key = '$.' . $key;
+            $param_key = ":json_{$key}";
+
+            // Verificar si es un número o booleano para evitar comillas innecesarias
+            if (is_numeric($value) || is_bool($value) || $value === '') {
+                $params["json_{$key}"] = $value;
+            } else {
+                $params["json_{$key}"] = json_encode($value, JSON_UNESCAPED_SLASHES);
+            }
+
+            $json_updates[] = "$json_column = JSON_SET($json_column, '{$json_key}', {$param_key})";
+        }
+
+        $sql = "UPDATE $table SET " . implode(', ', $json_updates) . " WHERE $condition";
+
+        $stmt = $this->connection->prepare($sql);
+
+        return $stmt->execute($params);
+    }
+
+    /**
+     * Select records from a table
+     *
+     * @param string $table Table name
+     * @param array<string> $columns Columns to retrieve
+     * @param string|null $condition WHERE clause (without "WHERE"), optional
+     * @param array<string, mixed> $params Parameters for the WHERE clause
+     * @param int|null $limit Maximum number of records to return
+     * @return array<int, array<string, mixed>> List of results as associative arrays
+     * @throws \RuntimeException If query execution fails
+     */
+    public function select(
+            string $table,
+            array $columns = ['*'],
+            ?string $condition = null,
+            array $params = [],
+            ?int $limit = null
+    ): array
+    {
+        $columnList = implode(", ", $columns);
+        $sql = "SELECT $columnList FROM $table";
+
+        if ($condition) {
+            $sql .= " WHERE $condition";
+        }
+
+        if ($limit !== null && $limit > 0) {
+            $sql .= ' LIMIT ' . $limit;
+        }
+
+        $stmt = $this->connection->prepare($sql);
+        if (!$stmt) {
+            throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
+        }
+
+        $stmt->execute($params);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Select a single record from a table.
+     *
+     * @param string $table Table name
+     * @param array<string> $columns Columns to select (default: all)
+     * @param string|null $condition WHERE clause (without "WHERE")
+     * @param array<string, mixed> $params Query parameters
+     *
+     * @return array<string, mixed>|null The selected record or null if not found
+     */
+    public function selectOne(
+        string $table,
+        array $columns = ['*'],
+        ?string $condition = null,
+        array $params = []
+    ): ?array {
+
+        $result = $this->select($table, $columns, $condition, $params, 1);
+
+        return $result[0] ?? null;
     }
 
 }

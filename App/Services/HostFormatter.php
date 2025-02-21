@@ -65,6 +65,16 @@ class HostFormatter
         if ($host['online'] && !empty($host['latency'])) :
             $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
         endif;
+
+        /**
+         * Misc
+         */
+        if (!empty($host['misc'])) {
+            $host['misc'] = $this->fMisc($host['misc']);
+            /* TODO: Migrate: keep misc values in misc then delete this */
+            $host = array_merge($host, $host['misc']);
+        }
+
         if (!empty($host['misc']['load_avg'])) :
             $loadavg = unserialize($host['misc']['load_avg']);
             (!empty($host['ncpu'])) ? $ncpu = (float)$host['ncpu'] : (float)$ncpu = 1;
@@ -135,15 +145,29 @@ class HostFormatter
         return $host['ip'];
     }
 
+    /**
+     *
+     * @param string $misc
+     * @return array<string, string|int>
+     */
     public function fMisc(string $misc): array
     {
-        if (!empty ($misc)) {
-            return json_decode($misc, true);
+        if (empty ($misc)) {
+            return [];
+        }
+        $misc = json_decode($misc, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [];
         }
 
-        return [];
+        return $misc;
     }
 
+    /**
+     *
+     * @param array<string, string|int> $logs_items
+     * @return array<string, string|int>
+     */
     public function fHostLogsMsgs(array $logs_items): array
     {
         $log_msg = [];

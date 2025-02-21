@@ -441,7 +441,7 @@ function requestHostDetails(command, command_values = []) {
                     console.warn("Tipo de contenido inesperado:", contentType);
                     return; // Terminamos si el tipo de contenido no es el esperado
                 }
-
+                
                 console.log(jsonData);
                 if (jsonData.login === "fail") {
                     location.href = '';
@@ -478,7 +478,11 @@ function requestHostDetails(command, command_values = []) {
                         $('#term_output').html('Error');
                     }
                 }
-
+                
+                /* Tex Notes */
+                if (jsonData.command_receive === 'load_notes') {
+                    $('#textnotes').html(jsonData.response_msg);
+                }
                 /* Syslog Journald load */
                 if (
                     jsonData.command_receive === 'syslog-load' ||

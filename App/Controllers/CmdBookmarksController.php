@@ -112,7 +112,7 @@ class CmdBookmarksController
     {
         $target_id = $this->filter->varInt($command_values['id']);
 
-        if ($this->cmdBookmarkModel->remove($target_id)) {
+        if ($this->cmdBookmarkModel->removeByID($target_id)) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Bookmark removed successfully',

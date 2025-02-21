@@ -20,6 +20,7 @@ namespace App\Controllers;
 
 use App\Models\CmdHostModel;
 use App\Models\CmdHostLogsModel;
+use App\Models\CmdHostNotesModel;
 use App\Services\Filter;
 use App\Services\AnsibleService;
 use App\Services\TemplateService;
@@ -31,6 +32,7 @@ class CmdHostController
 
     private CmdHostModel $cmdHostModel;
     private CmdHostLogsModel $cmdHostLogsModel;
+    private CmdHostNotesModel $cmdHostNotesModel;
     private Filter $filter;
     private \AppContext $ctx;
     private $ansibleService;
@@ -40,9 +42,10 @@ class CmdHostController
     public function __construct(\AppContext $ctx)
     {
         $this->hostService = new HostService($ctx);
-        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
         $this->hostFormatter = new HostFormatter($ctx);
         $this->cmdHostModel = new CmdHostModel($ctx);
+        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
+        $this->cmdHostNotesModel = new CmdHostNotesModel($ctx);
         $this->ansibleService = new AnsibleService($ctx);
         $this->templateService = new TemplateService($ctx);
 
@@ -53,8 +56,8 @@ class CmdHostController
     /**
      * Obtiene los detalles de un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_     * @param array<string, string|int> $command_values Los valores del comando.values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function getHostDetails(array $command_values): array
     {
@@ -95,14 +98,14 @@ class CmdHostController
     /**
      * Elimina un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function removeHost(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
 
-        if ($this->cmdHostModel->remove($target_id)) {
+        if ($this->cmdHostModel->removeByID($target_id)) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Host removed: ' . $target_id,
@@ -119,8 +122,8 @@ class CmdHostController
     /**
      * Actualiza la información de un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function updateHost(array $command_values): array
     {
@@ -128,7 +131,7 @@ class CmdHostController
         $field = $this->filter->varString($command_values['field']);
         $value = $this->filter->varString($command_values['value']);
 
-        if ($this->cmdHostModel->update($target_id, [$field => $value])) {
+        if ($this->cmdHostModel->updateByID($target_id, [$field => $value])) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Host updated successfully',
@@ -144,15 +147,15 @@ class CmdHostController
     /**
      * Activa o desactiva el ping para un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function toggleDisablePing(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varBool($command_values['value']);
 
-        if ($this->cmdHostModel->update($target_id, ['disable_ping' => $value])) {
+        if ($this->cmdHostModel->updateByID($target_id, ['disable_ping' => $value])) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Ping toggled successfully',
@@ -168,15 +171,16 @@ class CmdHostController
     /**
      * Establece el método de verificación de puertos para un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function setCheckPorts(array $command_values): array
     {
+        // 1 ping 2 TCP/UDP
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varInt($command_values['value']);
 
-        if ($this->cmdHostModel->update($target_id, ['check_method' => $value])) {
+        if ($this->cmdHostModel->updateByID($target_id, ['check_method' => $value])) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Check ports method updated successfully',
@@ -192,8 +196,8 @@ class CmdHostController
     /**
      * Crea un token para un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function submitHostToken(array $command_values): array
     {
@@ -215,15 +219,26 @@ class CmdHostController
     /**
      * Agrega un puerto remoto a un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function addRemotePort(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
+        $pnumber = isset($command_values['pnumber']) ?
+                $this->filter->varInt($command_values['pnumber']) : null;
+        $protocol = isset($command_values['protocol']) ?
+                $this->filter->varInt($command_values['protocol']) : null;
+
+        if ($target_id === null || $target_id <= 0 || $pnumber === null || $protocol === null) {
+            return [
+                'command_error' => 1,
+                'command_error_msg' => 'Remote port: Invalid input data',
+            ];
+        }
         $port_details = [
-            'pnumber' => $this->filter->varInt($command_values['pnumber']),
-            'protocol' => $this->filter->varInt($command_values['protocol']),
+            'pnumber' => $pnumber,
+            'protocol' => $protocol,
         ];
 
         if ($this->cmdHostModel->addRemoteScanHostPort($target_id, $port_details)) {
@@ -242,8 +257,8 @@ class CmdHostController
     /**
      * Elimina un puerto de un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function deleteHostPort(array $command_values): array
     {
@@ -265,8 +280,8 @@ class CmdHostController
     /**
      * Actualiza el nombre de un servicio personalizado para un puerto.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function submitCustomServiceName(array $command_values): array
     {
@@ -289,15 +304,15 @@ class CmdHostController
     /**
      * Actualiza el título de un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function submitTitle(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varString($command_values['value']);
 
-        if ($this->cmdHostModel->update($target_id, ['title' => $value])) {
+        if ($this->cmdHostModel->updateByID($target_id, ['title' => $value])) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Title updated successfully',
@@ -314,15 +329,15 @@ class CmdHostController
     /**
      * Actualiza el hostname de un host.
      *
-     * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @param array<string, string|int> $command_values Los valores del comando.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function submitHostname(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varDomain($command_values['value']);
 
-        if ($this->cmdHostModel->update($target_id, ['hostname' => $value])) {
+        if ($this->cmdHostModel->updateByID($target_id, ['hostname' => $value])) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Hostname updated successfully',
@@ -335,11 +350,97 @@ class CmdHostController
         }
     }
 
-    public function ackHostLog(array $command_values) {
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitOwner(array $command_values): array
+    {
+        return $this->updateMisc($command_values);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitHostTimeout(array $command_values): array
+    {
+        return $this->updateMisc($command_values);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitHostCategory(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varString($command_values['value']);
+
+        if ($target_id === null || $target_id <= 0 || $value === null) {
+            return [
+                'command_error' => 1,
+                'command_error_msg' => 'Host Category: Invalid input data',
+            ];
+        }
+
+        if ($this->cmdHostModel->updateByID($target_id, ['category' => $value])) {
+            return [
+                'command_success' => 1,
+                'response_msg' => 'Host category updated successfully',
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'command_error_msg' => 'Error updating host category',
+            ];
+        }
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitManufacture(array $command_values): array
+    {
+        return $this->updateMisc($command_values);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitMachineType(array $command_values): array
+    {
+        return $this->updateMisc($command_values);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitSysAval(array $command_values): array
+    {
+        return $this->updateMisc($command_values);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function ackHostLog(array $command_values): array
+    {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varBool($command_values['value']);
 
-        if ($this->cmdHostLogsModel->update($target_id, ['ack' => $value])) {
+        if ($this->cmdHostLogsModel->updateByID($target_id, ['ack' => $value])) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Ack updated successfully',
@@ -357,7 +458,7 @@ class CmdHostController
      * Obtiene las métricas de un host.
      *
      * @param int $target_id El ID del host.
-     * @return array Las métricas del host.
+     * @return array<string, string|int> Las métricas del host.
      */
     private function getHostMetrics(int $target_id): array
     {
@@ -382,14 +483,16 @@ class CmdHostController
      * Actualiza el campo misc de un host.
      *
      * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function updateMisc(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $misc_data = $this->filter->varArray($command_values['misc']);
+        $misc_data = [
+            $command_values['value_name'] => $command_values['value'],
+        ];
 
-        if ($this->cmdHostModel->updateMisc($target_id, $misc_data)) {
+        if ($this->cmdHostModel->updateMiscByID($target_id, $misc_data)) {
             return [
                 'command_success' => 1,
                 'response_msg' => 'Campo misc actualizado correctamente',
@@ -406,7 +509,7 @@ class CmdHostController
      * Obtiene el campo misc de un host.
      *
      * @param array $command_values Los valores del comando.
-     * @return array Respuesta en formato JSON.
+     * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function getMisc(array $command_values): array
     {
@@ -420,6 +523,10 @@ class CmdHostController
         ];
     }
 
+    /**
+     *
+     * @return array<string, string|int>
+     */
     public function getAlertHosts(): array
     {
         $lng = $this->ctx->get('lng');
@@ -436,9 +543,14 @@ class CmdHostController
             'command_receive' => 'report_alerts',
             'command_success' => 1,
             'response_msg' => $alertHostsTpl,
+            'force_hosts_refresh' => 1,
         ];
     }
 
+    /**
+     *
+     * @return array<string, string|int>
+     */
     public function getWarnHosts(): array
     {
         $lng = $this->ctx->get('lng');
@@ -455,9 +567,15 @@ class CmdHostController
             'command_receive' => 'report_warns',
             'command_success' => 1,
             'response_msg' => $warnHostsTpl,
+            'force_hosts_refresh' => 1,
         ];
     }
 
+    /**
+     *
+     * @param int|null $status
+     * @return array<string, string|int>
+     */
     public function getAgentsHosts(?int $status = null): array {
         $hosts = $this->hostService->getAgentsHosts($status);
         $tdata['hosts'] = $hosts;
@@ -474,6 +592,11 @@ class CmdHostController
         ];
     }
 
+    /**
+     *
+     * @param int|null $status
+     * @return array<string, string|int>
+     */
     public function getAnsibleHosts(?int $status = null): array
     {
         $tdata['hosts'] = $this->hostService->getAnsibleHosts($status);
@@ -490,23 +613,186 @@ class CmdHostController
         ];
     }
 
-    public function handleTabChange(array $command_values)
+    /**
+     *
+     * @return array<string,string|int>
+     */
+    public function clearAlerts(): array
+    {
+        $ret = $this->cmdHostModel->clearAllAlerts();
+        if ($ret) {
+            return [
+                'command_success' => 1,
+                'response_msg' => 'clear all alerts success:' . $ret,
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'response_msg' => 'clear all alerts failed:' .  $ret,
+            ];
+        }
+    }
+
+    /**
+     *
+     * @return array<string,string|int>
+     */
+    public function clearWarns(): array
+    {
+        if ($this->cmdHostModel->clearAllWarns()) {
+            return [
+                'command_success' => 1,
+                'response_msg' => 'clear all warns success',
+                'force_hosts_refresh' => 1,
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'response_msg' => 'clear all warns failed',
+            ];
+        }
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function setHighlight(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = (empty($command_values['value'])) ? 0 : 1;
+
+        $update['highlight'] = $value;
+
+        if ($this->cmdHostModel->updateByID($target_id, $update)) {
+            return [
+                'command_success' => 1,
+                'response_msg' => 'set highlight success',
+                'force_hosts_refresh' => 1,
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'response_msg' => 'set highlight failed',
+            ];
+        }
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function setHostAnsible(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = (empty($command_values['value'])) ? 0 : 1;
+
+        $update['ansible_enabled'] = $value;
+
+        if ($this->cmdHostModel->updateByID($target_id, $update)) {
+            return [
+                'command_success' => 1,
+                'response_msg' => 'set ansible enabled success',
+                'force_hosts_refresh' => 1,
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'response_msg' => 'set ansible enabled failed',
+            ];
+        }
+    }
+
+   /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function saveNote(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value_command = $this->filter->varUTF8($command_values['value']);
+
+        $content = urldecode($value_command);
+        if (str_starts_with($content, ":clear")) {
+            $content = '';
+        }
+        $update['content'] = $content;
+        $this->cmdHostNotesModel = new CmdHostNotesModel($this->ctx);
+        if ($this->cmdHostNotesModel->updateByID($target_id, $update)) {
+            return [
+                'command_success' => 1,
+                'response_msg' => 'set note success',
+                'force_hosts_refresh' => 1,
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'response_msg' => 'set note failed',
+            ];
+        }
+     }
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function setAlwaysOn(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+
+        if ($this->cmdHostModel->updateMiscByID($target_id, ['always_on' => $value])) {
+            return [
+                'command_success' => 1,
+                'response_msg' => 'Host updated successfully',
+            ];
+        } else {
+            return [
+                'command_error' => 1,
+                'command_error_msg' => 'Error updating host',
+            ];
+        }
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * return array<string, string|int>
+     */
+    public function handleTabChange(array $command_values): array
     {
         $tabName = $this->filter->varString($command_values['value']);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $cmd = '';
+        $response = '';
 
         switch($tabName):
             case 'tab3':    # Notes
-                return [];
+                $cmd = 'load_notes';
+                $response = $this->cmdHostNotesModel->getNotes($target_id);
+                break;
             case 'tab9':    # Log
-                return [];
+                break;
             case 'tab10':   # Metrics
-                return [];
+                break;
             case 'tab15':   # Tasks
-                return [];
+                break;
             case 'tab20':   # Ansible
-                return [];
+                break;
             default:
-                return [];
+                return [
+                    'command_error' => 1,
+                    'command_error_msg' => 'Unused tab change',
+                ];
         endswitch;
+
+        return [
+            'command_receive' => $cmd,
+            'command_success' => 1,
+            'response_msg' => $response,
+        ];
     }
 }
