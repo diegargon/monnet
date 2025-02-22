@@ -408,7 +408,7 @@
             <?php endif; ?>
             <?php
                 if (!empty($tdata['host_details']['host_logs'])):
-                    $tdata['host_details']['host_logs'];
+                    echo $tdata['host_details']['host_logs'];
                 endif;
             ?>
         </div>
