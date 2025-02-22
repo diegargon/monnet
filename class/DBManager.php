@@ -131,6 +131,7 @@ class DBManager
     public function qfetch(string $sql, array $params = []): ?array
     {
         $stmt = $this->connection->prepare($sql);
+        $this->bindParams($stmt, $params);
         $stmt->execute($params);
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
@@ -146,6 +147,7 @@ class DBManager
     public function qfetchAll(string $sql, array $params = []): array
     {
         $stmt = $this->connection->prepare($sql);
+        $this->bindParams($stmt, $params);
         $stmt->execute($params);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -346,4 +348,26 @@ class DBManager
         return $result[0] ?? null;
     }
 
+
+    /**
+     * Binds parameters dynamically based on their type.
+     *
+     * @param PDOStatement $stmt
+     * @param array<string, mixed> $params
+     * @return void
+     */
+    private function bindParams(PDOStatement $stmt, array $params): void
+    {
+        foreach ($params as $key => $value) {
+            if (is_int($value)) {
+                $stmt->bindValue($key, $value, PDO::PARAM_INT);
+            } elseif (is_bool($value)) {
+                $stmt->bindValue($key, (int) $value, PDO::PARAM_INT);
+            } elseif (is_null($value)) {
+                $stmt->bindValue($key, null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue($key, $value, PDO::PARAM_STR);
+            }
+        }
+    }
 }
