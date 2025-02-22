@@ -13,8 +13,8 @@ namespace App\Models;
 class LogModel {
     private \AppContext $ctx;
 
-     public function __construct(\AppContext $ctx)
-     {
-         $this->ctx = $ctx;
-     }
+    public function __construct(\AppContext $ctx)
+    {
+        $this->ctx = $ctx;
+    }
 }

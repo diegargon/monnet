@@ -73,22 +73,31 @@ class CommandRouter {
             case 'submitOwner':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submOwner($command_values);
+                break;
             case 'submitHostTimeout':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitHostTimeout($command_values);
+                break;
             case 'submitCat':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitHostCategory($command_values);
+                break;
             case 'submitManufacture':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitManufacture($command_values);
+                break;
             case 'submitMachineType':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitMachineType($command_values);
+                break;
             case 'submitSysAval':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitSysAval($command_values);
+                break;
             case 'logs-reload':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->logsReload($command_values);
+                break;
             case 'auto_reload_logs':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->reloadLogs($command_values);
@@ -185,6 +194,7 @@ class CommandRouter {
                 $response = $networkController->manageNetworks($command_values);
                 break;
             case 'network_select':
+                break;
             case 'network_unselect':
                 $hostController = new CmdNetworkController($this->ctx);
                 $response = $hostController->handleNetworkSelection($command_values);
@@ -199,7 +209,6 @@ class CommandRouter {
                 $taskController = new CmdTaskController($this->ctx);
                 $response = $taskController->queuePlaybook($command_values);
                 break;
-
 
             // Comando no reconocido
             default:

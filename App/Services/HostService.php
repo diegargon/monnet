@@ -20,6 +20,7 @@ class HostService
     private HostFormatter $hostFormatter;
     private AnsibleService $ansibleService;
 
+    private \AppContext $ctx;
     private \Config $ncfg;
 
     public function __construct(\AppContext $ctx)
@@ -30,6 +31,7 @@ class HostService
         $this->ansibleService = new AnsibleService($ctx);
         $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
         $this->ncfg = $ctx->get('Config');
+        $this->ctx = $ctx;
     }
 
     /**

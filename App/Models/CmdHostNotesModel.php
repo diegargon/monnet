@@ -37,7 +37,7 @@ class CmdHostNotesModel
     {
         $condition = 'host_id = :target_id';
         $notes = $this->db->selectOne('notes', ['*'], $condition, ['target_id' => $target_id]);
-        if ($notes) {
+        if (!empty($notes['content'])) {
             return $notes['content'];
         }
         return '';

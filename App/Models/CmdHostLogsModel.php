@@ -77,8 +77,7 @@ class CmdHostLogsModel
         $query .= ' ORDER BY date DESC';
 
         if (!empty($opts['limit'])) {
-            $query .= ' LIMIT :limit';
-            $params[':limit'] = (int) $opts['limit'];
+            $query .= ' LIMIT ' . (int) $opts['limit'];
         }
 
         $db = $this->ctx->get('DBManager');

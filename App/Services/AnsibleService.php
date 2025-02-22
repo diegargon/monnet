@@ -47,9 +47,9 @@ class AnsibleService
      * @return array Los informes de Ansible.
      */
     public function getReports(int $host_id) {
-        global $db;
+        $db = $this->ctx->get('DBManager');
 
-        $query = "SELECT * FROM ansible_reports WHERE host_id = :host_id ORDER BY date DESC";
+        $query = "SELECT * FROM reports WHERE host_id = :host_id ORDER BY date DESC";
         $params = ['host_id' => $host_id];
 
         return $db->qfetchAll($query, $params);
