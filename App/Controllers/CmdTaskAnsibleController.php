@@ -8,6 +8,10 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
+namespace App\Controllers;
+
+use App\Helpers\Response;
+
 class CmdTaskAnsibleController
 {
     private \AppContext $ctx;
@@ -21,7 +25,12 @@ class CmdTaskAnsibleController
         $this->ctx = $ctx;
     }
 
-    public function executePlaybook($command_values)
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function executePlaybook(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $playbook = $this->filter->varString($command_values['value']);
@@ -30,15 +39,9 @@ class CmdTaskAnsibleController
         $response = $this->ansibleService->runPlaybook($target_id, $playbook, $extra_vars);
 
         if ($response['status'] === "success") {
-            return [
-                'command_success' => 1,
-                'response_msg' => $response,
-            ];
+            return Response::stdReturn(true, $response);
         } else {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => $response['error_msg'],
-            ];
+            return Response::stdReturn(false, response['error_msg']);
         }
     }
 }

@@ -12,6 +12,7 @@
 namespace App\Controllers;
 
 use App\Models\CmdNetworkModel;
+use App\Helpers\Response;
 
 class CmdNetworkController
 {
@@ -26,7 +27,12 @@ class CmdNetworkController
         $this->ctx = $ctx;
     }
 
-    public function manageNetworks($command_values)
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function manageNetworks(array $command_values): array
     {
         $action = $this->filter->varString($command_values['action']);
         $target_id = $this->filter->varInt($command_values['id']);
@@ -34,17 +40,11 @@ class CmdNetworkController
 
         if ($action === 'remove') {
             $this->networkModel->removeNetwork($target_id);
-            return [
-                'command_success' => 1,
-                'response_msg' => 'Network removed successfully',
-            ];
+            return Response::stdReturn(true, 'Network removed successfully');
         } elseif ($action === 'update' || $action === 'add') {
             $decodedJson = json_decode($value_command, true);
             if ($decodedJson === null) {
-                return [
-                    'command_error' => 1,
-                    'command_error_msg' => 'JSON Invalid',
-                ];
+                return Response::stdReturn(false, 'JSON Invalid');
             }
 
             $network_data = $this->validateNetworkData($decodedJson);
@@ -53,20 +53,18 @@ class CmdNetworkController
             } else {
                 $this->networkModel->addNetwork($network_data);
             }
-
-            return [
-                'command_success' => 1,
-                'response_msg' => 'Network ' . $action . ' successfully',
-            ];
+            return Response::stdReturn(true, 'Network ' . $action . ' successfully');
         } else {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'Invalid action',
-            ];
+            return Response::stdReturn(false, 'Invalid action');
         }
     }
 
-    private function validateNetworkData($data)
+    /**
+     *
+     * @param array<string, string|int> $data
+     * @return array<string, string|int>
+     */
+    private function validateNetworkData(array $data): array
     {
         // Validar y sanitizar los datos de la red
         return [

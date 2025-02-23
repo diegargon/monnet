@@ -14,6 +14,8 @@ use App\Controllers\CmdHostController;
 use App\Controllers\CmdBookmarksController;
 use App\Controllers\CmdNetworkController;
 use App\Controllers\CmdTaskAnsibleController;
+use App\Controllers\UserController;
+use App\Controllers\ConfigController;
 
 class CommandRouter {
 
@@ -29,7 +31,9 @@ class CommandRouter {
         $response = [];
 
         switch ($command) :
-            // Hosts
+            /*
+             * Hosts
+             */
             case 'host-details':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->getHostDetails($command_values);
@@ -94,6 +98,26 @@ class CommandRouter {
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitSysAval($command_values);
                 break;
+            case 'submitOS':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitOS($command_values);
+                break;
+            case 'submitOSVersion':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitOSVersion($command_values);
+                break;
+            case 'submitSystemType':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitSystemTime($command_values);
+                break;
+            case 'submitAccessLink':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitAccessLink($command_values);
+                break;
+            case 'submitAccessType':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitAccessType($command_values);
+                break;
             case 'logs-reload':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->logsReload($command_values);
@@ -130,7 +154,9 @@ class CommandRouter {
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->saveNote($command_values);
                 break;
-            // Host Ansible Reports
+            /*
+             *  Host Ansible Reports
+             */
             case 'report_ansible_hosts':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->getAnsibleHosts();
@@ -174,7 +200,9 @@ class CommandRouter {
                 $response = $hostController->clearWarns();
                 break;
 
-            // Bookmarks
+            /*
+             *  Bookmarks
+             */
             case 'addBookmark':
                 $bookmarksController = new CmdBookmarksController($this->ctx);
                 $response = $bookmarksController->addBookmark($command_values);
@@ -188,19 +216,37 @@ class CommandRouter {
                 $response = $bookmarksController->removeBookmark($command_values);
                 break;
 
-            // Network
+            /*
+             * Config
+             */
+            case 'submitform':
+                $cfgController = new ConfigController($this->ctx);
+                $response = $cfgController->setMultiple($command_values);
+                break;
+            /*
+             *  User Prefs
+             */
+            case 'network_select':
+            case 'network_unselect':
+                $userController = new UserController($this->ctx);
+                $response = $userController->setPref($command, $command_values);
+                break;
+
+            case 'show_host_cat':
+                $userController = new UserController($this->ctx);
+                $response = $userController->toggleHostsCat($command, $command_values);
+                break;
+            /*
+             *  Network
+             */
             case 'mgmtNetworks':
                 $networkController = new CmdNetworkController($this->ctx);
                 $response = $networkController->manageNetworks($command_values);
                 break;
-            case 'network_select':
-                break;
-            case 'network_unselect':
-                $hostController = new CmdNetworkController($this->ctx);
-                $response = $hostController->handleNetworkSelection($command_values);
-                break;
 
-            // Task Ansible
+            /*
+             *  Task Ansible
+             */
             case 'playbook_exec':
                 $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
                 $response = $taskAnsibleController->executePlaybook($command_values);
@@ -210,7 +256,9 @@ class CommandRouter {
                 $response = $taskController->queuePlaybook($command_values);
                 break;
 
-            // Comando no reconocido
+            /*
+             *  Unknown command
+             */
             default:
                 $response = [
                     'command_error' => 1,

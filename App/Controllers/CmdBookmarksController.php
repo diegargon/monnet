@@ -25,16 +25,18 @@ class CmdBookmarksController
         $this->ctx = $ctx;
     }
 
-    public function addBookmark($command_values)
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function addBookmark(array $command_values): array
     {
         $value_command = $this->filter->varJson($command_values['value']);
         $decodedJson = json_decode($value_command, true);
 
         if ($decodedJson === null) {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'JSON Invalid',
-            ];
+            return Response::stdReturn(false, 'JSON Invalid');
         }
 
         $new_bookmark = [];
@@ -44,39 +46,32 @@ class CmdBookmarksController
 
         // Validar campos del bookmark
         if (!$this->filter->varString($new_bookmark['name'])) {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'Name is empty or invalid',
-            ];
+            return Response::stdReturn(false, 'Name is empty or invalid');
         }
 
         // Lógica para agregar el bookmark
         $result = $this->cmdBookmarkModel->add($new_bookmark);
 
         if ($result) {
-            return [
-                'command_success' => 1,
-                'response_msg' => 'Bookmark added successfully',
-            ];
+            return Response::stdReturn(true, 'Bookmark added successfully');
         } else {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'Error adding bookmark',
-            ];
+            return Response::stdReturn(false, 'Error adding bookmark');
         }
     }
 
-    public function updateBookmark($command_values)
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function updateBookmark(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value_command = $this->filter->varJson($command_values['value']);
         $decodedJson = json_decode($value_command, true);
 
         if ($decodedJson === null) {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'JSON Invalid',
-            ];
+            return Response::stdReturn(false, 'JSON Invalid');
         }
 
         $bookmark = ['id' => $target_id];
@@ -86,42 +81,32 @@ class CmdBookmarksController
 
         // Validar campos del bookmark
         if (!$this->filter->varString($bookmark['name'])) {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'Name is empty or invalid',
-            ];
+            return Response::stdReturn(false, 'Name is empty or invalid');
         }
 
         // Lógica para actualizar el bookmark
         $result = $this->cmdBookmarkModel->update($bookmark);
 
         if ($result) {
-            return [
-                'command_success' => 1,
-                'response_msg' => 'Bookmark updated successfully',
-            ];
+            return Response::stdReturn(true, 'Bookmark updated successfully');
         } else {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'Error updating bookmark',
-            ];
+            return Response::stdReturn(false, 'Error updating bookmark');
         }
     }
 
-    public function removeBookmark($command_values)
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function removeBookmark(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
 
         if ($this->cmdBookmarkModel->removeByID($target_id)) {
-            return [
-                'command_success' => 1,
-                'response_msg' => 'Bookmark removed successfully',
-            ];
+            return Response::stdReturn(true, 'Bookmark removed successfully');
         } else {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'Error removing bookmark',
-            ];
+            return Response::stdReturn(false, 'Error removing bookmark');
         }
     }
 }

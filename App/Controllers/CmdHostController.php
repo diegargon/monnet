@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author diego/@/envigo.net
@@ -27,10 +28,10 @@ use App\Services\TemplateService;
 use App\Services\HostFormatter;
 use App\Services\HostService;
 use App\Services\HostLogsService;
+use App\Helpers\Response;
 
 class CmdHostController
 {
-
     private CmdHostModel $cmdHostModel;
     private CmdHostLogsModel $cmdHostLogsModel;
     private CmdHostNotesModel $cmdHostNotesModel;
@@ -60,7 +61,7 @@ class CmdHostController
     /**
      * Obtiene los detalles de un host.
      *
-     * @param array<string, string|int> $command_     * @param array<string, string|int> $command_values Los valores del comando.values Los valores del comando.
+     * @param array<string, string|int>
      * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function getHostDetails(array $command_values): array
@@ -70,13 +71,13 @@ class CmdHostController
         $field = 'getHostDetails';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         $hostDetails = $this->hostService->getDetails($target_id);
 
         if (!$hostDetails) {
-            return $this->stdReturn(false, "$field: No details");
+            return Response::stdReturn(false, "$field: No details");
         }
 
         $tdata['theme'] = $user->getTheme();
@@ -95,7 +96,7 @@ class CmdHostController
             'data' => $hostDetailsTpl,
         ];
 
-        return $this->stdReturn(true, "ok", false, ['host_details' => $host_data]);
+        return Response::stdReturn(true, "ok", false, ['host_details' => $host_data]);
     }
 
     /**
@@ -109,15 +110,15 @@ class CmdHostController
         $target_id = $this->filter->varInt($command_values['id']);
         $field = 'removeHost';
 
-        if(!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->removeByID($target_id)) {
-            return $this->stdReturn(true, "$field: Host removed $target_id", true);
+            return Response::stdReturn(true, "$field: Host removed $target_id", true);
         }
 
-        return $this->stdReturn(false, "$field: Error removing host");
+        return Response::stdReturn(false, "$field: Error removing host");
     }
 
     /**
@@ -133,14 +134,14 @@ class CmdHostController
         $value = $this->filter->varString($command_values['value']);
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updateByID($target_id, [$field => $value])) {
-            return $this->stdReturn(true, "$field: updated successfully");
+            return Response::stdReturn(true, "$field: updated successfully");
         }
 
-        return $this->stdReturn(true, "$field: error updating host");
+        return Response::stdReturn(true, "$field: error updating host");
     }
 
     /**
@@ -156,14 +157,14 @@ class CmdHostController
         $field = 'disable_ping';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updateByID($target_id, ['disable_ping' => $value])) {
-            return $this->stdReturn(true, "$field: Ping toggled successfully");
+            return Response::stdReturn(true, "$field: Ping toggled successfully");
         }
 
-        return $this->stdReturn(false, "$field: error toggling ping");
+        return Response::stdReturn(false, "$field: error toggling ping");
     }
 
     /**
@@ -180,13 +181,13 @@ class CmdHostController
         $field = 'check_method';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updateByID($target_id, ['check_method' => $value])) {
-            return $this->stdReturn(true, "$field: Error updating check ports method");
+            return Response::stdReturn(true, "$field: Error updating check ports method");
         } else {
-            return $this->stdReturn(false, "$field: Error updating check ports method");
+            return Response::stdReturn(false, "$field: Error updating check ports method");
         }
     }
 
@@ -202,13 +203,13 @@ class CmdHostController
         $field = 'createHostToken';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->createHostToken($target_id)) {
-            return $this->stdReturn(true, "$field: success $target_id");
+            return Response::stdReturn(true, "$field: success $target_id");
         } else {
-            return $this->stdReturn(false, "$field: Error creating token");
+            return Response::stdReturn(false, "$field: Error creating token");
         }
     }
 
@@ -239,9 +240,9 @@ class CmdHostController
         ];
 
         if ($this->cmdHostModel->addRemoteScanHostPort($target_id, $port_details)) {
-            return $this->stdReturn(true, "$field: success $target_id");
+            return Response::stdReturn(true, "$field: success $target_id");
         } else {
-            return $this->stdReturn(false, "$field: Error adding port");
+            return Response::stdReturn(false, "$field: Error adding port");
         }
     }
 
@@ -257,12 +258,12 @@ class CmdHostController
         $field = 'delete_port';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
         if ($this->cmdHostModel->deletePort($target_id)) {
-            return $this->stdReturn(true, "$field: success $target_id");
+            return Response::stdReturn(true, "$field: success $target_id");
         } else {
-            return $this->stdReturn(false, "$field: Error adding port");
+            return Response::stdReturn(false, "$field: Error adding port");
         }
     }
 
@@ -279,13 +280,13 @@ class CmdHostController
         $field = 'custom_service';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updatePort($target_id, ['custom_service' => $value])) {
-            return $this->stdReturn(true, "$field: success $target_id");
+            return Response::stdReturn(true, "$field: success $target_id");
         } else {
-            return $this->stdReturn(false, "$field: Error updating custom service name");
+            return Response::stdReturn(false, "$field: Error updating custom service name");
         }
     }
 
@@ -302,13 +303,13 @@ class CmdHostController
         $field = 'title';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updateByID($target_id, ['title' => $value])) {
-            return $this->stdReturn(true, "$field: change success $target_id", true);
+            return Response::stdReturn(true, "$field: change success $target_id", true);
         } else {
-            return $this->stdReturn(false, "$field: Error updating title");
+            return Response::stdReturn(false, "$field: Error updating title");
         }
     }
 
@@ -325,13 +326,13 @@ class CmdHostController
         $field = 'hostname';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updateByID($target_id, ['hostname' => $value])) {
-            return $this->stdReturn(true, "$field: change success $target_id");
+            return Response::stdReturn(true, "$field: change success $target_id");
         } else {
-            return $this->stdReturn(false, "$field: Error updating hostname");
+            return Response::stdReturn(false, "$field: Error updating hostname");
         }
     }
 
@@ -367,17 +368,17 @@ class CmdHostController
         $field = 'category';
 
         if (!is_numeric($target_id)) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($target_id === null || $target_id <= 0 || $value === null) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updateByID($target_id, ['category' => $value])) {
-            return $this->stdReturn(true, "$field: update success $target_id");
+            return Response::stdReturn(true, "$field: update success $target_id");
         } else {
-            return $this->stdReturn(false, "$field: Error updating host category");
+            return Response::stdReturn(false, "$field: Error updating host category");
         }
     }
 
@@ -409,6 +410,60 @@ class CmdHostController
     public function submitSysAval(array $command_values): array
     {
         return $this->updateMisc('sys_availability', $command_values);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitOS(array $command_values): array
+    {
+        return $this->updateMisc('os', $command_values);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitOSVersion(array $command_values): array
+    {
+        return $this->updateMisc('os_version', $command_values);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitSystemType(array $command_values): array
+    {
+        return $this->updateMisc('system_type', $command_values);
+    }
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitAccessType(array $command_values): array
+    {
+        if (!empty($command_values['value'])) {
+            $value_command = Filters::varUrl($command_values['value']);
+        } else {
+            $value_command = '';
+        }
+
+        return $this->updateMisc('access_type', ['access_link' => $value_command]);
+    }
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitAccessLink(array $command_values): array
+    {
+        return $this->updateMisc('system_type', $command_values);
     }
 
     /**
@@ -458,14 +513,14 @@ class CmdHostController
         $value = $this->filter->varInt($command_values['value']);
 
         if ($target_id === null || $target_id <= 0 || $value === null) {
-            return $this->stdReturn(false, "$field: Invalid input data");
+            return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
-            return $this->stdReturn(true, "$field: updated successfully");
+            return Response::stdReturn(true, "$field: updated successfully");
         }
 
-        return $this->stdReturn(false, "$field: updated error");
+        return Response::stdReturn(false, "$field: updated error");
     }
 
     /**
@@ -479,7 +534,7 @@ class CmdHostController
         $target_id = $this->filter->varInt($command_values['id']);
         $misc_data = $this->cmdHostModel->getMisc($target_id);
 
-        return $this->stdReturn(true, $misc_data);
+        return Response::stdReturn(true, $misc_data);
     }
 
     /**
@@ -499,7 +554,7 @@ class CmdHostController
 
         $alertHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
 
-        return $this->stdReturn(true, $alertHostsTpl, false, ['command_receive' => $field]);
+        return Response::stdReturn(true, $alertHostsTpl, false, ['command_receive' => $field]);
     }
 
     /**
@@ -519,7 +574,7 @@ class CmdHostController
 
         $warnHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
 
-        return $this->stdReturn(true, $warnHostsTpl, false, ['command_receive' => $field]);
+        return Response::stdReturn(true, $warnHostsTpl, false, ['command_receive' => $field]);
     }
 
     /**
@@ -537,7 +592,7 @@ class CmdHostController
 
         $agentHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
 
-        return $this->stdReturn(true, $agentHostsTpl, false, ['command_receive' => $field]);
+        return Response::stdReturn(true, $agentHostsTpl, false, ['command_receive' => $field]);
     }
 
     /**
@@ -555,7 +610,7 @@ class CmdHostController
 
         $ansibleHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
 
-        return $this->stdReturn(true, $ansibleHostsTpl, false, ['command_receive' => $field]);
+        return Response::stdReturn(true, $ansibleHostsTpl, false, ['command_receive' => $field]);
     }
 
     /**
@@ -568,9 +623,9 @@ class CmdHostController
         $ret = $this->cmdHostModel->clearAllAlerts();
 
         if ($ret) {
-            return $this->stdReturn(true, $field . ': success', true);
+            return Response::stdReturn(true, $field . ': success', true);
         } else {
-            return $this->stdReturn(false, "$field: failed " . $ret);
+            return Response::stdReturn(false, "$field: failed " . $ret);
         }
     }
 
@@ -583,9 +638,9 @@ class CmdHostController
         $field = 'clearWarns';
 
         if ($this->cmdHostModel->clearAllWarns()) {
-            return $this->stdReturn(true, $field . ': success', true);
+            return Response::stdReturn(true, $field . ': success', true);
         } else {
-            return $this->stdReturn(false, "$field: failed");
+            return Response::stdReturn(false, "$field: failed");
         }
     }
 
@@ -603,9 +658,9 @@ class CmdHostController
         $update['highlight'] = $value;
 
         if ($this->cmdHostModel->updateByID($target_id, $update)) {
-            return $this->stdReturn(true, $field . ': success', true);
+            return Response::stdReturn(true, $field . ': success', true);
         } else {
-            return $this->stdReturn(false, "$field: failed");
+            return Response::stdReturn(false, "$field: failed");
         }
     }
 
@@ -623,9 +678,9 @@ class CmdHostController
         $update['ansible_enabled'] = $value;
 
         if ($this->cmdHostModel->updateByID($target_id, $update)) {
-            return $this->stdReturn(true, $field . ': success', true);
+            return Response::stdReturn(true, $field . ': success', true);
         } else {
-            return $this->stdReturn(false, "$field: failed ");
+            return Response::stdReturn(false, "$field: failed ");
         }
     }
 
@@ -647,9 +702,9 @@ class CmdHostController
         $update['content'] = $content;
         $this->cmdHostNotesModel = new CmdHostNotesModel($this->ctx);
         if ($this->cmdHostNotesModel->updateByID($target_id, $update)) {
-            return $this->stdReturn(true, $field . ': success', true);
+            return Response::stdReturn(true, $field . ': success', true);
         } else {
-            return $this->stdReturn(false, "$field: failed");
+            return Response::stdReturn(false, "$field: failed");
         }
      }
     /**
@@ -664,9 +719,9 @@ class CmdHostController
         $value = $this->filter->varInt($command_values['value']);
 
         if ($this->cmdHostModel->updateMiscByID($target_id, ['always_on' => $value])) {
-            return $this->stdReturn(true, $field . ': success', true);
+            return Response::stdReturn(true, $field . ': success', true);
         } else {
-            return $this->stdReturn(false, "$field: failed");
+            return Response::stdReturn(false, "$field: failed");
         }
     }
 
@@ -677,7 +732,7 @@ class CmdHostController
         $field = 'logs-reload';
         $response = $this->hostLogsService->getLogs($target_id, $command_values);
 
-        return $this->stdReturn(true, $response, false, ['command_receive' => $field]);
+        return Response::stdReturn(true, $response, false, ['command_receive' => $field]);
 
 
     }
@@ -720,43 +775,5 @@ class CmdHostController
             'command_success' => 1,
             'response_msg' => $response,
         ];
-    }
-
-    /**
-     *
-     * @param bool $success
-     * @param mixed $msg
-     * @param bool $force_reload
-     * @param array<string, mixed> $extra_fields
-     * @return array<string, string|int>
-     */
-    private function stdReturn(
-        bool $success,
-        mixed $msg,
-        bool $force_reload = false,
-        array $extra_fields = [],
-    ): array
-    {
-        if ($success) {
-            $response = [
-                'command_success' => 1,
-                'response_msg' => $msg,
-            ];
-        } else {
-            $response = [
-                'command_error' => 1,
-                'command_error_msg' => $msg,
-            ];
-        }
-        if ($force_reload) {
-            $response['force_hosts_refresh'] = 1;
-        }
-
-        if (!empty($extra_fields)) {
-            $response = array_merge($response, $extra_fields);
-        }
-
-
-         return $response;
     }
 }

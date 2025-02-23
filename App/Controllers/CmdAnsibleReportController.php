@@ -12,6 +12,7 @@ namespace App\Controllers;
 
 use App\Services\Filter;
 use App\Models\CmdAnsibleReportModel;
+use App\Helpers\Response;
 
 class CmdAnsibleReportController {
     private $reportModel;
@@ -25,7 +26,12 @@ class CmdAnsibleReportController {
         $this->reportModel = new CmdAnsibleReportModel($ctx);
     }
 
-    public function generateAnsibleReport($command_values)
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function generateAnsibleReport(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $report_type = $this->filter->varString($command_values['type']);
@@ -33,32 +39,25 @@ class CmdAnsibleReportController {
         $report_data = $this->reportModel->getReport($target_id, $report_type);
 
         if ($report_data) {
-            return [
-                'command_success' => 1,
-                'response_msg' => $report_data,
-            ];
+            return Response::stdReturn(true, $report_data);
         } else {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'Error generating report',
-            ];
+            return Response::stdReturn(false, 'Error generating report');
         }
     }
 
-    public function deleteReport($command_values)
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function deleteReport(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
 
         if ($this->reportModel->delete($target_id)) {
-            return [
-                'command_success' => 1,
-                'response_msg' => 'Report deleted successfully',
-            ];
+            return Response::stdReturn(true, 'Report deleted successfully');
         } else {
-            return [
-                'command_error' => 1,
-                'command_error_msg' => 'Error deleting report',
-            ];
+            return Response::stdReturn(false, 'Error deleting report');
         }
     }
 }
