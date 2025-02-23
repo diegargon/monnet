@@ -281,11 +281,14 @@ class User
     /**
      *
      * @param int $id
+     * @return int
      */
-    public function toggleHostsCat(int $id): void
+    public function toggleHostsCat(int $id): int
     {
         $this->categories_state[$id] = (!$this->categories_state[$id]) ? 1 : 0;
         $this->saveHostsCatsState();
+
+        return $this->categories_state[$id];
     }
 
     /**

@@ -396,11 +396,11 @@ if ($command == 'show_host_only_cat' && !empty($target_id)) {
 }
 
 if ($command == 'show_host_cat' && !empty($target_id)) :
-    $user->toggleHostsCat($target_id);
+    $data['response_msg'] = $user->toggleHostsCat($target_id);
     $data['command_success'] = 1;
     $data['force_hosts_refresh'] = 1;
 endif;
-
+/*
 if (
     $command == 'show_host_cat' ||
     $command == 'show_host_only_cat' &&
@@ -428,9 +428,10 @@ if (
     $tdata['networks'] = $networks_list;
     $tdata['networks_selected'] = $networks_selected;
 
-    $data['categories_host']['data'] = $frontend->getTpl('categories-host', $tdata);
+    $data['categories_host']['data'] = $frontend->getTpl('hosts-bar', $tdata);
     $data['categories_host']['cfg']['place'] = '#left-container';
 }
+*/
 
 /* /end Host Cat */
 

@@ -81,6 +81,7 @@ if ($user->getPref('show_other_hosts_status')) {
     $data['other_hosts']['cfg']['place'] = '#host_place';
     $data['other_hosts']['data'] = $frontend->getTpl('hosts-min', $tdata);
 }
+//END show host and other hosts status
 
 if ($user->getPref('show_termlog_status')) {
     $logs = [];
@@ -178,6 +179,7 @@ if ($user->getPref('show_termlog_status')) {
         $data['term_logs']['data'] = $frontend->getTpl('term', ['term_logs' => $log_lines]);
     }
 }
+// show_termlog_status
 
 $data['misc']['totals'] = $lng['L_SHOWED'] . ": $show_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count";
 $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
@@ -265,6 +267,42 @@ if ($hosts->agents_missing_pings) :
     ];
 endif;
 
+/*
+ *  Update top host-bar
+ */
+
+
+// Host Categories
+/*
+$hosts_categories = $user->getHostsCats();
+foreach ($hosts_categories as $key => $host_cat) {
+    if (!$hosts->catHaveHosts($host_cat['id'])) {
+        unset($hosts_categories[$key]);
+    }
+}
+$tdata['hosts_categories'] = $hosts_categories;
+
+// Host Networks
+$networks_list = $ctx->get('Networks')->getNetworks();
+$networks_selected = 0;
+foreach ($networks_list as &$net) {
+    $net_set = $user->getPref('network_select_' . $net['id']);
+    if (($net_set) || $net_set === false) {
+        $net['selected'] = 1;
+        $networks_selected++;
+    }
+}
+$tdata['networks'] = $networks_list;
+$tdata['networks_selected'] = $networks_selected;
+
+//Load Tpl
+$data['categories_host']['data'] = $frontend->getTpl('hosts-bar', $tdata);
+$data['categories_host']['cfg']['place'] = '#left-container';
+*/
+
+/*
+ *  Host Down Bar
+ */
 //TODO2 Move to ncfg
 
 $cli_last_run = 'Never';

@@ -455,45 +455,44 @@ $(document).ready(function () {
         });
     });
 
-    // Resize code
-    $(document).ready(function () {
-        const $left = $('#left-container');
-        const $center = $('#center-container');
-        const $hosts_cat = $('#hosts_cat');
+     // Resize code
 
-        let startX, startWidthLeft, startWidthCenter;
+    const $left = $('#left-container');
+    const $center = $('#center-container');
+    const $hosts_cat = $('#hosts_cat');
 
-        function resizeStart(e) {
-            const touch = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
+    let startX, startWidthLeft, startWidthCenter;
 
-            startX = touch.pageX;
-            startWidthLeft = $left.width();
-            startWidthCenter = $center.width();
+    function resizeStart(e) {
+        const touch = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
 
-            $(document).on('mousemove touchmove', resize);
-            $(document).on('mouseup touchend', stopResize);
+        startX = touch.pageX;
+        startWidthLeft = $left.width();
+        startWidthCenter = $center.width();
+
+        $(document).on('mousemove touchmove', resize);
+        $(document).on('mouseup touchend', stopResize);
+    }
+
+    function resize(e) {
+        const touch = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
+        const dx = touch.pageX - startX;
+        const newLeftWidth = Math.max(100, startWidthLeft + dx);
+        const newCenterWidth = Math.max(200, startWidthCenter - dx);
+
+        if (newLeftWidth + newCenterWidth <= $(window).width()) {
+            $left.css('width', `${newLeftWidth}px`);
+            $center.css('width', `${newCenterWidth}px`);
         }
+    }
 
-        function resize(e) {
-            const touch = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
-            const dx = touch.pageX - startX;
-            const newLeftWidth = Math.max(100, startWidthLeft + dx);
-            const newCenterWidth = Math.max(200, startWidthCenter - dx);
+    function stopResize() {
+        $(document).off('mousemove touchmove', resize);
+        $(document).off('mouseup touchend', stopResize);
+    }
 
-            if (newLeftWidth + newCenterWidth <= $(window).width()) {
-                $left.css('width', `${newLeftWidth}px`);
-                $center.css('width', `${newCenterWidth}px`);
-            }
-        }
-
-        function stopResize() {
-            $(document).off('mousemove touchmove', resize);
-            $(document).off('mouseup touchend', stopResize);
-        }
-
-        $hosts_cat.on('mousedown touchstart', resizeStart);
-    });
+    $hosts_cat.on('mousedown touchstart', resizeStart);
 
     // END Resize code
-}
-);
+
+});

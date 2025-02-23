@@ -403,7 +403,7 @@ class Hosts
     }
 
     /**
-     *
+     * Check if category is not empty
      * @param int $id
      * @return bool
      */

@@ -189,7 +189,7 @@ function page_index(AppContext $ctx): array
 
     /* Host Cat */
     $page['load_tpl'][] = [
-        'file' => 'categories-host',
+        'file' => 'hosts-bar',
         'place' => 'left_col_pre',
     ];
     /* Host Footer */
@@ -206,7 +206,7 @@ function page_index(AppContext $ctx): array
     $page['web_categories'] = $categories->getByType(2);
 
     /* Network Categories */
-    $page['network_categories'] = $categories->getByType(1);
+    //??$page['network_categories'] = $categories->getByType(1);
 
     return $page;
 }

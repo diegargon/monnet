@@ -69,9 +69,9 @@ class  UserController
     public function toggleHostsCat(string $command, array $command_values): array
     {
         $id = $this->filter->varInt($command_values['id']);
-        $this->user->toggleHostsCat($id);
+        $response = $this->user->toggleHostsCat($id);
 
-        return Response::stdReturn(true, $command . ': success', true);
+        return Response::stdReturn(true, $response, true);
     }
 
 }

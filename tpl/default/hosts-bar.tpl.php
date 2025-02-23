@@ -13,6 +13,10 @@
  * @var array<mixed> $tdata
  */
 !defined('IN_WEB') ? exit : true;
+
+/*
+ * TODO: split for refresh less
+ */
 ?>
 
 <div id="hosts_cat" class="hosts_cat">
@@ -44,7 +48,6 @@
         if (!empty($tdata['hosts_categories'])) :
             foreach ($tdata['hosts_categories'] as $cat) :
                 ?>
-
                 <div class="category">
                     <a class="show_host_cat"  data-catid="<?= $cat['id'] ?>" href="#">
                         <img src="/tpl/<?= $cfg['theme'] ?>/img/<?= $cat['on'] ? 'green.png' : 'red.png' ?>"/>
