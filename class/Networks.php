@@ -263,14 +263,17 @@ class Networks
         $networks = $this->getNetworks();
 
         foreach ($networks as $net) {
+            if ($net['disable'] || $net['scan'] !== 1) {
+                continue;
+            }
             if (empty($net['network']) || Filters::varNetwork($net['network']) === false) {
                 Log::error("Invalid network detected " . $net['network']);
                 continue;
             }
             /*
-             * Jump 0.0.0.0 (we use for add internet host and networks without scan field
+             * Jump 0.0.0.0 (we use 0.* for add internet host)
              */
-            if (str_starts_with($net['network'], "0") || $net['scan'] !== 1) {
+            if (str_starts_with($net['network'], "0")) {
                 continue;
             }
             Log::debug("Ping networks " . array2string($net));
@@ -341,12 +344,7 @@ class Networks
                     $fnet['pool'] = $net['pool'];
                 }
 
-                if ($fnet['disable'] === 0) :
-                    $this->networks[$id] = $fnet;
-                endif;
-                //else {
-                //    $this->networks_disabled[$id] = $fnet;
-                //}
+                $this->networks[$id] = $fnet;
             endforeach;
         endif;
     }

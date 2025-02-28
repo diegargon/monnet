@@ -110,6 +110,25 @@
                         }
                     }
 
+                    if (jsonData.command_receive === 'show_host_cat' && jsonData.command_success) {
+                            let newState = jsonData.response_msg;
+                            let imgSrc = `/tpl/<?= $cfg['theme'] ?>/img/${newState ? 'green.png' : 'red.png'}`;
+                            $('.show_host_cat[data-catid="' + jsonData.id + '"] img').attr('src', imgSrc);
+                    }
+
+                    /* Host Cat Double Click */
+                    if (jsonData.command_receive === 'show_host_only_cat' && jsonData.command_success) {
+                        let allOtherRed = $('.show_host_cat img').not('[data-catid="' + jsonData.id + '"]').filter('[src$="red.png"]').length === $('.show_host_cat').not('[data-catid="' + jsonData.id + '"]').length;
+
+                        if (allOtherRed) {
+                            // if all red except clicked category turn on all
+                            $('.show_host_cat img').attr('src', '/tpl/<?= $cfg['theme'] ?>/img/green.png');
+                        } else {
+                            // if not turn all off except the clicked category
+                            $('.show_host_cat img').not('[data-catid="' + jsonData.id + '"]').attr('src', '/tpl/<?= $cfg['theme'] ?>/img/red.png');
+                            $('.show_host_cat[data-catid="' + jsonData.id + '"] img').attr('src', '/tpl/<?= $cfg['theme'] ?>/img/green.png');
+                        }
+                    }
                     if (
                         jsonData.command_receive === 'report_ansible' ||
                         jsonData.command_receive === 'report_ansible_hosts' ||

@@ -516,10 +516,10 @@ class Hosts
     {
         foreach ($this->hosts as $host) :
             $id = $host['id'];
-            if (!empty($host['alert'])) :
+            if (!empty($host['alert'])) {
                 $this->db->update('hosts', ['alert' => 0], ['id' => $id]);
                 $this->hosts[$id]['alert'] = 0;
-            endif;
+            }
         endforeach;
 
         return true;
@@ -532,10 +532,10 @@ class Hosts
     {
         foreach ($this->hosts as $host) :
             $id = $host['id'];
-            if (!empty($host['warn'])) :
+            if (!empty($host['warn'])) {
                 $this->db->update('hosts', ['warn' => 0], ['id' => $id]);
                 $this->hosts[$id]['warn'] = 0;
-            endif;
+            }
         endforeach;
 
         return true;
@@ -1044,6 +1044,9 @@ class Hosts
                 $host['network_vlan'] = $network['vlan'];
             } else {
                 Log::warning('Host network seems not exists: ' . "[H: $id][N: $net_id]");
+            }
+            if ($network['disable']) {
+                continue;
             }
             $host['display_name'] = ucfirst($this->getDisplayName($host));
 

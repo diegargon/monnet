@@ -199,7 +199,10 @@ class CommandRouter {
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->clearWarns();
                 break;
-
+            case 'submitHost':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitRemoteHost($command_values);
+                break;
             /*
              *  Bookmarks
              */
@@ -215,7 +218,10 @@ class CommandRouter {
                 $bookmarksController = new CmdBookmarksController($this->ctx);
                 $response = $bookmarksController->removeBookmark($command_values);
                 break;
-
+            case 'mgmtBookmark':
+                $bookmarksController = new CmdBookmarksController($this->ctx);
+                $response = $bookmarksController->mgmtBookmark($command, $command_values);
+                break;
             /*
              * Config
              */
@@ -236,12 +242,17 @@ class CommandRouter {
                 $userController = new UserController($this->ctx);
                 $response = $userController->toggleHostsCat($command, $command_values);
                 break;
+            case 'show_host_only_cat':
+                $userController = new UserController($this->ctx);
+                $response = $userController->onlyOneHostsCat($command, $command_values);
+                break;
+
             /*
              *  Network
              */
             case 'mgmtNetworks':
                 $networkController = new CmdNetworkController($this->ctx);
-                $response = $networkController->manageNetworks($command_values);
+                $response = $networkController->manageNetworks($command, $command_values);
                 break;
 
             /*

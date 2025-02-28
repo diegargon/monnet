@@ -31,14 +31,6 @@ ping_nets($ctx);
 
 if ($db->isConn()) :
     $ncfg->set('discovery_last_run', date_now());
-/*
-    $db->update(
-        'prefs',
-        ['uid' => 0, 'pref_value' => date_now()],
-        ['pref_name' => 'discovery_last_run'],
-        'LIMIT 1'
-    );
-  */
 endif;
 
 Log::debug("[Finishing] $APP_NAME " . datetime_machine() . "");

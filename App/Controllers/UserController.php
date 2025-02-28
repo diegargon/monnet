@@ -70,8 +70,40 @@ class  UserController
     {
         $id = $this->filter->varInt($command_values['id']);
         $response = $this->user->toggleHostsCat($id);
-
-        return Response::stdReturn(true, $response, true);
+        $extra = [
+            'command_receive' => $command,
+            'id' => $id,
+        ];
+        return Response::stdReturn(true, $response, true, $extra);
     }
 
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function onlyOneHostsCat(string $command, array $command_values): array
+    {
+        $id = $this->filter->varInt($command_values['id']);
+        $categories_state = $this->user->getHostsCatState();
+
+        $ones = 0;
+        foreach ($categories_state as $state) :
+            $state == 1 ? $ones++ : null;
+        endforeach;
+
+        if (empty($categories_state) || $ones == 1) :
+            $this->user->turnHostsCatsOn();
+        else :
+            $this->user->turnHostsCatsOff();
+            $this->user->toggleHostsCat($id);
+        endif;
+        $extra = [
+            'command_receive' => $command,
+            'id' => $id,
+        ];
+
+        return Response::stdReturn(true, 'ok', true, $extra);
+    }
 }

@@ -684,6 +684,50 @@ class CmdHostController
         }
     }
 
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitRemoteHost(array $command_values): array
+    {
+        $host = [];
+        $ip = $domain = false;
+        $hosts = $this->ctx->get('H'
+                . 'osts');
+        $lng = $this->ctx->get('lng');
+
+        $ip = $this->filter->varIP($command_values['value']);
+        if (empty($ip)) {
+            $domain = $this->filter->varDomain($command_values['value']);
+        } else {
+            $host['ip'] = $ip;
+        }
+
+        if(empty($ip) && !empty($domain)) {
+            $host['ip'] = $hosts->getHostnameIP($host['hostname']);
+            $host['hostname'] = $domain;
+        }
+
+        if (!empty($host['ip']) && !$this->ctx->get('Networks')->isLocal($host['ip'])) {
+            $network_match = $this->ctx->get('Networks')->matchNetwork($host['ip']);
+            if (!valid_array($network_match)) {
+                return Response::stdReturn(false, $lng['L_ERR_NOT_NET_CONTAINER']);
+            } else {
+                if ($hosts->getHostByIP($host['ip'])) {
+                    return Response::stdReturn(false, $lng['L_ERR_DUP_IP']);
+                } else {
+
+                    $host['network'] = $network_match['id'];
+                    $hosts->addHost($host);
+                    return Response::stdReturn(true, $lng['L_OK'], true);
+                }
+            }
+        } else {
+            return Response::stdReturn(false, $lng['L_ERR_NOT_INTERNET_IP'] . $host['ip']);
+        }
+    }
+
    /**
      *
      * @param array<string, string|int> $command_values

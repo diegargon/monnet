@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author diego/@/envigo.net
@@ -9,20 +10,21 @@
 
 namespace App\Controllers;
 
-use App\Models\CmdBookmarkModel;
 use App\Services\Filter;
+use App\Services\TemplateService;
+use App\Helpers\Response;
 
 class CmdBookmarksController
 {
-    private CmdBookmarksController $cmdBookmarkModel;
     private Filter $filter;
     private \AppContext $ctx;
+    private $templateService;
 
     public function __construct(\AppContext $ctx)
     {
-        $this->cmdBookmarkModel = new CmdBookmarkModel($ctx);
         $this->filter = new Filter();
         $this->ctx = $ctx;
+        $this->templateService = new TemplateService($ctx);
     }
 
     /**
@@ -32,6 +34,8 @@ class CmdBookmarksController
      */
     public function addBookmark(array $command_values): array
     {
+        $lng = $this->ctx->get('lng');
+
         $value_command = $this->filter->varJson($command_values['value']);
         $decodedJson = json_decode($value_command, true);
 
@@ -44,13 +48,50 @@ class CmdBookmarksController
             $new_bookmark[$key] = trim($value);
         }
 
-        // Validar campos del bookmark
+        // Validar campos
         if (!$this->filter->varString($new_bookmark['name'])) {
-            return Response::stdReturn(false, 'Name is empty or invalid');
+            return Response::stdReturn(false, "{$lng['L_NAME']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+        }
+        if (!$this->filter->varString($new_bookmark['image_type'])) {
+            return Response::stdReturn(false, "{$lng['L_IMAGE_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+        }
+        if (!$this->filter->varInt($new_bookmark['cat_id'])) {
+            return Response::stdReturn(false, "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+        }
+        if (
+            !$this->filter->varUrl($new_bookmark['urlip']) &&
+            !$this->filter->varIP($new_bookmark['urlip'])
+        ) {
+            return Response::stdReturn(false, "{$lng['L_URLIP']}:{$lng['L_ERROR_EMPTY_INVALID']}");
+        }
+        if (
+            !$this->filter->varInt($new_bookmark['weight']) &&
+            ($this->filter->varInt($new_bookmark['weight']) !== 0)
+        ) {
+            return Response::stdReturn(false, "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
 
-        // Lógica para agregar el bookmark
-        $result = $this->cmdBookmarkModel->add($new_bookmark);
+        if ($new_bookmark['image_type'] === 'local_img'):
+            if (empty($new_bookmark['field_img'])) {
+                return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+            } else {
+                if (
+                        !$this->filter->varCustomString($new_bookmark['field_img'], '.', 255) ||
+                        !file_exists('bookmark_img/')
+                ) {
+                    return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+                }
+            }
+        endif;
+
+        if ($new_bookmark['image_type'] == 'url' && !empty($new_bookmark['field_img'])) :
+            if (!$this->filters->varUrl($new_bookmark['field_img'])) {
+                return Response::stdReturn(false, "{$lng['L_ERROR_URL_INVALID']}");
+            }
+        endif;
+
+        // TODO BookmarkModel?
+        $result = $this->ctx->get('Items')->addItem('bookmarks', $new_bookmark);
 
         if ($result) {
             return Response::stdReturn(true, 'Bookmark added successfully');
@@ -66,6 +107,7 @@ class CmdBookmarksController
      */
     public function updateBookmark(array $command_values): array
     {
+        $lng = $this->ctx->get('lng');
         $target_id = $this->filter->varInt($command_values['id']);
         $value_command = $this->filter->varJson($command_values['value']);
         $decodedJson = json_decode($value_command, true);
@@ -80,12 +122,52 @@ class CmdBookmarksController
         }
 
         // Validar campos del bookmark
+        if (!$this->filter->varInt($bookmark['bookmark_id'])) {
+            return Response::stdReturn(false, "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+        }
         if (!$this->filter->varString($bookmark['name'])) {
-            return Response::stdReturn(false, 'Name is empty or invalid');
+            return Response::stdReturn(false, "{$lng['L_NAME']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+        }
+        if (!$this->filter->varString($bookmark['image_type'])) {
+            return Response::stdReturn(false, "{$lng['L_IMAGE_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+        }
+        if (!$this->filter->varInt($bookmark['cat_id'])) {
+            return Response::stdReturn(false, "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+        }
+        if (
+            !$this->filter->varUrl($bookmark['urlip']) &&
+            !$this->filter->varIP($bookmark['urlip'])
+        ) {
+            return Response::stdReturn(false, "{$lng['L_URLIP']}:{$lng['L_ERROR_EMPTY_INVALID']}");
+        }
+        if (
+                !$this->filter->varInt($bookmark['weight']) &&
+                ($this->filter->varInt($bookmark['weight']) !== 0)
+        ) {
+            return Response::stdReturn(false, "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
 
-        // Lógica para actualizar el bookmark
-        $result = $this->cmdBookmarkModel->update($bookmark);
+        if ($bookmark['image_type'] === 'local_img') :
+            if (empty($bookmark['field_img'])) {
+                return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+            } else {
+                if (
+                        !$this->filter->varCustomString($bookmark['field_img'], '.', 255) ||
+                        !file_exists('bookmark_img/')
+                ) {
+                    return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
+                }
+            }
+        endif;
+
+        if ($bookmark['image_type'] == 'url' && !empty($bookmark['field_img'])) :
+            if (!$this->filters->varUrl($bookmark['field_img'])) {
+                return Response::stdReturn(false, "{$lng['L_ERROR_URL_INVALID']}");
+            }
+        endif;
+
+        // TODO BookmarkModel?
+        $result = $this->ctx->get('Items')->updateItem('bookmarks', $bookmark);
 
         if ($result) {
             return Response::stdReturn(true, 'Bookmark updated successfully');
@@ -103,10 +185,59 @@ class CmdBookmarksController
     {
         $target_id = $this->filter->varInt($command_values['id']);
 
-        if ($this->cmdBookmarkModel->removeByID($target_id)) {
+        if ($this->ctx->get('Items')->remove($target_id)) {
             return Response::stdReturn(true, 'Bookmark removed successfully');
         } else {
             return Response::stdReturn(false, 'Error removing bookmark');
         }
+    }
+
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function mgmtBookmark(string $command, array $command_values): array
+    {
+        $categories = $this->ctx->get('Categories');
+        $target_id = $this->filter->varInt($command_values['id']);
+        $tdata = [];
+        $items = $this->ctx->get('Items');
+        $cfg =  $this->ctx->get('cfg');
+        $lng =  $this->ctx->get('lng');
+
+
+        if (isset($command_values['action']) && $command_values['action'] === 'edit') {
+            $tdata = $items->getById($target_id);
+        }
+        $tdata['web_categories'] = [];
+        if (!empty($tdata['conf'])) {
+            $conf = json_decode($tdata, true);
+            $tdata['image_resource'] = $conf['image_resource'];
+            $tdata['image_type'] = $conf['image_type'];
+        }
+        if ($categories !== null) {
+            $tdata['web_categories'] = $categories->getByType(2);
+        }
+
+        $tdata['local_icons'] = getLocalIconsData($cfg, 'bookmark_img/');
+        if (isset($command_values['action']) && $command_values['action'] === 'edit') {
+            $tdata['bookmark_buttonid'] = 'updateBookmark';
+            $tdata['bookmark_title'] = $lng['L_EDIT'];
+        } elseif (isset($command_values['action']) && $command_values['action'] === 'add') {
+            $tdata['bookmark_buttonid'] = 'addBookmark';
+            $tdata['bookmark_title'] = $lng['L_ADD'];
+        }
+
+        $extra = [
+            'command_receive' => $command,
+            'mgmt_bookmark' => [
+                'cfg' => ['place' => '#left-container'],
+                'data' => $this->templateService->getTpl('mgmt-bookmark', $tdata)
+            ]
+        ];
+
+        return Response::stdReturn(true, $target_id, false, $extra);
     }
 }

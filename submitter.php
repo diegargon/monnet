@@ -392,47 +392,16 @@ if ($command == 'show_host_only_cat' && !empty($target_id)) {
     endif;
 
     $data['command_success'] = 1;
+    $data['id'] = $target_id;
     $data['force_hosts_refresh'] = 1;
 }
 
 if ($command == 'show_host_cat' && !empty($target_id)) :
     $data['response_msg'] = $user->toggleHostsCat($target_id);
+    $data['id'] = $target_id;
     $data['command_success'] = 1;
     $data['force_hosts_refresh'] = 1;
 endif;
-/*
-if (
-    $command == 'show_host_cat' ||
-    $command == 'show_host_only_cat' &&
-    $target_id
-) {
-    $hosts_categories = $user->getHostsCats();
-
-    foreach ($hosts_categories as $key => $host_cat) {
-        if (!$hosts->catHaveHosts($host_cat['id'])) {
-            unset($hosts_categories[$key]);
-        }
-    }
-    $tdata['hosts_categories'] = $hosts_categories;
-
-    $networks_list = $ctx->get('Networks')->getNetworks();
-
-    $networks_selected = 0;
-    foreach ($networks_list as &$net) {
-        $net_set = $user->getPref('network_select_' . $net['id']);
-        if (($net_set) || $net_set === false) {
-            $net['selected'] = 1;
-            $networks_selected++;
-        }
-    }
-    $tdata['networks'] = $networks_list;
-    $tdata['networks_selected'] = $networks_selected;
-
-    $data['categories_host']['data'] = $frontend->getTpl('hosts-bar', $tdata);
-    $data['categories_host']['cfg']['place'] = '#left-container';
-}
-*/
-
 /* /end Host Cat */
 
 /* ADD Bookmark */
@@ -464,8 +433,8 @@ if (
         endif;
 
         if (
-            !Filters::varUrl($new_bookmark['urlip']) ||
-            Filters::varIP($new_bookmark['urlip'])
+            !Filters::varUrl($new_bookmark['urlip']) &&
+            !Filters::varIP($new_bookmark['urlip'])
         ) :
             $data['command_error_msg'] = "{$lng['L_URLIP']}:{$lng['L_ERROR_EMPTY_INVALID']}";
         endif;
@@ -535,8 +504,8 @@ if ($command == 'updateBookmark' && !empty($value_command) && $target_id > 0) {
             $data['command_error_msg'] .= "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
         if (
-            !Filters::varUrl($bookmark['urlip']) ||
-            Filters::varIP($bookmark['urlip'])
+            !Filters::varUrl($bookmark['urlip']) &&
+            !Filters::varIP($bookmark['urlip'])
         ) {
             $data['command_error_msg'] .= "{$lng['L_URLIP']}: {$lng['L_ERROR_EMPTY_INVALID']}";
         }
