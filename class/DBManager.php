@@ -132,7 +132,7 @@ class DBManager
     {
         $stmt = $this->connection->prepare($sql);
         $this->bindParams($stmt, $params);
-        $stmt->execute($params);
+        $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -148,7 +148,7 @@ class DBManager
     {
         $stmt = $this->connection->prepare($sql);
         $this->bindParams($stmt, $params);
-        $stmt->execute($params);
+        $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 

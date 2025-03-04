@@ -23,7 +23,7 @@ class CmdHostLogsModel
      * Update...
      *
      * @param int $target_id El ID del host.
-     * @param array $data Los datos a actualizar.
+     * @param array<string, string|int> $data Los datos a actualizar.
      * @return bool True si se actualizó correctamente, False en caso contrario.
      */
     public function updateByID(int $target_id, array $data): bool
@@ -88,7 +88,7 @@ class CmdHostLogsModel
      * Obtiene los logs de un host.
      *
      * @param int $host_id El ID del host.
-     * @return array Los logs del host.
+     * @return array<string, string|int> Los logs del host.
      */
     public function getHostLogs($host_id) {
         $db = $this->ctx->get('DBManager');
@@ -96,5 +96,16 @@ class CmdHostLogsModel
         $params = ['host_id' => $host_id];
 
         return $db->fetchAll($query, $params);
+    }
+
+    /**
+     * Fetches logs from the data source.
+     *
+     * @param array<string, string|int> $log_opts Log filtering options.
+     * @return array<string, string|int> The retrieved logs.
+     */
+    public function getLogs(array $log_opts): array
+    {
+        return \Log::getLogsHosts($log_opts);
     }
 }

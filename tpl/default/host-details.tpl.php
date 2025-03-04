@@ -583,7 +583,7 @@
                                 <option value="<?= $cat['id'] ?>"<?= $selected ?>><?= $cat_name ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <button id="submitCat"><?= $lng['L_SEND'] ?></button>
+                        <button id="submitChangeCat"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
                         <label for="host_owner"><?= $lng['L_OWNER'] ?>: </label><br />
@@ -866,7 +866,6 @@
         <!-- TAB15 --><!-- Tasks -->
         <div id="tab15" class="host-details-tab-content">
             <div class="create_task">
-
                 <fieldset>
                     <legend>Create Task</legend>
                     <table>

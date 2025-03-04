@@ -66,64 +66,7 @@ class HostFormatter
             $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
         endif;
 
-        /**
-         * Misc
-         */
-        if (!empty($host['misc'])) {
-            $host['misc'] = $this->fMisc($host['misc']);
-            /* TODO: Migrate: keep misc values in misc then delete this */
-            $host = array_merge($host, $host['misc']);
-        }
-
-        if (!empty($host['misc']['load_avg'])) :
-            $loadavg = unserialize($host['misc']['load_avg']);
-            (!empty($host['ncpu'])) ? $ncpu = (float)$host['ncpu'] : (float)$ncpu = 1;
-            $m1 = floatToPercentage((float)$loadavg['1min'], 0.0, $ncpu);
-            $m5 = floatToPercentage((float)$loadavg['5min'], 0.0, $ncpu);
-            $m15 = floatToPercentage((float)$loadavg['15min'], 0.0, $ncpu);
-
-            $host['load_avg'] = [
-                ['value' => round($m1, 1), 'legend' => $lng['L_LOAD'] . ' 1m', 'min' => 0, 'max' => 100],
-                ['value' => round($m5, 1), 'legend' => $lng['L_LOAD'] . ' 5m', 'min' => 0, 'max' => 100],
-                ['value' => round($m15, 1), 'legend' => $lng['L_LOAD'] . ' 15m', 'min' => 0, 'max' => 100],
-            ];
-        endif;
-        if (!empty($host['misc']['meminfo'])) {
-            $mem_info = unserialize($host['misc']['mem_info']);
-            $total = $mem_info['total'];
-            $used = $mem_info['used'];
-            $gtotal = mbToGb($total, 0);
-            $gused = mbToGb($used, 0);
-            $gfree = mbToGb($mem_info['free'], 0);
-            $legend = "{$lng['L_MEMORY']}: ({$mem_info['percent']}%) {$lng['L_TOTAL']}:{$gtotal}GB";
-            $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB";
-            $host['mem_info'] =
-                [
-                    'value' => $used, 'legend' => $legend, 'tooltip' => $tooltip, 'min' => 0, 'max' => $total
-                ];
-        }
-
-        if (!empty($host['misc']['disks_info'])) :
-            $disksinfo = unserialize($host['misc']['disks_info']);
-            $host['disks_info'] = [];
-
-            foreach ($disksinfo as $disk) :
-                $disk_percent = round($disk['percent']);
-                $name = substr($disk['mountpoint'], strrpos($disk['mountpoint'], '/'));
-                $legend = "($disk_percent%): $name";
-                $gused = mbToGb($disk['used'], 0);
-                $gfree = mbToGb($disk['free'], 0);
-                $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB\n{$disk['device']} {$disk['fstype']}";
-
-                $host['disks_info'][] = [
-                    'value' => $disk['used'],
-                    'legend' => $legend,
-                    'tooltip' => $tooltip,
-                    'min' => 0,
-                    'max' => $disk['total']
-                ];
-            endforeach;
-        endif;
+        $this->formatMisc($host);
 
         return $host;
     }
@@ -150,14 +93,14 @@ class HostFormatter
      * @param string $misc
      * @return array<string, string|int>
      */
-    public function fMisc(string $misc): array
+    public function decodeMisc(string $misc): array
     {
-        if (empty ($misc)) {
+        if (empty($misc)) {
             return [];
         }
         $misc = json_decode($misc, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return [];
+            return ['status' => 'error'];
         }
 
         return $misc;
@@ -196,4 +139,70 @@ class HostFormatter
 
         return $log_msg;
     }
- }
+
+    /**
+     *
+     * @param array $host<string, string|int>
+     */
+    public function formatMisc(array &$host): void
+    {
+        $lng = $this->ctx->get('lng');
+
+        if (!empty($host['misc'])) {
+            $host['misc'] = $this->decodeMisc($host['misc']);
+            /* TODO: Migrate: keep misc values in misc then delete this */
+            $host = array_merge($host, $host['misc']);
+        }
+
+
+        if (!empty($host['misc']['load_avg'])) :
+            $loadavg = unserialize($host['misc']['load_avg']);
+
+            (!empty($host['ncpu'])) ? $ncpu = (float) $host['ncpu'] : (float) $ncpu = 1;
+            $m1 = floatToPercentage((float) $loadavg['1min'], 0.0, $ncpu);
+            $m5 = floatToPercentage((float) $loadavg['5min'], 0.0, $ncpu);
+            $m15 = floatToPercentage((float) $loadavg['15min'], 0.0, $ncpu);
+
+            $host['load_avg'] = [
+                ['value' => round($m1, 1), 'legend' => $lng['L_LOAD'] . ' 1m', 'min' => 0, 'max' => 100],
+                ['value' => round($m5, 1), 'legend' => $lng['L_LOAD'] . ' 5m', 'min' => 0, 'max' => 100],
+                ['value' => round($m15, 1), 'legend' => $lng['L_LOAD'] . ' 15m', 'min' => 0, 'max' => 100],
+            ];
+        endif;
+        if (!empty($host['misc']['mem_info'])) {
+            $mem_info = unserialize($host['misc']['mem_info']);
+            $total = $mem_info['total'];
+            $used = $mem_info['used'];
+            $gtotal = mbToGb($total, 0);
+            $gused = mbToGb($used, 0);
+            $gfree = mbToGb($mem_info['free'], 0);
+            $legend = "{$lng['L_MEMORY']}: ({$mem_info['percent']}%) {$lng['L_TOTAL']}:{$gtotal}GB";
+            $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB";
+            $host['mem_info'] = [
+                    'value' => $used, 'legend' => $legend, 'tooltip' => $tooltip, 'min' => 0, 'max' => $total
+            ];
+        }
+
+        if (!empty($host['misc']['disks_info'])) :
+            $disksinfo = unserialize($host['misc']['disks_info']);
+            $host['disks_info'] = [];
+
+            foreach ($disksinfo as $disk) :
+                $disk_percent = round($disk['percent']);
+                $name = substr($disk['mountpoint'], strrpos($disk['mountpoint'], '/'));
+                $legend = "($disk_percent%): $name";
+                $gused = mbToGb($disk['used'], 0);
+                $gfree = mbToGb($disk['free'], 0);
+                $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB\n{$disk['device']} {$disk['fstype']}";
+
+                $host['disks_info'][] = [
+                    'value' => $disk['used'],
+                    'legend' => $legend,
+                    'tooltip' => $tooltip,
+                    'min' => 0,
+                    'max' => $disk['total']
+                ];
+            endforeach;
+        endif;
+    }
+}

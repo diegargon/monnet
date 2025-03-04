@@ -925,7 +925,10 @@ class Hosts
      */
     public function getDisplayNameById(int $host_id): string
     {
-        return $this->getDisplayName($this->hosts[$host_id]);
+        if (isset($this->hosts[$host_id])) {
+            return $this->getDisplayName($this->hosts[$host_id]);
+        }
+        return $host_id;
     }
 
     /**
@@ -1170,9 +1173,12 @@ class Hosts
                 endif;
             endif;
 
+            /*
             if (isset($this->hosts[$id]['misc'])) :
                 unset($this->hosts[$id]['misc']);
             endif;
+             
+             */
         } // LOOP FIN
 
         return true;

@@ -20,38 +20,34 @@ CommandRouter       Devuelve la respuesta final al cliente.
 namespace App\Controllers;
 
 use App\Models\CmdHostModel;
-use App\Models\CmdHostLogsModel;
 use App\Models\CmdHostNotesModel;
 use App\Services\Filter;
 use App\Services\AnsibleService;
-use App\Services\TemplateService;
 use App\Services\HostFormatter;
 use App\Services\HostService;
 use App\Services\HostLogsService;
+use App\Services\HostViewBuilder;
 use App\Helpers\Response;
 
 class CmdHostController
 {
     private CmdHostModel $cmdHostModel;
-    private CmdHostLogsModel $cmdHostLogsModel;
     private CmdHostNotesModel $cmdHostNotesModel;
     private HostLogsService $hostLogsService;
+    private HostViewBuilder $hostViewBuilder;
 
     private Filter $filter;
     private \AppContext $ctx;
-    private $ansibleService;
-    private $templateService;
-    private $reportKeysToShow = ["id", "display_name", "ip", 'mac', "online"];
+    private AnsibleService $ansibleService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->hostService = new HostService($ctx);
         $this->hostFormatter = new HostFormatter($ctx);
         $this->cmdHostModel = new CmdHostModel($ctx);
-        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
+        $this->hostViewBuilder = new HostViewBuilder($ctx);
         $this->cmdHostNotesModel = new CmdHostNotesModel($ctx);
         $this->ansibleService = new AnsibleService($ctx);
-        $this->templateService = new TemplateService($ctx);
         $this->hostLogsService = new hostLogsService($ctx);
 
         $this->filter = new Filter();
@@ -66,7 +62,6 @@ class CmdHostController
      */
     public function getHostDetails(array $command_values): array
     {
-        $user = $this->ctx->get('User');
         $target_id = $this->filter->varInt($command_values['id']);
         $field = 'getHostDetails';
 
@@ -80,16 +75,7 @@ class CmdHostController
             return Response::stdReturn(false, "$field: No details");
         }
 
-        $tdata['theme'] = $user->getTheme();
-        $tdata['host_details'] = $hostDetails;
-        $tdata['host_details']['host_logs'] =  $this->templateService->getTpl(
-            'term',
-            [
-                'term_logs' => '',
-                'host_id' => $target_id
-            ]
-        );
-        $hostDetailsTpl = $this->templateService->getTpl('host-details', $tdata);
+        $hostDetailsTpl = $this->hostViewBuilder->hostDetails($target_id, $hostDetails);
 
         $host_data = [
             'cfg' => ['place' => "#left-container"],
@@ -99,13 +85,37 @@ class CmdHostController
         return Response::stdReturn(true, "ok", false, ['host_details' => $host_data]);
     }
 
+    public function reloadStatsView(string $command, array $command_values): array
+    {
+        /*
+         * TODO: Actually reload sending all html/js again
+         */
+        $target_id = $this->filter->varInt($command_values['id']);
+        $field = 'reloadStatsView';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+
+        $hostDetails = $this->hostService->getDetailsStats($target_id);
+
+        if (!$hostDetails) {
+            return Response::stdReturn(false, "$field: No details");
+        }
+
+        $hostDetailsTpl = $this->hostViewBuilder->buildStats($hostDetails);
+
+        return Response::stdReturn(true, "ok", false, ['command_receive' => $command, 'host_details' => $hostDetailsTpl]);
+    }
+
     /**
      * Elimina un host.
      *
+     * @param string $command
      * @param array<string, string|int> $command_values Los valores del comando.
      * @return array<string, string|int> Respuesta en formato JSON.
      */
-    public function removeHost(array $command_values): array
+    public function removeHost(string $command, array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $field = 'removeHost';
@@ -115,7 +125,7 @@ class CmdHostController
         }
 
         if ($this->cmdHostModel->removeByID($target_id)) {
-            return Response::stdReturn(true, "$field: Host removed $target_id", true);
+            return Response::stdReturn(true, "$field: Host removed $target_id", true, ['command_receive' => $command]);
         }
 
         return Response::stdReturn(false, "$field: Error removing host");
@@ -153,14 +163,13 @@ class CmdHostController
     public function toggleDisablePing(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varBool($command_values['value']);
+        $value = $this->filter->varInt($command_values['value']);
         $field = 'disable_ping';
 
         if (!is_numeric($target_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");
         }
-
-        if ($this->cmdHostModel->updateByID($target_id, ['disable_ping' => $value])) {
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
             return Response::stdReturn(true, "$field: Ping toggled successfully");
         }
 
@@ -185,9 +194,9 @@ class CmdHostController
         }
 
         if ($this->cmdHostModel->updateByID($target_id, ['check_method' => $value])) {
-            return Response::stdReturn(true, "$field: Error updating check ports method");
+            return Response::stdReturn(true, "$field: Updated check ports method ($value)");
         } else {
-            return Response::stdReturn(false, "$field: Error updating check ports method");
+            return Response::stdReturn(false, "$field: Error updating check ports method ($value)");
         }
     }
 
@@ -343,7 +352,18 @@ class CmdHostController
      */
     public function submitOwner(array $command_values): array
     {
-        return $this->updateMisc($command_values);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varString($command_values['value']);
+        $field = 'submitOwner';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
     }
 
     /**
@@ -353,15 +373,26 @@ class CmdHostController
      */
     public function submitHostTimeout(array $command_values): array
     {
-        return $this->updateMisc($command_values);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+        $field = 'submitHostTimeout';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
     }
 
     /**
-     *
+     * Trigger when change host category
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
-    public function submitHostCategory(array $command_values): array
+    public function submitChangeHostCategory(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varString($command_values['value']);
@@ -383,13 +414,86 @@ class CmdHostController
     }
 
     /**
+     * Create new host category
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitNewHostsCat(array $command_values): array
+    {
+        $value = $this->filter->varString($command_values['value']);
+        $response = $this->ctx->get('Categories')->create(1, $value);
+
+        if ($response['success'] == 1) {
+            return Response::stdReturn(true, $response['msg']);
+        }
+
+        return Response::stdReturn(false, $response['msg']);
+    }
+
+    /**
+     * Remove hosts category
+     * 2 Host Cat
+     * id 1 is the fauilt category
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function removeHostsCat(array $command_values): array
+    {
+        $lng = $this->ctx->get('lng');
+        $target_id = $this->filter->varInt($command_values['id']);
+
+        if ($target_id === 1) {
+            return Response::stdReturn(false, $lng['L_ERR_CAT_NODELETE']);
+        } elseif ($this->ctx->get('Categories')->remove($target_id)) {
+            // We remove the category set all host to default category
+            $this->db->update('hosts', ['category' => 1], 'category = :category', ['category' => $target_id]);
+        } else {
+            return Response::stdReturn(false, $lng['L_ERROR']);
+        }
+        //$data['force_hosts_refresh'] = 1;
+        return Response::stdReturn(true, 'ok: ' . $target_id);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function powerOn(array $command_values): array
+    {
+        $hosts = $this->ctx->get('Hosts');
+        $target_id = $this->filter->varInt($command_values['id']);
+        $host = $hosts->getHostById($target_id);
+
+        if (valid_array($host) && !empty($host['mac'])) {
+            sendWOL($host['mac']);
+            return Response::stdReturn(true, 'WOL: ' . $target_id);
+        } else {
+            $err_msg = $host['ip']. ' not mac address';
+            \Log::warning($err_msg);
+            return Response::stdReturn(false, $err_msg);
+        }
+    }
+    /**
      *
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
     public function submitManufacture(array $command_values): array
     {
-        return $this->updateMisc('manufacture', $command_values);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varString($command_values['value']);
+        $field = 'manufacture';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
+
     }
 
     /**
@@ -399,7 +503,18 @@ class CmdHostController
      */
     public function submitMachineType(array $command_values): array
     {
-        return $this->updateMisc('machine_type', $command_values);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+        $field = 'machine_type';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
     }
 
     /**
@@ -409,7 +524,18 @@ class CmdHostController
      */
     public function submitSysAval(array $command_values): array
     {
-        return $this->updateMisc('sys_availability', $command_values);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+        $field = 'sys_availability';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
     }
 
     /**
@@ -419,7 +545,19 @@ class CmdHostController
      */
     public function submitOS(array $command_values): array
     {
-        return $this->updateMisc('os', $command_values);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+        $field = 'os';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
+
     }
 
     /**
@@ -429,7 +567,18 @@ class CmdHostController
      */
     public function submitOSVersion(array $command_values): array
     {
-        return $this->updateMisc('os_version', $command_values);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+        $field = 'os_version';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
     }
 
     /**
@@ -439,7 +588,19 @@ class CmdHostController
      */
     public function submitSystemType(array $command_values): array
     {
-        return $this->updateMisc('system_type', $command_values);
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+        $field = 'system_type';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
+
     }
     /**
      *
@@ -448,13 +609,18 @@ class CmdHostController
      */
     public function submitAccessType(array $command_values): array
     {
-        if (!empty($command_values['value'])) {
-            $value_command = Filters::varUrl($command_values['value']);
-        } else {
-            $value_command = '';
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+        $field = 'access_type';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
         }
 
-        return $this->updateMisc('access_type', ['access_link' => $value_command]);
+        return Response::stdReturn(false, "$field: error");
     }
     /**
      *
@@ -463,64 +629,43 @@ class CmdHostController
      */
     public function submitAccessLink(array $command_values): array
     {
-        return $this->updateMisc('system_type', $command_values);
-    }
-
-    /**
-     *
-     * @param array<string, string|int> $command_values
-     * @return array<string, string|int>
-     */
-    public function ackHostLog(array $command_values): array
-    {
-        return $this->updateMisc('ack', $command_values);
-    }
-
-    /**
-     * Obtiene las métricas de un host.
-     *
-     * @param int $target_id El ID del host.
-     * @return array<string, string|int> Las métricas del host.
-     */
-    private function getHostMetrics(int $target_id): array
-    {
-        $metrics = [];
-
-        // Obtener estadísticas de memoria
-        $metrics['mem_info'] = $this->cmdHostModel->getMemoryInfo($target_id);
-
-        // Obtener carga promedio
-        $metrics['load_avg'] = $this->cmdHostModel->getLoadAverage($target_id);
-
-        // Obtener estadísticas de I/O
-        $metrics['iowait_stats'] = $this->cmdHostModel->getIOWaitStats($target_id);
-
-        // Obtener información de discos
-        $metrics['disks_info'] = $this->cmdHostModel->getDisksInfo($target_id);
-
-        return $metrics;
-    }
-
-    /**
-     *
-     * @param string $field
-     * @param array<string, int|string> $command_values
-     * @return array<string, int|string>
-     */
-    public function updateMisc(string $field, array $command_values): array
-    {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varInt($command_values['value']);
+        $field = 'access_link';
 
-        if ($target_id === null || $target_id <= 0 || $value === null) {
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
+    }
+
+    /**
+     * Updates a misc field
+     * $this->submitField($command_values, 'access_link', [$this->filter, 'varInt'])
+     *
+     * @param array $command_values Input values containing 'id' and 'value'.
+     * @param string $field The field name to update.
+     * @param callable $filter_function A filtering function for the value.
+     * @return array Standard response array.
+     */
+    public function submitMiscField(array $command_values, string $field, callable $filter_function): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $filter_function($command_values['value']);
+
+        if (!is_numeric($target_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");
         }
 
         if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
-            return Response::stdReturn(true, "$field: updated successfully");
+            return Response::stdReturn(true, "$field: successfully");
         }
 
-        return Response::stdReturn(false, "$field: updated error");
+        return Response::stdReturn(false, "$field: error");
     }
 
     /**
@@ -546,13 +691,10 @@ class CmdHostController
         $lng = $this->ctx->get('lng');
         $field = 'report_alerts';
         $tdata['hosts'] = $this->hostService->getAlertHosts();
-        $keysToShow = $this->reportKeysToShow;
-        array_push($keysToShow, 'log_msgs');
-        $tdata['keysToShow'] = $keysToShow;
         $tdata['table_btn'] = 'clear_alerts';
         $tdata['table_btn_name'] = $lng['L_CLEAR_ALERTS'];
 
-        $alertHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
+        $alertHostsTpl = $this->hostViewBuilder->buildHostReport($tdata, ['log_msgs']);
 
         return Response::stdReturn(true, $alertHostsTpl, false, ['command_receive' => $field]);
     }
@@ -566,15 +708,98 @@ class CmdHostController
         $lng = $this->ctx->get('lng');
         $field = 'report_warns';
         $tdata['hosts'] = $this->hostService->getWarnHosts();
-        $keysToShow = $this->reportKeysToShow;
-        array_push($keysToShow, 'log_msgs');
-        $tdata['keysToShow'] = $keysToShow;
         $tdata['table_btn'] = 'clear_warns';
         $tdata['table_btn_name'] = $lng['L_CLEAR_WARNS'];
 
-        $warnHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
+        $warnHostsTpl = $this->hostViewBuilder->buildHostReport($tdata, ['logs_msg']);
 
         return Response::stdReturn(true, $warnHostsTpl, false, ['command_receive' => $field]);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function clearHostAlarms(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $user = $this->ctx->get('User');
+        $this->hosts->clearHostAlarms($user->getUsername(), $target_id);
+
+        return Response::stdReturn(true, 'ok');
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function setHostAlarms(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varString($command_values['value']);
+        $msg = $this->hosts->setAlarmState($target_id, $value);
+
+        return Response::stdReturn(true, $msg);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function toggleMailAlarms(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varString($command_values['value']);
+        $msg = $this->hosts->setEmailAlarms($target_id, $value);
+
+        return Response::stdReturn(true, $msg);
+    }
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function toggleAlarmType(string $command, array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varString($command_values['value']);
+
+        $msg = $this->hosts->toggleAlarmType($target_id, $command, $value);
+
+        return Response::stdReturn(true, $msg);
+    }
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function toggleEmailAlarmType(string $command, array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varString($command_values['value']);
+
+        $msg = $this->hosts->toggleEmailAlarmType($target_id, $command, $value);
+
+        return Response::stdReturn(true, $msg);
+    }
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function setEmailList(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varString($command_values['value']);
+
+        $msg = $this->hosts->setEmailAlarms($target_id, $value);
+
+        return Response::stdReturn(true, $msg);
     }
 
     /**
@@ -586,11 +811,7 @@ class CmdHostController
         $hosts = $this->hostService->getAgentsHosts($status);
         $field = 'report_agents_hosts';
         $tdata['hosts'] = $hosts;
-        $keysToShow = $this->reportKeysToShow;
-        array_push($keysToShow, 'ansible_enabled', 'agent_version');
-        $tdata['keysToShow'] = $keysToShow;
-
-        $agentHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
+        $agentHostsTpl = $this->hostViewBuilder->buildHostReport($tdata, ['ansible_enabled', 'agent_version']);
 
         return Response::stdReturn(true, $agentHostsTpl, false, ['command_receive' => $field]);
     }
@@ -604,11 +825,7 @@ class CmdHostController
     {
         $tdata['hosts'] = $this->hostService->getAnsibleHosts($status);
         $field = 'report_ansible';
-        $keysToShow = $this->reportKeysToShow;
-        array_push($keysToShow, 'ansible_enabled', 'agent_version');
-        $tdata['keysToShow'] = $keysToShow;
-
-        $ansibleHostsTpl = $this->templateService->getTpl('hosts-report', $tdata);
+        $ansibleHostsTpl = $this->hostViewBuilder->buildHostReport($tdata, ['ansible_enabled', 'agent_version']);
 
         return Response::stdReturn(true, $ansibleHostsTpl, false, ['command_receive' => $field]);
     }
@@ -769,17 +986,6 @@ class CmdHostController
         }
     }
 
-
-    public function logsReload(array $command_values) : array
-    {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $field = 'logs-reload';
-        $response = $this->hostLogsService->getLogs($target_id, $command_values);
-
-        return Response::stdReturn(true, $response, false, ['command_receive' => $field]);
-
-
-    }
     /**
      *
      * @param array<string, string|int> $command_values

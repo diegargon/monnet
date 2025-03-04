@@ -49,13 +49,26 @@ class HostService
 
         $hostDetails = $this->hostFormatter->format($hostDetails);
 
-        #$hostDetails['logs'] = $this->logService->getHostLogs($target_id);
-        // Obtener puertos remotos
-        //$hostDetails['remote_ports'] = $this->cmdHostModel->getRemotePorts($target_id);
-
-        // Obtener logs del host
-        //$hostDetails['logs'] = $this->logService->getHostLogs($target_id);
-
+        // Obtener puertos remotos (1)
+        $hostDetails['remote_ports'] = $this->cmdHostModel->getHostScanPorts($target_id, 1);
+        // Agent Provided Ports (2)
+        if ($hostDetails['agent_installed']) {
+            $agent_ports = $this->cmdHostModel->getHostScanPorts($target_id, 2);
+            //Formatting
+            foreach ($agent_ports as $key_port => $port) :
+                if (isset($port['interface'])) :
+                    if (strpos($port['interface'], '[') === 0) {
+                        $agent_ports[$key_port]['class'] = 'port_ipv6';
+                        if (strpos($port['interface'], '[::]') === 0) :
+                            $agent_ports[$key_port]['class'] .= ' port_local';
+                        endif;
+                    } elseif (strpos($port['interface'], '127') === 0) {
+                        $agent_ports[$key_port]['class'] = 'port_local';
+                    }
+                endif;
+            endforeach;
+            $hostDetails['agent_ports']  = $agent_ports;
+        }
         // Obtener métricas del host
         //$hostDetails['metrics'] = $this->getHostMetrics($target_id);
 
@@ -67,6 +80,29 @@ class HostService
         }
 
         return $hostDetails;
+    }
+
+    /**
+     *
+     * @param int $target_id
+     * @return array<string, string|int>
+     */
+    public function getDetailsStats(int $target_id): array
+    {
+        $hostDetails = $this->cmdHostModel->getHostDetailsStats($target_id);
+
+        if (!$hostDetails) {
+            return ['error' => 'No details found for the host'];
+        }
+
+        $this->hostFormatter->formatMisc($hostDetails);
+
+        $hostDetails_stats['load_avg'] = $hostDetails['load_avg'];
+        $hostDetails_stats['mem_info'] = $hostDetails['mem_info'];
+        $hostDetails_stats['disks_info'] = $hostDetails['disks_info'];
+        $hostDetails_stats['iowait'] = $hostDetails['iowait'];
+
+        return $hostDetails_stats;
     }
 
     /**
@@ -85,7 +121,7 @@ class HostService
 
         foreach ($hosts as $host) :
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
-            $misc = $this->hostFormatter->fMisc($host['misc']);
+            $misc = $this->hostFormatter->decodeMisc($host['misc']);
             $host['misc'] = $misc;
             // TODO: misc array must be in misc key this merge is temporary for compatibility
             $host = array_merge($host, $misc);
@@ -123,7 +159,7 @@ class HostService
         foreach ($hosts as $host) :
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
 
-            $misc = $this->hostFormatter->fMisc($host['misc']);
+            $misc = $this->hostFormatter->decodeMisc($host['misc']);
             $host['misc'] = $misc;
             // TODO: misc array must be in misc key this merge is temporary for compatibility
             $host = array_merge($host, $misc);

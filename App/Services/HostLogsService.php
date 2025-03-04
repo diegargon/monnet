@@ -27,7 +27,13 @@ class HostLogsService {
     }
 
 
-    public function getLogs(int $target_id, array $command_values)
+    /**
+     *
+     * @param int $target_id
+     * @param array $command_values
+     * @return array<string, string|int>
+     */
+    public function getLogs(int $target_id, array $command_values): array
     {
         $cfg = $this->ctx->get('cfg');
 
@@ -59,6 +65,64 @@ class HostLogsService {
         return $response;
     }
 
+    /**
+     *
+     * @param string $command
+     * @return array<string, string|int>
+     */
+    public function getEvents(string $command): array
+    {
+        $log_opts = [
+            'limit' => 100,
+            'ack' => 0,
+        ];
+        if ($command === 'showAlarms') :
+            $log_opts['log_type'] = [
+                \LogType::EVENT_ALERT,
+                \LogType::EVENT_WARN,
+            ];
+        else :
+            $log_opts['log_type'] = [
+                \LogType::EVENT,
+                \LogType::EVENT_ALERT,
+                \LogType::EVENT_WARN,
+            ];
+        endif;
+
+        $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'event_type', 'msg', 'ack', 'date'];
+        $tdata['logs'] = $this->formatEventsLogs($this->cmdHostLogsModel->getLogs($log_opts));
+
+        return $tdata;
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $logs
+     * @return array<string, string|int>
+     */
+    private function formatEventsLogs(array $logs): array
+    {
+        $cfg = $this->ctx->get('cfg');
+        $hosts = $this->ctx->get('Hosts');
+
+        foreach ($logs as &$log) {
+            $log['host'] = $hosts->getDisplayNameById($log['host_id']);
+            $log['date'] = format_datetime_from_string($log['date'], $cfg['datetime_log_format']);
+            $log['level'] = \LogLevel::getName($log['level']);
+            $log['log_type'] = \LogType::getName($log['log_type']);
+            if (\EventType::getName($log['event_type'])) {
+                $log['event_type'] = \EventType::getName($log['event_type']);
+            }
+        }
+        return $logs;
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $logs
+     * @param string $nl
+     * @return array<string, string|int>
+     */
     private function formatHostLogs(array $logs, string $nl = '<br/>'): array
     {
         $cfg = $this->ctx->get('cfg');
@@ -83,7 +147,5 @@ class HostLogsService {
         endforeach;
 
         return $log_lines;
-        //return implode(', ', $log_lines);
     }
 }
-

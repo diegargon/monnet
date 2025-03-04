@@ -286,7 +286,7 @@ if ($command == 'submitHostTimeout' && !empty($target_id)) :
 endif;
 
 // Change Host Cat
-if ($command == 'submitCat' && !empty($target_id)) :
+if ($command == 'submitChangeCat' && !empty($target_id)) :
     if (!empty($value_command)) :
         $hosts->update($target_id, ['category' => $value_command]);
         $data['command_success'] = 1;
@@ -778,7 +778,8 @@ endif;
 
 /* Host and Bookmarks create category */
 if (
-    ($command == 'submitBookmarkCat' || $command == 'submitHostsCat') &&
+    ($command == 'submitBookmarkCat' ||
+    $command == 'submitNewHostsCat') &&
     !empty($value_command)
 ) {
     $cat_type = ($command == 'submitBookmarkCat') ? 2 : 1;

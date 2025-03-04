@@ -47,8 +47,9 @@ class TemplateService {
         $content = ob_get_clean();
         $content = preg_replace('/>\n\s+/', '>', $content);
         $content = preg_replace('/\s+</', '<', $content);
-        $content = preg_replace('/\n\s+/', ' ', $content);
         $content = preg_replace('/"\s+\/>/', '"\/>', $content);
+        //Falla en guage.tpl/js al quitar los espacios.
+        //$content = preg_replace('/\n\s+/', ' ', $content);
         return $content;
 
     }

@@ -240,4 +240,44 @@ class CmdBookmarksController
 
         return Response::stdReturn(true, $target_id, false, $extra);
     }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitBookmarkCat(array $command_values): array
+    {
+        $value = $this->filter->varString($command_values['value']);
+        $response = $this->ctx->get('Categories')->create(2, $value);
+
+        if ($response['success'] == 1) {
+            return Response::stdReturn(true, $response['msg']);
+        }
+
+        return Response::stdReturn(false, $response['msg']);
+    }
+
+    /**
+     * Remove bookmark category
+     * 50 default bookmark Cat L_OTHERS
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function removeHostsCat(array $command_values): array
+    {
+        $lng = $this->ctx->get('lng');
+        $target_id = $this->filter->varInt($command_values['id']);
+
+        if ($target_id === 50) {
+            return Response::stdReturn(false, $lng['L_ERR_CAT_NODELETE']);
+        } elseif ($this->ctx->get('Categories')->remove($target_id)) {
+            // We remove the category set all items to default category
+            $this->db->update('items', ['category' => 50], 'cat_id  = :cat_id', ['cat_id' => $target_id]);
+        } else {
+            return Response::stdReturn(false, $lng['L_ERROR']);
+        }
+
+        return Response::stdReturn(true, 'ok: ' . $target_id);
+    }
 }

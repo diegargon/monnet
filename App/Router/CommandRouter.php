@@ -11,6 +11,7 @@
 namespace App\Router;
 
 use App\Controllers\CmdHostController;
+use App\Controllers\CmdHostLogsController;
 use App\Controllers\CmdBookmarksController;
 use App\Controllers\CmdNetworkController;
 use App\Controllers\CmdTaskAnsibleController;
@@ -40,7 +41,7 @@ class CommandRouter {
                 break;
             case 'remove_host':
                 $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->removeHost($command_values);
+                $response = $hostController->removeHost($command, $command_values);
                 break;
             case 'toggleDisablePing':
                 $hostController = new CmdHostController($this->ctx);
@@ -82,9 +83,9 @@ class CommandRouter {
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitHostTimeout($command_values);
                 break;
-            case 'submitCat':
+            case 'submitChangeCat':
                 $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitHostCategory($command_values);
+                $response = $hostController->submitChangeHostCategory($command_values);
                 break;
             case 'submitManufacture':
                 $hostController = new CmdHostController($this->ctx);
@@ -118,21 +119,35 @@ class CommandRouter {
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitAccessType($command_values);
                 break;
-            case 'logs-reload':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->logsReload($command_values);
-                break;
-            case 'auto_reload_logs':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->reloadLogs($command_values);
-                break;
             case 'clearHostAlarms':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->clearHostAlarms($command_values);
                 break;
             case 'setHostAlarms':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->setHostAlarms($command_values);
                 break;
             case 'toggleMailAlarms':
                 $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->handleAlarms($command, $command_values);
+                $response = $hostController->toggleMailAlarms($command_values);
+                break;
+            case 'alarm_ping_disable':
+            case 'alarm_port_disable':
+            case 'alarm_macchange_disable':
+            case 'alarm_newport_disable':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->toggleAlarmType($command, $command_values);
+                break;
+            case 'alarm_ping_email':
+            case 'alarm_port_email':
+            case 'alarm_macchange_email':
+            case 'alarm_newport_email':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->toggleEmailAlarmType($command, $command_values);
+                break;
+            case 'updateAlertEmailList':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->setEmailList($command_values);
                 break;
             case 'changeHDTab':
                 $hostController = new CmdHostController($this->ctx);
@@ -153,6 +168,30 @@ class CommandRouter {
             case 'saveNote':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->saveNote($command_values);
+                break;
+            case 'auto_reload_host_details':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->reloadStatsView($command, $command_values);
+                break;
+            /*
+             *  Hosts Logs
+             */
+            case 'ack_host_log':
+                $hostLogsController = new CmdHostLogsController($this->ctx);
+                $response = $hostLogsController->ackHostLog($command_values);
+                break;
+            case 'logs-reload':
+                $hostLogsController = new CmdHostLogsController($this->ctx);
+                $response = $hostLogsController->logsReload($command_values);
+                break;
+            case 'auto_reload_logs':
+                $hostLogsController = new CmdHostLogsController($this->ctx);
+                $response = $hostLogsController->reloadLogs($command_values);
+                break;
+            case 'showAlarms':
+            case 'showEvents':
+                $hostLogsController = new CmdHostLogsController($this->ctx);
+                $response = $hostLogsController->getEvents($command);
                 break;
             /*
              *  Host Ansible Reports
@@ -178,6 +217,8 @@ class CommandRouter {
                 $response = $hostController->getAgentsHosts(0);
                 break;
             case 'report_agents_hosts_missing_pings':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->getAgentsHosts(2);
                 break;
             case 'report_alerts':
                 $hostController = new CmdHostController($this->ctx);
@@ -186,10 +227,6 @@ class CommandRouter {
             case 'report_warns':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->getWarnHosts();
-                break;
-            case 'ack_host_log':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->ackHostLog($command_values);
                 break;
             case 'clear_alerts':
                 $hostController = new CmdHostController($this->ctx);
@@ -203,6 +240,15 @@ class CommandRouter {
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitRemoteHost($command_values);
                 break;
+            case 'submitNewHostCat':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitNewHostsCat($command_values);
+                break;
+            case 'power_on':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->powerOn($command_values);
+                break;
+
             /*
              *  Bookmarks
              */
@@ -221,6 +267,14 @@ class CommandRouter {
             case 'mgmtBookmark':
                 $bookmarksController = new CmdBookmarksController($this->ctx);
                 $response = $bookmarksController->mgmtBookmark($command, $command_values);
+                break;
+            case 'submitBookmarkCat':
+                $bookmarksController = new CmdBookmarksController($this->ctx);
+                $response = $bookmarksController->submitBookmarkCat($command_values);
+                break;
+            case 'removeBookmarkCat':
+                $bookmarksController = new CmdBookmarksController($this->ctx);
+                $response = $bookmarksController->removeBookmarkCat($command_values);
                 break;
             /*
              * Config
@@ -247,6 +301,10 @@ class CommandRouter {
                 $response = $userController->onlyOneHostsCat($command, $command_values);
                 break;
 
+            case 'change_bookmarks_tab':
+                $userController = new UserController($this->ctx);
+                $response = $userController->changeBookmarksTab($command_values);
+                break;
             /*
              *  Network
              */
@@ -254,19 +312,22 @@ class CommandRouter {
                 $networkController = new CmdNetworkController($this->ctx);
                 $response = $networkController->manageNetworks($command, $command_values);
                 break;
-
+            case 'requestPool':
+                $networkController = new CmdNetworkController($this->ctx);
+                $response = $networkController->requestPoolIPs($command_values);
+                break;
+            case 'submitPoolReserver':
+                $networkController = new CmdNetworkController($this->ctx);
+                $response = $networkController->submitPoolReserver($command_values);
+                break;
             /*
              *  Task Ansible
              */
             case 'playbook_exec':
-                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
-                $response = $taskAnsibleController->executePlaybook($command_values);
-                break;
             case 'pbqueue':
-                $taskController = new CmdTaskController($this->ctx);
-                $response = $taskController->queuePlaybook($command_values);
+                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
+                $response = $taskAnsibleController->execPlaybook($command, $command_values);
                 break;
-
             /*
              *  Unknown command
              */

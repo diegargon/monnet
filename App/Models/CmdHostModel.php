@@ -33,6 +33,13 @@ class CmdHostModel
         return $this->db->qfetch($query, $params);
     }
 
+    public function getHostDetailsStats(int $target_id): array
+    {
+        $query = "SELECT misc FROM hosts WHERE id = :id";
+        $params = ['id' => $target_id];
+
+        return $this->db->qfetch($query, $params);
+    }
     /**
      * Elimina un host.
      *
@@ -111,12 +118,31 @@ class CmdHostModel
      * @param int $target_id El ID del host.
      * @return array<string, string|int> Los puertos remotos del host.
      */
-    public function getRemotePorts(int $target_id): bool
+    public function getRemotePorts(int $target_id): array
     {
-        $query = "SELECT * FROM ports WHERE host_id = :host_id AND remote_scan = 1";
+        $query = "SELECT * FROM ports WHERE hid = :host_id AND scan_type = 1";
         $params = ['host_id' => $target_id];
 
         return $this->db->qfetchAll($query, $params);
+    }
+
+    /**
+     *
+     * @param int $hid
+     * @param int $scan_type
+     * @return array<string,string|int>
+     */
+    public function getHostScanPorts(int $hid, int $scan_type = 0): array
+    {
+        $query = "SELECT * FROM ports WHERE hid = :hid AND scan_type = :scan_type";
+        $params = ['hid' => $hid, 'scan_type' => $scan_type];
+
+        $result = $this->db->qfetchAll($query, $params);
+
+        if (!$result || is_bool($result)) {
+            return [];
+        }
+        return $result;
     }
 
     /**

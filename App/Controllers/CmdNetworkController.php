@@ -8,7 +8,6 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-
 namespace App\Controllers;
 
 use App\Services\Filter;
@@ -90,6 +89,55 @@ class CmdNetworkController
             ]
         ];
         return Response::stdReturn(true, 'ok', false, $extra);
+    }
+
+    /**
+     *
+     * @return array<string, string|int>|false
+     */
+    public function requestPoolIPs(): array
+    {
+        $networks = $this->ctx->get('Networks');
+        $lng = $this->ctx->get('lng');
+        $tdata['networks'] = $networks->getPoolIPs(2) ?? [];
+
+        if (empty($tdata['networks'])) :
+            $tdata['status_msg'] = $lng['L_NO_POOLS'];
+        endif;
+
+        $extra = [
+            'command_receive' => 'requestPool',
+            'pool' => [
+                'cfg' => ['place' => '#left-container'],
+                'data' => $this->templateService->getTpl('pool', $tdata)
+            ]
+        ];
+
+        return Response::stdReturn(true, 'ok', false, $extra);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitPoolReserver(array $command_values): array
+    {
+        $hosts = $this->ctx->get('Hosts');
+
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value_command = $this->filter->varIP($command_values['value']);
+
+        $reserved_host = [
+            'title' => 'UserReserved',
+            'ip' => $value_command,
+            'network' => $target_id
+        ];
+        if ($hosts->addHost($reserved_host)) {
+            return Response::stdReturn(true, 'Reserved', true);
+        }
+
+        return Response::stdReturn(false, 'Add reserved fail');
     }
 
     /**

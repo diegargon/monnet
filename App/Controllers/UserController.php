@@ -106,4 +106,17 @@ class  UserController
 
         return Response::stdReturn(true, 'ok', true, $extra);
     }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function changeBookmarksTab(array $command_values): array
+    {
+        $id = $this->filter->varInt($command_values['id']);
+        $this->user->setPref('default_bookmarks_tab', $id);
+        
+        return Response::stdReturn(true, 'ok');
+    }
 }

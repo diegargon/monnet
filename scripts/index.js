@@ -51,7 +51,7 @@ function addHostsCat(title) {
     if (element) {
         element.style.display = "block";
         title_element.innerHTML = title;
-        std_content.innerHTML = '<input id="hostsCat" type="text"/><button id="submitHostsCat" type="submit">+</button>';
+        std_content.innerHTML = '<input id="hostsCat" type="text"/><button id="submitNewHostsCat" type="submit">+</button>';
     } else {
         console.error("Stdbox not found.");
     }
@@ -231,11 +231,11 @@ $(document).ready(function () {
             submitCommand('submitScanPorts', {id: hostId, value: portsValue});
         }
     });
-    $(document).on("click", "#submitCat", function () {
+    $(document).on("click", "#submitChangeCat", function () {
         var catValue = $('#hostcat_id').val();
         var hostId = $('#host_id').val();
         if (catValue && hostId) {
-            submitCommand('submitCat', {id: hostId, value: catValue});
+            submitCommand('submitChangeCat', {id: hostId, value: catValue});
         }
     });
 
@@ -289,10 +289,10 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("click", "#submitHostsCat", function () {
+    $(document).on("click", "#submitNewHostsCat", function () {
         var catValue = $('#hostsCat').val();
         if (catValue) {
-            submitCommand('submitHostsCat', {id: 0, value: catValue});
+            submitCommand('submitNewHostsCat', {id: 0, value: catValue});
         }
     });
 
