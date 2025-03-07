@@ -96,7 +96,7 @@ class CmdHostModel
      */
     public function deletePort(int $target_id): bool
     {
-        return $this->db->delete('ports', ['id' => $target_id]);
+        return $this->db->delete('ports', 'id = :id', ['id' => $target_id]);
     }
 
     /**

@@ -95,6 +95,7 @@ class DBManager
         if (!$stmt) {
             throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
         }
+        
         return $stmt->execute($params);
     }
 
@@ -223,8 +224,9 @@ class DBManager
         if (!$stmt) {
             throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
         }
+        $this->bindParams($stmt, $params);
 
-        return $stmt->execute($params);
+        return $stmt->execute();
     }
 
     /**
