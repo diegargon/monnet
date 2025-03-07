@@ -328,6 +328,11 @@ class CommandRouter {
                 $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
                 $response = $taskAnsibleController->execPlaybook($command, $command_values);
                 break;
+            case 'syslog-load':
+            case 'journald-load':
+                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
+                $response = $taskAnsibleController->getSystemLogs($command, $command_values);
+                break;
             /*
              *  Unknown command
              */

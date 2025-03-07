@@ -12,6 +12,7 @@ namespace App\Services;
 
 use App\Services\SocketClient;
 use App\Models\CmdAnsibleModel;
+use App\Services\TemplateService;
 
 class AnsibleService
 {
@@ -19,11 +20,14 @@ class AnsibleService
     private SocketClient $socketClient;
     private \Config $ncfg;
     private CmdAnsibleModel $cmdAnsibleModel;
+    private TemplateService $templateService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->ncfg = $ctx->get('Config');
         $this->cmdAnsibleModel = new CmdAnsibleModel($ctx);
+        $this->templateService = new TemplateService($ctx);
     }
 
     /**
@@ -33,21 +37,47 @@ class AnsibleService
      * @param array<string, string|int> $extra_vars
      * @return array<string, string|int>
      */
-    public function runPlaybook(int $target_id, string $playbook, array $extra_vars): array
+    public function runPlaybook(int $target_id, string $playbook, array $extra_vars = []): array
     {
-        $ctx = $this->ctx;
-        $this->ncfg = $ctx->get('Config');
-        $user = $ctx->get('User');
-        $db = $ctx->get('Mysql');
-        $cfg = $ctx->get('cfg');
-        $hosts = $ctx->get('Hosts');
+        $user = $this->ctx->get('User');
+        $db = $this->ctx->get('Mysql');
+        $cfg = $this->ctx->get('cfg');
+        $hosts = $this->ctx->get('Hosts');
+        $networks = $this->ctx->get('Networks');
         $host = $hosts->getHostById($target_id);
 
         $server_ip = $this->ncfg->get('ansible_server_ip');
         $server_port = $this->ncfg->get('ansible_server_port');
 
+        if ($playbook == 'install-monnet-agent-systemd') :
+            if (empty($host['token'])) :
+                $token = $hosts->createHostToken($target_id);
+            else :
+                $token = $host['token'];
+            endif;
+            /* Set default config */
+            $agent_config = [
+                "id" => $host['id'],
+                "token" => $token,
+                "loglevel" => 'info',
+                "default_interval" => $cfg['agent_default_interval'],
+                "ignore_cert" => $cfg['agent_allow_selfcerts'],
+                "server_host" => $_SERVER['HTTP_HOST'], //TODO Filter?
+                "server_endpoint" => "/feedme.php",
+            ];
 
-        $data = $this->buildResponse($host, $playbook, $extra_vars);
+            empty($networks) ? $networks = $this->ctx->get('Networks') : null;
+
+            if (!empty($this->ncfg->get('agent_external_host')) && !$networks->isLocal($host['ip'])) {
+                $agent_config['server_host'] = $this->ncfg->get('agent_external_host');
+            }
+            if (!empty($this->ncfg->get('agent_default_interval'))) {
+                $agent_config['agent_default_interval'] = $this->ncfg->get('agent_default_interval');
+            }
+            $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        endif;
+
+        $data = $this->buildSendData($host, $playbook, $extra_vars);
 
         $send_data = [
             'command' => 'playbook',
@@ -105,16 +135,13 @@ class AnsibleService
      * @param array<string, string|int> $extraVars
      * @return array<string, string|int>
      */
-    private function buildResponse(array $host, string $playbook, array $extraVars): array
+    private function buildSendData(array $host, string $playbook, array $extraVars = []): array
     {
         return [
-            'command' => 'playbook',
-            'data' => [
-                'playbook' => $playbook . '.yml',
-                'extra_vars' => $extraVars,
-                'ip' => $host['ip'],
-                'user' => $this->config->get('ansible_user') ?? 'ansible'
-            ]
+            'playbook' => $playbook . '.yml',
+            'extra_vars' => $extraVars,
+            'ip' => $host['ip'],
+            'user' => $this->ncfg->get('ansible_user') ?? 'ansible'
         ];
     }
 
@@ -179,5 +206,45 @@ class AnsibleService
         $params = ['host_id' => $host_id];
 
         return $db->qfetchAll($query, $params);
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $response
+     * @return array<string, string|int>
+     */
+    public function asHtml(array $response): array
+    {
+        $response = $this->templateService->getTpl('ansible-report', $response);
+
+        return [
+            'status' => 'success',
+            'response_msg' => $response,
+        ];
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $host
+     * @param array<string, string|int> $response
+     * @return array<string, string|int>
+     */
+    public function fSystemLogs(array $host, array $response): array
+    {
+        $debug_lines = [];
+        $host_ip = $host['ip'];
+        foreach ($response['plays'] as $play) :
+            foreach ($play['tasks'] as $task) :
+                if (isset($task['hosts'][$host_ip]['action']) && $task['hosts'][$host_ip]['action'] === 'debug') {
+                    $debug_lines = $task['hosts'][$host_ip]['msg'] ?? [];
+                    foreach ($debug_lines as &$debug_line) :
+                        $debug_line = $debug_line . '<br/>';
+                    endforeach;
+                    //$debug_lines[] =  serialize($task['hosts']);
+                }
+            endforeach;
+        endforeach;
+
+        return $debug_lines;
     }
 }

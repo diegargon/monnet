@@ -29,7 +29,6 @@ if (!empty($ncfg) && $ncfg->get('ansible')) {
     require_once 'class/TaskAnsible.php';
 }
 
-/*
 use App\Router\CommandRouter;
 $cmdRouter = new CommandRouter($ctx);
 
@@ -38,7 +37,6 @@ $command_values = Filters::sanArray('command_values', 'post');
 $response = $cmdRouter->handleCommand($command, $command_values);
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 exit();
-*/
 
 $tdata = [];
 $hosts = $ctx->get('Hosts');

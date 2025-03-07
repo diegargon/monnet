@@ -27,6 +27,7 @@ use App\Services\HostFormatter;
 use App\Services\HostService;
 use App\Services\HostLogsService;
 use App\Services\HostViewBuilder;
+use App\Services\HostMetricsService;
 use App\Helpers\Response;
 
 class CmdHostController
@@ -34,7 +35,9 @@ class CmdHostController
     private CmdHostModel $cmdHostModel;
     private CmdHostNotesModel $cmdHostNotesModel;
     private HostLogsService $hostLogsService;
+    private HostMetricsService $hostMetricsService;
     private HostViewBuilder $hostViewBuilder;
+    private HostService $hostService;
 
     private Filter $filter;
     private \AppContext $ctx;
@@ -49,6 +52,7 @@ class CmdHostController
         $this->cmdHostNotesModel = new CmdHostNotesModel($ctx);
         $this->ansibleService = new AnsibleService($ctx);
         $this->hostLogsService = new hostLogsService($ctx);
+        $this->hostMetricsService = new hostMetricsService($ctx);
 
         $this->filter = new Filter();
         $this->ctx = $ctx;
@@ -711,7 +715,7 @@ class CmdHostController
         $tdata['table_btn'] = 'clear_warns';
         $tdata['table_btn_name'] = $lng['L_CLEAR_WARNS'];
 
-        $warnHostsTpl = $this->hostViewBuilder->buildHostReport($tdata, ['logs_msg']);
+        $warnHostsTpl = $this->hostViewBuilder->buildHostReport($tdata, ['log_msgs']);
 
         return Response::stdReturn(true, $warnHostsTpl, false, ['command_receive' => $field]);
     }
@@ -723,10 +727,19 @@ class CmdHostController
      */
     public function clearHostAlarms(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $hid = $this->filter->varInt($command_values['id']);
         $user = $this->ctx->get('User');
-        $this->hosts->clearHostAlarms($user->getUsername(), $target_id);
+        $username = $user->getUsername();
+        $lng = $this->ctx->get('lng');
 
+        $values = [
+            'alert' => 0,
+            'warn' => 0,
+            'ansible_fail' => 0,
+            ];
+        $this->cmdHostModel->updateByID($hid, $values);
+
+        \Log::logHost(\LogLevel::NOTICE, $hid, $lng['L_CLEAR_ALARMS_BITS_BY'] . ': ' . $username);
         return Response::stdReturn(true, 'ok');
     }
 
@@ -738,8 +751,8 @@ class CmdHostController
     public function setHostAlarms(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
-        $msg = $this->hosts->setAlarmState($target_id, $value);
+        $value = $this->filter->varInt($command_values['value']);
+        $msg = $this->cmdHostModel->updateMiscByID($target_id, ['disable_alarms' => $value]);
 
         return Response::stdReturn(true, $msg);
     }
@@ -752,8 +765,9 @@ class CmdHostController
     public function toggleMailAlarms(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
-        $msg = $this->hosts->setEmailAlarms($target_id, $value);
+        $value = $this->filter->varInt($command_values['value']);
+
+        $msg = $this->cmdHostModel->updateMiscByID($target_id, ['email_alarms' => $value]);
 
         return Response::stdReturn(true, $msg);
     }
@@ -766,9 +780,9 @@ class CmdHostController
     public function toggleAlarmType(string $command, array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
+        $value = $this->filter->varInt($command_values['value']);
 
-        $msg = $this->hosts->toggleAlarmType($target_id, $command, $value);
+        $msg = $this->cmdHostModel->updateMiscByID($target_id, [$command => $value]);
 
         return Response::stdReturn(true, $msg);
     }
@@ -781,9 +795,9 @@ class CmdHostController
     public function toggleEmailAlarmType(string $command, array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
+        $value = $this->filter->varInt($command_values['value']);
 
-        $msg = $this->hosts->toggleEmailAlarmType($target_id, $command, $value);
+        $msg = $this->cmdHostModel->updateMiscByID($target_id, [$command => $value]);
 
         return Response::stdReturn(true, $msg);
     }
@@ -795,9 +809,10 @@ class CmdHostController
     public function setEmailList(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
+        $value = $command_values['value'];
 
-        $msg = $this->hosts->setEmailAlarms($target_id, $value);
+        $string = implode(",", $value);
+        $msg = $this->cmdHostModel->updateMiscByID($target_id, ['email_list' => $string]);
 
         return Response::stdReturn(true, $msg);
     }
@@ -995,8 +1010,7 @@ class CmdHostController
     {
         $tabName = $this->filter->varString($command_values['value']);
         $target_id = $this->filter->varInt($command_values['id']);
-        $cmd = '';
-        $response = '';
+        $extra = [];
 
         switch($tabName):
             case 'tab3':    # Notes
@@ -1008,22 +1022,26 @@ class CmdHostController
                 $response = $this->hostLogsService->getLogs($target_id, $command_values);
                 break;
             case 'tab10':   # Metrics
+                $cmd = 'changeHDTab';
+                $cmd_value =  'tab10';
+                $response = $this->hostMetricsService->getMetricsGraph($target_id);
                 break;
             case 'tab15':   # Tasks
                 break;
             case 'tab20':   # Ansible
                 break;
             default:
-                return [
-                    'command_error' => 1,
-                    'command_error_msg' => 'Unused tab change',
-                ];
+
+                return Response::stdReturn(false, 'Unused tab change');
         endswitch;
 
-        return [
-            'command_receive' => $cmd,
-            'command_success' => 1,
-            'response_msg' => $response,
-        ];
+        if (isset($cmd)) {
+            $extra['command_receive'] = $cmd;
+        }
+        if (isset($cmd_value)) {
+            $extra['command_value'] = $cmd_value;
+        }
+
+        return Response::stdReturn(true, $response, false, $extra);
     }
 }

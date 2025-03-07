@@ -63,7 +63,6 @@ class Hosts
         'alarm_port_disable',
         'alarm_macchange_disable',
         'alarm_newport_disable',
-        'enableMailAlarms',
         'alarm_ping_email',
         'alarm_port_email',
         'alarm_macchange_email',
@@ -217,7 +216,9 @@ class Hosts
                     elseif ($kvalue === 'mac_vendor') :
                         $log_msg = 'Mac vendor ' . $this->lng['L_HAS_CHANGED'] . " to $vvalue";
                     elseif ($kvalue === 'hostname') :
-                        $log_msg = 'Hostname ' . $this->lng['L_HAS_CHANGED'] . " to $vvalue";
+                        $log_msg = 'Hostname ' .
+                            $this->lng['L_HAS_CHANGED'] .
+                            " from {$this->hosts[$id][$kvalue]} to $vvalue";
                         $warn = 1;
                     endif;
 
@@ -1177,7 +1178,7 @@ class Hosts
             if (isset($this->hosts[$id]['misc'])) :
                 unset($this->hosts[$id]['misc']);
             endif;
-             
+
              */
         } // LOOP FIN
 

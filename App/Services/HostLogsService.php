@@ -57,12 +57,12 @@ class HostLogsService {
         endif;
 
         $logs =  $this->cmdHostLogsModel->getLogsHosts($opts);
-        $response = '';
-        if (!empty($logs)) {
-            $response = $this->formatHostLogs($logs);
+
+        if (empty($logs)) {
+            return [];
         }
 
-        return $response;
+        return $this->formatHostLogs($logs);
     }
 
     /**

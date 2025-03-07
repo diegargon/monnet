@@ -37,6 +37,7 @@ class CmdNetworkController
     {
         $action = $this->filter->varString($command_values['action']);
         $target_id = $this->filter->varInt($command_values['id']);
+
         if (isset($command_values['value'])) {
             $value_command = $this->filter->varJson($command_values['value']);
         } else {
@@ -63,7 +64,7 @@ class CmdNetworkController
                     return Response::stdReturn(true, 'add ok', true);
                 endif;
                 if ($action === 'update') :
-                    $this->ctx->get('Networks')->updateNetwork($val_net_data['id'], $val_net_data);
+                    $this->ctx->get('Networks')->updateNetwork($target_id, $val_net_data);
                     return Response::stdReturn(true, 'update ok', true);
                 endif;
             }
@@ -192,6 +193,7 @@ class CmdNetworkController
             $data['error_msg'] .= 'VLAN ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
         endif;
         if (!is_numeric($new_network['scan'])) :
+            $data['error'] = 1;
             $data['error_msg'] .= 'Scan ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
         endif;
 
@@ -216,7 +218,7 @@ class CmdNetworkController
                 endif;
             }
         }
-        if (!empty($data)) {
+        if (isset($data['error'])) {
             return $data;
         }
 
