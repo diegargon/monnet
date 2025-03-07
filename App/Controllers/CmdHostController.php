@@ -1027,8 +1027,10 @@ class CmdHostController
                 $response = $this->hostMetricsService->getMetricsGraph($target_id);
                 break;
             case 'tab15':   # Tasks
+                $response = '';
                 break;
             case 'tab20':   # Ansible
+                $response = '';
                 break;
             default:
 
