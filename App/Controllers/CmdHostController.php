@@ -358,7 +358,7 @@ class CmdHostController
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $value = $this->filter->varString($command_values['value']);
-        $field = 'submitOwner';
+        $field = 'owner';
 
         if (!is_numeric($target_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");

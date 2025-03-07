@@ -605,9 +605,8 @@
                             name="access_link"
                             value="<?=
                                 !empty($tdata['host_details']['access_link'])
-                                    ? $tdata['host_details']['access_link']
-                                    : null
-                            ?>"
+                                ? $tdata['host_details']['access_link']
+                                : null ?>"
                         />
                         <select id="access_link_type" name="access_link_type">
                             <?php foreach ($cfg['access_link_types'] as $key => $access_type) : ?>

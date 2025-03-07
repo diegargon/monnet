@@ -69,10 +69,6 @@ class HostService
             endforeach;
             $hostDetails['agent_ports']  = $agent_ports;
         }
-        // Obtener métricas del host
-        //$hostDetails['metrics'] = $this->getHostMetrics($target_id);
-
-
 
         // Obtener detalles de Ansible (si está habilitado)
         if ($hostDetails['ansible_enabled']) {

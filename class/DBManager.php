@@ -261,30 +261,30 @@ class DBManager
      */
     public function updateJson(string $table, string $json_column, array $json_data, string $condition, array $params): bool
     {
-        if (empty($json_data)) {
-            throw new \InvalidArgumentException('Los datos JSON no pueden estar vacíos');
+     if (empty($json_data)) {
+        throw new \InvalidArgumentException('Los datos JSON no pueden estar vacíos');
+    }
+
+    $json_updates = [];
+    foreach ($json_data as $key => $value) {
+        $json_key = '$.' . $key;
+        $param_key = ":json_{$key}";
+
+        // Avoid double quote on strings
+        if (is_null($value) || is_numeric($value) || is_bool($value)) {
+            $params["json_{$key}"] = $value;
+        } else {
+            $params["json_{$key}"] = (string) $value;
         }
 
-        $json_updates = [];
-        foreach ($json_data as $key => $value) {
-            $json_key = '$.' . $key;
-            $param_key = ":json_{$key}";
+        $json_updates[] = "$json_column = JSON_SET($json_column, '{$json_key}', {$param_key})";
+    }
 
-            // Verificar si es un número o booleano para evitar comillas innecesarias
-            if (is_numeric($value) || is_bool($value) || $value === '') {
-                $params["json_{$key}"] = $value;
-            } else {
-                $params["json_{$key}"] = json_encode($value, JSON_UNESCAPED_SLASHES);
-            }
+    $sql = "UPDATE $table SET " . implode(', ', $json_updates) . " WHERE $condition";
 
-            $json_updates[] = "$json_column = JSON_SET($json_column, '{$json_key}', {$param_key})";
-        }
+    $stmt = $this->connection->prepare($sql);
 
-        $sql = "UPDATE $table SET " . implode(', ', $json_updates) . " WHERE $condition";
-
-        $stmt = $this->connection->prepare($sql);
-
-        return $stmt->execute($params);
+    return $stmt->execute($params);
     }
 
     /**

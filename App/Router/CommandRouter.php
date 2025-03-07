@@ -77,7 +77,7 @@ class CommandRouter {
                 break;
             case 'submitOwner':
                 $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submOwner($command_values);
+                $response = $hostController->submitOwner($command_values);
                 break;
             case 'submitHostTimeout':
                 $hostController = new CmdHostController($this->ctx);
