@@ -189,12 +189,11 @@ class HostService
     {
 
         $hosts = $this->cmdHostModel->getAlertOn();
+        $log_type = [ \LogType::EVENT_ALERT ];
         $result_hosts = [];
 
         foreach ($hosts as $host) :
-            $alert_logs_msgs = [];
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
-            $alert_logs_items = [];
             $min_host = [
                 'id' => $host['id'],
                 'display_name' => $host['display_name'],
@@ -204,8 +203,6 @@ class HostService
             ];
 
             if ($host['alert'] && empty($host['disable_alarms'])) :
-                $log_type = [ \LogType::EVENT_ALERT ];
-
                 $logs_opt = [
                     'log_type' => $log_type,
                     'host_id' => $host['id'],
@@ -214,11 +211,9 @@ class HostService
 
                 if (!empty($alert_logs)) :
                     $min_host['log_msgs'] = $this->hostFormatter->fHostLogsMsgs($alert_logs);
-                    $result_hosts[] = $min_host;
-                else :
-                    $min_host['alert_msg']  = 'Alert logs are empty';
                 endif;
             endif;
+            $result_hosts[] = $min_host;
         endforeach;
 
         return $result_hosts;
@@ -233,6 +228,7 @@ class HostService
     {
         $hosts = $this->cmdHostModel->getWarnOn();
         $result_hosts = [];
+        $log_type = [ \LogType::EVENT_WARN ];
 
         foreach ($hosts as $host) :
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
@@ -245,8 +241,6 @@ class HostService
             ];
 
             if ($host['warn'] && empty($host['disable_alarms'])) :
-                $log_type = [ \LogType::EVENT_WARN ];
-
                 $logs_opt = [
                     'log_type' => $log_type,
                     'host_id' => $host['id'],
@@ -255,10 +249,8 @@ class HostService
 
                 if (!empty($warn_logs)) :
                     $min_host['log_msgs'] = $this->hostFormatter->fHostLogsMsgs($warn_logs);
-                    $result_hosts[] = $min_host;
-                else :
-                    $min_host['warn_msg']  = 'Warn logs are empty';
                 endif;
+                $result_hosts[] = $min_host;
             endif;
         endforeach;
 
