@@ -98,12 +98,6 @@ function check_known_hosts(AppContext $ctx): bool
                             EventType::PORT_UP
                         );
                     } elseif ($port['old_online_status'] == 1 && $port['online'] == 0) {
-                        if (empty($host['alarm_port_disable'])) {
-                            $log_type = LogType::EVENT_WARN;
-                        } else {
-                            $log_type = LogType::EVENT;
-                        }
-
                         if (in_array($check_ports_result['error_code'], [58, 59, 60], true)) {
                             $event_type = EventType::CERT_ERROR;
                         } else {
@@ -113,13 +107,17 @@ function check_known_hosts(AppContext $ctx): bool
                         $log_msg = "Port {$port['pnumber']} down:";
                         $log_msg .= " {$check_ports_result['error_msg']}";
                         $log_msg .= " ({$check_ports_result['error_code']})";
-                        Log::logHost(
-                            LogLevel::WARNING,
-                            $host['id'],
-                            $log_msg,
-                            $log_type,
-                            $event_type
-                        );
+                        if (empty($host['alarm_port_disable'])) {
+                            $hosts->setWarnOn($host['id'], $log_msg, LogType::EVENT_WARN, $event_type);
+                        } else {
+                            Log::logHost(
+                                LogLevel::WARNING,
+                                $host['id'],
+                                $log_msg,
+                                LogType::EVENT,
+                                $event_type
+                            );
+                        }
                     }
                 endforeach;
             }
