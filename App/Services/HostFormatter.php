@@ -100,6 +100,8 @@ class HostFormatter
         }
         $misc = json_decode($misc, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
+           \Log::warning('Error decodeMisc');
+
             return ['status' => 'error'];
         }
 
