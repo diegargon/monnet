@@ -39,25 +39,33 @@ class  UserController
      */
     public function setPref(string $command, array $command_values): array
     {
+        $num = $this->filter->varInt($command_values['value']);
+
+        if (!is_numeric($num)) {
+            return Response::stdReturn(true, $command . ': fail');
+        }
+
         switch ($command):
             case 'network_select':
             case 'network_unselect':
-                $num = $this->filter->varInt($command_values['value']);
-                if (!is_numeric($num)) {
-                    return Response::stdReturn(true, $command . ': fail');
+                 if ($command === 'network_select') {
+                    $pref_name = 'network_select_' . $num;
+                    $value = 1;
                 } else {
-                    if ($command === 'network_select') {
-                        $pref_name = 'network_select_' . $num;
-                        $value = 1;
-                    } else {
-                        $pref_name = 'network_select_' . $num;
-                        $value = 0;
-                    }
+                    $pref_name = 'network_select_' . $num;
+                    $value = 0;
                 }
-                $this->user->setPref($pref_name, $value);
-
-                return Response::stdReturn(true, $command . ': success', true);
+                break;
+            case 'footer_dropdown_status':
+                $pref_name = $command;
+                $value = $num;
+                break;
+            default:
+                return Response::stdReturn(false, $command . ': Command unknown', true);
         endswitch;
+
+        $this->user->setPref($pref_name, $value);
+        return Response::stdReturn(true, $command . ': success', true);
     }
 
     /**
@@ -116,7 +124,7 @@ class  UserController
     {
         $id = $this->filter->varInt($command_values['id']);
         $this->user->setPref('default_bookmarks_tab', $id);
-        
+
         return Response::stdReturn(true, 'ok');
     }
 }
