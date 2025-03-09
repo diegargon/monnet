@@ -109,4 +109,20 @@ class CmdTaskAnsibleController
             return Response::stdReturn(false, $lng['L_ACCESS_METHOD']);
         }
     }
+
+    public function handleShutdownReboot(string $command, array $command_values): array
+    {
+        $hid = $this->filter->varInt($command_values['id']);
+        if (!$hid) {
+            return Response::stdReturn(false, 'id error');
+        }
+
+        $playbook = $command . '-linux';
+        $response = $this->ansibleService->runPlaybook($hid, $playbook);
+        if ($response['status'] === "success") {
+            return Response::stdReturn(true, $response);
+        } else {
+            return Response::stdReturn(false, $response['error_msg']);
+        }
+    }
 }

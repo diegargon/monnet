@@ -38,6 +38,9 @@ $response = $cmdRouter->handleCommand($command, $command_values);
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 exit();
 
+/*
+ * OLD STUFF KEEP FOR REFERENCE
+ */
 $tdata = [];
 $hosts = $ctx->get('Hosts');
 $target_id = 0;
@@ -1295,8 +1298,8 @@ if ($command === 'clear_alerts') :
     $data['force_hosts_refresh'] = 1;
 endif;
 
-if ($command === 'show_footer_dropdown' && is_numeric($value_command)) :
-    $user->setPref('show_footer_status', $value_command);
+if ($command === 'footer_dropdown_status' && is_numeric($value_command)) :
+    $user->setPref('footer_dropdown_status', $value_command);
     $data['command_success'] = 1;
 endif;
 

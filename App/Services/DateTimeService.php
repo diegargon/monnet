@@ -44,8 +44,8 @@ class DateTimeService
         if (!$this->validTimezone($timezone)) {
             return false;
         }
-        $date_timezone = new DatetimeZone($timezone);
-        $date_now = new DateTime('now', $date_timezone);
+        $date_timezone = new \DatetimeZone($timezone);
+        $date_now = new \DateTime('now', $date_timezone);
 
         return $date_now->format('Y-m-d H:i:s');
     }
@@ -60,8 +60,8 @@ class DateTimeService
      */
     public function utcToTz(string $utc_date, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
     {
-        $date = new DateTime($utc_date, new DateTimeZone('UTC'));
-        $date->setTimezone(new DateTimeZone($timezone));
+        $date = new \DateTime($utc_date, new \DateTimeZone('UTC'));
+        $date->setTimezone(new \DateTimeZone($timezone));
 
         return $date->format($time_format);
     }
@@ -77,8 +77,8 @@ class DateTimeService
         if (!validTimezone($timezone)) {
             return false;
         }
-        $date_timezone = new DatetimeZone($timezone);
-        $date_now = new DateTime('now', $date_timezone);
+        $date_timezone = new \DatetimeZone($timezone);
+        $date_now = new \DateTime('now', $date_timezone);
 
         return $date_now->format($time_format);
     }
@@ -103,7 +103,7 @@ class DateTimeService
      */
     function datetimeMachine(): string
     {
-        $now = new DateTime();
+        $now = new \DateTime();
         return $now->format('Y-m-d H:i:s');
     }
 
@@ -119,8 +119,8 @@ class DateTimeService
     function formatTimestamp(int $timestamp, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
     {
         try {
-            $date = new DateTime('@' . $timestamp); // '@' indica un timestamp UNIX
-            $date->setTimezone(new DateTimeZone($timezone)); // Ajustar la zona horaria
+            $date = new \DateTime('@' . $timestamp); // '@' indica un timestamp UNIX
+            $date->setTimezone(new \DateTimeZone($timezone)); // Ajustar la zona horaria
 
             return $date->format($time_format);
         } catch (Exception $e) {

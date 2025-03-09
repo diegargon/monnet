@@ -95,7 +95,7 @@ class DBManager
         if (!$stmt) {
             throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
         }
-        
+
         return $stmt->execute($params);
     }
 
@@ -238,6 +238,9 @@ class DBManager
      */
     public function insert(string $table, array $data): bool
     {
+        if (empty($data)) {
+            return false;
+        }
         $columns = array_keys($data);
         $placeholders = array_map(fn($col) => ":$col", $columns);
 
@@ -248,7 +251,9 @@ class DBManager
             throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
         }
 
-        return $stmt->execute($data);
+        $this->bindParams($stmt, $data);
+
+        return $stmt->execute();
     }
 
     /**

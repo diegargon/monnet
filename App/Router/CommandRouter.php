@@ -15,6 +15,7 @@ use App\Controllers\CmdHostLogsController;
 use App\Controllers\CmdBookmarksController;
 use App\Controllers\CmdNetworkController;
 use App\Controllers\CmdTaskAnsibleController;
+use App\Controllers\CmdAnsibleReportController;
 use App\Controllers\UserController;
 use App\Controllers\ConfigController;
 
@@ -253,6 +254,17 @@ class CommandRouter {
                 $response = $hostController->powerOn($command_values);
                 break;
 
+            /**
+             * Ansible Reports
+             */
+            case 'submitDeleteReport':
+                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
+                $response = $ansibleReportController->deleteReport($command, $command_values);
+                break;
+            case 'submitViewReport':
+                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
+                $response = $ansibleReportController->viewReport($command, $command_values);
+                break;
             /*
              *  Bookmarks
              */

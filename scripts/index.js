@@ -97,10 +97,10 @@ $(document).ready(function () {
         const uid = this.getAttribute('data-id');
         if (dropdown.css("display") === "none") {
             dropdown.css("display", "inline-flex");
-            submitCommand('show_footer_dropdown', {id: uid, value: 1});
+            submitCommand('footer_dropdown_status', {id: uid, value: 1});
         } else {
             dropdown.css("display", "none");
-            submitCommand('show_footer_dropdown', {id: uid, value: 0});
+            submitCommand('footer_dropdown_status', {id: uid, value: 0});
         }
     });
 

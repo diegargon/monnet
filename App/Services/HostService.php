@@ -70,11 +70,6 @@ class HostService
             $hostDetails['agent_ports']  = $agent_ports;
         }
 
-        // Obtener detalles de Ansible (si está habilitado)
-        if ($hostDetails['ansible_enabled']) {
-            $hostDetails['ansible_reports'] = $this->ansibleService->getReports($target_id);
-        }
-
         return $hostDetails;
     }
 

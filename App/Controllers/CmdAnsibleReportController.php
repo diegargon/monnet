@@ -10,12 +10,14 @@
 
 namespace App\Controllers;
 
+use App\Services\AnsibleService;
 use App\Services\Filter;
 use App\Models\CmdAnsibleReportModel;
 use App\Helpers\Response;
 
 class CmdAnsibleReportController {
-    private $reportModel;
+    private CmdAnsibleReportModel $reportModel;
+    private AnsibleService $ansibleService;
     private \AppContext $ctx;
     private Filter $filter;
 
@@ -26,38 +28,50 @@ class CmdAnsibleReportController {
         $this->reportModel = new CmdAnsibleReportModel($ctx);
     }
 
-    /**
-     *
+     /**
+     * @param string $command
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
-    public function generateAnsibleReport(array $command_values): array
+    public function deleteReport(string $command, array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $report_type = $this->filter->varString($command_values['type']);
 
-        $report_data = $this->reportModel->getReport($target_id, $report_type);
+        $extra = [
+            'command_receive' => $command,
+            'response_id' => $target_id,
+        ];
 
-        if ($report_data) {
-            return Response::stdReturn(true, $report_data);
+        if ($this->reportModel->delete($target_id)) {
+            return Response::stdReturn(true, 'Report deleted successfully', false, $extra);
         } else {
-            return Response::stdReturn(false, 'Error generating report');
+            return Response::stdReturn(false, 'Error deleting report');
         }
     }
 
     /**
-     *
+     * @param string $command
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
-    public function deleteReport(array $command_values): array
+    public function viewReport(string $command, array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $report_id = $this->filter->varInt($command_values['id']);
 
-        if ($this->reportModel->delete($target_id)) {
-            return Response::stdReturn(true, 'Report deleted successfully');
+        $extra = [
+            'command_receive' => $command,
+            'response_id' => $report_id,
+        ];
+
+        if (!isset($this->ansibleService)) {
+            $this->ansibleService = new AnsibleService($this->ctx);
+        }
+        $response = $this->ansibleService->getHtmlReportById($report_id);
+
+        if ($response['status'] === 'success') {
+            return Response::stdReturn(true, $response['response_msg'], false, $extra);
         } else {
-            return Response::stdReturn(false, 'Error deleting report');
+            return Response::stdReturn(false, 'Error viewReport');
         }
     }
 }

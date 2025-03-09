@@ -32,7 +32,7 @@
     </div>
     <div
         id="footer_hosts_dropdown"
-        style="<?= $user->getPref('show_footer_status') ? 'display: inline-flex;' : 'color: blue'?>"
+        style="<?= $user->getPref('footer_dropdown_status') ? 'display: inline-flex;' : 'color: blue'?>"
     >
         <div id="footer-dropdown-item-container" class="footer-dropdown-item-container"></div>
     </div>

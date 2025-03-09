@@ -1090,7 +1090,9 @@ class CmdHostController
                 $response = 'success';
                 break;
             case 'tab20':   # Ansible
-                $response = '';
+                $cmd = 'changeHDTab';
+                $cmd_value = 'tab20';
+                $response = $this->ansibleService->getHostHeadsReports($target_id);
                 break;
             default:
                 return Response::stdReturn(false, 'Unused tab change');
