@@ -79,15 +79,9 @@ class Hosts
         'uptime',
         'iowait',
         'always_on',
+        'agent_missing_pings',
     ];
 
-    /**
-     * List of ignore/not keep in database keys
-     * @var array<string> $db_ignore_keys
-     */
-    private array $db_ignore_keys = [
-        'agent_missing_pings'
-    ];
     /**
      * host[$id] = ['key' => 'value']
      * json field is decode and encode on load/update ($misc_keys)
@@ -248,9 +242,7 @@ class Hosts
                 if (in_array($kvalue, $this->misc_keys)) {
                     $misc_container[$kvalue] = $vvalue;
                 } else {
-                    if (!in_array($kvalue, $this->db_ignore_keys)) :
-                        $fvalues[$kvalue] = $vvalue;
-                    endif;
+                    $fvalues[$kvalue] = $vvalue;
                 }
             }
         }
@@ -1160,17 +1152,26 @@ class Hosts
                     $this->hosts[$id]['agent_next_report'] < (time() - 5) # minus grace period
                 ) :
                     $this->agents_missing_pings++;
+                    if (empty($this->hosts[$id]['agent_missing_pings'])) {
+                        $this->update($id, ['agent_missing_pings' => 1]);
+                    }
                     $this->hosts[$id]['agent_missing_pings'] = 1;
+
                     //With pings disabled, if agent  missing a ping change state to off
                     if (!empty($this->hosts[$id]['disable_pings'])) :
                         $this->update($id, ['online' => 0]);
                     elseif (
-                        ((int) $this->hosts[$id]['agent_next_report'] + $this->ncfg->get('agent_default_interval'))  <
+                        ((int) $this->hosts[$id]['agent_next_report'] +
+                        $this->ncfg->get('agent_default_interval'))  <
                         time()
                     ) :
                         //Two pings missed
                         $this->update($id, ['online' => 0]);
                     endif;
+                else :
+                    if (!empty($this->hosts[$id]['agent_missing_pings'])) {
+                        $this->update($id, ['agent_missing_pings' => 0]);
+                    }
                 endif;
             endif;
 
