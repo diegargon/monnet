@@ -173,6 +173,10 @@ class CommandRouter {
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->reloadStatsView($command, $command_values);
                 break;
+            case 'setHostDisable':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->setHostDisable($command_values);
+                break;
             /*
              *  Hosts Logs
              */
@@ -288,6 +292,7 @@ class CommandRouter {
              */
             case 'network_select':
             case 'network_unselect':
+            case 'footer_dropdown_status':
                 $userController = new UserController($this->ctx);
                 $response = $userController->setPref($command, $command_values);
                 break;
@@ -332,6 +337,11 @@ class CommandRouter {
             case 'journald-load':
                 $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
                 $response = $taskAnsibleController->getSystemLogs($command, $command_values);
+                break;
+            case 'reboot':
+            case 'shutdown':
+                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
+                $response = $taskAnsibleController->handleShutdownReboot($command, $command_values);
                 break;
             /*
              *  Unknown command
