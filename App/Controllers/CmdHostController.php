@@ -319,7 +319,29 @@ class CmdHostController
             return Response::stdReturn(false, "$field: Invalid input data");
         }
 
-        if ($this->cmdHostModel->updateByID($target_id, ['title' => $value])) {
+        if ($this->cmdHostModel->updateByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: change success $target_id", true);
+        } else {
+            return Response::stdReturn(false, "$field: Error updating title");
+        }
+    }
+
+    /**
+     *
+     * @param arrayy<string, string|int> $command_values
+     * @return arrayy<string, string|int>
+     */
+    public function setHostDisable(array $command_values): array
+    {
+        $target_id = $this->filter->varInt($command_values['id']);
+        $value = $this->filter->varInt($command_values['value']);
+        $field = 'disable';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+
+        if ($this->cmdHostModel->updateByID($target_id, [$field => $value])) {
             return Response::stdReturn(true, "$field: change success $target_id", true);
         } else {
             return Response::stdReturn(false, "$field: Error updating title");
@@ -640,31 +662,6 @@ class CmdHostController
         if (!is_numeric($target_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");
         }
-        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
-            return Response::stdReturn(true, "$field: successfully");
-        }
-
-        return Response::stdReturn(false, "$field: error");
-    }
-
-    /**
-     * Updates a misc field
-     * $this->submitField($command_values, 'access_link', [$this->filter, 'varInt'])
-     *
-     * @param array $command_values Input values containing 'id' and 'value'.
-     * @param string $field The field name to update.
-     * @param callable $filter_function A filtering function for the value.
-     * @return array Standard response array.
-     */
-    public function submitMiscField(array $command_values, string $field, callable $filter_function): array
-    {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $filter_function($command_values['value']);
-
-        if (!is_numeric($target_id)) {
-            return Response::stdReturn(false, "$field: Invalid input data");
-        }
-
         if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
             return Response::stdReturn(true, "$field: successfully");
         }
@@ -1002,6 +999,69 @@ class CmdHostController
     }
 
     /**
+     * Unused yet
+     * @param string $command
+     * @param array $command_values
+     * @param string $field
+     * @param string $filterType
+     * @return array
+     */
+    /*
+    public function updateHostField(string $command, array $command_values, string $field, string $filterType = 'int'): array
+    {
+        $hid = $this->filter->varInt($command_values['id']);
+
+        switch ($filterType) {
+            case 'int':
+                $value = $this->filter->varInt($command_values['value']);
+                break;
+            case 'string':
+                $value = $this->filter->varString($command_values['value']);
+                break;
+            default:
+                return Response::stdReturn(false, "$field: Invalid filter type");
+        }
+
+        if (!is_numeric($hid)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+
+        if ($this->cmdHostModel->updateByID($hid, [$field => $value])) {
+            return Response::stdReturn(true, "$field: change success $hid", true);
+        } else {
+            return Response::stdReturn(false, "$field: Error updating");
+        }
+    }
+    */
+
+    /**
+     * UNUSED YET
+     * Updates a misc field
+     * $this->submitField($command_values, 'access_link', [$this->filter, 'varInt'])
+     *
+     * @param array $command_values Input values containing 'id' and 'value'.
+     * @param string $field The field name to update.
+     * @param callable $filter_function A filtering function for the value.
+     * @return array Standard response array.
+     */
+    /*
+    public function submitMiscField(array $command_values, string $field, callable $filter_function): array
+    {
+        $hid = $this->filter->varInt($command_values['id']);
+        $value = $filter_function($command_values['value']);
+
+        if (!is_numeric($hid)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+
+        if ($this->cmdHostModel->updateMiscByID($hid, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
+    }
+    */
+    /**
      *
      * @param array<string, string|int> $command_values
      * return array<string, string|int>
@@ -1027,13 +1087,12 @@ class CmdHostController
                 $response = $this->hostMetricsService->getMetricsGraph($target_id);
                 break;
             case 'tab15':   # Tasks
-                $response = '';
+                $response = 'success';
                 break;
             case 'tab20':   # Ansible
                 $response = '';
                 break;
             default:
-
                 return Response::stdReturn(false, 'Unused tab change');
         endswitch;
 
