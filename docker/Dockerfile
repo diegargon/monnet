@@ -11,8 +11,8 @@ RUN git clone https://github.com/diegargon/monnet.git /var/www/html
 
 RUN touch /var/log/cron.log
 
-RUN mkdir /opt/monnet-ansible
-RUN git clone https://github.com/diegargon/monnet-ansible.git /opt/monnet-ansible
+RUN mkdir /opt/monnet-core
+RUN git clone https://github.com/diegargon/monnet-core.git /opt/monnet-core
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html
