@@ -118,26 +118,25 @@ class HostService
         foreach ($hosts as $host) :
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
             $misc = $this->hostFormatter->decodeMisc($host['misc']);
+            if (isset($misc['status'])) {
+               continue;
+            }
             $host['misc'] = $misc;
             // TODO: misc array must be in misc key this merge is temporary for compatibility
             $host = array_merge($host, $misc);
 
-            // All
-            if ($status === null) :
+            if (
+                // All
+                $status === null ||
+                // Off
+                ($status === 0 && (int) $host['online'] === 0) ||
+                // On
+                ($status === 1 && (int) $host['online'] === 1) ||
+                // Fail
+                ($status === 2 && $host['ansible_fail'])
+            ) {
                 $result_hosts[] = $host;
-            endif;
-            // Off
-            if ($status === 0 && (int) $host['online'] === 0) :
-                $result_hosts[] = $host;
-            endif;
-            // On
-            if ($status === 1 && (int) $host['online'] === 1) :
-                $result_hosts[] = $host;
-            endif;
-            // Fail
-            if ($status === 2 && $host['ansible_fail']) :
-                $result_hosts[] = $host;
-            endif;
+            }
         endforeach;
 
         return $result_hosts;
