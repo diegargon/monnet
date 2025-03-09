@@ -79,7 +79,19 @@ function check_known_hosts(AppContext $ctx): bool
                     $check_ports_result['online'] = 1;
                     $check_ports_result['latency'] = $host_ping['latency'];
                 else :
-                    Log::logHost(LogLevel::WARNING, $host['id'], 'All Ports down / No ping response');
+                    if ($host['disable_alarms']) {
+                        $event_type = LogType::EVENT;
+                        $check_ports_result['warn'] = 0;
+                    } else {
+                        $event_type = LogType::EVENT_ALERT;
+                    }
+                    Log::logHost(
+                        LogLevel::ALERT,
+                        $host['id'],
+                        'All Ports down / No ping response',
+                        $event_type,
+                        EvenType::HOST_BECOME_OFF
+                        );
                 endif;
             }
 
@@ -108,8 +120,16 @@ function check_known_hosts(AppContext $ctx): bool
                         $log_msg .= " {$check_ports_result['error_msg']}";
                         $log_msg .= " ({$check_ports_result['error_code']})";
                         if (empty($host['alarm_port_disable'])) {
-                            $hosts->setWarnOn($host['id'], $log_msg, LogType::EVENT_WARN, $event_type);
+                            Log::logHost(
+                                LogLevel::WARNING,
+                                $host['id'],
+                                $log_msg,
+                                LogType::EVENT_WARN,
+                                $event_type
+                            );
                         } else {
+                            //No warn sign
+                            $check_ports_result['warn'] = 0;
                             Log::logHost(
                                 LogLevel::WARNING,
                                 $host['id'],
