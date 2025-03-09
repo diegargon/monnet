@@ -15,14 +15,13 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 ## MonNet Status
 
-MonNet is currently in an early version. It is possible that issues may arise between versions. The compatibility is not guaranteed.
+MonNet is currently in an early version. It is possible that issues may arise between versions. Compatibility is not guaranteed.
 
-I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts, automate installations and
-other tasks
+I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts, automate installations and other tasks
 
 # Features
 
-    - Track Host In your network and have and inventory
+    - Track Host In your network and have an inventory
     - Alarms/Events (Agent)
     - A simple bookmarks dashboard
     - Basic IPAM
@@ -62,9 +61,9 @@ Resume:
 
 # MonNet Install
 
-The fast method is using the docker-compose.yml
+The automatic/fast method is using the docker-compose.yml
 
-Here the manual process
+Here the manual process.
 
 ## Deps
 
@@ -79,10 +78,10 @@ Python
     Tested with >3
 
 Mysql/MariaDB:
-    You can install or use a remote machine with mysql
+    You can install or use a remote machine with mysql.
 
 arp
-    Optional for get mac's address, only work same network (other method will added in the future)
+    Optional for get mac's address, only work on the same network (other method will added in the future).
 
 ```
     apt install net-tools
@@ -108,15 +107,14 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 Ansible support with the agent
 
 ```
-git clone https://github.com/diegargon/monnet-ansible /opt/monnet-ansible
+git clone https://github.com/diegargon/monnet-core /opt/monnet-ansible
 ```
 
 ## Config
 
-Check config/config.defaults.php and add  the keywords you want to change
-to /etc/monnet/config.inc.php.
+Check config/config.defaults.php and add the keywords you want to change to /etc/monnet/config.inc.php.
 
-it’s better not copy the files just add the keywords you want change
+Avoid copy the file just add the keywords you want or need change
 
 Do not rename or modify config.defaults.php directly, as it will be overwritten.
 
@@ -155,9 +153,9 @@ monnet : monnetadmin
 
 ## Setting crontab
 
-Times depends of the size of your network. Paths depends of your system
+Times depends of the size of your network. Paths depends on your system.
 
-Here the config for run every 5 and 15 minutes each task
+Here is the config to run each task every 5 and 15 minutes.
 
 ```
 $ nano /etc/crontab
@@ -165,14 +163,13 @@ $ nano /etc/crontab
 */15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
 
-In the future we will migrating that cli tools to python.
+In the future I will migrating that cli tools to Python.
 
-After that you must configure your network/s clicking on"Netwrok" on the 
-top left panel
+After that, you must configure your network/s clicking on "Netwrok" on the top left panel.
 
 ## Composer
 
-Necessary if you want support for send mails
+Necessary if you want support for send mails.
 
 ```
 apt install composer
@@ -182,18 +179,16 @@ apt install composer
 
 ## Monne Agent
 
-Actually i am testing a basic linux agent (python based) for reports.
-The agent is the  monnet-ansbile repo/sources and has his own
-playbook to automatically install if you want.
+Currently, I am testing a basic linux agent (python based) for reports.
+The agent is the  monnet-core repo/sources and has its own playbook to automatically install if you want.
 
-You can install it manually check the install-agent-linux playbook for steps
+You can install it manually by checking the install-agent-linux playbook for steps.
 
-Python: Automatic process will install on the hosts: psutils
+Python: The automatic process will install on the hosts some deps: psutils.
 
 ## Ansible Support
 
-Ansible support its a testing feature, it will help to install the agent and in
-the future, crate and doing other common "ansible tasks"
+Ansible support is a testing feature; it will help to install the agent and, in the future, crate and perform other common "Ansible tasks"
 
 # Install ansible
 
@@ -201,20 +196,18 @@ the future, crate and doing other common "ansible tasks"
 apt install ansible
 ```
 
-# Install monnet-ansible
+# Install Monnet Ansible (monnet-core)
 
 ```
-git clone https://github.com/diegargon/monnet-ansible.git
+git clone https://github.com/diegargon/monnet-core.git
 ```
-
-Note: I change name/repo to monnet-core.git and will be use that repo near in the future
 
 ## Ansible server
 
-Ansible server listen in localhost only, it is a testing feature without security.
-You must install ansible in the same system.
+Ansible server listens on localhost only; it is a testing feature without security.
+You must install ansible on the same system.
 
-Ansible must output in json format.
+Ansible must output in JSON format.
 
 ```
 nano /etc/ansible/ansible.cfg
@@ -223,16 +216,14 @@ nano /etc/ansible/ansible.cfg
 stdout_callback=json
 ```
 
-
-
 ## Ansible client hosts
 
-By default the ansible ssh user will be 'ansible'
+By default, the Ansible SSH user will be 'ansible'.
 
 Must be/have:
 
-    * sudo member without need type password
-    * have the public ssh key installed
+    * Be a sudo member without need to type a password
+    * Have the public SSH key installed
 
 Example
 
@@ -255,44 +246,41 @@ sudo adduser ansible
 sudo usermod -aG wheel ansible
 ```
 
-You must have checking the "Ansible Support" in General configuration tab and "Ansible Support" in the host configuration
-section (Web UI)
+You must have "Ansible Support" checked in the General configuration tab and "Ansible Support" in the host configuration section (Web UI).
 
 ## SSH CERTS
 
-For Ansible server to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via Monnet/Ansible.
+For the Ansible server to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via MonNet/Ansible.
 
 ```
 $ ssh-keygen -m PEM -t rsa -b 4096
 $ ssh-copy-id -i ~/.ssh/id_rsa.pub ansible@ip.ip.ip.ip
 ```
-The user must exists and must be allowed log with standard credentials to install de key (you can disable it after)
 
+The user must exist and must be allowed to log in with standard credentials to install the key (you can disable it after).
 
-Or do it manually
-
-On the client host:
+Or do it manually on the client host:
 
 ```
 runuser -u ansible mkdir /home/ansible/.ssh
 runuser -u ansible nano /home/ansible/.ssh/authorized_keys
 ```
 
-and paste the ssh pub key
+And paste the SSH public key.
 
-If you don't use ssh-copy-id you must add manually the known_host (Monnet server side)
+If you don't use ssh-copy-id you must manually add the key to the known_host file (Monnet server side).
 
 ```
 ssh-keyscan -t ecdsa,ed25519 -H server.example.com >> ~/.ssh/known_hosts 2>&1
 ```
 
-If the host fingerprint change you must remove first the old one
+If the host fingerprint change you must first remove the old one
 
 ```
 ssh-keygen -R
 ```
 
-You can force ansible to ignore the host fingerprint check
+You can force Ansible to ignore the host fingerprint check.
 
 ```
 [defaults]
