@@ -54,7 +54,9 @@ class CmdTaskAnsibleController
                 $response = $this->ansibleService->asHtml($response);
             }
         } else if ($command === 'pbqueue') {
-//            $response = $this->ansibleService->createTask($target_id, 1, $playbook, $extra_vars);
+            $response = $this->ansibleService->createTask($target_id, 1, $playbook, $extra_vars);
+        } else {
+            return Response::stdReturn(false, 'Unknown Ansible Command');
         }
 
         if ($response['status'] === "success") {

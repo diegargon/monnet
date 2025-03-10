@@ -517,7 +517,13 @@ function requestHostDetails(command, command_values = []) {
                         $('#reports-table').html(jsonData.command_error_msg);
                     }
                 }
-
+                if (jsonData.command_receive === 'changeHDTab'  && jsonData.command_value === 'tab15') {
+                    if (jsonData.command_success === 1) {
+                        $('#tasks-list').html(jsonData.response_msg);
+                    } else {
+                        $('#tasks-list').html(jsonData.command_error_msg);
+                    }
+                }
                 if (jsonData.command_receive === 'submitDeleteReport') {
                     if (jsonData.command_success === 1 && jsonData.response_id) {
                         $('#report_status_msg').html(jsonData.response_msg);

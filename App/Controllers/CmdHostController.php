@@ -1087,7 +1087,9 @@ class CmdHostController
                 $response = $this->hostMetricsService->getMetricsGraph($target_id);
                 break;
             case 'tab15':   # Tasks
-                $response = 'success';
+                $cmd = 'changeHDTab';
+                $cmd_value = 'tab15';
+                $response = $this->ansibleService->getHostTasks($target_id);
                 break;
             case 'tab20':   # Ansible
                 $cmd = 'changeHDTab';

@@ -36,5 +36,17 @@ class CmdAnsibleModel
         $this->ctx = $ctx;
     }
 
+    /**
+     *
+     * @param int $hid
+     * @return array<int, array<string|int>
+     */
+    public function getHostsTasks(int $hid): array
+    {
+        $db = $this->ctx->get('DBManager');
+        $query = 'SELECT * FROM tasks WHERE hid = :id';
+        $params = [ 'id' => $hid ];
 
+        return $db->qfetchAll($query, $params);
+    }
 }

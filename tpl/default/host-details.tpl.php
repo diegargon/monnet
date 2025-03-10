@@ -921,8 +921,8 @@
                         data-input-events="<?= htmlspecialchars(json_encode(EventType::getConstants()))?>"
                     />
                 </fieldset>
-
             </div>
+            <div id="tasks-list" class="task-list"></div>
         </div>
         <!-- /TAB15 --><!-- /Tasks -->
         <!-- TAB20 --><!-- Ansible -->

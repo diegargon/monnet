@@ -129,23 +129,6 @@ class AnsibleService
 
     /**
      *
-     * @param array<string, string|int> $host
-     * @param string $playbook
-     * @param array<string, string|int> $extraVars
-     * @return array<string, string|int>
-     */
-    private function buildSendData(array $host, string $playbook, array $extraVars = []): array
-    {
-        return [
-            'playbook' => $playbook . '.yml',
-            'extra_vars' => $extraVars,
-            'ip' => $host['ip'],
-            'user' => $this->ncfg->get('ansible_user') ?? 'ansible'
-        ];
-    }
-
-    /**
-     *
      * @param int $hid
      * @param int $trigger_type
      * @param string $playbook
@@ -159,7 +142,7 @@ class AnsibleService
         $pb_id = $this->findPlaybookId($playbook);
 
         if (empty($pb_id)) {
-            return ['status' => 'error', 'msg' => 'pb id not exists'];
+            return ['status' => 'error', 'error_msg' => 'pb id not exists'];
         }
 
         $insert_data = [
@@ -170,29 +153,13 @@ class AnsibleService
             'extra' => json_encode($extra_vars),
         ];
         $ret = $db->insert('tasks', $insert_data);
-        ($ret) ? $status = ['status' => 'success', 'msg' => 'success'] : null;
+        ($ret) ? $status = ['status' => 'success', 'response_msg' => 'success'] : null;
 
         return $status;
 
     }
 
-    /**
-     *
-     * @param string $playbook
-     * @return int|null
-     */
-    private function findPlaybookId(string $playbook): ?int
-    {
-        $cfg = $this->ctx->get('cfg');
-        foreach ($cfg['playbooks'] as $pb) {
-            if ($pb['name'] === $playbook) {
-                return $pb['id'];
-            }
-        }
-        return null;
-    }
-
-    /**
+     /**
      * Obtiene los informes de Ansible para un host.
      *
      * @param int $host_id El ID del host.
@@ -332,5 +299,44 @@ class AnsibleService
         }
 
         return [];
+    }
+
+    public function getHostTasks(int $hid) {
+        $tdata['host_task'] = $this->cmdAnsibleModel->getHostsTasks($hid);
+
+        return  $this->templateService->getTpl('ansible-tasks', $tdata);
+    }
+
+    /**
+     *
+     * @param string $playbook
+     * @return int|null
+     */
+    private function findPlaybookId(string $playbook): ?int
+    {
+        $cfg = $this->ctx->get('cfg');
+        foreach ($cfg['playbooks'] as $pb) {
+            if ($pb['name'] === $playbook) {
+                return $pb['id'];
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $host
+     * @param string $playbook
+     * @param array<string, string|int> $extraVars
+     * @return array<string, string|int>
+     */
+    private function buildSendData(array $host, string $playbook, array $extraVars = []): array
+    {
+        return [
+            'playbook' => $playbook . '.yml',
+            'extra_vars' => $extraVars,
+            'ip' => $host['ip'],
+            'user' => $this->ncfg->get('ansible_user') ?? 'ansible'
+        ];
     }
 }
