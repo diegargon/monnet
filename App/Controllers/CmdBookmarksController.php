@@ -71,7 +71,7 @@ class CmdBookmarksController
             return Response::stdReturn(false, "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
 
-        if ($new_bookmark['image_type'] === 'local_img'):
+        if ($new_bookmark['image_type'] === 'local_img') {
             if (empty($new_bookmark['field_img'])) {
                 return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
             } else {
@@ -82,13 +82,13 @@ class CmdBookmarksController
                     return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
                 }
             }
-        endif;
+        }
 
-        if ($new_bookmark['image_type'] == 'url' && !empty($new_bookmark['field_img'])) :
+        if ($new_bookmark['image_type'] == 'url' && !empty($new_bookmark['field_img'])) {
             if (!$this->filters->varUrl($new_bookmark['field_img'])) {
                 return Response::stdReturn(false, "{$lng['L_ERROR_URL_INVALID']}");
             }
-        endif;
+        }
 
         // TODO BookmarkModel?
         $result = $this->ctx->get('Items')->addItem('bookmarks', $new_bookmark);

@@ -10,11 +10,13 @@
 
 namespace App\Services;
 
-class TemplateService {
+class TemplateService
+{
     private $templatesPath = 'tpl/default/';
     private \AppContext $ctx;
 
-    public function __construct(\AppContext $ctx) {
+    public function __construct(\AppContext $ctx)
+    {
         $this->ctx = $ctx;
         //$this->templatesPath = $templatesPath;
     }
@@ -26,7 +28,8 @@ class TemplateService {
      * @param array $data Los datos para renderizar la plantilla.
      * @return string El HTML renderizado.
      */
-    public function getTpl($templateName, $tdata = []) {
+    public function getTpl($templateName, $tdata = []): string
+    {
         $lng = $this->ctx->get('lng');
         $cfg = $this->ctx->get('cfg');
         $ncfg = $this->ctx->get('Config');
@@ -51,6 +54,5 @@ class TemplateService {
         //Falla en guage.tpl/js al quitar los espacios.
         //$content = preg_replace('/\n\s+/', ' ', $content);
         return $content;
-
     }
 }

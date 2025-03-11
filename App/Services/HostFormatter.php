@@ -100,7 +100,7 @@ class HostFormatter
         }
         $misc = json_decode($misc, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-           \Log::warning('Error decodeMisc');
+            \Log::warning('Error decodeMisc');
 
             return ['status' => 'error'];
         }
@@ -195,7 +195,8 @@ class HostFormatter
                 $legend = "($disk_percent%): $name";
                 $gused = mbToGb($disk['used'], 0);
                 $gfree = mbToGb($disk['free'], 0);
-                $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB\n{$disk['device']} {$disk['fstype']}";
+                $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB\n";
+                $tooltip .= "{$disk['device']} {$disk['fstype']}";
 
                 $host['disks_info'][] = [
                     'value' => $disk['used'],

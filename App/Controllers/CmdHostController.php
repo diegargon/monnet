@@ -108,8 +108,12 @@ class CmdHostController
         }
 
         $hostDetailsTpl = $this->hostViewBuilder->buildStats($hostDetails);
+        $extra_fields = [
+            'command_receive' => $command,
+            'host_details' => $hostDetailsTpl
+            ];
 
-        return Response::stdReturn(true, "ok", false, ['command_receive' => $command, 'host_details' => $hostDetailsTpl]);
+        return Response::stdReturn(true, "ok", false, $extra_fields);
     }
 
     /**
@@ -239,7 +243,7 @@ class CmdHostController
                 $this->filter->varInt($command_values['pnumber']) : null;
         $protocol = isset($command_values['protocol']) ?
                 $this->filter->varInt($command_values['protocol']) : null;
-        $field ='addRemotePort';
+        $field = 'addRemotePort';
 
         if ($target_id === null || $target_id <= 0 || $pnumber === null || $protocol === null) {
             return [
@@ -495,7 +499,7 @@ class CmdHostController
             sendWOL($host['mac']);
             return Response::stdReturn(true, 'WOL: ' . $target_id);
         } else {
-            $err_msg = $host['ip']. ' not mac address';
+            $err_msg = $host['ip'] . ' not mac address';
             \Log::warning($err_msg);
             return Response::stdReturn(false, $err_msg);
         }
@@ -519,7 +523,6 @@ class CmdHostController
         }
 
         return Response::stdReturn(false, "$field: error");
-
     }
 
     /**
@@ -583,7 +586,6 @@ class CmdHostController
         }
 
         return Response::stdReturn(false, "$field: error");
-
     }
 
     /**
@@ -626,7 +628,6 @@ class CmdHostController
         }
 
         return Response::stdReturn(false, "$field: error");
-
     }
     /**
      *
@@ -819,7 +820,8 @@ class CmdHostController
      * @param int|null $status
      * @return array<string, string|int>
      */
-    public function getAgentsHosts(?int $status = null): array {
+    public function getAgentsHosts(?int $status = null): array
+    {
         $hosts = $this->hostService->getAgentsHosts($status);
         $field = 'report_agents_hosts';
         $tdata['hosts'] = $hosts;
@@ -933,7 +935,7 @@ class CmdHostController
             $host['ip'] = $ip;
         }
 
-        if(empty($ip) && !empty($domain)) {
+        if (empty($ip) && !empty($domain)) {
             $host['ip'] = $hosts->getHostnameIP($host['hostname']);
             $host['hostname'] = $domain;
         }
@@ -946,7 +948,6 @@ class CmdHostController
                 if ($hosts->getHostByIP($host['ip'])) {
                     return Response::stdReturn(false, $lng['L_ERR_DUP_IP']);
                 } else {
-
                     $host['network'] = $network_match['id'];
                     $hosts->addHost($host);
                     return Response::stdReturn(true, $lng['L_OK'], true);
@@ -979,7 +980,7 @@ class CmdHostController
         } else {
             return Response::stdReturn(false, "$field: failed");
         }
-     }
+    }
     /**
      *
      * @param array<string, string|int> $command_values
@@ -1006,8 +1007,12 @@ class CmdHostController
      * @param string $filterType
      * @return array
      */
-    /*
-    public function updateHostField(string $command, array $command_values, string $field, string $filterType = 'int'): array
+
+    public function updateHostField(string $command,
+            array $command_values,
+            string $field,
+            string $filterType = 'int')
+            : array
     {
         $hid = $this->filter->varInt($command_values['id']);
 
@@ -1032,7 +1037,7 @@ class CmdHostController
             return Response::stdReturn(false, "$field: Error updating");
         }
     }
-    */
+
 
     /**
      * UNUSED YET
@@ -1072,7 +1077,7 @@ class CmdHostController
         $target_id = $this->filter->varInt($command_values['id']);
         $extra = [];
 
-        switch($tabName):
+        switch($tabName) :
             case 'tab3':    # Notes
                 $cmd = 'load_notes';
                 $response = $this->cmdHostNotesModel->getNotes($target_id);

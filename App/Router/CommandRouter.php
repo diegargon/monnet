@@ -19,7 +19,8 @@ use App\Controllers\CmdAnsibleReportController;
 use App\Controllers\UserController;
 use App\Controllers\ConfigController;
 
-class CommandRouter {
+class CommandRouter
+{
 
     private \AppContext $ctx;
 

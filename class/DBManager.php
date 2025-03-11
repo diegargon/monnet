@@ -266,32 +266,35 @@ class DBManager
      * @param array  $params  Parámetros de la condición WHERE
      * @return bool  `true` si se actualizó correctamente, `false` si no
      */
-    public function updateJson(string $table, string $json_column, array $json_data, string $condition, array $params): bool
-    {
-     if (empty($json_data)) {
-        throw new \InvalidArgumentException('Los datos JSON no pueden estar vacíos');
-    }
-
-    $json_updates = [];
-    foreach ($json_data as $key => $value) {
-        $json_key = '$.' . $key;
-        $param_key = ":json_{$key}";
-
-        // Avoid double quote on strings
-        if (is_null($value) || is_numeric($value) || is_bool($value)) {
-            $params["json_{$key}"] = $value;
-        } else {
-            $params["json_{$key}"] = (string) $value;
+    public function updateJson(string $table,
+            string $json_column,
+            array $json_data,
+            string $condition,
+            array $params
+    ): bool {
+        if (empty($json_data)) {
+            throw new \InvalidArgumentException('Los datos JSON no pueden estar vacíos');
         }
 
-        $json_updates[] = "$json_column = JSON_SET($json_column, '{$json_key}', {$param_key})";
-    }
+        $json_updates = [];
+        foreach ($json_data as $key => $value) {
+            $json_key = '$.' . $key;
+            $param_key = ":json_{$key}";
 
-    $sql = "UPDATE $table SET " . implode(', ', $json_updates) . " WHERE $condition";
+            // Avoid double quote on strings
+            if (is_null($value) || is_numeric($value) || is_bool($value)) {
+                $params["json_{$key}"] = $value;
+            } else {
+                $params["json_{$key}"] = (string) $value;
+            }
 
-    $stmt = $this->connection->prepare($sql);
+            $json_updates[] = "$json_column = JSON_SET($json_column, '{$json_key}', {$param_key})";
+        }
 
-    return $stmt->execute($params);
+        $sql = "UPDATE $table SET " . implode(', ', $json_updates) . " WHERE $condition";
+        $stmt = $this->connection->prepare($sql);
+
+        return $stmt->execute($params);
     }
 
     /**
@@ -306,13 +309,12 @@ class DBManager
      * @throws \RuntimeException If query execution fails
      */
     public function select(
-            string $table,
-            array $columns = ['*'],
-            ?string $condition = null,
-            array $params = [],
-            ?int $limit = null
-    ): array
-    {
+        string $table,
+        array $columns = ['*'],
+        ?string $condition = null,
+        array $params = [],
+        ?int $limit = null
+    ): array {
         $columnList = implode(", ", $columns);
         $sql = "SELECT $columnList FROM $table";
 

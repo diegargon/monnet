@@ -8,17 +8,15 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-
 namespace App\Services;
-
 
 use App\Services\DateTimeService;
 use App\Services\HostMetricsViewBuilder;
 use App\Models\HostMetricsModel;
 
-class HostMetricsService {
+class HostMetricsService
+{
     private \AppContext $ctx;
-
     private HostMetricsViewBuilder $hostMetricsViewBuilder;
     private DateTimeService $dateTimeService;
     private \App\Models\HostMetricsModel $hostMetricsModel;
@@ -45,7 +43,7 @@ class HostMetricsService {
         foreach ($metrics_types as $metrics_type) {
             /* 1 ping 2 loadavg 3 iowait */
             $metrics = $this->getMetricsByType($hid, $metrics_type);
-            if ($metrics){
+            if ($metrics) {
                 switch ($metrics_type) {
                     case 1:
                         $title = $lng['L_LATENCY'];
@@ -90,13 +88,11 @@ class HostMetricsService {
     {
         $cfg = $this->ctx->get('cfg');
 
-        foreach ($metrics as &$metric){
+        foreach ($metrics as &$metric) {
             $new_date = $this->dateTimeService->utcToTz($metric['date'], $cfg['timezone']);
             $metric['date'] = $new_date;
         }
 
         return $metrics;
     }
-
 }
-

@@ -114,7 +114,7 @@ class HostService
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
             $misc = $this->hostFormatter->decodeMisc($host['misc']);
             if (isset($misc['status'])) {
-               continue;
+                continue;
             }
             $host['misc'] = $misc;
             // TODO: misc array must be in misc key this merge is temporary for compatibility

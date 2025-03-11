@@ -18,7 +18,7 @@ use App\Helpers\Response;
  * Temp Wrap pre rewrite User
  */
 
-class  UserController
+class UserController
 {
     private $ctx;
     private Filter $filter;
@@ -45,10 +45,10 @@ class  UserController
             return Response::stdReturn(true, $command . ': fail');
         }
 
-        switch ($command):
+        switch ($command) :
             case 'network_select':
             case 'network_unselect':
-                 if ($command === 'network_select') {
+                if ($command === 'network_select') {
                     $pref_name = 'network_select_' . $num;
                     $value = 1;
                 } else {

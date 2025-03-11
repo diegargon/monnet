@@ -22,12 +22,13 @@ class HostMetricsViewBuilder
         $this->templateService = new TemplateService($ctx);
     }
 
-    public function build(int $hid, string $title, int $type, array $metrics) {
+    public function build(int $hid, string $title, int $type, array $metrics)
+    {
         $tdata['graph_name'] = $title;
         $tdata['type'] = $type;
         $tdata['host_id'] = $hid;
         $tdata['data'] = $metrics;
-        
+
         return $this->templateService->getTpl('chart-time-js', $tdata);
     }
 }

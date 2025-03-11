@@ -12,10 +12,8 @@ namespace App\Services;
 
 class DateTimeService
 {
-
-    function __construct()
+    public function __construct()
     {
-
     }
 
     /**
@@ -90,7 +88,7 @@ class DateTimeService
      * @param string $time_format
      * @return string|false
      */
-    function formatDateString(string $date, string $time_format = 'Y-m-d H:i:s'): string|false
+    public function formatDateString(string $date, string $time_format = 'Y-m-d H:i:s'): string|false
     {
         $timestamp = strtotime($date);
 
@@ -101,7 +99,7 @@ class DateTimeService
      *
      * @return string
      */
-    function datetimeMachine(): string
+    public function datetimeMachine(): string
     {
         $now = new \DateTime();
         return $now->format('Y-m-d H:i:s');
@@ -116,7 +114,7 @@ class DateTimeService
      * @return string Fecha formateada en la zona horaria especificada.
      */
 
-    function formatTimestamp(int $timestamp, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
+    public function formatTimestamp(int $timestamp, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
     {
         try {
             $date = new \DateTime('@' . $timestamp); // '@' indica un timestamp UNIX

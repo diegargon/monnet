@@ -405,9 +405,9 @@
             <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
             <div class="inline"><button id="syslog_btn">Syslog</button></div>
             <div class="inline"><button id="journald_btn">Journald</button></div>
-            <?php endif; ?>
             <?php
-                if (!empty($tdata['host_details']['host_logs'])):
+                endif;
+                if (!empty($tdata['host_details']['host_logs'])) :
                     echo $tdata['host_details']['host_logs'];
                 endif;
             ?>

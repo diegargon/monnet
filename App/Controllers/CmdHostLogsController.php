@@ -38,7 +38,7 @@ class CmdHostLogsController
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
-    public function logsReload(array $command_values) : array
+    public function logsReload(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $field = 'logs-reload';

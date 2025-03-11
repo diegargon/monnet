@@ -52,21 +52,21 @@ class CmdNetworkController
             } elseif ($action === 'update' || $action === 'add') {
                 $decodedJson = json_decode((string) $value_command, true);
                 $val_net_data = $this->valNetData($command_values['action'], $decodedJson);
-                if(empty($val_net_data)) {
+                if (empty($val_net_data)) {
                     return Response::stdReturn(false, 'Validaded data empty');
                 }
-                if(!empty($val_net_data['error'])) {
+                if (!empty($val_net_data['error'])) {
                     return Response::stdReturn(false, $val_net_data['error_msg']);
                 }
 
-                if ($action === 'add') :
+                if ($action === 'add') {
                     $this->ctx->get('Networks')->addNetwork($val_net_data);
                     return Response::stdReturn(true, 'add ok', true);
-                endif;
-                if ($action === 'update') :
+                }
+                if ($action === 'update') {
                     $this->ctx->get('Networks')->updateNetwork($target_id, $val_net_data);
                     return Response::stdReturn(true, 'update ok', true);
-                endif;
+                }
             }
         endif;
 

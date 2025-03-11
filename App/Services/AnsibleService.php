@@ -98,7 +98,7 @@ class AnsibleService
                 isset($responseArray['status']) &&
                 $responseArray['status'] === 'success' &&
                 isset($responseArray['result'])
-        ){
+        ) {
             /* SUCCESS */
             $playbook_id = $this->getPbIdByName($playbook);
 
@@ -156,7 +156,6 @@ class AnsibleService
         ($ret) ? $status = ['status' => 'success', 'response_msg' => 'success'] : null;
 
         return $status;
-
     }
 
      /**
@@ -165,8 +164,8 @@ class AnsibleService
      * @param int $host_id El ID del host.
      * @return array<string, string|int> Los informes de Ansible.
      */
-    public function getHostHeadsReports(int $host_id) {
-
+    public function getHostHeadsReports(int $host_id)
+    {
         if (!isset($this->ansibleReportModel)) {
             $this->ansibleReportModel = new CmdAnsibleReportModel($this->ctx);
         }
@@ -183,7 +182,7 @@ class AnsibleService
         //format
         foreach ($reports as &$report) {
             $playbook = $this->getPbById($report['pb_id']);
-            if ($playbook)  {
+            if ($playbook) {
                 $report['pb_name'] = $playbook['name'] . ' - ' . $playbook['desc'];
             }
             $timezone = $user->getTimeZone();
@@ -301,7 +300,8 @@ class AnsibleService
         return [];
     }
 
-    public function getHostTasks(int $hid) {
+    public function getHostTasks(int $hid)
+    {
         $tdata['host_task'] = $this->cmdAnsibleModel->getHostsTasks($hid);
 
         return  $this->templateService->getTpl('ansible-tasks', $tdata);

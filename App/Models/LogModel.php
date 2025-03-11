@@ -10,7 +10,8 @@
 
 namespace App\Models;
 
-class LogModel {
+class LogModel
+{
     private \AppContext $ctx;
 
     public function __construct(\AppContext $ctx)

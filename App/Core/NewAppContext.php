@@ -26,8 +26,6 @@ class NewAppContext
     /** @var self|null */
     private static ?self $instance = null;
 
-    private function __construct() {}
-
     /**
      * Devuelve la instancia única de AppContext (Singleton).
      *

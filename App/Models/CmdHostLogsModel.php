@@ -90,7 +90,8 @@ class CmdHostLogsModel
      * @param int $host_id El ID del host.
      * @return array<string, string|int> Los logs del host.
      */
-    public function getHostLogs($host_id) {
+    public function getHostLogs($host_id)
+    {
         $db = $this->ctx->get('DBManager');
         $query = "SELECT * FROM host_logs WHERE host_id = :host_id ORDER BY date DESC LIMIT 100";
         $params = ['host_id' => $host_id];

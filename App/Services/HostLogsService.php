@@ -13,7 +13,8 @@ namespace App\Services;
 use App\Models\CmdHostLogsModel;
 use App\Services\DateTimeService;
 
-class HostLogsService {
+class HostLogsService
+{
     private \AppContext $ctx;
 
     private CmdHostLogsModel $cmdHostLogsModel;

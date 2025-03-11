@@ -15,7 +15,8 @@ use App\Services\Filter;
 use App\Models\CmdAnsibleReportModel;
 use App\Helpers\Response;
 
-class CmdAnsibleReportController {
+class CmdAnsibleReportController
+{
     private CmdAnsibleReportModel $reportModel;
     private AnsibleService $ansibleService;
     private \AppContext $ctx;

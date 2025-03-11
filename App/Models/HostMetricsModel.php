@@ -11,7 +11,8 @@
 
 namespace App\Models;
 
-class HostMetricsModel {
+class HostMetricsModel
+{
     private \AppContext $ctx;
 
     public function __construct(\AppContext $ctx)

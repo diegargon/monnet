@@ -48,12 +48,12 @@ class CmdTaskAnsibleController
             $extra_vars = $this->filter->varJson($command_values['extra_vars']);
         }
 
-        if($command == 'playbook_exec') {
+        if ($command == 'playbook_exec') {
             $response = $this->ansibleService->runPlaybook($target_id, $playbook, $extra_vars);
             if (($response['status'] === 'success') && $as_html) {
                 $response = $this->ansibleService->asHtml($response);
             }
-        } else if ($command === 'pbqueue') {
+        } elseif ($command === 'pbqueue') {
             $response = $this->ansibleService->createTask($target_id, 1, $playbook, $extra_vars);
         } else {
             return Response::stdReturn(false, 'Unknown Ansible Command');

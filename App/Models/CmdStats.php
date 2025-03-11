@@ -19,5 +19,4 @@ class CmdStats
         $this->ctx = $ctx;
         $this->db = $ctx->get('DBManager');
     }
-    
 }

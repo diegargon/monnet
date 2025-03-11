@@ -108,7 +108,7 @@ function notification_data_process(AppContext $ctx, int $host_id, array $rdata):
                 'date' => date_now(),
                 'type' => 2,   //loadavg
                 'host_id' => $host_id,
-                'value' => $rdata['load_avg_stats']
+                'value' => $rdata['load_avg_stats']['5min']
             ];
             $db->insert('stats', $set_stats);
         endif;
