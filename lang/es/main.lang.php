@@ -38,6 +38,7 @@ $lng = [
     'L_AGENT_LAST_PING' => 'Ultimo contacto agente: ',
     'L_ALARMS_DISABLE' => 'Alarmas deshabilitadas',
     'L_ALWAYS_ON' => 'Always On',
+    'L_ADD_VAR' => 'Añadir Ansible Var',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -215,6 +216,7 @@ $lng = [
     'L_SUMMARY' => 'Resumen',
     'L_SCHEDULER' => 'Tiempo',
     'L_SEL_PLAYBOOK' => 'Selecciona Playbook',
+    'L_SCHEDULER' => 'Temporizador',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',

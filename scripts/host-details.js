@@ -216,6 +216,92 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", "#addvar_btn", function() {
+        var container = $(this).closest(".ansible_vars");
+
+        var data = {
+            host_id: container.find("input[type=hidden]").data("hid"),
+            var_type: container.find("#ans_var_type").val(),
+            var_name: container.find("input[data-name='ans_var_name']").val(),
+            var_value: container.find("input[data-name='ans_var_value']").val()
+        };
+
+        if (!data.var_name || !data.var_value) {
+            alert("Both 'Var name' and 'Var value' are required.");
+            return; // Detener ejecución
+        }
+        console.log(data);
+        requestHostDetails('add_ansible_var', data);
+    });    
+
+    $(document).on("click", "#del_var_btn", function() {
+        var container = $(this).closest(".ansible_vars");
+
+        var data = {
+            command: 'del_ansible_var',
+            id: container.find("input[type=hidden]").data("hid"),
+            var_type: container.find("#ans_var_type").val()
+        };
+
+        console.log(data);
+        requestHostDetails('del_ansible_var', data);
+    });   
+    
+    $(document).on('click', '#tab15 button[type="submit"]', function (e) {
+        e.preventDefault(); 
+        
+        let $row = $(this).closest('tr');
+        let taskId = $row.data('id');
+
+        if (taskId === undefined || taskId === null) {
+            console.error('Error: No se encontró el ID de la tarea.');
+            return;
+        }
+        
+        let taskName = $row.find('[name^="task_name"]').val();
+        let taskTrigger = $row.find('[name^="task_trigger"]').val();
+        let playbook = $row.find('[name^="playbooks"]').val();
+        let disableTask = $row.find('[name^="disable_task"]').is(':checked');
+        let nextTask = $row.find('[name^="next_task"]').val();
+        
+        let action = $(this).data('action');
+
+        let requestData = {
+            id: taskId, 
+            task_name: taskName,
+            task_trigger: taskTrigger,
+            playbook: playbook,
+            disable_task: disableTask,
+            next_task: nextTask
+        };
+
+        /*
+        console.log(`Action: ${action}`);
+        console.log(`Task ID: ${taskId}`);
+        console.log(`Task Name: ${taskName}`);
+        console.log(`Task Trigger: ${taskTrigger}`);
+        console.log(`Playbook: ${playbook}`);
+        console.log(`Disable Task: ${disableTask}`);
+        console.log(`Next Task: ${nextTask}`);
+        */
+
+        switch (action) {
+            case 'create_task':
+                requestHostDetails('create_task', requestData);
+                break;
+            case 'delete_task':
+                requestHostDetails('delete_task', { id: taskId });
+                break;
+            case 'update_task':
+                requestHostDetails('update_task', requestData);
+                break;
+            case 'force_exec_task':
+                requestHostDetails('force_exec_task', { id: taskId });
+                break;
+            default:
+                console.error('Acción desconocida:', action);
+        }        
+    });
  });
 
 function initTasks() {

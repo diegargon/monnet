@@ -250,7 +250,8 @@ $cfg['access_link_types'] = [
 $cfg['task_trigger'] = [
     1 => ['name' => 'L_MANUAL', 'id' => 1],
     2 => ['name' => 'L_EVENT_RESPONSE', 'id' => 2],
-    3 => ['name' => 'L_OTHER_TASK', 'id' => 3],
+    3 => ['name' => 'L_SCHEDULER', 'id' => 3],
+    4 => ['name' => 'L_OTHER_TASK', 'id' => 4],
     //4 => ['name' => 'L_SCHEDULER', 'id' => 4],
 ];
 

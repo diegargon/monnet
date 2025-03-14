@@ -212,11 +212,11 @@ class DBManager
      * Delete records from a table
      *
      * @param string $table Table name
-     * @param string $condition WHERE clause (without "WHERE")
+     * @param string $condition WHERE clause
      * @param array<string, mixed> $params Parameters for the WHERE clause
      * @return bool True on success, false on failure
      */
-    public function delete(string $table, string $condition, array $params = []): bool
+    public function delete(string $table, string $condition, array $params): bool
     {
         $sql = "DELETE FROM $table WHERE $condition";
         $stmt = $this->connection->prepare($sql);

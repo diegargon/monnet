@@ -13,6 +13,7 @@ namespace App\Controllers;
 use App\Helpers\Response;
 use App\Services\AnsibleService;
 use App\Services\Filter;
+use App\Models\CmdAnsibleModel;
 
 class CmdTaskAnsibleController
 {
@@ -54,7 +55,7 @@ class CmdTaskAnsibleController
                 $response = $this->ansibleService->asHtml($response);
             }
         } elseif ($command === 'pbqueue') {
-            $response = $this->ansibleService->createTask($target_id, 1, $playbook, $extra_vars);
+            $response = $this->ansibleService->queueTask($target_id, 1, $playbook, $extra_vars);
         } else {
             return Response::stdReturn(false, 'Unknown Ansible Command');
         }
@@ -112,6 +113,12 @@ class CmdTaskAnsibleController
         }
     }
 
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
     public function handleShutdownReboot(string $command, array $command_values): array
     {
         $hid = $this->filter->varInt($command_values['id']);
@@ -126,5 +133,87 @@ class CmdTaskAnsibleController
         } else {
             return Response::stdReturn(false, $response['error_msg']);
         }
+    }
+
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function mgmtTask(string $command, array $command_values): array
+    {
+        if ($command !== 'create_task') {
+            $hid = $this->filter->varInt($command_values['id']);
+        } else {
+            $hid = 0;
+        }
+        if (!is_numeric($hid)) {
+            return Response::stdReturn(false, 'id error');
+        }
+        $extra_field = [
+            'command' => $command,
+            'hid' => $hid
+        ];
+
+        if ($command === 'delete_task') {
+            $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
+            if ($cmdAnsibleModel->deleteTask($hid)) {
+                return Response::stdReturn(true, 'Delete Task Success', false, $extra_field);
+            } else {
+                return Response::stdReturn(false, 'Error deleting task', false, $extra_field);
+            }
+        }
+
+        switch ($command):
+            case 'create_task':
+                $playbook_id = $this->filter->varInt($command_values['playbook']);
+                $next_task_id = $this->filter->varInt($command_values['next_task']);
+                $task_trigger = $this->filter->varInt($command_values['task_trigger']);
+                $disable_task = $this->filter->varBool($command_values['disable_task']);
+                $task_name = $this->filter->varString($command_values['task_name']);
+                $extra_vars = [];
+
+                $task_data = [
+                    'hid' => $hid,
+                    'pb_id' => $playbook_id,
+                    'trigger_type' => $task_trigger,
+                    'task_name' => $task_name,
+                    'next_task' => $next_task_id,
+                    'disable' => $disable_task,
+                    'extra' => json_encode($extra_vars),
+                ];
+                return Response::stdReturn(false, 'Unknown command');
+            case 'update_task':
+                return Response::stdReturn(false, 'Unknown command');
+            case 'force_exec_task':
+                return Response::stdReturn(false, 'Unknown command');
+            default:
+                return Response::stdReturn(false, 'Unknown command');
+        endswitch;
+    }
+
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function addAnsibleVar(string $command, array $command_values): array
+    {
+
+        return Response::stdReturn(false, 'Unknown');
+    }
+
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function delAnsibleVar(string $command, array $command_values): array
+    {
+
+        return Response::stdReturn(false, 'Unknown');
     }
 }

@@ -211,7 +211,7 @@ function check_known_hosts(AppContext $ctx): bool
                     Log::logHost(LogLevel::NOTICE, $host['id'], $log_msg, LogType::EVENT, EventType::SYSTEM_SHUTDOWN);
                 endif;
 
-                if (!empty($host['alarm_ping_email'])) :
+                if (!empty($host['email_alarms']) && !empty($host['alarm_ping_email'])) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;
             }

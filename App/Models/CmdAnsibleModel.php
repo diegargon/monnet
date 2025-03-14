@@ -30,10 +30,12 @@ namespace App\Models;
 class CmdAnsibleModel
 {
     private \AppContext $ctx;
+    private \DBManager $db;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->db = $ctx->get('DBManager');
     }
 
     /**
@@ -43,10 +45,25 @@ class CmdAnsibleModel
      */
     public function getHostsTasks(int $hid): array
     {
-        $db = $this->ctx->get('DBManager');
         $query = 'SELECT * FROM tasks WHERE hid = :id';
         $params = [ 'id' => $hid ];
 
-        return $db->qfetchAll($query, $params);
+        return $this->db->qfetchAll($query, $params);
     }
+
+    /**
+     *
+     * @param array<string, string|int> $values
+     * @return bool
+     */
+    public function createTask(array $values): bool
+    {
+        return $this->db->insert('tasks', $values);
+    }
+
+    public function deleteTask(int $tid): bool
+    {
+        return $this->db->delete('tasks', 'id = :id', ['id' => $tid]);
+    }
+
 }

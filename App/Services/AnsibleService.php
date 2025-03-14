@@ -135,25 +135,26 @@ class AnsibleService
      * @param array<string, string|int> $extra_vars
      * @return array<string, string|int>
      */
-    public function createTask(int $hid, int $trigger_type, string $playbook, array $extra_vars)
+    public function queueTask(int $hid, int $trigger_type, string $playbook, array $extra_vars)
     {
-        $db = $this->ctx->get('Mysql');
-
         $pb_id = $this->findPlaybookId($playbook);
 
         if (empty($pb_id)) {
             return ['status' => 'error', 'error_msg' => 'pb id not exists'];
         }
 
-        $insert_data = [
+        $task_data = [
             'hid' => $hid,
             'pb_id' => $pb_id,
             'trigger_type' => $trigger_type,
             'task_name' => $playbook,
             'extra' => json_encode($extra_vars),
         ];
-        $ret = $db->insert('tasks', $insert_data);
-        ($ret) ? $status = ['status' => 'success', 'response_msg' => 'success'] : null;
+        if ($this->cmdAnsibleModel->createTask($task_data)) {
+            $status = ['status' => 'success', 'response_msg' => 'success'];
+        } else {
+            $status = ['status' => 'error', 'error_msg' => 'Error creating task'];
+        }
 
         return $status;
     }
@@ -302,7 +303,7 @@ class AnsibleService
 
     public function getHostTasks(int $hid)
     {
-        $tdata['host_task'] = $this->cmdAnsibleModel->getHostsTasks($hid);
+        $tdata['host_tasks'] = $this->cmdAnsibleModel->getHostsTasks($hid);
 
         return  $this->templateService->getTpl('ansible-tasks', $tdata);
     }

@@ -879,7 +879,7 @@
                             <td></td> <!-- Espacio para el botón -->
                         </tr>
                         <!-- Fila de inputs -->
-                        <tr>
+                        <tr data-id="0">
                             <td>
                                 <input type="text" size="12" max-size="12" id="task_name" name="task_name" required>
                             </td>
@@ -911,7 +911,7 @@
                                 </select>
                             </td>
                             <td>
-                                <button type="submit" name="action" value="create">Create</button>
+                                <button type="submit" data-action="create_task">Create</button>
                             </td>
                         </tr>
                     </table>
@@ -938,6 +938,25 @@
                         </select>
                         <label for="as_html">HTML</label>
                         <input id="as_html" type="checkbox" checked>
+                        <div class="ansible_vars">
+                            <button id="addvar_btn"><?= $lng['L_ADD_VAR'] ?></button>
+                            <select id="ans_var_type">
+                                <option value="alpha_value">Alphanumeric</option>
+                                <option value="encrypt_value">Encrypt</option>
+                            </select>
+                            <input type="hidden" data-hid="<?= $tdata['host_details']['id'] ?>"></input>
+                            <input type="text" data-name="ans_var_name" size="10" placeholder="Var name"></input>
+                            <input type="text" data-name="ans_var_value" size="15" placeholder="Var value"></input>
+                        </div>
+                        <?php
+                        if (!empty($tdata['host_details']['ansible_vars'])) {
+                        ?>
+                            <select id="ans_var_list">
+                            </select>
+                            <button id="delete_var_btn"><?= $lng['L_DEL'] ?></button>
+                        <?php
+                        }
+                        ?>
                         <div id="playbook_desc"></div>
                         <div id="vars_container"></div>
                     </div>

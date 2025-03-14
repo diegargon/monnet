@@ -3,7 +3,7 @@
 ?>
 <fieldset>
     <legend>Tasks</legend>
-    <table>
+    <table id="tasksTable">
         <!-- Fila de labels -->
         <tr>
             <td><label for="task_name">Name</label></td>
@@ -12,44 +12,58 @@
             <td><label for="playbook">Playbook</label></td>
             <td><label for="disable_task">Disable</label></td>
             <td><label for="next_task">Next Task</label></td>
-            <td></td> <!-- Espacio para el botón -->
+            <td></td>
         </tr>
+<?php
+    foreach ($tdata['host_tasks'] as $task) :
+        $task_id = $task['id'];
+    ?>
         <!-- Fila de inputs -->
-        <tr>
+        <tr data-id="<?= $task_id ?>">
             <td>
-                <input type="text" size="12" max-size="12" id="task_name" name="task_name" required>
+                <input type="text" size="20" max-size="20" name="task_name[<?= $task_id ?>]" value="<?= $task['task_name'] ?>" required>
             </td>
             <td>
-                <select id="task_trigger" name="task_trigger" required>
+                <select name="task_trigger[<?= $task_id ?>]" required>
                     <option value="" disabled selected>Select Trigger</option>
                     <?php
-                    foreach ($cfg['task_trigger'] as $task) :
-                        print("<option value={$task['id']}>{$lng[$task['name']]}</option>");
+                    foreach ($cfg['task_trigger'] as $trigger) :
+                        $selected = ($trigger['id'] == $task['trigger_type']) ? 'selected' : '';
+                        echo "<option value=\"{$trigger['id']}\" $selected>{$lng[$trigger['name']]}</option>";
                     endforeach;
                     ?>
                 </select>
             </td>
             <td id="conditional_field"></td>
             <td>
-                <select id="playbooks" name="playbooks">
-                    <option value="" disable selected>No select</option>
+                <select name="playbooks[<?= $task_id ?>]">
+                    <option value="" disabled selected>No select</option>
                     <?php
                     foreach ($cfg['playbooks'] as $playbook) :
-                        print("<option value={$playbook['name']}>{$playbook['name']}</option>");
+                        $selected = ($playbook['id'] == $task['pb_id']) ? 'selected' : '';
+                        echo "<option value=\"{$playbook['id']}\" $selected>{$playbook['name']}</option>";
                     endforeach;
                     ?>
                 </select>
             </td>
-            <td><input type="checkbox" id="disable_task" name="disable_task"></td>
             <td>
-                <select id="next_task" name="next_task">
-                  <option value="0" selected>No Next Task</option>
+                <input type="checkbox" name="disable_task[<?= $task_id ?>]" <?= $task['disable'] ? 'checked' : '' ?>>
+            </td>
+            <td>
+                <select name="next_task[<?= $task_id ?>]">
+                    <option value="0" selected disabled>No Next Task</option>
                 </select>
             </td>
             <td>
-                <button type="submit" name="action" value="create">Create</button>
+                <button type="submit" data-action="delete_task">Borrar</button>
+                <button type="submit" data-action="update_task">Modificar</button>
+                <button type="submit" data-action="force_exec_task">Forzar</button>
             </td>
         </tr>
+    <?php
+    endforeach;
+    ?>
+
     </table>
     <input
         type="hidden"

@@ -111,7 +111,7 @@ class CommandRouter
                 break;
             case 'submitSystemType':
                 $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitSystemTime($command_values);
+                $response = $hostController->submitSystemType($command_values);
                 break;
             case 'submitAccessLink':
                 $hostController = new CmdHostController($this->ctx);
@@ -355,6 +355,21 @@ class CommandRouter
             case 'shutdown':
                 $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
                 $response = $taskAnsibleController->handleShutdownReboot($command, $command_values);
+                break;
+            case 'create_task':
+            case 'delete_task':
+            case 'update_task':
+            case 'force_exec_task':
+                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
+                $response = $taskAnsibleController->mgmtTask($command, $command_values);
+                break;
+            case 'add_ansible_var':
+                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
+                $response = $taskAnsibleController->addAnsibleVar($command, $command_values);
+                break;
+            case 'del_ansible_var':
+                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
+                $response = $taskAnsibleController->delAnsibleVar($command, $command_values);
                 break;
             /*
              *  Unknown command

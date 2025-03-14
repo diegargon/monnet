@@ -224,9 +224,12 @@ class Hosts
                         Log::logHost(LogLevel::NOTICE, $id, $log_msg);
                     }
 
-                    if (!empty($this->hosts[$id]['alarm_macchange_email'])) :
+                    if (
+                            !empty($this->hosts[$id]['email_alarms']) &&
+                            !empty($this->hosts[$id]['alarm_macchange_email'])
+                    ) {
                         $this->sendHostMail($id, $log_msg, $log_msg);
-                    endif;
+                    }
                 }
                 //Log category change
                 if ($kvalue == 'category' && $vvalue != $this->hosts[$id]['category']) {
