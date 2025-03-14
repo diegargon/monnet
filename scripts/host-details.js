@@ -230,9 +230,9 @@ $(document).ready(function () {
             alert("Both 'Var name' and 'Var value' are required.");
             return; // Detener ejecución
         }
-        console.log(data);
+
         requestHostDetails('add_ansible_var', data);
-    });    
+    });
 
     $(document).on("click", "#del_var_btn", function() {
         var container = $(this).closest(".ansible_vars");
@@ -243,13 +243,12 @@ $(document).ready(function () {
             var_type: container.find("#ans_var_type").val()
         };
 
-        console.log(data);
         requestHostDetails('del_ansible_var', data);
-    });   
-    
+    });
+
     $(document).on('click', '#tab15 button[type="submit"]', function (e) {
-        e.preventDefault(); 
-        
+        e.preventDefault();
+
         let $row = $(this).closest('tr');
         let taskId = $row.data('id');
 
@@ -257,17 +256,17 @@ $(document).ready(function () {
             console.error('Error: No se encontró el ID de la tarea.');
             return;
         }
-        
+
         let taskName = $row.find('[name^="task_name"]').val();
         let taskTrigger = $row.find('[name^="task_trigger"]').val();
         let playbook = $row.find('[name^="playbooks"]').val();
         let disableTask = $row.find('[name^="disable_task"]').is(':checked');
         let nextTask = $row.find('[name^="next_task"]').val();
-        
+
         let action = $(this).data('action');
 
         let requestData = {
-            id: taskId, 
+            id: taskId,
             task_name: taskName,
             task_trigger: taskTrigger,
             playbook: playbook,
@@ -300,7 +299,7 @@ $(document).ready(function () {
                 break;
             default:
                 console.error('Acción desconocida:', action);
-        }        
+        }
     });
  });
 
