@@ -290,6 +290,30 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
+    $update = 0.00;
+    if ($db_version < $update) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            //$db->query("
+            //");
+            $db->query("
+                CREATE TABLE IF NOT EXISTS `ansible_vars` (
+                  `id` int NOT NULL AUTO_INCREMENT,
+                  `hid` int NOT NULL,
+                  `vtype` tinyint NOT NULL,
+                  `vkey` varchar(255) NOT NULL,
+                  `vvalue` varchar(255) NOT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB;
+            ");
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
     // Template
     $update = 0.00;
     if ($db_version < $update) {

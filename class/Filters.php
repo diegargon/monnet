@@ -341,18 +341,7 @@ class Filters
         ) {
             return false;
         }
-        /*
-          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-          (!empty($min_size) && (strlen($var) < $min_size))
-          ) {
-          return false;
-          }
 
-          if (!preg_match('/^[A-Za-z0-9]+$/', $var)) {
-          return false;
-          }
-         *
-         */
         if (!ctype_alnum($var)) {
             return false;
         }
@@ -390,15 +379,6 @@ class Filters
         ) {
             return false;
         }
-        /*
-          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-          (!empty($min_size) && (strlen($var) < $min_size))) {
-          return false;
-          }
-
-          return $var;
-         *
-         */
 
         if (!preg_match('/^[A-Za-z]+$/', $var)) {
             return false;
@@ -475,7 +455,6 @@ class Filters
 
     public static function varStrict(string $var, ?int $max_size = null, ?int $min_size = null): string|bool
     {
-        //TODO allow only alphanumerics and _
         $length = strlen($var);
 
         if (
@@ -791,7 +770,6 @@ class Filters
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
-
 
         if (!filter_var($val, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
             return false;

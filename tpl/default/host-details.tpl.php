@@ -940,12 +940,12 @@
                         <input id="as_html" type="checkbox" checked>
                         <div class="ansible_vars">
                             <button id="addvar_btn"><?= $lng['L_ADD_VAR'] ?></button>
-                            <select id="ans_var_type">
-                                <option value="alpha_value">Alphanumeric</option>
-                                <option value="encrypt_value">Encrypt</option>
-                            </select>
                             <input type="hidden" data-hid="<?= $tdata['host_details']['id'] ?>"></input>
                             <input type="text" data-name="ans_var_name" size="10" placeholder="Var name"></input>
+                            <select id="ans_var_type">
+                                <option value="stricname_value">Strict Name -></option>
+                                <option value="encrypt_value">Encrypt -></option>
+                            </select>
                             <input type="text" data-name="ans_var_value" size="15" placeholder="Var value"></input>
                         </div>
                         <?php

@@ -61,9 +61,56 @@ class CmdAnsibleModel
         return $this->db->insert('tasks', $values);
     }
 
+    /**
+     *
+     * @param int $tid
+     * @return bool
+     */
     public function deleteTask(int $tid): bool
     {
         return $this->db->delete('tasks', 'id = :id', ['id' => $tid]);
     }
 
+    /**
+     *
+     * @param int $vtype
+     * @param string $vkey
+     * @param string $vvalue
+     * @return bool
+     */
+    public function add_ansible_var(int $vtype, string $vkey, string $vvalue): bool
+    {
+        if ($this->check_ansible_var_exists($vkey)) {
+            return false;
+        }
+        $var_data = [
+            'vtype' => $vtype,
+            'vkey' => $vkey,
+            'vvalue' => $vvalue
+        ];
+        return $this->db->insert('ansible_vars', $var_data);
+    }
+
+    /**
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function del_ansible_var(int $id): bool
+    {
+        return $this->db->delete('ansible_vars', 'id = :id', ['id' => $id]);
+    }
+
+    /**
+     *
+     * @param int $key
+     * @return bool
+     */
+    private function check_ansible_var_exists(int $key): bool
+    {
+        $query = "SELECT COUNT(*) FROM ansible_vars WHERE ckey = :var_name LIMIT 1";
+        $params = ['var_name' => $key];
+
+        return $this->db->qfetch($query, $params) > 0;
+    }
 }
