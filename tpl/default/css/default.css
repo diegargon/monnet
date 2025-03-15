@@ -1660,6 +1660,9 @@ input:checked + .slider:before {
     resize: vertical;
 }
 
+.config_textbox {
+    display: block;
+}
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

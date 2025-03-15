@@ -24,6 +24,11 @@
             onclick="changeSettingsTab(1)"
             class="settings-tabs-head active"><?= $lng['L_GENERAL'];?>
         </button>
+        <button
+            id="settings_tab_10"
+            onclick="changeSettingsTab(10)"
+            class="settings-tabs-head"><?= $lng['L_SECURITY'];?>
+        </button>
         <?php if ($ncfg->get('ansible')) : ?>
         <button
             id="settings_tab_102"
@@ -126,6 +131,14 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                             </select>
                             <?php
                             break;
+                        case 10: //textbox
+                            ?>
+                            <textarea
+                                id="<?= $ckey ?>"
+                                class="config_textbox"
+                                name="<?= $ckey ?>"><?= base64_decode($cvalue) ?></textarea>
+                            <?php
+                            break;
                         case 700: // password
                             ?>
                             <input type="password" id="<?= $ckey ?>" name="<?= $ckey ?>" value="<?= $cvalue ?>" />
@@ -143,11 +156,6 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                             <?php
                             break;
                         case 1000: // array
-                            ?>
-                            <textarea id="<?= $ckey ?>" name="<?= $ckey ?>"><?= json_encode($cvalue) ?></textarea>
-                            <?php
-                            break;
-                        case 11: // array<array>
                             ?>
                             <textarea id="<?= $ckey ?>" name="<?= $ckey ?>"><?= json_encode($cvalue) ?></textarea>
                             <?php
