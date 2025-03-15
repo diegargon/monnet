@@ -5,21 +5,22 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 /**
  * Clase config
  * ctype =
- *          0(string)
- *          1(int)
- *          2(bool)
- *          3(float)
- *          4(date)
- *          5(url)
- *          6(dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
- *          7(password
- *          8(email) ?
+ *          0 (string)
+ *          1 (int)
+ *          2 (bool)
+ *          3 (float)
+ *          4 (date)
+ *          5 (url)
+ *          6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
+ *          7 (password) (TODO)
+ *          8 (email) (No yet)
+ *         10 (text/textbox)
  *
  *
  * ('keyname', JSON_QUOTE('key_value'), ctype, ccat, cdesc, cuid=0);
@@ -211,6 +212,8 @@ class Config
                 }
                 $this->modifiedKeys[$key]['value'] = $config['value'];
                 return 1;
+            } elseif ($config['ctype'] == 10) {
+                $this->modifiedKeys[$key]['value'] = base64_encode($value);
             } elseif ($config['value'] !== $value) {
                 $config['value'] = $value;
                 $this->modifiedKeys[$key]['value'] = $value;
@@ -306,6 +309,8 @@ class Config
                 endif;
                 return $decodedValue;
             case 7: //password
+                return $decodedValue;
+            case 10: //Textbox
                 return $decodedValue;
             default:
                 throw new InvalidArgumentException("Unsupported type: $type");
