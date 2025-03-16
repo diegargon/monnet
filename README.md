@@ -56,7 +56,7 @@ Resume:
 
     Non-Commercial Use = Allowed
 
-    Commercial Use = Ask
+    Commercial Use = License
 
 ## MonNet Install
 
@@ -176,11 +176,15 @@ monnet-core contains monnet-gateway service and the monnet-agent service
 
 - monnet-gateway is currently used only as a gateway to execute ansible commands, more feautres will be added in the future.
 It must be installed in the same host.
+
     Installation instructions:
+
     https://github.com/diegargon/monnet-core/tree/main/monnet_gateway
 
 - monnet-agent is used as source for install monnet-agent via ansible/monnet-gateway on remote hosts
+
     Installation instructions:
+
     https://github.com/diegargon/monnet-core/tree/main/monnet_agent
 
 Ansible support is required on the host.
@@ -195,7 +199,9 @@ apt install ansible
 
 ## External Resource used (included in sources)
 
-## MAC address, latest oui.csv
-https://regauth.standards.ieee.org/standards-ra-web/pub/view.html
-## IANNA Standard port
-https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv
+- MAC address, latest oui.csv
+
+    https://regauth.standards.ieee.org/standards-ra-web/pub/view.html
+
+- IANNA Standard port
+    https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv
