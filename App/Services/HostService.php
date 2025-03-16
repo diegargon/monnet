@@ -49,9 +49,9 @@ class HostService
 
         $hostDetails = $this->hostFormatter->format($hostDetails);
 
-        // Obtener puertos remotos (1)
+        // Get remote  ports (1)
         $hostDetails['remote_ports'] = $this->cmdHostModel->getHostScanPorts($target_id, 1);
-        // Agent Provided Ports (2)
+        // Agent provided port list (2)
         if ($hostDetails['agent_installed']) {
             $agent_ports = $this->cmdHostModel->getHostScanPorts($target_id, 2);
             //Formatting
