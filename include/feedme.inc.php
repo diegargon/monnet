@@ -42,16 +42,16 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
     $host_update_values = [];
 
     if ($rdata['name'] === 'starting') :
-        if (!empty($rdata['ncpu'])) :
+        if (!empty($rdata['ncpu'])) {
             if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
                 $host_update_values['ncpu'] = $rdata['ncpu'];
             endif;
-        endif;
-        if (!empty($rdata['uptime'])) :
-            if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime'])) :
+        }
+        if (!empty($rdata['uptime'])) {
+            if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime'])) {
                 $host_update_values['uptime'] = $rdata['uptime'];
-            endif;
-        endif;
+            }
+        }
     endif;
 
     $event_type = 0;
@@ -61,24 +61,24 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
     if (isset($rdata['log_type'])) :
         $log_type = $rdata['log_type'];
     else :
-        if (!empty($rdata['event_type'])) :
+        if (!empty($rdata['event_type'])) {
             $log_type = LogType::EVENT;
-        endif;
+        }
     endif;
 
-    if (!empty($rdata['event_type'])) :
+    if (!empty($rdata['event_type'])) {
         $event_type = $rdata['event_type'];
-    endif;
+    }
 
-    if (isset($rdata['log_level'])) :
+    if (isset($rdata['log_level'])) {
         $log_level = $rdata['log_level'];
-    endif;
+    }
 
     $log_msg = "Notification: {$rdata['name']}";
     isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
-    if (!empty($rdata['event_value'])) :
+    if (!empty($rdata['event_value'])) {
         $log_msg .= ' Event value: ' . $rdata['event_value'];
-    endif;
+    }
 
     if ($log_level <= LogLevel::CRITICAL) :
         $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, $event_type);
@@ -102,25 +102,23 @@ function notification_data_process(AppContext $ctx, int $host_id, array $rdata):
 {
     $db = $ctx->get('Mysql');
 
-    if ($rdata['name'] === 'send_stats') :
-        if (!isEmpty($rdata['load_avg_stats'])) :
-            $set_stats = [
-                'date' => date_now(),
-                'type' => 2,   //loadavg
-                'host_id' => $host_id,
-                'value' => $rdata['load_avg_stats']['5min']
-            ];
-            $db->insert('stats', $set_stats);
-        endif;
-        if (!isEmpty($rdata['iowait_stats'])) :
-            $set_stats = [
-                'date' => date_now(),
-                'type' => 3,   //iowait
-                'host_id' => $host_id,
-                'value' => $rdata['iowait_stats']
-            ];
-            $db->insert('stats', $set_stats);
-        endif;
+    if (!isEmpty($rdata['load_avg_stats'])) :
+        $set_stats = [
+            'date' => date_now(),
+            'type' => 2,   //loadavg
+            'host_id' => $host_id,
+            'value' => $rdata['load_avg_stats']['5min']
+        ];
+        $db->insert('stats', $set_stats);
+    endif;
+    if (!isEmpty($rdata['iowait_stats'])) :
+        $set_stats = [
+            'date' => date_now(),
+            'type' => 3,   //iowait
+            'host_id' => $host_id,
+            'value' => $rdata['iowait_stats']
+        ];
+        $db->insert('stats', $set_stats);
     endif;
 
     if (!isEmpty($rdata['listen_ports_info'])) :
@@ -144,7 +142,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
     // Obtener los puertos actuales de la base de datos, organizados en un mapa para comparación
     $db_host_ports = $hosts->getHostScanPorts($host_id, $scan_type);
     $db_ports_map = [];
-    foreach ($db_host_ports as $db_port) {
+    foreach ($db_host_ports as $db_port) :
         // Normalizar interface para IPv6
         $interface = $db_port['interface'] ?? '';
         $pnumber = (int) $db_port['pnumber'];
@@ -155,9 +153,9 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
 
         $key = "{$protocol}:$pnumber:{$interface}:{$db_port['ip_version']}";
         $db_ports_map[$key] = $db_port;
-    }
+    endforeach;
     // Procesar los puertos reportados en $listen_ports
-    foreach ($listen_ports as $port) {
+    foreach ($listen_ports as $port) :
         // Validar y normalizar datos de entrada
         $interface = $port['interface'] ?? '';
         $pnumber = (int)$port['port'];
@@ -215,10 +213,10 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
             $hosts->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_NEW);
             unset($db_ports_map[$key]); // Quitamos procesado
         }
-    }
+    endforeach;
 
     // Missing existing ports tag offline
-    foreach ($db_ports_map as $db_port) {
+    foreach ($db_ports_map as $db_port) :
         if ($db_port['online'] == 1) {
             $set = [
                 'online' => 0,
@@ -228,5 +226,5 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
             $hosts->setAlertOn($host_id, $alertmsg, LogType::EVENT_ALERT, EventType::PORT_DOWN);
             $hosts->updatePort($db_port['id'], $set);
         }
-    }
+    endforeach;
 }
