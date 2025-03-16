@@ -104,7 +104,8 @@ class DBManager
      *
      *
      * @param \PDOStatement $stmt The prepared statement to fetch data from.
-     * @return array|null The fetched row as an associative array, or null if no data is found.
+     * @return array<string, mixed>|null
+     *  An associative array for a single row, false if no more rows, or null if no rows found
     */
     public function fetch(\PDOStatement $stmt): ?array
     {
@@ -113,12 +114,14 @@ class DBManager
 
     /**
      * Retrieve multiple result rows
+     *
      * @param \PDOStatement $stmt The prepared statement to fetch data from.
-     * @return array|null
+     * @return array<array<string, mixed>>|array
+     *  An array of associative arrays or an empty array if no results
      */
     public function fetchAll(\PDOStatement $stmt): array
     {
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC) ;
     }
 
     /**
