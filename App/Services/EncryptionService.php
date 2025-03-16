@@ -19,12 +19,12 @@ class EncryptionService
     {
         $this->ncfg = $ctx->get('Config');
 
-        $public_cert_path = $this->ncfg->get('public_cert_path');
-        if (empty($public_cert_path) || !file_exists($public_cert_path)) {
+        $public_cert_base64 = $this->ncfg->get('public_key');
+        if (empty($public_cert_base64)) {
             return false;
         }
-        $this->publicKey = file_get_contents($public_cert_path);
-
+        $public_cert = base64_decode($public_cert_base64);
+        $this->publicKey = $public_cert;
         $this->cipherType = $cipherType;
     }
 

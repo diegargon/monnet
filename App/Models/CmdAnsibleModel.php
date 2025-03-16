@@ -61,7 +61,7 @@ class CmdAnsibleModel
         return $this->db->insert('tasks', $values);
     }
 
-    /**
+   /**
      *
      * @param int $tid
      * @return bool
@@ -72,22 +72,24 @@ class CmdAnsibleModel
     }
 
     /**
-     *
+     * @param int $hid
      * @param int $vtype
      * @param string $vkey
      * @param string $vvalue
      * @return bool
      */
-    public function add_ansible_var(int $vtype, string $vkey, string $vvalue): bool
+    public function addAnsibleVar(int $hid, int $vtype, string $vkey, string $vvalue): bool
     {
-        if ($this->check_ansible_var_exists($vkey)) {
-            return false;
+        if ($this->checkAnsibleVarExists($vkey)) {
+           return false;
         }
         $var_data = [
+            'hid' => $hid,
             'vtype' => $vtype,
             'vkey' => $vkey,
             'vvalue' => $vvalue
         ];
+
         return $this->db->insert('ansible_vars', $var_data);
     }
 
@@ -96,21 +98,34 @@ class CmdAnsibleModel
      * @param int $id
      * @return bool
      */
-    public function del_ansible_var(int $id): bool
+    public function delAnsibleVar(int $id): bool
     {
         return $this->db->delete('ansible_vars', 'id = :id', ['id' => $id]);
     }
 
     /**
      *
-     * @param int $key
+     * @param int $host_id
+     * @return array<int, array<string|int>
+     */
+    public function getAnsibleVarsByHostId(int $host_id): array
+    {
+        $query = "SELECT * FROM ansible_vars WHERE hid = :host_id";
+        $params = ['host_id' => $host_id];
+
+        return $this->db->qfetchAll($query, $params);
+    }
+    /**
+     *
+     * @param string $key
      * @return bool
      */
-    private function check_ansible_var_exists(int $key): bool
+    private function checkAnsibleVarExists(string $key): bool
     {
-        $query = "SELECT COUNT(*) FROM ansible_vars WHERE ckey = :var_name LIMIT 1";
+        $query = "SELECT COUNT(*) FROM ansible_vars WHERE vkey = :var_name";
         $params = ['var_name' => $key];
+        $result = $this->db->qfetch($query, $params);
 
-        return $this->db->qfetch($query, $params) > 0;
+        return $result && ((int) $result['COUNT(*)'] > 0);
     }
 }

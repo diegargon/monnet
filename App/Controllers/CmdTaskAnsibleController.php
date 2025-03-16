@@ -14,6 +14,7 @@ use App\Helpers\Response;
 use App\Services\AnsibleService;
 use App\Services\Filter;
 use App\Models\CmdAnsibleModel;
+use App\Services\EncryptionService;
 
 class CmdTaskAnsibleController
 {
@@ -201,8 +202,29 @@ class CmdTaskAnsibleController
      */
     public function addAnsibleVar(string $command, array $command_values): array
     {
+        $hid = $this->filter->varInt($command_values['host_id']);
+        $var_name = $this->filter->varStrict($command_values['var_name']);
+        $var_value = $this->filter->varStrict($command_values['var_value']);
+        $var_type = $this->filter->varString($command_values['var_type']);
 
-        return Response::stdReturn(false, 'Unknown');
+        if ($var_type === "encrypt_value") {
+            $vtype = 1;
+            $encryptService = new EncryptionService($this->ctx);
+            if (!$encryptService) {
+                return Response::stdReturn(false, 'Encrypt instance fail. Missing public key?');
+            }
+            $var_value = $encryptService->encrypt($var_value);
+        } else {
+            $vtype = 2;
+        }
+
+        $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
+        if ($cmdAnsibleModel->addAnsibleVar($hid, $vtype, $var_name, $var_value)) {
+            return Response::stdReturn(true, 'Ansible var added', false, ['command' => $command]);
+        }
+
+        return Response::stdReturn(false, 'Problem adding the ansible var');
+
     }
 
     /**
@@ -213,7 +235,11 @@ class CmdTaskAnsibleController
      */
     public function delAnsibleVar(string $command, array $command_values): array
     {
-
-        return Response::stdReturn(false, 'Unknown');
+        $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
+        $id = $this->filter->varInt($command_values['id']);
+        if ($cmdAnsibleModel->delAnsibleVar($id)) {
+            return Response::stdReturn(true, 'Deleted ansible var', false, ['commnand' => $command]);
+        }
+        return Response::stdReturn(false, 'Error Deleting ansible var', false, ['command' => $command]);
     }
 }

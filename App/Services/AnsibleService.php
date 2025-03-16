@@ -159,13 +159,27 @@ class AnsibleService
         return $status;
     }
 
+    /**
+     *
+     * @param int $host_id
+     * @return array<string, string>
+     */
+    public function getAnsibleTabDetails(int $host_id): array
+    {
+
+        $ansible['reports_list'] = $this->getHostHeadsReports($host_id);
+        $ansible['ansible_vars'] = $this->cmdAnsibleModel->getAnsibleVarsByHostId($host_id);
+
+        return $ansible;
+    }
+
      /**
-     * Obtiene los informes de Ansible para un host.
+     * Gets the Ansible reports for a host applying the template
      *
      * @param int $host_id El ID del host.
-     * @return array<string, string|int> Los informes de Ansible.
+     * @return string Los informes de Ansible.
      */
-    public function getHostHeadsReports(int $host_id)
+    public function getHostHeadsReports(int $host_id): string
     {
         if (!isset($this->ansibleReportModel)) {
             $this->ansibleReportModel = new CmdAnsibleReportModel($this->ctx);
@@ -180,7 +194,7 @@ class AnsibleService
 
         $user = $this->ctx->get('User');
         $ncfg = $this->ctx->get('Config');
-        //format
+        //format TODO: Move
         foreach ($reports as &$report) {
             $playbook = $this->getPbById($report['pb_id']);
             if ($playbook) {
