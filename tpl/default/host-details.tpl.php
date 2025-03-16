@@ -931,15 +931,14 @@
                  data-playbooks='<?= json_encode($cfg['playbooks']); ?>'>
                 <div class="left-details-column">
                     <div>
-                        <button id="pbqueue_btn"><?= $lng['L_ENQUEUE'] ?></button>
-                        <button id="pbexec_btn">Exec</button>
                         <select id="playbook_select">
                             <option value=""><?= $lng['L_SEL_PLAYBOOK']?></option>
                         </select>
                         <label for="as_html">HTML</label>
                         <input id="as_html" type="checkbox" checked>
+                        <button id="pbqueue_btn"><?= $lng['L_ENQUEUE'] ?></button>
+                        <button id="pbexec_btn">Exec</button>
                         <div class="ansible_vars">
-                            <button id="addvar_btn"><?= $lng['L_ADD_VAR'] ?></button>
                             <input type="hidden" data-hid="<?= $tdata['host_details']['id'] ?>"></input>
                             <input type="text" data-name="ans_var_name" size="10" placeholder="Var name"></input>
                             <select id="ans_var_type">
@@ -947,16 +946,11 @@
                                 <option value="encrypt_value">Encrypt -></option>
                             </select>
                             <input type="text" data-name="ans_var_value" size="15" placeholder="Var value"></input>
-                        </div>
-                        <?php
-                        if (!empty($tdata['host_details']['ansible_vars'])) {
-                        ?>
+                            <button id="addvar_btn"><?= $lng['L_ADD_VAR'] ?></button>
                             <select id="ans_var_list">
                             </select>
-                            <button id="delete_var_btn"><?= $lng['L_DEL'] ?></button>
-                        <?php
-                        }
-                        ?>
+                            <button id="delete_var_btn"><?= $lng['L_DELETE'] ?></button>
+                        </div>
                         <div id="playbook_desc"></div>
                         <div id="vars_container"></div>
                     </div>

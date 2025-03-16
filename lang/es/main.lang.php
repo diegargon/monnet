@@ -217,6 +217,8 @@ $lng = [
     'L_SCHEDULER' => 'Tiempo',
     'L_SEL_PLAYBOOK' => 'Selecciona Playbook',
     'L_SCHEDULER' => 'Temporizador',
+    'L_SEL_ONE' => 'Selecciona una',
+    'L_SECURITY' => 'Seguridad',
     //T
     'L_THIS_SYSTEM' => 'This',
     'L_TYPE' => 'Tipo',

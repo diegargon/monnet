@@ -234,6 +234,18 @@ $(document).ready(function () {
         requestHostDetails('add_ansible_var', data);
     });
 
+    $(document).on("click", "#delete_var_btn", function() {
+
+        let selectedOption = $('#ans_var_list option:selected');
+        let selectedValue = selectedOption.val();
+        let data = {
+            id: selectedValue
+        };
+        if (selectedValue) {
+            requestHostDetails('del_ansible_var', data);
+        }
+    });
+
     $(document).on("click", "#del_var_btn", function() {
         var container = $(this).closest(".ansible_vars");
 
@@ -489,7 +501,7 @@ function executePlaybookAction(pb_cmd) {
     };
 
     if (Object.keys(extraVars).length > 0) {
-        requestData.extra_vars = extraVars;
+        requestData.extra_vars = JSON.stringify(extraVars);
     }
 
     requestHostDetails(pb_cmd, requestData);
@@ -597,7 +609,18 @@ function requestHostDetails(command, command_values = []) {
                 }
                 if (jsonData.command_receive === 'changeHDTab'  && jsonData.command_value === 'tab20') {
                     if (jsonData.command_success === 1) {
-                        $('#reports-table').html(jsonData.response_msg);
+                        if (jsonData.response_msg.reports_list) {
+                            $('#reports-table').html(jsonData.response_msg.reports_list);
+                        }
+                        if (jsonData.response_msg.ansible_vars) {
+                            console.log("Ansible Vars:", jsonData.response_msg.ansible_vars);
+                            let optionsHtml = jsonData.response_msg.ansible_vars.map(option => {
+                                return option.vtype === 1
+                                    ? `<option value="${option.id}">${option.vkey}: ****)</option>`
+                                    : `<option value="${option.id}">${option.vkey}: ${option.vvalue}</option>`;
+                            }).join('');
+                            $('#ans_var_list').html(optionsHtml);
+                        }
                     } else {
                         $('#reports-table').html(jsonData.command_error_msg);
                     }
