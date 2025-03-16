@@ -290,7 +290,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    $update = 0.00;
+    $update = 0.54;
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
@@ -302,9 +302,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   `hid` int NOT NULL,
                   `vtype` tinyint NOT NULL,
                   `vkey` varchar(255) NOT NULL,
-                  `vvalue` varchar(255) NOT NULL,
+                  `vvalue` varchar(700) NOT NULL,
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB;
+            ");
+            $db->query("
+                INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('public_key', CAST('null' AS JSON), 10, 10, NULL, 0);
             ");
             $db_version = $update;
             Log::notice("Update version to $update successful");
