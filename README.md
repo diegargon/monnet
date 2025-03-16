@@ -22,7 +22,7 @@ I started implementing Ansible as a replacement for phpseclib as a method to con
 # Features
 
     - Track Host In your network and have an inventory
-    - Alarms/Events (Agent)
+    - Alarms/Warnings/Events (Agent)
     - A simple bookmarks dashboard
     - Basic IPAM
     - Basic Hosts Stats (Agent)
@@ -34,12 +34,11 @@ I started implementing Ansible as a replacement for phpseclib as a method to con
     Partially working Features
 
     - Execute Playbooks (Ansible)
-    - Respond to events in hosts with playbooks ((Agent/Ansible)
 
     Future Features:
 
     - Windows hosts support
-
+    - Respond to events in hosts with playbooks ((Agent/Ansible)
 
 ## Versions Convention
 
@@ -59,7 +58,7 @@ Resume:
 
     Commercial Use = Ask
 
-# MonNet Install
+## MonNet Install
 
 The automatic/fast method is using the docker-compose.yml
 
@@ -102,12 +101,6 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 /var/www/html# git clone https://github.com/diegargon/monnet .
 /var/www/html# chown -R www-data:www-data *
 /var/www/html# chmod 755 cache logs
-```
-
-Ansible support with the agent
-
-```
-git clone https://github.com/diegargon/monnet-core /opt/monnet-ansible
 ```
 
 ## Config
@@ -177,114 +170,27 @@ apt install composer
 /path/to/monnet# composer require phpmailer/phpmailer
 ```
 
-## Monne Agent
+# Monnet Core
 
-Currently, I am testing a basic linux agent (python based) for reports.
-The agent is the  monnet-core repo/sources and has its own playbook to automatically install if you want.
+monnet-core contains monnet-gateway service and the monnet-agent service
 
-You can install it manually by checking the install-agent-linux playbook for steps.
+- monnet-gateway is currently used only as a gateway to execute ansible commands, more feautres will be added in the future.
+It must be installed in the same host.
+    Installation instructions:
+    https://github.com/diegargon/monnet-core/tree/main/monnet_gateway
 
-Python: The automatic process will install on the hosts some deps: psutils.
+- monnet-agent is used as source for install monnet-agent via ansible/monnet-gateway on remote hosts
+    Installation instructions:
+    https://github.com/diegargon/monnet-core/tree/main/monnet_agent
 
-## Ansible Support
+Ansible support is required on the host.
 
-Ansible support is a testing feature; it will help to install the agent and, in the future, crate and perform other common "Ansible tasks"
+## Install and configure Ansible
 
-# Install ansible
+Ansible support is currently an experimental feature. It helps with the agent installation and, in the future, will allow the execution of other common Ansible tasks.
 
 ```
 apt install ansible
-```
-
-# Install Monnet Ansible (monnet-core)
-
-```
-git clone https://github.com/diegargon/monnet-core.git
-```
-
-## Ansible server
-
-Ansible server listens on localhost only; it is a testing feature without security.
-You must install ansible on the same system.
-
-Ansible must output in JSON format.
-
-```
-nano /etc/ansible/ansible.cfg
-
-[defaults]
-stdout_callback=json
-```
-
-## Ansible client hosts
-
-By default, the Ansible SSH user will be 'ansible'.
-
-Must be/have:
-
-    * Be a sudo member without need to type a password
-    * Have the public SSH key installed
-
-Example
-
-```
-apt install sudo
-adduser --disabled-password ansible
-usermod -aG sudo ansible
-```
-
-Start 'visudo' and add:
-
-```
-ansible ALL=(ALL) NOPASSWD: ALL
-```
-
-# Fedora
-
-```
-sudo adduser ansible
-sudo usermod -aG wheel ansible
-```
-
-You must have "Ansible Support" checked in the General configuration tab and "Ansible Support" in the host configuration section (Web UI).
-
-## SSH CERTS
-
-For the Ansible server to connect to the hosts, you need to generate an SSH key and install it on each host you want to access via MonNet/Ansible.
-
-```
-$ ssh-keygen -m PEM -t rsa -b 4096
-$ ssh-copy-id -i ~/.ssh/id_rsa.pub ansible@ip.ip.ip.ip
-```
-
-The user must exist and must be allowed to log in with standard credentials to install the key (you can disable it after).
-
-Or do it manually on the client host:
-
-```
-runuser -u ansible mkdir /home/ansible/.ssh
-runuser -u ansible nano /home/ansible/.ssh/authorized_keys
-```
-
-And paste the SSH public key.
-
-If you don't use ssh-copy-id you must manually add the key to the known_host file (Monnet server side).
-
-```
-ssh-keyscan -t ecdsa,ed25519 -H server.example.com >> ~/.ssh/known_hosts 2>&1
-```
-
-If the host fingerprint change you must first remove the old one
-
-```
-ssh-keygen -R
-```
-
-You can force Ansible to ignore the host fingerprint check.
-
-```
-[defaults]
-host_key_checking = False
 ```
 
 ## External Resource used (included in sources)
