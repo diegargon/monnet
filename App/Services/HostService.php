@@ -88,10 +88,18 @@ class HostService
 
         $this->hostFormatter->formatMisc($hostDetails);
 
-        $hostDetails_stats['load_avg'] = $hostDetails['load_avg'];
-        $hostDetails_stats['mem_info'] = $hostDetails['mem_info'];
-        $hostDetails_stats['disks_info'] = $hostDetails['disks_info'];
-        $hostDetails_stats['iowait'] = $hostDetails['iowait'];
+        if(!empty($hostDetails['load_avg'])) {
+            $hostDetails_stats['load_avg'] = $hostDetails['load_avg'];
+        }
+        if(!empty($hostDetails['mem_ifno'])) {
+            $hostDetails_stats['mem_info'] = $hostDetails['mem_info'];
+        }
+        if(!empty($hostDetails['disks_info'])) {
+            $hostDetails_stats['disks_info'] = $hostDetails['disks_info'];
+        }
+        if(!empty($hostDetails['iowait'])) {
+            $hostDetails_stats['iowait'] = $hostDetails['iowait'];
+        }
 
         return $hostDetails_stats;
     }

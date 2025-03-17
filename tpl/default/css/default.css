@@ -1550,7 +1550,6 @@ input:checked + .slider:before {
 
 .progress-bar-container {
     position: relative;
-
     display: inline-block;
 }
 
