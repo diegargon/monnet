@@ -557,10 +557,10 @@ function requestHostDetails(command, command_values = []) {
                         $('#load_container').html(host_details['load_avg']);
                     }
                     if (host_details['mem_info']) {
-                        $('#bars_container').append(host_details['mem_info']);
+                        $('#bars_container').html(host_details['mem_info']);
                     }
                     if (host_details['disks_info']) {
-                        $('#bars_container').append(host_details['disks_info']);
+                        $('#bars_container').html(host_details['disks_info']);
                     }
                 }
                 /* Logs reload */
