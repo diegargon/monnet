@@ -308,7 +308,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             ");
             $db->query("
                 INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
-                ('public_key', CAST('null' AS JSON), 10, 10, NULL, 0);
+                ('public_key', 'null', 10, 10, NULL, 0);
             ");
             $db_version = $update;
             Log::notice("Update version to $update successful");

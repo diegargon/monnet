@@ -136,7 +136,9 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) {
                             <textarea
                                 id="<?= $ckey ?>"
                                 class="config_textbox"
-                                name="<?= $ckey ?>"><?= base64_decode($cvalue) ?></textarea>
+                                name="<?= $ckey ?>"><?=
+                                !empty($cvalue) ? base64_decode($cvalue) : null;
+                            ?></textarea>
                             <?php
                             break;
                         case 700: // password
