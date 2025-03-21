@@ -3,7 +3,8 @@ FROM php:8.2-apache
 # Instalar dependencias
 RUN apt-get update
 RUN apt-get install -y git mariadb-client
-RUN apt-get install -y docker-php-ext-install mysqli docker-php-ext-install sockets
+RUN apt-get install -y docker-php-ext-install mysqli
+RUN docker-php-ext-install sockets
 RUN apt-get install -y net-tools ansible cron
 
 # Clonar el repositorio en /var/www/html
