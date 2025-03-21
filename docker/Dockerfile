@@ -2,10 +2,10 @@ FROM php:8.2-apache
 
 # Instalar dependencias
 RUN apt-get update
-RUN apt-get install -y git mariadb-client net-tools ansible cron pip
+RUN apt-get install -y git mariadb-client net-tools ansible cron
 RUN apt-get install -y python3.11-venv
-#RUN docker-php-ext-install mysqli
-#RUN docker-php-ext-install sockets
+RUN docker-php-ext-install mysqli sockets
+
 
 # Clonar el repositorio en /var/www/html
 RUN git clone https://github.com/diegargon/monnet.git /var/www/html
@@ -14,9 +14,6 @@ RUN touch /var/log/cron.log
 
 RUN mkdir /opt/monnet-core
 RUN git clone https://github.com/diegargon/monnet-core.git /opt/monnet-core
-
-# Configurar permisos
-#RUN chown -R www-data:www-data /var/www/html
 
 # Habilitar módulos de Apache
 RUN a2enmod rewrite
