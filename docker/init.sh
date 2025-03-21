@@ -11,7 +11,7 @@ CRON_LINE_1="*/5 * * * * root php /var/www/html/monnet-cli.php"
 CRON_LINE_2="*/15 * * * * root php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V.27";
+echo "V.28"
 
 pwd
 ls -al /opt/monnet-core
@@ -40,7 +40,6 @@ service cron start
 service cron status
 
 mkdir -p "/etc/ansible"
-#touch /etc/ansible/ansible.cfg
 
 cat > /etc/ansible/ansible.cfg <<EOF
 [defaults]
@@ -88,6 +87,7 @@ if ps aux | grep -v grep | grep -q "mgateway.py"; then
     echo "El script está en ejecución."
 else
     echo "El script NO está en ejecución."
+    exit 1
 fi
 
 # Mantener el contenedor ejecutándose
