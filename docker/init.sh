@@ -11,9 +11,13 @@ CRON_LINE_1="*/5 * * * * root php /var/www/html/monnet-cli.php"
 CRON_LINE_2="*/15 * * * * root php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V.28"
+echo "V.29"
 
 pwd
+# Fetch latest every stop/start
+git -C /var/www/html fetch
+git -C /opt/monnet-core fetch
+
 ls -al /opt/monnet-core
 cd /opt/monnet-core
 git fetch --verbose
