@@ -33,7 +33,7 @@ RUN mkdir -p /etc/monnet && \
     echo "\$cfg_db['dbhost'] = 'mysql_container';" >> /etc/monnet/config.inc.php && \
     echo "\$cfg_db['dbname'] = 'monnet';" >> /etc/monnet/config.inc.php && \
     echo "\$cfg_db['dbuser'] = 'root';" >> /etc/monnet/config.inc.php && \
-    echo "\$cfg_db['dbpassword'] = 'monnetadmin';" >> /etc/monnet/config.inc.php
+    echo "\$cfg_db['dbpassword'] = 'monnetadmin';" >> /etc/monnet/config.inc.php && \
     echo "\$cfg['path'] = '/var/www/html';" >> /etc/monnet/config.inc.php
 
 # Copiar script de inicialización
