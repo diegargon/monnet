@@ -11,7 +11,7 @@ CRON_LINE_1="*/5 * * * * root php /var/www/html/monnet-cli.php"
 CRON_LINE_2="*/15 * * * * root php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V.26";
+echo "V.27";
 
 pwd
 ls -al /opt/monnet-core
@@ -83,6 +83,12 @@ chmod +x /opt/monnet-core/monnet_gateway/install.bash
 /opt/monnet-core/monnet_gateway/install.bash
 echo "Iniciando el servicio mgateway..."
 $ANSIBLE_SCRIPT &
+sleep 3
+if ps aux | grep -v grep | grep -q "mgateway.py"; then
+    echo "El script está en ejecución."
+else
+    echo "El script NO está en ejecución."
+fi
 
 # Mantener el contenedor ejecutándose
 echo "Inicialización completa. Contenedor listo."
