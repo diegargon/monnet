@@ -16,7 +16,7 @@ echo "V.27";
 pwd
 ls -al /opt/monnet-core
 cd /opt/monnet-core
-git fetch
+git fetch --verbose
 
 # Configurar trabajos cron
 echo "Configurando trabajos cron..."
