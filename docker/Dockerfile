@@ -17,7 +17,7 @@ RUN mkdir /opt/monnet-core
 RUN git clone https://github.com/diegargon/monnet-core.git /opt/monnet-core
 
 # Configurar permisos
-RUN chown -R www-data:www-data /var/www/html
+#RUN chown -R www-data:www-data /var/www/html
 
 # Habilitar módulos de Apache
 RUN a2enmod rewrite
