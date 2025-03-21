@@ -56,6 +56,7 @@ $lng = [
     'L_CHECKS' => 'Checks',
     'L_CLEAR_ALERTS' => 'Limpiar alertas',
     'L_CLEAR_WARNS' => 'Limpiar avisos',
+    'L_CONDITIONAL' => 'Condicional',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
@@ -97,6 +98,7 @@ $lng = [
     'L_FREE' => 'Libre',
     //G
     'L_GENERAL' => 'General',
+    'L_GROUPS' => 'Grupos',
     //H
     'L_HIGHLIGHT_HOSTS' => 'Destacados',
     'L_HOSTNAME' => 'Hostname',
@@ -163,6 +165,7 @@ $lng = [
     'L_NOT_ALLOWED' => 'no permitida',
     'L_NEW_HOST' => 'Nuevo host descubierto',
     'L_NO_POOLS' => 'No hay pool o no quedan ips',
+    'L_NEXT_TASK' => 'Proxima tarea',
     //O
     'L_OK' => 'Ok',
     'L_ONLINE' => 'Online',
@@ -230,6 +233,7 @@ $lng = [
     'L_TASKS' => 'Tareas',
     'L_TASK' => 'Tarea',
     'L_TRACK' => 'Seguimiento',
+    'L_TASK_TRIGGER' => 'Task Trigger',
     //U
     'L_USERS' => 'Usuarios',
     'L_USERNAME' => 'Usuario',
@@ -241,6 +245,7 @@ $lng = [
     'L_UPDATE' => 'Update',
     'L_USED' => 'Usados',
     'L_USER' => 'Usuario',
+    'L_UNIQ' => 'Unica',
     //V
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',

@@ -265,25 +265,30 @@ $(document).ready(function () {
         let taskId = $row.data('id');
 
         if (taskId === undefined || taskId === null) {
-            console.error('Error: No se encontró el ID de la tarea.');
+            console.error('Error:  Task id not found');
             return;
         }
-
+        let hid = $row.find('[name^="hid"]').val();
         let taskName = $row.find('[name^="task_name"]').val();
         let taskTrigger = $row.find('[name^="task_trigger"]').val();
         let playbook = $row.find('[name^="playbooks"]').val();
         let disableTask = $row.find('[name^="disable_task"]').is(':checked');
         let nextTask = $row.find('[name^="next_task"]').val();
+        let conditional = $row.find('[name^="conditional"]').val();
+        let groups = $row.find('[name^="ansible_groups"]').val();
 
         let action = $(this).data('action');
 
         let requestData = {
             id: taskId,
+            hid: hid,
             task_name: taskName,
             task_trigger: taskTrigger,
             playbook: playbook,
             disable_task: disableTask,
-            next_task: nextTask
+            next_task: nextTask,
+            conditional: conditional,
+            groups: groups
         };
 
         /*
@@ -297,8 +302,8 @@ $(document).ready(function () {
         */
 
         switch (action) {
-            case 'create_task':
-                requestHostDetails('create_task', requestData);
+            case 'create_host_task':
+                requestHostDetails('create_host_task', requestData);
                 break;
             case 'delete_task':
                 requestHostDetails('delete_task', { id: taskId });
@@ -316,34 +321,42 @@ $(document).ready(function () {
  });
 
 function initTasks() {
-   $('#task_trigger').change(function() {
-      const selectedValue = $(this).val();
-      const eventData = document.getElementById("event_data");
-      const conditionalField = document.getElementById("conditional_field");
+    $(document).on('change', '[name^="task_trigger["], #task_trigger', function() {
+        console.log('Cambio detectado en', this.name || this.id);
 
-      console.log("Triggered");
-      // Replace the content of the "what" container based on the selected value
-      if (selectedValue == 2) {
-        const events = JSON.parse(eventData.getAttribute("data-input-events"));
-        conditionalField.innerHTML = "";
+        const selectedValue = Number($(this).val());
+        const row = $(this).closest('tr'); // Obtiene la fila actual
+        const eventData = document.getElementById("event_data");
+        const conditionalField = row.find('[id^="conditional_field"]')[0];
 
-        const dynamicSelect = document.createElement("select");
-        dynamicSelect.id = "what";
-        dynamicSelect.name = "what";
+        console.log("Selected Triggered");
 
-        // Agregar las opciones al <select>
-        for (const [key, value] of Object.entries(events)) {
-          const option = document.createElement("option");
-          option.value = value;
-          option.textContent = key;
-          dynamicSelect.appendChild(option);
+        // Lógica para el trigger con valor 2 o 3
+        if (selectedValue === 3) {
+            const events = JSON.parse(eventData.getAttribute("data-input-events"));
+            conditionalField.innerHTML = "";
+            const dynamicSelect = document.createElement("select");
+            dynamicSelect.name = `conditional[${row.data('id')}]`; // Mantiene el ID de la tarea
+
+            for (const [key, value] of Object.entries(events)) {
+                const option = document.createElement("option");
+                option.value = value;
+                option.textContent = key;
+                dynamicSelect.appendChild(option);
+            }        
+            conditionalField.appendChild(dynamicSelect);
+        } else if (selectedValue === 4) {          
+            const inputText = document.createElement("input");
+            conditionalField.innerHTML = "";
+            inputText.type = "text";
+            inputText.name = `conditional[${row.data('id')}]`;
+            inputText.placeholder = "Cron time * * * * *"; 
+            conditionalField.appendChild(inputText);
+        } else {
+            conditionalField.innerHTML = "";
         }
-
-        conditionalField.appendChild(dynamicSelect);
-      } else {
-        $('#conditional_field').html('');
-      }
     });
+
 }
 
 function initializePlaybookForm() {
@@ -673,6 +686,19 @@ function requestHostDetails(command, command_values = []) {
                         });
                     } else {
                         $('#playbook_content').html(jsonData.command_error_msg);
+                    }
+                }
+                /* Tasks */
+                if (
+                    ['delete_task', 'create_host_task', 
+                     'update_task', 'force_exec_task']
+                    .includes(jsonData.command)
+                ) {
+                    if(jsonData.response_msg) {
+                        $('#tasks_status_msg').html(jsonData.response_msg);
+                    }
+                    if(jsonData.command_error_msg) {
+                        $('#tasks_status_msg').html(jsonData.command_error_msg);
                     }
                 }
             })

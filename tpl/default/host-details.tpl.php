@@ -864,23 +864,26 @@
         </div>
         <!-- TAB15 --><!-- Tasks -->
         <div id="tab15" class="host-details-tab-content">
+            <div id="tasks_status_msg" class="center">&nbsp</div>
             <div class="create_task">
                 <fieldset>
                     <legend>Create Task</legend>
                     <table>
                         <!-- Fila de labels -->
                         <tr>
-                            <td><label for="task_name">Name</label></td>
-                            <td><label for="task_trigger">Task Trigger</label></td>
-                            <td><label for="conditional_field"></label></td>
+                            <td><label for="task_name"><?= $lng['L_NAME'] ?></label></td>
+                            <td><label for="task_trigger"><?= $lng['L_TASK_TRIGGER'] ?></label></td>
+                            <td><label for="conditional_field"><?= $lng['L_CONDITIONAL'] ?></label></td>
                             <td><label for="playbook">Playbook</label></td>
-                            <td><label for="disable_task">Disable</label></td>
-                            <td><label for="next_task">Next Task</label></td>
-                            <td></td> <!-- Espacio para el botón -->
+                            <td><label for="ansible_groups"><?= $lng['L_GROUPS']?></label></td>
+                            <td><label for="disable_task"><?= $lng['L_DISABLE']?></label></td>
+                            <td><label for="next_task"><?= $lng['L_NEXT_TASK']?></label></td>
+                            <td></td>
                         </tr>
                         <!-- Fila de inputs -->
                         <tr data-id="0">
                             <td>
+                                <input type="hidden" name="hid" value="<?= $tdata['host_details']['id']?>"/>
                                 <input type="text" size="12" max-size="12" id="task_name" name="task_name" required>
                             </td>
                             <td>
@@ -899,9 +902,14 @@
                                     <option value="" disable selected>No select</option>
                                     <?php
                                     foreach ($cfg['playbooks'] as $playbook) :
-                                        print("<option value={$playbook['name']}>{$playbook['name']}</option>");
+                                        print("<option value={$playbook['id']}>{$playbook['name']}</option>");
                                     endforeach;
                                     ?>
+                                </select>
+                            </td>
+                            <td> <!-- Groups -->
+                                <select id="ansible_groups" name="ansible_groups">
+                                  <option value="0" selected disabled><?= $lng['L_THIS_SYSTEM'] ?></option>
                                 </select>
                             </td>
                             <td><input type="checkbox" id="disable_task" name="disable_task"></td>
@@ -911,7 +919,7 @@
                                 </select>
                             </td>
                             <td>
-                                <button type="submit" data-action="create_task">Create</button>
+                                <button type="submit" data-action="create_host_task">Create</button>
                             </td>
                         </tr>
                     </table>

@@ -239,8 +239,8 @@ class CmdHostController
     public function addRemotePort(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $pnumber = isset($command_values['pnumber']) ?
-                $this->filter->varInt($command_values['pnumber']) : null;
+        $pnumber = isset($command_values['value']) ?
+                $this->filter->varInt($command_values['value']) : null;
         $protocol = isset($command_values['protocol']) ?
                 $this->filter->varInt($command_values['protocol']) : null;
         $field = 'addRemotePort';
@@ -252,8 +252,10 @@ class CmdHostController
             ];
         }
         $port_details = [
+            'scan_type' => 1, # Remote
             'pnumber' => $pnumber,
             'protocol' => $protocol,
+            'last_change' => date_now()
         ];
 
         if ($this->cmdHostModel->addRemoteScanHostPort($target_id, $port_details)) {

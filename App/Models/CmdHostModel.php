@@ -84,7 +84,9 @@ class CmdHostModel
      */
     public function addRemoteScanHostPort(int $target_id, array $port_details): bool
     {
-        $port_details['host_id'] = $target_id;
+        $port_details['hid'] = $target_id;
+        !isset($port_details['service']) ? $port_details['service'] = 'unknonwn' : null;
+
         return $this->db->insert('ports', $port_details);
     }
 

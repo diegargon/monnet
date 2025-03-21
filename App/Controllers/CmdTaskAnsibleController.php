@@ -144,36 +144,57 @@ class CmdTaskAnsibleController
      */
     public function mgmtTask(string $command, array $command_values): array
     {
-        if ($command !== 'create_task') {
-            $hid = $this->filter->varInt($command_values['id']);
-        } else {
-            $hid = 0;
-        }
-        if (!is_numeric($hid)) {
-            return Response::stdReturn(false, 'id error');
-        }
-        $extra_field = [
+        switch ($command):
+            case 'create_host_task':
+                $hid = $this->filter->varInt($command_values['hid']);
+                break;
+            case 'delete_task':
+                $hid = $this->filter->varInt($command_values['id']);
+                break;
+            default:
+                $hid = 0;
+        endswitch;
+
+        $response_extra = [
             'command' => $command,
-            'hid' => $hid
         ];
 
         if ($command === 'delete_task') {
             $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
             if ($cmdAnsibleModel->deleteTask($hid)) {
-                return Response::stdReturn(true, 'Delete Task Success', false, $extra_field);
+                return Response::stdReturn(true, 'Delete Task Success', false, $response_extra);
             } else {
-                return Response::stdReturn(false, 'Error deleting task', false, $extra_field);
+                return Response::stdReturn(false, 'Error deleting task', false, $response_extra);
             }
         }
 
         switch ($command):
-            case 'create_task':
+            case 'create_host_task':
                 $playbook_id = $this->filter->varInt($command_values['playbook']);
                 $next_task_id = $this->filter->varInt($command_values['next_task']);
                 $task_trigger = $this->filter->varInt($command_values['task_trigger']);
+                $ansible_groups = $this->filter->varInt($command_values['groups']);
                 $disable_task = $this->filter->varBool($command_values['disable_task']);
                 $task_name = $this->filter->varString($command_values['task_name']);
-                $extra_vars = [];
+
+                if ($task_trigger === 2) {
+                    $conditional = $this->filter->varInt($command_values['conditional']);
+                    if (empty($conditional)) {
+                        $conditional_error = 'Wrong event';
+                    } else {
+                        $event_id = $conditional;
+                    }
+                } elseif ($task_trigger === 4) {
+                    if (!$this->filter->varCron($command_values['conditional'])) {
+                        $conditional_error = 'Wrong Cron, syntax must be a cron expression * * * * *';
+                    } else {
+                        $crontime = $command_values['conditional'];
+                    }
+                }
+
+                if (!empty($conditional_error)) {
+                    return Response::stdReturn(false, $conditional_error, false, $response_extra);
+                }
 
                 $task_data = [
                     'hid' => $hid,
@@ -182,15 +203,30 @@ class CmdTaskAnsibleController
                     'task_name' => $task_name,
                     'next_task' => $next_task_id,
                     'disable' => $disable_task,
-                    'extra' => json_encode($extra_vars),
                 ];
-                return Response::stdReturn(false, 'Unknown command');
+
+                if (isset($event_id)) {
+                    $task_data['event_id'] =  $event_id;
+                }
+                if (isset($crontime)) {
+                    $task_data['crontime'] = $crontime;
+                }
+                if (!isset($ansible_groups)) {
+                    $task_data['groups'] =  $ansible_groups;
+                }
+                $response = $this->ansibleService->createTask($task_data);
+
+                if ($response['status'] === 'success') {
+                    return Response::stdReturn(true, $response['response_msg'], false, $response_extra);
+                } else {
+                    return Response::stdReturn(false, $response['error_msg'], false, $response_extra);
+                }
             case 'update_task':
-                return Response::stdReturn(false, 'Unknown command');
+                return Response::stdReturn(false, 'Unknown command', false, $response_extra);
             case 'force_exec_task':
-                return Response::stdReturn(false, 'Unknown command');
+                return Response::stdReturn(false, 'Unknown command', false, $response_extra);
             default:
-                return Response::stdReturn(false, 'Unknown command');
+                return Response::stdReturn(false, 'Unknown command', false, $response_extra);
         endswitch;
     }
 

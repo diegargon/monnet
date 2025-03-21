@@ -47,6 +47,10 @@ a:visited {
 p {
 }
 
+.center {
+    text-align: center;
+}
+
 button, button-submit {
     background-color: #007bff; /* Color de fondo */
     color: #fff; /* Color del texto */

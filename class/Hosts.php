@@ -899,7 +899,7 @@ class Hosts
      */
     public function addRemoteScanHostPort(int $hid, array $details): void
     {
-        empty($details['ip_version']) ? $details['ip_version'] = 1 : null;
+        empty($details['ip_version']) ? $details['ip_version'] = 'unknown' : null;
         empty($details['service']) ? $details['service'] = 'unknown' : null;
         $insert = [
             'hid' => $hid,

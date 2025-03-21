@@ -135,7 +135,7 @@ class AnsibleService
      * @param array<string, string|int> $extra_vars
      * @return array<string, string|int>
      */
-    public function queueTask(int $hid, int $trigger_type, string $playbook, array $extra_vars)
+    public function queueTask(int $hid, int $trigger_type, string $playbook, array $extra_vars = [])
     {
         $pb_id = $this->findPlaybookId($playbook);
 
@@ -159,6 +159,15 @@ class AnsibleService
         return $status;
     }
 
+    public function createTask(array $task_data): array
+    {
+
+        if ($this->cmdAnsibleModel->createTask($task_data)) {
+            return ['status' => 'success', 'response_msg' => 'success'];
+        }
+
+        return ['status' => 'error', 'error_msg' => 'Error creating task'];
+    }
     /**
      *
      * @param int $host_id

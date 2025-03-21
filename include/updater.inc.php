@@ -313,7 +313,22 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db_version = $update;
             Log::notice("Update version to $update successful");
         } catch (Exception $e) {
-            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+    // 0.55
+    $update = 0.55;
+    if ($db_version < $update) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db->query("ALTER TABLE `tasks` ADD `event_id` INT DEFAULT 0");
+            $db->query("ALTER TABLE `tasks` ADD `crontime` VARCHAR(255)");
+            $db->query("ALTER TABLE `tasks` ADD `groups` VARCHAR(255)");
+            $db->query("ALTER TABLE `ports` CHANGE `ip_version` `ip_version` VARCHAR(5) NULL DEFAULT NULL;");
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }

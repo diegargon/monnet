@@ -9,9 +9,9 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-$cfg['monnet_version'] = 0.54;
+$cfg['monnet_version'] = 0.55;
 
-$cfg['monnet_revision'] = 3;
+$cfg['monnet_revision'] = 1;
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.143;
 $cfg['agent_latest_version'] = 0.145;
@@ -248,11 +248,11 @@ $cfg['access_link_types'] = [
 ];
 
 $cfg['task_trigger'] = [
-    1 => ['name' => 'L_MANUAL', 'id' => 1],
-    2 => ['name' => 'L_EVENT_RESPONSE', 'id' => 2],
-    3 => ['name' => 'L_SCHEDULER', 'id' => 3],
-    4 => ['name' => 'L_OTHER_TASK', 'id' => 4],
-    //4 => ['name' => 'L_SCHEDULER', 'id' => 4],
+    1 => ['name' => 'L_UNIQ', 'id' => 1],
+    2 => ['name' => 'L_MANUAL', 'id' => 2],
+    3 => ['name' => 'L_EVENT_RESPONSE', 'id' => 3],
+    4 => ['name' => 'L_SCHEDULER', 'id' => 4],
+    5 => ['name' => 'L_OTHER_TASK', 'id' => 5],
 ];
 
 /* TODO: Retrieve from monnet-ansible */
