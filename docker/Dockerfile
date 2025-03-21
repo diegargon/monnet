@@ -13,6 +13,8 @@ RUN touch /var/log/cron.log
 
 RUN mkdir /opt/monnet-core
 RUN git clone https://github.com/diegargon/monnet-core.git /opt/monnet-core
+RUN ls /opt
+RUN ls /opt/monnet-core
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html
