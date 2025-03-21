@@ -6,12 +6,12 @@ DB_USER="root"
 DB_PASS="monnetadmin"
 DB_NAME="monnet"
 SQL_FILE="/var/www/html/config/monnet.sql"
-ANSIBLE_SCRIPT="/usr/bin/python3 /opt/monnet-core/monnet_gateway/mgateway.py"
+ANSIBLE_SCRIPT="/opt/monnet-core/monnet_gateway/venv/bin/python3 /opt/monnet-core/monnet_gateway/mgateway.py"
 CRON_LINE_1="*/5 * * * * root php /var/www/html/monnet-cli.php"
 CRON_LINE_2="*/15 * * * * root php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V.20";
+echo "V.21";
 
 pwd
 ls -al /opt/monnet-core
@@ -80,9 +80,7 @@ echo "Conmfiguando mgateway..."
 chmod +x /opt/monnet-core/monnet_gateway/install.bash
 /opt/monnet-core/monnet_gateway/install.bash
 echo "Iniciando el servicio mgateway..."
-#$ANSIBLE_SCRIPT &
-systemctl start monnet-gateway.service
-systemctl status monnet-gateway.service
+$ANSIBLE_SCRIPT &
 
 # Mantener el contenedor ejecutándose
 echo "Inicialización completa. Contenedor listo."
