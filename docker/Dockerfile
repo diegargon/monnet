@@ -2,10 +2,8 @@ FROM php:8.2-apache
 
 # Instalar dependencias
 RUN apt-get update
-RUN apt-get install -y git mariadb-client
-RUN apt-get install -y docker-php-ext-install mysqli
-RUN docker-php-ext-install sockets
-RUN apt-get install -y net-tools ansible cron
+RUN apt-get install -y git mariadb-client net-tools ansible cron
+RUN docker-php-ext-install mysqli sockets
 
 # Clonar el repositorio en /var/www/html
 RUN git clone https://github.com/diegargon/monnet.git /var/www/html
