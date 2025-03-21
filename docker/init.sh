@@ -11,7 +11,11 @@ CRON_LINE_1="*/5 * * * * root php /var/www/html/monnet-cli.php"
 CRON_LINE_2="*/15 * * * * root php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V.18";
+echo "V.19";
+
+pwd
+ls -al /opt
+ls -al /opt/monnet-core
 
 # Configurar trabajos cron
 echo "Configurando trabajos cron..."
@@ -35,7 +39,7 @@ service cron start
 service cron status
 
 mkdir -p "/etc/ansible"
-touch /etc/ansible/ansible.cfg
+#touch /etc/ansible/ansible.cfg
 
 cat > /etc/ansible/ansible.cfg <<EOF
 [defaults]
@@ -44,8 +48,6 @@ host_key_checking = False
 EOF
 
 cat /etc/ansible/ansible.cfg
-
-ls -al /opt/monnet-core
 
 # Esperar a que MySQL esté listo
 echo "Esperando a que MySQL esté listo..."
@@ -75,7 +77,9 @@ fi
 echo "Mostrando las tablas de la base de datos '$DB_NAME':"
 mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "SHOW TABLES;"
 
-# Iniciar el servicio monnet-ansible
+echo "Conmfiguando mgateway..."
+chmod +x /opt/monnet_core/monnet_gateway/install.bash
+/opt/monnet-core/monnet_gateway/install.bash
 echo "Iniciando el servicio mgateway..."
 $ANSIBLE_SCRIPT &
 

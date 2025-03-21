@@ -12,18 +12,12 @@ RUN touch /var/log/cron.log
 
 RUN mkdir /opt/monnet-core
 RUN git clone https://github.com/diegargon/monnet-core.git /opt/monnet-core
-RUN ls /opt
-RUN ls /opt/monnet-core
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html
 
 # Habilitar módulos de Apache
 RUN a2enmod rewrite
-
-RUN ls -al .
-
-RUN ls -al /var/www/html
 
 # Crear el archivo de configuración en /etc/monnet
 RUN mkdir -p /etc/monnet && \
