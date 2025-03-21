@@ -11,10 +11,9 @@ CRON_LINE_1="*/5 * * * * root php /var/www/html/monnet-cli.php"
 CRON_LINE_2="*/15 * * * * root php /var/www/html/monnet-discovery.php"
 CRONTAB_FILE="/etc/crontab"
 
-echo "V.19";
+echo "V.20";
 
 pwd
-ls -al /opt
 ls -al /opt/monnet-core
 
 # Configurar trabajos cron
@@ -78,10 +77,12 @@ echo "Mostrando las tablas de la base de datos '$DB_NAME':"
 mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "SHOW TABLES;"
 
 echo "Conmfiguando mgateway..."
-chmod +x /opt/monnet_core/monnet_gateway/install.bash
+chmod +x /opt/monnet-core/monnet_gateway/install.bash
 /opt/monnet-core/monnet_gateway/install.bash
 echo "Iniciando el servicio mgateway..."
-$ANSIBLE_SCRIPT &
+#$ANSIBLE_SCRIPT &
+systemctl start monnet-gateway.service
+systemctl status monnet-gateway.service
 
 # Mantener el contenedor ejecutándose
 echo "Inicialización completa. Contenedor listo."
