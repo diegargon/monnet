@@ -2,7 +2,8 @@ FROM php:8.2-apache
 
 # Instalar dependencias
 RUN apt-get update
-RUN apt-get install -y git mariadb-client net-tools ansible cron pip python3.11-venv
+RUN apt-get install -y git mariadb-client net-tools ansible cron pip
+RUN apt-get install -y python3 python3.11-venv
 RUN docker-php-ext-install mysqli sockets
 
 # Clonar el repositorio en /var/www/html
