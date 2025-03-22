@@ -2,5 +2,11 @@
 /next.txt
 /test-int/
 /config/config.inc.php
-/TODO
+TODO
 /oldworkflows/
+bookmarks_icons/*
+!bookmarks_icons/gmail.png
+!bookmarks_icons/cluster.png
+!bookmarks_icons/calendar.png
+!bookmarks_icons/home.png
+!bookmarks_icons/www.png
