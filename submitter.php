@@ -451,7 +451,7 @@ if (
             if (empty($new_bookmark['field_img'])) :
                 $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
             else :
-                if (!Filters::varCustomString($new_bookmark['field_img'], '.', 255) || !file_exists('bookmark_img/')) :
+                if (!Filters::varCustomString($new_bookmark['field_img'], '.', 255) || !file_exists('bookmarks_icons/')) :
                     $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
                 endif;
             endif;
@@ -522,7 +522,7 @@ if ($command == 'updateBookmark' && !empty($value_command) && $target_id > 0) {
             if (empty($bookmark['field_img'])) {
                 $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
             } else {
-                if (!Filters::varCustomString($bookmark['field_img'], '.', 255) || !file_exists('bookmark_img/')) {
+                if (!Filters::varCustomString($bookmark['field_img'], '.', 255) || !file_exists('bookmarks_icons/')) {
                     $data['command_error_msg'] = "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}";
                 }
             }
@@ -707,7 +707,7 @@ if ($command == 'mgmtBookmark') {
         $tdata['web_categories'] = $categories->getByType(2);
     endif;
 
-    $tdata['local_icons'] = getLocalIconsData($cfg, 'bookmark_img/');
+    $tdata['local_icons'] = getLocalIconsData($cfg, 'bookmarks_icons/');
     if (isset($command_values['action']) && $command_values['action'] === 'edit') {
         $tdata['bookmark_buttonid'] = 'updateBookmark';
         $tdata['bookmark_title'] = $lng['L_EDIT'];

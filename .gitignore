@@ -6,3 +6,4 @@ TODO
 /oldworkflows/
 bookmarks_icons/*
 !bookmarks_icons/.noempty
+!bookmarks_icons/www.png
