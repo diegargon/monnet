@@ -26,11 +26,11 @@ function check_known_hosts(AppContext $ctx): bool
     $hosts = $ctx->get('Hosts');
     $cfg = $ctx->get('cfg');
 
-    if (!is_object($hosts)) :
+    if (!is_object($hosts)) {
         Log::error("hosts is not a object");
         return false;
-    endif;
-
+    }
+    
     Log::debug('Pinging known host');
     $db_hosts = $hosts->getknownEnabled();
 
@@ -53,12 +53,12 @@ function check_known_hosts(AppContext $ctx): bool
                     usleep($cfg['check_retries_usleep']);
                     $check_ports_result = check_host_ports($ctx, $host);
 
-                    if ($check_ports_result['online'] == 1) :
+                    if ($check_ports_result['online'] == 1) {
                         Log::debug("Retry $i port check works for {$host['display_name']}");
                         break;
-                    elseif ($i === $retries) :
+                    } elseif ($i === $retries) {
                         Log::debug("Retry $i ping port not work for {$host['display_name']}");
-                    endif;
+                    }
                 }
             }
             if ($check_ports_result['online'] == 0) {
@@ -74,11 +74,11 @@ function check_known_hosts(AppContext $ctx): bool
                     $usec = $cfg['ping_hosts_timeout'];
                 }
                 $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
-                if ($host_ping['online']) :
+                if ($host_ping['online']) {
                     //Ports down but we got ping
                     $check_ports_result['online'] = 1;
                     $check_ports_result['latency'] = $host_ping['latency'];
-                else :
+                } else {
                     if ($host['disable_alarms']) {
                         $event_type = LogType::EVENT;
                         $check_ports_result['warn'] = 0;
@@ -91,8 +91,8 @@ function check_known_hosts(AppContext $ctx): bool
                         'All Ports down / No ping response',
                         $event_type,
                         EvenType::HOST_BECOME_OFF
-                        );
-                endif;
+                    );
+                }
             }
 
             /* Checks finished */
@@ -100,7 +100,7 @@ function check_known_hosts(AppContext $ctx): bool
             /* Port Status Change Logging */
             if (isset($check_ports_result['ports']) && is_array($check_ports_result['ports'])) {
                 $ports_status = $check_ports_result['ports'];
-                foreach ($ports_status as $port):
+                foreach ($ports_status as $port) :
                     if ($port['old_online_status'] == 0 && $port['online'] == 1) {
                         Log::logHost(
                             LogLevel::NOTICE,

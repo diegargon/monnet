@@ -81,7 +81,7 @@ class CmdAnsibleModel
     public function addAnsibleVar(int $hid, int $vtype, string $vkey, string $vvalue): bool
     {
         if ($this->checkAnsibleVarExists($vkey)) {
-           return false;
+            return false;
         }
         $var_data = [
             'hid' => $hid,

@@ -1010,11 +1010,12 @@ class CmdHostController
      * @return array
      */
 
-    public function updateHostField(string $command,
-            array $command_values,
-            string $field,
-            string $filterType = 'int')
-            : array
+    public function updateHostField(
+        string $command,
+        array $command_values,
+        string $field,
+        string $filterType = 'int')
+        : array
     {
         $hid = $this->filter->varInt($command_values['id']);
 
@@ -1079,7 +1080,7 @@ class CmdHostController
         $target_id = $this->filter->varInt($command_values['id']);
         $extra = [];
 
-        switch($tabName) :
+        switch ($tabName) :
             case 'tab3':    # Notes
                 $cmd = 'load_notes';
                 $response = $this->cmdHostNotesModel->getNotes($target_id);

@@ -21,7 +21,6 @@ use App\Controllers\ConfigController;
 
 class CommandRouter
 {
-
     private \AppContext $ctx;
 
     public function __construct(\AppContext $ctx)

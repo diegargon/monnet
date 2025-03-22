@@ -23,13 +23,18 @@
             <td></td>
         </tr>
 <?php
-    foreach ($tdata['host_tasks'] as $task) :
+foreach ($tdata['host_tasks'] as $task) :
         $task_id = $task['id'];
-    ?>
+?>
         <tr data-id="<?= $task_id ?>">
             <td>
                 <input type="hidden" name="hid" value="<?= $task['hid'] ?>"/>
-                <input type="text" size="20" max-size="20" name="task_name[<?= $task_id ?>]" value="<?= $task['task_name'] ?>" required>
+                <input
+                    type="text" size="20" max-size="20"
+                    name="task_name[<?= $task_id ?>]"
+                    value="<?= $task['task_name'] ?>"
+                    required
+                >
             </td>
             <td>
                 <select name="task_trigger[<?= $task_id ?>]" required>
@@ -48,14 +53,14 @@
                         <?php
                         foreach (\EventType::getConstants() as $value => $name) :
                             $value === $task['event_id'] ? $event_selected = 'selected' : $event_selected = null;
-                            echo '<option value="' . $name . '" ' . $event_selected .'>' . $value . '</option>';
+                            echo '<option value="' . $name . '" ' . $event_selected . '>' . $value . '</option>';
                         endforeach;
                         ?>
                     </select>
                     <?php
                 endif;
                 if ($task['trigger_type'] == 4) : # Scheduler
-                    echo '<input type="text" name="conditional" value="' . $task['crontime'] .'"/>';
+                    echo '<input type="text" name="conditional" value="' . $task['crontime'] . '"/>';
                 endif;
                 ?>
             </td>
@@ -87,10 +92,9 @@
                 <button type="submit" data-action="force_exec_task">Forzar</button>
             </td>
         </tr>
-    <?php
-    endforeach;
-    ?>
-
+<?php
+endforeach;
+?>
     </table>
     <input
         type="hidden"

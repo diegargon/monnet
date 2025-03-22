@@ -12,7 +12,7 @@
  * Limit to allow both: 60 chars -> varchar(700)
  */
 
-Namespace App\Controllers;
+namespace App\Controllers;
 
 use App\Services\EncryptionService;
 

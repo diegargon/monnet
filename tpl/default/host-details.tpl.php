@@ -189,11 +189,11 @@
                 </div> <!-- host port container -->
             <?php } ?>
             <?php
-            if (!empty($tdata['host_details']['agent_ports'])) {
+            if (!empty($tdata['host_details']['agent_ports'])) :
                 ?>
                 <div class="host_port_container">
                     <?php
-                    foreach ($tdata['host_details']['agent_ports'] as $port) {
+                    foreach ($tdata['host_details']['agent_ports'] as $port) :
                         $port['protocol'] = $port['protocol'] == 1 ? 'TCP' : 'UDP';
                         $port_name = !empty($port['custom_service']) ? $port['custom_service'] : $port['service'];
                         ?>
@@ -216,9 +216,9 @@
                                 </div>
                             </div>
                         </div> <!-- port container -->
-                    <?php } ?>
+                    <?php endforeach; ?>
                 </div> <!-- host port container -->
-            <?php } ?>
+            <?php endif; ?>
 
             <!-- END PORTS -->
             <div class="resume_container">
@@ -402,15 +402,17 @@
             </div>
             <label for="log_size">Nº:</label>
             <input type="number" id="log_size" name="log_size" step="25" value="25" data-btn="auto_reload_logs">
-            <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
+        <?php
+        if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) :
+        ?>
             <div class="inline"><button id="syslog_btn">Syslog</button></div>
             <div class="inline"><button id="journald_btn">Journald</button></div>
-            <?php
-                endif;
-                if (!empty($tdata['host_details']['host_logs'])) :
-                    echo $tdata['host_details']['host_logs'];
-                endif;
-            ?>
+        <?php
+        endif;
+        if (!empty($tdata['host_details']['host_logs'])) :
+            echo $tdata['host_details']['host_logs'];
+        endif;
+        ?>
         </div>
         <!-- /TAB9 -->
         <!-- TAB10 --><!-- Graphs / PING -->

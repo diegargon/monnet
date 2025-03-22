@@ -47,7 +47,13 @@ class HostsModel
         $this->ctx = $ctx;
     }
 
-    public function getAll() {
+
+    /**
+     *
+     * @return array<string, mixed>
+     */
+    public function getAll(): array
+    {
         $db = $this->ctx->get('DBManager');
 
         $query = "SELECT * FROM hosts";

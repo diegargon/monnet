@@ -46,5 +46,4 @@ class EncryptionService
             throw new Exception("Algoritmo de cifrado no soportado.");
         }
     }
-
 }

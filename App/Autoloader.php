@@ -11,11 +11,18 @@
 namespace App;
 
 class Autoloader {
-    public static function register() {
+    public static function register()
+    {
         spl_autoload_register([__CLASS__, 'autoload']);
     }
 
-    private static function autoload($class) {
+    /**
+     *
+     * @param string $class
+     * @return void
+     */
+    private static function autoload(string $class): void
+    {
         $class = str_replace(__NAMESPACE__ . '\\', '', $class);
         $file = __DIR__ . '/' . str_replace('\\', '/', $class) . '.php';
         if (file_exists($file)) {
