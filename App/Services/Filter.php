@@ -178,9 +178,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getUtf8(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getUtf8(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -193,9 +193,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postUtf8(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postUtf8(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -208,9 +208,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varUtf8(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varUtf8(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && mb_strlen($val, 'UTF-8') > $size)) {
             return false;
@@ -226,9 +226,9 @@ class Filter
      *
      * @param string $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getUrl(string $val, int $size = PHP_INT_MAX): string|bool
+    public function getUrl(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -241,9 +241,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postUrl(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -256,9 +256,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varUrl(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -274,9 +274,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getImgUrl(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getImgUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -289,9 +289,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postImgUrl(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postImgUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -304,9 +304,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varImgUrl(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varImgUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         $exts = array('jpg', 'gif', 'png', 'ico');
 
@@ -337,9 +337,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postAzChar(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postAzChar(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -352,9 +352,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getAzChar(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getAzChar(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -368,9 +368,9 @@ class Filter
      * @param mixed $var
      * @param int|null $max_size
      * @param int|null $min_size
-     * @return string|bool
+     * @return string|false
      */
-    public function varAzChar(mixed $var, ?int $max_size = null, ?int $min_size = null): string|bool
+    public function varAzChar(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
 
         if (
@@ -392,9 +392,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postAlphanum(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postAlphanum(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -407,9 +407,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getAlphanum(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getAlphanum(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -423,9 +423,9 @@ class Filter
      * @param mixed $var
      * @param int|null $max_size
      * @param int|null $min_size
-     * @return string|bool
+     * @return string|false
      */
-    public function varAlphanum(mixed $var, ?int $max_size = null, ?int $min_size = null): string|bool
+    public function varAlphanum(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         $length = strlen($var);
 
@@ -459,9 +459,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postUsername(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postUsername(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -474,9 +474,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getUsername(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getUsername(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -490,9 +490,9 @@ class Filter
      * @param mixed $var
      * @param int|null $max_size
      * @param int|null $min_size
-     * @return string|bool
+     * @return string|false
      */
-    public function varUsername(mixed $var, ?int $max_size = null, ?int $min_size = null): string|bool
+    public function varUsername(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         //Filter name, only az, no special chars, no spaces
         $length = strlen($var);
@@ -523,9 +523,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postEmail(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postEmail(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -538,9 +538,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getEmail(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getEmail(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -554,9 +554,9 @@ class Filter
      * @param mixed $var
      * @param int|null $max_size
      * @param int|null $min_size
-     * @return string|bool
+     * @return string|false
      */
-    public function varEmail(mixed $var, ?int $max_size = null, ?int $min_size = null): string|bool
+    public function varEmail(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         $length = strlen($var);
 
@@ -589,9 +589,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postStrict(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postStrict(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -604,9 +604,9 @@ class Filter
      *
      * @param string $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getStrict(string $val, int $size = PHP_INT_MAX): string|bool
+    public function getStrict(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -620,9 +620,9 @@ class Filter
      * @param mixed $var
      * @param int|null $max_size
      * @param int|null $min_size
-     * @return string|bool
+     * @return string|false
      */
-    public function varStrict(mixed $var, ?int $max_size = null, ?int $min_size = null): string|bool
+    public function varStrict(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         //TODO allow only alphanumerics and _
         $length = strlen($var);
@@ -645,9 +645,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postPassword(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postPassword(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -660,9 +660,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getPassword(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getPassword(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -676,9 +676,9 @@ class Filter
      * @param mixed $var
      * @param int|null $max_size
      * @param int|null $min_size
-     * @return string|bool
+     * @return string|false
      */
-    public function varPassword(mixed $var, ?int $max_size = null, ?int $min_size = null): string|bool
+    public function varPassword(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         //Password validate safe password
         if (
@@ -695,9 +695,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getIP(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getIP(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -710,9 +710,9 @@ class Filter
      *
      * @param string $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postIP(string $val, int $size = PHP_INT_MAX): string|bool
+    public function postIP(string $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -725,9 +725,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varIP(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varIP(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -742,9 +742,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getNetwork(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getNetwork(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -757,9 +757,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postNetwork(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postNetwork(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -772,9 +772,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varNetwork(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varNetwork(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -805,9 +805,9 @@ class Filter
      * POST PATH
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getPath(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getPath(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -820,9 +820,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postPath(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postPath(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -835,9 +835,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varPath(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varPath(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -856,9 +856,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getPathFile(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getPathFile(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -871,9 +871,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postPathFile(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postPathFile(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -886,9 +886,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varPathFile(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varPathFile(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -918,14 +918,14 @@ class Filter
      * @param string $validSpecial
      * @param int $max_size
      * @param int $min_size
-     * @return string|bool
+     * @return string|false
      */
     public function postCustomString(
         mixed $val,
         string $validSpecial,
         int $max_size = null,
         int $min_size = null
-    ): string|bool {
+    ): string|false {
         if (empty($_POST[$val])) {
             return false;
         }
@@ -939,14 +939,14 @@ class Filter
      * @param string $validSpecial
      * @param int $max_size
      * @param int $min_size
-     * @return string|bool
+     * @return string|false
      */
     public function getCustomString(
         mixed $val,
         string $validSpecial,
         int $max_size = null,
         int $min_size = null
-    ): string|bool {
+    ): string|false {
         if (empty($_GET[$val])) {
             return false;
         }
@@ -960,14 +960,14 @@ class Filter
      * @param string $validSpecialChars
      * @param int $max_size
      * @param int $min_size
-     * @return string|bool
+     * @return string|false
      */
     public function varCustomString(
         mixed $var,
         string $validSpecialChars,
         int $max_size = null,
         int $min_size = null
-    ): string|bool {
+    ): string|false {
         // Define el conjunto predeterminado de caracteres (AZaz y números)
         $validChars = 'A-Za-z0-9';
 
@@ -996,9 +996,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getDomain(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getDomain(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -1011,9 +1011,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postDomain(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postDomain(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -1026,9 +1026,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varDomain(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varDomain(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -1048,9 +1048,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function getHostname(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function getHostname(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_GET[$val])) {
             return false;
@@ -1063,9 +1063,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function postHostname(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function postHostname(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($_POST[$val])) {
             return false;
@@ -1078,9 +1078,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|bool
+     * @return string|false
      */
-    public function varHostname(mixed $val, int $size = PHP_INT_MAX): string|bool
+    public function varHostname(mixed $val, int $size = PHP_INT_MAX): string|false
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;

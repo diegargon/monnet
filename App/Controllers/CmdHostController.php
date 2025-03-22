@@ -62,7 +62,7 @@ class CmdHostController
     /**
      * Obtiene los detalles de un host.
      *
-     * @param array<string, string|int>
+     * @param array<string, string|int> $command_values
      * @return array<string, string|int> Respuesta en formato JSON.
      */
     public function getHostDetails(array $command_values): array
@@ -93,7 +93,7 @@ class CmdHostController
     /**
      *
      * @param string $command
-     * @param array $command_values
+     * @param array<string, string|int> $command_values
      * @return array <string, string|int>
      */
     public function reloadStatsView(string $command, array $command_values): array
@@ -341,8 +341,8 @@ class CmdHostController
 
     /**
      *
-     * @param arrayy<string, string|int> $command_values
-     * @return arrayy<string, string|int>
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
      */
     public function setHostDisable(array $command_values): array
     {
@@ -437,11 +437,11 @@ class CmdHostController
         $value = $this->filter->varString($command_values['value']);
         $field = 'category';
 
-        if (!is_numeric($target_id)) {
-            return Response::stdReturn(false, "$field: Invalid input data");
-        }
-
-        if ($target_id === null || $target_id <= 0 || $value === null) {
+        if (
+            !is_numeric($target_id) ||
+            $value === false ||
+            $target_id <= 0
+        ) {
             return Response::stdReturn(false, "$field: Invalid input data");
         }
 
@@ -483,14 +483,17 @@ class CmdHostController
 
         if ($target_id === 1) {
             return Response::stdReturn(false, $lng['L_ERR_CAT_NODELETE']);
-        } elseif ($this->ctx->get('Categories')->remove($target_id)) {
-            // We remove the category set all host to default category
-            $this->db->update('hosts', ['category' => 1], 'category = :category', ['category' => $target_id]);
-        } else {
-            return Response::stdReturn(false, $lng['L_ERROR']);
         }
-        //$data['force_hosts_refresh'] = 1;
-        return Response::stdReturn(true, 'ok: ' . $target_id);
+
+        $categories = $this->ctx->get('Categories');
+        if ($categories->remove($target_id)) {
+            //Change remain utems to default category
+            if ($categories->updateToDefault(1, $target_id)) {
+                return Response::stdReturn(true, 'ok: ' . $target_id);
+            }
+        }
+
+        return Response::stdReturn(false, $lng['L_ERROR']);
     }
 
     /**
@@ -978,17 +981,19 @@ class CmdHostController
         $target_id = $this->filter->varInt($command_values['id']);
         $value_command = $this->filter->varUTF8($command_values['value']);
 
-        $content = urldecode($value_command);
-        if (str_starts_with($content, ":clear")) {
-            $content = '';
+        if ($value_command) {
+            $content = urldecode($value_command);
+            if (str_starts_with($content, ":clear")) {
+                $content = '';
+            }
+            $update['content'] = $content;
+            $this->cmdHostNotesModel = new CmdHostNotesModel($this->ctx);
+            if ($this->cmdHostNotesModel->updateByID($target_id, $update)) {
+                return Response::stdReturn(true, $field . ': success', true);
+            }
         }
-        $update['content'] = $content;
-        $this->cmdHostNotesModel = new CmdHostNotesModel($this->ctx);
-        if ($this->cmdHostNotesModel->updateByID($target_id, $update)) {
-            return Response::stdReturn(true, $field . ': success', true);
-        } else {
-            return Response::stdReturn(false, "$field: failed");
-        }
+        return Response::stdReturn(false, "$field: failed");
+
     }
     /**
      *
@@ -1010,11 +1015,13 @@ class CmdHostController
 
     /**
      * Unused yet
+     *
      * @param string $command
-     * @param array $command_values
+     * @param array<string, mixed> $command_values
      * @param string $field
      * @param string $filterType
-     * @return array
+     *
+     * @return array<string, mixed>
      */
 
     public function updateHostField(
@@ -1057,6 +1064,7 @@ class CmdHostController
      * @param array $command_values Input values containing 'id' and 'value'.
      * @param string $field The field name to update.
      * @param callable $filter_function A filtering function for the value.
+     *
      * @return array Standard response array.
      */
     /*
@@ -1079,6 +1087,7 @@ class CmdHostController
     /**
      *
      * @param array<string, string|int> $command_values
+     *
      * return array<string, string|int>
      */
     public function handleTabChange(array $command_values): array

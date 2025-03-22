@@ -16,7 +16,7 @@ class HostViewBuilder
     private TemplateService $templateService;
     private \AppContext $ctx;
 
-    private $reportKeysToShow = ['id', 'display_name', 'ip', 'mac', 'online'];
+    private array $reportKeysToShow = ['id', 'display_name', 'ip', 'mac', 'online'];
 
     public function __construct(\AppContext $ctx)
     {
@@ -51,7 +51,7 @@ class HostViewBuilder
 
     /**
      *
-     * @param array<string, string|int> $tdata
+     * @param array<string, mixed> $tdata
      * @param array<string, string|int> $show_keys
      * @return string
      */
@@ -72,7 +72,7 @@ class HostViewBuilder
      */
     public function buildStats(array $hostDetails): array
     {
-        if (!empty($hostDetails['mem_info']) && is_array($hostDetails['mem_info'])) :
+        if (!empty($hostDetails['mem_info'])) :
             $hostDetails['mem_info'] = $this->templateService->getTpl(
                 'progressbar',
                 [
@@ -81,7 +81,7 @@ class HostViewBuilder
             );
         endif;
 
-        if (!empty($hostDetails['load_avg']) && is_array($hostDetails['load_avg'])) :
+        if (!empty($hostDetails['load_avg'])) :
             $hostDetails['load_avg'] = $this->templateService->getTpl(
                 'gauge',
                 [
@@ -90,7 +90,7 @@ class HostViewBuilder
             );
         endif;
 
-        if (isset($hostDetails['iowait']) && is_numeric($hostDetails['iowait'])) :
+        if (isset($hostDetails['iowait'])) :
             $hostDetails['iowait_stats'] = $this->templateService->getTpl(
                 'gauge',
                 [
@@ -101,7 +101,7 @@ class HostViewBuilder
             );
         endif;
 
-        if (!empty($hostDetails['disks_info']) && is_array($hostDetails['disks_info'])) :
+        if (!empty($hostDetails['disks_info'])) :
             $hostDetails['disks_info'] = $this->templateService->getTpl(
                 'progressbar',
                 [

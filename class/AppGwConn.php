@@ -10,9 +10,9 @@
 
 class AppGwConn
 {
-    private $socket;
-    private $serverIp;
-    private $serverPort;
+    private Socket $socket;
+    private string $serverIp;
+    private int $serverPort;
 
     /**
      *
