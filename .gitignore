@@ -2,7 +2,6 @@
 /next.txt
 /test-int/
 /config/config.inc.php
-TODO
 /oldworkflows/
 bookmarks_icons/*
 !bookmarks_icons/.noempty
