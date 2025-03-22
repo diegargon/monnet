@@ -70,9 +70,7 @@ class CmdHostLogsModel
             $conditions[] = '(' . implode(' OR ', $logConditions) . ')';
         }
 
-        if (count($conditions) > 0) {
-            $query .= ' WHERE ' . implode(' AND ', $conditions);
-        }
+        $query .= ' WHERE ' . implode(' AND ', $conditions);
 
         $query .= ' ORDER BY date DESC';
 

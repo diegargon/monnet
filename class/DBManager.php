@@ -130,7 +130,7 @@ class DBManager
      * @param string $sql Consulta SQL para obtener datos
      * @param array<string, mixed> $params Parámetros de consulta
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<string, mixed>|null Returns an associative array|null
      */
     public function qfetch(string $sql, array $params = []): ?array
     {

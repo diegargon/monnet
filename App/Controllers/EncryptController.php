@@ -58,7 +58,7 @@ class EncryptController
             $encryptedData = $this->encryptService->encrypt($raw_data);
 
             return ['status' => 'Success', 'response_msg' => $encryptedData];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['status' => 'Fail' , 'error_msg' => $e->getMessage()];
         }
     }

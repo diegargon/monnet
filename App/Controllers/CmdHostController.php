@@ -38,6 +38,7 @@ class CmdHostController
     private HostMetricsService $hostMetricsService;
     private HostViewBuilder $hostViewBuilder;
     private HostService $hostService;
+    private HostFormatter $hostFormatter;
 
     private Filter $filter;
     private \AppContext $ctx;
@@ -89,6 +90,12 @@ class CmdHostController
         return Response::stdReturn(true, "ok", false, ['host_details' => $host_data]);
     }
 
+    /**
+     *
+     * @param string $command
+     * @param array $command_values
+     * @return array <string, string|int>
+     */
     public function reloadStatsView(string $command, array $command_values): array
     {
         /*

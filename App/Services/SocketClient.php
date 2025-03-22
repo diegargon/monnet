@@ -14,7 +14,7 @@ class SocketClient
 {
     private string $host;
     private int $port;
-    private $socket;
+    private \Socket $socket;
 
     public function __construct(string $host, int $port)
     {

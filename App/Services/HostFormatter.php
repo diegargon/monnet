@@ -19,6 +19,11 @@ class HostFormatter
         $this->ctx = $ctx;
     }
 
+    /**
+     *
+     * @param array<string, mixed> $host
+     * @return arra<string, mixed>y
+     */
     public function format(array $host): array
     {
         $lng = $this->ctx->get('lng');
@@ -41,7 +46,7 @@ class HostFormatter
             $host['network_name'] = $network['name'];
             $host['network_vlan'] = $network['vlan'];
         } else {
-            Log::warning('Host network seems not exists: ' . "[H: $id][N: $net_id]");
+            \Log::warning('Host network seems not exists: ' . "[H: $id][N: $net_id]");
         }
 
         if ($host['online']) :
@@ -110,7 +115,7 @@ class HostFormatter
 
     /**
      *
-     * @param array<string, string|int> $logs_items
+     * @param array<string, mixed> $logs_items
      * @return array<string, string|int>
      */
     public function fHostLogsMsgs(array $logs_items): array
@@ -121,7 +126,7 @@ class HostFormatter
         $ncfg = $this->ctx->get('Config');
 
         foreach ($logs_items as $item) :
-            if (!in_array($item['msg'], $flogs_msgs)) :
+            if (!empty($item['msg']) && !in_array($item['msg'], $flogs_msgs)) :
                 $flogs_msgs[] = $item['msg'];
                 $flogs_items[] = $item;
             endif;
@@ -144,7 +149,7 @@ class HostFormatter
 
     /**
      *
-     * @param array $host<string, string|int>
+     * @param array $host<string, mixed>
      */
     public function formatMisc(array &$host): void
     {

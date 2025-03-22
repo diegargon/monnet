@@ -81,8 +81,8 @@ class HostMetricsService
 
     /**
      *
-     * @param array<string, string|int> $metrics
-     * @return array<string, string|int>
+     * @param array<string, string> $metrics
+     * @return array<string, string>
      */
     public function fMetricsDate(array $metrics): array
     {

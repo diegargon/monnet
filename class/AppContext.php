@@ -49,8 +49,8 @@ class AppContext
         $this->cfg = &$cfg;
     }
 
-    /*
-     * @param array<string,mixed> $cfg
+    /**
+     * @param array<string,mixed> $cfg_db
      * @return void
      */
     public function setCfgDb(array $cfg_db): void

@@ -22,10 +22,10 @@ class CmdHostModel
 
     /**
      *
-     * @param type $target_id
-     * @return array<string, string|int>
+     * @param int $target_id
+     * @return array<string, mixed>|null
      */
-    public function getHostDetails(int $target_id): array
+    public function getHostDetails(int $target_id): ?array
     {
         $query = "SELECT * FROM hosts WHERE id = :id";
         $params = ['id' => $target_id];
@@ -33,7 +33,12 @@ class CmdHostModel
         return $this->db->qfetch($query, $params);
     }
 
-    public function getHostDetailsStats(int $target_id): array
+    /**
+     *
+     * @param int $target_id
+     * @return array<string, mixed>|null
+     */
+    public function getHostDetailsStats(int $target_id): ?array
     {
         $query = "SELECT misc FROM hosts WHERE id = :id";
         $params = ['id' => $target_id];
@@ -167,9 +172,9 @@ class CmdHostModel
      * Obtiene la carga promedio de un host.
      *
      * @param int $target_id El ID del host.
-     * @return array<string, string|int> La carga promedio.
+     * @return array<string, mixed>|null La carga promedio.
      */
-    public function getLoadAverage($target_id): array
+    public function getLoadAverage($target_id): ?array
     {
         $query = "SELECT load_avg_1min, load_avg_5min, load_avg_15min FROM stats WHERE host_id = :host_id";
         $params = ['host_id' => $target_id];
@@ -181,9 +186,9 @@ class CmdHostModel
      * Obtiene las estadísticas de I/O de un host.
      *
      * @param int $target_id El ID del host.
-     * @return array<string, string|int> Las estadísticas de I/O.
+     * @return array<string, mixed>|null Las estadísticas de I/O.
      */
-    public function getIOWaitStats($target_id): array
+    public function getIOWaitStats($target_id): ?array
     {
         $query = "SELECT iowait FROM host_metrics WHERE host_id = :host_id";
         $params = ['host_id' => $target_id];
@@ -227,7 +232,7 @@ class CmdHostModel
      * Obtiene el campo misc de un host.
      *
      * @param int $target_id El ID del host.
-     * @return array<string, string|int> Los datos misc en formato array.
+     * @return array<string, mixed>  Los datos misc en formato array.
      */
     public function getMisc(int $target_id): array
     {

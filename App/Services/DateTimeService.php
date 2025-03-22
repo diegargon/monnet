@@ -72,7 +72,7 @@ class DateTimeService
      */
     public function formatDateNow(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s'): string|false
     {
-        if (!validTimezone($timezone)) {
+        if (!$this->validTimezone($timezone)) {
             return false;
         }
         $date_timezone = new \DatetimeZone($timezone);
@@ -121,7 +121,7 @@ class DateTimeService
             $date->setTimezone(new \DateTimeZone($timezone)); // Ajustar la zona horaria
 
             return $date->format($time_format);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return 'Error: ' . $e->getMessage();
         }
     }

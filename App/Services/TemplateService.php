@@ -12,7 +12,7 @@ namespace App\Services;
 
 class TemplateService
 {
-    private $templatesPath = 'tpl/default/';
+    private string $templatesPath = 'tpl/default/';
     private \AppContext $ctx;
 
     public function __construct(\AppContext $ctx)
@@ -25,10 +25,10 @@ class TemplateService
      * Obtiene una plantilla y la renderiza con los datos proporcionados.
      *
      * @param string $templateName El nombre de la plantilla.
-     * @param array $data Los datos para renderizar la plantilla.
+     * @param array<string, mixed> $data Los datos para renderizar la plantilla.
      * @return string El HTML renderizado.
      */
-    public function getTpl($templateName, $tdata = []): string
+    public function getTpl(string $templateName, array $tdata = []): string
     {
         $lng = $this->ctx->get('lng');
         $cfg = $this->ctx->get('cfg');
