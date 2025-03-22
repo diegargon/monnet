@@ -151,10 +151,24 @@ class Categories
         return $response;
     }
 
+    /**
+     *
+     * @param int $id
+     * @return bool
+     */
     public function remove(int $id): bool
     {
-        $this->db->delete('categories', ['id' => $id], 'LIMIT 1');
+        return $this->db->delete('categories', ['id' => $id], 'LIMIT 1');
+    }
 
-        return true;
+    /**
+     *
+     * @param int $default_category
+     * @param int $old_category
+     * @return bool
+     */
+    public function updateToDefault(int $default_category, int $old_category): bool
+    {
+        return $this->db->update('items', ['category' => $default_category], 'cat_id  = :cat_id', ['cat_id' => $old_category]);
     }
 }

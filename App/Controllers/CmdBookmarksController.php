@@ -18,7 +18,7 @@ class CmdBookmarksController
 {
     private Filter $filter;
     private \AppContext $ctx;
-    private $templateService;
+    private TemplateService $templateService;
 
     public function __construct(\AppContext $ctx)
     {
@@ -271,13 +271,16 @@ class CmdBookmarksController
 
         if ($target_id === 50) {
             return Response::stdReturn(false, $lng['L_ERR_CAT_NODELETE']);
-        } elseif ($this->ctx->get('Categories')->remove($target_id)) {
-            // We remove the category set all items to default category
-            $this->db->update('items', ['category' => 50], 'cat_id  = :cat_id', ['cat_id' => $target_id]);
-        } else {
-            return Response::stdReturn(false, $lng['L_ERROR']);
         }
 
-        return Response::stdReturn(true, 'ok: ' . $target_id);
+        $categories = $this->ctx->get('Categories');
+        if ($categories->remove($target_id)) {
+            //Change remain utems to default category
+            if ($categories->updateToDefault(50, $target_id)) {
+                return Response::stdReturn(true, 'ok: ' . $target_id);
+            }
+        }
+
+        return Response::stdReturn(false, $lng['L_ERROR']);
     }
 }
