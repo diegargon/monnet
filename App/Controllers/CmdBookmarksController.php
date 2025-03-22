@@ -161,7 +161,7 @@ class CmdBookmarksController
         endif;
 
         if ($bookmark['image_type'] == 'url' && !empty($bookmark['field_img'])) :
-            if (!$this->filters->varUrl($bookmark['field_img'])) {
+            if (!$this->filter->varUrl($bookmark['field_img'])) {
                 return Response::stdReturn(false, "{$lng['L_ERROR_URL_INVALID']}");
             }
         endif;

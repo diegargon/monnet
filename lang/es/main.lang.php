@@ -217,7 +217,6 @@ $lng = [
     'L_SYSTEM_TYPE' => 'Tipo sistema',
     'L_STATS' => 'Estadisticas',
     'L_SUMMARY' => 'Resumen',
-    'L_SCHEDULER' => 'Tiempo',
     'L_SEL_PLAYBOOK' => 'Selecciona Playbook',
     'L_SCHEDULER' => 'Temporizador',
     'L_SEL_ONE' => 'Selecciona una',

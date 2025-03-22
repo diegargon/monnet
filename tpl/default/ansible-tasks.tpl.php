@@ -6,7 +6,13 @@
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
-
+/**
+ * In frontend->getTpl()
+ * @var array<int|string, mixed> $cfg
+ * @var Config $ncfg
+ * @var array<string> $lng Language data
+ * @var array<mixed> $tdata Template Data
+ */
 ?>
 <fieldset>
     <legend>Tasks</legend>
