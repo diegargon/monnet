@@ -1124,9 +1124,8 @@ class CmdHostController
                 return Response::stdReturn(false, 'Unused tab change');
         endswitch;
 
-        if (isset($cmd)) {
-            $extra['command_receive'] = $cmd;
-        }
+        $extra['command_receive'] = $cmd;
+
         if (isset($cmd_value)) {
             $extra['command_value'] = $cmd_value;
         }

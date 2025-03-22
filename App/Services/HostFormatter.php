@@ -22,7 +22,7 @@ class HostFormatter
     /**
      *
      * @param array<string, mixed> $host
-     * @return arra<string, mixed>y
+     * @return arra<string, mixed>
      */
     public function format(array $host): array
     {

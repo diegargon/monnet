@@ -18,7 +18,7 @@ class CmdNetworkController
 {
     private Filter $filter;
     private \AppContext $ctx;
-    private $templateService;
+    private TemplateService $templateService;
 
     public function __construct(\AppContext $ctx)
     {
@@ -51,10 +51,12 @@ class CmdNetworkController
                 $networks->removeNetwork($target_id);
             } elseif ($action === 'update' || $action === 'add') {
                 $decodedJson = json_decode((string) $value_command, true);
-                $val_net_data = $this->valNetData($command_values['action'], $decodedJson);
-                if (empty($val_net_data)) {
-                    return Response::stdReturn(false, 'Validaded data empty');
+
+                if ($decodedJson === null) {
+                    return Response::stdReturn(false, 'JSON Invalid');
                 }
+                $val_net_data = $this->validateNetData($command_values['action'], $decodedJson);
+
                 if (!empty($val_net_data['error'])) {
                     return Response::stdReturn(false, $val_net_data['error_msg']);
                 }
@@ -94,7 +96,7 @@ class CmdNetworkController
 
     /**
      *
-     * @return array<string, string|int>|false
+     * @return array<string, string|int>
      */
     public function requestPoolIPs(): array
     {
@@ -145,21 +147,13 @@ class CmdNetworkController
      *
      * @param string $action
      * @param array<string, string|int> $net_values
-     * @return array<string, string|int>|false
+     * @return array<string, string|int>
      */
-    private function valNetData(string $action, array $net_values): array|false
+    private function validateNetData(string $action, array $net_values): array
     {
         $lng = $this->ctx->get('lng');
         $new_network = [];
         $data['error_msg'] = '';
-
-        if ($net_values === null) {
-            $data['error'] = 1;
-            $data['command_error_msg'] = 'JSON Invalid';
-
-            return $data;
-        }
-
 
         foreach ($net_values as $key => $dJson) {
             ($key == 'networkVLAN') ? $key = 'vlan' : null;

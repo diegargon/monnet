@@ -28,7 +28,13 @@ class CommandRouter
         $this->ctx = $ctx;
     }
 
-    public function handleCommand($command, $command_values)
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $command_values
+     * @return string
+     */
+    public function handleCommand(string $command, array $command_values)
     {
         $response = [];
 

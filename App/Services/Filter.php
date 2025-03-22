@@ -742,9 +742,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|false
+     * @return bool
      */
-    public function getNetwork(mixed $val, int $size = PHP_INT_MAX): string|false
+    public function getNetwork(mixed $val, int $size = PHP_INT_MAX): bool
     {
         if (empty($_GET[$val])) {
             return false;
@@ -757,9 +757,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|false
+     * @return bool
      */
-    public function postNetwork(mixed $val, int $size = PHP_INT_MAX): string|false
+    public function postNetwork(mixed $val, int $size = PHP_INT_MAX): bool
     {
         if (empty($_POST[$val])) {
             return false;
@@ -772,9 +772,9 @@ class Filter
      *
      * @param mixed $val
      * @param int $size
-     * @return string|false
+     * @return bool
      */
-    public function varNetwork(mixed $val, int $size = PHP_INT_MAX): string|false
+    public function varNetwork(mixed $val, int $size = PHP_INT_MAX): bool
     {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
@@ -792,12 +792,10 @@ class Filter
 
             if ($network_ip == $numeric_ip) {
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
 
