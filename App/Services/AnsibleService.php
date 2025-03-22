@@ -93,7 +93,6 @@ class AnsibleService
             return ['status' => 'error', 'error_msg' => $e->getMessage()];
         }
 
-
         if (
                 isset($responseArray['status']) &&
                 $responseArray['status'] === 'success' &&
@@ -116,7 +115,7 @@ class AnsibleService
                 $this->ansibleReportModel->insertReport($pb_data);
             }
 
-            return $responseArray;
+            return ['status' => 'success', 'response_msg' => $responseArray];
         }
 
         $error_msg = 'Ansible status error: ';
@@ -310,9 +309,9 @@ class AnsibleService
         }
         $response = $this->ansibleReportModel->getDbReportById($report_id);
 
-        $response = json_decode($response['report'], true);
+        $response_report = json_decode($response['report'], true);
         if ($response) {
-            $html_response = $this->asHtml($response);
+            $html_response = $this->asHtml($response_report);
             if ($html_response['status'] === 'success') {
                 return [
                     'status' => 'success',

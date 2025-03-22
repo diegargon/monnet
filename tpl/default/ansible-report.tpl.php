@@ -10,19 +10,20 @@
  * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  * @var array<string> $lng Language data
- * @var array<mixed> $tdata Template Data
+ * @var array<mixed> $report Template Data
  */
+
+$report = $tdata['result'];
 ?>
 
-<?php if (isset($tdata['stats']) && is_array($tdata['stats'])) : ?>
+<?php if (isset($report['stats']) && is_array($report['stats'])) : ?>
     <h2><?= $lng['L_STATS'] ?></h2>
     <table>
         <thead>
             <tr>
                 <th>Host</th>
                 <?php
-                // Tomamos las claves del primer host
-                $keys = array_keys($tdata['stats'][key($tdata['stats'])]);
+                $keys = array_keys($report['stats'][key($report['stats'])]);
                 foreach ($keys as $key) :
                     ?>
                     <th><?= is_string($key) ? ucwords($key) : $key; ?></th>
@@ -30,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($tdata['stats'] as $host => $stats) : ?>
+            <?php foreach ($report['stats'] as $host => $stats) : ?>
                 <tr>
                     <td><?= $host ?></td>
                     <td><?= $stats['changed'] ?></td>
@@ -49,7 +50,7 @@
 <?php
 $messages = [];
 
-foreach ($tdata['plays'] as $play) {
+foreach ($report['plays'] as $play) {
     foreach ($play['tasks'] as $task) {
         foreach ($task['hosts'] as $ip => $hostData) {
             $msg = '';
@@ -97,7 +98,7 @@ foreach ($tdata['plays'] as $play) {
 <?php
 $messages = [];
 
-foreach ($tdata['plays'] as $playIndex => $play) : ?>
+foreach ($report['plays'] as $playIndex => $play) : ?>
     <h2>Play: <?= $play['play']['name'] ?? "Play sin nombre" ?></h2>
     <div class="ansible_list">
         <?php

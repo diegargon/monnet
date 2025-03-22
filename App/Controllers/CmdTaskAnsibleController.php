@@ -53,7 +53,7 @@ class CmdTaskAnsibleController
         if ($command == 'playbook_exec') {
             $response = $this->ansibleService->runPlaybook($target_id, $playbook, $extra_vars);
             if (($response['status'] === 'success') && $as_html) {
-                $response = $this->ansibleService->asHtml($response);
+                $response = $this->ansibleService->asHtml($response['response_msg']);
             }
         } elseif ($command === 'pbqueue') {
             $response = $this->ansibleService->queueTask($target_id, 1, $playbook, $extra_vars);
