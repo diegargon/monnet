@@ -2,8 +2,6 @@ parameters:
     level: 7
     fileExtensions:
         - php
-    paths:
-        - /myapp/App
     excludePaths:
         - /myapp/tests
         - /myapp/vendor
