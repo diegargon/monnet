@@ -16,7 +16,7 @@ class EventType
     public const HIGH_DISK_USAGE = 3;
     public const HIGH_CPU_USAGE = 4;
     public const STARTING = 5;
-    public const APP_SHUTDOWN = 6;
+    public const AGENT_SHUTDOWN = 6;
     public const SYSTEM_SHUTDOWN = 7;
     public const PORT_UP = 8;
     public const PORT_DOWN = 9;

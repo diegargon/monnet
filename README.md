@@ -40,6 +40,10 @@ I started implementing Ansible as a replacement for phpseclib as a method to con
     - Windows hosts support
     - Respond to events in hosts with playbooks ((Agent/Ansible)
 
+## Starting (Basic)
+
+For basic usage after the install process, you must add at least one network to monitor in top-right menu: General->Networks
+
 ## Versions Convention
 
 v0.0.0 Mayor.Minor.Revision
