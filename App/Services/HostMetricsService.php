@@ -38,7 +38,7 @@ class HostMetricsService
     {
         $lng = $this->ctx->get('lng');
         $metrics_tpl = '';
-        $metrics_types = [1, 2, 3];
+        $metrics_types = [1, 2, 3, 4];
 
         foreach ($metrics_types as $metrics_type) {
             /* 1 ping 2 loadavg 3 iowait */
@@ -54,10 +54,14 @@ class HostMetricsService
                     case 3:
                         $title = 'IOWait';
                         break;
+                    case 4:
+                        $title = $lng['L_MEMORY'];
+                        break;
                 }
                 $metrics_tpl .= $this->hostMetricsViewBuilder->build($hid, $title, $metrics_type, $metrics);
             }
         }
+
         return $metrics_tpl;
     }
 

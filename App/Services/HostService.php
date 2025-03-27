@@ -95,7 +95,7 @@ class HostService
      */
     public function getDetailsStats(int $hid): array
     {
-        $hostDetails = $this->hostModel->getHostMisc($hid);
+        $hostDetails = $this->hostsModel->getHostMisc($hid);
 
         if (!$hostDetails) {
             return ['error' => 'No details found for the host'];

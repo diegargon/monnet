@@ -15,7 +15,9 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 ## MonNet Status
 
-MonNet is currently in an early version. It is possible that issues may arise between versions. Compatibility is not guaranteed.
+MonNet is currently in an early version. issues may arise between versions. Compatibility is not guaranteed.
+
+Since Monnet is becoming more complex, i working in rewrite nearly all code, beware.
 
 I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts, automate installations and other tasks
 

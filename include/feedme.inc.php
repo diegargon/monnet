@@ -120,12 +120,12 @@ function notification_data_process(AppContext $ctx, int $host_id, array $rdata):
         ];
         $db->insert('stats', $set_stats);
     endif;
-    if (!isEmpty($rdata['mem_stats'])) :
+    if (!isEmpty($rdata['memory_stats'])) :
         $set_stats = [
             'date' => date_now(),
             'type' => 4,   // Memory
             'host_id' => $host_id,
-            'value' => $rdata['mem_stats_stats']
+            'value' => $rdata['memory_stats']
         ];
         $db->insert('stats', $set_stats);
     endif;
