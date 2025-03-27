@@ -22,38 +22,36 @@ class CmdHostModel
 
     /**
      *
-     * @param int $target_id
+     * @param int $hid
      * @return array<string, mixed>|null
      */
-    public function getHostDetails(int $target_id): ?array
+    public function getHostById(int $hid): ?array
     {
         $query = "SELECT * FROM hosts WHERE id = :id";
-        $params = ['id' => $target_id];
+        $params = ['id' => $hid];
 
         return $this->db->qfetch($query, $params);
     }
 
-    /**
-     *
-     * @param int $target_id
-     * @return array<string, mixed>|null
-     */
-    public function getHostDetailsStats(int $target_id): ?array
-    {
-        $query = "SELECT misc FROM hosts WHERE id = :id";
-        $params = ['id' => $target_id];
-
-        return $this->db->qfetch($query, $params);
-    }
     /**
      * Elimina un host.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @return bool True si se eliminó correctamente, False en caso contrario.
      */
-    public function removeByID(int $target_id): bool
+    public function removeByID(int $hid): bool
     {
-        return $this->db->delete('hosts', 'id = :id', ['id' => $target_id]);
+        $this->db->delete('hosts', 'id = :id', ['id' => $hid]);
+        $this->db->delete('notes', 'host_id = :hid', ['hid' => $hid]);
+        $this->db->delete('stats', 'host_id = :hid', ['hid' => $hid]);
+        $this->db->delete('hosts_logs', 'host_id = :hid', ['hid' => $hid]);
+        $this->db->delete('reports', 'host_id = :hid', ['hid' => $hid]);
+        $this->db->delete('ansible_msg', 'host_id = :hid', ['hid' => $hid]);
+        $this->db->delete('ports', 'hid = :hid', ['hid' => $hid]);
+        $this->db->delete('ansible_vars', 'hid = :hid', ['hid' => $hid]);
+        $this->db->delete('tasks', 'hid = :hid', ['hid' => $hid]);
+
+        return true;
     }
 
     /**

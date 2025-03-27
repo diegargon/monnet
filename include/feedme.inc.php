@@ -120,7 +120,15 @@ function notification_data_process(AppContext $ctx, int $host_id, array $rdata):
         ];
         $db->insert('stats', $set_stats);
     endif;
-
+    if (!isEmpty($rdata['mem_stats'])) :
+        $set_stats = [
+            'date' => date_now(),
+            'type' => 4,   // Memory
+            'host_id' => $host_id,
+            'value' => $rdata['mem_stats_stats']
+        ];
+        $db->insert('stats', $set_stats);
+    endif;
     if (!isEmpty($rdata['listen_ports_info'])) :
         feed_update_listen_ports($ctx, $host_id, $rdata['listen_ports_info']);
     endif;

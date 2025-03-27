@@ -25,10 +25,6 @@ require_once 'include/common-call.php';
 require_once 'include/usermode.inc.php';
 require_once 'include/submitter-call.php';
 
-if (!empty($ncfg) && $ncfg->get('ansible')) {
-    require_once 'class/TaskAnsible.php';
-}
-
 use App\Router\CommandRouter;
 $cmdRouter = new CommandRouter($ctx);
 
@@ -41,6 +37,10 @@ exit();
 /*
  * OLD STUFF KEEP FOR REFERENCE
  */
+if (!empty($ncfg) && $ncfg->get('ansible')) {
+    require_once 'class/TaskAnsible.php';
+}
+
 $tdata = [];
 $hosts = $ctx->get('Hosts');
 $target_id = 0;

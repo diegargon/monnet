@@ -95,26 +95,6 @@ class HostFormatter
 
     /**
      *
-     * @param string $misc
-     * @return array<string, string|int>
-     */
-    public function decodeMisc(string $misc): array
-    {
-        if (empty($misc)) {
-            return [];
-        }
-        $misc = json_decode($misc, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            \Log::warning('Error decodeMisc');
-
-            return ['status' => 'error'];
-        }
-
-        return $misc;
-    }
-
-    /**
-     *
      * @param array<string, mixed> $logs_items
      * @return array<string, string|int>
      */
@@ -154,13 +134,6 @@ class HostFormatter
     public function formatMisc(array &$host): void
     {
         $lng = $this->ctx->get('lng');
-
-        if (!empty($host['misc'])) {
-            $host['misc'] = $this->decodeMisc($host['misc']);
-            /* TODO: Migrate: keep misc values in misc then delete this */
-            $host = array_merge($host, $host['misc']);
-        }
-
 
         if (!empty($host['misc']['load_avg'])) :
             $loadavg = unserialize($host['misc']['load_avg']);
@@ -212,5 +185,29 @@ class HostFormatter
                 ];
             endforeach;
         endif;
+
+        if(!empty($host['misc']['uptime'])) {
+            $host['misc']['uptime'] = $this->formatUptime($host['misc']['uptime']);
+        }
+     }
+
+    /**
+     * Converts system uptime in seconds to a human-readable format.
+     *
+     * @param float $seconds The uptime in seconds.
+     * @return string Human-readable uptime format.
+     */
+    function formatUptime(float $seconds): string {
+        $days = floor($seconds / 86400);
+        $seconds %= 86400;
+
+        $hours = floor($seconds / 3600);
+        $seconds %= 3600;
+
+        $minutes = floor($seconds / 60);
+        $seconds %= 60;
+
+        return sprintf("%d days, %d:%d:%d", $days, $hours, $minutes, $seconds);
     }
+
 }

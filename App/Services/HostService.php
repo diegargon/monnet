@@ -12,6 +12,7 @@ namespace App\Services;
 
 use App\Models\CmdHostModel;
 use App\Models\CmdHostLogsModel;
+use App\Models\HostsModel;
 
 class HostService
 {
@@ -19,6 +20,7 @@ class HostService
     private CmdHostLogsModel $cmdHostLogsModel;
     private HostFormatter $hostFormatter;
     private AnsibleService $ansibleService;
+    private HostsModel $hostsModel;
 
     private \AppContext $ctx;
     private \Config $ncfg;
@@ -30,10 +32,18 @@ class HostService
         $this->hostFormatter = new HostFormatter($ctx);
         $this->ansibleService = new AnsibleService($ctx);
         $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
+        $this->hostsModel = new HostsModel($ctx);
+
         $this->ncfg = $ctx->get('Config');
         $this->ctx = $ctx;
     }
 
+    public function getHostById(int $id): array
+    {
+        $host = $this->cmdHostLogsModel->getHostById($id);
+
+        return $host;
+    }
     /**
      *
      * @param int $target_id
@@ -41,12 +51,17 @@ class HostService
      */
     public function getDetails(int $target_id): array
     {
-        $hostDetails = $this->cmdHostModel->getHostDetails($target_id);
+        $hostDetails = $this->cmdHostModel->getHostById($target_id);
 
         if (!$hostDetails) {
             return ['error' => 'No details found for the host'];
         }
 
+        if (!empty($hostDetails['misc'])) {
+            $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
+            /* TODO: Migrate: keep misc values in misc then delete this */
+            $hostDetails = array_merge($hostDetails, $hostDetails['misc']);
+        }
         $hostDetails = $this->hostFormatter->format($hostDetails);
 
         // Get remote  ports (1)
@@ -75,15 +90,21 @@ class HostService
 
     /**
      *
-     * @param int $target_id
+     * @param int $hid
      * @return array<string, string|int>
      */
-    public function getDetailsStats(int $target_id): array
+    public function getDetailsStats(int $hid): array
     {
-        $hostDetails = $this->cmdHostModel->getHostDetailsStats($target_id);
+        $hostDetails = $this->hostModel->getHostMisc($hid);
 
         if (!$hostDetails) {
             return ['error' => 'No details found for the host'];
+        }
+
+        if (!empty($hostDetails['misc'])) {
+            $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
+            /* TODO: Migrate: keep misc values in misc then delete this */
+            $hostDetails = array_merge($hostDetails, $hostDetails['misc']);
         }
 
         $this->hostFormatter->formatMisc($hostDetails);
@@ -91,7 +112,7 @@ class HostService
         if (!empty($hostDetails['load_avg'])) {
             $hostDetails_stats['load_avg'] = $hostDetails['load_avg'];
         }
-        if (!empty($hostDetails['mem_ifno'])) {
+        if (!empty($hostDetails['mem_info'])) {
             $hostDetails_stats['mem_info'] = $hostDetails['mem_info'];
         }
         if (!empty($hostDetails['disks_info'])) {
@@ -120,7 +141,7 @@ class HostService
 
         foreach ($hosts as $host) :
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
-            $misc = $this->hostFormatter->decodeMisc($host['misc']);
+            $misc = $this->decodeMisc($host['misc']);
             if (isset($misc['status'])) {
                 continue;
             }
@@ -157,7 +178,7 @@ class HostService
         foreach ($hosts as $host) :
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
 
-            $misc = $this->hostFormatter->decodeMisc($host['misc']);
+            $misc = $this->decodeMisc($host['misc']);
             $host['misc'] = $misc;
             // TODO: misc array must be in misc key this merge is temporary for compatibility
             $host = array_merge($host, $misc);
@@ -257,5 +278,106 @@ class HostService
         endforeach;
 
         return $result_hosts;
+    }
+
+    /**
+     *
+     * @param string $misc
+     * @return array<string, string|int>
+     */
+    public function encodeMisc(string $misc): array
+    {
+        if (empty($misc)) {
+            return [];
+        }
+        $misc = json_encode($misc, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            \Log::warning('Error encodeMisc: Invalid JSON');
+
+            return ['status' => 'error'];
+        }
+
+        return $misc;
+    }
+
+    /**
+     *
+     * @param string $misc
+     * @return array<string, string|int>
+     */
+    public function decodeMisc(string $misc): array
+    {
+        if (empty($misc)) {
+            return [];
+        }
+        $misc = json_decode($misc, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            \Log::warning('Error decodeMisc: Invalid JSON');
+
+            return ['status' => 'error'];
+        }
+
+        return $misc;
+    }
+
+    /**
+     * Procesa la actualización de un host, manejando el campo misc correctamente.
+     *
+     * @param int $id del host a actualizar.
+     * @param array $data datos a actualizar (incluyendo misc).
+     *
+     * @return bool
+     */
+    public function updateHost(int $id, array $data): bool
+    {
+        if (isset($data['misc'])) {
+            if (!is_array($data['misc'])) {
+                return ['error', 'Misc value is set but not an array'];
+            }
+            //Database Current Misc
+            $currentMisc = $this->hostModel->getMiscById($id);
+            $currentMisc = $this->decodeMisc($currentMisc);
+            if (isset($currentMisc['error'])) {
+                return $currentMisc;
+            }
+
+            $newMisc = array_merge($currentMisc, $data['misc']);
+
+            $newMiscEncoded = $this->encodeMisc($newMisc);
+
+            if(isset($newMiscEncoded['error'])) {
+                return $newMiscEncoded;
+            }
+
+            $data['misc'] = $newMiscEncoded;
+        }
+
+        return $this->hostModel->update($id, $data);
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param string $msg
+     * @param int $log_type
+     * @return void
+     */
+    public function setAlertOn(int $id, string $msg, int $log_type, int $event_type): void
+    {
+        \Log::logHost(LogLevel::ALERT, $id, $msg, $log_type, $event_type);
+        $this->hostModel->update($id, ['alert' => 1]);
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param string $msg
+     * @param int $log_type
+     * @return void
+     */
+    public function setWarnOn(int $id, string $msg, int $log_type, int $event_type): void
+    {
+        \Log::logHost(LogLevel::WARNING, $id, $msg, $log_type, $event_type);
+        $this->hostModel->update($id, ['warn' => 1]);
     }
 }

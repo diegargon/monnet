@@ -76,7 +76,7 @@ require_once 'class/Log.php';
 /**
  * @var array<string> $lng
  */
-/* Get default lang overwrite after with user settings */
+/* Get default lang: User settings will overwrite */
 require_once 'lang/es/main.lang.php';
 $ctx->setLang($lng);
 
@@ -86,28 +86,6 @@ require_once 'include/util.inc.php';
 require_once 'include/time.inc.php';
 require_once 'class/Filters.php';
 
-/*
- * TODO Actualmente necesita update primero para que cree la tabla Config
- * update.inc.php utiliza ncfg
- * para evitar y actualice bien de momento usamos un archivo updateuserold.inc.php
- * hasta que exista la tabla config y $ncfg no devuelva null borrar sobre finales
- * de enero
- * Despues limpiar casi todo esto;
- */
-
-$tableExistsQuery = $db->query("SHOW TABLES LIKE 'prefs'");
-$tableExists = $tableExistsQuery ? $db->fetch($tableExistsQuery) : false;
-
-if ($tableExists) {
-    $query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
-
-    if ($query) {
-        $result = $db->fetchAll($query);
-        if (!empty($result) && isset($result[0]['pref_value'])) {
-            $db_version = (float) $result[0]['pref_value'];
-        }
-    }
-}
 Log::init($cfg, $db, $lng);
 
 $ncfg = $ctx->set('Config', new Config($ctx));

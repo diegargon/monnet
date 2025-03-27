@@ -333,6 +333,8 @@ class Hosts
         $this->db->delete('reports', ['host_id' => $hid]);
         $this->db->delete('ansible_msg', ['host_id' => $hid]);
         $this->db->delete('ports', ['hid' => $hid]);
+        $this->db->delete('ansible_vars', ['hid' => $hid]);
+        $this->db->delete('tasks', ['hid' => $hid]);
 
         unset($this->hosts[$hid]);
     }

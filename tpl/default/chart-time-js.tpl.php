@@ -19,7 +19,14 @@ $id = $tdata['type'] . '_' . $tdata['host_id'];
 
 <canvas id="graph_<?= $id ?>" width="400" height="200"></canvas>
 <button id="zoomInButton_<?= $id ?>"><?= $lng['L_ZOOM_IN'] ?></button>
-<button id="zoomOutButton_<?= $id ?>"><?= $lng['L_ZOOM_IN'] ?></button>
+<button id="zoomOutButton_<?= $id ?>"><?= $lng['L_ZOOM_OUT'] ?></button>
+<style>
+    #graph_<?= $id ?> {
+        border: 1px outset black;
+        background-color: #392a2a;
+        padding: 5px;
+    }
+</style>
 <script>
     var datatime_graph_format = "<?= $cfg['datatime_graph_format'] ?>";
     var timezone = "<?= $cfg['timezone'] ?>";
@@ -38,8 +45,8 @@ $id = $tdata['type'] . '_' . $tdata['host_id'];
         return item.value;
     });
 
-    var myChart = new Chart(ctx, {
-        // line, bar,radar doughnut, pie ,polarArea, bubble
+    const myChart = new Chart(ctx, {
+        // line, bar,radar dougnut, pie ,polarArea, bubble
         type: 'bar',
         data: {
             labels: fechas,
@@ -111,13 +118,12 @@ $id = $tdata['type'] . '_' . $tdata['host_id'];
                     barThickness: 'flex' // 'flex' significa que el ancho se ajustará automáticamente
                 }
             }
-
         }
     });
 
 
-    var zoomLevel = 0;
-    var removedData = [];
+    let zoomLevel = 0;
+    let removedData = [];
 
     document.getElementById('zoomOutButton_<?= $id ?>').addEventListener('click', function () {
         if (zoomLevel < 50) {

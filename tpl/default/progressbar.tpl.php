@@ -4,7 +4,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -27,6 +27,10 @@ $progress_bar_width = $tdata['progress_bar_width'] ?? '190'
 <style>
 .progress-bar-container {
     width: <?= $progress_bar_width?>px;
+    border: 1px outset black;
+    padding: 6px;
+    background-color: #392a2a;
+    margin-right: -8px;
 }
 </style>
 

@@ -140,6 +140,7 @@ class CmdHostController
         }
 
         if ($this->cmdHostModel->removeByID($target_id)) {
+            \Log::notice('Deleted host id: ' . $target_id);
             return Response::stdReturn(true, "$field: Host removed $target_id", true, ['command_receive' => $command]);
         }
 

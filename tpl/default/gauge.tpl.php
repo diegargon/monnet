@@ -4,7 +4,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
  * In frontend->getTpl()
@@ -34,6 +34,10 @@ $unique_prefix = uniqid('gauge_', true);
     .chart-container {
         width: <?= $gauge_container_width ?>px;
         height: <?= $gauge_container_width ?>px;
+        border: 1px outset black;
+        padding: 6px;
+        background-color: #392a2a;
+        margin-right: -8px;
     }
 </style>
 

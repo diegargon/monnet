@@ -258,13 +258,13 @@
                     </div>
                     <?php
                     if (
-                        !empty($tdata['host_details']['uptime'])
+                        !empty($tdata['host_details']['misc']['uptime'])
                     ) {
                         ?>
                         <div class="" >
                             <span class="resume_label"><?= $lng['L_UPTIME'] ?>:</span>
                             <span class="resume_field">
-                                <?= $tdata['host_details']['uptime']?>
+                                <?= $tdata['host_details']['misc']['uptime']?>
                             </span>
                         </div>
                     <?php } ?>

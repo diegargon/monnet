@@ -560,20 +560,20 @@ function requestHostDetails(command, command_values = []) {
                 if (jsonData.command_receive === 'auto_reload_host_details') {
                     host_details = jsonData.host_details;
 
-                    if (host_details['disk_info'] || host_details['mem_info']) {
-                        $('#bars_container').html('');
-                    }
                     if (host_details['iowait_stats']) {
                         $('#iowait_container').html(host_details['iowait_stats']);
                     }
                     if (host_details['load_avg']) {
                         $('#load_container').html(host_details['load_avg']);
                     }
+                    if (host_details['mem_info'] || host_details['disks_info']) {
+                        $('#bars_container').html('');
+                    }
                     if (host_details['mem_info']) {
-                        $('#bars_container').html(host_details['mem_info']);
+                        $('#bars_container').append(host_details['mem_info']);
                     }
                     if (host_details['disks_info']) {
-                        $('#bars_container').html(host_details['disks_info']);
+                        $('#bars_container').append(host_details['disks_info']);
                     }
                 }
                 /* Logs reload */

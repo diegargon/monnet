@@ -13,40 +13,13 @@ namespace App\Models;
 class HostsModel
 {
     private \AppContext $ctx;
-
-   /** @var int */
-    public int $totals = 0;
-    /** @var int */
-    public int $total_on = 0;
-    /** @var int */
-    public int $total_off = 0;
-    /** @var int */
-    public int $highlight_total = 0;
-    /** @var int */
-    public int $ansible_hosts = 0;
-    /** @var int */
-    public int $ansible_hosts_off = 0;
-    /** @var int */
-    public int $ansible_hosts_fail = 0;
-    /** @var int */
-    public int $agents = 0;
-    /** @var int */
-    public int $agents_off = 0;
-    /** @var int */
-    public int $agents_missing_pings = 0;
-    /**  @var int */
-    public int $hypervisor_rols = 0;
-    /**  @var int */
-    public int $alerts = 0;
-    /**  @var int */
-    public int $warns = 0;
-
+    private \DBManager $db;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->db = $this->ctx->get('DBManager');
     }
-
 
     /**
      *
@@ -54,11 +27,8 @@ class HostsModel
      */
     public function getAll(): array
     {
-        $db = $this->ctx->get('DBManager');
-
         $query = "SELECT * FROM hosts";
-
-        $results = $db->qfetchAll($query);
+        $results = $this->db->qfetchAll($query);
 
         if (is_bool($results)) {
             return [];
@@ -67,4 +37,38 @@ class HostsModel
 
         return $results;
     }
+
+    /**
+     *
+     * @param int $target_id
+     * @return array<string, mixed>|null
+     */
+    public function getHostMisc(int $target_id): ?array
+    {
+        $query = "SELECT misc FROM hosts WHERE id = :id";
+        $params = ['id' => $target_id];
+
+        return $this->db->qfetch($query, $params);
+    }
+
+    /**
+     * Actualiza los datos de un host.
+     *
+     * @param int   $id   ID del host a actualizar.
+     * @param array $data Datos a actualizar.
+     *
+     * @return bool
+     */
+    public function update(int $id, array $data): bool
+    {
+        $fields = array_keys($data);
+        $setPart = implode(", ", array_map(fn($field) => "$field = :$field", $fields));
+
+        $query = "UPDATE host SET $setPart WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+
+        $data['id'] = $id;
+        return $stmt->execute($data);
+    }
+
 }

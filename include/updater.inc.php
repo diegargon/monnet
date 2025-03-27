@@ -8,6 +8,7 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+
 function trigger_update(Config $ncfg, Database $db, float $db_version, float $files_version): void
 {
     Log::notice("Triggered updater File version: $files_version DB version: $db_version");
@@ -357,12 +358,12 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 /**
  * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
-  * @var Database $db
+ * @var Database $db
  */
 if ($db->isConn()) {
     $lockFile = '/tmp/monnet_update.lock';
-    //$query = $db->select('prefs', 'pref_value', ['uid' => 0, 'pref_name' => 'monnet_version']);
     $db_version = (float) $ncfg->get('db_monnet_version');
+
     if ($db_version) :
         $files_version = (float) $cfg['monnet_version'];
 
