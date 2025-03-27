@@ -30,7 +30,7 @@ function check_known_hosts(AppContext $ctx): bool
         Log::error("hosts is not a object");
         return false;
     }
-    
+
     Log::debug('Pinging known host');
     $db_hosts = $hosts->getknownEnabled();
 
@@ -79,7 +79,7 @@ function check_known_hosts(AppContext $ctx): bool
                     $check_ports_result['online'] = 1;
                     $check_ports_result['latency'] = $host_ping['latency'];
                 } else {
-                    if ($host['disable_alarms']) {
+                    if (!empty($host['disable_alarms'])) {
                         $event_type = LogType::EVENT;
                         $check_ports_result['warn'] = 0;
                     } else {
@@ -90,7 +90,7 @@ function check_known_hosts(AppContext $ctx): bool
                         $host['id'],
                         'All Ports down / No ping response',
                         $event_type,
-                        EvenType::HOST_BECOME_OFF
+                        EventType::HOST_BECOME_OFF
                     );
                 }
             }
