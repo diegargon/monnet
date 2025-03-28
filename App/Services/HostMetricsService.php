@@ -33,6 +33,8 @@ class HostMetricsService
      *
      * @param int $hid
      * @return string
+     *
+     *  Metrics Types: 1 ping 2 loadavg 3 iowait 4 memory
      */
     public function getMetricsGraph(int $hid): string
     {
@@ -41,7 +43,6 @@ class HostMetricsService
         $metrics_types = [1, 2, 3, 4];
 
         foreach ($metrics_types as $metrics_type) {
-            /* 1 ping 2 loadavg 3 iowait */
             $metrics = $this->getMetricsByType($hid, $metrics_type);
             if ($metrics) {
                 switch ($metrics_type) {
