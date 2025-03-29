@@ -46,7 +46,7 @@
                                 alt="online_status"
                                 title="Off">
                             <?php
-                        elseif ($key === 'log_msgs') :
+                        elseif ($key === 'log_msgs' && is_array($host['log_msg'])) :
                             foreach ($host['log_msgs'] as $log_msg) :
                                 ?>
                             <div>

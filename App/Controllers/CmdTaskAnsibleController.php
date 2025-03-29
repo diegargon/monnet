@@ -45,7 +45,9 @@ class CmdTaskAnsibleController
         } else {
             $as_html = 0;
         }
-
+        if (empty($playbook)) {
+            return Response::stdReturn(false, 'Playbook its mandatory');
+        }
         if (!empty($command_values['extra_vars'])) {
             $extra_vars = $this->filter->varJson($command_values['extra_vars']);
         }

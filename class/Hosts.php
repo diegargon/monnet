@@ -80,6 +80,7 @@ class Hosts
         'iowait',
         'always_on',
         'agent_missing_pings',
+        'latency'
     ];
 
     /**
