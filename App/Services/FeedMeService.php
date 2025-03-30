@@ -24,6 +24,11 @@ class FeedMeService
         $this->hostService = new HostService($ctx);
     }
 
+    /**
+     *
+     * @param array<string, string|int> $request
+     * @return array<string, string|int>
+     */
     public function processRequest(array $request): array
     {
         $command = $request['cmd'];
@@ -46,7 +51,7 @@ class FeedMeService
         if (!empty($request['name'])) {
             switch ($request['name']):
                 case 'ping': //Ping come with real time data
-                    $ping_updates = $this->processPingData($host_update_values, $rdata);
+                    $ping_updates = $this->processPingData($host_id, $host_update_values, $rdata);
                     if(!empty($ping_updates)) {
                         $host_update_values = array_merge($host_update_values, $ping_updates);
                     }
@@ -78,7 +83,13 @@ class FeedMeService
         return $this->prepareResponse($command, $request, $agent_default_interval);
     }
 
-    public function processStarting(int $host_id, array $rdata)
+    /**
+     *
+     * @param int $host_id
+     * @param array<string, string|int> $rdata
+     * @return array<string, string|int>
+     */
+    public function processStarting(int $host_id, array $rdata): array
     {
         $host = $this->model->getHostById($host_id);
         $host_update_values = [];
@@ -97,6 +108,12 @@ class FeedMeService
         return $host_update_values;
     }
 
+    /**
+     *
+     * @param int $host_id
+     * @param array<string, string|int> $rdata
+     * @return bool
+     */
     public function processStats(int $host_id, array $rdata): bool
     {
         if (!isEmpty($rdata['load_avg_stats'])) {
@@ -132,6 +149,12 @@ class FeedMeService
         return true;
     }
 
+    /**
+     *
+     * @param int $host_id
+     * @param array<string, string|int> $rdata
+     * @return bool
+     */
     public function processPorts(int $host_id, array $rdata): bool
     {
         if (empty($rdata['listen_ports_info']) || !is_array($rdata['listen_ports_info'])) {
@@ -142,6 +165,13 @@ class FeedMeService
 
         return true;
     }
+
+    /**
+     *
+     * @param int $host_id
+     * @param array<string, string|int> $listen_ports
+     * @return bool
+     */
     public function updateListenPorts(int $host_id, array $listen_ports): bool
     {
         $scan_type = 2; // Agent Based
@@ -232,7 +262,14 @@ class FeedMeService
         }
     }
 
-    private function processPingData(array $host_update_values, array $rdata): array
+    /**
+     *
+     * @param int $host_id
+     * @param array<string, string|int> $host_update_values
+     * @param array<string, mixed> $rdata
+     * @return array<string, string|int>
+     */
+    private function processPingData(int $host_id, array $host_update_values, array $rdata): array
     {
         if (!isEmpty($rdata['loadavg'])) {
             $host_update_values['misc']['load_avg'] = serialize($rdata['loadavg']);
@@ -246,10 +283,22 @@ class FeedMeService
         if (!isEmpty($rdata['iowait'])) {
             $host_update_values['misc']['iowait'] = $rdata['iowait'];
         }
+        if (!isEmpty($rdata['host_logs'])) :
+            foreach($rdata['host_logs'] as $hlog) {
+                \Log::logHost($hlog['level'], $host_id, 'Agent: ' . $hlog['message']);
+            }
+        endif;
 
         return $host_update_values;
     }
 
+    /**
+     *
+     * @param string $command
+     * @param array<string, string|int> $request
+     * @param int $interval
+     * @return array<string, string|int>
+     */
     private function prepareResponse(string $command, array $request, int $interval): array
     {
         $response = [
@@ -273,6 +322,13 @@ class FeedMeService
         return [];
     }
 
+    /**
+     *
+     * @param array<string, string|int> $host
+     * @param string $token
+     * @param int $host_id
+     * @return array<string, string|int>
+     */
     private function validateHostRequest(array $host, string $token, int $host_id): array
     {
         if (!$host) {
@@ -286,6 +342,10 @@ class FeedMeService
         return ['success'];
     }
 
+    /**
+     *
+     * @return int
+     */
     private function getAgentInterval(): int
     {
         $cfg = $this->ctx->get('cfg');
@@ -302,6 +362,13 @@ class FeedMeService
         return $agent_default_interval;
     }
 
+    /**
+     *
+     * @param array<string, string|int> $host
+     * @param array<string, string|int> $request
+     * @param int $interval
+     * @return array<string, string|int>
+     */
     private function prepareHostUpdateValues(array $host, array $request, int $interval): array
     {
         $values = [
@@ -321,6 +388,12 @@ class FeedMeService
         return $values;
     }
 
+    /**
+     *
+     * @param string $request_name
+     * @param int $host_id
+     * @param array<string, mixed> $rdata
+     */
     private function notificationLog(string $request_name, int $host_id, array $rdata)
     {
         $event_type = !empty($rdata['event_type']) ? $rdata['event_type'] : 0;

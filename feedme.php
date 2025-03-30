@@ -180,6 +180,11 @@ if ($command === 'ping' && !isEmpty($rdata)) :
     if (!isEmpty($rdata['iowait'])) :
         $host_update_values['iowait'] = $rdata['iowait'];
     endif;
+    if (!isEmpty($rdata['host_logs'])) :
+        foreach($rdata['host_logs'] as $hlog) {
+            Log::logHost($hlog['level'], $host_id, 'Agent: ' . $hlog['message']);
+        }
+    endif;
 endif;
 
 /* Update host */
