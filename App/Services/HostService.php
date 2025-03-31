@@ -380,4 +380,15 @@ class HostService
         \Log::logHost(LogLevel::WARNING, $id, $msg, $log_type, $event_type);
         $this->hostModel->update($id, ['warn' => 1]);
     }
+
+    /**
+     *
+     * @param int $id
+     * @param array<string, string|int> $port_update
+     * @return bool
+     */
+    public function updatePort(int $id, array $port_update): bool
+    {
+        return $this->cmdHostModel->updatePort($id, $port_update);
+    }
 }

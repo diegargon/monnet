@@ -12,13 +12,12 @@ namespace App\Controllers;
 use App\Services\FeedMeService;
 
 class FeedMeController {
-    private AppContext $ctx;
+    private \AppContext $ctx;
     private FeedMeService $feedMeService;
 
-    public function __construct(AppContext $ctx) {
+    public function __construct(\AppContext $ctx) {
         $this->ctx = $ctx;
         $this->feedMeService = new FeedMeService($ctx);
-
     }
 
     /**
@@ -46,14 +45,15 @@ class FeedMeController {
             $this->responseError($request['error']);
         }
 
-        $response = $this->feedMeService->processRequest($request_content);
+        $response = $this->feedMeService->processRequest($request);
 
-        if(empty($response['error'])) {
-            $this->responseError($request['error']);
+        if(!empty($response['error'])) {
+            $this->responseError($response['error']);
         } elseif ($response['success']) {
             $this->responseSuccess($response['response_data']);
         }
 
+        $this->responseError('Unknown error on handleRequest');
     }
 
     /**
@@ -81,15 +81,15 @@ class FeedMeController {
             return ['error' => 'Missing version field'];
         }
 
-        return ['success'];
+        return ['success' => true];
     }
 
     /**
      *
      * @param string $msg
-     * @return never
+     * @return void
      */
-    private function responseError(string $msg)
+    private function responseError(string $msg): void
     {
         \Log::error($msg);
         http_response_code(400);
@@ -103,11 +103,12 @@ class FeedMeController {
     /**
      *
      * @param string $response
-     * @return string
+     * @return void
      */
-    private function responseSuccess(string $response): string
+    private function responseSuccess(string $response): void
     {
         header('Content-Type: application/json');
         echo json_encode($response);
+        exit();
     }
 }

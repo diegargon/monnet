@@ -223,7 +223,7 @@ class AnsibleService
 
     /**
      *
-     * @param array<string, string|int> $response
+     * @param array<string, mixed> $response
      * @return array<string, string|int>
      */
     public function asHtml(array $response): array
@@ -239,7 +239,7 @@ class AnsibleService
     /**
      *
      * @param array<string, string|int> $host
-     * @param array<string, string|int> $response
+     * @param array<string, mixed>> $response
      * @return array<string, string|int>
      */
     public function fSystemLogs(array $host, array $response): array
@@ -309,18 +309,34 @@ class AnsibleService
         }
         $response = $this->ansibleReportModel->getDbReportById($report_id);
 
-        $response_report = json_decode($response['report'], true);
-        if ($response) {
-            $html_response = $this->asHtml($response_report);
-            if ($html_response['status'] === 'success') {
-                return [
-                    'status' => 'success',
-                    'response_msg' => $html_response['response_msg'],
-                ];
-            }
+        if(!$response) {
+            return [
+                'status' => 'error',
+                'error' => 'Report id not exists'
+            ];
         }
 
-        return [];
+        try {
+            $response_report = json_decode($response['report'], true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return [
+                'status' => 'error',
+                'error_msg' => 'Error decoding JSON: ' . $e->getMessage()
+            ];
+        }
+
+        $html_response = $this->asHtml($response_report);
+        if ($html_response['status'] === 'success') {
+            return [
+                'status' => 'success',
+                'response_msg' => $html_response['response_msg'],
+            ];
+        }
+
+        return [
+            'status' => 'error',
+            'error_msg' => 'Unknown error getting the report'
+        ];
     }
 
     public function getHostTasks(int $hid)

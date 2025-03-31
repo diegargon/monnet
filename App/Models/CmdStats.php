@@ -19,4 +19,9 @@ class CmdStats
         $this->ctx = $ctx;
         $this->db = $ctx->get('DBManager');
     }
+
+    public function insertStats(array $data)
+    {
+        $this->db->insert('stats', $data);
+    }
 }

@@ -11,22 +11,27 @@
 namespace App\Services;
 
 use App\Services\HostService;
+use App\Models\CmdHostModel;
+use App\Models\CmdStats;
 
 class FeedMeService
 {
     private \AppContext $ctx;
     private HostService $hostService;
-
+    private CmdStats $cmdStats;
+    private CmdHostModel $cmdHostModel;
+    private array $cfg = [];
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->cfg = $ctx->get('cfg');
         $this->hostService = new HostService($ctx);
     }
 
     /**
      *
-     * @param array<string, string|int> $request
+     * @param array<string, mixed> $request
      * @return array<string, string|int>
      */
     public function processRequest(array $request): array
@@ -35,6 +40,7 @@ class FeedMeService
         $host_id = (int) $request['id'];
         $host = $this->hostService->getHostById($host_id);
         $rdata = $request['data'];
+        $host_update_values = [];
 
         $validated_response = $this->validateHostRequest($host, $request['token'], $host_id);
         if (!empty($validated_response['error'])) {
@@ -46,7 +52,9 @@ class FeedMeService
         $agent_default_interval = $this->getAgentInterval();
 
         $host_update_values = $this->prepareHostUpdateValues($host, $request, $agent_default_interval);
-        $host_update_values['agent_installed'] = 1;
+        if (empty($host['agent_installed'])) {
+            $host_update_values['agent_installed'] = 1;
+        }
 
         if (!empty($request['name'])) {
             switch ($request['name']):
@@ -91,7 +99,7 @@ class FeedMeService
      */
     public function processStarting(int $host_id, array $rdata): array
     {
-        $host = $this->model->getHostById($host_id);
+        $host = $this->hostService->getHostById($host_id);
         $host_update_values = [];
 
         if (!empty($rdata['ncpu'])) {
@@ -116,34 +124,38 @@ class FeedMeService
      */
     public function processStats(int $host_id, array $rdata): bool
     {
-        if (!isEmpty($rdata['load_avg_stats'])) {
-            $this->model->insertStat([
+        if (empty($this->cmdStats)) {
+            $this->cmdStats = new CmdStats($this->ctx);
+        }
+
+        if (!\isEmpty($rdata['load_avg_stats'])) {
+            $stats_data = [
                 'date' => date_now(),
                 'type' => 2,   //loadavg
                 'host_id' => $host_id,
                 'value' => $rdata['load_avg_stats']['5min']
-            ]);
+            ];
+            $this->cmdStats->insertStats($stats_data);
         }
 
-        if (!isEmpty($rdata['iowait_stats'])) {
-            $this->model->insertStat([
+        if (!\isEmpty($rdata['iowait_stats'])) {
+            $stats_data = [
                 'date' => date_now(),
                 'type' => 3,   //iowait
                 'host_id' => $host_id,
                 'value' => $rdata['iowait_stats']
-            ]);
+            ];
+            $this->cmdStats->insertStats($stats_data);
         }
 
-        if (!isEmpty($rdata['mem_stats'])) :
-            $set_stats = [
+        if (!\isEmpty($rdata['mem_stats'])) {
+            $stats_data = [
                 'date' => date_now(),
                 'type' => 4,   // Memory
                 'host_id' => $host_id,
-                'value' => $rdata['mem_stats_stats']
+                'value' => $rdata['mem_stats']
             ];
-        endif;
-        if(!empty($set_stats)) {
-           $db->insert('stats', $set_stats);
+            $this->cmdStats->insertStats($stats_data);
         }
 
         return true;
@@ -175,9 +187,14 @@ class FeedMeService
     public function updateListenPorts(int $host_id, array $listen_ports): bool
     {
         $scan_type = 2; // Agent Based
-        $db_host_ports = $this->model->getHostScanPorts($host_id, $scan_type);
+
+        if(!isset($this->cmdHostModel)) {
+            $this->cmdHostModel = new CmdHostModel($this->ctx);
+        }
+        $db_host_ports = $this->cmdHostModel->getHostScanPorts($host_id, $scan_type);
         $db_ports_map = [];
 
+        // Normalize TODO: to method?
         foreach ($db_host_ports as $db_port) {
             $interface = $db_port['interface'] ?? '';
             $pnumber = (int) $db_port['pnumber'];
@@ -209,18 +226,18 @@ class FeedMeService
                 if ($db_port['service'] !== $port['service']) {
                     $warnmsg = 'Service name change detected: '
                         . "({$db_port['service']}->{$port['service']}) ({$pnumber})";
-                    $this->model->setWarnOn($host_id, $warnmsg, LogType::EVENT_WARN, EventType::SERVICE_NAME_CHANGE);
+                    $this->hostService->setWarnOn($host_id, $warnmsg, \LogType::EVENT_WARN, \EventType::SERVICE_NAME_CHANGE);
 
-                    $this->model->updatePort($db_port['id'], [
+                    $this->hostService->updatePort($db_port['id'], [
                         "service" => $port['service'],
                         "online" => 1,
                         "last_change" => date_now(),
                     ]);
                 } elseif ($db_port['online'] == 0) {
                     $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber)";
-                    $this->model->setWarnOn($host_id, $alertmsg, LogType::EVENT_WARN, EventType::PORT_UP);
+                    $this->hostService->setWarnOn($host_id, $alertmsg, \LogType::EVENT_WARN, \EventType::PORT_UP);
 
-                    $this->model->updatePort($db_port['id'], [
+                    $this->hostService->updatePort($db_port['id'], [
                         "online" => 1,
                         "last_change" => date_now(),
                     ]);
@@ -229,7 +246,7 @@ class FeedMeService
                 unset($db_ports_map[$key]);
             } else {
                 \Log::warning($key);
-                $this->model->addPort([
+                $new_port_data = [
                     'hid' => $host_id,
                     'scan_type' => $scan_type,
                     'protocol' => $protocol,
@@ -239,14 +256,12 @@ class FeedMeService
                     'interface' => $interface,
                     'ip_version' => $ip_version,
                     'last_change' => date_now(),
-                ]);
-
+                ];
+                $this->cmdHostModel->addPort($new_port_data);
                 $log_msg = "New port detected: $pnumber ({$port['service']})";
-                $this->model->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_NEW);
+                $this->hostService->setAlertOn($host_id, $log_msg, \LogType::EVENT_ALERT, \EventType::PORT_NEW);
                 unset($db_ports_map[$key]);
             }
-
-            return true;
         }
 
         foreach ($db_ports_map as $db_port) {
@@ -256,10 +271,12 @@ class FeedMeService
                     'last_change' => date_now(),
                 ];
                 $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
-                $this->model->setAlertOn($host_id, $alertmsg, LogType::EVENT_ALERT, EventType::PORT_DOWN);
-                $this->model->updatePort($db_port['id'], $set);
+                $this->hostService->setAlertOn($host_id, $alertmsg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
+                $this->hostService->updatePort($db_port['id'], $set);
             }
         }
+
+        return true;
     }
 
     /**

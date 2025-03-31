@@ -670,10 +670,10 @@ class CmdHostController
     public function submitAccessLink(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $value = $this->filter->varUrl($command_values['value'], 255);
         $field = 'access_link';
 
-        if (!is_numeric($target_id)) {
+        if (!is_numeric($target_id) || empty($value)) {
             return Response::stdReturn(false, "$field: Invalid input data");
         }
         if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {

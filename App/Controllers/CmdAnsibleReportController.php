@@ -71,8 +71,10 @@ class CmdAnsibleReportController
 
         if ($response['status'] === 'success') {
             return Response::stdReturn(true, $response['response_msg'], false, $extra);
-        } else {
-            return Response::stdReturn(false, 'Error viewReport');
+        } elseif (!empty($response['error'])) {
+            return Response::stdReturn(false, $response['error_msg']);
         }
+
+        return Response::stdReturn(false, 'Error viewReport');
     }
 }

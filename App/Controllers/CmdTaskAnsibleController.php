@@ -32,7 +32,7 @@ class CmdTaskAnsibleController
     /**
      *
      * @param string $command
-     * @param array<string, string|int> $command_values
+     * @param array<string, mixed> $command_values
      * @return array<string, string|int>
      */
     public function execPlaybook(string $command, array $command_values): array
@@ -75,7 +75,7 @@ class CmdTaskAnsibleController
     /**
      *
      * @param string $command
-     * @param array<string, string|int> $command_values
+     * @param array<string, mixed> $command_values
      * @return array<string, string|int>
      */
     public function getSystemLogs(string $command, array $command_values): array
@@ -119,7 +119,7 @@ class CmdTaskAnsibleController
     /**
      *
      * @param string $command
-     * @param array<string, string|int> $command_values
+     * @param array<string, mixed> $command_values
      * @return array<string, string|int>
      */
     public function handleShutdownReboot(string $command, array $command_values): array
@@ -141,7 +141,7 @@ class CmdTaskAnsibleController
     /**
      *
      * @param string $command
-     * @param array<string, string|int> $command_values
+     * @param array<string, mixed> $command_values
      * @return array<string, string|int>
      */
     public function mgmtTask(string $command, array $command_values): array
@@ -235,7 +235,7 @@ class CmdTaskAnsibleController
     /**
      *
      * @param string $command
-     * @param array<string, string|int> $command_values
+     * @param array<string, mxied> $command_values
      * @return array<string, string|int>
      */
     public function addAnsibleVar(string $command, array $command_values): array
@@ -268,7 +268,7 @@ class CmdTaskAnsibleController
     /**
      *
      * @param string $command
-     * @param array<string, string|int> $command_values
+     * @param array<string, mixed> $command_values
      * @return array<string, string|int>
      */
     public function delAnsibleVar(string $command, array $command_values): array

@@ -94,6 +94,16 @@ class CmdHostModel
     }
 
     /**
+     *
+     * @param array<string, string|int> $port_data
+     * @return bool
+     */
+    public function addPort(array $port_data): bool
+    {
+        return $this->db->insert('ports', $port_data);
+    }
+
+    /**
      * Elimina un puerto de un host.
      *
      * @param int $target_id El ID del puerto.
@@ -107,14 +117,13 @@ class CmdHostModel
     /**
      * Actualiza un puerto de un host.
      *
-     * @param int $target_id El ID del puerto.
+     * @param int $port_id El ID del puerto.
      * @param array<string, string|int> $data Los datos a actualizar.
      * @return bool True si se actualizó correctamente, False en caso contrario.
      */
-    public function updatePort(int $target_id, array $data): bool
+    public function updatePort(int $port_id, array $data): bool
     {
-
-        return $this->db->update('ports', $data, 'id = id:', ['id' => $target_id]);
+        return $this->db->update('ports', $data, 'id = id:', ['id' => $port_id]);
     }
 
     /**
