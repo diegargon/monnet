@@ -67,6 +67,10 @@ $(document).ready(function () {
         var logSize = $('#log_size').val();
         requestHostDetails('logs-reload', {id: hostId, log_level: logLevel, log_size: logSize});
     });
+    
+    $(document).on("change", "#log_level", function () {
+        $("#logs_reload_btn").trigger("click");
+    }); 
 
     $(document).off("click", "#pbqueue_btn").on("click", "#pbqueue_btn", function () {
         executePlaybookAction('pbqueue');
