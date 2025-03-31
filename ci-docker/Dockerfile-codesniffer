@@ -1,5 +1,7 @@
 FROM php:8.2-cli
 
+RUN cat /etc/resolv.conf
+RUN echo 1.1.1.1 > /etc/resolv.conf
 RUN apt-get update && apt-get install -y curl git unzip
 
 COPY . /myapp
