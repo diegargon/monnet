@@ -388,15 +388,14 @@
                 </div>
                 <div>
                     <select id="log_level" name="log_level" data-btn="auto_reload_logs">
-                        <option value="-1">LOG_ALL</option>
-                        <option value="0">LOG_EMERGENCY</option>
-                        <option value="1">LOG_ALERT</option>
-                        <option value="2">LOG_CRITICAL</option>
-                        <option value="3">LOG_ERROR</option>
-                        <option value="4">LOG_WARNING</option>
-                        <option value="5">LOG_NOTICE</option>
-                        <option value="6">LOG_INFO</option>
                         <option value="7">LOG_DEBUG</option>
+                        <option value="6">LOG_INFO</option>
+                        <option value="5">LOG_NOTICE</option>
+                        <option value="4">LOG_WARNING</option>
+                        <option value="3">LOG_ERROR</option>
+                        <option value="2">LOG_CRITICAL</option>
+                        <option value="1">LOG_ALERT</option>
+                        <option value="0">LOG_EMERGENCY</option>
                     </select>
                 </div>
             </div>
