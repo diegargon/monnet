@@ -73,14 +73,6 @@ class DBManager
     }
 
     /**
-     * Desconectar de la base de datos
-     */
-    public function disconnect(): void
-    {
-        $this->connection = null;
-    }
-
-    /**
      * Ejecutar una consulta SQL
      *
      * @param string $sql Consulta SQL a ejecutar
@@ -121,7 +113,10 @@ class DBManager
      */
     public function fetchAll(\PDOStatement $stmt): array
     {
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC) ;
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC) ;
+        $stmt->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -137,7 +132,10 @@ class DBManager
         $stmt = $this->connection->prepare($sql);
         $this->bindParams($stmt, $params);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+        $stmt->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -382,5 +380,20 @@ class DBManager
                 $stmt->bindValue($key, $value, PDO::PARAM_STR);
             }
         }
+    }
+
+    /**
+     * Desconectar de la base de datos
+     */
+    public function disconnect(): void
+    {
+        $this->connection = null;
+    }
+    /**
+     *
+     */
+    public function __destruct() {
+        $this->disconnect();
+        unset($this->connection, $this->ctx);
     }
 }

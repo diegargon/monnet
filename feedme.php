@@ -64,7 +64,7 @@ require_once 'include/common.inc.php';
 use App\Controllers\FeedMeController;
 $feedMeController = new FeedMeController($ctx);
 $feedMeController->handleRequest();
-exit();
+exit;
 */
 
 require_once 'include/feedme.inc.php';
@@ -77,6 +77,7 @@ if ($request_content === false) :
     trigger_feedme_error('Error: file_get_contents');
 endif;
 $request = json_decode($request_content, true);
+unset($request_content);
 #var_dump($request);
 if (json_last_error() !== JSON_ERROR_NONE) :
     trigger_feedme_error('Invalid json receive: ' . json_last_error_msg());

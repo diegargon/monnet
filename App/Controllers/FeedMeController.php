@@ -52,10 +52,15 @@ class FeedMeController {
         } elseif ($response['success']) {
             $this->responseSuccess($response['response_data']);
         } elseif (empty($response)) {
-            return;
+            exit;
         }
 
         $this->responseError('Unknown error on handleRequest');
+    }
+
+    public function __destruct() {
+        unset($this->ctx);
+        unset($this->feedMeService);
     }
 
     /**
@@ -99,6 +104,7 @@ class FeedMeController {
         echo json_encode([
             'error' => $msg
         ]);
+        exit;
     }
 
     /**
@@ -110,5 +116,7 @@ class FeedMeController {
     {
         header('Content-Type: application/json');
         echo json_encode($response);
+        exit;
     }
+
 }
