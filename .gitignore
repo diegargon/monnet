@@ -4,5 +4,6 @@ TODO
 /test-int/
 /config/config.inc.php
 /oldworkflows/
+/oldfiles/
 bookmarks_icons/*
 !bookmarks_icons/www.png
