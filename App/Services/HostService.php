@@ -37,6 +37,16 @@ class HostService
         $this->ncfg = $ctx->get('Config');
         $this->ctx = $ctx;
     }
+    public function __destruct()
+    {
+        unset($this->ctx, $this->ncfg);
+        unset($this->cmdHostModel);
+        unset($this->cmdHostLogsModel);
+        unset($this->hostFormatter);
+        unset($this->ansibleService);
+        unset($this->cmdHostLogsModel);
+        unset($this->hostsModel);
+    }
 
     public function getHostById(int $id): array
     {
@@ -352,7 +362,7 @@ class HostService
             $data['misc'] = $newMiscEncoded;
         }
 
-        return $this->cmdHostModel->updateMiscByID($id, $data);
+        return $this->cmdHostModel->updateByID($id, $data);
     }
 
     /**

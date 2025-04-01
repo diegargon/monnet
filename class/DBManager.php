@@ -58,6 +58,14 @@ class DBManager
     }
 
     /**
+     *
+     */
+    public function __destruct() {
+        $this->disconnect();
+        unset($this->connection, $this->ctx);
+    }
+
+    /**
      * Conectar a la base de datos
      *
      * @throws RuntimeException Si la conexión falla
@@ -70,6 +78,14 @@ class DBManager
         } catch (\PDOException $e) {
             throw new \RuntimeException("Connection failed: " . $e->getMessage());
         }
+    }
+
+    /**
+     * Desconectar de la base de datos
+     */
+    public function disconnect(): void
+    {
+        $this->connection = null;
     }
 
     /**
@@ -101,7 +117,10 @@ class DBManager
     */
     public function fetch(\PDOStatement $stmt): ?array
     {
-        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+        $stmt->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -151,7 +170,10 @@ class DBManager
         $stmt = $this->connection->prepare($sql);
         $this->bindParams($stmt, $params);
         $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -205,6 +227,7 @@ class DBManager
         if (!$stmt->execute($data + $params)) {
             throw new \RuntimeException("Failed to execute SQL statement: " . $sql);
         }
+        $stmt->closeCursor();
 
         return true;
     }
@@ -226,8 +249,10 @@ class DBManager
             throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
         }
         $this->bindParams($stmt, $params);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
 
-        return $stmt->execute();
+        return $result;
     }
 
     /**
@@ -253,8 +278,10 @@ class DBManager
         }
 
         $this->bindParams($stmt, $data);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
 
-        return $stmt->execute();
+        return $result;
     }
 
     /**
@@ -300,6 +327,54 @@ class DBManager
     }
 
     /**
+     * Actualiza valores específicos dentro de un campo JSON sin sobrescribirlo.
+     * Mysql8 variant
+     *
+     * @param string $table  Nombre de la tabla
+     * @param string $json_column  Nombre de la columna JSON
+     * @param array  $json_data  Datos a actualizar dentro del JSON
+     * @param string $condition  Condición WHERE
+     * @param array  $params  Parámetros de la condición WHERE
+     * @return bool  `true` si se actualizó correctamente, `false` si no
+     */
+    public function _updateJson(
+        string $table,
+        string $json_column,
+        array $json_data,
+        string $condition,
+        array $params
+    ): bool {
+        if (empty($json_data)) {
+            throw new \InvalidArgumentException('JSON data no puede estar vacío');
+        }
+
+        // Prepara el patch (solo las keys a actualizar)
+        $patch = [];
+        foreach ($json_data as $key => $value) {
+            if (!preg_match('/^[a-z0-9_]+$/i', $key)) {
+                throw new \InvalidArgumentException("Clave JSON inválida: $key");
+            }
+            $patch[$key] = $value; // Sin "$." porque JSON_MERGE_PATCH usa la notación plana
+        }
+
+        $params[':json_patch'] = json_encode($patch);
+        $sql = "UPDATE $table
+                SET $json_column = JSON_MERGE_PATCH($json_column, :json_patch)
+                WHERE $condition";
+
+        $this->connection->beginTransaction();
+        try {
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($params);
+            $this->connection->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
      * Select records from a table
      *
      * @param string $table Table name
@@ -334,7 +409,10 @@ class DBManager
         }
 
         $stmt->execute($params);
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -380,20 +458,5 @@ class DBManager
                 $stmt->bindValue($key, $value, PDO::PARAM_STR);
             }
         }
-    }
-
-    /**
-     * Desconectar de la base de datos
-     */
-    public function disconnect(): void
-    {
-        $this->connection = null;
-    }
-    /**
-     *
-     */
-    public function __destruct() {
-        $this->disconnect();
-        unset($this->connection, $this->ctx);
     }
 }

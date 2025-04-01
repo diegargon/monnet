@@ -290,6 +290,7 @@ class Database
     public function close(): void
     {
         $this->dblink?->close();
+        unset($this->dblink);
     }
 
     /**
