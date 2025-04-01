@@ -20,6 +20,10 @@ class FeedMeController {
         $this->feedMeService = new FeedMeService($ctx);
     }
 
+    public function __destruct() {
+        unset($this->ctx);
+        unset($this->feedMeService);
+    }
     /**
      *
      * @return void
@@ -37,8 +41,8 @@ class FeedMeController {
         if (json_last_error() !== JSON_ERROR_NONE) {
             $this->responseError('Invalid JSON received: ' . json_last_error_msg());
         }
-
-        \Log::debug("Host contact request" . print_r($request, true));
+        unset($request_content);
+        //\Log::debug("Host contact request" . print_r($request, true));
 
         $validation = $this->validateRequest($request);
         if (!empty($validation['error'])) {
@@ -56,11 +60,6 @@ class FeedMeController {
         }
 
         $this->responseError('Unknown error on handleRequest');
-    }
-
-    public function __destruct() {
-        unset($this->ctx);
-        unset($this->feedMeService);
     }
 
     /**

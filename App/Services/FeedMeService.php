@@ -29,6 +29,11 @@ class FeedMeService
         $this->hostService = new HostService($ctx);
     }
 
+    public function __destruct()
+    {
+        unset($this->ctx, $this->cfg, $this->hostService);
+    }
+
     /**
      *
      * @param array<string, mixed> $request
@@ -390,14 +395,14 @@ class FeedMeService
      */
     private function prepareHostUpdateValues(array $host, array $request, int $interval): array
     {
-        $values = [
+        $values['misc'] = [
             'agent_next_report' => time() + (int) $interval,
             'agent_last_contact' => time(),
             'agent_online' => 1
         ];
 
-        if (empty($host['agent_version']) || $host['agent_version'] != (string) $request['version']) {
-            $values['agent_version'] = (string) $request['version'];
+        if (empty($host['misc']['agent_version']) || $host['misc']['agent_version'] != (string) $request['version']) {
+            $values['misc']['agent_version'] = (string) $request['version'];
         }
 
         if ((int) $host['online'] !== 1) {
