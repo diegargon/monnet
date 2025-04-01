@@ -49,6 +49,7 @@ class CmdNetworkController
         if (!empty($action) && is_numeric($target_id)) :
             if ($action === 'remove') {
                 $networks->removeNetwork($target_id);
+                //TODO: remove host on that network?
             } elseif ($action === 'update' || $action === 'add') {
                 $decodedJson = json_decode((string) $value_command, true);
 

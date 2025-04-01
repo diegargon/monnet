@@ -471,33 +471,6 @@ class CmdHostController
     }
 
     /**
-     * Remove hosts category
-     * 2 Host Cat
-     * id 1 is the fauilt category
-     * @param array<string, string|int> $command_values
-     * @return array<string, string|int>
-     */
-    public function removeHostsCat(array $command_values): array
-    {
-        $lng = $this->ctx->get('lng');
-        $target_id = $this->filter->varInt($command_values['id']);
-
-        if ($target_id === 1) {
-            return Response::stdReturn(false, $lng['L_ERR_CAT_NODELETE']);
-        }
-
-        $categories = $this->ctx->get('Categories');
-        if ($categories->remove($target_id)) {
-            //Change remain utems to default category
-            if ($categories->updateToDefault(1, $target_id)) {
-                return Response::stdReturn(true, 'ok: ' . $target_id);
-            }
-        }
-
-        return Response::stdReturn(false, $lng['L_ERROR']);
-    }
-
-    /**
      *
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
@@ -684,20 +657,6 @@ class CmdHostController
     }
 
     /**
-     * Obtiene el campo misc de un host.
-     *
-     * @param array $command_values Los valores del comando.
-     * @return array<string, string|int> Respuesta en formato JSON.
-     */
-    public function getMisc(array $command_values): array
-    {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $misc_data = $this->cmdHostModel->getMisc($target_id);
-
-        return Response::stdReturn(true, $misc_data);
-    }
-
-    /**
      *
      * @return array<string, string|int>
      */
@@ -814,7 +773,7 @@ class CmdHostController
     }
     /**
      *
-     * @param array<string, string|int> $command_values
+     * @param array<string, mixed> $command_values
      * @return array<string, string|int>
      */
     public function setEmailList(array $command_values): array

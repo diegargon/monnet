@@ -88,7 +88,9 @@ class FeedMeService
 
         $this->hostService->updateHost($host['id'], $host_update_values);
 
-        return $this->prepareResponse($command, $request, $agent_default_interval);
+        $response = $this->prepareResponse($command, $request, $agent_default_interval);
+
+        return ['success' => true, 'response_data' => $response];
     }
 
     /**
@@ -366,7 +368,7 @@ class FeedMeService
     private function getAgentInterval(): int
     {
         $cfg = $this->ctx->get('cfg');
-        $ncfg = $this->ctx->get('ncfg');
+        $ncfg = $this->ctx->get('Config');
 
         $agent_default_interval = $cfg['agent_default_interval'];
         $last_refreshing = (int) $ncfg->get('refreshing');

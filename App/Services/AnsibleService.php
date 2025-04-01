@@ -318,7 +318,7 @@ class AnsibleService
 
         try {
             $response_report = json_decode($response['report'], true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return [
                 'status' => 'error',
                 'error_msg' => 'Error decoding JSON: ' . $e->getMessage()

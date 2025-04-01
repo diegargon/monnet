@@ -57,17 +57,27 @@ define('IN_WEB', true);
  * @var array<string,mixed> $cfg common.inc.php
  * @var Config $ncfg;
  */
+
 require_once 'include/common.inc.php';
+
+/*
+use App\Controllers\FeedMeController;
+$feedMeController = new FeedMeController($ctx);
+$feedMeController->handleRequest();
+exit();
+*/
+
 require_once 'include/feedme.inc.php';
 
 $agent_default_interval = $cfg['agent_default_interval'];
 $request_content = file_get_contents('php://input');
+#var_dump($request_content);
 
 if ($request_content === false) :
     trigger_feedme_error('Error: file_get_contents');
 endif;
 $request = json_decode($request_content, true);
-
+#var_dump($request);
 if (json_last_error() !== JSON_ERROR_NONE) :
     trigger_feedme_error('Invalid json receive: ' . json_last_error_msg());
 endif;

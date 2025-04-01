@@ -209,4 +209,20 @@ class Items
 
         return $uniq_types;
     }
+
+    public function changeToDefaultCat(string $item_type, int $removed_cat_id): bool
+    {
+        if ($item_type == 'bookmarks') {
+            $default_cat = 50;
+        } else {
+            return false;
+        }
+
+        $where = [
+            'type' => $item_type,
+            'cat_id' => $removed_cat_id
+        ];
+
+        return $this->db->update('items', ['cat_id' => $default_cat], $where);
+    }
 }

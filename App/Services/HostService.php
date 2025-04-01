@@ -40,7 +40,7 @@ class HostService
 
     public function getHostById(int $id): array
     {
-        $host = $this->cmdHostLogsModel->getHostById($id);
+        $host = $this->cmdHostModel->getHostById($id);
 
         return $host;
     }
@@ -95,7 +95,7 @@ class HostService
      */
     public function getDetailsStats(int $hid): array
     {
-        $hostDetails = $this->hostsModel->getHostMisc($hid);
+        $hostDetails = $this->cmdHostModel->getMiscById($hid);
 
         if (!$hostDetails) {
             return ['error' => 'No details found for the host'];
@@ -282,19 +282,19 @@ class HostService
 
     /**
      *
-     * @param string $misc
-     * @return array<string, string|int>
+     * @param array<string, mixed> $misc
+     * @return string|false
      */
-    public function encodeMisc(string $misc): array
+    public function encodeMisc(array $misc): string|false
     {
         if (empty($misc)) {
-            return [];
+            return false;
         }
         $misc = json_encode($misc, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             \Log::warning('Error encodeMisc: Invalid JSON');
 
-            return ['status' => 'error'];
+            return false;
         }
 
         return $misc;
@@ -335,8 +335,8 @@ class HostService
                 return ['error', 'Misc value is set but not an array'];
             }
             //Database Current Misc
-            $currentMisc = $this->hostModel->getMiscById($id);
-            $currentMisc = $this->decodeMisc($currentMisc);
+            $host_misc  = $this->cmdHostModel->getMiscById($id);
+            $currentMisc = $this->decodeMisc($host_misc['misc']);
             if (isset($currentMisc['error'])) {
                 return $currentMisc;
             }
@@ -345,14 +345,14 @@ class HostService
 
             $newMiscEncoded = $this->encodeMisc($newMisc);
 
-            if(isset($newMiscEncoded['error'])) {
-                return $newMiscEncoded;
+            if ($newMiscEncoded === false) {
+                return ['error', 'Error encoding misc'];
             }
 
             $data['misc'] = $newMiscEncoded;
         }
 
-        return $this->hostModel->update($id, $data);
+        return $this->cmdHostModel->updateMiscByID($id, $data);
     }
 
     /**

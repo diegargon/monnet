@@ -169,6 +169,6 @@ class Categories
      */
     public function updateToDefault(int $default_category, int $old_category): bool
     {
-        return $this->db->update('items', ['category' => $default_category], 'cat_id  = :cat_id', ['cat_id' => $old_category]);
+        return $this->db->update('items', ['category' => $default_category], ['cat_id' => $old_category]);
     }
 }

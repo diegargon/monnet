@@ -264,7 +264,7 @@ class CmdBookmarksController
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
-    public function removeHostsCat(array $command_values): array
+    public function removeBookmarkCat(array $command_values): array
     {
         $lng = $this->ctx->get('lng');
         $target_id = $this->filter->varInt($command_values['id']);
@@ -274,11 +274,12 @@ class CmdBookmarksController
         }
 
         $categories = $this->ctx->get('Categories');
+        $items = $this->ctx->get('Items');
+
         if ($categories->remove($target_id)) {
-            //Change remain utems to default category
-            if ($categories->updateToDefault(50, $target_id)) {
-                return Response::stdReturn(true, 'ok: ' . $target_id);
-            }
+            //Change remain items to default category
+            $items->changeToDefaultCat('bookmarks', $target_id);
+            return Response::stdReturn(true, 'ok: ' . $target_id);
         }
 
         return Response::stdReturn(false, $lng['L_ERROR']);

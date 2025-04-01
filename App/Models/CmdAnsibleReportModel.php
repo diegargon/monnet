@@ -25,7 +25,7 @@ class CmdAnsibleReportModel
      * report_type: 1 manual 2 task
      *
      * @param int $rid report id
-     * @return array<int, array<int|string>>
+     * @return array<int, mixed>
      */
     public function getDbReportById(int $rid): array
     {

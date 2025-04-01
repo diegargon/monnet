@@ -75,7 +75,7 @@ class CmdHostModel
     public function createHostToken(int $target_id): bool
     {
         $token = bin2hex(random_bytes(16));
-        return $this->db->update('hosts', ['token' => $token], ['id' => $target_id]);
+        return $this->db->update('hosts', ['token' => $token], 'id = :id', ['id' => $target_id]);
     }
 
     /**
@@ -238,21 +238,15 @@ class CmdHostModel
     /**
      * Obtiene el campo misc de un host.
      *
-     * @param int $target_id El ID del host.
-     * @return array<string, mixed>  Los datos misc en formato array.
+     * @param int $hid El ID del host.
+     * @return array<string, string>|null
      */
-    public function getMisc(int $target_id): array
+    public function getMiscById(int $hid): ?array
     {
         $query = "SELECT misc FROM hosts WHERE id = :id";
-        $params = ['id' => $target_id];
+        $params = ['id' => $hid];
 
-        $result = $this->db->qfetch($query, $params);
-
-        if ($result && isset($result['misc'])) {
-            return json_decode($result['misc'], true);
-        }
-
-        return [];
+        return $this->db->qfetch($query, $params);
     }
 
     /**

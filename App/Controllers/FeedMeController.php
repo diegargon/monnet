@@ -40,8 +40,8 @@ class FeedMeController {
 
         \Log::debug("Host contact request" . print_r($request, true));
 
-        $request = $this->validateRequest($request);
-        if (!empty($request['error'])) {
+        $validation = $this->validateRequest($request);
+        if (!empty($validation['error'])) {
             $this->responseError($request['error']);
         }
 
@@ -51,6 +51,8 @@ class FeedMeController {
             $this->responseError($response['error']);
         } elseif ($response['success']) {
             $this->responseSuccess($response['response_data']);
+        } elseif (empty($response)) {
+            return;
         }
 
         $this->responseError('Unknown error on handleRequest');
@@ -87,9 +89,9 @@ class FeedMeController {
     /**
      *
      * @param string $msg
-     * @return void
+     * @return bool
      */
-    private function responseError(string $msg): void
+    private function responseError(string $msg): bool
     {
         \Log::error($msg);
         http_response_code(400);
@@ -97,18 +99,16 @@ class FeedMeController {
         echo json_encode([
             'error' => $msg
         ]);
-        exit();
     }
 
     /**
      *
-     * @param string $response
-     * @return void
+     * @param array<string, mixed> $response
+     * @return bool
      */
-    private function responseSuccess(string $response): void
+    private function responseSuccess(array $response): bool
     {
         header('Content-Type: application/json');
         echo json_encode($response);
-        exit();
     }
 }

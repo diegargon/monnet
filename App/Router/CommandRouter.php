@@ -197,7 +197,7 @@ class CommandRouter
                 break;
             case 'auto_reload_logs':
                 $hostLogsController = new CmdHostLogsController($this->ctx);
-                $response = $hostLogsController->reloadLogs($command_values);
+                $response = $hostLogsController->logsReload($command_values);
                 break;
             case 'showAlarms':
             case 'showEvents':
