@@ -4,7 +4,6 @@ RUN apt-get update && apt-get install -y curl git unzip  iputils-ping
 
 RUN apt install -y default-mysql-client && docker-php-ext-install mysqli pdo pdo_mysql
 RUN cat /etc/resolv.conf
-RUN echo 1.1.1.1 > /etc/resolv.conf
 COPY . /var/www/html/
 COPY config/config.defaults.php /etc/monnet/config.inc.php
 COPY ci-docker/entry.sh /usr/local/bin/entry.sh
