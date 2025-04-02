@@ -20,7 +20,6 @@ class FeedMeService
     private HostService $hostService;
     private CmdStats $cmdStats;
     private CmdHostModel $cmdHostModel;
-    private array $cfg = [];
 
     public function __construct(\AppContext $ctx)
     {
@@ -31,7 +30,7 @@ class FeedMeService
 
     public function __destruct()
     {
-        unset($this->ctx, $this->cfg, $this->hostService);
+        unset($this->ctx, $this->hostService);
     }
 
     /**
@@ -372,12 +371,11 @@ class FeedMeService
      */
     private function getAgentInterval(): int
     {
-        $cfg = $this->ctx->get('cfg');
         $ncfg = $this->ctx->get('Config');
 
-        $agent_default_interval = $cfg['agent_default_interval'];
+        $agent_default_interval = $ncfg->get('agent_default_interval');
         $last_refreshing = (int) $ncfg->get('refreshing');
-        $refresh_time_seconds = (int) $cfg['refresher_time'] * 60;
+        $refresh_time_seconds = (int) $ncfg->get('refresher_time') * 60;
 
         if ((time() - $last_refreshing) < $refresh_time_seconds) {
             $agent_default_interval = 5;

@@ -288,8 +288,8 @@
                     if (!empty($tdata['host_details']['ncpu'])) {
                         ?>
                         <div>
-                            <span class="cpu_label">CPUs:</span>
-                            <span class="cpu_field"><?= $tdata['host_details']['ncpu'] ?></span>
+                            <span class="cpu_label">CPUs: </span>
+                            <span class="cpu_field"><?= $tdata['host_details']['misc']['ncpu'] ?></span>
                         </div>
                     <?php } ?>
                     <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
@@ -302,19 +302,19 @@
                         <div>
                             <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>
                             <span class="resume_field">
-                                <?= $tdata['host_details']['agent_version'] ?>
+                                <?= $tdata['host_details']['misc']['agent_version'] ?>
                                 (<?= $cfg['agent_latest_version'] ?>)
                             </span>
                         </div>
                         <div>
                             <span class="resume_label"><?= $lng['L_AGENT_LAST_PING'] ?>:</span>
-                            <span class="resume_field"><?= $tdata['host_details']['agent_last_contact'] ?></span>
+                            <span class="resume_field"><?= $tdata['host_details']['misc']['agent_last_contact'] ?></span>
                         </div>
                     <?php endif; ?>
-                    <?php if (!empty($tdata['host_details']['access_link'])) : ?>
+                    <?php if (!empty($tdata['host_details']['misc']['access_link'])) : ?>
                         <div>
-                            <a href="<?= $tdata['host_details']['access_link'] ?>"
-                               target="_blank"><?= $tdata['host_details']['access_link'] ?>
+                            <a href="<?= $tdata['host_details']['misc']['access_link'] ?>"
+                               target="_blank"><?= $tdata['host_details']['misc']['access_link'] ?>
                             </a>
                         </div>
                     <?php endif; ?>

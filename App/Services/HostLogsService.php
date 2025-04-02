@@ -36,7 +36,7 @@ class HostLogsService
      */
     public function getLogs(int $target_id, array $command_values): array
     {
-        $cfg = $this->ctx->get('cfg');
+        $ncfg = $this->ctx->get('Config');
 
         $opts = [
             'host_id' => $target_id,
@@ -46,7 +46,7 @@ class HostLogsService
         if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) :
             $opts['limit'] = (int) $command_values['log_size'];
         else :
-            $opts['limit'] = (int) $cfg['term_max_lines'];
+            $opts['limit'] = (int) $ncfg->get('term_max_lines');
         endif;
 
         if (
@@ -103,12 +103,12 @@ class HostLogsService
      */
     private function formatEventsLogs(array $logs): array
     {
-        $cfg = $this->ctx->get('cfg');
+        $ncfg = $this->ctx->get('Config');
         $hosts = $this->ctx->get('Hosts');
 
         foreach ($logs as &$log) {
             $log['host'] = $hosts->getDisplayNameById($log['host_id']);
-            $log['date'] = format_datetime_from_string($log['date'], $cfg['datetime_log_format']);
+            $log['date'] = format_datetime_from_string($log['date'], $ncfg->get('datetime_log_format'));
             $log['level'] = \LogLevel::getName($log['level']);
             $log['log_type'] = \LogType::getName($log['log_type']);
             if (\EventType::getName($log['event_type'])) {
@@ -126,13 +126,13 @@ class HostLogsService
      */
     private function formatHostLogs(array $logs, string $nl = '<br/>'): array
     {
-        $cfg = $this->ctx->get('cfg');
+        $ncfg = $this->ctx->get('Config');
 
         $log_lines = [];
         foreach ($logs as $term_log) :
             if (is_numeric($term_log['level'])) :
                 $log_level = (int) $term_log['level'];
-                $date = $this->dateTimeService->formatDateString($term_log['date'], $cfg['term_date_format']);
+                $date = $this->dateTimeService->formatDateString($term_log['date'], $ncfg->get('term_date_format'));
                 $loglevelname = \LogLevel::getName($term_log['level']);
                 $loglevelname = str_replace('LOG_', '', $loglevelname);
                 $loglevelname = substr($loglevelname, 0, 4);

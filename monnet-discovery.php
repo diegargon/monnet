@@ -35,6 +35,7 @@ if ($db->isConn()) :
     $execution_time = round(microtime(true) - $start_time, 2);
     $load = sys_getloadavg();
     $cpu_usage = round($load[0], 2);
+    //TODO: set not work if not exist or fix config or create the key
     $ncfg->set('discovery_last_run_metrics', " ($memory_usage|$execution_time|$cpu_usage)");
     $ncfg->set('discovery_last_run', date_now());
 endif;

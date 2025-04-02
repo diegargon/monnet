@@ -311,15 +311,15 @@ $data['categories_host']['cfg']['place'] = '#left-container';
 /*
  *  Host Down Bar
  */
-//TODO2 Move to ncfg
 
 $cli_last_run = 'Never';
-$discovery_last_run = 'Never';
 if ($ncfg->get('cli_last_run')) {
     $cli_last_run = $ncfg->get('cli_last_run');
     $cli_last_run = utc_to_tz($cli_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
     $cli_last_run .= $ncfg->get('cli_last_run_metrics');
 }
+
+$discovery_last_run = 'Never';
 if ($ncfg->get('discovery_last_run')) {
     $discovery_last_run = $ncfg->get('discovery_last_run');
     $discovery_last_run = utc_to_tz($discovery_last_run, $user->getTimezone(), $cfg['datetime_format_min']);

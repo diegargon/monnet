@@ -91,10 +91,10 @@ class HostMetricsService
      */
     public function fMetricsDate(array $metrics): array
     {
-        $cfg = $this->ctx->get('cfg');
+        $ncfg = $this->ctx->get('Config');
 
         foreach ($metrics as &$metric) {
-            $new_date = $this->dateTimeService->utcToTz($metric['date'], $cfg['timezone']);
+            $new_date = $this->dateTimeService->utcToTz($metric['date'], $ncfg->get('timezone'));
             $metric['date'] = $new_date;
         }
 

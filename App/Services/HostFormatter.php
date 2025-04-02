@@ -27,10 +27,10 @@ class HostFormatter
     public function format(array $host): array
     {
         $lng = $this->ctx->get('lng');
-        $cfg = $this->ctx->get('cfg');
         $user = $this->ctx->get('User');
         $networks = $this->ctx->get('Networks');
         $categories = $this->ctx->get('Categories');
+        $ncfg = $this->ctx->get('Config');
 
         $id = (int) $host['id'];
         $net_id = $host['network'];
@@ -58,14 +58,14 @@ class HostFormatter
         endif;
 
         if (!empty($host['last_seen'])) :
-            $host['f_last_seen'] = utc_to_tz($host['last_seen'], $cfg['timezone'], $cfg['datetime_format']);
+            $host['f_last_seen'] = utc_to_tz($host['last_seen'], $ncfg->get('timezone'), $ncfg->get('datetime_format'));
         endif;
 
         if (!empty($host['last_check'])) :
-            $host['f_last_check'] = utc_to_tz($host['last_check'], $cfg['timezone'], $cfg['datetime_format']);
+            $host['f_last_check'] = utc_to_tz($host['last_check'], $ncfg->get('timezone'), $ncfg->get('datetime_format'));
         endif;
 
-        $host['formated_creation_date'] = utc_to_tz($host['created'], $cfg['timezone'], $cfg['datetime_format']);
+        $host['formated_creation_date'] = utc_to_tz($host['created'], $ncfg->get('timezone'), $ncfg->get('datetime_format'));
 
         if ($host['online'] && !empty($host['latency'])) :
             $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
@@ -134,12 +134,12 @@ class HostFormatter
     public function formatMisc(array &$host): void
     {
         $lng = $this->ctx->get('lng');
-        $cfg = $this->ctx->get('cfg');
+        $ncfg = $this->ctx->get('Config');
 
         if (!empty($host['misc']['load_avg'])) :
             $loadavg = unserialize($host['misc']['load_avg']);
 
-            (!empty($host['ncpu'])) ? $ncpu = (float) $host['ncpu'] : (float) $ncpu = 1;
+            (!empty($host['misc']['ncpu'])) ? $ncpu = (int) $host['misc']['ncpu'] : $ncpu = 1;
             $m1 = floatToPercentage((float) $loadavg['1min'], 0.0, $ncpu);
             $m5 = floatToPercentage((float) $loadavg['5min'], 0.0, $ncpu);
             $m15 = floatToPercentage((float) $loadavg['15min'], 0.0, $ncpu);
@@ -196,7 +196,7 @@ class HostFormatter
         if (!empty($host['misc']['agent_last_contact'])) {
             $host['misc']['agent_last_contact'] = $dateTimeService->formatTimestamp(
                     $host['misc']['agent_last_contact'],
-                    $cfg['timezone']
+                    $ncfg->get('timezone')
                 );
             $host['misc']['agent_last_contact']  ='';
         }

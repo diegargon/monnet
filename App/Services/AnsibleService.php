@@ -43,7 +43,6 @@ class AnsibleService
     public function runPlaybook(int $target_id, string $playbook, array $extra_vars = []): array
     {
         $user = $this->ctx->get('User');
-        $cfg = $this->ctx->get('cfg');
         $hosts = $this->ctx->get('Hosts');
         $networks = $this->ctx->get('Networks');
         $host = $hosts->getHostById($target_id);
@@ -62,8 +61,8 @@ class AnsibleService
                 "id" => $host['id'],
                 "token" => $token,
                 "loglevel" => 'info',
-                "default_interval" => $cfg['agent_default_interval'],
-                "ignore_cert" => $cfg['agent_allow_selfcerts'],
+                "default_interval" => $this->ncfg->get('agent_default_interval'),
+                "ignore_cert" => $this->ncfg->get('agent_allow_selfcerts'),
                 "server_host" => $_SERVER['HTTP_HOST'], //TODO Filter?
                 "server_endpoint" => "/feedme.php",
             ];
@@ -268,9 +267,7 @@ class AnsibleService
      */
     public function getPbIdByName(string $pb_name): int
     {
-        $cfg = $this->ctx->get('cfg');
-
-        foreach ($cfg['playbooks'] as $play) {
+        foreach ($this->ncfg->get('playbooks') as $play) {
             if ($play['name'] === $pb_name) :
                 return $play['id'];
             endif;
@@ -286,9 +283,7 @@ class AnsibleService
      */
     public function getPbById(int $id): array
     {
-        $cfg = $this->ctx->get('cfg');
-
-        foreach ($cfg['playbooks'] as $play) {
+        foreach ($this->ncfg->get('playbooks') as $play) {
             if ($play['id'] === $id) :
                 return $play;
             endif;
@@ -353,8 +348,7 @@ class AnsibleService
      */
     private function findPlaybookId(string $playbook): ?int
     {
-        $cfg = $this->ctx->get('cfg');
-        foreach ($cfg['playbooks'] as $pb) {
+        foreach ($this->ncfg->get('playbooks') as $pb) {
             if ($pb['name'] === $playbook) {
                 return $pb['id'];
             }
