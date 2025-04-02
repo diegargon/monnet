@@ -134,6 +134,7 @@ class HostFormatter
     public function formatMisc(array &$host): void
     {
         $lng = $this->ctx->get('lng');
+        $cfg = $this->ctx->get('cfg');
 
         if (!empty($host['misc']['load_avg'])) :
             $loadavg = unserialize($host['misc']['load_avg']);
@@ -186,8 +187,18 @@ class HostFormatter
             endforeach;
         endif;
 
-        if(!empty($host['misc']['uptime'])) {
+        if (!empty($host['misc']['uptime'])) {
             $host['misc']['uptime'] = $this->formatUptime($host['misc']['uptime']);
+        }
+        # TODO No funciona
+        $dateTimeService = new DateTimeService($this->ctx);
+
+        if (!empty($host['misc']['agent_last_contact'])) {
+            $host['misc']['agent_last_contact'] = $dateTimeService->formatTimestamp(
+                    $host['misc']['agent_last_contact'],
+                    $cfg['timezone']
+                );
+            $host['misc']['agent_last_contact']  ='';
         }
      }
 

@@ -57,37 +57,37 @@ class CmdHostModel
     /**
      * Actualiza un host by id.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @param array<string, string|int> $data Los datos a actualizar.
      * @return bool True si se actualizó correctamente, False en caso contrario.
      */
-    public function updateByID(int $target_id, array $data): bool
+    public function updateByID(int $hid, array $data): bool
     {
-        return $this->db->update('hosts', $data, 'id = :id', ['id' => $target_id]);
+        return $this->db->update('hosts', $data, 'id = :id', ['id' => $hid]);
     }
 
     /**
      * Crea un token para un host.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @return bool True si se creó correctamente, False en caso contrario.
      */
-    public function createHostToken(int $target_id): bool
+    public function createHostToken(int $hid): bool
     {
         $token = bin2hex(random_bytes(16));
-        return $this->db->update('hosts', ['token' => $token], 'id = :id', ['id' => $target_id]);
+        return $this->db->update('hosts', ['token' => $token], 'id = :id', ['id' => $hid]);
     }
 
     /**
      * Agrega un puerto remoto a un host.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @param array<string, string|int> $port_details Los detalles del puerto.
      * @return bool True si se agregó correctamente, False en caso contrario.
      */
-    public function addRemoteScanHostPort(int $target_id, array $port_details): bool
+    public function addRemoteScanHostPort(int $hid, array $port_details): bool
     {
-        $port_details['hid'] = $target_id;
+        $port_details['hid'] = $hid;
         !isset($port_details['service']) ? $port_details['service'] = 'unknonwn' : null;
 
         return $this->db->insert('ports', $port_details);
@@ -106,12 +106,12 @@ class CmdHostModel
     /**
      * Elimina un puerto de un host.
      *
-     * @param int $target_id El ID del puerto.
+     * @param int $port_id El ID del puerto.
      * @return bool True si se eliminó correctamente, False en caso contrario.
      */
-    public function deletePort(int $target_id): bool
+    public function deletePort(int $port_id): bool
     {
-        return $this->db->delete('ports', 'id = :id', ['id' => $target_id]);
+        return $this->db->delete('ports', 'id = :id', ['id' => $port_id]);
     }
 
     /**
@@ -129,13 +129,13 @@ class CmdHostModel
     /**
      * Obtiene los puertos remotos de un host.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @return array<string, string|int> Los puertos remotos del host.
      */
-    public function getRemotePorts(int $target_id): array
+    public function getRemotePorts(int $hid): array
     {
         $query = "SELECT * FROM ports WHERE hid = :host_id AND scan_type = 1";
-        $params = ['host_id' => $target_id];
+        $params = ['host_id' => $hid];
 
         return $this->db->qfetchAll($query, $params);
     }
@@ -178,13 +178,13 @@ class CmdHostModel
     /**
      * Obtiene la carga promedio de un host.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @return array<string, mixed>|null La carga promedio.
      */
-    public function getLoadAverage($target_id): ?array
+    public function getLoadAverage(int $hid): ?array
     {
         $query = "SELECT load_avg_1min, load_avg_5min, load_avg_15min FROM stats WHERE host_id = :host_id";
-        $params = ['host_id' => $target_id];
+        $params = ['host_id' => $hid];
 
         return $this->db->qfetch($query, $params);
     }
@@ -192,13 +192,13 @@ class CmdHostModel
     /**
      * Obtiene las estadísticas de I/O de un host.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @return array<string, mixed>|null Las estadísticas de I/O.
      */
-    public function getIOWaitStats($target_id): ?array
+    public function getIOWaitStats(int $hid): ?array
     {
         $query = "SELECT iowait FROM host_metrics WHERE host_id = :host_id";
-        $params = ['host_id' => $target_id];
+        $params = ['host_id' => $hid];
 
         return $this->db->qfetch($query, $params);
     }
@@ -206,13 +206,13 @@ class CmdHostModel
     /**
      * Obtiene la información de discos de un host.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @return array<string, string|int> La información de discos.
      */
-    public function getDisksInfo($target_id): array
+    public function getDisksInfo(int $hid): array
     {
         $query = "SELECT disk_name, disk_total, disk_used, disk_free FROM host_disks WHERE host_id = :host_id";
-        $params = ['host_id' => $target_id];
+        $params = ['host_id' => $hid];
 
         return $this->db->qfetchAll($query, $params);
     }
@@ -220,18 +220,18 @@ class CmdHostModel
     /**
      * Actualiza el campo misc de un host.
      *
-     * @param int $target_id El ID del host.
+     * @param int $hid El ID del host.
      * @param array<string, string|int> $misc_data Los datos misc en formato array.
      * @return bool True si se actualizó correctamente, False en caso contrario.
      */
-    public function updateMiscByID(int $target_id, array $misc_data): bool
+    public function updateMiscByID(int $hid, array $misc_data): bool
     {
         return $this->db->updateJson(
             'hosts',
             'misc',
             $misc_data,
             'id = :id',
-            ['id' => $target_id]
+            ['id' => $hid]
         );
     }
 

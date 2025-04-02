@@ -182,7 +182,15 @@ if ($user->getPref('show_termlog_status')) {
 // show_termlog_status
 
 $data['misc']['totals'] = $lng['L_SHOWED'] . ": $show_hosts_count | {$lng['L_TOTAL']}: $hosts_totals_count";
+
+
+$memory_usage = round(memory_get_peak_usage(true) / 1024 / 1024, 2);
+$start_time = $_SERVER["REQUEST_TIME_FLOAT"];
+$execution_time = round(microtime(true) - $start_time, 2);
+$load = sys_getloadavg();
+$cpu_usage = round($load[0], 2);
 $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
+$data['misc']['last_refresher'] .= " ($memory_usage|$execution_time|$cpu_usage)";
 
 $data['footer_dropdown'][] = [
     'value' => $total_hosts_on ?? 0,
@@ -310,10 +318,12 @@ $discovery_last_run = 'Never';
 if ($ncfg->get('cli_last_run')) {
     $cli_last_run = $ncfg->get('cli_last_run');
     $cli_last_run = utc_to_tz($cli_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+    $cli_last_run .= $ncfg->get('cli_last_run_metrics');
 }
 if ($ncfg->get('discovery_last_run')) {
     $discovery_last_run = $ncfg->get('discovery_last_run');
     $discovery_last_run = utc_to_tz($discovery_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+    $discovery_last_run .= $ncfg->get('discovery_last_run_metrics');
 }
 
 /* Usado para saber si hay alguien conectado */

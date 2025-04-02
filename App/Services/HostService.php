@@ -374,8 +374,8 @@ class HostService
      */
     public function setAlertOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        \Log::logHost(LogLevel::ALERT, $id, $msg, $log_type, $event_type);
-        $this->hostModel->update($id, ['alert' => 1]);
+        \Log::logHost(\LogLevel::ALERT, $id, $msg, $log_type, $event_type);
+        $this->cmdHostModel->updateByID($id, ['alert' => 1]);
     }
 
     /**
@@ -387,8 +387,8 @@ class HostService
      */
     public function setWarnOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        \Log::logHost(LogLevel::WARNING, $id, $msg, $log_type, $event_type);
-        $this->hostModel->update($id, ['warn' => 1]);
+        \Log::logHost(\LogLevel::WARNING, $id, $msg, $log_type, $event_type);
+        $this->cmdHostModel->updateByID($id, ['warn' => 1]);
     }
 
     /**

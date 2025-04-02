@@ -437,6 +437,44 @@ class DBManager
         return $result[0] ?? null;
     }
 
+    /**
+     * Insert or update a record in a table (UPSERT)
+     *
+     * @param string $table 
+     * @param array<string, mixed> $data Key-value pairs of columns and values
+     * @param array<string> $uniqueKeys Columns that determine uniqueness (for ON DUPLICATE KEY UPDATE in MySQL)
+     * @return bool True on success, false on failure
+     */
+    public function upsert(string $table, array $data, array $uniqueKeys): bool
+    {
+        if (empty($data) || empty($uniqueKeys)) {
+            throw new \InvalidArgumentException("Data and unique keys cannot be empty");
+        }
+
+        $columns = array_keys($data);
+        $placeholders = array_map(fn($col) => ":$col", $columns);
+
+        $updates = [];
+        foreach ($columns as $col) {
+            if (!in_array($col, $uniqueKeys, true)) {
+                $updates[] = "$col = VALUES($col)";
+            }
+        }
+
+        $sql = "INSERT INTO $table (" . implode(", ", $columns) . ")
+                VALUES (" . implode(", ", $placeholders) . ")
+                ON DUPLICATE KEY UPDATE " . implode(", ", $updates);
+
+        $stmt = $this->connection->prepare($sql);
+        if (!$stmt) {
+            throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
+        }
+
+        $result = $stmt->execute($data);
+        $stmt->closeCursor();
+
+        return $result;
+    }
 
     /**
      * Binds parameters dynamically based on their type.

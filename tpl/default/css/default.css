@@ -1267,12 +1267,15 @@ input:checked + .slider:before {
     */
     opacity: 0.15;
 }
-.footer_bar {
+.footer-bar {
     border: 0px solid pink;
     width: 95%;
     margin: 0 auto;
 }
-.footer_right_element {
+.footer-left-element  {
+    display: inline-flex;
+}
+.footer-right-element {
     float: right;
 }
 .clearfix {

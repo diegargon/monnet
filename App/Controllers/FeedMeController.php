@@ -93,11 +93,12 @@ class FeedMeController {
     /**
      *
      * @param string $msg
-     * @return bool
+     * @return never
      */
-    private function responseError(string $msg): bool
+    private function responseError(string $msg): never
     {
         \Log::error($msg);
+
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode([
@@ -109,13 +110,13 @@ class FeedMeController {
     /**
      *
      * @param array<string, mixed> $response
-     * @return bool
+     * @return never
      */
-    private function responseSuccess(array $response): bool
+    private function responseSuccess(array $response): never
     {
+        http_response_code(200);
         header('Content-Type: application/json');
         echo json_encode($response);
         exit;
     }
-
 }
