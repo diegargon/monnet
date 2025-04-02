@@ -6,6 +6,46 @@
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+/*
+  {
+      cmd: ping
+      token: string
+      version: 0.1
+      data: []
+  }
+  {
+      cmd: pong
+      token: string
+      version: 0.1
+      response_msg: true
+      refresh: 5 // Inform when is the next update
+      data: []
+  }
+
+    Notifications
+        {
+            "id": id,
+            "cmd": "notification",
+            "token": token,
+            "version": AGENT_VERSION,
+            "data":  data,
+            "meta": meta
+        }
+            data {
+                "name": "notification name" // Mandatory
+                "msg": "Custom msg" //Optional
+                ... other custom fields ...
+            }
+
+        "high_iowait", "iowait"
+        "high_memory_usage", "memory_usage": meminfo_data
+        "high_disk_usage", stats
+        "high_cpu_usage", "cpu_usage": loadavg_data["usage"]
+        "starting", "msg": "Custom msg"
+        "shutdown", "msg": "Custom msg"
+        "system_shutdown", "msg": "Custom msg"
+*/
+
 
 namespace App\Controllers;
 
