@@ -123,7 +123,7 @@ class CmdHostModel
      */
     public function updatePort(int $port_id, array $data): bool
     {
-        return $this->db->update('ports', $data, 'id = id:', ['id' => $port_id]);
+        return $this->db->update('ports', $data, 'id = :id', ['id' => $port_id]);
     }
 
     /**

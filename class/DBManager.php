@@ -201,8 +201,8 @@ class DBManager
      *
      * @param string $table Table name
      * @param array<string, mixed> $data Key-value pairs of columns and their new values
-     * @param string $condition WHERE clause (without "WHERE")
-     * @param array<string, mixed> $params Parameters for the WHERE clause
+     * @param string $condition WHERE clause ex 'id = :id'
+     * @param array<string, mixed> $params Parameters for the condition clause
      * @return bool True on success, false on failure
      */
     public function update(string $table, array $data, string $condition, array $params = []): bool
@@ -440,7 +440,7 @@ class DBManager
     /**
      * Insert or update a record in a table (UPSERT)
      *
-     * @param string $table 
+     * @param string $table
      * @param array<string, mixed> $data Key-value pairs of columns and values
      * @param array<string> $uniqueKeys Columns that determine uniqueness (for ON DUPLICATE KEY UPDATE in MySQL)
      * @return bool True on success, false on failure

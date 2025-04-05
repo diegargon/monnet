@@ -11,6 +11,7 @@
 namespace App\Services;
 
 use App\Services\HostService;
+use App\Services\DateTimeService;
 use App\Models\CmdHostModel;
 use App\Models\CmdStats;
 
@@ -134,9 +135,11 @@ class FeedMeService
             $this->cmdStats = new CmdStats($this->ctx);
         }
 
+        $dateTimeService  = new DateTimeService();
+
         if (!\isEmpty($rdata['load_avg_stats'])) {
             $stats_data = [
-                'date' => date_now(),
+                'date' => $dateTimeService->dateNow(),
                 'type' => 2,   //loadavg
                 'host_id' => $host_id,
                 'value' => $rdata['load_avg_stats']['5min']
@@ -146,7 +149,7 @@ class FeedMeService
 
         if (!\isEmpty($rdata['iowait_stats'])) {
             $stats_data = [
-                'date' => date_now(),
+                'date' => $dateTimeService->dateNow(),
                 'type' => 3,   //iowait
                 'host_id' => $host_id,
                 'value' => $rdata['iowait_stats']
@@ -156,7 +159,7 @@ class FeedMeService
 
         if (!\isEmpty($rdata['mem_stats'])) {
             $stats_data = [
-                'date' => date_now(),
+                'date' => $dateTimeService->dateNow(),
                 'type' => 4,   // Memory
                 'host_id' => $host_id,
                 'value' => $rdata['mem_stats']
@@ -197,6 +200,8 @@ class FeedMeService
         if(!isset($this->cmdHostModel)) {
             $this->cmdHostModel = new CmdHostModel($this->ctx);
         }
+        $dateTimeService  = new DateTimeService();
+
         $db_host_ports = $this->cmdHostModel->getHostScanPorts($host_id, $scan_type);
         $db_ports_map = [];
 
@@ -237,7 +242,7 @@ class FeedMeService
                     $this->hostService->updatePort($db_port['id'], [
                         "service" => $port['service'],
                         "online" => 1,
-                        "last_change" => date_now(),
+                        "last_change" => $dateTimeService->dateNow(),
                     ]);
                 } elseif ($db_port['online'] == 0) {
                     $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber)";
@@ -245,7 +250,7 @@ class FeedMeService
 
                     $this->hostService->updatePort($db_port['id'], [
                         "online" => 1,
-                        "last_change" => date_now(),
+                        "last_change" => $dateTimeService->dateNow(),
                     ]);
                 }
 
@@ -261,7 +266,7 @@ class FeedMeService
                     'service' => $port['service'],
                     'interface' => $interface,
                     'ip_version' => $ip_version,
-                    'last_change' => date_now(),
+                    'last_change' => $dateTimeService->dateNow(),
                 ];
                 $this->cmdHostModel->addPort($new_port_data);
                 $log_msg = "New port detected: $pnumber ({$port['service']})";
@@ -274,7 +279,7 @@ class FeedMeService
             if ($db_port['online'] == 1) {
                 $set = [
                     'online' => 0,
-                    'last_change' => date_now(),
+                    'last_change' => $dateTimeService->dateNow(),
                 ];
                 $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
                 $this->hostService->setAlertOn($host_id, $alertmsg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
