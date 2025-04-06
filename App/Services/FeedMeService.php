@@ -86,6 +86,7 @@ class FeedMeService
                 case 'high_memory_usage':
                 case 'high_disk_usage':
                     $this->notificationLog($request['name'], $host_id,  $rdata);
+                    break;
                 default:
                     \Log::warning('Notification receive with unknown reference: ' . $rdata['name']);
             endswitch;
