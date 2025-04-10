@@ -178,7 +178,7 @@ class Config
     public function set($key, $value, int $force_save = 0): int
     {
         // If ctype exist is database config key
-        if (!empty($this->cfg[$key]['ctype'])) {
+        if (isset($this->cfg[$key]['ctype'])) {
             $config = &$this->cfg[$key];
 
             if ($config['ctype'] == 6) {
