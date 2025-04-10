@@ -15,7 +15,6 @@ header('Content-Type: application/json; charset=UTF-8');
  * @var AppContext|null $ctx An instance of Context or null if not defined
  * @var array<string,string> $lng
  * @var Database|null $db An instance of Database or null if not defined
- * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  */
 require_once 'include/common.inc.php';
@@ -40,7 +39,7 @@ if ($user->getId() > 0) {
 }
 
 $frontend = new Frontend($ctx);
-$tdata['theme'] = $cfg['theme'];
+$tdata['theme'] = $ncfg->get('theme');
 
 $data['footer_dropdown'] = [];
 $highlight_hosts_count = 0;
@@ -89,8 +88,8 @@ if ($user->getPref('show_termlog_status')) {
 
     // Get Host Relate Logs for termlog
     $logs_opt = [
-        'limit' => $cfg['term_max_lines'],
-        'level' => $cfg['term_hosts_log_level'],
+        'limit' => $ncfg->get('term_max_lines'),
+        'level' => $ncfg->get('term_hosts_log_level'),
         'ack' => 1,
     ];
     $host_logs = Log::getLogsHosts($logs_opt);
@@ -112,8 +111,8 @@ if ($user->getPref('show_termlog_status')) {
     endif;
 
     // Get System Logs for termlog
-    if ($cfg['term_show_system_logs'] && $cfg['system_log_to_db']) :
-        $system_logs = Log::getSystemDBLogs($cfg['term_max_lines']);
+    if ($ncfg->get('term_show_system_logs') && $ncfg->get('system_log_to_db')) :
+        $system_logs = Log::getSystemDBLogs($ncfg->get('term_max_lines'));
         // Formatting
         if (!empty($system_logs)) :
             foreach ($system_logs as &$system_log) :
@@ -146,8 +145,8 @@ if ($user->getPref('show_termlog_status')) {
     endforeach;
 
     //If we add systems logs probably we exceed the max
-    if (valid_array($logs) && count($logs) > $cfg['term_max_lines']) {
-        $term_logs = array_slice($logs, 0, $cfg['term_max_lines']);
+    if (valid_array($logs) && count($logs) > $ncfg->get('term_max_lines')) {
+        $term_logs = array_slice($logs, 0, $ncfg->get('term_max_lines'));
     } else {
         $term_logs = $logs;
     }
@@ -160,7 +159,7 @@ if ($user->getPref('show_termlog_status')) {
                 continue;
             endif;
 
-            $date = format_datetime_from_string($term_log['date'], $cfg['term_date_format']);
+            $date = format_datetime_from_string($term_log['date'], $ncfg->get('term_date_format'));
             $loglevelname = LogLevel::getName($log_level);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
             $loglevelname = substr($loglevelname, 0, 4);
@@ -189,7 +188,7 @@ $start_time = $_SERVER["REQUEST_TIME_FLOAT"];
 $execution_time = round(microtime(true) - $start_time, 2);
 $load = sys_getloadavg();
 $cpu_usage = round($load[0], 2);
-$data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($cfg['datetime_format_min']);
+$data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $user->getDateNow($ncfg->get('datetime_format_min'));
 $data['misc']['last_refresher'] .= " ($memory_usage|$execution_time|$cpu_usage)";
 
 $data['footer_dropdown'][] = [
@@ -315,14 +314,14 @@ $data['categories_host']['cfg']['place'] = '#left-container';
 $cli_last_run = 'Never';
 if ($ncfg->get('cli_last_run')) {
     $cli_last_run = $ncfg->get('cli_last_run');
-    $cli_last_run = utc_to_tz($cli_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+    $cli_last_run = utc_to_tz($cli_last_run, $user->getTimezone(), $ncfg->get('datetime_format_min'));
     $cli_last_run .= $ncfg->get('cli_last_run_metrics');
 }
 
 $discovery_last_run = 'Never';
 if ($ncfg->get('discovery_last_run')) {
     $discovery_last_run = $ncfg->get('discovery_last_run');
-    $discovery_last_run = utc_to_tz($discovery_last_run, $user->getTimezone(), $cfg['datetime_format_min']);
+    $discovery_last_run = utc_to_tz($discovery_last_run, $user->getTimezone(), $ncfg->get('datetime_format_min'));
     $discovery_last_run .= $ncfg->get('discovery_last_run_metrics');
 }
 

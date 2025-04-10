@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -19,7 +18,7 @@
         <div id="head-center">
             <div class="head-center_content">
                 <div class="search-container">
-                    <h1 class='title gradiant'><a href=""><?= strtoupper($cfg['app_name']) ?></a></h1>
+                    <h1 class='title gradiant'><a href=""><?= strtoupper($ncfg->get('app_name')) ?></a></h1>
                     <div class="search-wrapper">
                         <form target="_blank"  action="https://gooogle.com/search" method="GET">
                             <input type="text" name="q" required class="search-box" placeholder="Google" />

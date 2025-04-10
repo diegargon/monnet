@@ -41,8 +41,6 @@ require_once('Constants/Constants.php');
  */
 include '/etc/monnet/config.inc.php';
 
-date_default_timezone_set($cfg['timezone']);
-
 require_once 'include/checks.inc.php';
 common_checks($cfg_db, $cfg);
 
@@ -86,10 +84,12 @@ require_once 'include/util.inc.php';
 require_once 'include/time.inc.php';
 require_once 'class/Filters.php';
 
-Log::init($cfg, $db, $lng);
-
 $ncfg = $ctx->set('Config', new Config($ctx));
 $ncfg->init($cfg);
+
+date_default_timezone_set($ncfg->get('timezone'));
+
+Log::init($ctx);
 
 require_once 'include/updater.inc.php';
 require_once 'include/curl.inc.php';

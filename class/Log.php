@@ -13,6 +13,17 @@ class Log
 {
     /**
      *
+     * @var \AppContext
+     */
+    private static \AppContext $ctx;
+
+    /**
+     *
+     * @var \Config
+     */
+    private static \Config $ncfg;
+    /**
+     *
      * @var int
      */
     private static int $max_db_msg = 254;
@@ -30,10 +41,6 @@ class Log
     private static bool $console = false;
 
     /**
-     * @var array<string, mixed> $cfg
-     */
-    private static array $cfg;
-    /**
      * @var Database $db
      */
     private static Database $db;
@@ -44,15 +51,16 @@ class Log
     private static array $lng = [];
 
     /**
-     * @param array<string, mixed> $cfg
-     * @param Database $db
-     * @param array<string, string> $lng
+     *
+     * @param \AppContext $ctx
+     * @return void
      */
-    public static function init(array &$cfg, Database &$db, array &$lng): void
+    public static function init(\AppContext $ctx): void
     {
-        self::$cfg = &$cfg;
-        self::$db = &$db;
-        self::$lng = &$lng;
+        self::$ctx = $ctx;
+        self::$db = $ctx->get('Mysql');
+        self::$lng = $ctx->get('lng');
+        self::$ncfg = $ctx->get('Config');
     }
 
     /**
@@ -74,17 +82,17 @@ class Log
             }
         }
 
-        if ($log_level <= self::$cfg['log_level']) {
+        if ($log_level <= self::$ncfg->get('log_level')) {
             if (is_array($msg)) {
                 $msg = print_r($msg, true);
             }
             if (self::$console) {
                 echo '[' .
-                format_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format']) .
-                '][' . self::$cfg['app_name'] . '][' . $log_level . '] ' . $msg . "\n";
+                format_date_now(self::$ncfg->get('timezone'), self::$ncfg->get('datetime_log_format')) .
+                '][' . self::$ncfg->get('app_name') . '][' . $log_level . '] ' . $msg . "\n";
             }
-            if (self::$cfg['system_log_to_db']) {
-                if ($log_level < 7 || self::$cfg['system_log_to_db_debug']) :
+            if (self::$ncfg->get('system_log_to_db')) {
+                if ($log_level < 7 || self::$ncfg->get('system_log_to_db_debug')) :
                     if (mb_strlen($msg) > self::$max_db_msg) {
                         self::debug(self::$lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
                         $msg_db = substr($msg, 0, 254);
@@ -94,12 +102,12 @@ class Log
                     self::$db->insert('system_logs', ['level' => $log_level, 'msg' => $msg_db]);
                 endif;
             }
-            if (self::$cfg['log_to_file']) {
-                $log_file = self::$cfg['log_file'];
+            if (self::$ncfg->get('log_to_file')) {
+                $log_file = self::$ncfg->get('log_file');
 
                 $content = '['
-                    . format_date_now(self::$cfg['timezone'], self::$cfg['datetime_log_format'])
-                    . '][' . self::$cfg['app_name'] . ']:[' . $log_level . '] ' . $msg . "\n";
+                    . format_date_now(self::$ncfg->get('timezone'), self::$ncfg->get('datetime_log_format'))
+                    . '][' . self::$ncfg->get('app_name') . ']:[' . $log_level . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     $effectiveUser = false;
                     if (is_numeric($sysuid = getmyuid())) {
@@ -111,10 +119,10 @@ class Log
                             . ' effective User: ' . $userName, 1);
                         self::debug(getcwd(), 1);
                     } else {
-                        if (!chown($log_file, self::$cfg['log_file_owner'])) {
+                        if (!chown($log_file, self::$ncfg->get('log_file_owner'))) {
                             self::error(self::$lng['L_ERR_FILE_CHOWN'], 1);
                         }
-                        if (!chgrp($log_file, self::$cfg['log_file_owner_group'])) {
+                        if (!chgrp($log_file, self::$ncfg->get('log_file_owner_group'))) {
                             self::error('L_ERR_FILE_CHGRP', 1);
                         }
                         if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
@@ -127,8 +135,8 @@ class Log
                     self::error('Error opening/writing log to file', 1);
                 }
             }
-            if (self::$cfg['system_log_to_syslog'] === 1) {
-                openlog(self::$cfg['app_name'] . ' ' . self::$cfg['monnet_version'], LOG_NDELAY, LOG_SYSLOG);
+            if (self::$ncfg->get('system_log_to_syslog') === 1) {
+                openlog(self::$ncfg->get('app_name') . ' ' . self::$ncfg->get('monnet_version'), LOG_NDELAY, LOG_SYSLOG);
                 syslog($log_level, $msg);
             }
         }
@@ -232,8 +240,13 @@ class Log
     public static function getSystemDBLogs(int $limit): array
     {
         $lines = [];
-        $query = 'SELECT * FROM system_logs WHERE level <= ' .
-            self::$cfg['term_system_log_level'] . ' ORDER BY date DESC LIMIT ' . $limit;
+        $level = self::$ncfg->get('term_system_log_level');
+        if (!is_numeric($level)) {
+            $level = 5;
+        }
+
+        $query = 'SELECT * FROM system_logs WHERE level <= ' . $level
+             . ' ORDER BY date DESC LIMIT ' . $limit;
         $result = self::$db->query($query);
         $lines = self::$db->fetchAll($result);
 

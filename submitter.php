@@ -17,7 +17,6 @@ header('Content-Type: application/json; charset=UTF-8');
  * @var AppContext|null $ctx An instance of Context or null if not defined
  * @var array<string,string> $lng
  * @var Database|null $db An instance of Database or null if not defined
- * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  */
 require_once 'include/common.inc.php';

@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -64,7 +63,7 @@ if (empty($tdata['hosts'])) {
                     <?php endif; ?>
                     <?php if (!empty($host['access_link'])) : ?>
                         <a href="<?= $host['access_link'] ?>" target="_blank">
-                        <img class="fab" src="tpl/<?= $cfg['theme']?>/img/icons/link.png"
+                        <img class="fab" src="tpl/<?= $ncfg->get('theme')?>/img/icons/link.png"
                             alt="access_link" rel="noreferrer" title="<?= $host['access_link'] ?>"/>
                         </a>
                     <?php endif; ?>

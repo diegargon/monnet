@@ -25,7 +25,10 @@
  *
  * ('keyname', JSON_QUOTE('key_value'), ctype, ccat, cdesc, cuid=0);
  *
- * ccat = 0 (hidden), 1 (general) 101 (mail) 102 Ansible 103 (Agent)
+ * ccat
+ * 0 (hidden), 1 (general) 101 (mail),
+ * 102 Ansible 103 (Agent) 104 (Purge) 105 (Logging)
+ * 106 Network
  */
 class Config
 {
@@ -83,9 +86,7 @@ class Config
                 $value = $this->parseRowValue($row['cvalue'], (int) $row['ctype']);
 
                 /*
-                 * Only update values with category set to nondefault
-                 * Mean db cfg only have precedence if ccat > 0
-                 * exception to ccat > 0  if key not exists in cfg
+                 * DB Precedence only for keys with cat > 0
                  */
                 if (
                     (isset($row['ccat']) && $row['ccat'] > 0) ||
@@ -97,25 +98,6 @@ class Config
                 }
             }
         }
-
-        // Verificar claves predefinidas que no estén en la base de datos
-        /*
-        foreach ($this->cfg as $key => $value) {
-            $escapedKey = $db->escape($key);
-
-            // Si no existe en la base de datos, insertamos el valor predeterminado
-            $query = "SELECT COUNT(*) AS count FROM config WHERE ckey = '$escapedKey'";
-            $countResult = $db->query($query);
-            $count = $countResult->fetch_assoc()['count'];
-
-            if ($count == 0) {
-                // Insertar el valor predeterminado
-                $escapedValue = $db->escape(json_encode($value)); // Codificar como JSON
-                $insertQuery = "INSERT INTO config (ckey, cvalue) VALUES ('$escapedKey', '$escapedValue')";
-                $db->query($insertQuery);
-            }
-        }
-        */
     }
 
     /**
@@ -124,7 +106,7 @@ class Config
      * @param string|int $key Clave de configuración.
      * @return mixed Valor de la configuración o null si no existe.
      */
-    public function get($key)
+    public function get($key): mixed
     {
         if (!isset($this->cfg[$key]['value'])) :
             return null;
@@ -141,9 +123,9 @@ class Config
 
     /**
      *
-     * @return array<int|string, mixed>
+     * @return array<mixed>
      */
-    public function getAll()
+    public function getAll(): mixed
     {
         return $this->cfg;
     }
@@ -195,7 +177,8 @@ class Config
      */
     public function set($key, $value, int $force_save = 0): int
     {
-        if (isset($this->cfg[$key])) {
+        // If ctype exist is database config key
+        if (!empty($this->cfg[$key]['ctype'])) {
             $config = &$this->cfg[$key];
 
             if ($config['ctype'] == 6) {
@@ -219,6 +202,9 @@ class Config
                 $this->modifiedKeys[$key]['value'] = $value;
                 return 1;
             }
+        } else {
+            /* No database value  avoid save to database */
+            $this->cfg['key']['value'] = $value;
         }
         if ($force_save) :
             $this->saveChanges();

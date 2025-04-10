@@ -9,7 +9,6 @@
 
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
@@ -23,6 +22,11 @@
             id="settings_tab_1"
             onclick="changeSettingsTab(1)"
             class="settings-tabs-head active"><?= $lng['L_GENERAL'];?>
+        </button>
+        <button
+            id="settings_tab_2"
+            onclick="changeSettingsTab(2)"
+            class="settings-tabs-head"><?= $lng['L_UI'];?>
         </button>
         <button
             id="settings_tab_10"
@@ -40,6 +44,21 @@
             id="settings_tab_103"
             onclick="changeSettingsTab(103)"
             class="settings-tabs-head"><?= $lng['L_AGENT'];?>
+        </button>
+        <button
+            id="settings_tab_104"
+            onclick="changeSettingsTab(104)"
+            class="settings-tabs-head"><?= $lng['L_PURGE'];?>
+        </button>
+        <button
+            id="settings_tab_105"
+            onclick="changeSettingsTab(105)"
+            class="settings-tabs-head"><?= $lng['L_LOGGING'];?>
+        </button>
+        <button
+            id="settings_tab_106"
+            onclick="changeSettingsTab(106)"
+            class="settings-tabs-head"><?= $lng['L_NETWORK'];?>
         </button>
         <?php if ($ncfg->get('mail')) : ?>
         <button

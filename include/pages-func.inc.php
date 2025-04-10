@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 /**
@@ -49,13 +49,12 @@ function format_items(User $user, array $items_results): array
 
 /**
  *
- * @param array<string, mixed> $cfg
+ * @param string $allowed_ext
  * @param string $directory
  * @return array<int, array<string, string>>
  */
-function getLocalIconsData(array $cfg, string $directory): array
+function getLocalIconsData(string $allowed_ext, string $directory): array
 {
-    $allowedExtensions = $cfg['allowed_images_ext'];
     $imageData = [];
 
     if (is_dir($directory)) {
@@ -63,7 +62,7 @@ function getLocalIconsData(array $cfg, string $directory): array
         foreach ($dir as $fileinfo) {
             if ($fileinfo->isFile()) {
                 $extension = strtolower($fileinfo->getExtension());
-                if (in_array($extension, $allowedExtensions)) {
+                if (in_array($extension, $allowed_ext)) {
                     $imageData[] = [
                         'path' => $fileinfo->getPathname(),
                         'basename' => $fileinfo->getBasename()

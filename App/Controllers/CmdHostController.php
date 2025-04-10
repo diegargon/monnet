@@ -805,7 +805,7 @@ class CmdHostController
     /**
      *
      * @param int|null $status
-     * @return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function getAnsibleHosts(?int $status = null): array
     {

@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
@@ -129,7 +128,7 @@
                 });
         // Avoid set auto-refresh when a force call is execute
         if (!force) {
-            setTimeout(refresh, <?= $cfg['refresher_time'] * 60000 ?>);
+            setTimeout(refresh, <?= $ncfg->get('refresher_time') * 60000 ?>);
     }
     }
 </script>

@@ -68,6 +68,7 @@ $lng = [
     'L_DAYS' => 'Dias',
     'L_DETAIL_VIEW' => 'Vista detallada',
     'L_DISABLE' => 'Deshabilitar',
+    'L_DISKS' => 'Discos',
     //E
 //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
@@ -141,6 +142,7 @@ $lng = [
     'L_LINK' => 'Enlace',
     'L_LINK_HELP' => 'Server image name, favicon path, http link',
     'L_LOG' => 'Log',
+    'L_LOGGING' => 'Registros',
     'L_LOGMSG_TOO_LONG' => 'Mensaje log demasiado largo. Cortado!',
     //M
     'L_MEM' => 'Mem',
@@ -190,6 +192,7 @@ $lng = [
     'L_PING_CHECK_DISABLE' => 'Deshabilitar Ping',
     'L_PROVIDER' => 'Proveedor',
     'L_POOL' => 'Pool',
+    'L_PURGE' => 'Purga',
     //Q
     'L_QUICK_CONFIG' => 'Quick Config',
     'L_QUEUE' => 'Cola',
@@ -233,6 +236,7 @@ $lng = [
     'L_TASK' => 'Tarea',
     'L_TRACK' => 'Seguimiento',
     'L_TASK_TRIGGER' => 'Task Trigger',
+    'L_THRESHOLD' => 'Umbral',
     //U
     'L_USERS' => 'Usuarios',
     'L_USERNAME' => 'Usuario',
@@ -245,6 +249,7 @@ $lng = [
     'L_USED' => 'Usados',
     'L_USER' => 'Usuario',
     'L_UNIQ' => 'Unica',
+    'L_UI' => 'UI',
     //V
     'L_VENDOR' => 'Vendor',
     'L_VM' => 'VM',

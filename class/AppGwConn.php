@@ -108,7 +108,6 @@ class AppGwConn
     {
         if ($this->socket) {
             socket_close($this->socket);
-            $this->socket = null;
         }
     }
 }

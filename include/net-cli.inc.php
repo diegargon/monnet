@@ -24,7 +24,9 @@ function check_known_hosts(AppContext $ctx): bool
 
     /** @var Hosts $hosts */
     $hosts = $ctx->get('Hosts');
-    $cfg = $ctx->get('cfg');
+
+    /** @var Config $ncfg */
+    $ncfg = $ctx->get('Config');
 
     if (!is_object($hosts)) {
         Log::error("hosts is not a object");
@@ -34,7 +36,7 @@ function check_known_hosts(AppContext $ctx): bool
     Log::debug('Pinging known host');
     $db_hosts = $hosts->getknownEnabled();
 
-    $retries = $cfg['check_retries'];
+    $retries = $ncfg->get('check_retries');
 
     foreach ($db_hosts as $host) {
         $new_host_status = [];
@@ -50,7 +52,7 @@ function check_known_hosts(AppContext $ctx): bool
                     !isset($check_ports_result['no_retry'])
             ) {
                 for ($i = 2; $i <= $retries; $i++) {
-                    usleep($cfg['check_retries_usleep']);
+                    usleep($ncfg->get('check_retries_usleep'));
                     $check_ports_result = check_host_ports($ctx, $host);
 
                     if ($check_ports_result['online'] == 1) {
@@ -71,7 +73,7 @@ function check_known_hosts(AppContext $ctx): bool
                     $usec = $usec > 0 ? $usec * 1000000 : 0;
                 } else {
                     $sec = 0;
-                    $usec = $cfg['ping_hosts_timeout'];
+                    $usec = $ncfg->get('ping_hosts_timeout');
                 }
                 $host_ping = ping($host['ip'], ['sec' => $sec, 'usec' => $usec]);
                 if ($host_ping['online']) {
@@ -169,7 +171,7 @@ function check_known_hosts(AppContext $ctx): bool
             //recheck if was online
             if ($host['online'] == 1 && $ping_host_result['online'] == 0) {
                 for ($i = 2; $i <= $retries; $i++) :
-                    usleep($cfg['check_retries_usleep']);
+                    usleep($ncfg->get('check_retries_usleep'));
                     $ping_host_result = ping_known_host($ctx, $host);
 
                     if ($ping_host_result['online'] == 1) {
@@ -274,9 +276,9 @@ function ping_nets_ip(AppContext $ctx, string $ip)
 {
     $hosts = $ctx->get('Hosts');
     $networks = $ctx->get('Networks');
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
 
-    $timeout = ['sec' => 0, 'usec' => $cfg['ping_nets_timeout']];
+    $timeout = ['sec' => 0, 'usec' => $ncfg->get('ping_nets_timeout')];
 
     $latency = microtime(true);
     $ip_status = ping($ip, $timeout);
@@ -399,7 +401,8 @@ function check_macs(Hosts $hosts): void
  */
 function check_host_ports(AppContext $ctx, array $host): array
 {
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
+
     $latencies = [];
 
     $host_result = [
@@ -425,7 +428,7 @@ function check_host_ports(AppContext $ctx, array $host): array
     if (!empty($host['timeout'])) {
         $timeout = $host['timeout'];
     } else {
-        $timeout = $networks->isLocal($host['ip']) ? $cfg['port_timeout_local'] : $cfg['port_timeout'];
+        $timeout = $networks->isLocal($host['ip']) ? $ncfg->get('port_timeout_local') : $ncfg->get('port_timeout');
     }
 
     foreach ($ports as $port) :
@@ -514,7 +517,7 @@ function check_host_ports(AppContext $ctx, array $host): array
  */
 function ping_known_host(AppContext $ctx, array $host): array
 {
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
 
     $time_now = date_now();
     $networks = $ctx->get('Networks');
@@ -525,10 +528,10 @@ function ping_known_host(AppContext $ctx, array $host): array
         $usec = $usec > 0 ? $usec * 1000000 : 0;
     } elseif ($networks->isLocal($host['ip'])) {
         $sec = 0;
-        $usec = $cfg['ping_local_hosts_timeout'];
+        $usec = $ncfg->get('ping_local_hosts_timeout');
     } else {
         $sec = 0;
-        $usec = $cfg['ping_hosts_timeout'];
+        $usec = $ncfg->get('ping_hosts_timeout');
     }
 
     $timeout = ['sec' => $sec, 'usec' => $usec];

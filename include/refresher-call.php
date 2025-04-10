@@ -16,10 +16,11 @@
  */
 function get_hosts_view(AppContext $ctx, int $highlight = 0): array
 {
-    $cfg = $ctx->get('cfg');
     $hosts = $ctx->get('Hosts');
     $user = $ctx->get('User');
     $lng = $ctx->get('lng');
+    $ncfg = $ctx->get('Config');
+
     $hosts_view = [];
     $networks = $ctx->get('Networks');
 
@@ -66,15 +67,6 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
                     unset($hosts_view[$key]);
                 }
             }
-            //DUP TO DELETE
-            //Discard hidden networks
-            /*
-              $host_network_pref = 'network_select_' . $host['network'];
-              if ($user->getPref($host_network_pref) === 0) {
-              unset($hosts_view[$key]);
-              }
-             *
-             */
         }
     }
 
@@ -104,21 +96,21 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
         }
 
         if (!empty($vhost['manufacture'])) {
-            $manufacture = get_manufacture_data($cfg, $vhost['manufacture']);
+            $manufacture = get_manufacture_data($ncfg, $vhost['manufacture']);
             if (is_array($manufacture)) :
                 $hosts_view[$key]['manufacture_image'] = $manufacture['manufacture_image'];
                 $hosts_view[$key]['manufacture_name'] = $manufacture['name'];
             endif;
         }
         if (!empty($vhost['os'])) {
-            $os = get_os_data($cfg, $vhost['os']);
+            $os = get_os_data($ncfg, $vhost['os']);
             if (is_array($os)) :
                 $hosts_view[$key]['os_image'] = $os['os_image'];
                 $hosts_view[$key]['os_name'] = $os['name'];
             endif;
         }
         if (!empty($vhost['system_type'])) {
-            $system_type = get_system_type_data($cfg, $vhost['system_type']);
+            $system_type = get_system_type_data($ncfg, $vhost['system_type']);
             if (is_array($system_type)) :
                 $hosts_view[$key]['system_type_image'] = $system_type['system_type_image'];
                 $hosts_view[$key]['system_type_name'] = $system_type['name'];
@@ -133,7 +125,7 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
         $diff = $date_now->diff($change_time);
         $minutes_diff = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
 
-        if ($minutes_diff > 0 && ($minutes_diff <= $cfg['glow_time'])) {
+        if ($minutes_diff > 0 && ($minutes_diff <= $ncfg->get('glow_time'))) {
             if ($vhost['online']) {
                 $hosts_view[$key]['glow_tag'] = ' host-glow-green';
             } else {

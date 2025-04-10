@@ -335,19 +335,58 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
     // 0.56
-    $update = 0.00;
+    $update = 0.56;
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
             # Unused
-            $db->query("ALTER TABLE hosts DROP COLUMN access_result;");
-            # Unused
-            $db->query("ALTER TABLE hosts DROP COLUMN fingerprint;");
-            # Latency to misc
-            $db->query("ALTER TABLE hosts DROP COLUMN latency;");
-            //$db->query("
-            //");
+            $result = $db->query("SHOW COLUMNS FROM `hosts` LIKE 'access_results'");
+            if ($result && $result->num_rows > 0) {
+                $db->query("ALTER TABLE `hosts` DROP COLUMN `access_results`");
+            }
+            $result = $db->query("SHOW COLUMNS FROM `hosts` LIKE 'fingerprint'");
+            if ($result && $result->num_rows > 0) {
+                $db->query("ALTER TABLE `hosts` DROP COLUMN `fingerprint`");
+            }
+            $result = $db->query("SHOW COLUMNS FROM `hosts` LIKE 'latency'");
+            if ($result && $result->num_rows > 0) {
+                $db->query("ALTER TABLE `hosts` DROP COLUMN `latency`");
+            }
             $db->query("START TRANSACTION");
+            # Migration to ncfg
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('log_level', JSON_QUOTE('5'), 1, 105, NULL, 0),
+                ('log_file', JSON_QUOTE('logs/monnet.log'), 0, 105, NULL, 0),
+                ('system_log_to_syslog', JSON_QUOTE('0'), 2, 105, NULL, 0),
+                ('system_log_to_db', JSON_QUOTE('1'), 2, 105, NULL, 0),
+                ('system_log_to_db_debug', JSON_QUOTE('0'), 2, 105, NULL, 0),
+                ('log_to_file', JSON_QUOTE('1'), 2, 105, NULL, 0),
+                ('log_file_owner', JSON_QUOTE('www-data'), 0, 105, NULL, 0),
+                ('log_file_owner_group', JSON_QUOTE('www-data'), 0, 105, NULL, 0),
+                ('term_hosts_log_level', JSON_QUOTE('5'), 1, 105, NULL, 0),
+                ('term_system_log_level', JSON_QUOTE('5'), 1, 105, NULL, 0),
+                ('term_max_lines', JSON_QUOTE('100'), 1, 105, NULL, 0),
+                ('term_show_system_logs', JSON_QUOTE('1'), 2, 105, NULL, 0),
+                ('theme_css', JSON_QUOTE('default'), 0, 2, NULL, 0),
+                ('theme', JSON_QUOTE('default'), 0, 2, NULL, 0),
+                ('refresher_time', JSON_QUOTE('2'), 1, 2, NULL, 0),
+                ('glow_time', JSON_QUOTE('10'), 1, 2, NULL, 0),
+                ('port_timeout_local', JSON_QUOTE('0.5'), 3, 106, NULL, 0),
+                ('port_timeout', JSON_QUOTE('0.8'), 3, 106, NULL, 0),
+                ('ping_nets_timeout', JSON_QUOTE('200000'), 1, 106, NULL, 0),
+                ('ping_hosts_timeout', JSON_QUOTE('400000'), 1, 106, NULL, 0),
+                ('ping_local_hosts_timeout', JSON_QUOTE('300000'), 1, 106, NULL, 0),
+                ('clear_logs_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
+                ('clear_stats_intvl', JSON_QUOTE('15'), 1, 104, NULL, 0),
+                ('clear_reports_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
+                ('agent_allow_selfcerts', JSON_QUOTE('1'), 2, 103, NULL, 0),
+                ('default_mem_alert_threshold', JSON_QUOTE('90'), 1, 103, NULL, 0),
+                ('default_mem_warn_threshold', JSON_QUOTE('80'), 1, 103, NULL, 0),
+                ('default_disks_alert_threshold', JSON_QUOTE('90'), 1, 103, NULL, 0),
+                ('default_disks_warn_threshold', JSON_QUOTE('80'), 1, 103, NULL, 0);
+            ");
+
             //$db->query("
             //");
             $db->query("COMMIT");
@@ -381,22 +420,25 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 }
 
 /**
- * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  * @var Database $db
  */
-if ($db->isConn()) {
-    $lockFile = '/tmp/monnet_update.lock';
-    $db_version = (float) $ncfg->get('db_monnet_version');
+if (!$db->isConn()) {
+    echo "No Dabase Connection Error";
+}
+$lockFile = '/tmp/monnet_update.lock';
+$db_version = (float) $ncfg->get('db_monnet_version');
 
-    if ($db_version) :
-        $files_version = (float) $cfg['monnet_version'];
+if ($db_version) {
+    $files_version = (float) $ncfg->get('monnet_version');
 
-        if (($files_version > $db_version) && !file_exists($lockFile)) :
-            file_put_contents($lockFile, 'locked');
+    if (($files_version > $db_version) && !file_exists($lockFile)) {
+        if (file_put_contents($lockFile, 'locked') !== false) {
             Log::notice('Triggered Update');
             trigger_update($ncfg, $db, $db_version, $files_version);
             unlink($lockFile);
-        endif;
-    endif;
+        } else {
+            Log::error("Could not create lock file: $lockFile");
+        }
+    }
 }

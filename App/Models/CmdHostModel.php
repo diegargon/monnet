@@ -251,7 +251,7 @@ class CmdHostModel
 
     /**
      *
-     * @return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function getAlertOn(): array
     {
@@ -270,7 +270,7 @@ class CmdHostModel
 
     /**
      *
-     * @return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function getWarnOn(): array
     {
@@ -288,7 +288,7 @@ class CmdHostModel
 
     /**
      *
-     * @return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function getAgentsHosts(): array
     {
@@ -307,7 +307,7 @@ class CmdHostModel
     /**
      *
      * @param int $status
-     * @return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function getAgentsByStatus(int $status): array
     {
@@ -327,7 +327,7 @@ class CmdHostModel
 
     /**
      *
-     * @return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function getAnsibleHosts(): array
     {

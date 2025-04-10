@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -22,7 +21,7 @@
 <div id="hosts_cat" class="hosts_cat">
     <div class="categories_container">
         <div class="category dropdown">
-            <img src="/tpl/<?= $cfg['theme'] ?>/img/network.png"/>
+            <img src="/tpl/<?= $ncfg->get('theme') ?>/img/network.png"/>
             <div class="dropdown-content" id="myDropdown">
                 <?php
                 if (!empty($tdata['networks']) && valid_array($tdata['networks'])) {
@@ -50,7 +49,7 @@
                 ?>
                 <div class="category">
                     <a class="show_host_cat"  data-catid="<?= $cat['id'] ?>" href="#">
-                        <img src="/tpl/<?= $cfg['theme'] ?>/img/<?= $cat['on'] ? 'green.png' : 'red.png' ?>"/>
+                        <img src="/tpl/<?= $ncfg->get('theme') ?>/img/<?= $cat['on'] ? 'green.png' : 'red.png' ?>"/>
                         <input onclick="confirmSubmit('removeHostsCat', {id: <?= $cat['id'] ?>})" type="image"
                                class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png"
                                alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>">

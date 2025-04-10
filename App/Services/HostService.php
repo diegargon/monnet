@@ -71,6 +71,22 @@ class HostService
             $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
             /* TODO: Migrate: keep misc values in misc then delete this */
             $hostDetails = array_merge($hostDetails, $hostDetails['misc']);
+/*
+ * TODO WHEN DB VALUE
+            if(!isset($hostDetails['misc']['mem_alert_threshold'])) {
+                $hostDetails['misc']['mem_alert_threshold'] = $this->ncfg['default_mem_alert_threshold'];
+            }
+            if(!isset($hostDetails['misc']['mem_warn_threshold'])) {
+                $hostDetails['misc']['mem_warn_threshold'] = $this->ncfg['default_mem_warn_threshold'];
+            }
+            if(!isset($hostDetails['misc']['cpu_alert_threshold'])) {
+                $hostDetails['misc']['cpu_alert_threshold'] = $this->ncfg['default_cpu_alert_threshold'];
+
+            }
+            if(!isset($hostDetails['misc']['cpu_warn_threshold'])) {
+                $hostDetails['misc']['cpu_warn_threshold'] = $this->ncfg['default_cpu_warn_threshold'];
+            }
+ */
         }
         $hostDetails = $this->hostFormatter->format($hostDetails);
 
@@ -138,7 +154,7 @@ class HostService
     /**
      * Status (null All) (0 Off) (1 On) (2 Fail) - Returns hosts
      * @param int|null $status
-     * @return list<array<string, mixed>>
+     * @return list<string, mixed>>
      */
     public function getAnsibleHosts(?int $status = null): array
     {
@@ -336,13 +352,13 @@ class HostService
      * @param int $id del host a actualizar.
      * @param array $data datos a actualizar (incluyendo misc).
      *
-     * @return bool
+     * @return array<string|int>
      */
-    public function updateHost(int $id, array $data): bool
+    public function updateHost(int $id, array $data): array
     {
         if (isset($data['misc'])) {
             if (!is_array($data['misc'])) {
-                return ['error', 'Misc value is set but not an array'];
+                return ['error', 'error_msg' => 'Misc value is set but not an array'];
             }
             //Database Current Misc
             $host_misc  = $this->cmdHostModel->getMiscById($id);
@@ -356,13 +372,17 @@ class HostService
             $newMiscEncoded = $this->encodeMisc($newMisc);
 
             if ($newMiscEncoded === false) {
-                return ['error', 'Error encoding misc'];
+                return ['error', 'error_msg' => 'Error encoding misc'];
             }
 
             $data['misc'] = $newMiscEncoded;
         }
 
-        return $this->cmdHostModel->updateByID($id, $data);
+        if ($this->cmdHostModel->updateByID($id, $data)) {
+            return ['success' => true];
+        }
+
+        return ['error', 'error_msg' => 'Error updating host'];
     }
 
     /**

@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
@@ -22,11 +21,11 @@
         <div class="host-details-bar dragbar">
             <div class="host-controls-left">
                 <button id="close_host_details" type="submit"  class="button-ctrl">
-                    <img src="tpl/<?= $cfg['theme'] ?>/img/close.png"
+                    <img src="tpl/<?= $ncfg->get('theme') ?>/img/close.png"
                          alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
                 </button>
                 <button id="max_host_details" type="submit"  class="button-ctrl">
-                    <img src="tpl/<?= $cfg['theme'] ?>/img/maximize.png"
+                    <img src="tpl/<?= $ncfg->get('theme') ?>/img/maximize.png"
                          alt="<?= $lng['L_MAXIMIZE'] ?>" title="<?= $lng['L_MAXIMIZE'] ?>" />
                 </button>
                 <div class="host-details-tabs-head-container">
@@ -55,6 +54,16 @@
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab12')">
                         <?= $lng['L_CONFIG'] ?>
                     </button>
+                <?php
+                if ($tdata['host_details']['agent_installed']):
+                ?>
+                    <button id="tab16_btn" class="host-details-tabs-head" data-tab="16"
+                            onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab16')">
+                        <?= $lng['L_AGENT'] ?>
+                    </button>
+                <?php
+                endif;
+                ?>
                     <button id="tab13_btn" class="host-details-tabs-head" data-tab="13"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab13')">
                         <?= $lng['L_CHECKS'] ?>
@@ -74,7 +83,7 @@
             <div class="host-controls-right">
                 <?php if (!empty($tdata['host_details']['mac']) && empty($tdata['host_details']['online'])) : ?>
                     <input onClick="submitCommand('power_on', {id: <?= $tdata['host_details']['id'] ?>})" type="image"
-                           class="action-icon power-off" src="tpl/<?= $cfg['theme'] ?>/img/power-off.png"
+                           class="action-icon power-off" src="tpl/<?= $ncfg->get('theme') ?>/img/power-off.png"
                            alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
                 <?php endif; ?>
                 <?php
@@ -84,16 +93,16 @@
                 ) {
                     ?>
                     <input onClick="submitCommand('shutdown', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
-                           class="action-icon power-on" src="tpl/<?= $cfg['theme'] ?>/img/power-on.png"
+                           class="action-icon power-on" src="tpl/<?= $ncfg->get('theme') ?>/img/power-on.png"
                            alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['ansible_enabled'])) : ?>
                 <input onClick="submitCommand('reboot', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
-                           class="action-icon reboot" src="tpl/<?= $cfg['theme'] ?>/img/reboot.png"
+                           class="action-icon reboot" src="tpl/<?= $ncfg->get('theme') ?>/img/reboot.png"
                            alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
                 <?php endif; ?>
                 <input onClick="confirmSubmit('remove_host',{id:<?= $tdata['host_details']['id']?>})" type="image"
-                       class="action-icon remove" src="tpl/<?= $cfg['theme'] ?>/img/remove.png"
+                       class="action-icon remove" src="tpl/<?= $ncfg->get('theme') ?>/img/remove.png"
                        alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>"/>
             </div> <!--host-controls-right -->
 
@@ -303,7 +312,7 @@
                             <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>
                             <span class="resume_field">
                                 <?= $tdata['host_details']['misc']['agent_version'] ?>
-                                (<?= $cfg['agent_latest_version'] ?>)
+                                (<?= $ncfg->get('agent_latest_version') ?>)
                             </span>
                         </div>
                         <div>
@@ -610,7 +619,7 @@
                                 : null ?>"
                         />
                         <select id="access_link_type" name="access_link_type">
-                            <?php foreach ($cfg['access_link_types'] as $key => $access_type) : ?>
+                            <?php foreach ($ncfg->get('access_link_types') as $key => $access_type) : ?>
                                 <option value="<?= $key ?>" selected="1"><?= $access_type ?></option>
                             <?php endforeach; ?>
                         </select>
@@ -629,7 +638,7 @@
                     <div class="">
                         <label for="machine_type"><?= $lng['L_MACHINE_TYPE'] ?>: </label><br/>
                         <select id="machine_type">
-                            <?php foreach ($cfg['machine_type'] as $mtype) :
+                            <?php foreach ($ncfg->get('machine_type') as $mtype) :
                                 $selected = '';
                                 if (
                                     !empty($tdata['host_details']['machine_type']) &&
@@ -646,7 +655,7 @@
                     <div class="">
                         <label for="manufacture"><?= $lng['L_PROVIDER'] ?>: </label><br/>
                         <select id="manufacture">
-                            <?php foreach ($cfg['manufacture'] as $manufacture) :
+                            <?php foreach ($ncfg->get('manufacture') as $manufacture) :
                                 $selected = '';
                                 if (
                                     !empty($tdata['host_details']['manufacture']) &&
@@ -663,7 +672,7 @@
                     <div class="">
                         <label for="os"><?= $lng['L_OS'] ?>: </label><br/>
                         <select id="os">
-                            <?php foreach ($cfg['os'] as $os) :
+                            <?php foreach ($ncfg->get('os') as $os) :
                                 $selected = '';
                                 if (
                                     !empty($tdata['host_details']['os']) &&
@@ -680,7 +689,7 @@
                     <div class="">
                         <label for="system_type"><?= $lng['L_ROL'] ?>: </label><br/>
                         <select id="system_type">
-                            <?php foreach ($cfg['system_type'] as $system_type) :
+                            <?php foreach ($ncfg->get('system_type') as $system_type) :
                                 $selected = '';
                                 if (
                                     !empty($tdata['host_details']['system_type']) &&
@@ -698,7 +707,7 @@
                     <div class="">
                         <label for="system_aval"><?= $lng['L_AVAILABILITY'] ?>: </label><br/>
                         <select id="system_aval">
-                            <?php foreach ($cfg['sys_availability'] as $sys_aval) :
+                            <?php foreach ($ncfg->get('sys_availability') as $sys_aval) :
                                 $selected = '';
                                 if (
                                     !empty($tdata['host_details']['sys_availability']) &&
@@ -891,7 +900,7 @@
                                 <select id="task_trigger" name="task_trigger" required>
                                     <option value="" disabled selected>Select Trigger</option>
                                     <?php
-                                    foreach ($cfg['task_trigger'] as $task) :
+                                    foreach ($ncfg->get('task_trigger') as $task) :
                                         print("<option value={$task['id']}>{$lng[$task['name']]}</option>");
                                     endforeach;
                                     ?>
@@ -902,7 +911,7 @@
                                 <select id="playbooks" name="playbooks">
                                     <option value="" disable selected>No select</option>
                                     <?php
-                                    foreach ($cfg['playbooks'] as $playbook) :
+                                    foreach ($ncfg->get('playbooks') as $playbook) :
                                         print("<option value={$playbook['id']}>{$playbook['name']}</option>");
                                     endforeach;
                                     ?>
@@ -937,7 +946,7 @@
         <!-- TAB20 --><!-- Ansible -->
         <div id="tab20" class="host-details-tab-content">
             <div id="ansible_container" class="ansible_container"
-                 data-playbooks='<?= json_encode($cfg['playbooks']); ?>'>
+                 data-playbooks='<?= json_encode($ncfg->get('playbooks')); ?>'>
                 <div class="left-details-column">
                     <div>
                         <select id="playbook_select">
@@ -976,6 +985,35 @@
             </div>
         </div>
         <!-- /TAB20 -->
+        <!-- TAB16 --><!-- Agent  -->
+        <div id="tab16" class="host-details-tab-content">
+            <div id="agent_container" class="agent_container">
+                <div>Log Level</div>
+                <div>
+                    <select id="log_level_agent" name="log_level_agent">
+                        <option value="7">LOG_DEBUG</option>
+                        <option value="6">LOG_INFO</option>
+                        <option value="5">LOG_NOTICE</option>
+                        <option value="4">LOG_WARNING</option>
+                        <option value="3">LOG_ERROR</option>
+                        <option value="2">LOG_CRITICAL</option>
+                        <option value="1">LOG_ALERT</option>
+                        <option value="0">LOG_EMERGENCY</option>
+                    </select>
+                </div>
+                <div><?= $lng['L_MEMORY'] .' '. $lng['L_THRESHOLD'] ?></div>
+                <label for="mem_alert_thresh"><?= $lng['L_ALERTS'] ?></label>
+                <input id="mem_alert_thresh" name="mem_alert_thresh" size="2" max-size="2" type="text" value=""/>
+                <label for="mem_warn_thresh"><?= $lng['L_WARNS'] ?></label>
+                <input id="mem_warn_thresh" name="mem_alert_thresh" size="2" max-size="2" type="text" value=""/>
+                <div><?= $lng['L_DISKS'] .' '. $lng['L_THRESHOLD'] ?></div>
+                <label for="disks_alert_thresh"><?= $lng['L_ALERTS'] ?></label>
+                <input id="disks_alert_thresh" name="disks_alert_thresh" size="2" max-size="2" type="text" value=""/>
+                <label for="disks_warn_thresh"><?= $lng['L_WARNS'] ?></label>
+                <input id="disks_warn_thresh" name="disks_alert_thresh" size="2" max-size="2" type="text" value=""/>
+            </div>
+        </div>
+        <!-- /TAB16 -->
     </div> <!-- host-details-container -->
     <!-- host-details -->
     <script>

@@ -204,7 +204,7 @@ class CmdBookmarksController
         $target_id = $this->filter->varInt($command_values['id']);
         $tdata = [];
         $items = $this->ctx->get('Items');
-        $cfg =  $this->ctx->get('cfg');
+        $ncfg =  $this->ctx->get('Config');
         $lng =  $this->ctx->get('lng');
 
 
@@ -221,7 +221,7 @@ class CmdBookmarksController
             $tdata['web_categories'] = $categories->getByType(2);
         }
 
-        $tdata['local_icons'] = getLocalIconsData($cfg, 'bookmarks_icons/');
+        $tdata['local_icons'] = getLocalIconsData($ncfg->get('allowed_images_ext'), 'bookmarks_icons/');
         if (isset($command_values['action']) && $command_values['action'] === 'edit') {
             $tdata['bookmark_buttonid'] = 'updateBookmark';
             $tdata['bookmark_title'] = $lng['L_EDIT'];

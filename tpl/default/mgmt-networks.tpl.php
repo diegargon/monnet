@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -18,7 +17,7 @@
      style="<?= isset($tdata['show_add_network']) ? 'display:block;' : null ?>">
     <div class="front-container-bar dragbar">
         <button id="close_mgmt_network" class="button-ctrl" type="submit">
-            <img class="close_link" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>">
+            <img class="close_link" src="./tpl/<?= $ncfg->get('theme') ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>">
         </button>
         <div class="front-container-bar-title"><?= $lng['L_NETWORKS'] ?></div>
     </div>

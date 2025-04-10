@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  * @var array<string> $lng Language data
  * @var array<mixed> $tdata Template Data
@@ -45,7 +44,7 @@ foreach ($tdata['host_tasks'] as $task) :
             <td>
                 <select name="task_trigger[<?= $task_id ?>]" required>
                     <option value="" disabled selected>Select Trigger</option>
-                    <?php foreach ($cfg['task_trigger'] as $trigger) :
+                    <?php foreach ($ncfg->get('task_trigger') as $trigger) :
                         $selected = ($trigger['id'] == $task['trigger_type']) ? 'selected' : ''; ?>
                         <option value="<?= $trigger['id'] ?>" <?= $selected ?>><?= $lng[$trigger['name']] ?></option>
                     <?php endforeach; ?>
@@ -73,7 +72,7 @@ foreach ($tdata['host_tasks'] as $task) :
             <td>
                 <select name="playbooks[<?= $task_id ?>]">
                     <option value="" disabled selected>No select</option>
-                    <?php foreach ($cfg['playbooks'] as $playbook) :
+                    <?php foreach ($ncfg->get('playbooks') as $playbook) :
                         $selected = ($playbook['id'] == $task['pb_id']) ? 'selected' : ''; ?>
                         <option value="<?= $playbook['id'] ?>" <?= $selected ?>><?= $playbook['name'] ?></option>
                     <?php endforeach; ?>

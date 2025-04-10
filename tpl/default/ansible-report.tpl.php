@@ -7,7 +7,6 @@
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /**
- * @var array<int|string, mixed> $cfg
  * @var Config $ncfg
  * @var array<string> $lng Language data
  * @var array<mixed> $report Template Data

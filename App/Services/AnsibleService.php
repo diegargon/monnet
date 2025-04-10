@@ -64,6 +64,11 @@ class AnsibleService
                 "default_interval" => $this->ncfg->get('agent_default_interval'),
                 "ignore_cert" => $this->ncfg->get('agent_allow_selfcerts'),
                 "server_host" => $_SERVER['HTTP_HOST'], //TODO Filter?
+                //TODO When db value
+#                "mem_alert_threshold" => $this->ncfg['default_mem_alert_threshold'],
+#                "mem_warn_threshold" => $this->ncfg['default_mem_warn_threshold'],
+#                "disks_alert_threshold" => $this->ncfg['default_disks_alert_threshold'],
+#                "disks_warn_threshold" => $this->ncfg['default_disks_warn_threshold'],
                 "server_endpoint" => "/feedme.php",
             ];
 

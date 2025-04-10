@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -28,9 +27,9 @@ $id = $tdata['type'] . '_' . $tdata['host_id'];
     }
 </style>
 <script>
-    var datatime_graph_format = "<?= $cfg['datatime_graph_format'] ?>";
-    var timezone = "<?= $cfg['timezone'] ?>";
-    var charset = "<?= $cfg['graph_charset'] ?>";
+    var datatime_graph_format = "<?= $ncfg->get('datatime_graph_format') ?>";
+    var timezone = "<?= $ncfg->get('timezone') ?>";
+    var charset = "<?= $ncfg->get('graph_charset') ?>";
     var graph_name = "<?= !empty($tdata['graph_name']) ? $tdata['graph_name'] : 'test';?>";
 
     var ctx = document.getElementById('graph_<?= $id ?>').getContext('2d');

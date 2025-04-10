@@ -7,3 +7,10 @@ TODO
 /oldfiles/
 bookmarks_icons/*
 !bookmarks_icons/www.png
+logs/*
+!logs/.htaccess
+composer.json
+composer.lock
+info.php
+cache/*
+!cache/.noempty

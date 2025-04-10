@@ -9,7 +9,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -28,8 +27,8 @@ $cpu_usage = round($load[0], 2);
         <div>CPU Usage: <span id="cpu_usage"><?= $cpu_usage ?></span></div>
     </div>
     <div class="footer-right-element">
-        <a href="<?= $cfg['monnet_homepage'] ?>" target="_blank">
-            v<?= $cfg['monnet_version'] ?>.<?= $cfg['monnet_revision'] ?>
+        <a href="<?= $ncfg->get('monnet_homepage') ?>" target="_blank">
+            v<?= $ncfg->get('monnet_version') ?>.<?= $ncfg->get('monnet_revision') ?>
         </a>
     </div>
     <div class="clearfix"></div>

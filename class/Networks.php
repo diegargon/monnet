@@ -339,8 +339,8 @@ class Networks
                 ];
 
                 #temp fix for upgrade
-                $cfg = $this->ctx->get('cfg');
-                if ($cfg['monnet_version'] >= 0.44) {
+                $ncfg = $this->ctx->get('Config');
+                if ($ncfg->get('monnet_version') >= 0.44) {
                     $fnet['pool'] = $net['pool'];
                 }
 

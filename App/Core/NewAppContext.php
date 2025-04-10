@@ -17,9 +17,6 @@ class NewAppContext
     /** @var array<string,object> */
     private static array $services = [];
 
-    /** @var array<string,mixed> */
-    private static array $cfg = [];
-
     /** @var array<string,string> */
     private static array $lng = [];
 
@@ -83,26 +80,6 @@ class NewAppContext
     public function has(string $className): bool
     {
         return isset(self::$services[$className]);
-    }
-
-    /**
-     * Guarda la configuración global.
-     *
-     * @param array<string,mixed> $config
-     */
-    public function setCfg(array $config): void
-    {
-        self::$cfg = $config;
-    }
-
-    /**
-     * Obtiene la configuración global.
-     *
-     * @return array<string,mixed>
-     */
-    public function getCfg(): array
-    {
-        return self::$cfg;
     }
 
     /**

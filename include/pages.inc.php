@@ -19,14 +19,14 @@ function page_defaults(AppContext $ctx): array
     $page = [];
 
     $user = $ctx->get('User');
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
 
     $_user = $user->getUser();
 
-    empty($_user['theme']) ? $page['theme'] = $cfg['theme'] : $page['theme'] = $_user['theme'];
-    empty($_user['lang']) ? $page['lang'] = $cfg['lang'] : $page['lang'] = $_user['lang'];
-    empty($_user['charset']) ? $page['charset'] = $cfg['charset'] : $page['charset'] = $_user['charset'];
-    $page['web_title'] = $cfg['web_title'];
+    empty($_user['theme']) ? $page['theme'] = $ncfg->get('theme') : $page['theme'] = $_user['theme'];
+    empty($_user['lang']) ? $page['lang'] = $ncfg->get('lang') : $page['lang'] = $_user['lang'];
+    empty($_user['charset']) ? $page['charset'] = $ncfg->get('charset') : $page['charset'] = $_user['charset'];
+    $page['web_title'] = $ncfg->get('web_title');
 
     return $page;
 }
@@ -42,8 +42,8 @@ function page_common_head(AppContext $ctx): array
 
     $db = $ctx->get('Mysql');
     //$user = $ctx->get('User');
-    $cfg = $ctx->get('cfg');
     $lng = $ctx->get('lng');
+    $ncfg = $ctx->get('Config');
 
     $results = $db->select('items', '*', ['type' => 'search_engine']);
     $search_engines = $db->fetchAll($results);
@@ -67,7 +67,7 @@ function page_common_head(AppContext $ctx): array
     $page['web_main']['scriptlink'][] = './scripts/common.js';
 
 
-    $weather = weather_widget($cfg, $lng);
+    $weather = weather_widget($ncfg, $lng);
     if (!empty($weather)) {
         $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
         $page['weather_widget'] = $weather;
@@ -93,7 +93,7 @@ function page_index(AppContext $ctx): array
     $page = [];
 
     $user = $ctx->get('User');
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
     $categories = $ctx->get('Categories');
     $networks_list = $ctx->get('Networks')->getNetworks();
     $page = page_common_head($ctx);
@@ -114,7 +114,7 @@ function page_index(AppContext $ctx): array
     $items = $ctx->get('Items');
 
     $page['page'] = 'index';
-    $page['head_name'] = $cfg['web_title'];
+    $page['head_name'] = $ncfg->get('web_title');
 
     //Index scripts
     $page['web_main']['scriptlink'][] = './scripts/index.js';
@@ -222,7 +222,7 @@ function page_login(AppContext $ctx): array
 
     //$db = $ctx->get('Mysql');
     $user = $ctx->get('User');
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
     $lng = $ctx->get('lng');
 
     if (
@@ -235,16 +235,16 @@ function page_login(AppContext $ctx): array
             $userid = $user->checkUser($username, $password);
             if (!empty($userid) && $userid > 0) {
                 $user->setUser($userid);
-                if (empty($cfg['rel_path'])) {
-                    $cfg['rel_path'] = '/';
+                if (empty($ncfg->get('rel_path'))) {
+                    $ncfg->set('rel_path', '/');
                 }
-                header("Location: {$cfg['rel_path']} ");
+                header("Location: {$ncfg->get('rel_path')} ");
 
                 exit();
             }
         }
     }
-    $page['head_name'] = $cfg['web_title'];
+    $page['head_name'] = $ncfg->get('web_title');
     $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     $page['web_main']['scriptlink'][] = './scripts/background.js';
 
@@ -278,16 +278,16 @@ function page_login(AppContext $ctx): array
 function page_logout(AppContext $ctx): void
 {
 
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
 
     $_SESSION = [];
     session_destroy();
 
     setcookie('sid', '', time() - 3600, '/');
     setcookie('uid', '', time() - 3600, '/');
-    (empty($cfg['rel_path'])) ? $cfg['rel_path'] = '/' : null;
+    (empty($ncfg->get('rel_path'))) ? $ncfg->set('rel_path', '/') : null;
 
-    header("Location: {$cfg['rel_path']}index.php");
+    header("Location: {$ncfg->get('rel_path')}index.php");
 }
 
 /**
@@ -299,7 +299,7 @@ function page_settings(AppContext $ctx): array
 {
     $page = [];
 
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
     $config_all = $ctx->get('Config')->getAllEditable();
     $groupedConfig = [];
     foreach ($config_all as $config) {
@@ -318,7 +318,7 @@ function page_settings(AppContext $ctx): array
         'place' => 'head-left',
     ];
     $page['page'] = 'index';
-    $page['head_name'] = $cfg['web_title'];
+    $page['head_name'] = $ncfg->get('web_title');
     $page['web_main']['scriptlink'][] = './scripts/settings.js';
 
     $page['load_tpl'][] = [
@@ -338,7 +338,7 @@ function page_privacy(AppContext $ctx): array
 {
     $page = [];
 
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
 
     $page = page_common_head($ctx);
     /* Top Buttons */
@@ -348,7 +348,7 @@ function page_privacy(AppContext $ctx): array
     ];
 
     $page['page'] = 'index';
-    $page['head_name'] = $cfg['web_title'];
+    $page['head_name'] = $ncfg->get('web_title');
     $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     $page['web_main']['scriptlink'][] = './scripts/background.js';
 
@@ -364,7 +364,7 @@ function page_user(AppContext $ctx): array
 {
     $page = [];
 
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
 
     $page = page_common_head($ctx);
     /* Top Buttons */
@@ -374,7 +374,7 @@ function page_user(AppContext $ctx): array
     ];
 
     $page['page'] = 'index';
-    $page['head_name'] = $cfg['web_title'];
+    $page['head_name'] = $ncfg->get('web_title');
     //$page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     //$page['web_main']['scriptlink'][] = './scripts/background.js';
 

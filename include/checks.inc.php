@@ -59,49 +59,47 @@ function common_checks(array $cfg_db, array $cfg): void
         exit($cfg['path'] . $err_nofile_msg);
     endif;
 }
+
 /**
  *
- * @param array<int|string, mixed> $cfg
+ * @param Config $ncfg
  */
-function usermode_checks(array $cfg): void
+function usermode_checks(\Config $ncfg): void
 {
-    if (empty($cfg)) {
-        exit('cfg can be empty');
-    }
     $err_empty_msg = ' can\'t be empty check config.inc.php';
     $err_nofile_msg = ' file/directory not exists';
     $err_numeric_msg = ' must be numeric';
     $err_noexists_msg = ' not exists';
 
-    if (empty($cfg['lang'])) {
+    if (empty($ncfg->get('lang'))) {
         exit('lang' . $err_empty_msg);
     }
 
-    $lang_file = $cfg['path'] . '/lang/' . $cfg['lang'] . '/main.lang.php';
+    $lang_file = $ncfg->get('path') . '/lang/' . $ncfg->get('lang') . '/main.lang.php';
     if (!file_exists($lang_file)) {
         exit($lang_file . $err_nofile_msg);
     }
 
-    if (!isset($cfg['sid_expire'])) {
+    if (empty($ncfg->get('sid_expire'))) {
         exit('sid_expire' . $err_empty_msg);
     }
 
-    if (!is_numeric($cfg['sid_expire'])) {
+    if (!is_numeric($ncfg->get('sid_expire'))) {
         exit('sid_expire' . $err_numeric_msg);
     }
 
-    if (empty($cfg['css'])) {
-        exit('css' . $err_empty_msg);
+    if (empty($ncfg->get('theme_css'))) {
+        exit('Theme CSS' . $err_empty_msg);
     }
 
-    if (empty($cfg['theme'])) {
+    if (empty($ncfg->get('theme'))) {
         exit('theme' . $err_empty_msg);
     }
-    if (empty($cfg['charset'])) {
+    if (empty($ncfg->get('charset'))) {
         exit('charset' . $err_empty_msg);
     }
 
-    if (!is_dir($cfg['path'] . '/tpl/' . $cfg['theme'])) {
-        exit('theme ' . $cfg['theme'] . ' ' . $err_noexists_msg);
+    if (!is_dir($ncfg->get('path') . '/tpl/' . $ncfg->get('theme'))) {
+        exit('theme ' . $this->ncfg->get('theme') . ' ' . $err_noexists_msg);
     }
 }

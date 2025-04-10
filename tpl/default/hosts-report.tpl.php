@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -33,7 +32,7 @@
                             ?>
                             <img
                                 class="hosts-online"
-                                src="tpl/<?= $cfg['theme']?>/img/green2.png"
+                                src="tpl/<?= $ncfg->get('theme')?>/img/green2.png"
                                 alt="online_status"
                                 title="On"
                             >
@@ -42,7 +41,7 @@
                             ?>
                             <img
                                 class="hosts-offline"
-                                src="tpl/<?= $cfg['theme']?>/img/red2.png"
+                                src="tpl/<?= $ncfg->get('theme')?>/img/red2.png"
                                 alt="online_status"
                                 title="Off">
                             <?php

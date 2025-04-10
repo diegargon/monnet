@@ -8,7 +8,7 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg Config data
+ * @var Config data
  * @var array<string> $lng Language data
  * @var array<mixed> $tdata Template Data
  */
@@ -19,11 +19,11 @@ if (Filters::getString('page') == $privacy_page) {
 ?>
 <div id="top_button_bar" class="top_button_bar">
     <div class="bar_button_container">
-        <a href="<?= $cfg['rel_path'] ?>?page=logout">
-            <img src="tpl/<?= $cfg['theme'] ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT']; ?>">
+        <a href="<?= $ncfg->get('rel_path') ?>?page=logout">
+            <img src="tpl/<?= $ncfg->get('theme') ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT']; ?>">
         </a>
-        <a href="<?= $cfg['rel_path'] ?>?page=<?= $privacy_page ?>">
-            <img src="tpl/<?= $cfg['theme'] ?>/img/privacy.png" alt="privacy" title="<?= $lng['L_PRIVACY']; ?>"/>
+        <a href="<?= $ncfg->get('rel_path') ?>?page=<?= $privacy_page ?>">
+            <img src="tpl/<?= $ncfg->get('theme') ?>/img/privacy.png" alt="privacy" title="<?= $lng['L_PRIVACY']; ?>"/>
         </a>
     </div>
     <?= !empty($tdata['top_button_bar']) ? $tdata['top_button_bar'] : null; ?>

@@ -8,7 +8,7 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
+ * @var Config $ncfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */

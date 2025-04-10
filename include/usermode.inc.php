@@ -5,15 +5,14 @@
  *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 /**
- * @var array<int|string, mixed> $cfg An instance of Config or null if not defined
  * @var AppContext|null $ctx An instance of AppCtx or null if not defined
  * @var array<string,string> $lng - Default included in common, we overwrite user lang here
  */
-usermode_checks($cfg);
+usermode_checks($ncfg);
 
 session_name('monnet');
 session_start();
@@ -31,7 +30,6 @@ if ($user->getLang() !== 'es') {
 }
 
 require_once 'class/Web.php';
-
 require_once 'include/pages-func.inc.php';
 require_once 'include/pages-post.inc.php';
 require_once 'include/pages.inc.php';

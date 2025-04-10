@@ -11,16 +11,16 @@
 
 /**
  *
- * @param array<int|string, mixed> $cfg
+ * @param Config $ncfg
  * @param array<string,string> $lng
  * @return array<string,string|int>|null
  */
-function weather_widget(array $cfg, array $lng): ?array
+function weather_widget(\Config $ncfg, array $lng): ?array
 {
 
     $page_data = [];
 
-    $weather_data = request_weather($cfg);
+    $weather_data = request_weather($ncfg);
     if ($weather_data === null) {
         return null;
     }
@@ -38,16 +38,19 @@ function weather_widget(array $cfg, array $lng): ?array
 
 /**
  *
- * @param array<int|string, mixed> $cfg
+ * @param Config $ncfg
  *
  * @return array<string, mixed>|null
  */
-function request_weather(array $cfg): mixed
+function request_weather(\Config $ncfg): mixed
 {
+    $weather_config = $ncfg->get('weather_widget');
+    $api = $weather_config['weather_api'];
+    $country = $weather_config['country'];
 
     $ApiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' .
-            $cfg['weather_widget']['country']
-            . '&appid=' . $cfg['weather_widget']['weather_api']
+            $country
+            . '&appid=' . $api
             . '&lang=es&units=metric';
 
     $response = curl_get($ApiUrl);

@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -17,7 +16,7 @@
 <div id="mgmt-bookmark-container" class="draggable">
     <div class="front-container-bar dragbar">
         <button id="close_mgmtbookmark" class="button-ctrl" type="submit">
-            <img class="close_link" src="./tpl/<?= $cfg['theme'] ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>">
+            <img class="close_link" src="./tpl/<?= $ncfg->get('theme') ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>">
         </button>
         <div class="front-container-bar-title"><?= $tdata['bookmark_title'] . ' ' . $lng['L_BOOKMARK'] ?></div>
     </div>

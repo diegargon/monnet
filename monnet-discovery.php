@@ -22,7 +22,7 @@ require_once 'include/climode.inc.php';
 Log::debug("Starting $APP_NAME");
 
 if (is_locked()) {
-    Log::debug("CLI Locked skipping");
+    Log::notice("CLI Locked skipping");
     die();
 }
 

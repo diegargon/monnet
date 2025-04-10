@@ -18,10 +18,9 @@ class User
 
     /**
      *
-     * @var array<string|int>
+     * @var \Config
      */
-    private array $cfg;
-
+    private \Config $ncfg;
     /**
      *
      * @var Database
@@ -50,7 +49,7 @@ class User
     {
         $this->ctx = $ctx;
         $this->db = $ctx->get('Mysql');
-        $this->cfg = $ctx->get('cfg');
+        $this->ncfg = $ctx->get('Config');
 
         if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
             $this->user = $this->getProfile($_SESSION['uid']);
@@ -72,9 +71,9 @@ class User
             $this->user['id'] = -1;
         }
 
-        $this->user['lang'] ??= $this->cfg['lang'];
-        $this->user['theme'] ??= $this->cfg['theme'];
-        $this->user['timezone'] ??= $this->cfg['timezone'];
+        $this->user['lang'] ??= $this->ncfg->get('lang');
+        $this->user['theme'] ??= $this->ncfg->get('theme');
+        $this->user['timezone'] ??= $this->ncfg->get('timezone');
 
         $this->user['id'] > 0 ? $this->loadPrefs() : null;
         $this->loadUserHostCatsState();
@@ -170,7 +169,7 @@ class User
 
         $timezone = $this->user['timezone'];
         if (empty($timezone)) {
-            $timezone = $this->cfg['timezone'];
+            $timezone = $this->ncfg->get('timezone');
         }
         return is_string($timezone) ? $timezone : null;
     }
@@ -183,7 +182,7 @@ class User
     public function getDateNow(string $format = null): string|bool
     {
         if (!$format) {
-            $format = $this->cfg['datatime_format'];
+            $format = $this->ncfg->get('datatime_format');
         }
 
         return format_date_now($this->user['timezone'], $format);
@@ -341,12 +340,12 @@ class User
     {
         if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
             setcookie('sid', session_id(), [
-                'expires' => time() + $this->cfg['sid_expire'],
+                'expires' => time() + $this->ncfg->get('sid_expire'),
                 'secure' => true,
                 'samesite' => 'lax',
             ]);
             setcookie('uid', (string) $this->getId(), [
-                'expires' => time() + $this->cfg['sid_expire'],
+                'expires' => time() + $this->ncfg->get('sid_expire'),
                 'secure' => true,
                 'samesite' => 'lax',
             ]);
@@ -359,20 +358,20 @@ class User
             setcookie(
                 'sid',
                 session_id(),
-                time() + $this->cfg['sid_expire'],
-                $this->cfg['rel_path']
+                time() + $this->ncfg->get('sid_expire'),
+                $this->ncfg->get('rel_path')
             );
             setcookie(
                 'uid',
                 (string)$this->getId(),
-                time() + $this->cfg['sid_expire'],
-                $this->cfg['rel_path']
+                time() + $this->ncfg->get('sid_expire'),
+                $this->ncfg->get('rel_path')
             );
             setcookie(
                 'username',
                 $this->getUsername(),
                 time() + (10 * 365 * 24 * 120),
-                $this->cfg['rel_path']
+                $this->ncfg->get('rel_path')
             );
         }
         $new_sid = session_id();

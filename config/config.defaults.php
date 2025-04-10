@@ -25,7 +25,7 @@ $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
 $cfg['sid_expire'] = 99999;
 $cfg['theme'] = 'default';
-$cfg['css'] = 'default';
+$cfg['theme_css'] = 'default';
 $cfg['charset'] = 'utf-8';
 $cfg['graph_charset'] = 'es-ES';
 $cfg['check_retries'] = 4;                # Ping/Port retrys to  mark host down
@@ -64,7 +64,7 @@ $cfg['datetime_log_format'] = 'd-m-y H:i:s';
 
 /* TIMEOUTS */
 $cfg['port_timeout_local'] = 0.5;           # sec
-$cfg['port_timeout'] = 0.8;                 #sec
+$cfg['port_timeout'] = 0.8;                 # sec
 $cfg['ping_nets_timeout'] = 200000;         # usec
 $cfg['ping_hosts_timeout'] = 400000;        # usec
 $cfg['ping_local_hosts_timeout'] = 300000;  # usec
@@ -72,8 +72,6 @@ $cfg['ping_local_hosts_timeout'] = 300000;  # usec
 //Web UI refresh time
 $cfg['refresher_time'] = 2;
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
-$cfg['stats_clear_days'] = 30;
-$cfg['logs_clear_days'] = 30;
 $cfg['glow_time'] = 10; // Minutes. Glow host time
 /*
  * Agent interval in seconds, inyected in config file, must

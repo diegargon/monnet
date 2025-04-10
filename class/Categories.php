@@ -5,7 +5,7 @@
  *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -17,9 +17,9 @@ class Categories
     private AppContext $ctx;
 
     /**
-     * @var array<int|string, mixed> $cfg
+     *
+     * @var Database
      */
-    private array $cfg = [];
     private Database $db;
     /**
      * @var array<int, array<string, mixed>> $categories
@@ -36,16 +36,22 @@ class Categories
      */
     private array $lng = [];
 
+    /**
+     *
+     * @var \Config
+     */
+    private \Config $ncfg;
+
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->cfg = $ctx->get('cfg');
+        $this->ncfg = $ctx->get('Config');
         $this->db = $ctx->get('Mysql');
         $this->lng = $ctx->get('lng');
 
         $results = $this->db->select('categories', '*');
         $this->categories = $this->db->fetchAll($results);
-        $this->cat_types = $this->cfg['cat_types'];
+        $this->cat_types = $this->ncfg->get('cat_types');
     }
 
     /**

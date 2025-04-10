@@ -8,7 +8,6 @@
  */
 /**
  * In frontend->getTpl()
- * @var array<int|string, mixed> $cfg
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
@@ -112,7 +111,7 @@
 
                     if (jsonData.command_receive === 'show_host_cat' && jsonData.command_success) {
                             let newState = jsonData.response_msg;
-                            let imgSrc = `/tpl/<?= $cfg['theme'] ?>/img/${newState ? 'green.png' : 'red.png'}`;
+                            let imgSrc = `/tpl/<?= $ncfg->get('theme') ?>/img/${newState ? 'green.png' : 'red.png'}`;
                             $('.show_host_cat[data-catid="' + jsonData.id + '"] img').attr('src', imgSrc);
                     }
 
@@ -122,11 +121,11 @@
 
                         if (allOtherRed) {
                             // if all red except clicked category turn on all
-                            $('.show_host_cat img').attr('src', '/tpl/<?= $cfg['theme'] ?>/img/green.png');
+                            $('.show_host_cat img').attr('src', '/tpl/<?= $ncfg->get('theme') ?>/img/green.png');
                         } else {
                             // if not turn all off except the clicked category
-                            $('.show_host_cat img').not('[data-catid="' + jsonData.id + '"]').attr('src', '/tpl/<?= $cfg['theme'] ?>/img/red.png');
-                            $('.show_host_cat[data-catid="' + jsonData.id + '"] img').attr('src', '/tpl/<?= $cfg['theme'] ?>/img/green.png');
+                            $('.show_host_cat img').not('[data-catid="' + jsonData.id + '"]').attr('src', '/tpl/<?= $ncfg->get('theme') ?>/img/red.png');
+                            $('.show_host_cat[data-catid="' + jsonData.id + '"] img').attr('src', '/tpl/<?= $ncfg->get('theme') ?>/img/green.png');
                         }
                     }
                     if (

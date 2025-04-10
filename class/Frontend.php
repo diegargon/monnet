@@ -21,11 +21,17 @@ class Frontend
     /**  @var array<string,string> $lng */
     private array $lng;
 
+    /**
+     *
+     * @var \Config
+     */
+    private \Config $ncfg;
+
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->lng = &$this->ctx->get('lng');
-        $this->cfg = &$this->ctx->get('cfg');
+        $this->ncfg = $this->ctx->get('Config');
     }
 
     /**
@@ -35,13 +41,13 @@ class Frontend
      */
     public function showPage(array $tdata): void
     {
-        $web['main_head'] = $this->cssLinkFile($this->cfg['theme'], $this->cfg['css']);
+        $web['main_head'] = $this->cssLinkFile($this->ncfg->get('theme'), $this->ncfg->get('theme_css'));
         $web['main_footer'] = '';
 
         /* Add custom css files */
         if (!empty($tdata['web_main']['cssfile']) && is_array($tdata['web_main']['cssfile'])) {
             foreach ($tdata['web_main']['cssfile'] as $cssfile) {
-                $web['main_head'] .= $this->cssLinkFile($this->cfg['theme'], $cssfile);
+                $web['main_head'] .= $this->cssLinkFile($this->ncfg->get('theme'), $cssfile);
             }
         }
         /* Add script link */
@@ -106,12 +112,12 @@ class Frontend
     public function getTpl(string $tpl, array $tdata = []): string|bool
     {
         $lng = $this->lng;
-        $cfg = $this->cfg;
+        $cfg = $this->ctx->get('cfg');
         $ncfg = $this->ctx->get('Config');
         $user = $this->ctx->get('User');
 
         ob_start();
-        $tpl_file = 'tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php';
+        $tpl_file = 'tpl/' . $ncfg->get('theme') . '/' . $tpl . '.tpl.php';
         !file_exists($tpl_file) ? $tpl_file = 'tpl/default/' . $tpl . '.tpl.php' : null;
         include($tpl_file);
 
@@ -173,7 +179,7 @@ class Frontend
         $menu = '';
         $body = $this->msgBox(['title' => $msg['title'], 'body' => $msg['body']]);
         $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
-        //$tdata['css_file'] = $this->getCssFile($this->cfg['theme'], $this->cfg['css']);
+        //$tdata['css_file'] = $this->getCssFile($this->ncfg->get('theme'), $this->ncfg->get('theme_css'));
         echo $this->getTpl('html_mstruct', $tdata);
 
         exit();

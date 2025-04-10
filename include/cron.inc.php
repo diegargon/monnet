@@ -80,9 +80,9 @@ function cron(AppContext $ctx): void
  */
 function clear_stats(AppContext $ctx): void
 {
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
     $db = $ctx->get('Mysql');
-    $intvl = $cfg['clear_stats_intvl'];
+    $intvl = $ncfg->get('clear_stats_intvl');
 
     $query = "DELETE FROM stats WHERE date < DATE_SUB(CURDATE(), INTERVAL $intvl DAY)";
     $db->query($query);
@@ -97,9 +97,10 @@ function clear_stats(AppContext $ctx): void
  */
 function clear_system_logs(AppContext $ctx): void
 {
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
+
     $db = $ctx->get('Mysql');
-    $intvl = $cfg['clear_logs_intvl'];
+    $intvl = $ncfg->get('clear_logs_intvl');
 
     $query = "DELETE FROM system_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL $intvl DAY)";
     $db->query($query);
@@ -114,9 +115,9 @@ function clear_system_logs(AppContext $ctx): void
  */
 function clear_hosts_logs(AppContext $ctx): void
 {
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
     $db = $ctx->get('Mysql');
-    $intvl = $cfg['clear_logs_intvl'];
+    $intvl = $ncfg->get('clear_logs_intvl');
 
     $query = "DELETE FROM hosts_logs WHERE date < DATE_SUB(CURDATE(), INTERVAL $intvl DAY)";
     $db->query($query);
@@ -131,9 +132,9 @@ function clear_hosts_logs(AppContext $ctx): void
  */
 function clear_reports(AppContext $ctx): void
 {
-    $cfg = $ctx->get('cfg');
+    $ncfg = $ctx->get('Config');
     $db = $ctx->get('Mysql');
-    $intvl = $cfg['clear_reports_intvl'];
+    $intvl = $ncfg->get('clear_reports_intvl');
 
     $query = "DELETE FROM reports WHERE date < DATE_SUB(CURDATE(), INTERVAL $intvl DAY)";
     $db->query($query);

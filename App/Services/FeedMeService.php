@@ -1,10 +1,13 @@
 <?php
 
 /**
+ * FeedMeService
  *
+ * Servicio para procesar solicitudes de agentes y manejar actualizaciones de hosts.
+ *
+ * @package App\Services
+ * @subpackage FeedMeService
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -17,27 +20,56 @@ use App\Models\CmdStats;
 
 class FeedMeService
 {
+    /**
+     * @var \AppContext $ctx Contexto
+     */
     private \AppContext $ctx;
+
+    /**
+     * @var HostService $hostService Servicio para manejar hosts.
+     */
     private HostService $hostService;
+
+    /**
+     * @var CmdStats $cmdStats Model Stats
+     */
     private CmdStats $cmdStats;
+
+    /**
+     * @var CmdHostModel $cmdHostModel Model host data
+     */
     private CmdHostModel $cmdHostModel;
 
+    /**
+     * @var \Config $ncfg Config
+     */
+    private \Config $ncfg;
+
+    /**
+     * Constructor de FeedMeService.
+     *
+     * @param \AppContext $ctx Contexto de la aplicación.
+     */
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->cfg = $ctx->get('cfg');
+        $this->ncfg = $ctx->get('Config');
         $this->hostService = new HostService($ctx);
     }
 
+    /**
+     * Destruct
+     */
     public function __destruct()
     {
         unset($this->ctx, $this->hostService);
     }
 
     /**
+     * Procesa una solicitud del agente.
      *
-     * @param array<string, mixed> $request
-     * @return array<string, string|int>
+     * @param array<string, mixed> $request Datos de la solicitud.
+     * @return array<string, mixed> Respuesta procesada.
      */
     public function processRequest(array $request): array
     {
@@ -85,6 +117,7 @@ class FeedMeService
                 case 'high_cpu_usage':
                 case 'high_memory_usage':
                 case 'high_disk_usage':
+                case 'agent_shutdown':
                     $this->notificationLog($request['name'], $host_id,  $rdata);
                     break;
                 default:
@@ -92,7 +125,10 @@ class FeedMeService
             endswitch;
         }
 
-        $this->hostService->updateHost($host['id'], $host_update_values);
+        $update_response = $this->hostService->updateHost($host['id'], $host_update_values);
+        if(!empty($update_response['error'])) {
+            return $update_response;
+        }
 
         $response = $this->prepareResponse($command, $request, $agent_default_interval);
 
@@ -100,10 +136,11 @@ class FeedMeService
     }
 
     /**
+     * Procesa datos de inicio enviados por el agente.
      *
-     * @param int $host_id
-     * @param array<string, string|int> $rdata
-     * @return array<string, string|int>
+     * @param int $host_id ID del host.
+     * @param array<string, string|int> $rdata Datos enviados por el agente.
+     * @return array<string, string|int> Valores actualizados del host.
      */
     public function processStarting(int $host_id, array $rdata): array
     {
@@ -125,10 +162,11 @@ class FeedMeService
     }
 
     /**
+     * Procesa estadísticas enviadas por el agente.
      *
-     * @param int $host_id
-     * @param array<string, string|int> $rdata
-     * @return bool
+     * @param int $host_id ID del host.
+     * @param array<string, string|int> $rdata Datos de estadísticas.
+     * @return bool Indica si el procesamiento fue exitoso.
      */
     public function processStats(int $host_id, array $rdata): bool
     {
@@ -172,10 +210,11 @@ class FeedMeService
     }
 
     /**
+     * Procesa port info provided by agent
      *
-     * @param int $host_id
-     * @param array<string, string|int> $rdata
-     * @return bool
+     * @param int $host_id ID del host.
+     * @param array<string, string|int> $rdata Datos de puertos.
+     * @return bool Indica si el procesamiento fue exitoso.
      */
     public function processPorts(int $host_id, array $rdata): bool
     {
@@ -189,10 +228,11 @@ class FeedMeService
     }
 
     /**
+     * Update ports
      *
-     * @param int $host_id
-     * @param array<string, string|int> $listen_ports
-     * @return bool
+     * @param int $host_id ID del host.
+     * @param array<string, string|int> $listen_ports Ports
+     * @return bool success|fail.
      */
     public function updateListenPorts(int $host_id, array $listen_ports): bool
     {
@@ -292,11 +332,12 @@ class FeedMeService
     }
 
     /**
+     * Ping data. Agent Provided
      *
-     * @param int $host_id
-     * @param array<string, string|int> $host_update_values
+     * @param int $host_id ID del host.
+     * @param array<string, string|int> $host_update_values  Update fields
      * @param array<string, mixed> $rdata
-     * @return array<string, string|int>
+     * @return array<string, string|int> return added values.
      */
     private function processPingData(int $host_id, array $host_update_values, array $rdata): array
     {
@@ -322,18 +363,19 @@ class FeedMeService
     }
 
     /**
+     * Response to agent
      *
-     * @param string $command
+     * @param string $command Command
      * @param array<string, string|int> $request
      * @param int $interval
-     * @return array<string, string|int>
+     * @return array<string, string|int> response
      */
     private function prepareResponse(string $command, array $request, int $interval): array
     {
         $response = [
             'cmd' => $command,
             'token' => $request['token'],
-            'version' => $this->cfg['agent_min_version'],
+            'version' => $this->ncfg->get('agent_min_version'),
             'response_msg' => null,
             'refresh' => $interval,
             'data' => []
@@ -352,11 +394,12 @@ class FeedMeService
     }
 
     /**
+     * Validate request
      *
-     * @param array<string, string|int> $host
-     * @param string $token
-     * @param int $host_id
-     * @return array<string, string|int>
+     * @param array<string, string|int> $host host data
+     * @param string $token Auth Toeken
+     * @param int $host_id  Host id.
+     * @return array<string, string|int> result array success|error.
      */
     private function validateHostRequest(array $host, string $token, int $host_id): array
     {
@@ -372,16 +415,15 @@ class FeedMeService
     }
 
     /**
+     * Obtiene el intervalo predeterminado para el agente.
      *
-     * @return int
+     * @return int Intervalo en segundos.
      */
     private function getAgentInterval(): int
     {
-        $ncfg = $this->ctx->get('Config');
-
-        $agent_default_interval = $ncfg->get('agent_default_interval');
-        $last_refreshing = (int) $ncfg->get('refreshing');
-        $refresh_time_seconds = (int) $ncfg->get('refresher_time') * 60;
+        $agent_default_interval = $this->ncfg->get('agent_default_interval');
+        $last_refreshing = (int) $this->ncfg->get('refreshing');
+        $refresh_time_seconds = (int) $this->ncfg->get('refresher_time') * 60;
 
         if ((time() - $last_refreshing) < $refresh_time_seconds) {
             $agent_default_interval = 5;
@@ -391,11 +433,12 @@ class FeedMeService
     }
 
     /**
+     * Prepara los valores de actualización del host.
      *
-     * @param array<string, string|int> $host
-     * @param array<string, string|int> $request
-     * @param int $interval
-     * @return array<string, string|int>
+     * @param array<string, string|int> $host Datos actuales del host.
+     * @param array<string, string|int> $request Datos de la solicitud.
+     * @param int $interval Intervalo de actualización.
+     * @return array<string, string|int> Valores preparados para la actualización.
      */
     private function prepareHostUpdateValues(array $host, array $request, int $interval): array
     {
@@ -417,12 +460,14 @@ class FeedMeService
     }
 
     /**
+     * Registra un log de notificación.
      *
-     * @param string $request_name
-     * @param int $host_id
-     * @param array<string, mixed> $rdata
+     * @param string $request_name Nombre de la solicitud.
+     * @param int $host_id ID del host.
+     * @param array<string, mixed> $rdata Datos de la notificación.
+     * @return void
      */
-    private function notificationLog(string $request_name, int $host_id, array $rdata)
+    private function notificationLog(string $request_name, int $host_id, array $rdata): void
     {
         $event_type = !empty($rdata['event_type']) ? $rdata['event_type'] : 0;
         $log_type = isset($rdata['log_type']) ? $rdata['log_type'] : (!empty($rdata['event_type']) ? \LogType::EVENT : 0);
