@@ -113,7 +113,7 @@ class FeedMeService
                         $host_update_values = array_merge($host_update_values, $starting_updates);
                     }
                     break;
-                case 'high_iowat':
+                case 'high_iowait':
                 case 'high_cpu_usage':
                 case 'high_memory_usage':
                 case 'high_disk_usage':
