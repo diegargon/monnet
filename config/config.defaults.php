@@ -24,34 +24,11 @@ $cfg['path'] = '/var/www/html';
 $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
 $cfg['sid_expire'] = 99999;
-$cfg['theme'] = 'default';
-$cfg['theme_css'] = 'default';
 $cfg['charset'] = 'utf-8';
 $cfg['graph_charset'] = 'es-ES';
 $cfg['check_retries'] = 4;                # Ping/Port retrys to  mark host down
 $cfg['check_retries_usleep'] = 500000;    # Next attempt wait usec
 /* Log and Term Logs */
-$cfg['log_level'] = 5;
-$cfg['log_file'] = 'logs/monnet.log';
-$cfg['system_log_to_syslog'] = 0;
-$cfg['system_log_to_db'] = 1;
-$cfg['system_log_to_db_debug'] = 0; //Beware
-$cfg['log_to_file'] = 1;
-$cfg['log_file_owner'] = 'www-data';
-$cfg['log_file_owner_group'] = 'www-data';
-/*
-  'LOG_EMERGENCY' => 0    'LOG_ALERT' => 1    'LOG_CRITICAL' => 2
-  'LOG_ERROR' => 3      'LOG_WARNING' => 4  'LOG_NOTICE' => 5
-  'LOG_INFO' => 6     'LOG_DEBUG' => 7
- */
-$cfg['term_hosts_log_level'] = 5;
-$cfg['term_system_log_level'] = 5;
-$cfg['term_max_lines'] = 100;
-$cfg['term_show_system_logs'] = 1;
-/* Clear (days) */
-$cfg['clear_logs_intvl'] = 30;
-$cfg['clear_stats_intvl'] = 15;
-$cfg['clear_reports_intvl'] = 30;
 /* Date */
 $cfg['term_date_format'] = '[d][H:i]';
 $cfg['timezone'] = 'UTC';
@@ -62,23 +39,8 @@ $cfg['datetime_format_min'] = 'd/H:i';
 $cfg['datatime_graph_format'] = 'H:i';
 $cfg['datetime_log_format'] = 'd-m-y H:i:s';
 
-/* TIMEOUTS */
-$cfg['port_timeout_local'] = 0.5;           # sec
-$cfg['port_timeout'] = 0.8;                 # sec
-$cfg['ping_nets_timeout'] = 200000;         # usec
-$cfg['ping_hosts_timeout'] = 400000;        # usec
-$cfg['ping_local_hosts_timeout'] = 300000;  # usec
-
 //Web UI refresh time
-$cfg['refresher_time'] = 2;
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
-$cfg['glow_time'] = 10; // Minutes. Glow host time
-/*
- * Agent interval in seconds, inyected in config file, must
- * reinstall to take efect
- */
-$cfg['agent_default_interval'] = 30;
-$cfg['agent_allow_selfcerts'] = true;
 
 /* Modules Config */
 

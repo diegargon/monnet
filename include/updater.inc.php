@@ -398,6 +398,31 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+
+    // 0.57
+    $update = 0.00;
+    if ($db_version < $update) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            //$db->query("
+            //");
+            $db->query("START TRANSACTION");
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('web_title', JSON_QUOTE('MonNet'), 0, 2, NULL, 0),
+                ('check_retries_usleep', JSON_QUOTE('500000'), 1, 106, NULL, 0),
+                ('check_retries', JSON_QUOTE('4'), 1, 106, NULL, 0);
+            ");
+            $db->query("COMMIT");
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
     // Template
     $update = 0.00;
     if ($db_version < $update) {
