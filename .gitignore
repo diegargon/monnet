@@ -14,3 +14,4 @@ composer.lock
 info.php
 cache/*
 !cache/.noempty
+/vendor/*
