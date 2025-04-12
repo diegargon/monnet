@@ -25,7 +25,7 @@ function page_defaults(AppContext $ctx): array
 
     empty($_user['theme']) ? $page['theme'] = $ncfg->get('theme') : $page['theme'] = $_user['theme'];
     empty($_user['lang']) ? $page['lang'] = $ncfg->get('lang') : $page['lang'] = $_user['lang'];
-    empty($_user['charset']) ? $page['charset'] = $ncfg->get('charset') : $page['charset'] = $_user['charset'];
+    empty($_user['page_charset']) ? $page['page_charset'] = $ncfg->get('default_charset') : $page['page_charset'] = $_user['charset'];
     $page['web_title'] = $ncfg->get('web_title');
 
     return $page;

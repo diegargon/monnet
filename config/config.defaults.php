@@ -24,14 +24,16 @@ $cfg['path'] = '/var/www/html';
 $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
 $cfg['sid_expire'] = 99999;
-$cfg['charset'] = 'utf-8';
+//TODB
+$cfg['default_charset'] = 'utf-8';
 $cfg['graph_charset'] = 'es-ES';
 $cfg['check_retries'] = 4;                # Ping/Port retrys to  mark host down
 $cfg['check_retries_usleep'] = 500000;    # Next attempt wait usec
+$cfg['default_timezone'] = 'UTC';
+//ENDTODB
 /* Log and Term Logs */
 /* Date */
 $cfg['term_date_format'] = '[d][H:i]';
-$cfg['timezone'] = 'UTC';
 $cfg['date_format'] = 'd-m-Y';
 $cfg['time_format'] = 'H:i:s';
 $cfg['datetime_format'] = 'd-m-Y H:i:s';

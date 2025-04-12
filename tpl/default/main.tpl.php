@@ -15,7 +15,7 @@
 <!DOCTYPE html>
 <html lang="<?= $tdata['lang'] ?>">
     <head>
-        <meta charset="<?= $tdata['charset'] ?>" />
+        <meta charset="<?= $tdata['page_charset'] ?>" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" href="favicon.ico" />
         <meta name="referrer" content="never">

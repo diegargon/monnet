@@ -757,7 +757,7 @@ class Hosts
                         endif;
                     endforeach;
 
-                    $timezone = $this->ncfg->get('timezone');
+                    $timezone = $this->ncfg->get('default_timezone');
                     $timeformat = $this->ncfg->get('datetime_format_min');
                     foreach ($alert_logs_items as $item) :
                         $date = utc_to_tz($item['date'], $timezone, $timeformat);
@@ -815,7 +815,7 @@ class Hosts
                             $warn_logs_items[] = $item;
                         endif;
                     endforeach;
-                    $timezone = $this->ncfg->get('timezone');
+                    $timezone = $this->ncfg->get('default_timezone');
                     $timeformat = $this->ncfg->get('datetime_format_min');
                     foreach ($warn_logs_items as $item) :
                         $date = utc_to_tz($item['date'], $timezone, $timeformat);

@@ -58,14 +58,14 @@ class HostFormatter
         endif;
 
         if (!empty($host['last_seen'])) :
-            $host['f_last_seen'] = utc_to_tz($host['last_seen'], $ncfg->get('timezone'), $ncfg->get('datetime_format'));
+            $host['f_last_seen'] = utc_to_tz($host['last_seen'], $ncfg->get('default_timezone'), $ncfg->get('datetime_format'));
         endif;
 
         if (!empty($host['last_check'])) :
-            $host['f_last_check'] = utc_to_tz($host['last_check'], $ncfg->get('timezone'), $ncfg->get('datetime_format'));
+            $host['f_last_check'] = utc_to_tz($host['last_check'], $ncfg->get('default_timezone'), $ncfg->get('datetime_format'));
         endif;
 
-        $host['formated_creation_date'] = utc_to_tz($host['created'], $ncfg->get('timezone'), $ncfg->get('datetime_format'));
+        $host['formated_creation_date'] = utc_to_tz($host['created'], $ncfg->get('default_timezone'), $ncfg->get('datetime_format'));
 
         if ($host['online'] && !empty($host['latency'])) :
             $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
@@ -111,7 +111,7 @@ class HostFormatter
                 $flogs_items[] = $item;
             endif;
         endforeach;
-        $timezone = $ncfg->get('timezone');
+        $timezone = $ncfg->get('default_timezone');
         $timeformat = $ncfg->get('datetime_format_min');
         foreach ($flogs_items as $item) :
             $date = utc_to_tz($item['date'], $timezone, $timeformat);
@@ -196,7 +196,7 @@ class HostFormatter
         if (!empty($host['misc']['agent_last_contact'])) {
             $host['misc']['agent_last_contact'] = $dateTimeService->formatTimestamp(
                     $host['misc']['agent_last_contact'],
-                    $ncfg->get('timezone')
+                    $ncfg->get('default_timezone')
                 );
             $host['misc']['agent_last_contact']  ='';
         }

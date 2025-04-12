@@ -73,7 +73,7 @@ class User
 
         $this->user['lang'] ??= $this->ncfg->get('lang');
         $this->user['theme'] ??= $this->ncfg->get('theme');
-        $this->user['timezone'] ??= $this->ncfg->get('timezone');
+        $this->user['timezone'] ??= $this->ncfg->get('default_timezone');
 
         $this->user['id'] > 0 ? $this->loadPrefs() : null;
         $this->loadUserHostCatsState();
@@ -169,7 +169,7 @@ class User
 
         $timezone = $this->user['timezone'];
         if (empty($timezone)) {
-            $timezone = $this->ncfg->get('timezone');
+            $timezone = $this->ncfg->get('default_timezone');
         }
         return is_string($timezone) ? $timezone : null;
     }

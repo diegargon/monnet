@@ -87,7 +87,7 @@ require_once 'class/Filters.php';
 $ncfg = $ctx->set('Config', new Config($ctx));
 $ncfg->init($cfg);
 
-date_default_timezone_set($ncfg->get('timezone'));
+date_default_timezone_set($ncfg->get('default_timezone'));
 
 Log::init($ctx);
 

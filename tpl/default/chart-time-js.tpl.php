@@ -28,7 +28,7 @@ $id = $tdata['type'] . '_' . $tdata['host_id'];
 </style>
 <script>
     var datatime_graph_format = "<?= $ncfg->get('datatime_graph_format') ?>";
-    var timezone = "<?= $ncfg->get('timezone') ?>";
+    var timezone = "<?= $ncfg->get('default_timezone') ?>";
     var charset = "<?= $ncfg->get('graph_charset') ?>";
     var graph_name = "<?= !empty($tdata['graph_name']) ? $tdata['graph_name'] : 'test';?>";
 

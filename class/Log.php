@@ -51,6 +51,10 @@ class Log
     private static array $lng = [];
 
     /**
+     * @var string
+     */
+    private static string $timezone;
+    /**
      *
      * @param \AppContext $ctx
      * @return void
@@ -61,6 +65,7 @@ class Log
         self::$db = $ctx->get('Mysql');
         self::$lng = $ctx->get('lng');
         self::$ncfg = $ctx->get('Config');
+        self::$timezone = self::$ncfg->get('default_timezone');
     }
 
     /**
@@ -88,7 +93,7 @@ class Log
             }
             if (self::$console) {
                 echo '[' .
-                format_date_now(self::$ncfg->get('timezone'), self::$ncfg->get('datetime_log_format')) .
+                format_date_now(self::$timezone, self::$ncfg->get('datetime_log_format')) .
                 '][' . self::$ncfg->get('app_name') . '][' . $log_level . '] ' . $msg . "\n";
             }
             if (self::$ncfg->get('system_log_to_db')) {
@@ -106,7 +111,7 @@ class Log
                 $log_file = self::$ncfg->get('log_file');
 
                 $content = '['
-                    . format_date_now(self::$ncfg->get('timezone'), self::$ncfg->get('datetime_log_format'))
+                    . format_date_now(self::$timezone, self::$ncfg->get('datetime_log_format'))
                     . '][' . self::$ncfg->get('app_name') . ']:[' . $log_level . '] ' . $msg . "\n";
                 if (!file_exists($log_file)) {
                     $effectiveUser = false;

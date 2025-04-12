@@ -409,6 +409,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("START TRANSACTION");
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('default_charset', JSON_QUOTE('utf-8'), 0, 1, NULL, 0),
+                ('graph_charset', JSON_QUOTE('es-ES'), 0, 1, NULL, 0),
                 ('web_title', JSON_QUOTE('MonNet'), 0, 2, NULL, 0),
                 ('check_retries_usleep', JSON_QUOTE('500000'), 1, 106, NULL, 0),
                 ('check_retries', JSON_QUOTE('4'), 1, 106, NULL, 0);
