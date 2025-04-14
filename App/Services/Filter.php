@@ -624,7 +624,6 @@ class Filter
      */
     public function varStrict(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
-        //TODO allow only alphanumerics and _
         $length = strlen($var);
 
         if (
@@ -633,7 +632,7 @@ class Filter
             return false;
         }
 
-        if (!preg_match('/^[A-Za-z0-9_.]+$/', $var)) {
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $var)) {
             return false;
         }
 

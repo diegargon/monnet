@@ -71,22 +71,20 @@ class HostService
             $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
             /* TODO: Migrate: keep misc values in misc then delete this */
             $hostDetails = array_merge($hostDetails, $hostDetails['misc']);
-/*
- * TODO WHEN DB VALUE
-            if(!isset($hostDetails['misc']['mem_alert_threshold'])) {
-                $hostDetails['misc']['mem_alert_threshold'] = $this->ncfg['default_mem_alert_threshold'];
+
+            if (!isset($hostDetails['misc']['mem_alert_threshold'])) {
+                $hostDetails['misc']['mem_alert_threshold'] = $this->ncfg->get('default_mem_alert_threshold');
             }
-            if(!isset($hostDetails['misc']['mem_warn_threshold'])) {
-                $hostDetails['misc']['mem_warn_threshold'] = $this->ncfg['default_mem_warn_threshold'];
+            if (!isset($hostDetails['misc']['mem_warn_threshold'])) {
+                $hostDetails['misc']['mem_warn_threshold'] = $this->ncfg->get('default_mem_warn_threshold');
             }
-            if(!isset($hostDetails['misc']['cpu_alert_threshold'])) {
-                $hostDetails['misc']['cpu_alert_threshold'] = $this->ncfg['default_cpu_alert_threshold'];
+            if (!isset($hostDetails['misc']['cpu_alert_threshold'])) {
+                $hostDetails['misc']['cpu_alert_threshold'] = $this->ncfg->get('default_cpu_alert_threshold');
 
             }
-            if(!isset($hostDetails['misc']['cpu_warn_threshold'])) {
-                $hostDetails['misc']['cpu_warn_threshold'] = $this->ncfg['default_cpu_warn_threshold'];
+            if (!isset($hostDetails['misc']['cpu_warn_threshold'])) {
+                $hostDetails['misc']['cpu_warn_threshold'] = $this->ncfg->get('default_cpu_warn_threshold');
             }
- */
         }
         $hostDetails = $this->hostFormatter->format($hostDetails);
 

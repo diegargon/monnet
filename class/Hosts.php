@@ -352,14 +352,6 @@ class Hosts
             return null;
         endif;
         $host = $this->hosts[$id];
-        //TODO: Load notes on changetab
-        $result = $this->db->select('notes', '*', ['id' => $host['notes_id']], 'LIMIT 1');
-        if (is_bool($result)) {
-            return [];
-        }
-        $notes = $this->db->fetch($result);
-        $host['notes'] = $notes['content'];
-        $host['notes_date'] = $notes['update'];
 
         return $host;
     }

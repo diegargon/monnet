@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.56;
-$cfg['monnet_revision'] = 4;
+$cfg['monnet_revision'] = 5;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.149;
@@ -255,7 +255,7 @@ $cfg['task_trigger'] = [
     5 => ['name' => 'L_OTHER_TASK', 'id' => 5],
 ];
 
-/* TODO: Retrieve from monnet-ansible */
+/* TODO: Retrieve from monnet-gateway */
 
 $cfg['playbooks'] = [
     [

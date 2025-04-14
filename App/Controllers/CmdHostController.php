@@ -99,7 +99,7 @@ class CmdHostController
     public function reloadStatsView(string $command, array $command_values): array
     {
         /*
-         * TODO: Actually reload sending all html/js again
+         * TODO: Actually reload send all html/js again
          */
         $target_id = $this->filter->varInt($command_values['id']);
         $field = 'reloadStatsView';
