@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.56;
-$cfg['monnet_revision'] = 2;
+$cfg['monnet_revision'] = 3;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.149;
@@ -260,144 +260,144 @@ $cfg['task_trigger'] = [
 $cfg['playbooks'] = [
     [
         'id' => 1,
-        'name' => 'ansible-facts',
+        'name' => 'std-ansible-facts',
         'desc' => 'Display gathered facts',
         'cat' => ['posix', 'windows'],
     ],
     [
         'id' => 2,
-        'name' => 'install-monnet-agent-systemd',
+        'name' => 'std-install-monnet-agent-systemd',
         'desc' => 'Install Monnet Agent on systemd devices',
         'cat' => ['posix'],
     ],
     [
         'id' => 3,
-        'name' => 'buildin-cmd-df-linux',
+        'name' => 'std-buildin-cmd-df-linux',
         'desc' => 'Get disk usage',
         'cat' => ['posix'],
     ],
     [
         'id' => 4,
-        'name' => 'buildin-shell-free-linux',
+        'name' => 'std-buildin-shell-free-linux',
         'desc' => 'Get memory usage',
         'cat' => ['posix'],
     ],
     [
         'id' => 5,
-        'name' => 'cmd-df-linux',
+        'name' => 'std-cmd-df-linux',
         'desc' => 'Obtener información de particiones reales',
         'cat' => ['posix'],
     ],
     [
         'id' => 6,
-        'name' => 'cmd-sstuln',
+        'name' => 'std-cmd-sstuln',
         'desc' => 'Get network socket information',
         'cat' => ['posix'],
     ],
     [
         'id' => 7,
-        'name' => 'cmd-topbn1',
+        'name' => 'std-cmd-topbn1',
         'desc' => 'Gather system load information',
         'cat' => ['posix'],
     ],
     [
         'id' => 8,
-        'name' => 'cmd-uptime',
+        'name' => 'std-cmd-uptime',
         'desc' => 'Gather uptime information',
         'cat' => ['posix'],
     ],
     [
         'id' => 9,
-        'name' => 'gather-facts',
+        'name' => 'std-gather-min-facts',
         'desc' => 'Minimal fact gathering',
         'cat' => ['posix', 'windows'],
     ],
     [
         'id' => 10,
-        'name' => 'ip-info',
+        'name' => 'std-ip-info',
         'desc' => 'Gather IP address and routes',
         'cat' => ['posix'],
     ],
     [
         'id' => 11,
-        'name' => 'iptables-facts',
-        'desc' => 'Gather iptables facts',
+        'name' => 'std-iptables-facts',
+        'desc' => 'std-Gather iptables facts',
         'cat' => ['posix'],
     ],
     [
         'id' => 12,
-        'name' => 'journald-linux',
+        'name' => 'std-journald-linux',
         'desc' => 'Get the last lines from the system journal',
         'cat' => ['posix'],
     ],
     [
         'id' => 13,
-        'name' => 'cmd-df-linux',
+        'name' => 'std-cmd-df-linux',
         'desc' => 'Obtener información de particiones reales',
         'cat' => ['posix'],
     ],
     [
         'id' => 14,
-        'name' => 'load-linux',
+        'name' => 'std-load-linux',
         'desc' => 'Get load statistics',
         'cat' => ['posix'],
     ],
     [
         'id' => 15,
-        'name' => 'reboot-linux',
+        'name' => 'std-reboot-linux',
         'desc' => 'Reboot a Linux system',
         'cat' => ['posix'],
     ],
     [
         'id' => 16,
-        'name' => 'reboot-win',
+        'name' => 'std-reboot-win',
         'desc' => 'Reboot a Windows system',
         'cat' => ['windows'],
     ],
     [
         'id' => 17,
-        'name' => 'service-facts',
+        'name' => 'std-service-facts',
         'desc' => 'Gather service facts',
         'cat' => ['posix'],
     ],
     [
         'id' => 18,
-        'name' => 'setup',
+        'name' => 'std-setup',
         'desc' => 'Gather system information',
         'cat' => ['posix', 'windows'],
     ],
     [
         'id' => 19,
-        'name' => 'shutdown-linux',
+        'name' => 'std-shutdown-linux',
         'desc' => 'Shutdown a Linux system',
         'cat' => ['posix'],
     ],
     [
         'id' => 20,
-        'name' => 'shutdown-win',
+        'name' => 'std-shutdown-win',
         'desc' => 'Shutdown a Windows system',
     ],
     [
         'id' => 21,
-        'name' => 'syslog-linux',
+        'name' => 'std-syslog-linux',
         'desc' => 'Get the last lines of syslog',
         'cat' => ['posix'],
     ],
     [
         'id' => 22,
-        'name' => 'win-facts',
+        'name' => 'std-win-facts',
         'desc' => 'Gather facts from Windows hosts',
         'cat' => ['windows'],
     ],
     [
         'id' => 23,
-        'name' => 'mysql-keepalive',
+        'name' => 'std-mysql-keepalive',
         'desc' => 'Check and ensure MySQL service is running',
         'cat' => ['posix'],
     ],
     [
         'id' => 24,
-        'name' => 'mysql-dblocks',
+        'name' => 'std-mysql-dblocks',
         'desc' => 'Ensure MySQL is running and check database locks',
         'string_vars' => ['database_service', 'database_name', 'db_username'],
         'passwd_vars' => ['db_password'],
@@ -405,7 +405,7 @@ $cfg['playbooks'] = [
     ],
     [
         'id' => 25,
-        'name' => 'mysql-performance',
+        'name' => 'std-mysql-performance',
         'desc' => 'Monitor MySQL performance and resource usage',
         'string_vars' => ['db_username'],
         'password_vars' => ['db_password'],
@@ -413,20 +413,20 @@ $cfg['playbooks'] = [
     ],
     [
         'id' => 26,
-        'name' => 'clean-logs-systemd',
+        'name' => 'std-clean-logs-systemd',
         'desc' => 'Manage journald and log cleanup',
         'cat' => ['posix', 'windows'],
         'numeric_vars' => ['log_retention_days']
     ],
     [
         'id' => 27,
-        'name' => 'ansible-ping',
+        'name' => 'std-ansible-ping',
         'desc' => 'Test Ansible connectivity',
         'cat' => ['posix', 'windows'],
     ],
     [
         'id' => 28,
-        'name' => 'mysql-check-repair',
+        'name' => 'std-mysql-check-repair',
         'desc' => 'Check and optimize/repair MySQL tables',
         'req' => 'Python3: PyMySQL or mysqlclient Python2: MySQL-python',
         'string_vars' => ['db_name', 'db_username' ],
@@ -435,7 +435,7 @@ $cfg['playbooks'] = [
     ],
     [
         'id' => 29,
-        'name' => 'python-mysql-install',
+        'name' => 'std-python-mysql-install',
         'desc' => 'Install Python MySQL library on Debian/Redhat os',
         'cat' => ['posix'],
     ],
