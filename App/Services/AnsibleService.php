@@ -86,7 +86,8 @@ class AnsibleService
         $data = $this->buildSendData($host, $playbook, $extra_vars);
 
         $send_data = [
-            'command' => 'playbook',
+            'command' => 'playbook_exec',
+            'module' => 'ansible',
             'data' => $data
         ];
 
