@@ -52,14 +52,32 @@ class Filter
      */
     public function varInt(mixed $val, int $size = PHP_INT_MAX): ?int
     {
-        $triVal = trim($val);
-        if (!is_numeric($triVal) || $triVal > $size) {
+        $tVal = trim($val);
+        if (!is_numeric($tVal) || $tVal > $size) {
             return null;
         }
 
-        return (int) $triVal;
+        return (int) $tVal;
     }
 
+    /**
+     * Check for float
+     *
+     * @param mixed $val
+     * @param float $maxValue Maximum allowed value
+     * @return float|null Returns the float value or null if invalid
+     */
+    public function varFloat(mixed $val, float $maxValue = PHP_FLOAT_MAX): ?float
+    {
+        $tVal = trim((string)$val);
+
+        // Check if the value is numeric and doesn't exceed maximum allowed value
+        if (!is_numeric($tVal) || (float)$tVal > $maxValue) {
+            return null;
+        }
+
+        return (float)$tVal;
+    }
     /*
      * Parse get/post/var
      * Simple String words without accents or special characters
