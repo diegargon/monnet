@@ -57,10 +57,9 @@ class DBManager
         $this->connect();
     }
 
-    /**
-     *
-     */
-    public function __destruct() {
+
+    public function __destruct()
+    {
         $this->disconnect();
         unset($this->connection, $this->ctx);
     }
@@ -337,7 +336,7 @@ class DBManager
      * @param array  $params  Parámetros de la condición WHERE
      * @return bool  `true` si se actualizó correctamente, `false` si no
      */
-    public function _updateJson(
+    public function mysql8_updateJson(
         string $table,
         string $json_column,
         array $json_data,

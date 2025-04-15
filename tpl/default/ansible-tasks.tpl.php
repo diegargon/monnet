@@ -27,10 +27,10 @@
             <td><label for="next_task"><?= $lng['L_NEXT_TASK']?></label></td>
             <td></td>
         </tr>
-<?php
-foreach ($tdata['host_tasks'] as $task) :
+    <?php
+    foreach ($tdata['host_tasks'] as $task) :
         $task_id = $task['id'];
-?>
+    ?>
         <tr data-id="<?= $task_id ?>">
             <td>
                 <input type="hidden" name="hid" value="<?= $task['hid'] ?>"/>
@@ -97,9 +97,9 @@ foreach ($tdata['host_tasks'] as $task) :
                 <button type="submit" data-action="force_exec_task">Forzar</button>
             </td>
         </tr>
-<?php
-endforeach;
-?>
+    <?php
+    endforeach;
+    ?>
     </table>
     <input
         type="hidden"

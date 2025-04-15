@@ -26,7 +26,7 @@ class Response
         mixed $msg,
         bool $force_reload = false,
         array $extra_fields = [],
-    ): array  {
+    ): array {
         if ($success) {
             $response = [
                 'command_success' => 1,

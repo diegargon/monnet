@@ -56,14 +56,14 @@ $h_misc = $tdata['host_details']['misc'];
                         <?= $lng['L_CONFIG'] ?>
                     </button>
                 <?php
-                if ($tdata['host_details']['agent_installed']):
+                   if ($tdata['host_details']['agent_installed']) :
                 ?>
                     <button id="tab16_btn" class="host-details-tabs-head" data-tab="16"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab16')">
                         <?= $lng['L_AGENT'] ?>
                     </button>
                 <?php
-                endif;
+                    endif;
                 ?>
                     <button id="tab13_btn" class="host-details-tabs-head" data-tab="13"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab13')">
@@ -1002,7 +1002,7 @@ $h_misc = $tdata['host_details']['misc'];
                         <option value="0">LOG_EMERGENCY</option>
                     </select>
                 </div>
-                <div><?= $lng['L_MEMORY'] .' '. $lng['L_THRESHOLD'] ?></div>
+                <div><?= $lng['L_MEMORY'] . ' ' . $lng['L_THRESHOLD'] ?></div>
                 <label for="mem_alert_threshold"><?= $lng['L_ALERTS'] ?></label>
                 <input
                     id="mem_alert_threshold"
@@ -1021,7 +1021,7 @@ $h_misc = $tdata['host_details']['misc'];
                     type="number"
                     value="<?= $h_misc['mem_warn_threshold']?>"
                 />
-                <div><?= $lng['L_DISKS'] .' '. $lng['L_THRESHOLD'] ?></div>
+                <div><?= $lng['L_DISKS'] . ' ' . $lng['L_THRESHOLD'] ?></div>
                 <label for="disks_alert_threshold"><?= $lng['L_ALERTS'] ?></label>
                 <input
                     id="disks_alert_threshold"

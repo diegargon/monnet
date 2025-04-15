@@ -309,7 +309,7 @@ class AnsibleService
         }
         $response = $this->ansibleReportModel->getDbReportById($report_id);
 
-        if(!$response) {
+        if (!$response) {
             return [
                 'status' => 'error',
                 'error' => 'Report id not exists'

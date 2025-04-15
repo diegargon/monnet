@@ -88,11 +88,11 @@ foreach ($tdata['groupedConfig'] as $tabId => $configs) :
         <form id="config_<?= $tabId ?>">
         <?php
         foreach ($configs as $config) :
-                $ctype = $config['ctype'];
-                $ckey = $config['ckey'];
-                $cvalue = $config['cvalue'];
-                $cdesc = $config['cdesc'];
-                $cdisplay = $config['cdisplay'];
+            $ctype = $config['ctype'];
+            $ckey = $config['ckey'];
+            $cvalue = $config['cvalue'];
+            $cdesc = $config['cdesc'];
+            $cdisplay = $config['cdisplay'];
         ?>
             <div class="config-field">
                 <label for="<?= $ckey ?>"><?= $cdisplay ?></label>

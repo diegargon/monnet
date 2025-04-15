@@ -55,12 +55,14 @@ class FeedMeController {
     private \AppContext $ctx;
     private FeedMeService $feedMeService;
 
-    public function __construct(\AppContext $ctx) {
+    public function __construct(\AppContext $ctx)
+    {
         $this->ctx = $ctx;
         $this->feedMeService = new FeedMeService($ctx);
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         unset($this->ctx);
         unset($this->feedMeService);
     }
@@ -91,7 +93,7 @@ class FeedMeController {
 
         $response = $this->feedMeService->processRequest($request);
 
-        if(!empty($response['error'])) {
+        if (!empty($response['error'])) {
             $this->responseError($response['error']);
         } elseif ($response['success']) {
             $this->responseSuccess($response['response_data']);

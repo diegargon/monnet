@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -23,9 +23,22 @@ function page_defaults(AppContext $ctx): array
 
     $_user = $user->getUser();
 
-    empty($_user['theme']) ? $page['theme'] = $ncfg->get('theme') : $page['theme'] = $_user['theme'];
-    empty($_user['lang']) ? $page['lang'] = $ncfg->get('lang') : $page['lang'] = $_user['lang'];
-    empty($_user['page_charset']) ? $page['page_charset'] = $ncfg->get('default_charset') : $page['page_charset'] = $_user['charset'];
+    if (empty($_user['theme'])) {
+        $page['theme'] = $ncfg->get('theme');
+    } else {
+        $page['theme'] = $_user['theme'];
+    }
+    if (empty($_user['lang'])) {
+        $page['lang'] = $ncfg->get('lang');
+    } else {
+        $page['lang'] = $_user['lang'];
+    }
+    if (empty($_user['page_charset'])) {
+        $page['page_charset'] = $ncfg->get('default_charset');
+    } else {
+        $page['page_charset'] = $_user['charset'];
+    }
+
     $page['web_title'] = $ncfg->get('web_title');
 
     return $page;

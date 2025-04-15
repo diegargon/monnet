@@ -953,7 +953,6 @@ class CmdHostController
             }
         }
         return Response::stdReturn(false, "$field: failed");
-
     }
     /**
      *
@@ -988,9 +987,8 @@ class CmdHostController
         string $command,
         array $command_values,
         string $field,
-        string $filterType = 'int')
-        : array
-    {
+        string $filterType = 'int'
+    ): array {
         $hid = $this->filter->varInt($command_values['id']);
 
         switch ($filterType) {

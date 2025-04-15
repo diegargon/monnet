@@ -146,7 +146,7 @@ class CmdTaskAnsibleController
      */
     public function mgmtTask(string $command, array $command_values): array
     {
-        switch ($command):
+        switch ($command) :
             case 'create_host_task':
                 $hid = $this->filter->varInt($command_values['hid']);
                 break;
@@ -170,7 +170,7 @@ class CmdTaskAnsibleController
             }
         }
 
-        switch ($command):
+        switch ($command) :
             case 'create_host_task':
                 $playbook_id = $this->filter->varInt($command_values['playbook']);
                 $next_task_id = $this->filter->varInt($command_values['next_task']);
@@ -262,7 +262,6 @@ class CmdTaskAnsibleController
         }
 
         return Response::stdReturn(false, 'Problem adding the ansible var');
-
     }
 
     /**

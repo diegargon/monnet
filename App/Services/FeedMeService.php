@@ -94,10 +94,10 @@ class FeedMeService
         }
 
         if (!empty($request['name'])) {
-            switch ($request['name']):
+            switch ($request['name']) :
                 case 'ping': //Ping come with real time data
                     $ping_updates = $this->processPingData($host_id, $host_update_values, $rdata);
-                    if(!empty($ping_updates)) {
+                    if (!empty($ping_updates)) {
                         $host_update_values = array_merge($host_update_values, $ping_updates);
                     }
                     break;
@@ -118,7 +118,7 @@ class FeedMeService
                 case 'high_memory_usage':
                 case 'high_disk_usage':
                 case 'agent_shutdown':
-                    $this->notificationLog($request['name'], $host_id,  $rdata);
+                    $this->notificationLog($request['name'], $host_id, $rdata);
                     break;
                 default:
                     \Log::warning('Notification receive with unknown reference: ' . $rdata['name']);
@@ -126,7 +126,7 @@ class FeedMeService
         }
 
         $update_response = $this->hostService->updateHost($host['id'], $host_update_values);
-        if(!empty($update_response['error'])) {
+        if (!empty($update_response['error'])) {
             return $update_response;
         }
 
@@ -238,7 +238,7 @@ class FeedMeService
     {
         $scan_type = 2; // Agent Based
 
-        if(!isset($this->cmdHostModel)) {
+        if (!isset($this->cmdHostModel)) {
             $this->cmdHostModel = new CmdHostModel($this->ctx);
         }
         $dateTimeService  = new DateTimeService();
@@ -278,7 +278,12 @@ class FeedMeService
                 if ($db_port['service'] !== $port['service']) {
                     $warnmsg = 'Service name change detected: '
                         . "({$db_port['service']}->{$port['service']}) ({$pnumber})";
-                    $this->hostService->setWarnOn($host_id, $warnmsg, \LogType::EVENT_WARN, \EventType::SERVICE_NAME_CHANGE);
+                    $this->hostService->setWarnOn(
+                        $host_id,
+                        $warnmsg,
+                        \LogType::EVENT_WARN,
+                        \EventType::SERVICE_NAME_CHANGE
+                    );
 
                     $this->hostService->updatePort($db_port['id'], [
                         "service" => $port['service'],
@@ -354,7 +359,7 @@ class FeedMeService
             $host_update_values['misc']['iowait'] = $rdata['iowait'];
         }
         if (!isEmpty($rdata['host_logs'])) :
-            foreach($rdata['host_logs'] as $hlog) {
+            foreach ($rdata['host_logs'] as $hlog) {
                 \Log::logHost($hlog['level'], $host_id, 'Agent: ' . $hlog['message']);
             }
         endif;
@@ -470,7 +475,9 @@ class FeedMeService
     private function notificationLog(string $request_name, int $host_id, array $rdata): void
     {
         $event_type = !empty($rdata['event_type']) ? $rdata['event_type'] : 0;
-        $log_type = isset($rdata['log_type']) ? $rdata['log_type'] : (!empty($rdata['event_type']) ? \LogType::EVENT : 0);
+        $log_type = isset(
+            $rdata['log_type']) ? $rdata['log_type'] : (!empty($rdata['event_type']) ? \LogType::EVENT : 0
+        );
         $log_level = isset($rdata['log_level']) ? $rdata['log_level'] : 7;
         $log_msg = "Notification: $request_name";
         isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;

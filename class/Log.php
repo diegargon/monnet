@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -141,7 +141,11 @@ class Log
                 }
             }
             if (self::$ncfg->get('system_log_to_syslog') === 1) {
-                openlog(self::$ncfg->get('app_name') . ' ' . self::$ncfg->get('monnet_version'), LOG_NDELAY, LOG_SYSLOG);
+                openlog(
+                    self::$ncfg->get('app_name') . ' ' . self::$ncfg->get('monnet_version'),
+                    LOG_NDELAY,
+                    LOG_SYSLOG
+                );
                 syslog($log_level, $msg);
             }
         }

@@ -117,7 +117,19 @@
 
                     /* Host Cat Double Click */
                     if (jsonData.command_receive === 'show_host_only_cat' && jsonData.command_success) {
-                        let allOtherRed = $('.show_host_cat img').not('[data-catid="' + jsonData.id + '"]').filter('[src$="red.png"]').length === $('.show_host_cat').not('[data-catid="' + jsonData.id + '"]').length;
+                        let excludedCategory = '[data-catid="' + jsonData.id + '"]';
+
+                        // Select all red icons not in the current category
+                        let redIcons = $('.show_host_cat img')
+                            .not(excludedCategory)
+                            .filter('[src$="red.png"]');
+
+                        // Select all containers not in the current category
+                        let otherContainers = $('.show_host_cat')
+                            .not(excludedCategory);
+
+                        // Check if all other containers have red icons
+                        let allOtherRed = redIcons.length === otherContainers.length;
 
                         if (allOtherRed) {
                             // if all red except clicked category turn on all

@@ -58,14 +58,26 @@ class HostFormatter
         endif;
 
         if (!empty($host['last_seen'])) :
-            $host['f_last_seen'] = utc_to_tz($host['last_seen'], $ncfg->get('default_timezone'), $ncfg->get('datetime_format'));
+            $host['f_last_seen'] = utc_to_tz(
+                $host['last_seen'],
+                $ncfg->get('default_timezone'),
+                $ncfg->get('datetime_format')
+            );
         endif;
 
         if (!empty($host['last_check'])) :
-            $host['f_last_check'] = utc_to_tz($host['last_check'], $ncfg->get('default_timezone'), $ncfg->get('datetime_format'));
+            $host['f_last_check'] = utc_to_tz(
+                $host['last_check'],
+                $ncfg->get('default_timezone'),
+                $ncfg->get('datetime_format')
+            );
         endif;
 
-        $host['formated_creation_date'] = utc_to_tz($host['created'], $ncfg->get('default_timezone'), $ncfg->get('datetime_format'));
+        $host['formated_creation_date'] = utc_to_tz(
+            $host['created'],
+            $ncfg->get('default_timezone'),
+            $ncfg->get('datetime_format')
+        );
 
         if ($host['online'] && !empty($host['latency'])) :
             $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
@@ -195,12 +207,12 @@ class HostFormatter
 
         if (!empty($host['misc']['agent_last_contact'])) {
             $host['misc']['agent_last_contact'] = $dateTimeService->formatTimestamp(
-                    $host['misc']['agent_last_contact'],
-                    $ncfg->get('default_timezone')
-                );
-            $host['misc']['agent_last_contact']  ='';
+                $host['misc']['agent_last_contact'],
+                $ncfg->get('default_timezone')
+            );
+            $host['misc']['agent_last_contact']  = '';
         }
-     }
+    }
 
     /**
      * Converts system uptime in seconds to a human-readable format.
@@ -208,7 +220,8 @@ class HostFormatter
      * @param float $seconds The uptime in seconds.
      * @return string Human-readable uptime format.
      */
-    function formatUptime(float $seconds): string {
+    public function formatUptime(float $seconds): string
+    {
         $days = floor($seconds / 86400);
         $seconds %= 86400;
 
@@ -220,5 +233,4 @@ class HostFormatter
 
         return sprintf("%d days, %d:%d:%d", $days, $hours, $minutes, $seconds);
     }
-
 }

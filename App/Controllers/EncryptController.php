@@ -16,7 +16,6 @@ namespace App\Controllers;
 
 use App\Services\EncryptionService;
 
-
 class EncryptController
 {
     private \AppContext $ctx;
@@ -46,7 +45,6 @@ class EncryptController
         }
 
         try {
-
             $byte_length = strlen(utf8_decode($raw_data)); // Número de bytes en la cadena UTF-8
 
             if ($byte_length > 245) {
