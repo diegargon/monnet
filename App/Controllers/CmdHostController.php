@@ -414,8 +414,8 @@ class CmdHostController
     public function submitHostTimeout(array $command_values): array
     {
         $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
-        $field = 'submitHostTimeout';
+        $value = $this->filter->varFloat($command_values['value']);
+        $field = 'timeout';
 
         if (!is_numeric($target_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");
