@@ -50,7 +50,7 @@ class AnsibleService
         $server_ip = $this->ncfg->get('ansible_server_ip');
         $server_port = $this->ncfg->get('ansible_server_port');
 
-        if ($playbook == 'install-monnet-agent-systemd') :
+        if ($playbook == 'std-install-monnet-agent-systemd') :
             if (empty($host['token'])) :
                 $token = $hosts->createHostToken($target_id);
             else :
