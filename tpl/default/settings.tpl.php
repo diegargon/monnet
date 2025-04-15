@@ -29,6 +29,11 @@
             class="settings-tabs-head"><?= $lng['L_UI'];?>
         </button>
         <button
+            id="settings_tab_5"
+            onclick="changeSettingsTab(5)"
+            class="settings-tabs-head"><?= $lng['L_FORMAT'];?>
+        </button>
+        <button
             id="settings_tab_10"
             onclick="changeSettingsTab(10)"
             class="settings-tabs-head"><?= $lng['L_SECURITY'];?>

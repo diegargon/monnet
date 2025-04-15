@@ -97,6 +97,7 @@ $lng = [
     //F
     'L_FIELD' => 'Campo',
     'L_FREE' => 'Libre',
+    'L_FORMAT' => 'Formato',
     //G
     'L_GENERAL' => 'General',
     'L_GROUPS' => 'Grupos',

@@ -12,7 +12,7 @@
 /**
  *
  * @param array<string,string> $cfg_db
- * @param array<string,string|int|array<int|string,int|string>> $cfg
+ * @param array<string, mixed> $cfg
  * @return void
  */
 function common_checks(array $cfg_db, array $cfg): void

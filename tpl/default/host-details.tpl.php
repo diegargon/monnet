@@ -12,6 +12,7 @@
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
+$h_misc = $tdata['host_details']['misc'];
 ?>
 
 <div id="host-details" class="host-details draggable" style="display:block">
@@ -267,13 +268,13 @@
                     </div>
                     <?php
                     if (
-                        !empty($tdata['host_details']['misc']['uptime'])
+                        !empty($h_misc['uptime'])
                     ) {
                         ?>
                         <div class="" >
                             <span class="resume_label"><?= $lng['L_UPTIME'] ?>:</span>
                             <span class="resume_field">
-                                <?= $tdata['host_details']['misc']['uptime']?>
+                                <?= $h_misc['uptime']?>
                             </span>
                         </div>
                     <?php } ?>
@@ -298,7 +299,7 @@
                         ?>
                         <div>
                             <span class="cpu_label">CPUs: </span>
-                            <span class="cpu_field"><?= $tdata['host_details']['misc']['ncpu'] ?></span>
+                            <span class="cpu_field"><?= $h_misc['ncpu'] ?></span>
                         </div>
                     <?php } ?>
                     <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
@@ -307,23 +308,23 @@
                             <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
                         </div>
                     <?php endif; ?>
-                    <?php if (!empty($tdata['host_details']['misc']['agent_last_contact'])) : ?>
+                    <?php if (!empty($h_misc['agent_last_contact'])) : ?>
                         <div>
                             <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>
                             <span class="resume_field">
-                                <?= $tdata['host_details']['misc']['agent_version'] ?>
+                                <?= $h_misc['agent_version'] ?>
                                 (<?= $ncfg->get('agent_latest_version') ?>)
                             </span>
                         </div>
                         <div>
                             <span class="resume_label"><?= $lng['L_AGENT_LAST_PING'] ?>:</span>
-                            <span class="resume_field"><?= $tdata['host_details']['misc']['agent_last_contact'] ?></span>
+                            <span class="resume_field"><?= $h_misc['agent_last_contact'] ?></span>
                         </div>
                     <?php endif; ?>
-                    <?php if (!empty($tdata['host_details']['misc']['access_link'])) : ?>
+                    <?php if (!empty($h_misc['access_link'])) : ?>
                         <div>
-                            <a href="<?= $tdata['host_details']['misc']['access_link'] ?>"
-                               target="_blank"><?= $tdata['host_details']['misc']['access_link'] ?>
+                            <a href="<?= $h_misc['access_link'] ?>"
+                               target="_blank"><?= $h_misc['access_link'] ?>
                             </a>
                         </div>
                     <?php endif; ?>
@@ -1002,15 +1003,44 @@
                     </select>
                 </div>
                 <div><?= $lng['L_MEMORY'] .' '. $lng['L_THRESHOLD'] ?></div>
-                <label for="mem_alert_thresh"><?= $lng['L_ALERTS'] ?></label>
-                <input id="mem_alert_thresh" name="mem_alert_thresh" size="2" max-size="2" type="text" value=""/>
-                <label for="mem_warn_thresh"><?= $lng['L_WARNS'] ?></label>
-                <input id="mem_warn_thresh" name="mem_alert_thresh" size="2" max-size="2" type="text" value=""/>
+                <label for="mem_alert_threshold"><?= $lng['L_ALERTS'] ?></label>
+                <input
+                    id="mem_alert_threshold"
+                    name="mem_alert_threshold"
+                    size="2"
+                    max-size="2"
+                    type="number"
+                    value="<?= $h_misc['mem_alert_threshold']?>"
+                 />
+                <label for="mem_warn_threshold"><?= $lng['L_WARNS'] ?></label>
+                <input
+                    id="mem_warn_threshold"
+                    name="mem_alert_threshold"
+                    size="2"
+                    max-size="2"
+                    type="number"
+                    value="<?= $h_misc['mem_warn_threshold']?>"
+                />
                 <div><?= $lng['L_DISKS'] .' '. $lng['L_THRESHOLD'] ?></div>
-                <label for="disks_alert_thresh"><?= $lng['L_ALERTS'] ?></label>
-                <input id="disks_alert_thresh" name="disks_alert_thresh" size="2" max-size="2" type="text" value=""/>
-                <label for="disks_warn_thresh"><?= $lng['L_WARNS'] ?></label>
-                <input id="disks_warn_thresh" name="disks_alert_thresh" size="2" max-size="2" type="text" value=""/>
+                <label for="disks_alert_threshold"><?= $lng['L_ALERTS'] ?></label>
+                <input
+                    id="disks_alert_threshold"
+                    name="disks_alert_threshold"
+                    size="2" max-size="2"
+                    type="number"
+                    value="<?= $h_misc['disks_alert_threshold']?>"
+                />
+                <label for="disks_warn_threshold"><?= $lng['L_WARNS'] ?></label>
+                <input
+                    id="disks_warn_threshold"
+                    name="disks_alert_threshold"
+                    min="0"
+                    max="100"
+                    size="2"
+                    max-size="2"
+                    type="number"
+                    value="<?= $h_misc['disks_warn_threshold']?>"
+                />
             </div>
         </div>
         <!-- /TAB16 -->

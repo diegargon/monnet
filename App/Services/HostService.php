@@ -78,6 +78,13 @@ class HostService
             if (!isset($hostDetails['misc']['mem_warn_threshold'])) {
                 $hostDetails['misc']['mem_warn_threshold'] = $this->ncfg->get('default_mem_warn_threshold');
             }
+            if (!isset($hostDetails['misc']['disks_alert_threshold'])) {
+                $hostDetails['misc']['disks_alert_threshold'] = $this->ncfg->get('default_disks_alert_threshold');
+            }
+            if (!isset($hostDetails['misc']['disks_warn_threshold'])) {
+                $hostDetails['misc']['disks_warn_threshold'] = $this->ncfg->get('default_disks_warn_threshold');
+            }
+            /*
             if (!isset($hostDetails['misc']['cpu_alert_threshold'])) {
                 $hostDetails['misc']['cpu_alert_threshold'] = $this->ncfg->get('default_cpu_alert_threshold');
 
@@ -85,6 +92,7 @@ class HostService
             if (!isset($hostDetails['misc']['cpu_warn_threshold'])) {
                 $hostDetails['misc']['cpu_warn_threshold'] = $this->ncfg->get('default_cpu_warn_threshold');
             }
+            */
         }
         $hostDetails = $this->hostFormatter->format($hostDetails);
 

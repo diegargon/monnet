@@ -409,7 +409,15 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("START TRANSACTION");
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('term_date_format', JSON_QUOTE('[d][H:i]'), 0, 5, NULL, 0),
+                ('date_format', JSON_QUOTE('d-m-Y'), 0, 5, NULL, 0),
+                ('time_format', JSON_QUOTE('H:i:s'), 0, 5, NULL, 0),
+                ('datetime_format', JSON_QUOTE('d-m-Y H:i:s'), 0, 5, NULL, 0),
+                ('datetime_format_min', JSON_QUOTE('d/H:i'), 0, 5, NULL, 0),
+                ('datatime_graph_format', JSON_QUOTE('H:i'), 0, 5, NULL, 0),
+                ('datetime_log_format', JSON_QUOTE('d-m-y H:i:s'), 0, 5, NULL, 0),
                 ('default_charset', JSON_QUOTE('utf-8'), 0, 1, NULL, 0),
+                ('default_timezone', JSON_QUOTE('UTC'), 0, 1, NULL, 0),
                 ('graph_charset', JSON_QUOTE('es-ES'), 0, 1, NULL, 0),
                 ('web_title', JSON_QUOTE('MonNet'), 0, 2, NULL, 0),
                 ('check_retries_usleep', JSON_QUOTE('500000'), 1, 106, NULL, 0),

@@ -5,7 +5,7 @@
  * @author diego/@/envigo.net
  * @package
  * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
  */
 !defined('IN_WEB') ? exit : true;
@@ -14,9 +14,6 @@ class Frontend
 {
     /** @var AppContext $ctx */
     private AppContext $ctx;
-
-    /** @var array<int|string, mixed> $cfg */
-    private array $cfg;
 
     /**  @var array<string,string> $lng */
     private array $lng;
@@ -112,7 +109,6 @@ class Frontend
     public function getTpl(string $tpl, array $tdata = []): string|bool
     {
         $lng = $this->lng;
-        $cfg = $this->ctx->get('cfg');
         $ncfg = $this->ctx->get('Config');
         $user = $this->ctx->get('User');
 
@@ -189,7 +185,7 @@ class Frontend
     public function getFooter(): string
     {
         /* TODO
-          global $db, $cfg;
+          global $db;
 
           $cfg['show_querys'] ?? 0;
           $querys = $db->getQuerys();

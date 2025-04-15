@@ -26,7 +26,7 @@
  * ('keyname', JSON_QUOTE('key_value'), ctype, ccat, cdesc, cuid=0);
  *
  * ccat
- * 0 (hidden), 1 (general) 101 (mail),
+ * 0 (hidden), 1 (general), 5(Format) 101 (mail),
  * 102 Ansible 103 (Agent) 104 (Purge) 105 (Logging)
  * 106 Network
  */
