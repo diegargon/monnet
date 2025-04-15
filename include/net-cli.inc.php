@@ -299,7 +299,7 @@ function ping_nets_ip(AppContext $ctx, string $ip)
         $network_id = $networks->getNetworkIDbyIP($ip);
         if ($network_id == false) {
             Log::warning('Failed to get id network for ip ' . $ip);
-            //TODO 1???
+            // 1 is default
             $set['network'] = 1;
         } else {
             $set['network'] = $network_id;
