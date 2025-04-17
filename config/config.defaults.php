@@ -23,23 +23,6 @@ $cfg['path'] = '/var/www/html';
 $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
 $cfg['sid_expire'] = 99999;
-//TODB
-$cfg['web_title'] = 'MonNet';
-$cfg['default_charset'] = 'utf-8';
-$cfg['graph_charset'] = 'es-ES';
-$cfg['check_retries'] = 4;                # Ping/Port retrys to  mark host down
-$cfg['check_retries_usleep'] = 500000;    # Next attempt wait usec
-$cfg['default_timezone'] = 'UTC';
-
-$cfg['term_date_format'] = '[d][H:i]';
-$cfg['date_format'] = 'd-m-Y';
-$cfg['time_format'] = 'H:i:s';
-$cfg['datetime_format'] = 'd-m-Y H:i:s';
-$cfg['datetime_format_min'] = 'd/H:i';
-$cfg['datatime_graph_format'] = 'H:i';
-$cfg['datetime_log_format'] = 'd-m-y H:i:s';
-
-//ENDTODB
 
 //Web UI refresh time
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];

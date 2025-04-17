@@ -345,15 +345,17 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 $db->query("ALTER TABLE `hosts` DROP COLUMN `access_results`");
             }
             $result = $db->query("SHOW COLUMNS FROM `hosts` LIKE 'fingerprint'");
+            # Unused
             if ($result && $result->num_rows > 0) {
                 $db->query("ALTER TABLE `hosts` DROP COLUMN `fingerprint`");
             }
+            # Unused
             $result = $db->query("SHOW COLUMNS FROM `hosts` LIKE 'latency'");
             if ($result && $result->num_rows > 0) {
                 $db->query("ALTER TABLE `hosts` DROP COLUMN `latency`");
             }
             $db->query("START TRANSACTION");
-            # Migration to ncfg
+            # DONE: Migration to ncfg
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('log_level', JSON_QUOTE('5'), 1, 105, NULL, 0),
@@ -404,11 +406,16 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
+            # Add Latency to ports
             $db->query("ALTER TABLE `ports` ADD `latency` FLOAT DEFAULT NULL");
+            # Use last_check instead of last_change
             $db->query("ALTER TABLE `ports` ADD `last_check` datetime DEFAULT NULL");
+            # DONE Remote not null
             $db->query("ALTER TABLE `ports` MODIFY `scan_type` tinyint");
+            # DONE Remove not null
             $db->query("ALTER TABLE `ports` MODIFY `service` varchar(255) DEFAULT NULL");
             $db->query("START TRANSACTION");
+            # DONE Remove from $cfg
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('term_date_format', JSON_QUOTE('[d][H:i]'), 0, 5, NULL, 0),
@@ -434,7 +441,27 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-
+    // 0.58
+    $update = 0.00;
+    if ($db_version < $update) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            # Drop last_change after use last_check
+            #$db->query("ALTER TABLE `ports` DROP COLUMN `last_change`");
+            //$db->query("
+            //");
+            $db->query("START TRANSACTION");
+            //$db->query("
+            //");
+            $db->query("COMMIT");
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
     // Template
     $update = 0.00;
     if ($db_version < $update) {
