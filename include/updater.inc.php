@@ -400,12 +400,14 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
     // 0.57
-    $update = 0.00;
+    $update = 0.57;
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            //$db->query("
-            //");
+            $db->query("ALTER TABLE `ports` ADD `latency` FLOAT DEFAULT NULL");
+            $db->query("ALTER TABLE `ports` ADD `last_check` datetime DEFAULT NULL");
+            $db->query("ALTER TABLE `ports` MODIFY `scan_type` tinyint");
+            $db->query("ALTER TABLE `ports` MODIFY `service` varchar(255) DEFAULT NULL");
             $db->query("START TRANSACTION");
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
