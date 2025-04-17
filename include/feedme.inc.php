@@ -188,7 +188,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 $hosts->updatePort($db_port['id'], [
                     "service" => $port['service'],
                     "online" => 1,
-                    "last_change" => date_now(),
+                    "last_check" => date_now(),
                 ]);
             } elseif ($db_port['online'] == 0) {
                 // Si el puerto estaba offline, actualizar a online
@@ -197,7 +197,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
 
                 $hosts->updatePort($db_port['id'], [
                     "online" => 1,
-                    "last_change" => date_now(),
+                    "last_check" => date_now(),
                 ]);
             }
 
@@ -214,7 +214,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
                 'service' => $port['service'],
                 'interface' => $interface,
                 'ip_version' => $ip_version,
-                'last_change' => date_now(),
+                'last_check' => date_now(),
             ]);
 
             $log_msg = "New port detected: $pnumber ({$port['service']})";
@@ -228,7 +228,7 @@ function feed_update_listen_ports(AppContext $ctx, int $host_id, array $listen_p
         if ($db_port['online'] == 1) {
             $set = [
                 'online' => 0,
-                'last_change' => date_now(),
+                'last_check' => date_now(),
             ];
             $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
             $hosts->setAlertOn($host_id, $alertmsg, LogType::EVENT_ALERT, EventType::PORT_DOWN);

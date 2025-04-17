@@ -263,7 +263,7 @@ class CmdHostController
             'scan_type' => 1, # Remote
             'pnumber' => $pnumber,
             'protocol' => $protocol,
-            'last_change' => date_now()
+            'last_check' => date_now()
         ];
 
         if ($this->cmdHostModel->addRemoteScanHostPort($target_id, $port_details)) {

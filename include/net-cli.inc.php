@@ -436,7 +436,7 @@ function check_host_ports(AppContext $ctx, array $host): array
         $https = $selfSigned = false;
         $error_code = $error_msg = '';
         $port_status = [];
-        $port_status['last_change'] = date_now();
+        $port_status['last_check'] = date_now();
         $port['protocol'] = (int) $port['protocol'];
         $tim_start = microtime(true);
         $ip = trim($host['ip']);

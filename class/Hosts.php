@@ -901,7 +901,7 @@ class Hosts
             'scan_type' => 1,
             'protocol' => $details['protocol'],
             'pnumber' => $details['pnumber'],
-            'last_change' => date_now(),
+            'last_check' => date_now(),
             'ip_version' => $details['ip_version'],
             'service' => $details['service'],
         ];
@@ -1065,7 +1065,7 @@ class Hosts
                         "scan_type" => 1,
                         "protocol" => $port['port_type'],
                         "online" => $port['online'],
-                        "last_change" => date_now()
+                        "last_check" => date_now()
                     ];
                     $this->db->insert('ports', $set);
                     $this->db->update('hosts', ['ports' => '{}'], ['id' => $id]);

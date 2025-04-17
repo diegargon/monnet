@@ -60,7 +60,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                   `pnumber` smallint UNSIGNED NOT NULL,
                   `online` tinyint(1) NOT NULL DEFAULT '0',
                   `interface` varchar(45) DEFAULT NULL,
-                  `last_change` datetime NOT NULL,
+                  `last_check` datetime NOT NULL,
                   PRIMARY KEY (`id`),
                   KEY `idx_hid` (`hid`)
                 ) ENGINE=InnoDB;
@@ -408,7 +408,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $ncfg->set('db_monnet_version', $update, 1);
             # Add Latency to ports
             $db->query("ALTER TABLE `ports` ADD `latency` FLOAT DEFAULT NULL");
-            # Use last_check instead of last_change
+            # Use last_check instead of last_check
             $db->query("ALTER TABLE `ports` ADD `last_check` datetime DEFAULT NULL");
             # DONE Remote not null
             $db->query("ALTER TABLE `ports` MODIFY `scan_type` tinyint");
@@ -446,8 +446,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            # Drop last_change after use last_check
-            #$db->query("ALTER TABLE `ports` DROP COLUMN `last_change`");
+            # Drop last_check after use last_check
+            #$db->query("ALTER TABLE `ports` DROP COLUMN `last_check`");
             //$db->query("
             //");
             $db->query("START TRANSACTION");

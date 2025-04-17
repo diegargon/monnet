@@ -288,7 +288,7 @@ class FeedMeService
                     $this->hostService->updatePort($db_port['id'], [
                         "service" => $port['service'],
                         "online" => 1,
-                        "last_change" => $dateTimeService->dateNow(),
+                        "last_check" => $dateTimeService->dateNow(),
                     ]);
                 } elseif ($db_port['online'] == 0) {
                     $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber)";
@@ -296,7 +296,7 @@ class FeedMeService
 
                     $this->hostService->updatePort($db_port['id'], [
                         "online" => 1,
-                        "last_change" => $dateTimeService->dateNow(),
+                        "last_check" => $dateTimeService->dateNow(),
                     ]);
                 }
 
@@ -312,7 +312,7 @@ class FeedMeService
                     'service' => $port['service'],
                     'interface' => $interface,
                     'ip_version' => $ip_version,
-                    'last_change' => $dateTimeService->dateNow(),
+                    'last_check' => $dateTimeService->dateNow(),
                 ];
                 $this->cmdHostModel->addPort($new_port_data);
                 $log_msg = "New port detected: $pnumber ({$port['service']})";
@@ -325,7 +325,7 @@ class FeedMeService
             if ($db_port['online'] == 1) {
                 $set = [
                     'online' => 0,
-                    'last_change' => $dateTimeService->dateNow(),
+                    'last_check' => $dateTimeService->dateNow(),
                 ];
                 $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
                 $this->hostService->setAlertOn($host_id, $alertmsg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
