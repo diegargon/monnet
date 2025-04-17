@@ -60,7 +60,7 @@ class AnsibleService
             $agent_config = [
                 "id" => $host['id'],
                 "token" => $token,
-                "loglevel" => 'info',
+                "log_level" => 'info',
                 "default_interval" => $this->ncfg->get('agent_default_interval'),
                 "ignore_cert" => $this->ncfg->get('agent_allow_selfcerts'),
                 "server_host" => $_SERVER['HTTP_HOST'], //TODO Filter?
