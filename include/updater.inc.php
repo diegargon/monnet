@@ -406,9 +406,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            # Add Latency to ports
+            # DONE Add Latency to ports
             $db->query("ALTER TABLE `ports` ADD `latency` FLOAT DEFAULT NULL");
-            # Use last_check instead of last_check
+            # DONE  Use last_check instead of last_chaneg
             $db->query("ALTER TABLE `ports` ADD `last_check` datetime DEFAULT NULL");
             # DONE Remote not null
             $db->query("ALTER TABLE `ports` MODIFY `scan_type` tinyint");
@@ -442,12 +442,25 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
     // 0.58
+    $update = 0.58;
+    if ($db_version < $update) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            # Drop last_change after use last_check
+            $db->query("ALTER TABLE `ports` DROP COLUMN `last_change`");
+            $db->query("COMMIT");
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+    // 0.59
     $update = 0.00;
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            # Drop last_check after use last_check
-            #$db->query("ALTER TABLE `ports` DROP COLUMN `last_check`");
             //$db->query("
             //");
             $db->query("START TRANSACTION");
