@@ -110,7 +110,7 @@ if ($user->getPref('show_termlog_status')) {
         $logs = $host_logs;
     endif;
 
-    // Get System Logs for termlog
+    // Get System Logs for termlog if we log into de database
     if ($ncfg->get('term_show_system_logs') && $ncfg->get('system_log_to_db')) :
         $system_logs = Log::getSystemDBLogs($ncfg->get('term_max_lines'));
         // Formatting
