@@ -49,11 +49,11 @@ function format_items(User $user, array $items_results): array
 
 /**
  *
- * @param string $allowed_ext
+ * @param array $allowed_ext
  * @param string $directory
  * @return array<int, array<string, string>>
  */
-function getLocalIconsData(string $allowed_ext, string $directory): array
+function getLocalIconsData(array $allowed_ext, string $directory): array
 {
     $imageData = [];
 
