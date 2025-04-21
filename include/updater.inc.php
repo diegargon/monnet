@@ -442,7 +442,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
     // 0.59
     $update = 0.59;
-    if ($db_version == 0.57) {
+    if ($db_version == 0.57 || $db_version == 0.58) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
             $db->query("
