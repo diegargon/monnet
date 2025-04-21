@@ -95,22 +95,22 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
             $hosts_view[$key]['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         }
 
-        if (!empty($vhost['manufacture'])) {
-            $manufacture = get_manufacture_data($ncfg, $vhost['manufacture']);
+        if (!empty($vhost['misc']['manufacture'])) {
+            $manufacture = get_manufacture_data($ncfg, $vhost['misc']['manufacture']);
             if (is_array($manufacture)) :
                 $hosts_view[$key]['manufacture_image'] = $manufacture['manufacture_image'];
                 $hosts_view[$key]['manufacture_name'] = $manufacture['name'];
             endif;
         }
-        if (!empty($vhost['os'])) {
-            $os = get_os_data($ncfg, $vhost['os']);
+        if (!empty($vhost['misc']['os'])) {
+            $os = get_os_data($ncfg, $vhost['misc']['os']);
             if (is_array($os)) :
                 $hosts_view[$key]['os_image'] = $os['os_image'];
                 $hosts_view[$key]['os_name'] = $os['name'];
             endif;
         }
-        if (!empty($vhost['system_type'])) {
-            $system_type = get_system_type_data($ncfg, $vhost['system_type']);
+        if (!empty($vhost['misc']['system_type'])) {
+            $system_type = get_system_type_data($ncfg, $vhost['misc']['system_type']);
             if (is_array($system_type)) :
                 $hosts_view[$key]['system_type_image'] = $system_type['system_type_image'];
                 $hosts_view[$key]['system_type_name'] = $system_type['name'];
@@ -137,7 +137,7 @@ function get_hosts_view(AppContext $ctx, int $highlight = 0): array
          * Alert/Warn
          * Show msg on tooltip (details)
          */
-        if (empty($vhost['disable_alarms'])) :
+        if (empty($vhost['misc']['disable_alarms'])) :
             if ($vhost['alert']) :
                 $hosts_view[$key]['alert_mark'] = 'tpl/' . $theme . '/img/alert-mark.png';
             endif;

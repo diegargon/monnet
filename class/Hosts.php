@@ -72,6 +72,7 @@ class Hosts
         'agent_next_report', /* Timesstamp for next report */
         'agent_last_contact',
         'agent_version',
+        'agent_missing_pings',
         'load_avg',
         'mem_info',
         'disks_info',
@@ -79,7 +80,6 @@ class Hosts
         'uptime',
         'iowait',
         'always_on',
-        'agent_missing_pings',
         'latency'
     ];
 
@@ -193,11 +193,20 @@ class Hosts
         /** @var array<int, array<string, mixed>> $misc_container misc json field key/values */
         $misc_container = [];
 
+        /* Temporaly fix misc in two places TODO remove later */
+        foreach ($values as $kvalue => $vvalue) {
+            if ($kvalue == 'misc' && is_array($vvalue)) {
+                $misc_container = $vvalue;
+                unset($values[$kvalue]);
+                break;
+            }
+        }
+
         foreach ($values as $kvalue => $vvalue) {
             if (!empty($kvalue) && isset($vvalue)) {
                 //Log change
                 if (
-                        empty($this->hosts[$id]['disable_alarms']) &&
+                        empty($this->hosts[$id]['misc']['disable_alarms']) &&
                         ($kvalue === 'mac' || $kvalue === 'mac_vendor' || $kvalue === 'hostname') &&
                         ($this->hosts[$id][$kvalue] != $vvalue)
                 ) {
@@ -226,8 +235,8 @@ class Hosts
                     }
 
                     if (
-                            !empty($this->hosts[$id]['email_alarms']) &&
-                            !empty($this->hosts[$id]['alarm_macchange_email'])
+                            !empty($this->hosts[$id]['misc']['email_alarms']) &&
+                            !empty($this->hosts[$id]['misc']['alarm_macchange_email'])
                     ) {
                         $this->sendHostMail($id, $log_msg, $log_msg);
                     }
@@ -288,7 +297,11 @@ class Hosts
                 $host['hostname'] = $hostname;
             endif;
         }
-        //remove keys that we store in misc json field
+        /*
+         * remove/move keys and that we store in misc json field
+         * to misc container
+         */
+
         foreach ($host as $h_key => $h_value) {
             if (
                 in_array($h_key, $this->misc_keys) &&
@@ -304,12 +317,7 @@ class Hosts
         $this->db->insert('hosts', $host);
 
         $host_id = $this->db->insertID();
-        $hostlog = $this->getDisplayName($host);
-        if (!empty($host['mac_vendor']) && $host['mac_vendor'] !== '-') {
-            $hostlog .= ' [' . $host['mac_vendor'] . ']';
-        } elseif (!empty($host['mac'])) {
-            $hostlog .= ' [' . $host['mac'] . ']';
-        }
+
         $host['id'] = $host_id;
         $host['display_name'] = $this->getDisplayName($host);
         $this->hosts[$host_id] = $host;
@@ -604,10 +612,10 @@ class Hosts
     {
         if (
             $this->ncfg->get('mail') &&
-            !empty($this->hosts[$id]['email_alarms']) &&
-            !empty($this->hosts[$id]['email_list'])
+            !empty($this->hosts[$id]['misc']['email_alarms']) &&
+            !empty($this->hosts[$id]['misc']['email_list'])
         ) {
-            $mails = explode(",", $this->hosts[$id]['email_list']);
+            $mails = explode(",", $this->hosts[$id]['misc']['email_list']);
             if (!isEmpty($mails)) {
                 $mailer = $this->ctx->get('Mailer');
                 if (isset($this->hosts[$id]['display_name'])) :
@@ -705,7 +713,7 @@ class Hosts
                 $result_hosts[] = $host;
             endif;
             // Ping Fail
-            if ($status === 2 && !empty($host['agent_missing_pings'])) :
+            if ($status === 2 && !empty($host['misc']['agent_missing_pings'])) :
                 $result_hosts[] = $host;
             endif;
         endforeach;
@@ -732,7 +740,7 @@ class Hosts
                 'online' => $host['online'],
             ];
 
-            if ($host['alert'] && empty($host['disable_alarms'])) :
+            if ($host['alert'] && empty($host['misc']['disable_alarms'])) :
                 $log_type = [ LogType::EVENT_ALERT ];
 
                 $opt = [
@@ -789,7 +797,7 @@ class Hosts
                 'online' => $host['online'],
             ];
 
-            if ($host['warn'] && empty($host['disable_alarms'])) :
+            if ($host['warn'] && empty($host['misc']['disable_alarms'])) :
                 $log_type = [ LogType::EVENT_WARN ];
 
                 $opt = [
@@ -1054,29 +1062,11 @@ class Hosts
             else :
                 $this->host_cat_track[$host['category']]++;
             endif;
-            /* Port Field JSON TODO remove  */
-            if (!empty($this->hosts[$id]['ports'])) :
-                $this->hosts[$id]['ports'] = json_decode($host['ports'], true);
-                //upgrade remove later
-                foreach ($this->hosts[$id]['ports'] as $port) :
-                    $set = [
-                        "hid" => $id,
-                        "pnumber" => $port['n'],
-                        "scan_type" => 1,
-                        "protocol" => $port['port_type'],
-                        "online" => $port['online'],
-                        "last_check" => date_now()
-                    ];
-                    $this->db->insert('ports', $set);
-                    $this->db->update('hosts', ['ports' => '{}'], ['id' => $id]);
-                endforeach;
-                $this->hosts[$id]['ports'] = '';
-            endif;
-            /* END REMOVE */
 
             /* Misc field  fields that we keep in JSON format */
             if (!isEmpty($this->hosts[$id]['misc'])) :
                 $misc_values = json_decode($this->hosts[$id]['misc'], true);
+                $this->hosts[$id]['misc'] = $misc_values;
                 foreach ($misc_values as $key => $value) :
                     if (in_array($key, $this->misc_keys, true)) : //Prevent unused/old keys
                         if (in_array($key, ['agent_version'], true)) : //Prevent Version numbers to float
@@ -1108,14 +1098,14 @@ class Hosts
              * MISC KEYS EXTRA TASKS
              */
             /* General */
-            if (!empty($host['system_type'])) :
-                if ((int) $host['system_type'] === 17) :
+            if (!empty($host['misc']['system_type'])) :
+                if ((int) $host['misc']['system_type'] === 17) :
                     $this->hypervisor_rols++;
                 endif;
             endif;
 
             /* ALARMS */
-            if (empty($host['disable_alarms'])) :
+            if (empty($host['misc']['disable_alarms'])) :
                 if (!empty($host['alert'])) :
                     $this->alerts++;
                 endif;
@@ -1141,25 +1131,25 @@ class Hosts
             /* Agent */
             if (!empty($this->hosts[$id]['agent_installed'])) :
                 $this->agents++;
-                if (!$host['online'] || empty($this->hosts[$id]['agent_online'])) :
+                if (!$host['online'] || empty($this->hosts[$id]['misc']['agent_online'])) :
                     $this->agents_off++;
                 endif;
 
                 if (
-                    !empty($this->hosts[$id]['agent_next_report']) &&
-                    $this->hosts[$id]['agent_next_report'] < (time() - 5) # minus grace period
+                    !empty($this->hosts[$id]['misc']['agent_next_report']) &&
+                    $this->hosts[$id]['misc']['agent_next_report'] < (time() - 5) # minus grace period
                 ) :
                     $this->agents_missing_pings++;
-                    if (empty($this->hosts[$id]['agent_missing_pings'])) {
+                    if (empty($this->hosts[$id]['misc']['agent_missing_pings'])) {
                         $this->update($id, ['agent_missing_pings' => 1]);
                     }
-                    $this->hosts[$id]['agent_missing_pings'] = 1;
+                    $this->hosts[$id]['misc']['agent_missing_pings'] = 1;
 
                     //With pings disabled, if agent  missing a ping change state to off
-                    if (!empty($this->hosts[$id]['disable_pings'])) :
+                    if (!empty($this->hosts[$id]['misc']['disable_pings'])) :
                         $this->update($id, ['online' => 0]);
                     elseif (
-                        ((int) $this->hosts[$id]['agent_next_report'] +
+                        ((int) $this->hosts[$id]['misc']['agent_next_report'] +
                         $this->ncfg->get('agent_default_interval'))  <
                         time()
                     ) :
@@ -1167,19 +1157,13 @@ class Hosts
                         $this->update($id, ['online' => 0]);
                     endif;
                 else :
-                    if (!empty($this->hosts[$id]['agent_missing_pings'])) {
+                    if (!empty($this->hosts[$id]['misc']['agent_missing_pings'])) {
                         $this->update($id, ['agent_missing_pings' => 0]);
                     }
                 endif;
             endif;
 
-            /*
-            if (isset($this->hosts[$id]['misc'])) :
-                unset($this->hosts[$id]['misc']);
-            endif;
-
-             */
-        } // LOOP FIN
+         } // LOOP FIN
 
         return true;
     }

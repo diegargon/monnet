@@ -43,12 +43,12 @@ function notification_process(AppContext $ctx, int $host_id, array $rdata): arra
 
     if ($rdata['name'] === 'starting') :
         if (!empty($rdata['ncpu'])) {
-            if (!isset($host['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) :
+            if (!isset($host['misc']['ncpu']) || ($rdata['ncpu'] !== $host['misc']['ncpu'])) :
                 $host_update_values['ncpu'] = $rdata['ncpu'];
             endif;
         }
-        if (!empty($rdata['uptime'])) {
-            if (!isset($host['uptime']) || ($rdata['uptime'] !== $host['uptime'])) {
+        if (!empty($rdata['misc']['uptime'])) {
+            if (!isset($host['misc']['uptime']) || ($rdata['uptime'] !== $host['misc']['uptime'])) {
                 $host_update_values['uptime'] = $rdata['uptime'];
             }
         }

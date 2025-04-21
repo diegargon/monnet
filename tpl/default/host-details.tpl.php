@@ -135,10 +135,7 @@ $h_misc = $tdata['host_details']['misc'];
                      alt="ansible" title="ansible"/>
             <?php endif; ?>
             <?php
-            if (
-                !empty($tdata['host_details']['machine_type']) &&
-                (int) $tdata['host_details']['machine_type'] === 2
-            ) :
+            if (!empty($h_misc['machine_type']) && (int) $h_misc['machine_type'] === 2) :
                 ?>
                 <img class="fab" src="tpl/<?= $tdata['theme']?>/img/vm.png"
                      alt="vm" title="vm"/>
@@ -157,11 +154,11 @@ $h_misc = $tdata['host_details']['misc'];
             <?php endif; ?>
             <?php
             if (
-                !empty($tdata['host_details']['mac_vendor']) &&
-                $tdata['host_details']['mac_vendor'] != '-'
+                !empty($h_misc['mac_vendor']) &&
+                $h_misc['mac_vendor'] != '-'
             ) {
                 ?>
-                <div class="host-item"><?= $tdata['host_details']['mac_vendor'] ?> </div>
+                <div class="host-item"><?= $h_misc['mac_vendor'] ?> </div>
             <?php } ?>
         </div>
 
@@ -254,10 +251,10 @@ $h_misc = $tdata['host_details']['misc'];
                         <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
                         <div><?= $lng['L_VLAN'] ?>: <?= $tdata['host_details']['network_vlan'] ?></div>
                     </div>
-                    <?php if (!empty($tdata['host_details']['owner'])) : ?>
+                    <?php if (!empty($h_misc['owner'])) : ?>
                         <div class="">
                             <span class="resume_label"><?= $lng['L_OWNER'] ?>:</span>
-                            <span class="resume_field"><?= $tdata['host_details']['owner'] ?></span>
+                            <span class="resume_field"><?= $h_misc['owner'] ?></span>
                         </div>
                     <?php endif; ?>
                     <div class="">
@@ -304,7 +301,7 @@ $h_misc = $tdata['host_details']['misc'];
                     <?php } ?>
                     <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
                         <div>
-                            <span class="resume_label"><?= $lng['L_LAST_PING_CHECK'] ?>:</span>
+                            <span class="resume_label"><?= $lng['L_LAST_PING_CHECK'] ?>: </span>
                             <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
                         </div>
                     <?php endif; ?>
@@ -441,42 +438,42 @@ $h_misc = $tdata['host_details']['misc'];
                         onchange="submitCommand('setHostAlarms',
                                     {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
                             type="checkbox" id="disableAlarms"
-                           <?= !empty($tdata['host_details']['disable_alarms']) ? 'checked' : null ?>>
+                           <?= !empty($h_misc['disable_alarms']) ? 'checked' : null ?>>
                     <div><?= $lng['L_DISABLE_PER_TYPE']?></div>
                     <label for=""><?= $lng['L_ALARM_PING']?>:</label>
                     <input type="hidden" id="alarm_ping_disable" value="0">
                     <input type="checkbox"
                            id="alarm_ping_disable"
                            data-command="alarm_ping_disable"
-                           <?= !empty($tdata['host_details']['alarm_ping_disable']) ? 'checked' : null ?>
+                           <?= !empty($h_misc['alarm_ping_disable']) ? 'checked' : null ?>
                            >
                     <label for=""><?= $lng['L_ALARM_PING_PORT']?>:</label>
                     <input type="hidden" id="alarm_port_disable" value="0">
                     <input type="checkbox"
                            id="alarm_port_disable"
                            data-command="alarm_port_disable"
-                           <?= !empty($tdata['host_details']['alarm_port_disable']) ? 'checked' : null ?>
+                           <?= !empty($h_misc['alarm_port_disable']) ? 'checked' : null ?>
                            >
                     <label for=""><?= $lng['L_ALARM_MACCHANGE']?>:</label>
                     <input type="hidden" id="alarm_macchange_disable" value="0">
                     <input type="checkbox"
                            id="alarm_macchange_disable"
                            data-command="alarm_macchange_disable""
-                           <?= !empty($tdata['host_details']['alarm_macchange_disable']) ? 'checked' : null ?>
+                           <?= !empty($h_misc['alarm_macchange_disable']) ? 'checked' : null ?>
                            >
                     <label for=""><?= $lng['L_ALARM_NEW_PORT']?>:</label>
                     <input disable type="hidden" id="alarm_newport_disable" value="0">
                     <input disable type="checkbox"
                            id="alarm_newport_disable"
                            data-command="alarm_newport_disable"
-                           <?= !empty($tdata['host_details']['alarm_newport_disable']) ? 'checked' : null ?>
+                           <?= !empty($h_misc['alarm_newport_disable']) ? 'checked' : null ?>
                            >
                     <br/>
                     <label for="enableEmailAlarms"><?= $lng['L_EMAIL_ALARMS'] ?>:</label>
                     <input
                         type="checkbox" id="toggleMailAlarms"
                         data-command="toggleMailAlarms"
-                        <?= !empty($tdata['host_details']['email_alarms']) ? 'checked' : null ?>
+                        <?= !empty($h_misc['email_alarms']) ? 'checked' : null ?>
                     >
                     <br/>
                     <div><?= $lng['L_ENABLE_PER_TYPE']?></div>
@@ -485,28 +482,28 @@ $h_misc = $tdata['host_details']['misc'];
                     <input type="checkbox"
                            id="alarm_ping_email"
                            data-command="alarm_ping_email"
-                           <?= !empty($tdata['host_details']['alarm_ping_email']) ? 'checked' : null ?>
+                           <?= !empty($h_misc['alarm_ping_email']) ? 'checked' : null ?>
                            >
                     <label for=""><?= $lng['L_ALARM_PING_PORT']?>:</label>
                     <input type="hidden" id="alarm_port_email" value="0">
                     <input type="checkbox"
                            id="alarm_port_email"
                            data-command="alarm_port_email"
-                           <?= !empty($tdata['host_details']['alarm_port_email']) ? 'checked' : null ?>
+                           <?= !empty($h_misc['alarm_port_email']) ? 'checked' : null ?>
                            >
                     <label for=""><?= $lng['L_ALARM_MACCHANGE']?>:</label>
                     <input type="hidden" id="alarm_macchange_email" value="0">
                     <input type="checkbox"
                            id="alarm_macchange_email"
                            data-command="alarm_macchange_email"
-                           <?= !empty($tdata['host_details']['alarm_macchange_email']) ? 'checked' : null ?>
+                           <?= !empty($h_misc['alarm_macchange_email']) ? 'checked' : null ?>
                            >
                     <label for=""><?= $lng['L_ALARM_NEW_PORT']?>:</label>
                     <input disable type="hidden" id="alarm_newport_email" value="0">
                     <input disable type="checkbox"
                            id="alarm_newport_email"
                            data-command="alarm_newport_email"
-                           <?= !empty($tdata['host_details']['alarm_newport_email']) ? 'checked' : null ?>
+                           <?= !empty($h_misc['alarm_newport_email']) ? 'checked' : null ?>
                            >
                     <br/>
                     <label for="alarm_emails">Emails (Comma Separated)</label><br/>
@@ -515,8 +512,8 @@ $h_misc = $tdata['host_details']['misc'];
                            id="alarm_emails"
                            placeholder="Enter emails separated by commas"
                            value="<?php
-                            if (!empty($tdata['host_details']['email_list'])) {
-                                echo $tdata['host_details']['email_list'];
+                            if (!empty($h_misc['email_list'])) {
+                                echo $h_misc['email_list'];
                             }
                             ?>"
                            >
@@ -560,7 +557,7 @@ $h_misc = $tdata['host_details']['misc'];
                             type="checkbox"
                             id="always_on"
                             data-command="setAlwaysOn"
-                            <?= !empty($tdata['host_details']['always_on']) ? ' checked' : '' ?>>
+                            <?= !empty($h_misc['always_on']) ? ' checked' : '' ?>>
                     </div>
                     <div class="">
                         <label for="disable_host"><?= $lng['L_DISABLE'] ?></label>
@@ -601,8 +598,8 @@ $h_misc = $tdata['host_details']['misc'];
                         <input
                             type="text" id="host_owner" name="host_owner"
                             value="<?=
-                                !empty($tdata['host_details']['owner'])
-                                ? $tdata['host_details']['owner']
+                                !empty($h_misc['owner'])
+                                ? $h_misc['owner']
                                 : null
                             ?>"
                         />
@@ -615,8 +612,8 @@ $h_misc = $tdata['host_details']['misc'];
                             id="access_link"
                             name="access_link"
                             value="<?=
-                                !empty($tdata['host_details']['access_link'])
-                                ? $tdata['host_details']['access_link']
+                                !empty($h_misc['access_link'])
+                                ? $h_misc['access_link']
                                 : null ?>"
                         />
                         <select id="access_link_type" name="access_link_type">
@@ -642,8 +639,8 @@ $h_misc = $tdata['host_details']['misc'];
                             <?php foreach ($ncfg->get('machine_type') as $mtype) :
                                 $selected = '';
                                 if (
-                                    !empty($tdata['host_details']['machine_type']) &&
-                                    ($mtype['id'] == $tdata['host_details']['machine_type'])
+                                    !empty($h_misc['machine_type']) &&
+                                    ($mtype['id'] == $h_misc['machine_type'])
                                 ) :
                                     $selected = ' selected=1 ';
                                 endif; ?>
@@ -659,8 +656,8 @@ $h_misc = $tdata['host_details']['misc'];
                             <?php foreach ($ncfg->get('manufacture') as $manufacture) :
                                 $selected = '';
                                 if (
-                                    !empty($tdata['host_details']['manufacture']) &&
-                                    ($manufacture['id'] == $tdata['host_details']['manufacture'])
+                                    !empty($h_misc['manufacture']) &&
+                                    ($manufacture['id'] == $h_misc['manufacture'])
                                 ) :
                                     $selected = ' selected=1 ';
                                 endif; ?>
@@ -676,8 +673,8 @@ $h_misc = $tdata['host_details']['misc'];
                             <?php foreach ($ncfg->get('os') as $os) :
                                 $selected = '';
                                 if (
-                                    !empty($tdata['host_details']['os']) &&
-                                    ($os['id'] == $tdata['host_details']['os'])
+                                    !empty($h_misc['os']) &&
+                                    ($os['id'] == $h_misc['os'])
                                 ) :
                                     $selected = ' selected=1 ';
                                 endif;
@@ -693,8 +690,8 @@ $h_misc = $tdata['host_details']['misc'];
                             <?php foreach ($ncfg->get('system_type') as $system_type) :
                                 $selected = '';
                                 if (
-                                    !empty($tdata['host_details']['system_type']) &&
-                                    ($system_type['id'] == $tdata['host_details']['system_type'])
+                                    !empty($h_misc['system_type']) &&
+                                    ($system_type['id'] == $h_misc['system_type'])
                                 ) :
                                     $selected = ' selected=1 ';
                                 endif;
@@ -711,8 +708,8 @@ $h_misc = $tdata['host_details']['misc'];
                             <?php foreach ($ncfg->get('sys_availability') as $sys_aval) :
                                 $selected = '';
                                 if (
-                                    !empty($tdata['host_details']['sys_availability']) &&
-                                    ($sys_aval['id'] == $tdata['host_details']['sys_availability'])
+                                    !empty($h_misc['sys_availability']) &&
+                                    ($sys_aval['id'] == $h_misc['sys_availability'])
                                 ) :
                                     $selected = ' selected=1 ';
                                 endif;
@@ -726,7 +723,7 @@ $h_misc = $tdata['host_details']['misc'];
                     <div class="">
                         <label for="os_version"><?= $lng['L_VERSION'] ?>: </label><br/>
                         <input type="text" size="20" id="os_version" name="os_version"
-                               value="<?= $tdata['host_details']['os_version'] ?? '' ?>" />
+                               value="<?= $h_misc['os_version'] ?? '' ?>" />
                         <button id="submitOSVersion"><?= $lng['L_SEND'] ?></button>
                     </div>
                 </div>
@@ -744,7 +741,7 @@ $h_misc = $tdata['host_details']['misc'];
                         <label for="disable_ping"><?= $lng['L_PING_CHECK_DISABLE'] ?>: </label>
                         <input type="hidden" id="disable_ping" value="0"/>
                         <input type="checkbox" id="disable_ping"
-                               <?= !empty($tdata['host_details']['disable_ping']) ? 'checked' : null ?>><br />
+                               <?= !empty($h_misc['disable_ping']) ? 'checked' : null ?>><br />
                     </div>
                     <div class="">
                         <label for="checkport"><?= $lng['L_REMOTE_PORT_CHECK'] ?>: </label>
@@ -790,8 +787,8 @@ $h_misc = $tdata['host_details']['misc'];
                             size="4" max-size="4" step="0.1" min="0.1" max="5"
                             type="number" id="host_timeout" name="host_timeout"
                                value="<?=
-                                !empty($tdata['host_details']['timeout']) ?
-                                $tdata['host_details']['timeout'] : $ncfg->get('port_timeout_local');
+                                !empty($h_misc['timeout']) ?
+                                $h_misc['timeout'] : $ncfg->get('port_timeout_local');
                                 ?>"
                         />
                         <button id="submitHostTimeout"><?= $lng['L_SEND'] ?></button>

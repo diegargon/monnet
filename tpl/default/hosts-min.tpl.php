@@ -26,13 +26,13 @@ if (empty($tdata['hosts'])) {
                href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['details'] ?>">
                 <div class="hosts-thumb shadow1<?= $host['glow_tag'] ?>">
                     <?php
-                    if (!empty($host['machine_type']) && (int) $host['machine_type'] === 2) :
+                    if (!empty($host['misc']['machine_type']) && (int) $host['misc']['machine_type'] == 2) :
                         echo "<div class=\"vm-mark\"></div>";
                     endif;
                     if (!empty($host['ansible_enabled'])) :
                         echo "<div class=\"ansible-mark\"></div>";
                     endif;
-                    if (!empty($host['system_type']) && (int) $host['system_type'] === 17) :
+                    if (!empty($host['misc']['system_type']) && (int) $host['misc']['system_type'] === 17) :
                         echo "<div class=\"hypervisor-mark\"></div>";
                     endif;
                     ?>

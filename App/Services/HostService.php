@@ -228,7 +228,7 @@ class HostService
                 $result_hosts[] = $host;
             endif;
             // Ping Fail
-            if ($status === 2 && !empty($host['agent_missing_pings'])) :
+            if ($status === 2 && !empty($host['misc']['agent_missing_pings'])) :
                 $result_hosts[] = $host;
             endif;
         endforeach;
@@ -257,7 +257,7 @@ class HostService
                 'online' => $host['online'],
             ];
 
-            if ($host['alert'] && empty($host['disable_alarms'])) :
+            if ($host['alert'] && empty($host['misc']['disable_alarms'])) :
                 $logs_opt = [
                     'log_type' => $log_type,
                     'host_id' => $host['id'],
@@ -295,7 +295,7 @@ class HostService
                 'online' => $host['online'],
             ];
 
-            if ($host['warn'] && empty($host['disable_alarms'])) :
+            if ($host['warn'] && empty($host['misc']['disable_alarms'])) :
                 $logs_opt = [
                     'log_type' => $log_type,
                     'host_id' => $host['id'],

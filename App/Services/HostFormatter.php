@@ -79,8 +79,8 @@ class HostFormatter
             $ncfg->get('datetime_format')
         );
 
-        if ($host['online'] && !empty($host['latency'])) :
-            $host['latency_ms'] = micro_to_ms($host['latency']) . 'ms';
+        if ($host['online'] && !empty($host['misc']['latency'])) :
+            $host['latency_ms'] = micro_to_ms($host['misc']['latency']) . 'ms';
         endif;
 
         $this->formatMisc($host);
@@ -208,9 +208,9 @@ class HostFormatter
         if (!empty($host['misc']['agent_last_contact'])) {
             $host['misc']['agent_last_contact'] = $dateTimeService->formatTimestamp(
                 $host['misc']['agent_last_contact'],
-                $ncfg->get('default_timezone')
+                $ncfg->get('default_timezone'),
+                $ncfg->get('datetime_format')
             );
-            $host['misc']['agent_last_contact']  = '';
         }
     }
 

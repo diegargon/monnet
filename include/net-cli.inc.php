@@ -81,7 +81,7 @@ function check_known_hosts(AppContext $ctx): bool
                     $check_ports_result['online'] = 1;
                     $check_ports_result['latency'] = $host_ping['latency'];
                 } else {
-                    if (!empty($host['disable_alarms'])) {
+                    if (!empty($host['misc']['disable_alarms'])) {
                         $event_type = LogType::EVENT;
                         $check_ports_result['warn'] = 0;
                     } else {
@@ -121,7 +121,7 @@ function check_known_hosts(AppContext $ctx): bool
                         $log_msg = "Port {$port['pnumber']} down:";
                         $log_msg .= " {$check_ports_result['error_msg']}";
                         $log_msg .= " ({$check_ports_result['error_code']})";
-                        if (empty($host['alarm_port_disable'])) {
+                        if (empty($host['misc']['alarm_port_disable'])) {
                             Log::logHost(
                                 LogLevel::WARNING,
                                 $host['id'],
@@ -156,7 +156,7 @@ function check_known_hosts(AppContext $ctx): bool
                 unset($new_port_status['error_msg']);
                 unset($new_port_status['error_code']);
                 //TODO Alarm if port changes
-                //if (!empty($host['alarm_port_email'])) :
+                //if (!empty($host['misc']['alarm_port_email'])) :
                 //    $hosts->sendHostMail($host['id'], $log_msg);
                 //endif;
                 $db->update('ports', $new_port_status, ['id' => $portid]);
@@ -207,13 +207,13 @@ function check_known_hosts(AppContext $ctx): bool
                 //$host_timeout = !empty($host['timeout']) ? '(' . $host['timeout'] . ')' : '';
                 $log_msg = $lng['L_HOST_BECOME_OFF'];
                 // Create alert when always on is set
-                if (!empty($host['always_on'])) :
+                if (!empty($host['misc']['always_on'])) :
                     $hosts->setAlertOn($host['id'], $log_msg, LogType::EVENT_ALERT, EventType::SYSTEM_SHUTDOWN);
                 else :
                     Log::logHost(LogLevel::NOTICE, $host['id'], $log_msg, LogType::EVENT, EventType::SYSTEM_SHUTDOWN);
                 endif;
 
-                if (!empty($host['email_alarms']) && !empty($host['alarm_ping_email'])) :
+                if (!empty($host['misc']['email_alarms']) && !empty($host['misc']['alarm_ping_email'])) :
                     $hosts->sendHostMail($host['id'], $log_msg);
                 endif;
             }
@@ -348,7 +348,7 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0): void
 
         if (
             (!empty($host['mac'])) &&
-            (empty($host['mac_vendor']) || $forceall === 1)
+            (empty($host['misc']['mac_vendor']) || $forceall === 1)
         ) {
             Log::debug("Getting mac vendor for {$host['display_name']}");
             $vendor = get_mac_vendor_local(trim($host['mac']));
@@ -359,14 +359,14 @@ function fill_mac_vendors(Hosts $hosts, int $forceall = 0): void
 
             if (empty($vendor['company'])) :
                 Log::debug("Mac vendor for {$host['mac']} is null");
-                (empty($host['mac_vendor'])) ? $update['mac_vendor'] = '-' : null;
+                (empty($host['misc']['mac_vendor'])) ? $update['misc']['mac_vendor'] = '-' : null;
             else :
-                if (!empty($host['mac_vendor']) && ($vendor['company'] != $host['mac_vendor'])) :
-                    Log::warning("Mac vendor change from {$host['mac_vendor']} to {$vendor['company']} ] updating...");
+                if (!empty($host['misc']['mac_vendor']) && ($vendor['company'] != $host['misc']['mac_vendor'])) :
+                    Log::warning("Mac vendor change from {$host['misc']['mac_vendor']} to {$vendor['company']} ] updating...");
                 endif;
                 $update['mac_vendor'] = $vendor['company'];
             endif;
-            if (!empty($update) && ($host['mac_vendor'] != $update['mac_vendor'])) :
+            if (!empty($update) && ($host['misc']['mac_vendor'] != $update['mac_vendor'])) :
                 $hosts->update($host['id'], $update);
             endif;
         }
