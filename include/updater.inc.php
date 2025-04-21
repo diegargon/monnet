@@ -442,7 +442,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
     // 0.59
     $update = 0.59;
-    if ($db_version == 0.58) {
+    if ($db_version == 0.57) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
             $db->query("
@@ -523,23 +523,47 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
         $db->query("ALTER TABLE `ports` MODIFY `scan_type` tinyint");
         $db->query("ALTER TABLE `ports` MODIFY `service` varchar(255) DEFAULT NULL");
-        $db->query("COMMIT");
         $ncfg->set('db_monnet_version', $update, 1);
+        $db->query("COMMIT");
         $db_version = $update;
         Log::warning("Update version to $update successful");
+    }
+
+    // 0.61 test
+    $update = 0.61;
+    if ($db_version == 0.60) {
+        try {
+            $db_version = $update;
+            $ncfg->set('db_monnet_version', $update, 1);
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+        }
+    }
+
+    // 0.62
+    $update = 0.62;
+    if ($db_version == 0.00) {
+        try {
+            $db_version = $update;
+            $ncfg->set('db_monnet_version', $update, 1);
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+        }
     }
 
     // Template
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
-            $ncfg->set('db_monnet_version', $update, 1);
             //$db->query("
             //");
             $db->query("START TRANSACTION");
             //$db->query("
             //");
             $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
             Log::notice("Update version to $update successful");
         } catch (Exception $e) {
@@ -560,16 +584,25 @@ if (!$db->isConn()) {
 $lockFile = '/tmp/monnet_update.lock';
 $db_version = (float) $ncfg->get('db_monnet_version');
 
+$lockDir = $lockFile . '.lockdir';
+
 if ($db_version) {
     $files_version = (float) $ncfg->get('monnet_version');
 
-    if (($files_version > $db_version) && !file_exists($lockFile)) {
-        #if (file_put_contents($lockFile, 'locked') !== false) {
-        Log::notice('Triggered Update');
-        trigger_update($ncfg, $db, $db_version, $files_version);
-        #unlink($lockFile);
-        #} else {
-        #    Log::error("Could not create lock file: $lockFile");
-        #}
+    if (($files_version > $db_version) && !is_dir($lockDir)) {
+        if (@mkdir($lockDir)) {
+            try {
+                Log::notice('Triggered Update');
+                trigger_update($ncfg, $db, $db_version, $files_version);
+            } catch (Throwable $e) {
+                Log::error('Update failed: ' . $e->getMessage());
+            } finally {
+                if (is_dir($lockDir)) {
+                    rmdir($lockDir);
+                }
+            }
+        } else {
+            Log::info("Another update is already in progress.");
+        }
     }
 }
