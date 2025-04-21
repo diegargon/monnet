@@ -21,6 +21,10 @@ Since Monnet is becoming more complex, i working in rewrite nearly all code, bew
 
 I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts, automate installations and other tasks
 
+## Breaking/Mayor changes
+
+* MonNet no uses the CRON scripts anymore, now MoNet Gateway is in charge, so the two CRON scripts need to be removed.
+
 # Features
 
     - Track Host In your network and have an inventory
@@ -80,10 +84,11 @@ LAMP
     apt install apache2 php-fpm php-mysqli php-curl php-mbstring
 
 Python
-    Tested with >3
+    Tested with >=3.9
 
 Mysql/MariaDB:
-    You can install or use a remote machine with mysql.
+    Tested MySQL >= 8
+    You can install locally or use a remote machine with mysql.
 
 arp
     Optional for get mac's address, only work on the same network (other method will added in the future).
@@ -150,11 +155,9 @@ $cfg['lang'] = 'es';
 monnet : monnetadmin
 ```
 
-## Setting crontab
+## Setting crontab (OBSOLETE)
 
-Times depends of the size of your network. Paths depends on your system.
-
-Here is the config to run each task every 5 and 15 minutes.
+Must removed this CRON lines, script already migrated to MonNet Gateway.
 
 ```
 $ nano /etc/crontab
@@ -162,13 +165,9 @@ $ nano /etc/crontab
 */15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
 
-In the future I will migrating that cli tools to Python.
-
-After that, you must configure your network/s clicking on "Netwrok" on the top left panel.
-
 ## Composer
 
-Necessary if you want support for send mails.
+Necessary if you want support for send mails. (Probably will migrate this to Monnet Gateway in the future))
 
 ```
 apt install composer
@@ -180,7 +179,7 @@ apt install composer
 
 monnet-core contains monnet-gateway service and the monnet-agent service
 
-- monnet-gateway is currently used only as a gateway to execute ansible commands, more feautres will be added in the future.
+- monnet-gateway is currently used as a gateway to execute ansible commands, scan, discovery more feautres will be added in the future.
 It must be installed in the same host.
 
     Installation instructions:
