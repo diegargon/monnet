@@ -100,7 +100,7 @@ INSERT INTO `config` (`id`, `ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) V
 (122, 'cron_daily', '\"0\"', 1, 0, NULL, 0),
 (123, 'refreshing', '\"0\"', 1, 0, NULL, 0),
 (124, 'db_monnet_version', '0.42', 0, 0, NULL, 0),
-(125, 'discoveery_last_run', '\"0\"', 1, 0, NULL, 0);
+(125, 'discovery_last_run', '\"0\"', 1, 0, NULL, 0);
 
 -- --------------------------------------------------------
 

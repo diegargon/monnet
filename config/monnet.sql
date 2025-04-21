@@ -23,6 +23,20 @@ CREATE TABLE `ansible_msg` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ansible_vars`
+--
+
+CREATE TABLE `ansible_vars` (
+  `id` int NOT NULL,
+  `hid` int NOT NULL,
+  `vtype` tinyint NOT NULL,
+  `vkey` varchar(255) NOT NULL,
+  `vvalue` varchar(700) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `categories`
 --
 
@@ -87,19 +101,64 @@ INSERT INTO `config` (`id`, `ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) V
 (110, 'mail_from', '\"monnet@localhost\"', 0, 101, NULL, 0),
 (111, 'smtp_security', '{\"SMTPS\": 0, \"STARTTLS\": 1}', 6, 101, NULL, 0),
 (112, 'ansible_user', '\"ansible\"', 0, 102, NULL, 0),
-(113, 'allow_save_password', '\"0\"', 2, 1, NULL, 0),
-(114, 'cli_last_run', '\"0\"', 1, 0, NULL, 0),
-(115, 'cron_quarter', '\"0\"', 1, 0, NULL, 0),
-(116, 'cron_hourly', '\"0\"', 1, 0, NULL, 0),
-(117, 'cron_halfday', '\"0\"', 1, 0, NULL, 0),
-(118, 'cron_weekly', '\"0\"', 1, 0, NULL, 0),
-(119, 'cron_monthly', '\"0\"', 1, 0, NULL, 0),
-(120, 'cron_update', '\"0\"', 1, 0, NULL, 0),
-(121, 'cron_five', '\"0\"', 1, 0, NULL, 0),
-(122, 'cron_daily', '\"0\"', 1, 0, NULL, 0),
-(123, 'refreshing', '\"0\"', 1, 0, NULL, 0),
-(124, 'db_monnet_version', '0.45', 0, 0, NULL, 0),
-(125, 'discoveery_last_run', '\"0\"', 1, 0, NULL, 0);
+(113, 'allow_save_password', '0', 2, 1, NULL, 0),
+(114, 'cli_last_run', '0', 1, 0, NULL, 0),
+(115, 'cron_quarter', '0', 1, 0, NULL, 0),
+(116, 'cron_hourly', '0', 1, 0, NULL, 0),
+(117, 'cron_halfday', '0', 1, 0, NULL, 0),
+(118, 'cron_weekly', '0', 1, 0, NULL, 0),
+(119, 'cron_monthly', '0', 1, 0, NULL, 0),
+(120, 'cron_update', '0', 1, 0, NULL, 0),
+(121, 'cron_five', '0', 1, 0, NULL, 0),
+(122, 'cron_daily', '0', 1, 0, NULL, 0),
+(123, 'refreshing', '0', 1, 0, NULL, 0),
+(124, 'db_monnet_version', '0.61', 0, 0, NULL, 0),
+(125, 'discovery_last_run', '0', 1, 0, NULL, 0),
+(126, 'agent_external_host', '\"\"', 0, 103, NULL, 0),
+(127, 'agent_default_interval', '60', 1, 103, NULL, 0),
+(129, 'public_key', '\"\"', 10, 10, NULL, 0),
+(130, 'log_level', '5', 1, 105, NULL, 0),
+(131, 'log_file', '\"logs/monnet.log\"', 0, 105, NULL, 0),
+(132, 'system_log_to_syslog', '1', 2, 105, NULL, 0),
+(133, 'system_log_to_db', '1', 2, 105, NULL, 0),
+(134, 'system_log_to_db_debug', '0', 2, 105, NULL, 0),
+(135, 'log_to_file', '1', 2, 105, NULL, 0),
+(136, 'log_file_owner', '\"www-data\"', 0, 105, NULL, 0),
+(137, 'log_file_owner_group', '\"www-data\"', 0, 105, NULL, 0),
+(138, 'term_hosts_log_level', '5', 1, 105, NULL, 0),
+(139, 'term_system_log_level', '5', 1, 105, NULL, 0),
+(140, 'term_max_lines', '100', 1, 105, NULL, 0),
+(141, 'term_show_system_logs', '1', 2, 105, NULL, 0),
+(142, 'theme_css', '\"default\"', 0, 2, NULL, 0),
+(143, 'theme', '\"default\"', 0, 2, NULL, 0),
+(144, 'refresher_time', '2', 1, 2, NULL, 0),
+(145, 'glow_time', '10', 1, 2, NULL, 0),
+(146, 'port_timeout_local', '0.5', 3, 106, NULL, 0),
+(147, 'port_timeout', '0.8', 3, 106, NULL, 0),
+(148, 'ping_nets_timeout', '200000', 1, 106, NULL, 0),
+(149, 'ping_hosts_timeout', '400000', 1, 106, NULL, 0),
+(150, 'ping_local_hosts_timeout', '300000', 1, 106, NULL, 0),
+(151, 'clear_logs_intvl', '30', 1, 104, NULL, 0),
+(152, 'clear_stats_intvl', '15', 1, 104, NULL, 0),
+(153, 'clear_reports_intvl', '30', 1, 104, NULL, 0),
+(154, 'agent_allow_selfcerts', '1', 2, 103, NULL, 0),
+(155, 'default_mem_alert_threshold', '90', 1, 103, NULL, 0),
+(156, 'default_mem_warn_threshold', '80', 1, 103, NULL, 0),
+(157, 'default_disks_alert_threshold', '90', 1, 103, NULL, 0),
+(158, 'default_disks_warn_threshold', '80', 1, 103, NULL, 0),
+(159, 'term_date_format', '\"[d][H:i]\"', 0, 5, NULL, 0),
+(160, 'date_format', '\"d-m-Y\"', 0, 5, NULL, 0),
+(161, 'time_format', '\"H:i:s\"', 0, 5, NULL, 0),
+(162, 'datetime_format', '\"d-m-Y H:i:s\"', 0, 5, NULL, 0),
+(163, 'datetime_format_min', '\"d/H:i\"', 0, 5, NULL, 0),
+(164, 'datatime_graph_format', '\"H:i\"', 0, 5, NULL, 0),
+(165, 'datetime_log_format', '\"d-m-y H:i:s\"', 0, 5, NULL, 0),
+(166, 'default_charset', '\"utf-8\"', 0, 1, NULL, 0),
+(167, 'default_timezone', '\"UTC\"', 0, 1, NULL, 0),
+(168, 'graph_charset', '\"es-ES\"', 0, 1, NULL, 0),
+(169, 'web_title', '\"MonNet\"', 0, 2, NULL, 0),
+(170, 'check_retries_usleep', '500000', 1, 106, NULL, 0),
+(171, 'check_retries', '4', 1, 106, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -113,30 +172,23 @@ CREATE TABLE `hosts` (
   `hostname` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `ip` char(18) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `category` int NOT NULL DEFAULT '1',
-  `mac` char(255) DEFAULT NULL,
+  `mac` char(17) DEFAULT NULL,
   `highlight` tinyint(1) NOT NULL DEFAULT '0',
-  `check_method` tinyint NOT NULL DEFAULT '1' COMMENT '1:ping 2:tcp ports',
-  `version` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `check_method` tinyint NOT NULL DEFAULT '1' COMMENT '1:ping 2:tcp ports 3 https',
   `weight` tinyint NOT NULL DEFAULT '60',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '0:ok;1:warn;3:danger',
   `online` tinyint NOT NULL DEFAULT '0',
+  `glow` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `online_change` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `access_method` tinyint NOT NULL DEFAULT '0' COMMENT '0:no;1:ssh..',
-  `access_results` json DEFAULT NULL,
-  `latency` float DEFAULT NULL,
   `disable` tinyint NOT NULL DEFAULT '0',
   `warn` tinyint NOT NULL DEFAULT '0',
-  `warn_port` tinyint NOT NULL DEFAULT '0',
-  `warn_msg` char(255) DEFAULT NULL,
   `warn_mail` tinyint(1) NOT NULL DEFAULT '0',
-  `alert_msg` char(255) DEFAULT NULL,
   `scan` tinyint NOT NULL DEFAULT '0',
   `alert` tinyint NOT NULL DEFAULT '0',
-  `fingerprint` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `network` tinyint NOT NULL DEFAULT '1',
   `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ports` json DEFAULT NULL,
   `token` char(255) DEFAULT NULL,
   `notes_id` int DEFAULT NULL,
   `encrypted` text,
@@ -144,7 +196,8 @@ CREATE TABLE `hosts` (
   `last_seen` datetime DEFAULT NULL,
   `misc` json DEFAULT NULL,
   `ansible_enabled` tinyint NOT NULL DEFAULT '0',
-  `ansible_fail` tinyint NOT NULL DEFAULT '0'
+  `ansible_fail` tinyint NOT NULL DEFAULT '0',
+  `agent_installed` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -157,7 +210,8 @@ CREATE TABLE `hosts_logs` (
   `id` int NOT NULL,
   `host_id` int NOT NULL,
   `level` tinyint NOT NULL DEFAULT '7',
-  `log_type` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '0' COMMENT '0 default, 1 event 2 remote_port_status 3 Alert 4 Warn 5 Alert/Event 6 Warn/Event',
+  `log_type` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '0' COMMENT 'DEFAULT = 0;\r\nEVENT = 1;\r\nEVENT_WARN = 2;\r\nEVENT_ALERT = 3;',
+  `event_type` smallint DEFAULT '0',
   `msg` char(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `ack` tinyint(1) NOT NULL DEFAULT '0',
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -205,19 +259,18 @@ CREATE TABLE `networks` (
   `scan` tinyint(1) NOT NULL DEFAULT '1',
   `pool` tinyint NOT NULL DEFAULT '0',
   `weight` tinyint NOT NULL DEFAULT '50',
-  `disable` tinyint NOT NULL DEFAULT '0'
+  `disable` tinyint NOT NULL DEFAULT '0',
+  `only_online` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `networks`
 --
 
-INSERT INTO `networks` (`id`, `network`, `name`, `vlan`, `scan`, `pool`, `weight`, `disable`) VALUES
-(1, '255.255.255.0/24', 'default', 1, 0, 0, 50, 0),
-(2, '0.0.0.0/0', 'INTERNET', 0, 0, 0, 50, 0),
-(3, '192.168.1.0/24', 'Main Network', 1, 1, 1, 50, 0);
-
-
+INSERT INTO `networks` (`id`, `network`, `name`, `vlan`, `scan`, `pool`, `weight`, `disable`, `only_online`) VALUES
+(1, '255.255.255.0/24', 'default', 1, 0, 0, 50, 0, 0),
+(2, '0.0.0.0/0', 'INTERNET', 0, 0, 0, 50, 0, 0),
+(3, '192.168.1.0/24', 'Main Network', 1, 1, 1, 50, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -242,15 +295,16 @@ CREATE TABLE `notes` (
 CREATE TABLE `ports` (
   `id` int NOT NULL,
   `hid` int NOT NULL,
-  `scan_type` tinyint NOT NULL DEFAULT '0' COMMENT '0 None 1 remote scan 2 agent provided',
-  `protocol` tinyint NOT NULL COMMENT '1 tcp 2 udp',
+  `scan_type` tinyint DEFAULT NULL,
+  `protocol` tinyint NOT NULL COMMENT '1 tcp 2 udp 3 https',
   `pnumber` smallint UNSIGNED NOT NULL,
   `online` tinyint(1) NOT NULL DEFAULT '0',
   `interface` varchar(45) DEFAULT NULL,
-  `ip_version` varchar(5) NOT NULL,
+  `ip_version` varchar(5) DEFAULT NULL,
   `custom_service` varchar(255) DEFAULT NULL,
-  `service` varchar(255) NOT NULL,
-  `last_change` datetime NOT NULL
+  `service` varchar(255) DEFAULT NULL,
+  `latency` float DEFAULT NULL,
+  `last_check` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -281,6 +335,22 @@ INSERT INTO `prefs` (`id`, `uid`, `pref_name`, `pref_value`) VALUES
 (8, 0, 'cron_update', '0'),
 (9, 0, 'cron_five', '0'),
 (10, 0, 'cron_daily', '0');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reports`
+--
+
+CREATE TABLE `reports` (
+  `id` int NOT NULL,
+  `host_id` int NOT NULL,
+  `pb_id` int NOT NULL,
+  `source_id` int DEFAULT '0' COMMENT 'source_id = \r\ntask id if task\r\nuser id if manual',
+  `rtype` tinyint NOT NULL COMMENT '1 manual 2 Task',
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `report` json NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -317,9 +387,20 @@ CREATE TABLE `system_logs` (
 CREATE TABLE `tasks` (
   `id` int NOT NULL,
   `hid` int NOT NULL,
-  `task` tinyint NOT NULL,
-  `what` varchar(255) NOT NULL,
-  `next_task` int DEFAULT '0'
+  `pb_id` smallint NOT NULL,
+  `trigger_type` smallint NOT NULL,
+  `last_triggered` datetime DEFAULT NULL,
+  `next_trigger` datetime DEFAULT NULL,
+  `task_name` varchar(100) NOT NULL,
+  `next_task` int DEFAULT '0',
+  `disable` tinyint(1) DEFAULT '0',
+  `extra` json DEFAULT NULL,
+  `task_interval` varchar(10) DEFAULT NULL,
+  `interval_seconds` int DEFAULT NULL,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `event_id` int DEFAULT '0',
+  `crontime` varchar(255) DEFAULT NULL,
+  `groups` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -358,6 +439,13 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `sid`, `timezone`, `
 ALTER TABLE `ansible_msg`
   ADD PRIMARY KEY (`id`),
   ADD KEY `host_id` (`host_id`);
+
+--
+-- Indexes for table `ansible_vars`
+--
+ALTER TABLE `ansible_vars`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `hid` (`hid`,`vkey`);
 
 --
 -- Indexes for table `categories`
@@ -421,6 +509,13 @@ ALTER TABLE `prefs`
   ADD UNIQUE KEY `uid` (`uid`,`pref_name`);
 
 --
+-- Indexes for table `reports`
+--
+ALTER TABLE `reports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_host_id_id` (`host_id`,`id`);
+
+--
 -- Indexes for table `stats`
 --
 ALTER TABLE `stats`
@@ -457,6 +552,12 @@ ALTER TABLE `ansible_msg`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `ansible_vars`
+--
+ALTER TABLE `ansible_vars`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -466,7 +567,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `config`
 --
 ALTER TABLE `config`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=200;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=500;
 
 --
 -- AUTO_INCREMENT for table `hosts`
@@ -508,7 +609,13 @@ ALTER TABLE `ports`
 -- AUTO_INCREMENT for table `prefs`
 --
 ALTER TABLE `prefs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
+--
+-- AUTO_INCREMENT for table `reports`
+--
+ALTER TABLE `reports`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `system_logs`
