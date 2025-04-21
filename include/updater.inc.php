@@ -155,7 +155,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $ncfg->set('db_monnet_version', 0.48, 1);
             $db->query("START TRANSACTION");
-            $db->query("DELETE FROM `config` WHERE `ckey` IN ('discover_last_run', 'discoveery_last_run');");
+            $db->query("DELETE FROM `config` WHERE `ckey` IN ('discover_last_run', 'discovery_last_run');");
             $db->query("INSERT INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('discovery_last_run', JSON_QUOTE('0'), 1, 0, NULL, 0)");
             $db->query("COMMIT");
