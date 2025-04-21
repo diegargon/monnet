@@ -65,8 +65,8 @@ class Log
         self::$db = $ctx->get('Mysql');
         self::$lng = $ctx->get('lng');
         self::$ncfg = $ctx->get('Config');
-        self::$timezone = self::$ncfg->get('default_timezone');
-    }
+            self::$timezone = self::$ncfg->get('default_timezone');
+        }
 
     /**
      *

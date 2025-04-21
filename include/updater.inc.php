@@ -401,14 +401,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.57
+    // Update 0.57
     $update = 0.57;
-    if ($db_version < $update) {
+    if ($db_version == 0.56) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
             # DONE Add Latency to ports
             $db->query("ALTER TABLE `ports` ADD `latency` FLOAT DEFAULT NULL");
-            # DONE  Use last_check instead of last_chaneg
             $db->query("ALTER TABLE `ports` ADD `last_check` datetime DEFAULT NULL");
             # DONE Remote not null
             $db->query("ALTER TABLE `ports` MODIFY `scan_type` tinyint");
@@ -441,43 +440,98 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // 0.58
-    $update = 0.58;
-    if ($db_version < $update) {
-        try {
-            $ncfg->set('db_monnet_version', $update, 1);
-            # Drop last_change after use last_check
-            $db->query("ALTER TABLE `ports` DROP COLUMN `last_change`");
-            $db->query("COMMIT");
-            $db_version = $update;
-            Log::notice("Update version to $update successful");
-        } catch (Exception $e) {
-            $ncfg->set('db_monnet_version', $db_version, 1);
-            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
-        }
-    }
     // 0.59
-    $update = 0.00;
-    if ($db_version < $update) {
+    $update = 0.59;
+    if ($db_version == 0.58) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            //$db->query("
-            //");
-            $db->query("START TRANSACTION");
-            //$db->query("
-            //");
-            $db->query("COMMIT");
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('log_level', JSON_QUOTE('5'), 1, 105, NULL, 0),
+                ('log_file', JSON_QUOTE('logs/monnet.log'), 0, 105, NULL, 0),
+                ('system_log_to_syslog', JSON_QUOTE('0'), 2, 105, NULL, 0),
+                ('system_log_to_db', JSON_QUOTE('1'), 2, 105, NULL, 0),
+                ('system_log_to_db_debug', JSON_QUOTE('0'), 2, 105, NULL, 0),
+                ('log_to_file', JSON_QUOTE('1'), 2, 105, NULL, 0),
+                ('log_file_owner', JSON_QUOTE('www-data'), 0, 105, NULL, 0),
+                ('log_file_owner_group', JSON_QUOTE('www-data'), 0, 105, NULL, 0),
+                ('term_hosts_log_level', JSON_QUOTE('5'), 1, 105, NULL, 0),
+                ('term_system_log_level', JSON_QUOTE('5'), 1, 105, NULL, 0),
+                ('term_max_lines', JSON_QUOTE('100'), 1, 105, NULL, 0),
+                ('term_show_system_logs', JSON_QUOTE('1'), 2, 105, NULL, 0),
+                ('theme_css', JSON_QUOTE('default'), 0, 2, NULL, 0),
+                ('theme', JSON_QUOTE('default'), 0, 2, NULL, 0),
+                ('refresher_time', JSON_QUOTE('2'), 1, 2, NULL, 0),
+                ('glow_time', JSON_QUOTE('10'), 1, 2, NULL, 0),
+                ('port_timeout_local', JSON_QUOTE('0.5'), 3, 106, NULL, 0),
+                ('port_timeout', JSON_QUOTE('0.8'), 3, 106, NULL, 0),
+                ('ping_nets_timeout', JSON_QUOTE('200000'), 1, 106, NULL, 0),
+                ('ping_hosts_timeout', JSON_QUOTE('400000'), 1, 106, NULL, 0),
+                ('ping_local_hosts_timeout', JSON_QUOTE('300000'), 1, 106, NULL, 0),
+                ('clear_logs_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
+                ('clear_stats_intvl', JSON_QUOTE('15'), 1, 104, NULL, 0),
+                ('clear_reports_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
+                ('agent_allow_selfcerts', JSON_QUOTE('1'), 2, 103, NULL, 0),
+                ('default_mem_alert_threshold', JSON_QUOTE('90'), 1, 103, NULL, 0),
+                ('default_mem_warn_threshold', JSON_QUOTE('80'), 1, 103, NULL, 0),
+                ('default_disks_alert_threshold', JSON_QUOTE('90'), 1, 103, NULL, 0),
+                ('default_disks_warn_threshold', JSON_QUOTE('80'), 1, 103, NULL, 0);
+            ");
+            $columnExists = $db->query("SELECT 1
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_SCHEMA = DATABASE()
+                  AND TABLE_NAME = 'ports'
+                  AND COLUMN_NAME = 'last_change'");
+            if ($columnExists->num_rows > 0) {
+                $db->query("ALTER TABLE `ports` DROP COLUMN `last_change`");
+            }
+
             $db_version = $update;
             Log::notice("Update version to $update successful");
         } catch (Exception $e) {
-            $db->query("ROLLBACK");
+
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+    // 0.60
+    $update = 0.60;
+    if ($db_version == 0.59) {
+        Log::warning("Init version $update");
+        $result = $db->query("
+            SELECT 1
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME = 'ports'
+              AND COLUMN_NAME = 'latency'
+            LIMIT 1
+        ");
+        if ($result && $result->num_rows === 0) {
+            $db->query("ALTER TABLE `ports` ADD `latency` FLOAT DEFAULT NULL");
+        }
+
+        $result = $db->query("
+            SELECT 1
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME = 'ports'
+              AND COLUMN_NAME = 'last_check'
+            LIMIT 1
+        ");
+        if ($result && $result->num_rows === 0) {
+            $db->query("ALTER TABLE `ports` ADD `last_check` DATETIME DEFAULT NULL");
+        }
+        $db->query("ALTER TABLE `ports` MODIFY `scan_type` tinyint");
+        $db->query("ALTER TABLE `ports` MODIFY `service` varchar(255) DEFAULT NULL");
+        $db->query("COMMIT");
+        $ncfg->set('db_monnet_version', $update, 1);
+        $db_version = $update;
+        Log::warning("Update version to $update successful");
+    }
+
     // Template
     $update = 0.00;
-    if ($db_version < $update) {
+    if ($db_version == 0.00) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
             //$db->query("
@@ -510,12 +564,12 @@ if ($db_version) {
     $files_version = (float) $ncfg->get('monnet_version');
 
     if (($files_version > $db_version) && !file_exists($lockFile)) {
-        if (file_put_contents($lockFile, 'locked') !== false) {
-            Log::notice('Triggered Update');
-            trigger_update($ncfg, $db, $db_version, $files_version);
-            unlink($lockFile);
-        } else {
-            Log::error("Could not create lock file: $lockFile");
-        }
+        #if (file_put_contents($lockFile, 'locked') !== false) {
+        Log::notice('Triggered Update');
+        trigger_update($ncfg, $db, $db_version, $files_version);
+        #unlink($lockFile);
+        #} else {
+        #    Log::error("Could not create lock file: $lockFile");
+        #}
     }
 }

@@ -95,9 +95,6 @@ function usermode_checks(\Config $ncfg): void
     if (empty($ncfg->get('theme'))) {
         exit('theme' . $err_empty_msg);
     }
-    if (empty($ncfg->get('default_charset'))) {
-        exit('default charset' . $err_empty_msg);
-    }
 
     if (!is_dir($ncfg->get('path') . '/tpl/' . $ncfg->get('theme'))) {
         exit('theme ' . $this->ncfg->get('theme') . ' ' . $err_noexists_msg);
