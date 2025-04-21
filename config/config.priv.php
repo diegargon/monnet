@@ -14,7 +14,7 @@ $cfg['monnet_revision'] = 7;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.170;
-$cfg['agent_latest_version'] = 0.173;
+$cfg['agent_latest_version'] = 0.177;
 $cfg['app_name'] = 'monnet';
 
 /* Hardware Manufacture */
