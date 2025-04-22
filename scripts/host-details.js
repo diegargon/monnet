@@ -604,7 +604,9 @@ function requestHostDetails(command, command_values = []) {
                     ) {
                     if (jsonData.command_success === 1) {
                         $('#term_output').html(jsonData.response_msg);
-                    } else {
+                    } else if (jsonData.command_error_msg) {
+                        $('#term_output').html(jsonData.command_error_msg);
+                    } else {                        
                         $('#term_output').html('Error');
                     }
                 }

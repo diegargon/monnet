@@ -92,9 +92,9 @@ class CmdTaskAnsibleController
         $host = $hosts->getHostById($target_id);
 
         if ($command === 'syslog-load') {
-            $playbook = 'syslog-linux';
+            $playbook = 'std-syslog-linux';
         } else {
-            $playbook = 'journald-linux';
+            $playbook = 'std-journald-linux';
         }
 
         if (valid_array($host) && $host['ansible_enabled']) {
@@ -103,14 +103,23 @@ class CmdTaskAnsibleController
                 $extra_vars['num_lines'] = $value;
             }
             $response = $this->ansibleService->runPlaybook($target_id, $playbook, $extra_vars);
-            if ($response['status'] === "success") {
-                $debug_lines = $this->ansibleService->fSystemLogs($host, $response);
-
-                return Response::stdReturn(true, $debug_lines, false, ['command_receive' => $command]);
-            } else {
+            // Connection Error Check
+            if ($response['status'] !== 'success') {
                 $hosts->setAnsibleAlarm($target_id, $response['error_msg']);
-                return Response::stdReturn(false, $response['error_msg']);
+                return Response::stdReturn(false, $response['error_msg'], false, ['command_receive' => $command]);
             }
+            // Ansible Error return check
+            if (!isset($response['response_msg']['result'])) {
+                return Response::stdReturn(false, 'Response format error', false, ['command_receive' => $command]);
+            }
+            $result = $response['response_msg']['result'];
+            if (isset($result['status']) && $result['status'] === 'error') {
+                return Response::stdReturn(false, $result['message'], false, ['command_receive' => $command]);
+            }
+            $debug_lines = $this->ansibleService->fSystemLogs($host, $result);
+
+            return Response::stdReturn(true, $debug_lines, false, ['command_receive' => $command]);
+
         } else {
             return Response::stdReturn(false, $lng['L_ACCESS_METHOD']);
         }

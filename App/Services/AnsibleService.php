@@ -243,21 +243,27 @@ class AnsibleService
     /**
      *
      * @param array<string, string|int> $host
-     * @param array<string, mixed>> $response
-     * @return array<string, string|int>
+     * @param array<string, mixed>> $result
+     * @return string
      */
-    public function fSystemLogs(array $host, array $response): array
+    public function fSystemLogs(array $host, array $result): string
     {
-        $debug_lines = [];
+        $debug_lines = '';
         $host_ip = $host['ip'];
-        foreach ($response['plays'] as $play) :
+        if (!isset($result['plays']) || !is_array($result['plays'])) {
+            return $debug_lines = 'Ansible result Plays Format Error';
+        }
+        foreach ($result['plays'] as $play) :
+            if (!isset($play['tasks']) || !is_array($play['tasks'])) {
+               return $debug_lines = 'Ansible result Tasks Format Error';
+            }
             foreach ($play['tasks'] as $task) :
-                if (isset($task['hosts'][$host_ip]['action']) && $task['hosts'][$host_ip]['action'] === 'debug') {
-                    $debug_lines = $task['hosts'][$host_ip]['msg'] ?? [];
-                    foreach ($debug_lines as &$debug_line) :
-                        $debug_line = $debug_line . '<br/>';
-                    endforeach;
-                    //$debug_lines[] =  serialize($task['hosts']);
+                if (isset($task['hosts'][$host_ip]['action']) && $task['hosts'][$host_ip]['action'] == 'debug') {
+                    if (!empty($task['hosts'][$host_ip]['msg'])) {
+                        return implode('<br/>', $task['hosts'][$host_ip]['msg']);
+                    } else {
+                        $debug_lines = "empty";
+                    }
                 }
             endforeach;
         endforeach;
