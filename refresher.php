@@ -22,6 +22,18 @@ require_once 'include/common-call.php';
 require_once 'include/usermode.inc.php';
 require_once 'include/refresher-call.php';
 
+/*
+use App\Controllers\RefresherController;
+use App\Services\TemplateService;
+use App\Views\RefresherView;
+
+$templates = new TemplateService($ctx);
+$view = new RefresherView($templates);
+$controller = new RefresherController($ctx, $view);
+
+$controller->refreshPage();
+*/
+
 $tdata = [];
 $hosts = $ctx->get('Hosts');
 
@@ -55,7 +67,6 @@ $agent_hosts_off = 0;
 if ($user->getPref('show_highlight_hosts_status')) {
     $hosts_view = get_hosts_view($ctx, 1);
     $highlight_hosts_count = 0;
-
     $highlight_hosts_count = count($hosts_view);
     $tdata = [];
     $tdata['hosts'] = $hosts_view;
@@ -67,7 +78,6 @@ if ($user->getPref('show_highlight_hosts_status')) {
 
 if ($user->getPref('show_other_hosts_status')) {
     $hosts_view = get_hosts_view($ctx);
-
     $show_hosts_count = count($hosts_view);
     $hosts_totals_count = $hosts->totals;
     $show_hosts_count = $show_hosts_count + $highlight_hosts_count;
