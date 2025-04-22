@@ -122,7 +122,7 @@ INSERT INTO `config` (`id`, `ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) V
 (132, 'system_log_to_syslog', '1', 2, 105, NULL, 0),
 (133, 'system_log_to_db', '1', 2, 105, NULL, 0),
 (134, 'system_log_to_db_debug', '0', 2, 105, NULL, 0),
-(135, 'log_to_file', '1', 2, 105, NULL, 0),
+(135, 'log_to_file', '0', 2, 105, NULL, 0),
 (136, 'log_file_owner', '\"www-data\"', 0, 105, NULL, 0),
 (137, 'log_file_owner_group', '\"www-data\"', 0, 105, NULL, 0),
 (138, 'term_hosts_log_level', '5', 1, 105, NULL, 0),

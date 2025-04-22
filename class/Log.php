@@ -107,39 +107,57 @@ class Log
                     self::$db->insert('system_logs', ['level' => $log_level, 'msg' => $msg_db]);
                 endif;
             }
+
             if (self::$ncfg->get('log_to_file')) {
                 $log_file = self::$ncfg->get('log_file');
-
                 $content = '['
                     . format_date_now(self::$timezone, self::$ncfg->get('datetime_log_format'))
                     . '][' . self::$ncfg->get('app_name') . ']:[' . $log_level . '] ' . $msg . "\n";
-                if (!file_exists($log_file)) {
-                    $effectiveUser = false;
-                    if (is_numeric($sysuid = getmyuid())) {
-                        $effectiveUser = posix_getpwuid($sysuid);
-                    }
-                    $userName = $effectiveUser !== false ? $effectiveUser['name'] : 'Unknown';
-                    if (!touch($log_file)) {
-                        self::error(self::$lng['L_ERR_FILE_CREATE']
-                            . ' effective User: ' . $userName, 1);
-                        self::debug(getcwd(), 1);
+
+                $file_ready = false;
+                $log_dir = dirname($log_file);
+
+                // Ensure directory is writable
+                if (!is_dir($log_dir) || !is_writable($log_dir)) {
+                    self::error('Log directory does not exist or is not writable: ' . $log_dir, 1);
+                } else {
+                    // File does not exist, try to create it
+                    if (!file_exists($log_file)) {
+                        $effectiveUser = false;
+                        if (is_numeric($sysuid = getmyuid())) {
+                            $effectiveUser = posix_getpwuid($sysuid);
+                        }
+                        $userName = $effectiveUser !== false ? $effectiveUser['name'] : 'Unknown';
+
+                        if (!touch($log_file)) {
+                            self::error(self::$lng['L_ERR_FILE_CREATE'] . ' effective User: ' . $userName, 1);
+                            self::debug(getcwd(), 1);
+                        } else {
+                            if (!chown($log_file, self::$ncfg->get('log_file_owner'))) {
+                                self::error(self::$lng['L_ERR_FILE_CHOWN'], 1);
+                            }
+                            if (!chgrp($log_file, self::$ncfg->get('log_file_owner_group'))) {
+                                self::error('L_ERR_FILE_CHGRP', 1);
+                            }
+                            $file_ready = true;
+                        }
                     } else {
-                        if (!chown($log_file, self::$ncfg->get('log_file_owner'))) {
-                            self::error(self::$lng['L_ERR_FILE_CHOWN'], 1);
-                        }
-                        if (!chgrp($log_file, self::$ncfg->get('log_file_owner_group'))) {
-                            self::error('L_ERR_FILE_CHGRP', 1);
-                        }
-                        if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
-                            self::error('Error opening/writing log to file '
-                                . 'effective User: ' . $userName, 1);
+                        if (is_writable($log_file)) {
+                            $file_ready = true;
+                        } else {
+                            self::error('Log file exists but is not writable: ' . $log_file, 1);
                         }
                     }
-                }
-                if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
-                    self::error('Error opening/writing log to file', 1);
+
+                    // Append to log only if file is ready
+                    if ($file_ready) {
+                        if (file_put_contents($log_file, $content, FILE_APPEND) === false) {
+                            self::error('Error opening/writing log to file', 1);
+                        }
+                    }
                 }
             }
+
             if (self::$ncfg->get('system_log_to_syslog') === 1) {
                 openlog(
                     self::$ncfg->get('app_name') . ' ' . self::$ncfg->get('monnet_version'),
