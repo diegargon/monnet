@@ -185,7 +185,7 @@ footer {
     margin-top: 5px;
     resize: horizontal;
     overflow: visible;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .center-container {
     flex-grow: 1;
@@ -194,6 +194,7 @@ footer {
     min-width: min-content;
     overflow: hidden;
     width: 21vw;
+    margin-right: 5px;
 }
 .right-container {
     flex: 0 0 auto;
