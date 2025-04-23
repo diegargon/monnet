@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.61;
-$cfg['monnet_revision'] = 8;
+$cfg['monnet_revision'] = 9;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.170;
@@ -76,46 +76,46 @@ $cfg['manufacture'] = [
     69 => ['id' => 69, 'name' => 'Manjaro', 'img' => 'manjaro.png'],
     70 => ['id' => 70, 'name' => 'CentoOS', 'img' => 'manjaro.png'],
     71 => ['id' => 71, 'name' => 'RHEL', 'img' => 'rhel.png'],
-   /* CLOUD  SYSTEMS */
-   100 => ['id' => 100, 'name' => 'AWS', 'img' => 'unknown.png'],
-   101 => ['id' => 101, 'name' => 'Azure', 'img' => 'unknown.png'],
-   102 => ['id' => 102, 'name' => 'Google Cloud', 'img' => 'unknown.png'],
-   103 => ['id' => 103, 'name' => 'ArubaCloud', 'img' => 'unknown.png'],
-   /* Hypervisors */
-   150 => ['id' => 150, 'name' => 'Proxmox VE', 'img' => 'proxmox.png'],
-   151 => ['id' => 151, 'name' => 'VMWare ESXI', 'img' => 'vmware.png'],
-   152 => ['id' => 152, 'name' => 'Hyper-V', 'img' => 'unknown.png'],
-   153 => ['id' => 153, 'name' => 'Oracle Virtualbox', 'img' => 'unknown.png'],
-   154 => ['id' => 154, 'name' => 'KVM', 'img' => 'unknown.png'],
-   155 => ['id' => 155, 'name' => 'Citrix Hypervisor', 'img' => 'unknown.png'],
-   156 => ['id' => 156, 'name' => 'Xen', 'img' => 'unknown.png'],
-   157 => ['id' => 157, 'name' => 'Parallels', 'img' => 'unknown.png'],
-   158 => ['id' => 158, 'name' => 'QEMU', 'img' => 'unknown.png'],
-   159 => ['id' => 159, 'name' => 'OpenVZ', 'img' => 'unknown.png'],
-   160 => ['id' => 160, 'name' => 'XCP-ng', 'img' => 'unknown.png'],
-   /* Container Orchestration */
-   200 => ['id' => 200, 'name' => 'Docker', 'img' => 'unknown.png'],
-   201 => ['id' => 201, 'name' => 'Podman', 'img' => 'unknown.png'],
-   202 => ['id' => 202, 'name' => 'Kubernetes', 'img' => 'unknown.png'],
-   203 => ['id' => 203, 'name' => 'Docker Swarm', 'img' => 'unknown.png'],
-   204 => ['id' => 204, 'name' => 'Apache Mesos', 'img' => 'unknown.png'],
-   205 => ['id' => 205, 'name' => 'Nomad', 'img' => 'unknown.png'],
-   206 => ['id' => 206, 'name' => 'Rancher', 'img' => 'unknown.png'],
-   207 => ['id' => 207, 'name' => 'OpenShift', 'img' => 'unknown.png'],
-   /* Other Datacenters */
-   300 => ['id' => 300, 'name' => 'Hetzner', 'img' => 'unknown.png'],
-   301 => ['id' => 301, 'name' => 'OVH', 'img' => 'unknown.png'],
-   302 => ['id' => 302, 'name' => 'DigitalOcean', 'img' => 'unknown.png'],
-   304 => ['id' => 304, 'name' => 'Netcup', 'img' => 'unknown.png'],
-   305 => ['id' => 305, 'name' => 'Cantabo', 'img' => 'unknown.png'],
-   306 => ['id' => 306, 'name' => 'Altia', 'img' => 'unknown.png'],
-   307 => ['id' => 307, 'name' => 'Vultr', 'img' => 'unknown.png'],
-   /* Networking */
-   500 => ['id' => 500, 'name' => 'Cloudflare', 'img' => 'unknown.png'],
-   501 => ['id' => 501, 'name' => 'Akamai', 'img' => 'unknown.png'],
-   502 => ['id' => 502, 'name' => 'Fastly', 'img' => 'unknown.png'],
-   503 => ['id' => 503, 'name' => 'Amazon CloudFront', 'img' => 'unknown.png'],
-   504 => ['id' => 504, 'name' => 'Google Cloud CDN', 'img' => 'unknown.png'],
+    /* CLOUD  SYSTEMS */
+    100 => ['id' => 100, 'name' => 'AWS', 'img' => 'unknown.png'],
+    101 => ['id' => 101, 'name' => 'Azure', 'img' => 'unknown.png'],
+    102 => ['id' => 102, 'name' => 'Google Cloud', 'img' => 'unknown.png'],
+    103 => ['id' => 103, 'name' => 'ArubaCloud', 'img' => 'unknown.png'],
+    /* Hypervisors */
+    150 => ['id' => 150, 'name' => 'Proxmox VE', 'img' => 'proxmox.png'],
+    151 => ['id' => 151, 'name' => 'VMWare ESXI', 'img' => 'vmware.png'],
+    152 => ['id' => 152, 'name' => 'Hyper-V', 'img' => 'unknown.png'],
+    153 => ['id' => 153, 'name' => 'Oracle Virtualbox', 'img' => 'unknown.png'],
+    154 => ['id' => 154, 'name' => 'KVM', 'img' => 'unknown.png'],
+    155 => ['id' => 155, 'name' => 'Citrix Hypervisor', 'img' => 'unknown.png'],
+    156 => ['id' => 156, 'name' => 'Xen', 'img' => 'unknown.png'],
+    157 => ['id' => 157, 'name' => 'Parallels', 'img' => 'unknown.png'],
+    158 => ['id' => 158, 'name' => 'QEMU', 'img' => 'unknown.png'],
+    159 => ['id' => 159, 'name' => 'OpenVZ', 'img' => 'unknown.png'],
+    160 => ['id' => 160, 'name' => 'XCP-ng', 'img' => 'unknown.png'],
+    /* Container Orchestration */
+    200 => ['id' => 200, 'name' => 'Docker', 'img' => 'unknown.png'],
+    201 => ['id' => 201, 'name' => 'Podman', 'img' => 'unknown.png'],
+    202 => ['id' => 202, 'name' => 'Kubernetes', 'img' => 'unknown.png'],
+    203 => ['id' => 203, 'name' => 'Docker Swarm', 'img' => 'unknown.png'],
+    204 => ['id' => 204, 'name' => 'Apache Mesos', 'img' => 'unknown.png'],
+    205 => ['id' => 205, 'name' => 'Nomad', 'img' => 'unknown.png'],
+    206 => ['id' => 206, 'name' => 'Rancher', 'img' => 'unknown.png'],
+    207 => ['id' => 207, 'name' => 'OpenShift', 'img' => 'unknown.png'],
+    /* Other Datacenters */
+    300 => ['id' => 300, 'name' => 'Hetzner', 'img' => 'unknown.png'],
+    301 => ['id' => 301, 'name' => 'OVH', 'img' => 'unknown.png'],
+    302 => ['id' => 302, 'name' => 'DigitalOcean', 'img' => 'unknown.png'],
+    304 => ['id' => 304, 'name' => 'Netcup', 'img' => 'unknown.png'],
+    305 => ['id' => 305, 'name' => 'Cantabo', 'img' => 'unknown.png'],
+    306 => ['id' => 306, 'name' => 'Altia', 'img' => 'unknown.png'],
+    307 => ['id' => 307, 'name' => 'Vultr', 'img' => 'unknown.png'],
+    /* Networking */
+    500 => ['id' => 500, 'name' => 'Cloudflare', 'img' => 'unknown.png'],
+    501 => ['id' => 501, 'name' => 'Akamai', 'img' => 'unknown.png'],
+    502 => ['id' => 502, 'name' => 'Fastly', 'img' => 'unknown.png'],
+    503 => ['id' => 503, 'name' => 'Amazon CloudFront', 'img' => 'unknown.png'],
+    504 => ['id' => 504, 'name' => 'Google Cloud CDN', 'img' => 'unknown.png'],
 ];
 
 /* Machine Type */
@@ -429,7 +429,7 @@ $cfg['playbooks'] = [
         'name' => 'std-mysql-check-repair',
         'desc' => 'Check and optimize/repair MySQL tables',
         'req' => 'Python3: PyMySQL or mysqlclient Python2: MySQL-python',
-        'string_vars' => ['db_name', 'db_username' ],
+        'string_vars' => ['db_name', 'db_username'],
         'password_vars' => ['db_password'],
         'cat' => ['posix'],
     ],
