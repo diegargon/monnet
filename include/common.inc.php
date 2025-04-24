@@ -32,16 +32,10 @@ if (!file_exists('/etc/monnet/config.inc.php')) {
 
 require_once 'config/config.priv.php';
 require_once 'config/config.defaults.php';
-
-require_once('Constants/Constants.php');
-/*
- * FIXME: climode.inc.php need include this file before for acccess 'path'
- * This include cant be include_once because climode rewrite with defaults
- * and must load again
- */
-include '/etc/monnet/config.inc.php';
-
+require_once 'Constants/Constants.php';
+require_once '/etc/monnet/config.inc.php';
 require_once 'include/checks.inc.php';
+
 common_checks($cfg_db, $cfg);
 
 require_once 'class/AppContext.php';
@@ -79,7 +73,6 @@ require_once 'lang/es/main.lang.php';
 $ctx->setLang($lng);
 
 require_once 'class/Lang.php';
-
 require_once 'include/util.inc.php';
 require_once 'include/time.inc.php';
 require_once 'class/Filters.php';
