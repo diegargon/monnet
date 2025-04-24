@@ -18,7 +18,7 @@ class RefresherController
 {
     private $ctx;
     private $view;
-    private RefresherService $refreshService;
+    private RefresherService $refresherService;
 
     public function __construct($ctx, RefresherView $view)
     {
@@ -29,18 +29,13 @@ class RefresherController
     public function refreshPage(): void
     {
         $logModel = new LogModel($this->ctx);
-        $this->refreshService = $this->refreshService;
+        $this->refresherService = $this->refresherService;
 
         $user = $this->ctx->get('User');
         $lng = $this->ctx->get('lng');
         $ncfg = $this->ctx->get('Config');
         $view_highlight = 0;
         $view_other_hosts = 1;
-        $hosts_highlight_count = 0;
-        $hosts_other_count = 0;
-        $hosts_total = 0;
-        $total_hosts_on = 0;
-        $total_hosts_off = 0;
 
         $data = [
             'conn' => 'success',
@@ -60,17 +55,11 @@ class RefresherController
             $view_other_hosts = 0;
         }
 
-        $hosts = $refreshService->getHostsView($view_other_hosts, $view_highlight);
-        $hosts_total = count($hosts);
+        $hosts = $this->refresherService->getHostsView($view_other_hosts, $view_highlight);
         $hosts_highlight = [];
         $hosts_other = [];
 
         foreach ($hosts as $host) {
-            if ($host['online']) {
-                $total_hosts_on++;
-            } else {
-                $total_hosts_off++;
-            }
             if ($host['highlight']) {
                 $hosts_highlight[] = $host;
             } else {
@@ -81,7 +70,6 @@ class RefresherController
 
         // Renderizar hosts destacados
         if ($view_highlight && count($hosts_highlight) > 0) {
-            $hosts_highlight_count = count($hosts_highlight);
             $data['highlight_hosts'] = $this->view->renderHighlightHosts(
                 $hosts_highlight,
                 $lng['L_HIGHLIGHT_HOSTS'],
@@ -91,7 +79,6 @@ class RefresherController
 
         // Renderizar otros hosts
         if ($view_other_hosts && count($hosts_other) > 0) {
-            $hosts_other_count = count($hosts_other);
             $data['other_hosts'] = $this->view->renderOtherHosts(
                 $hosts_other,
                 $lng['L_OTHERS'],
