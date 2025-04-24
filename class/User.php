@@ -235,6 +235,19 @@ class User
         return $this->categories_state;
     }
 
+    public function getEnabledHostCatId(): array
+    {
+        $user_networks = $user->get_selected_networks();
+        $enabled_cats = [];
+        foreach ($this->categories_state  as $cat_id => $cat_state) {
+            if ($cat_state == 1) {
+                $enabled_cats[] = $cat_id;
+            }
+        }
+
+        return $enabled_cats;
+    }
+
 
     /**
      *
@@ -447,5 +460,19 @@ class User
             $this->db->insert('prefs', $new_item);
         }
         $this->prefs[$key] = $value;
+    }
+
+    /**
+     * Get selected network IDs for current host.
+     *
+     * @return int[] Array of network IDs
+     */
+    public function get_selected_networks(): array
+    {
+        $query = 'SELECT * FROM prefs WHERE `key` LIKE network_select_ %  AND id='. $this->getId();
+        $result = $this->db->query($query);
+        $rows = $this->db->fetchAll($result);
+
+        return array_map('intval', array_column($rows, 'value'));
     }
 }

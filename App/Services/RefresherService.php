@@ -9,109 +9,89 @@
 
 namespace App\Services;
 
+use App\Models\HostsModel;
+
 class RefresherService
 {
     private \AppContext $ctx;
+    private HostsModel $hostsModel;
 
     public function __construct(\AppContext $ctx) {
         $this->ctx = $ctx;
+        $this->hostsModel = new HostsModel($ctx);
     }
 
     /**
      * Obtiene la vista de hosts según el estado de "highlight".
      *
+     * @param int $other_hosts
      * @param int $highlight
      * @return array<string, mixed>
      */
-    public function get_hosts_view(int $highlight = 0): array
+    public function get_hosts_view(int $other_hosts = 1, int $highlight = 0): array
     {
         $hosts = $this->ctx->get('Hosts');
         $user = $this->ctx->get('User');
         $networks = $this->ctx->get('Networks');
         $ncfg = $this->ctx->get('Config');
 
-        if ($highlight) {
-            $hosts_view = $this->get_highlight_hosts($hosts, $highlight);
-        } else {
-            $hosts_view = $this->get_hosts_by_sel_cat($hosts, $user);
+        $hosts_filter = [];
+
+        if ($highlight == 1) {
+            $hosts_filter['highlight'] = 1;
         }
 
+        $user_networks = $user->get_selected_networks();
+
+        if (!empty($user_networks) && count($user_networks) > 0) {
+            $hosts_filter['networks'] = $user_networks;
+        }
+
+        $valid_cats = $user->getEnabledHostCatId();
+        if (count($valid_cats) > 0) {
+           $hosts_filter['cats'] = $valid_cats;
+        }
+        $hosts_view = $this->hostsModel->getFiltered($hosts_filter);
 
         if (!valid_array($hosts_view)) {
             return [];
         }
 
-        $hosts_view = $this->filter_hosts($hosts_view, $user, $networks);
+        $hosts_view = $this->filter_hosts($hosts_view, $networks);
         $hosts_view = $this->format_hosts($hosts_view, $user, $ncfg);
 
-        return $hosts_view;
-    }
-
-    /**
-     * Obtiene los hosts destacados.
-     *
-     * @param object $hosts
-     * @param int $highlight
-     * @return array<string, mixed>
-     */
-    private function get_highlight_hosts($hosts, int $highlight): array
-    {
-        return $hosts->getHighLight($highlight);
-    }
-
-    /**
-     * Obtiene los hosts según las categorías del usuario.
-     *
-     * @param object $hosts
-     * @param object $user
-     * @return array<string, mixed>
-     */
-    private function get_hosts_by_sel_cat($hosts, $user): array
-    {
-        $user_cats_state = $user->getHostsCatState();
-
-        if (!valid_array($user_cats_state)) {
-            return [];
-        }
-
-        $hosts_view = [];
-        foreach ($user_cats_state as $cat_id => $cat_state) {
-            if ($cat_state == 1) {
-                $hosts_cat = $hosts->getHostsByCat($cat_id);
-                if (valid_array($hosts_cat)) {
-                    $hosts_view = array_merge($hosts_view, $hosts_cat);
-                }
-            }
-        }
+        order($hosts_view, 'display_name');
 
         return $hosts_view;
     }
 
     /**
-     * Filtra los hosts según las preferencias del usuario y las redes.
+     *
+     * @return array<string, int>
+     */
+    public function get_hosts_stats(): array
+    {
+        $total = $this->hostsModel->get_totals_stats();
+        $online = $total['total_online'];
+        $total['total_offline'] = $total['total_hosts'] - $online;
+        if ($this->ncfg->get('ansible')) {
+            $total['ansible_off'] = $total['ansible_enabled'] - $total['ansible_online'];
+        }
+
+        return $total;
+    }
+    /**
+     * Filtra los hosts donde la configuracion de red esta configurada
+     * para que se muestren solo los onlines
      *
      * @param array<string, mixed> $hosts_view
      * @param object $user
      * @param object $networks
      * @return array<string, mixed>
      */
-    private function filter_hosts(array $hosts_view, $user, $networks): array
+    private function filter_hosts(array $hosts_view, array $networks): array
     {
         foreach ($hosts_view as $key => $host) {
-            // Descartar hosts destacados si no se deben mostrar
-            if ($user->getPref('show_highlight_hosts_status') && $host['highlight']) {
-                unset($hosts_view[$key]);
-                continue;
-            }
-
-            // Filtrar redes no seleccionadas
-            $pref_value = $user->getPref('network_select_' . $host['network']);
-            if ($pref_value === '0') {
-                unset($hosts_view[$key]);
-                continue;
-            }
-
-            // Filtrar redes etiquetadas como "solo online"
             if (!empty($host['network'])) {
                 $network = $networks->getNetworkById($host['network']);
                 if ((int)$host['online'] === 0 && (int)$network['only_online'] === 1) {

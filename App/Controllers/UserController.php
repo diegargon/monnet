@@ -50,7 +50,7 @@ class UserController
             case 'network_unselect':
                 if ($command === 'network_select') {
                     $pref_name = 'network_select_' . $num;
-                    $value = 1;
+                    $value = $num;
                 } else {
                     $pref_name = 'network_select_' . $num;
                     $value = 0;

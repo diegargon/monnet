@@ -10,14 +10,15 @@
 
 namespace App\Controllers;
 
-use App\Models\HostModel;
 use App\Models\LogModel;
+use App\Services\RefresherService;
 use App\Views\RefresherView;
 
 class RefresherController
 {
     private $ctx;
     private $view;
+    private RefresherService $refreshService;
 
     public function __construct($ctx, RefresherView $view)
     {
@@ -27,12 +28,19 @@ class RefresherController
 
     public function refreshPage(): void
     {
-        $hostModel = new HostModel($this->ctx);
         $logModel = new LogModel($this->ctx);
+        $this->refreshService = $this->refreshService;
 
         $user = $this->ctx->get('User');
         $lng = $this->ctx->get('lng');
         $ncfg = $this->ctx->get('Config');
+        $view_highlight = 0;
+        $view_other_hosts = 1;
+        $hosts_highlight_count = 0;
+        $hosts_other_count = 0;
+        $hosts_total = 0;
+        $total_hosts_on = 0;
+        $total_hosts_off = 0;
 
         $data = [
             'conn' => 'success',
@@ -44,21 +52,48 @@ class RefresherController
             return;
         }
 
-        // Renderizar hosts destacados
         if ($user->getPref('show_highlight_hosts_status')) {
-            $highlight_hosts = $hostModel->getHostsView(1);
+            $view_highlight = 1;
+        }
+
+        if (!$user->getPref('show_other_hosts_status')) {
+            $view_other_hosts = 0;
+        }
+
+        $hosts = $refreshService->getHostsView($view_other_hosts, $view_highlight);
+        $hosts_total = count($hosts);
+        $hosts_highlight = [];
+        $hosts_other = [];
+
+        foreach ($hosts as $host) {
+            if ($host['online']) {
+                $total_hosts_on++;
+            } else {
+                $total_hosts_off++;
+            }
+            if ($host['highlight']) {
+                $hosts_highlight[] = $host;
+            } else {
+                $hosts_other[] = $host;
+            }
+        }
+        unset($hosts);
+
+        // Renderizar hosts destacados
+        if ($view_highlight && count($hosts_highlight) > 0) {
+            $hosts_highlight_count = count($hosts_highlight);
             $data['highlight_hosts'] = $this->view->renderHighlightHosts(
-                $highlight_hosts,
+                $hosts_highlight,
                 $lng['L_HIGHLIGHT_HOSTS'],
                 'highlight-hosts'
             );
         }
 
         // Renderizar otros hosts
-        if ($user->getPref('show_other_hosts_status')) {
-            $other_hosts = $hostModel->getHostsView();
+        if ($view_other_hosts && count($hosts_other) > 0) {
+            $hosts_other_count = count($hosts_other);
             $data['other_hosts'] = $this->view->renderOtherHosts(
-                $other_hosts,
+                $hosts_other,
                 $lng['L_OTHERS'],
                 'other-hosts'
             );
@@ -70,6 +105,84 @@ class RefresherController
             $log_lines = $this->formatLogs($logs, $ncfg);
             $data['term_logs'] = $this->view->renderTermLogs($log_lines);
         }
+
+        $hosts_totals = $this->refreshService->get_hosts_stats();
+
+        $data['footer_dropdown'][] = [
+            'value' => $hosts_totals['total_online'] ?? 0,
+            'desc' => $lng['L_HOSTS_ON'],
+            'number-color' => 'blue'
+        ];
+        $data['footer_dropdown'][] = [
+            'value' => $hosts_totals['total_offline'] ?? 0,
+            'desc' => $lng['L_HOSTS_OFF'],
+            'number-color' => 'red'
+        ];
+
+        if ($hosts->alerts) {
+            $data['footer_dropdown'][] = [
+                'value' => $hosts_totals['alerts'] ?? 0,
+                'report_type' => 'alerts',
+                'desc' => $lng['L_ALERTS'],
+                'number-color' => 'red'
+            ];
+        }
+
+        if ($hosts->warns) {
+            $data['footer_dropdown'][] = [
+                'value' => $hosts_totals['warns'] ?? 0,
+                'report_type' => 'warns',
+                'desc' => $lng['L_WARNS'],
+                'number-color' => 'orange'
+            ];
+        }
+
+        if ($ncfg->get('ansible')) {
+            //$ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
+            if ($hosts->ansible_hosts) {
+                $data['footer_dropdown'][] = [
+                    'value' => $hosts_totals['ansible_hosts'],
+                    'report_type' => 'ansible_enabled',
+                    'desc' => $lng['L_ANSIBLE_HOSTS'],
+                    'number-color' => 'blue'
+                ];
+            }
+            if ($hosts->ansible_hosts_off) {
+                $data['footer_dropdown'][] = [
+                    'value' => $hosts_totals['ansible_hosts_off'],
+                    'report_type' => 'ansible_off',
+                    'desc' => $lng['L_ANSIBLE_HOSTS_OFF'],
+                    'number-color' => 'red'
+                ];
+            }
+            if ($hosts->ansible_hosts_fail) {
+                $data['footer_dropdown'][] = [
+                    'value' => $hosts_totals['ansible_hosts_fail'],
+                    'report_type' => 'ansible_fail',
+                    'desc' => $lng['L_ANSIBLE_HOSTS_FAIL'],
+                    'number-color' => 'red'
+                ];
+            }
+        }
+
+        if ($hosts_totals['agent_installed']) {
+            $data['footer_dropdown'][] = [
+                'value' => $hosts_totals['agents_installed'],
+                'report_type' => 'agents_hosts',
+                'desc' => $lng['L_AGENT_HOSTS'],
+                'number-color' => 'blue'
+            ];
+        }
+
+        if ($hosts_totals['agents_offline']) {
+            $data['footer_dropdown'][] = [
+                'value' => $hosts_totals['agents_offline'],
+                'report_type' => 'agents_hosts_off',
+                'desc' => $lng['L_AGENT_HOSTS_OFF'],
+                'number-color' => 'red'
+            ];
+        }
+
 
         $this->view->renderJson($data);
     }

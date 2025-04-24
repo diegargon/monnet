@@ -305,7 +305,7 @@ $networks_selected = 0;
 foreach ($networks_list as &$net) {
     $net_set = $user->getPref('network_select_' . $net['id']);
     if (($net_set) || $net_set === false) {
-        $net['selected'] = 1;
+        $net['selected'] = $net['id'];
         $networks_selected++;
     }
 }
