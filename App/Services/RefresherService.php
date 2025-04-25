@@ -71,10 +71,11 @@ class RefresherService
      */
     public function get_hosts_stats(): array
     {
+        $ncfg = $this->ctx->get('Config');
         $total = $this->hostsModel->get_totals_stats();
         $online = $total['total_online'];
         $total['total_offline'] = $total['total_hosts'] - $online;
-        if ($this->ncfg->get('ansible')) {
+        if ($ncfg->get('ansible')) {
             $total['ansible_off'] = $total['ansible_enabled'] - $total['ansible_online'];
         }
 

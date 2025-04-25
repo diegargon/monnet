@@ -24,10 +24,12 @@ class HostMetricsViewBuilder
 
     public function build(int $hid, string $title, int $type, array $metrics)
     {
-        $tdata['graph_name'] = $title;
-        $tdata['type'] = $type;
-        $tdata['host_id'] = $hid;
-        $tdata['data'] = $metrics;
+        $tdata = [
+            'graph_name' => $title,
+            'type' => $type,
+            'host_id' => $hid,
+            'data' => $metrics,
+        ];
 
         return $this->templateService->getTpl('chart-time-js', $tdata);
     }

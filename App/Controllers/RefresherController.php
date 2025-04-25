@@ -170,6 +170,30 @@ class RefresherController
             ];
         }
 
+        /*
+         *  Host Down Bar
+         */
+
+        $cli_last_run = 'Never';
+        if ($ncfg->get('cli_last_run')) {
+            $cli_last_run = $ncfg->get('cli_last_run');
+            $cli_last_run = utc_to_tz($cli_last_run, $user->getTimezone(), $ncfg->get('datetime_format_min'));
+            $cli_last_run .= $ncfg->get('cli_last_run_metrics');
+        }
+
+        $discovery_last_run = 'Never';
+        if ($ncfg->get('discovery_last_run')) {
+            $discovery_last_run = $ncfg->get('discovery_last_run');
+            $discovery_last_run = utc_to_tz($discovery_last_run, $user->getTimezone(), $ncfg->get('datetime_format_min'));
+            $discovery_last_run .= $ncfg->get('discovery_last_run_metrics');
+        }
+
+        /* Usado para saber si hay alguien conectado */
+        $ncfg->set('refreshing', time());
+
+        $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;
+        $data['misc']['discovery_last_run'] = 'Discovery ' . strtolower($lng['L_UPDATED']) . ' ' . $discovery_last_run;
+
 
         $this->view->renderJson($data);
     }
