@@ -809,15 +809,16 @@ $h_misc = $tdata['host_details']['misc'];
                                 foreach ($tdata['host_details']['agent_ports'] as $port) :
                                     !isset($first_service) ? $first_service = $port['custom_service'] : null;
                                     $port_protocol = (int) $port['protocol'] === 1 ? 'TCP' : 'UDP';
-                                    $port_name = "{$port['pnumber']}/$port_protocol"
+                                    $port['online'] ? $port_online = '* ' : $port_online = '';
+                                    $port_name = "$port_online{$port['pnumber']}/$port_protocol"
                                         . " {$port['interface']} {$port['service']}"
                                     ?>
-                                <option
-                                    value="<?= $port['id'] ?>"
-                                    data-cservice="<?= $port['custom_service'] ?>"
-                                >
-                                    <?= $port_name ?>
-                                </option>
+                                    <option
+                                        value="<?= $port['id'] ?>"
+                                        data-cservice="<?= $port['custom_service'] ?>"
+                                    >
+                                        <?= $port_name ?>
+                                    </option>
                                     <?php
                                 endforeach;
                                 ?>

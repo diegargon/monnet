@@ -93,8 +93,14 @@ class HostsModel
         return $results;
     }
 
-    public function get_totals_stats()
+    /**
+     *
+     * @return array<string, int>
+     */
+    public function get_totals_stats(): array
     {
+        $stats = [];
+
         $result = $this->db->query("
             SELECT
                 COUNT(*) AS total_hosts,
@@ -108,7 +114,10 @@ class HostsModel
                 SUM(ansible_enabled = 1 AND online = 1) AS ansible_online
               FROM hosts
         ");
-        return $this->db->fetch($result);
+        if ($result) {
+            $stats = $this->db->fetch($result) ?: [];
+        }
+        return $stats;
     }
     /**
      * Actualiza los datos de un host.
