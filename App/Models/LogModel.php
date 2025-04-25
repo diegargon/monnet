@@ -8,8 +8,6 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-namespace App\Models;
-
 class LogModel
 {
     private \DBManager $db;
@@ -19,79 +17,82 @@ class LogModel
         $this->db = $db;
     }
 
-    public function addSystemLog(array $data)
+    public function addSystemLog(array $data): bool
     {
-        $this->db->insert('system_logs', $data);
+        return $this->db->insert('system_logs', $data);
     }
-    public function addHostLog(array $data)
+
+    public function addHostLog(array $data): bool
     {
-        $this->db->insert('system_logs', $data);
+        return $this->db->insert('hosts_logs', $data);
     }
 
     /**
+     * Get system logs filtered by level with a maximum number of results
      *
-     * @param int $level
-     * @param int $max
-     *
-     * @return array<int, array<string, string>>
+     * @param int $level Maximum log level to retrieve
+     * @param int $max Maximum number of logs to return
+     * @return array<int, array<string, mixed>> Array of log entries
      */
     public function getSystemDBLogs(int $level, int $max): array
     {
-        $lines = [];
-
-        $query = 'SELECT * FROM system_logs WHERE level <= ' . $level
-             . ' ORDER BY date DESC LIMIT ' . $max;
-        $result = $this->db->query($query);
-        $lines = $this->db->fetchAll($result);
-
-        return $lines;
+        return $this->db->select(
+            'system_logs',
+            ['*'],
+            'level <= :level',
+            ['level' => $level],
+            $max
+        );
     }
 
-
     /**
-     * Return logs based on [$opt]ions
-     * @param array<string,mixed> $opts
-     * @return array<string,mixed>
+     * Return host logs based on provided options
+     *
+     * @param array<string, mixed> $opts Filtering options:
+     *   - level: Maximum log level
+     *   - ack: Whether to include acknowledged logs
+     *   - host_id: Filter by specific host ID
+     *   - log_type: Array of log types to include
+     *   - limit: Maximum number of results
+     * @return array<int, array<string, mixed>> Array of log entries
      */
     public function getLogsHosts(array $opts = []): array
     {
-        $lines = [];
         $conditions = [];
+        $params = [];
 
-        $query = 'SELECT * FROM hosts_logs';
+        if (!empty($opts['level'])) {
+            $conditions[] = 'level <= :level';
+            $params['level'] = (int)$opts['level'];
+        }
 
-        if (!empty($opts['level'])) :
-            $conditions[] = 'level <= ' . (int)$opts['level'];
-        endif;
+        if (!empty($opts['ack'])) {
+            $conditions[] = 'ack >= 0';
+        } else {
+            $conditions[] = 'ack != 1';
+        }
 
-        /* if ack is set show all if not hidde ack */
-        if (!empty($opts['ack'])) :
-            $conditions[] = ' ack >= 0';
-        else :
-            $conditions[] = ' ack != 1';
-        endif;
-
-        if (isset($opts['host_id'])) :
-            $conditions[] = 'host_id = ' . (int)$opts['host_id'];
-        endif;
+        if (isset($opts['host_id'])) {
+            $conditions[] = 'host_id = :host_id';
+            $params['host_id'] = (int)$opts['host_id'];
+        }
 
         if (isset($opts['log_type'])) {
             $logConditions = [];
-            foreach ($opts['log_type'] as $l_types) {
-                $logConditions[] = 'log_type=' . (int)$l_types;
+            foreach ($opts['log_type'] as $index => $l_type) {
+                $key = "log_type_$index";
+                $logConditions[] = "log_type = :$key";
+                $params[$key] = (int)$l_type;
             }
             $conditions[] = '(' . implode(' OR ', $logConditions) . ')';
         }
 
-        $query .= ' WHERE ' . implode(' AND ', $conditions);
-        $query .= ' ORDER BY date DESC';
-
-        if (!empty($opts['limit'])) :
-            $query .= ' LIMIT ' . (int)$opts['limit'];
-        endif;
-        $result = $this->db->query($query);
-        $lines = $this->db->fetchAll($result);
-
-        return $lines;
+        return $this->db->select(
+            'hosts_logs',
+            ['*'],
+            implode(' AND ', $conditions),
+            $params,
+            $opts['limit'] ?? null
+        );
     }
 }
