@@ -46,6 +46,11 @@ class FeedMeService
     private \Config $ncfg;
 
     /**
+     * @var \DBManager
+     */
+    private \DBManager $db;
+
+    /**
      * Constructor de FeedMeService.
      *
      * @param \AppContext $ctx Contexto de la aplicación.
@@ -54,6 +59,7 @@ class FeedMeService
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');
+        $this->db = $ctx->get('DBManager');
         $this->hostService = new HostService($ctx);
     }
 
@@ -239,7 +245,7 @@ class FeedMeService
         $scan_type = 2; // Agent Based
 
         if (!isset($this->cmdHostModel)) {
-            $this->cmdHostModel = new CmdHostModel($this->ctx);
+            $this->cmdHostModel = new CmdHostModel($this->db);
         }
         $dateTimeService  = new DateTimeService();
 
