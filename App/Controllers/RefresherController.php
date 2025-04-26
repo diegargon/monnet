@@ -140,11 +140,10 @@ class RefresherController
         }
 
         if ($ncfg->get('ansible')) {
-            //$ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
-            if ($hosts_totals['ansible_enabled']) {
+            if ($hosts_totals['ansible_hosts']) {
                 $data['footer_dropdown'][] = [
-                    'value' => $hosts_totals['ansible_enabled'],
-                    'report_type' => 'ansible_enabled',
+                    'value' => $hosts_totals['ansible_hosts'],
+                    'report_type' => 'ansible_hosts',
                     'desc' => $lng['L_ANSIBLE_HOSTS'],
                     'number-color' => 'blue'
                 ];
@@ -152,7 +151,7 @@ class RefresherController
             if ($hosts_totals['ansible_hosts_off']) {
                 $data['footer_dropdown'][] = [
                     'value' => $hosts_totals['ansible_hosts_off'],
-                    'report_type' => 'ansible_off',
+                    'report_type' => 'ansible_hosts_off',
                     'desc' => $lng['L_ANSIBLE_HOSTS_OFF'],
                     'number-color' => 'red'
                 ];
