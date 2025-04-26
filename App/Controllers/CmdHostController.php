@@ -44,16 +44,24 @@ class CmdHostController
     private \AppContext $ctx;
     private AnsibleService $ansibleService;
 
+    private \DBManager $db;
+
     public function __construct(\AppContext $ctx)
     {
+
+        $this->db = $ctx->get('DBManager');
+
         $this->hostService = new HostService($ctx);
-        $this->hostFormatter = new HostFormatter($ctx);
-        $this->cmdHostModel = new CmdHostModel($ctx);
-        $this->hostViewBuilder = new HostViewBuilder($ctx);
-        $this->cmdHostNotesModel = new CmdHostNotesModel($ctx);
         $this->ansibleService = new AnsibleService($ctx);
         $this->logHostsService = new LogHostsService($ctx);
         $this->hostMetricsService = new hostMetricsService($ctx);
+
+        $this->cmdHostNotesModel = new CmdHostNotesModel($this->db);
+        $this->cmdHostModel = new CmdHostModel($this->db);
+
+        $this->hostFormatter = new HostFormatter($ctx);
+        $this->hostViewBuilder = new HostViewBuilder($ctx);
+
 
         $this->filter = new Filter();
         $this->ctx = $ctx;
@@ -947,7 +955,7 @@ class CmdHostController
                 $content = '';
             }
             $update['content'] = $content;
-            $this->cmdHostNotesModel = new CmdHostNotesModel($this->ctx);
+            $this->cmdHostNotesModel = new CmdHostNotesModel($this->db);
             if ($this->cmdHostNotesModel->updateByID($target_id, $update)) {
                 return Response::stdReturn(true, $field . ': success', true);
             }
