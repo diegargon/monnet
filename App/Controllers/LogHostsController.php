@@ -16,7 +16,7 @@ use App\Services\Filter;
 use App\Helpers\Response;
 use App\Services\TemplateService;
 
-class CmdHostLogsController
+class LogHostsController
 {
     private \AppContext $ctx;
     private LogHostsModel $logHostsModel;

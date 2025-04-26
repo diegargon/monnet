@@ -11,7 +11,7 @@
 namespace App\Router;
 
 use App\Controllers\CmdHostController;
-use App\Controllers\CmdHostLogsController;
+use App\Controllers\LogHostsController;
 use App\Controllers\CmdBookmarksController;
 use App\Controllers\CmdNetworkController;
 use App\Controllers\CmdTaskAnsibleController;
@@ -188,21 +188,21 @@ class CommandRouter
              *  Hosts Logs
              */
             case 'ack_host_log':
-                $hostLogsController = new CmdHostLogsController($this->ctx);
-                $response = $hostLogsController->ackHostLog($command_values);
+                $logHostsController = new LogHostsController($this->ctx);
+                $response = $logHostsController->ackHostLog($command_values);
                 break;
             case 'logs-reload':
-                $hostLogsController = new CmdHostLogsController($this->ctx);
-                $response = $hostLogsController->logsReload($command_values);
+                $logHostsController = new LogHostsController($this->ctx);
+                $response = $logHostsController->logsReload($command_values);
                 break;
             case 'auto_reload_logs':
-                $hostLogsController = new CmdHostLogsController($this->ctx);
-                $response = $hostLogsController->logsReload($command_values);
+                $logHostsController = new LogHostsController($this->ctx);
+                $response = $logHostsController->logsReload($command_values);
                 break;
             case 'showAlarms':
             case 'showEvents':
-                $hostLogsController = new CmdHostLogsController($this->ctx);
-                $response = $hostLogsController->getEvents($command);
+                $logHostsController = new LogHostsController($this->ctx);
+                $response = $logHostsController->getEvents($command);
                 break;
             /*
              *  Host Ansible Reports
