@@ -99,19 +99,12 @@ class RefresherController
             }
             if ($this->ncfg->get('term_show_system_logs') && $this->ncfg->get('system_log_to_db')) {
                 $system_logs = $this->refresherService->getTermSystemLogs();
+
                 if(!empty($system_logs)) {
                     $system_logs = $this->view->termSystemLogsFormat($system_logs);
                 }
             }
-
-            $logs = array_merge($hosts_logs, $system_logs);
-
-            if (!empty($logs) && count($logs) > $ncfg->get('term_max_lines')) {
-                $term_logs = array_slice($logs, 0, $ncfg->get('term_max_lines'));
-            } else {
-                $term_logs = $logs;
-            }
-
+            $term_logs = array_merge($hosts_logs, $system_logs);
             $data['term_logs'] = $this->view->renderTermLogs($term_logs);
         }
 

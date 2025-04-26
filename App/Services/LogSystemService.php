@@ -144,7 +144,7 @@ class LogSystemService
      *
      * @return array<int, array<string, string>>
      */
-    public function get(int $max): array
+    public function get(int $max = 25): array
     {
         $level = $this->ncfg->get('term_system_log_level');
         if (!is_numeric($level)) {

@@ -57,13 +57,8 @@ class RefresherView
         if (!isset($this->dateTimeService)) {
             $this->dateTimeService = new DateTimeService();
         }
-        usort($logs, fn($a, $b) => $b['date'] <=>$a['date']);
 
-        array_walk($logs, function(&$log) {
-            if (!empty($log['date'])) {
-                $log['date'] = $this->dateTimeService->formatDateString($log['date']);
-            }
-        });
+        usort($logs, fn($a, $b) => $b['date'] <=>$a['date']);
 
         # Limit term max lines
         $term_max_lines = $this->ncfg->get('term_max_lines');
@@ -73,7 +68,8 @@ class RefresherView
             $term_logs = $logs;
         }
 
-        $logs_lines = $this->termLogsFormat($logs);
+        $logs_lines = [];
+        $logs_lines = $this->termLogsFormat($term_logs);
 
         return [
             'data' => $this->templates->getTpl('term', ['term_logs' => $logs_lines]),
@@ -121,8 +117,19 @@ class RefresherView
 
     private function termLogsFormat(array $logs): array
     {
+        array_walk($logs, function(&$log) {
+            if (!empty($log['date'])) {
+                $log['date'] = $this->dateTimeService->formatDateString($log['date']);
+            }
+        });
+
         $log_lines = [];
+        $term_date_format= $this->ncfg->get('term_date_format');
         foreach ($logs as $log) {
+            $log_date =  $this->dateTimeService->formatDateString(
+                    $log['date'],
+                    $term_date_format,
+                );
             $log_level = (int) $log['level'];
             $loglevelname = \LogLevel::getName($log_level);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
@@ -136,7 +143,7 @@ class RefresherView
                 $loglevelname = '<span class="color-yellow">' . $loglevelname . '</span>';
             }
 
-            $log_lines[] = $log['date'] .
+            $log_lines[] = $log_date .
                 $log['type_mark'] .
                 '[' . $loglevelname . ']' .
                 $log['display_name'] .
