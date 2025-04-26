@@ -10,20 +10,20 @@
 
 namespace App\Services;
 
-use App\Models\CmdHostLogsModel;
+use App\Models\LogHostsModel;
 use App\Services\DateTimeService;
 
-class HostLogsService
+class HostsLogsService
 {
     private \AppContext $ctx;
 
-    private CmdHostLogsModel $cmdHostLogsModel;
+    private LogHostsModel $logHostsModel;
     private DateTimeService $dateTimeService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
+        $this->logHostsModel = new LogHostsModel($ctx);
         $this->dateTimeService = new DateTimeService();
     }
 
@@ -57,7 +57,7 @@ class HostLogsService
             $opts['level'] = $command_values['log_level'];
         endif;
 
-        $logs =  $this->cmdHostLogsModel->getLogsHosts($opts);
+        $logs =  $this->logHostsModel->getLogsHosts($opts);
 
         if (empty($logs)) {
             return [];
@@ -91,7 +91,7 @@ class HostLogsService
         endif;
 
         $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'event_type', 'msg', 'ack', 'date'];
-        $tdata['logs'] = $this->formatEventsLogs($this->cmdHostLogsModel->getLogs($log_opts));
+        $tdata['logs'] = $this->formatEventsLogs($this->logHostsModel->getLogs($log_opts));
 
         return $tdata;
     }

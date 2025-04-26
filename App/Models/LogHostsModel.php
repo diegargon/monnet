@@ -10,7 +10,7 @@
 
 namespace App\Models;
 
-class CmdHostLogsModel
+class LogHostsModel
 {
     private \AppContext $ctx;
 

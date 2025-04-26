@@ -10,8 +10,8 @@
 
 namespace App\Controllers;
 
-use App\Models\CmdHostLogsModel;
-use App\Services\HostLogsService;
+use App\Models\LogHostsModel;
+use App\Services\HostsLogsService;
 use App\Services\Filter;
 use App\Helpers\Response;
 use App\Services\TemplateService;
@@ -19,16 +19,16 @@ use App\Services\TemplateService;
 class CmdHostLogsController
 {
     private \AppContext $ctx;
-    private CmdHostLogsModel $cmdHostLogsModel;
-    private HostLogsService $hostLogsService;
+    private LogHostsModel $logHostsModel;
+    private HostsLogsService $hostsLogsService;
     private Filter $filter;
     private TemplateService $templateService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
-        $this->hostLogsService = new hostLogsService($ctx);
+        $this->logHostsModel = new LogHostsModel($ctx);
+        $this->hostsLogsService = new HostsLogsService($ctx);
         $this->filter = new Filter();
         $this->templateService = new TemplateService($ctx);
     }
@@ -42,7 +42,7 @@ class CmdHostLogsController
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $field = 'logs-reload';
-        $response = $this->hostLogsService->getLogs($target_id, $command_values);
+        $response = $this->hostsLogsService->getLogs($target_id, $command_values);
 
         return Response::stdReturn(true, $response, false, ['command_receive' => $field]);
     }
@@ -61,7 +61,7 @@ class CmdHostLogsController
         if (!is_numeric($target_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");
         }
-        if (($ret = $this->cmdHostLogsModel->updateByID($target_id, [$field => $value]))) {
+        if (($ret = $this->logHostsModel->updateByID($target_id, [$field => $value]))) {
             return Response::stdReturn(true, "$field: successfully $ret");
         }
 
@@ -75,7 +75,7 @@ class CmdHostLogsController
      */
     public function getEvents(string $command): array
     {
-        $eventsTplData = $this->hostLogsService->getEvents($command);
+        $eventsTplData = $this->hostsLogsService->getEvents($command);
 
         $reportTpl = $this->templateService->getTpl('events-report', $eventsTplData);
 

@@ -11,13 +11,13 @@
 namespace App\Services;
 
 use App\Models\CmdHostModel;
-use App\Models\CmdHostLogsModel;
+use App\Models\LogHostsModel;
 use App\Models\HostsModel;
 
 class HostService
 {
     private CmdHostModel $cmdHostModel;
-    private CmdHostLogsModel $cmdHostLogsModel;
+    private LogHostsModel $logHostsModel;
     private HostFormatter $hostFormatter;
     private AnsibleService $ansibleService;
     private HostsModel $hostsModel;
@@ -28,10 +28,10 @@ class HostService
     public function __construct(\AppContext $ctx)
     {
         $this->cmdHostModel = new CmdHostModel($ctx);
-        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
+        $this->logHostsModel = new LogHostsModel($ctx);
         $this->hostFormatter = new HostFormatter($ctx);
         $this->ansibleService = new AnsibleService($ctx);
-        $this->cmdHostLogsModel = new CmdHostLogsModel($ctx);
+        $this->logHostsModel = new LogHostsModel($ctx);
         $this->hostsModel = new HostsModel($ctx);
 
         $this->ncfg = $ctx->get('Config');
@@ -41,10 +41,10 @@ class HostService
     {
         unset($this->ctx, $this->ncfg);
         unset($this->cmdHostModel);
-        unset($this->cmdHostLogsModel);
+        unset($this->logHostsModel);
         unset($this->hostFormatter);
         unset($this->ansibleService);
-        unset($this->cmdHostLogsModel);
+        unset($this->logHostsModel);
         unset($this->hostsModel);
     }
 
@@ -262,7 +262,7 @@ class HostService
                     'log_type' => $log_type,
                     'host_id' => $host['id'],
                 ];
-                $alert_logs = $this->cmdHostLogsModel->getLogsHosts($logs_opt);
+                $alert_logs = $this->logHostsModel->getLogsHosts($logs_opt);
 
                 if (!empty($alert_logs)) :
                     $min_host['log_msgs'] = $this->hostFormatter->fHostLogsMsgs($alert_logs);
@@ -300,7 +300,7 @@ class HostService
                     'log_type' => $log_type,
                     'host_id' => $host['id'],
                 ];
-                $warn_logs = $this->cmdHostLogsModel->getLogsHosts($logs_opt);
+                $warn_logs = $this->logHostsModel->getLogsHosts($logs_opt);
 
                 if (!empty($warn_logs)) :
                     $min_host['log_msgs'] = $this->hostFormatter->fHostLogsMsgs($warn_logs);
