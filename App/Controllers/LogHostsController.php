@@ -19,6 +19,7 @@ use App\Services\TemplateService;
 class LogHostsController
 {
     private \AppContext $ctx;
+    private \DBManager $db;
     private LogHostsModel $logHostsModel;
     private LogHostsService $logHostsService;
     private Filter $filter;
@@ -27,9 +28,11 @@ class LogHostsController
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->logHostsModel = new LogHostsModel($ctx);
-        $this->logHostsService = new LogHostsService($ctx);
+        $this->db = $ctx->get('DBManager');
+
         $this->filter = new Filter();
+        $this->logHostsModel = new LogHostsModel($this->db);
+        $this->logHostsService = new LogHostsService($ctx);
         $this->templateService = new TemplateService($ctx);
     }
 
