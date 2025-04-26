@@ -126,6 +126,9 @@ class HostService
         $hosts = $this->hostsModel->getFiltered($filters);
         foreach ($hosts as &$host) {
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
+            if (!empty($host['misc'])) {
+                $host['misc'] = $this->decodeMisc($host['misc']);
+            }
         }
 
         return $hosts;

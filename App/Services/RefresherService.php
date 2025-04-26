@@ -20,7 +20,7 @@ class RefresherService
     private \DBManager $db;
 
     private LogHostsService $logHostService;
-    private LogSystemService $logSystemServicec;
+    private LogSystemService $logSystemService;
     private HostService $hostService;
     private HostsModel $hostsModel;
 
@@ -180,13 +180,10 @@ class RefresherService
             $hosts_view[$key]['title_online'] = $vhost['online'] ? $lng['L_S_ONLINE'] : $lng['L_S_OFFLINE'];
             $hosts_view[$key]['online_image'] = 'tpl/' . $theme . '/img/' . ($vhost['online'] ? 'green2.png' : 'red2.png');
 
-            // Datos adicionales (fabricante, sistema operativo, tipo de sistema)
+
+            // Passing Reference
             $this->add_misc_data($hosts_view[$key], $vhost, $ncfg);
-
-            // Glow (resaltado)
             $this->add_glow_tag($hosts_view[$key], $vhost, $date_now, $ncfg);
-
-            // Alertas y advertencias
             $this->add_alerts_and_warnings($hosts_view[$key], $vhost, $theme);
         }
 
