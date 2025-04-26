@@ -10,50 +10,74 @@
 namespace App\Services;
 
 use App\Models\HostsModel;
+use App\Services\LogHostsService;
+use App\Services\HostService;
 
 class RefresherService
 {
     private \AppContext $ctx;
+    private \Config $ncfg;
+    private \DBManager $db;
+
+    private LogHostsService $logHostService;
+    private LogSystemService $logSystemServicec;
+    private HostService $hostService;
     private HostsModel $hostsModel;
+
 
     public function __construct(\AppContext $ctx) {
         $this->ctx = $ctx;
-        $this->hostsModel = new HostsModel($ctx);
+        $this->db = $ctx->get('DBManager');
+        $this->ncfg = $ctx->get('Config');
+
+        $this->logHostService = new LogHostsService($ctx);
+        $this->logSystemService = new LogSystemService($ctx);
+        $this->hostService = new hostService($ctx);
+
+        $this->hostsModel = new HostsModel($this->db);
     }
 
     /**
      * Obtiene la vista de hosts según el estado de "highlight".
      *
-     * @param int $other_hosts
+     * @param int $hosts_other
      * @param int $highlight
      * @return array<string, mixed>
      */
-    public function get_hosts_view(int $other_hosts = 1, int $highlight = 0): array
+    public function getHostsView(int $hosts_other = 1, int $highlight = 0): array
     {
-        $hosts = $this->ctx->get('Hosts');
         $user = $this->ctx->get('User');
         $networks = $this->ctx->get('Networks');
         $ncfg = $this->ctx->get('Config');
 
         $hosts_filter = [];
 
-        if ($highlight == 1) {
-            $hosts_filter['highlight'] = 1;
+        if ($highlight == 1 && $hosts_other == 0) {
+            $hosts_filter['only_highlight'] = 1;
         }
 
-        $user_networks = $user->get_selected_networks();
+        if ($highlight == 0 && $hosts_other == 1) {
+            $hosts_filter['not_highlight'] = 1;
+        }
+
+/*
+        $user_networks = $user->getSelectedNetworks();
 
         if (!empty($user_networks) && count($user_networks) > 0) {
             $hosts_filter['networks'] = $user_networks;
         }
+  */
+
 
         $valid_cats = $user->getEnabledHostCatId();
         if (count($valid_cats) > 0) {
            $hosts_filter['cats'] = $valid_cats;
         }
-        $hosts_view = $this->hostsModel->getFiltered($hosts_filter);
 
-        if (!valid_array($hosts_view)) {
+        $hosts_view = $this->hostService->getFiltered($hosts_filter);
+
+
+        if (!$hosts_view) {
             return [];
         }
 
@@ -65,18 +89,39 @@ class RefresherService
         return $hosts_view;
     }
 
+    public function getTermHostsLogs(): array
+    {
+        // Get Host Relate Logs for termlog
+        $logs_opt = [
+            'limit' => $this->ncfg->get('term_max_lines'),
+            'level' => $this->ncfg->get('term_hosts_log_level'),
+            'ack' => 1,
+        ];
+        $host_logs = $this->logHostService->getLogsHosts($logs_opt);
+
+        return $host_logs;
+    }
+
+    public function getTermSystemLogs(): array
+    {
+        $logs_limit = $this->ncfg->get('term_max_lines');
+
+        return $this->logSystemService->get($logs_limit);
+    }
+
     /**
      *
      * @return array<string, int>
      */
-    public function get_hosts_stats(): array
+    public function getHostsStats(): array
     {
         $ncfg = $this->ctx->get('Config');
-        $total = $this->hostsModel->get_totals_stats();
+        $total = $this->hostsModel->getTotalsStats();
         $online = $total['total_online'];
         $total['total_offline'] = $total['total_hosts'] - $online;
+        $total['agent_online'] = $total['agent_installed'] - $total['agent_offline'];
         if ($ncfg->get('ansible')) {
-            $total['ansible_off'] = $total['ansible_enabled'] - $total['ansible_online'];
+            $total['ansible_hosts_off'] = $total['ansible_enabled'] - $total['ansible_online'];
         }
 
         return $total;
@@ -86,11 +131,11 @@ class RefresherService
      * para que se muestren solo los onlines
      *
      * @param array<string, mixed> $hosts_view
-     * @param object $user
-     * @param object $networks
+     * @param array $user
+     * @param \Networks $networks
      * @return array<string, mixed>
      */
-    private function filter_hosts(array $hosts_view, array $networks): array
+    private function filter_hosts(array $hosts_view,  $networks): array
     {
         foreach ($hosts_view as $key => $host) {
             if (!empty($host['network'])) {

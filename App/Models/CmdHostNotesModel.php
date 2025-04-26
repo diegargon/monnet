@@ -12,13 +12,11 @@ namespace App\Models;
 
 class CmdHostNotesModel
 {
-    private \AppContext $ctx;
     private \DBManager $db;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(\DBManager $db)
     {
-        $this->ctx = $ctx;
-        $this->db = $ctx->get('DBManager');
+        $this->db = $db;
     }
 
     /**

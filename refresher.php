@@ -24,14 +24,10 @@ require_once 'include/refresher-call.php';
 
 /*
 use App\Controllers\RefresherController;
-use App\Services\TemplateService;
-use App\Views\RefresherView;
 
-$templates = new TemplateService($ctx);
-$view = new RefresherView($templates);
-$controller = new RefresherController($ctx, $view);
-
+$controller = new RefresherController($ctx);
 $controller->refreshPage();
+exit();
 */
 
 $tdata = [];

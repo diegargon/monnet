@@ -121,6 +121,16 @@ class HostService
         return $hostDetails;
     }
 
+    public function getFiltered(array $filters): array
+    {
+        $hosts = $this->hostsModel->getFiltered($filters);
+        foreach ($hosts as &$host) {
+            $host['display_name'] = $this->hostFormatter->getDisplayName($host);
+        }
+
+        return $hosts;
+    }
+
     /**
      *
      * @param int $hid

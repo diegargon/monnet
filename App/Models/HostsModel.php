@@ -46,12 +46,19 @@ class HostsModel
         $query = "SELECT * FROM hosts WHERE 1=1";
         $params = [];
 
-        if (isset($filters['highlight']) && (int)$filters['highlight'] === 1) {
+
+        if (!empty($filters['only_highlight'])) {
             $query .= " AND highlight = :highlight";
             $params['highlight'] = 1;
         }
 
+        if (!empty($filters['not_highlight'])) {
+            $query .= " AND highlight = :highlight";
+            $params['highlight'] = 0;
+        }
+
         // Filter by network IDs if provided
+
         if (
                 isset($filters['network']) &&
                 is_array($filters['network']) &&
@@ -67,7 +74,9 @@ class HostsModel
             $query .= " AND network IN (" . implode(',', $placeholders) . ")";
         }
 
+
         // Filter by category IDs
+
         if (
             isset($filters['cats']) &&
             is_array($filters['cats']) &&
@@ -82,9 +91,12 @@ class HostsModel
             $query .= " AND category IN (" . implode(',', $placeholders) . ")";
         }
 
+
         $results = $this->db->qfetchAll($query, $params);
 
-        if (is_bool($results)) {
+
+
+        if (!$results) {
             return [];
         }
 
@@ -95,7 +107,7 @@ class HostsModel
      *
      * @return array<string, int>
      */
-    public function get_totals_stats(): array
+    public function getTotalsStats(): array
     {
         $stats = [];
 
@@ -103,12 +115,12 @@ class HostsModel
             SELECT
                 COUNT(*) AS total_hosts,
                 SUM(online = 1) AS total_online,
-                SUM(alerts > 0) AS alerts,
-                SUM(warns > 0) AS warns,
+                SUM(alert > 0) AS alerts,
+                SUM(warn > 0) AS warns,
                 SUM(agent_installed = 1) as agent_installed,
                 SUM(agent_installed = 1 and online = 0) AS agent_offline,
                 SUM(ansible_enabled = 1) as ansible_enabled,
-                SUM(ansible_fail = 1) as ansible_fail,
+                SUM(ansible_fail = 1) as ansible_hosts_fail,
                 SUM(ansible_enabled = 1 AND online = 1) AS ansible_online
               FROM hosts
         ");

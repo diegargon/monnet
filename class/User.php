@@ -237,7 +237,6 @@ class User
 
     public function getEnabledHostCatId(): array
     {
-        $user_networks = $user->get_selected_networks();
         $enabled_cats = [];
         foreach ($this->categories_state  as $cat_id => $cat_state) {
             if ($cat_state == 1) {
@@ -467,9 +466,9 @@ class User
      *
      * @return int[] Array of network IDs
      */
-    public function get_selected_networks(): array
+    public function getSelectedNetworks(): array
     {
-        $query = 'SELECT * FROM prefs WHERE `key` LIKE network_select_ %  AND id='. $this->getId();
+        $query = 'SELECT * FROM prefs WHERE `pref_name` LIKE \'network_select_%\' AND id='. $this->getId();
         $result = $this->db->query($query);
         $rows = $this->db->fetchAll($result);
 

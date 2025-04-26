@@ -10,27 +10,28 @@
 
 namespace App\Controllers;
 
-use App\Models\LogModel;
 use App\Services\RefresherService;
 use App\Views\RefresherView;
+use App\Services\TemplateService;
 
 class RefresherController
 {
     private $ctx;
     private $view;
+    private \Config $ncfg;
     private RefresherService $refresherService;
 
-    public function __construct($ctx, RefresherView $view)
+    public function __construct($ctx)
     {
         $this->ctx = $ctx;
-        $this->view = $view;
+        $this->ncfg = $ctx->get('Config');
+        $templates = new TemplateService($ctx);
+        $this->view = new RefresherView($ctx, $templates);
+        $this->refresherService  = new RefresherService($ctx);
     }
 
     public function refreshPage(): void
     {
-        $logModel = new LogModel($this->ctx);
-        $this->refresherService = $this->refresherService;
-
         $user = $this->ctx->get('User');
         $lng = $this->ctx->get('lng');
         $ncfg = $this->ctx->get('Config');
@@ -87,13 +88,34 @@ class RefresherController
         }
 
         // Renderizar logs
+
         if ($user->getPref('show_termlog_status')) {
-            $logs = $logModel->getTermLogs();
-            $log_lines = $this->formatLogs($logs, $ncfg);
-            $data['term_logs'] = $this->view->renderTermLogs($log_lines);
+            $hosts_logs = [];
+            $system_logs = [];
+
+            $hosts_logs = $this->refresherService->getTermHostsLogs();
+            if (!empty($hosts_logs)) {
+                $hosts_logs = $this->view->termHostsLogsFormat($hosts_logs);
+            }
+            if ($this->ncfg->get('term_show_system_logs') && $this->ncfg->get('system_log_to_db')) {
+                $system_logs = $this->refresherService->getTermSystemLogs();
+                if(!empty($system_logs)) {
+                    $system_logs = $this->view->termSystemLogsFormat($system_logs);
+                }
+            }
+
+            $logs = array_merge($hosts_logs, $system_logs);
+
+            if (!empty($logs) && count($logs) > $ncfg->get('term_max_lines')) {
+                $term_logs = array_slice($logs, 0, $ncfg->get('term_max_lines'));
+            } else {
+                $term_logs = $logs;
+            }
+
+            $data['term_logs'] = $this->view->renderTermLogs($term_logs);
         }
 
-        $hosts_totals = $this->refreshService->get_hosts_stats();
+        $hosts_totals = $this->refresherService->getHostsStats();
 
         $data['footer_dropdown'][] = [
             'value' => $hosts_totals['total_online'] ?? 0,
@@ -106,7 +128,7 @@ class RefresherController
             'number-color' => 'red'
         ];
 
-        if ($hosts->alerts) {
+        if ($hosts_totals['alerts']) {
             $data['footer_dropdown'][] = [
                 'value' => $hosts_totals['alerts'] ?? 0,
                 'report_type' => 'alerts',
@@ -115,7 +137,7 @@ class RefresherController
             ];
         }
 
-        if ($hosts->warns) {
+        if ($hosts_totals['warns']) {
             $data['footer_dropdown'][] = [
                 'value' => $hosts_totals['warns'] ?? 0,
                 'report_type' => 'warns',
@@ -126,15 +148,15 @@ class RefresherController
 
         if ($ncfg->get('ansible')) {
             //$ansible_hosts_on = $ansible_hosts - $ansible_hosts_off;
-            if ($hosts->ansible_hosts) {
+            if ($hosts_totals['ansible_enabled']) {
                 $data['footer_dropdown'][] = [
-                    'value' => $hosts_totals['ansible_hosts'],
+                    'value' => $hosts_totals['ansible_enabled'],
                     'report_type' => 'ansible_enabled',
                     'desc' => $lng['L_ANSIBLE_HOSTS'],
                     'number-color' => 'blue'
                 ];
             }
-            if ($hosts->ansible_hosts_off) {
+            if ($hosts_totals['ansible_hosts_off']) {
                 $data['footer_dropdown'][] = [
                     'value' => $hosts_totals['ansible_hosts_off'],
                     'report_type' => 'ansible_off',
@@ -142,7 +164,7 @@ class RefresherController
                     'number-color' => 'red'
                 ];
             }
-            if ($hosts->ansible_hosts_fail) {
+            if ($hosts_totals['ansible_hosts_fail']) {
                 $data['footer_dropdown'][] = [
                     'value' => $hosts_totals['ansible_hosts_fail'],
                     'report_type' => 'ansible_fail',
@@ -154,16 +176,16 @@ class RefresherController
 
         if ($hosts_totals['agent_installed']) {
             $data['footer_dropdown'][] = [
-                'value' => $hosts_totals['agents_installed'],
+                'value' => $hosts_totals['agent_installed'],
                 'report_type' => 'agents_hosts',
                 'desc' => $lng['L_AGENT_HOSTS'],
                 'number-color' => 'blue'
             ];
         }
 
-        if ($hosts_totals['agents_offline']) {
+        if ($hosts_totals['agent_offline']) {
             $data['footer_dropdown'][] = [
-                'value' => $hosts_totals['agents_offline'],
+                'value' => $hosts_totals['agent_offline'],
                 'report_type' => 'agents_hosts_off',
                 'desc' => $lng['L_AGENT_HOSTS_OFF'],
                 'number-color' => 'red'
@@ -196,29 +218,5 @@ class RefresherController
 
 
         $this->view->renderJson($data);
-    }
-
-    private function formatLogs(array $logs, $ncfg): array
-    {
-        $log_lines = [];
-        foreach ($logs as $log) {
-            $date = format_datetime_from_string($log['date'], $ncfg->get('term_date_format'));
-            $log_level = (int) $log['level'];
-            $loglevelname = LogLevel::getName($log_level);
-            $loglevelname = str_replace('LOG_', '', $loglevelname);
-            $loglevelname = substr($loglevelname, 0, 4);
-
-            if ($log_level <= 2) {
-                $loglevelname = '<span class="color-red">' . $loglevelname . '</span>';
-            } elseif ($log_level === 3) {
-                $loglevelname = '<span class="color-orange">' . $loglevelname . '</span>';
-            } elseif ($log_level === 4) {
-                $loglevelname = '<span class="color-yellow">' . $loglevelname . '</span>';
-            }
-
-            $log_lines[] = $date . $log['type_mark'] . '[' . $loglevelname . ']' . $log['display_name'] . $log['msg'] . '<br/>';
-        }
-
-        return $log_lines;
     }
 }

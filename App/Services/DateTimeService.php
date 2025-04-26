@@ -12,8 +12,11 @@ namespace App\Services;
 
 class DateTimeService
 {
-    public function __construct()
+    private string $timezone = 'UTC';
+
+    public function __construct(string $timezone = 'UTC')
     {
+        $this->timezone = $timezone;
     }
 
     /**

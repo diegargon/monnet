@@ -203,7 +203,7 @@ class HostFormatter
             $host['misc']['uptime'] = $this->formatUptime($host['misc']['uptime']);
         }
         # TODO No funciona
-        $dateTimeService = new DateTimeService($this->ctx);
+        $dateTimeService = new DateTimeService();
 
         if (!empty($host['misc']['agent_last_contact'])) {
             $host['misc']['agent_last_contact'] = $dateTimeService->formatTimestamp(

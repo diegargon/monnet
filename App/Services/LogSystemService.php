@@ -25,7 +25,7 @@ class LogSystemService
     private string $timezone = 'UTC';
     private array $lng = [];
     private \Config $ncfg;
-    
+
     public function __construct(\AppContext $ctx)
     {
         $db = $ctx->get('DBManager');
@@ -144,7 +144,7 @@ class LogSystemService
      *
      * @return array<int, array<string, string>>
      */
-    public function getSystemDBLogs(int $max): array
+    public function get(int $max): array
     {
         $level = $this->ncfg->get('term_system_log_level');
         if (!is_numeric($level)) {

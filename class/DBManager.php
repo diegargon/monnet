@@ -93,17 +93,21 @@ class DBManager
      * @param string $sql Consulta SQL a ejecutar
      * @param array<string, mixed> $params Parámetros de consulta
      * @return bool True on success, false on failure.
-     * @return array<string, mixed>|null
+     * @return \PDOStatement
      * @throws \RuntimeException If the statement preparation fails.
      */
-    public function query(string $sql, array $params = []): bool
+    public function query(string $sql, array $params = []): \PDOStatement
     {
         $stmt = $this->connection->prepare($sql);
         if (!$stmt) {
             throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
         }
 
-        return $stmt->execute($params);
+        if (!$stmt->execute($params)) {
+            throw new \RuntimeException("Failed to execute SQL statement");
+        }
+
+        return $stmt;
     }
 
     /**
