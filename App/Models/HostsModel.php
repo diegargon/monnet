@@ -12,13 +12,11 @@ namespace App\Models;
 
 class HostsModel
 {
-    private \AppContext $ctx;
     private \DBManager $db;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(\DBManager $db)
     {
-        $this->ctx = $ctx;
-        $this->db = $this->ctx->get('DBManager');
+        $this->db = $db;
     }
 
     /**
