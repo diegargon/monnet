@@ -24,18 +24,19 @@ class HostService
 
     private \AppContext $ctx;
     private \Config $ncfg;
+    private \DBManager $db;
 
     public function __construct(\AppContext $ctx)
     {
-        $this->cmdHostModel = new CmdHostModel($ctx);
-        $this->logHostsModel = new LogHostsModel($ctx);
+        $this->ctx = $ctx;
+        $this->ncfg = $ctx->get('Config');
+        $this->db = $ctx->get('DBManager');
+        $this->cmdHostModel = new CmdHostModel($this->db);
+        $this->logHostsModel = new LogHostsModel($this->db);
+        $this->hostsModel = new HostsModel($this->db);
+
         $this->hostFormatter = new HostFormatter($ctx);
         $this->ansibleService = new AnsibleService($ctx);
-        $this->logHostsModel = new LogHostsModel($ctx);
-        $this->hostsModel = new HostsModel($ctx);
-
-        $this->ncfg = $ctx->get('Config');
-        $this->ctx = $ctx;
     }
     public function __destruct()
     {
