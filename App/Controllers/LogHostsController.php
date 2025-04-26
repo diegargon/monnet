@@ -11,7 +11,7 @@
 namespace App\Controllers;
 
 use App\Models\LogHostsModel;
-use App\Services\HostsLogsService;
+use App\Services\LogHostsService;
 use App\Services\Filter;
 use App\Helpers\Response;
 use App\Services\TemplateService;
@@ -20,7 +20,7 @@ class LogHostsController
 {
     private \AppContext $ctx;
     private LogHostsModel $logHostsModel;
-    private HostsLogsService $hostsLogsService;
+    private LogHostsService $logHostsService;
     private Filter $filter;
     private TemplateService $templateService;
 
@@ -28,7 +28,7 @@ class LogHostsController
     {
         $this->ctx = $ctx;
         $this->logHostsModel = new LogHostsModel($ctx);
-        $this->hostsLogsService = new HostsLogsService($ctx);
+        $this->logHostsService = new LogHostsService($ctx);
         $this->filter = new Filter();
         $this->templateService = new TemplateService($ctx);
     }
@@ -42,7 +42,7 @@ class LogHostsController
     {
         $target_id = $this->filter->varInt($command_values['id']);
         $field = 'logs-reload';
-        $response = $this->hostsLogsService->getLogs($target_id, $command_values);
+        $response = $this->logHostsService->getLogs($target_id, $command_values);
 
         return Response::stdReturn(true, $response, false, ['command_receive' => $field]);
     }
@@ -75,7 +75,7 @@ class LogHostsController
      */
     public function getEvents(string $command): array
     {
-        $eventsTplData = $this->hostsLogsService->getEvents($command);
+        $eventsTplData = $this->logHostsService->getEvents($command);
 
         $reportTpl = $this->templateService->getTpl('events-report', $eventsTplData);
 

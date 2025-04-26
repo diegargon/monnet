@@ -13,10 +13,23 @@ namespace App\Models;
 class LogHostsModel
 {
     private \AppContext $ctx;
+    private \DBManager $db;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->db = $this->ctx->get('DBManager');
+    }
+
+    /**
+     * Add a new log entry to the database.
+     *
+     * @param array<string, string|int> $data The log data to insert.
+     * @return bool True if the log was added successfully, false otherwise.
+     */
+    public function insert(array $data): bool
+    {
+        return $this->db->insert('hosts_logs', $data);
     }
 
     /**
@@ -28,8 +41,7 @@ class LogHostsModel
      */
     public function updateByID(int $target_id, array $data): bool
     {
-        $db = $this->ctx->get('DBManager');
-        return $db->update('hosts_logs', $data, 'id = :id', ['id' => $target_id]);
+        return $this->db->update('hosts_logs', $data, 'id = :id', ['id' => $target_id]);
     }
 
     /**
@@ -78,33 +90,6 @@ class LogHostsModel
             $query .= ' LIMIT ' . (int) $opts['limit'];
         }
 
-        $db = $this->ctx->get('DBManager');
-        return $db->qfetchAll($query, $params);
-    }
-
-    /**
-     * Obtiene los logs de un host.
-     *
-     * @param int $host_id El ID del host.
-     * @return array<string, string|int> Los logs del host.
-     */
-    public function getHostLogs($host_id)
-    {
-        $db = $this->ctx->get('DBManager');
-        $query = "SELECT * FROM host_logs WHERE host_id = :host_id ORDER BY date DESC LIMIT 100";
-        $params = ['host_id' => $host_id];
-
-        return $db->fetchAll($query, $params);
-    }
-
-    /**
-     * Fetches logs from the data source.
-     *
-     * @param array<string, string|int> $log_opts Log filtering options.
-     * @return array<string, string|int> The retrieved logs.
-     */
-    public function getLogs(array $log_opts): array
-    {
-        return \Log::getLogsHosts($log_opts);
+        return $this->db->qfetchAll($query, $params);
     }
 }

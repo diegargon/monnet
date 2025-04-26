@@ -25,7 +25,7 @@ use App\Services\Filter;
 use App\Services\AnsibleService;
 use App\Services\HostFormatter;
 use App\Services\HostService;
-use App\Services\HostsLogsService;
+use App\Services\LogHostsService;
 use App\Services\HostViewBuilder;
 use App\Services\HostMetricsService;
 use App\Helpers\Response;
@@ -34,7 +34,7 @@ class CmdHostController
 {
     private CmdHostModel $cmdHostModel;
     private CmdHostNotesModel $cmdHostNotesModel;
-    private HostsLogsService $hostsLogsService;
+    private LogHostsService $logHostsService;
     private HostMetricsService $hostMetricsService;
     private HostViewBuilder $hostViewBuilder;
     private HostService $hostService;
@@ -52,7 +52,7 @@ class CmdHostController
         $this->hostViewBuilder = new HostViewBuilder($ctx);
         $this->cmdHostNotesModel = new CmdHostNotesModel($ctx);
         $this->ansibleService = new AnsibleService($ctx);
-        $this->hostsLogsService = new HostsLogsService($ctx);
+        $this->logHostsService = new LogHostsService($ctx);
         $this->hostMetricsService = new hostMetricsService($ctx);
 
         $this->filter = new Filter();
@@ -1061,7 +1061,7 @@ class CmdHostController
                 break;
             case 'tab9':    # Log
                 $cmd = 'logs-reload';
-                $response = $this->hostsLogsService->getLogs($target_id, $command_values);
+                $response = $this->logHostsService->getLogs($target_id, $command_values);
                 break;
             case 'tab10':   # Metrics
                 $cmd = 'changeHDTab';

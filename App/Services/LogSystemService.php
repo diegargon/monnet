@@ -10,28 +10,29 @@
 
 namespace App\Services;
 
-use App\Models\LogModel;
+use App\Models\LogSystemModel;
 
-class LogService
+class LogSystemService
 {
     /**
      *
      * @var int
      */
     private static int $recursionCount = 0;
-    private LogModel $logModel;
+    private LogSystemModel $logSystemModel;
     private int $maxDbMsg = 254;
     private bool $console = false;
     private string $timezone = 'UTC';
     private array $lng = [];
     private \Config $ncfg;
+    
     public function __construct(\AppContext $ctx)
     {
         $db = $ctx->get('DBManager');
         $this->lng = $ctx->get('lng');
         $this->ncfg = $ctx->get('Config');
 
-        $this->logModel = new LogModel($db);
+        $this->logSystemModel = new LogSystemModel($db);
     }
 
     public function logged(int $log_level, mixed $msg, ?int $self_caller = null): void
@@ -58,11 +59,11 @@ class LogService
                 if ($log_level < 7 || $this->ncfg->get('system_log_to_db_debug')) :
                     if (mb_strlen($msg) > $this->max_db_msg) {
                         $this->debug($this->lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
-                        $msg_db = substr($msg, 0, 254);
+                        $msg_db = substr($msg, 0, $this->maxDbMsg);
                     } else {
                         $msg_db = $msg;
                     }
-                    $this->logModel->addSystemLog(['level' => $log_level, 'msg' => $msg_db]);
+                    $this->logSystemModel->insert(['level' => $log_level, 'msg' => $msg_db]);
                 endif;
             }
 
@@ -139,48 +140,6 @@ class LogService
 
     /**
      *
-     * @param int $log_level
-     * @param int $host_id
-     * @param string $msg
-     * @param int $log_type
-     *
-     * @return void
-     */
-    public function logHost(
-        int $log_level,
-        int $host_id,
-        string $msg,
-        int $log_type = 0,
-        int $event_type = 0
-    ): void {
-        if (mb_strlen($msg) > $this->max_db_msg) {
-            self::debug($this->lng['L_LOGMSG_TOO_LONG'] . '(Host ID:' . $host_id . ')', 1);
-            $msg_db = substr($msg, 0, 254);
-        } else {
-            $msg_db = $msg;
-        }
-        $set = [
-            'host_id' => $host_id,
-            'level' => $log_level,
-            'msg' => $msg_db,
-            'log_type' => $log_type,
-            'event_type' => $event_type
-        ];
-        $this->logModel->addHostLog($set);
-    }
-
-    /**
-     * Return logs based on [$opt]ions
-     * @param array<string,mixed> $opts
-     * @return array<string,mixed>
-     */
-    public function getLogsHosts(array $opts = []): array
-    {
-        return $this->logModel->getLogsHosts($opts);
-    }
-
-    /**
-     *
      * @param int $max
      *
      * @return array<int, array<string, string>>
@@ -191,7 +150,7 @@ class LogService
         if (!is_numeric($level)) {
             $level = 5;
         }
-        return $this->logModel->getSystemDBLogs($level, $max);
+        return $this->logSystemModel->getSystemDBLogs($level, $max);
     }
     /**
      *

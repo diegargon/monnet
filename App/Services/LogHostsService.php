@@ -13,7 +13,7 @@ namespace App\Services;
 use App\Models\LogHostsModel;
 use App\Services\DateTimeService;
 
-class HostsLogsService
+class LogHostsService
 {
     private \AppContext $ctx;
 
@@ -26,7 +26,6 @@ class HostsLogsService
         $this->logHostsModel = new LogHostsModel($ctx);
         $this->dateTimeService = new DateTimeService();
     }
-
 
     /**
      *

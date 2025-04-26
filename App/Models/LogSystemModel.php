@@ -17,14 +17,14 @@ class LogModel
         $this->db = $db;
     }
 
-    public function addSystemLog(array $data): bool
+    /**
+     *
+     * @param array<string, mixed> $data
+     * @return bool
+     */
+    public function insert(array $data): bool
     {
         return $this->db->insert('system_logs', $data);
-    }
-
-    public function addHostLog(array $data): bool
-    {
-        return $this->db->insert('hosts_logs', $data);
     }
 
     /**
