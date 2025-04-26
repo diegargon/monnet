@@ -23,7 +23,8 @@ class LogHostsService
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->logHostsModel = new LogHostsModel($ctx);
+        $db = $ctx->get('DBManager');
+        $this->logHostsModel = new LogHostsModel($db);
         $this->dateTimeService = new DateTimeService();
     }
 
