@@ -546,6 +546,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version == 0.00) {
         try {
             $db_version = $update;
+            # getTotalsStats
+            $db->query("ALTER TABLE `hosts` ADD `agent_online` TINYINT(1) NOT NULL DEFAULT 0;");
+            # Rerbuild User
             $db->query("
                 CREATE TABLE `sessions` (
                   `id` INT(11) NOT NULL AUTO_INCREMENT,
