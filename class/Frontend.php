@@ -184,18 +184,6 @@ class Frontend
     /** @return string */
     public function getFooter(): string
     {
-        /* TODO
-          global $db;
-
-          $cfg['show_querys'] ?? 0;
-          $querys = $db->getQuerys();
-          valid_array($querys) ? $num_querys = count($querys) : $num_querys = 0;
-          $tdata['num_querys'] = $num_querys;
-          $cfg['show_querys'] ? $tdata['querys'] = $querys : null;
-
-          return $this->getTpl('footer', $tdata);
-         *
-         */
         return '';
     }
 }
