@@ -108,7 +108,13 @@ class RefresherController
             $data['term_logs'] = $this->view->renderTermLogs($term_logs);
         }
 
+        // Down Bar details
         $hosts_totals = $this->refresherService->getHostsStats();
+        $total_hosts = $hosts_totals['total_hosts'];
+        $total_showing = count($hosts_highlight) + count($hosts_other);
+        $data['misc']['totals'] = $lng['L_SHOWED'] . ": $total_showing | {$lng['L_TOTAL']}: $total_hosts";
+        $timenow = $user->getDateNow($ncfg->get('datetime_format_min'));
+        $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $timenow;
 
         $data['footer_dropdown'][] = [
             'value' => $hosts_totals['total_online'] ?? 0,

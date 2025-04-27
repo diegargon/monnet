@@ -18,7 +18,7 @@ class LogSystemService
      *
      * @var int
      */
-    private static int $recursionCount = 0;
+    private int $recursionCount = 0;
     private LogSystemModel $logSystemModel;
     private int $maxDbMsg = 254;
     private bool $console = false;
@@ -57,7 +57,7 @@ class LogSystemService
             }
             if ($this->ncfg->get('system_log_to_db')) {
                 if ($log_level < 7 || $this->ncfg->get('system_log_to_db_debug')) :
-                    if (mb_strlen($msg) > $this->max_db_msg) {
+                    if (mb_strlen($msg) > $this->maxDbMsg) {
                         $this->debug($this->lng['L_LOGMSG_TOO_LONG'] . '(System Log)', 1);
                         $msg_db = substr($msg, 0, $this->maxDbMsg);
                     } else {
@@ -150,6 +150,7 @@ class LogSystemService
         if (!is_numeric($level)) {
             $level = 5;
         }
+
         return $this->logSystemModel->getSystemDBLogs($level, $max);
     }
     /**

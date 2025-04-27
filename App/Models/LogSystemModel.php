@@ -43,7 +43,8 @@ class LogSystemModel
             ['*'],
             'level <= :level',
             ['level' => $level],
-            $max
+            $max,
+            ' ORDER BY date DESC '
         );
     }
 }

@@ -46,7 +46,6 @@ class HostsModel
         $query = "SELECT * FROM hosts WHERE 1=1";
         $params = [];
 
-
         if (!empty($filters['only_highlight'])) {
             $query .= " AND highlight = :highlight";
             $params['highlight'] = 1;
@@ -60,12 +59,12 @@ class HostsModel
         // Filter by network IDs if provided
 
         if (
-                isset($filters['network']) &&
-                is_array($filters['network']) &&
-                count($filters['network']) > 0
+                isset($filters['networks']) &&
+                is_array($filters['networks']) &&
+                count($filters['networks']) > 0
         ) {
             $placeholders = [];
-            foreach ($filters['network'] as $index => $networkId) {
+            foreach ($filters['networks'] as $index => $networkId) {
                 $key = "net_$index";
                 $placeholders[] = ":$key";
                 $params[$key] = (int)$networkId;

@@ -468,10 +468,10 @@ class User
      */
     public function getSelectedNetworks(): array
     {
-        $query = 'SELECT * FROM prefs WHERE `pref_name` LIKE \'network_select_%\' AND id='. $this->getId();
+        $query = "SELECT * FROM prefs WHERE `pref_name` LIKE 'network_select_%' AND uid=". $this->getId();
         $result = $this->db->query($query);
         $rows = $this->db->fetchAll($result);
 
-        return array_map('intval', array_column($rows, 'value'));
+        return array_map('intval', array_column($rows, 'pref_value'));
     }
 }

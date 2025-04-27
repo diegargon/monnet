@@ -385,6 +385,7 @@ class DBManager
      * @param string|null $condition WHERE clause (without "WHERE"), optional
      * @param array<string, mixed> $params Parameters for the WHERE clause
      * @param int|null $limit Maximum number of records to return
+     * @param string $extra 
      * @return array<int, array<string, mixed>> List of results as associative arrays
      * @throws \RuntimeException If query execution fails
      */
@@ -393,13 +394,18 @@ class DBManager
         array $columns = ['*'],
         ?string $condition = null,
         array $params = [],
-        ?int $limit = null
+        ?int $limit = null,
+        ?string $extra = null
     ): array {
         $columnList = implode(", ", $columns);
         $sql = "SELECT $columnList FROM $table";
 
         if ($condition) {
             $sql .= " WHERE $condition";
+        }
+
+        if ($extra !== null) {
+            $sql .= $extra;
         }
 
         if ($limit !== null && $limit > 0) {

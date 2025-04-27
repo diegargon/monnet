@@ -11,6 +11,7 @@ namespace App\Services;
 
 use App\Models\HostsModel;
 use App\Services\LogHostsService;
+use App\Services\LogSystemService;
 use App\Services\HostService;
 
 class RefresherService
@@ -60,15 +61,13 @@ class RefresherService
             $hosts_filter['not_highlight'] = 1;
         }
 
-/*
+        # Filter User Selected Networks
         $user_networks = $user->getSelectedNetworks();
-
         if (!empty($user_networks) && count($user_networks) > 0) {
             $hosts_filter['networks'] = $user_networks;
         }
-  */
 
-
+        # Filter User Selected Categories
         $valid_cats = $user->getEnabledHostCatId();
         if (count($valid_cats) > 0) {
            $hosts_filter['cats'] = $valid_cats;

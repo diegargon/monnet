@@ -61,6 +61,7 @@ class RefresherView
         usort($logs, fn($a, $b) => $b['date'] <=>$a['date']);
 
         # Limit term max lines
+
         $term_max_lines = $this->ncfg->get('term_max_lines');
         if (is_array($logs) && count($logs) > $term_max_lines) {
             $term_logs = array_slice($logs, 0, $term_max_lines);
@@ -69,7 +70,7 @@ class RefresherView
         }
 
         $logs_lines = [];
-        $logs_lines = $this->termLogsFormat($term_logs);
+        $logs_lines = $this->termLogsFormat($logs);
 
         return [
             'data' => $this->templates->getTpl('term', ['term_logs' => $logs_lines]),
@@ -89,28 +90,28 @@ class RefresherView
             $this->hostService = new HostService($this->ctx);
         }
 
-        foreach ($host_logs as &$log) :
+        foreach ($host_logs as &$log) {
             $host = $this->hostService->getHostById($log['host_id']);
             $log['type_mark'] = '[H]';
 
-            if (!empty($host['display_name'])) :
+            if (!empty($host['display_name'])) {
                 $log['display_name'] = '[' . $host['display_name'] . ']';
-            elseif (!empty($host['ip'])) :
+            } elseif (!empty($host['ip'])) {
                 $log['display_name'] = '[' . $host['ip'] . ']';
-            else :
+            } else {
                 $log['display_name'] = '[' . $log['host_id'] . ']';
-            endif;
-        endforeach;
+            }
+        }
 
         return $host_logs;
     }
 
     public function termSystemLogsFormat(array $system_logs): array
     {
-        foreach ($system_logs as &$system_log) :
+        foreach ($system_logs as &$system_log) {
             $system_log['type_mark'] = '[S]';
             $system_log['display_name'] = '';
-        endforeach;
+        }
 
         return $system_logs;
     }
