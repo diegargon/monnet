@@ -543,7 +543,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
     // 0.62
     $update = 0.62;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.61) {
         try {
             $db_version = $update;
             # getTotalsStats
@@ -553,13 +553,15 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 CREATE TABLE `sessions` (
                   `id` INT(11) NOT NULL AUTO_INCREMENT,
                   `user_id` INT(11) NOT NULL,
-                  `sid` CHAR(255) NOT NULL,
+                  `sid` VARCHAR(64) NOT NULL,
                   `ip_address` VARCHAR(45) DEFAULT NULL,
-                  `created_at` DEFAULT CURRENT_TIMESTAMP,
-                  `expired_at` DATATIME,
-                  `last_active_at` TIMESTAMP NULL DEFAULT NULL,
+                  `user_agent` VARCHAR(255) DEFAULT NULL,
+                  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                  `expired_at` DATETIME DEFAULT NULL,
+                  `last_active_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
                   PRIMARY KEY (`id`),
-                  KEY `user_id` (`user_id`),
+                  UNIQUE KEY `sid` (`sid`),
+                  KEY `user_id` (`user_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
             ");
             $ncfg->set('db_monnet_version', $update, 1);
