@@ -10,11 +10,11 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.62;
-$cfg['monnet_revision'] = 2;
+$cfg['monnet_revision'] = 3;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.170;
-$cfg['agent_latest_version'] = 0.177;
+$cfg['agent_latest_version'] = 0.178;
 $cfg['app_name'] = 'monnet';
 
 /* Hardware Manufacture */
@@ -252,7 +252,8 @@ $cfg['task_trigger'] = [
     2 => ['name' => 'L_MANUAL', 'id' => 2],
     3 => ['name' => 'L_EVENT_RESPONSE', 'id' => 3],
     4 => ['name' => 'L_SCHEDULER', 'id' => 4],
-    5 => ['name' => 'L_OTHER_TASK', 'id' => 5],
+    5 => ['name' => 'L_INTERVAL', 'id' => 5],
+    6 => ['name' => 'L_OTHER_TASK', 'id' => 6],
 ];
 
 /* TODO: Retrieve from monnet-gateway */

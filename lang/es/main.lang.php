@@ -131,6 +131,7 @@ $lng = [
     'L_IOT' => 'Iot',
     'L_INTERNAL' => 'Internal',
     'L_INVALID' => 'invalida',
+    'L_INTERVAL' => 'Intervalo',
     //L
     'L_LAST_UPDATE' => 'Actualizado',
     'L_LOGIN' => 'Identificarse',

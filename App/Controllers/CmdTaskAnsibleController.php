@@ -188,7 +188,11 @@ class CmdTaskAnsibleController
                 $disable_task = $this->filter->varBool($command_values['disable_task']);
                 $task_name = $this->filter->varString($command_values['task_name']);
 
-                if ($task_trigger === 2) {
+                if(empty($disable_task)) {
+                    $disable_task = 0;
+                }
+                
+                if ($task_trigger === 3) {
                     $conditional = $this->filter->varInt($command_values['conditional']);
                     if (empty($conditional)) {
                         $conditional_error = 'Wrong event';
@@ -222,9 +226,11 @@ class CmdTaskAnsibleController
                 if (isset($crontime)) {
                     $task_data['crontime'] = $crontime;
                 }
+                /*
                 if (!isset($ansible_groups)) {
                     $task_data['groups'] =  $ansible_groups;
                 }
+                */
                 $response = $this->ansibleService->createTask($task_data);
 
                 if ($response['status'] === 'success') {
