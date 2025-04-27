@@ -37,9 +37,11 @@ class DBManager
         switch ($dbType) {
             case 'mysql':
             case 'mysqli':
-                $this->dsn = "mysql:host=$host;dbname=$dbName;charset=utf8";
+                $port = $port ?? '3306';
+                $this->dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=utf8";
                 break;
             case 'pgsql':
+                $port = $port ?? '5432';
                 $this->dsn = "pgsql:host=$host;port=$port;dbname=$dbName";
                 break;
             case 'sqlite':
@@ -92,22 +94,23 @@ class DBManager
      *
      * @param string $sql Consulta SQL a ejecutar
      * @param array<string, mixed> $params Parámetros de consulta
-     * @return bool True on success, false on failure.
      * @return \PDOStatement
      * @throws \RuntimeException If the statement preparation fails.
      */
     public function query(string $sql, array $params = []): \PDOStatement
     {
-        $stmt = $this->connection->prepare($sql);
-        if (!$stmt) {
-            throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
-        }
+        try {
+            $stmt = $this->connection->prepare($sql);
+            if (!$stmt) {
+                throw new \RuntimeException("Failed to prepare SQL statement: " . $sql);
+            }
 
-        if (!$stmt->execute($params)) {
-            throw new \RuntimeException("Failed to execute SQL statement");
-        }
+            $stmt->execute($params);
 
-        return $stmt;
+            return $stmt;
+        } catch (\PDOException $e) {
+            throw new \RuntimeException("Query failed: " . $e->getMessage() . " [SQL: $sql]", 0, $e);
+        }
     }
 
     /**
@@ -183,10 +186,14 @@ class DBManager
      * Obtener el último ID insertado
      *
      * @return int El último ID insertado
+     * @throws Exception
      */
     public function lastInsertId(): int
     {
-        return (int) $this->connection->lastInsertId();
+        if (!$this->connection) {
+            throw new \RuntimeException("No active database connection");
+        }
+        return (int)$this->connection->lastInsertId();
     }
 
     /**
@@ -240,10 +247,10 @@ class DBManager
      *
      * @param string $table Table name
      * @param string $condition WHERE clause
-     * @param array<string, mixed> $params Parameters for the WHERE clause
+     * @param array<string, mixed> $params Optional parameters for the WHERE clause
      * @return bool True on success, false on failure
      */
-    public function delete(string $table, string $condition, array $params): bool
+    public function delete(string $table, string $condition, array $params = []): bool
     {
         $sql = "DELETE FROM $table WHERE $condition";
         $stmt = $this->connection->prepare($sql);
@@ -282,7 +289,6 @@ class DBManager
 
         $this->bindParams($stmt, $data);
         $result = $stmt->execute();
-        $stmt->closeCursor();
 
         return $result;
     }
@@ -296,7 +302,9 @@ class DBManager
      * @param string $condition  Condición WHERE
      * @param array  $params  Parámetros de la condición WHERE
      * @return bool  `true` si se actualizó correctamente, `false` si no
-     */
+     * @throws \InvalidArgumentException JSON data invalid or empty
+     * @throws \RuntimeException General errores
+    */
     public function updateJson(
         string $table,
         string $json_column,
@@ -305,7 +313,7 @@ class DBManager
         array $params
     ): bool {
         if (empty($json_data)) {
-            throw new \InvalidArgumentException('Los datos JSON no pueden estar vacíos');
+            throw new \InvalidArgumentException('JSON data cannot be empty');
         }
 
         $json_updates = [];
@@ -324,9 +332,29 @@ class DBManager
         }
 
         $sql = "UPDATE $table SET " . implode(', ', $json_updates) . " WHERE $condition";
-        $stmt = $this->connection->prepare($sql);
 
-        return $stmt->execute($params);
+        $this->connection->beginTransaction();
+        try {
+            $stmt = $this->connection->prepare($sql);
+
+            if (!$stmt) {
+                throw new \RuntimeException("Error al preparar la consulta SQL");
+            }
+
+            $this->bindParams($stmt, $params);
+            $success = $stmt->execute();
+
+            if (!$success) {
+                throw new \RuntimeException("Error al ejecutar la actualización JSON");
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            $this->connection->rollBack();
+            throw new \RuntimeException("Error en updateJson: " . $e->getMessage(), 0, $e);
+        }
+
+        return false;
     }
 
     /**
@@ -385,7 +413,7 @@ class DBManager
      * @param string|null $condition WHERE clause (without "WHERE"), optional
      * @param array<string, mixed> $params Parameters for the WHERE clause
      * @param int|null $limit Maximum number of records to return
-     * @param string $extra 
+     * @param string $extra
      * @return array<int, array<string, mixed>> List of results as associative arrays
      * @throws \RuntimeException If query execution fails
      */
@@ -486,14 +514,55 @@ class DBManager
     }
 
     /**
+     *
+     * @return void
+     * @throws \RuntimeException
+     */
+    public function beginTransaction(): void
+    {
+        if (!$this->connection->beginTransaction()) {
+            throw new \RuntimeException("Failed to start transaction");
+        }
+    }
+
+    /**
+     *
+     * @return void
+     * @throws \RuntimeException
+     */
+    public function commit(): void
+    {
+        if (!$this->connection->commit()) {
+            throw new \RuntimeException("Failed to commit transaction");
+        }
+    }
+
+    /**
+     *
+     * @return void
+     * @throws \RuntimeException
+     */
+    public function rollBack(): void
+    {
+        if (!$this->connection->rollBack()) {
+            throw new \RuntimeException("Failed to rollback transaction");
+        }
+    }
+
+
+    /**
      * Binds parameters dynamically based on their type.
      *
      * @param PDOStatement $stmt
      * @param array<string, mixed> $params
-     * @return void
+     * @throws \RuntimeException if not valid stmt
      */
     private function bindParams(PDOStatement $stmt, array $params): void
     {
+
+        if (!$stmt) {
+            throw new \RuntimeException("Invalid PDOStatement");
+        }
         foreach ($params as $key => $value) {
             if (is_int($value)) {
                 $stmt->bindValue($key, $value, PDO::PARAM_INT);
@@ -501,9 +570,9 @@ class DBManager
                 $stmt->bindValue($key, (int) $value, PDO::PARAM_INT);
             } elseif (is_null($value)) {
                 $stmt->bindValue($key, null, PDO::PARAM_NULL);
-            } else {
-                $stmt->bindValue($key, $value, PDO::PARAM_STR);
             }
+
+            $stmt->bindValue($key, $value, PDO::PARAM_STR);
         }
     }
 }

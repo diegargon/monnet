@@ -224,13 +224,19 @@ class CmdHostModel
      */
     public function updateMiscByID(int $hid, array $misc_data): bool
     {
-        return $this->db->updateJson(
+        $success = $this->db->updateJson(
             'hosts',
             'misc',
             $misc_data,
             'id = :id',
             ['id' => $hid]
         );
+
+        if ($success) {
+            $this->db->commit();
+        }
+
+        return $success;
     }
 
     /**
