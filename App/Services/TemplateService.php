@@ -31,7 +31,6 @@ class TemplateService
     public function getTpl(string $templateName, array $tdata = []): string
     {
         $lng = $this->ctx->get('lng');
-        $cfg = $this->ctx->get('cfg');
         $ncfg = $this->ctx->get('Config');
 
         $templateFile = $this->templatesPath . $templateName . '.tpl.php';
