@@ -29,6 +29,10 @@ class RefresherController
         $this->refresherService  = new RefresherService($ctx);
     }
 
+    /**
+     *
+     * @return void
+     */
     public function refreshPage(): void
     {
         $user = $this->ctx->get('User');
@@ -56,6 +60,10 @@ class RefresherController
         }
 
         $hosts = $this->refresherService->getHostsView($view_other_hosts, $view_highlight);
+        $hosts = $this->view->formatHosts($hosts);
+        // Ordenar por nombre para la vista
+        order($hosts, 'display_name');
+
         $hosts_highlight = [];
         $hosts_other = [];
 

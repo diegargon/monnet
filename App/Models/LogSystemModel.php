@@ -30,21 +30,31 @@ class LogSystemModel
     }
 
     /**
-     * Get system logs filtered by level with a maximum number of results
+     * Get system logs
      *
-     * @param int $level Maximum log level to retrieve
-     * @param int $max Maximum number of logs to return
+     * @param array<string, mixed> $opts
      * @return array<int, array<string, mixed>> Array of log entries
      */
-    public function getSystemDBLogs(int $level, int $max): array
+    public function getSystemDBLogs(array $opts): array
     {
-        return $this->db->select(
-            'system_logs',
-            ['*'],
-            'level <= :level',
-            ['level' => $level],
-            $max,
-            ' ORDER BY date DESC '
-        );
+        $conditions = [];
+        $params = [];
+
+        $query = 'SELECT * FROM system_logs';
+
+        if (!empty($opts['level'])) {
+            $conditions[] = 'level <= :level';
+            $params[':level'] = (int) $opts['level'];
+        }
+
+        $query .= ' WHERE ' . implode(' AND ', $conditions);
+
+        $query .= ' ORDER BY date DESC';
+
+        if (!empty($opts['limit'])) {
+            $query .= ' LIMIT ' . (int) $opts['limit'];
+        }
+
+        return $this->db->qfetchAll($query, $params);
     }
 }

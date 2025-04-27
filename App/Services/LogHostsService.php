@@ -28,7 +28,12 @@ class LogHostsService
         $this->dateTimeService = new DateTimeService();
     }
 
-    public function getLogsHosts(array $opts)
+    /**
+     *
+     * @param array<string, mixed> $opts
+     * @return array<string, mixed>
+     */
+    public function getLogsHosts(array $opts): array
     {
         return $this->logHostsModel->getLogsHosts($opts);
     }

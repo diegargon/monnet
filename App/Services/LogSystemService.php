@@ -35,6 +35,24 @@ class LogSystemService
         $this->logSystemModel = new LogSystemModel($db);
     }
 
+    /**
+     *
+     * @param array<string, mixed> $opts
+     *
+     * @return array<int, array<string, string>>
+     */
+    public function get(array $opts): array
+    {
+         return $this->logSystemModel->getSystemDBLogs($opts);
+    }
+
+    /**
+     *
+     * @param int $log_level
+     * @param mixed $msg
+     * @param int|null $self_caller
+     * @return void
+     */
     public function logged(int $log_level, mixed $msg, ?int $self_caller = null): void
     {
         if ($self_caller === null) {
@@ -138,21 +156,6 @@ class LogSystemService
         $this->console = $value;
     }
 
-    /**
-     *
-     * @param int $max
-     *
-     * @return array<int, array<string, string>>
-     */
-    public function get(int $max = 25): array
-    {
-        $level = $this->ncfg->get('term_system_log_level');
-        if (!is_numeric($level)) {
-            $level = 5;
-        }
-
-        return $this->logSystemModel->getSystemDBLogs($level, $max);
-    }
     /**
      *
      * @param mixed $msg
