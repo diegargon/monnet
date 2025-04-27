@@ -162,7 +162,7 @@ class LogSystemService
      */
     public function debug(mixed $msg, ?int $self_caller = null): void
     {
-        $this->logged(LogLevel::DEBUG, $msg, $self_caller);
+        $this->logged(\LogLevel::DEBUG, $msg, $self_caller);
     }
 
     /**
@@ -174,7 +174,7 @@ class LogSystemService
      */
     public function info(mixed $msg, ?int $self_caller = null): void
     {
-        $this->logged(LogLevel::INFO, $msg, $self_caller);
+        $this->logged(\LogLevel::INFO, $msg, $self_caller);
     }
 
     /**
@@ -186,7 +186,7 @@ class LogSystemService
      */
     public function notice(mixed $msg, ?int $self_caller = null): void
     {
-        $this->logged(LogLevel::NOTICE, $msg, $self_caller);
+        $this->logged(\LogLevel::NOTICE, $msg, $self_caller);
     }
 
     /**
@@ -197,7 +197,7 @@ class LogSystemService
      */
     public function warning(mixed $msg, ?int $self_caller = null): void
     {
-        $this->logged(LogLevel::WARNING, $msg, $self_caller);
+        $this->logged(\LogLevel::WARNING, $msg, $self_caller);
     }
 
     /**
@@ -209,7 +209,7 @@ class LogSystemService
      */
     public function error(mixed $msg, ?int $self_caller = null): void
     {
-        $this->logged(LogLevel::ERROR, $msg, $self_caller);
+        $this->logged(\LogLevel::ERROR, $msg, $self_caller);
     }
 
     /**
@@ -221,7 +221,7 @@ class LogSystemService
      */
     public function alert(mixed $msg, ?int $self_caller = null): void
     {
-        $this->logged(LogLevel::ALERT, $msg, $self_caller);
+        $this->logged(\LogLevel::ALERT, $msg, $self_caller);
     }
 
     /**
@@ -232,7 +232,7 @@ class LogSystemService
      */
     public function critical(mixed $msg, ?int $self_caller = null): void
     {
-        $this->logged(LogLevel::CRITICAL, $msg, $self_caller);
+        $this->logged(\LogLevel::CRITICAL, $msg, $self_caller);
     }
 
     /**
@@ -244,6 +244,6 @@ class LogSystemService
      */
     public function emergency(mixed $msg, ?int $self_caller = null): void
     {
-        $this->logged(LogLevel::EMERGENCY, $msg, $self_caller);
+        $this->logged(\LogLevel::EMERGENCY, $msg, $self_caller);
     }
 }

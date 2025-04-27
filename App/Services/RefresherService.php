@@ -69,19 +69,19 @@ class RefresherService
 
         # Filter User Selected Categories
         $valid_cats = $user->getEnabledHostCatId();
+
         if (count($valid_cats) > 0) {
            $hosts_filter['cats'] = $valid_cats;
         }
 
         $hosts_view = $this->hostService->getFiltered($hosts_filter);
 
-
         if (!$hosts_view) {
             return [];
         }
 
-        $hosts_view = $this->filter_hosts($hosts_view, $networks);
-        $hosts_view = $this->format_hosts($hosts_view, $user, $ncfg);
+        $hosts_view = $this->filterHosts($hosts_view, $networks);
+        $hosts_view = $this->formatHosts($hosts_view, $user, $ncfg);
 
         order($hosts_view, 'display_name');
 
@@ -134,7 +134,7 @@ class RefresherService
      * @param \Networks $networks
      * @return array<string, mixed>
      */
-    private function filter_hosts(array $hosts_view,  $networks): array
+    private function filterHosts(array $hosts_view,  $networks): array
     {
         foreach ($hosts_view as $key => $host) {
             if (!empty($host['network'])) {
@@ -156,7 +156,7 @@ class RefresherService
      * @param object $ncfg
      * @return array<string, mixed>
      */
-    private function format_hosts(array $hosts_view, $user, $ncfg): array
+    private function formatHosts(array $hosts_view, $user, $ncfg): array
     {
         $theme = $user->getTheme();
         $lng = $this->ctx->get('lng');
@@ -181,9 +181,9 @@ class RefresherService
 
 
             // Passing Reference
-            $this->add_misc_data($hosts_view[$key], $vhost, $ncfg);
-            $this->add_glow_tag($hosts_view[$key], $vhost, $date_now, $ncfg);
-            $this->add_alerts_and_warnings($hosts_view[$key], $vhost, $theme);
+            $this->addMiscData($hosts_view[$key], $vhost, $ncfg);
+            $this->addGlowTag($hosts_view[$key], $vhost, $date_now, $ncfg);
+            $this->addEventMarks($hosts_view[$key], $vhost, $theme);
         }
 
         // Ordenar por nombre para la vista
@@ -199,7 +199,7 @@ class RefresherService
      * @param array<string, mixed> $vhost
      * @param object $ncfg
      */
-    private function add_misc_data(array &$host_view, array $vhost, $ncfg): void
+    private function addMiscData(array &$host_view, array $vhost, $ncfg): void
     {
         if (!empty($vhost['misc']['manufacture'])) {
             $manufacture = get_manufacture_data($ncfg, $vhost['misc']['manufacture']);
@@ -234,7 +234,7 @@ class RefresherService
      * @param \DateTime $date_now
      * @param object $ncfg
      */
-    private function add_glow_tag(array &$host_view, array $vhost, \DateTime $date_now, $ncfg): void
+    private function addGlowTag(array &$host_view, array $vhost, \DateTime $date_now, $ncfg): void
     {
         $host_view['glow_tag'] = '';
         $change_time = new \DateTime($vhost['glow'], new \DateTimeZone('UTC'));
@@ -253,7 +253,7 @@ class RefresherService
      * @param array<string, mixed> $vhost
      * @param string $theme
      */
-    private function add_alerts_and_warnings(array &$host_view, array $vhost, string $theme): void
+    private function addEventMarks(array &$host_view, array $vhost, string $theme): void
     {
         if (empty($vhost['misc']['disable_alarms'])) {
             if ($vhost['alert']) {
