@@ -64,6 +64,11 @@ class CmdHostModel
         return $this->db->update('hosts', $data, 'id = :id', ['id' => $hid]);
     }
 
+    public function update(array $field, string $condition, $params): bool
+    {
+        return $this->db->update('hosts', $field, $condition, $params);
+    }
+
     /**
      * Crea un token para un host.
      *

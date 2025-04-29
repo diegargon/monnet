@@ -441,4 +441,13 @@ class HostService
     {
         return $this->cmdHostModel->updatePort($id, $port_update);
     }
+
+    public function switchHostsNetwork(int $n_origin_id, int $n_new_id): bool
+    {
+        $field['network'] = $n_new_id;
+        $condition = 'network = :origin_network';
+        $params['origin_network'] = $n_origin_id;
+
+        return $this->cmdHostModel->update($field, $condition, $params);
+    }
 }

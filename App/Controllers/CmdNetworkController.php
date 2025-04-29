@@ -10,6 +10,7 @@
 
 namespace App\Controllers;
 
+use App\Services\HostService;
 use App\Services\Filter;
 use App\Services\TemplateService;
 use App\Helpers\Response;
@@ -19,6 +20,7 @@ class CmdNetworkController
     private Filter $filter;
     private \AppContext $ctx;
     private TemplateService $templateService;
+    private HostService $hostService;
 
     public function __construct(\AppContext $ctx)
     {
@@ -49,6 +51,11 @@ class CmdNetworkController
         if (!empty($action) && is_numeric($target_id)) :
             if ($action === 'remove') {
                 $networks->removeNetwork($target_id);
+                // Update existing host to default 1
+                // TODO Uncomment and test
+                #if (!isset($this->hostService)) {
+                #    $this->hostService->switchHostsNetwork($target_id, 1);
+                #}
                 //TODO: remove host on that network?
             } elseif ($action === 'update' || $action === 'add') {
                 $decodedJson = json_decode((string) $value_command, true);
@@ -128,12 +135,14 @@ class CmdNetworkController
     public function submitPoolReserver(array $command_values): array
     {
         $hosts = $this->ctx->get('Hosts');
+        $user = $this->ctx->get('User');
+        $username = $user->getUsername();
 
         $target_id = $this->filter->varInt($command_values['id']);
         $value_command = $this->filter->varIP($command_values['value']);
 
         $reserved_host = [
-            'title' => 'UserReserved',
+            'title' => $username. 'Reserved',
             'ip' => $value_command,
             'network' => $target_id
         ];

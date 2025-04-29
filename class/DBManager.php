@@ -211,11 +211,11 @@ class DBManager
      *
      * @param string $table Table name
      * @param array<string, mixed> $data Key-value pairs of columns and their new values
-     * @param string $condition WHERE clause ex 'id = :id'
+     * @param ?string $condition WHERE clause ex 'id = :id'
      * @param array<string, mixed> $params Parameters for the condition clause
      * @return bool True on success, false on failure
      */
-    public function update(string $table, array $data, string $condition, array $params = []): bool
+    public function update(string $table, array $data, ?string $condition, array $params = []): bool
     {
         // Convert bool to int to avoid fail (why need?)
         foreach ($data as $key => $value) {
@@ -227,7 +227,12 @@ class DBManager
         $columns = array_keys($data);
         $setClause = implode(", ", array_map(fn($col) => "$col = :$col", $columns));
 
-        $sql = "UPDATE $table SET $setClause WHERE $condition";
+        $sql = "UPDATE $table SET $setClause";
+
+        if ($condition) {
+            $sql .= " WHERE $condition";
+        }
+        
         $stmt = $this->connection->prepare($sql);
 
         if (!$stmt) {
