@@ -1013,7 +1013,7 @@ $h_misc = $tdata['host_details']['misc'];
                 <label for="mem_warn_threshold"><?= $lng['L_WARNS'] ?></label>
                 <input
                     id="mem_warn_threshold"
-                    name="mem_alert_threshold"
+                    name="mem_warn_threshold"
                     size="2"
                     max-size="2"
                     type="number"
@@ -1031,7 +1031,7 @@ $h_misc = $tdata['host_details']['misc'];
                 <label for="disks_warn_threshold"><?= $lng['L_WARNS'] ?></label>
                 <input
                     id="disks_warn_threshold"
-                    name="disks_alert_threshold"
+                    name="disks_warn_threshold"
                     min="0"
                     max="100"
                     size="2"
