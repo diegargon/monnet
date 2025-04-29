@@ -40,6 +40,18 @@ class CmdAnsibleModel
 
     /**
      *
+     * @param int $tid
+     * @return array<int, array<string|int>
+     */
+    public function getTaskById(int $tid): array
+    {
+        $query = 'SELECT * FROM tasks WHERE id = :tid';
+        $params = [ 'tid' => $tid ];
+
+        return $this->db->qfetchAll($query, $params);
+    }
+    /**
+     *
      * @param int $hid
      * @return array<int, array<string|int>
      */
@@ -61,6 +73,16 @@ class CmdAnsibleModel
         return $this->db->insert('tasks', $values);
     }
 
+    /**
+     *
+     * @param int $tid
+     * @param array<string, int|string> $values
+     * @return bool
+     */
+    public function updateTask(int $tid, array $values): bool
+    {
+        return $this->db->update('tasks', $values, 'id = :tid', ['tid' => $tid]);
+    }
    /**
      *
      * @param int $tid

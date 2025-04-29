@@ -362,8 +362,8 @@ class CommandRouter
                 $response = $taskAnsibleController->handleShutdownReboot($command, $command_values);
                 break;
             case 'create_host_task':
-            case 'delete_task':
-            case 'update_task':
+            case 'delete_host_task':
+            case 'update_host_task':
             case 'force_exec_task':
                 $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
                 $response = $taskAnsibleController->mgmtTask($command, $command_values);

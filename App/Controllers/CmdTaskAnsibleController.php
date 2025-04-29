@@ -159,8 +159,9 @@ class CmdTaskAnsibleController
             case 'create_host_task':
                 $hid = $this->filter->varInt($command_values['hid']);
                 break;
-            case 'delete_task':
-                $hid = $this->filter->varInt($command_values['id']);
+            case 'update_host_task':
+            case 'delete_host_task':
+                $tid = $this->filter->varInt($command_values['id']);
                 break;
             default:
                 $hid = 0;
@@ -170,67 +171,19 @@ class CmdTaskAnsibleController
             'command' => $command,
         ];
 
-        if ($command === 'delete_task') {
-            $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
-            if ($cmdAnsibleModel->deleteTask($hid)) {
-                return Response::stdReturn(true, 'Delete Task Success', false, $response_extra);
-            } else {
-                return Response::stdReturn(false, 'Error deleting task', false, $response_extra);
-            }
-        }
-
-        switch ($command) :
+         switch ($command) :
+            case 'delete_host_task':
+                $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
+                if ($cmdAnsibleModel->deleteTask($tid)) {
+                    return Response::stdReturn(true, 'Delete Task Success', false, $response_extra);
+                } else {
+                    return Response::stdReturn(false, 'Error deleting task', false, $response_extra);
+                }
             case 'create_host_task':
-                $playbook_id = $this->filter->varInt($command_values['playbook']);
-                $next_task_id = $this->filter->varInt($command_values['next_task']);
-                $task_trigger = $this->filter->varInt($command_values['task_trigger']);
-                $ansible_groups = $this->filter->varInt($command_values['groups']);
-                $disable_task = $this->filter->varBool($command_values['disable_task']);
-                $task_name = $this->filter->varString($command_values['task_name']);
-
-                if(empty($disable_task)) {
-                    $disable_task = 0;
+                $task_data = $this->checkTaskFields($hid, $command, $command_values);
+                if (isset($task_data['status']) && $task_data['status'] == 'error') {
+                    return Response::stdReturn(false, $task_data['error_msg'], false, $response_extra);
                 }
-                
-                if ($task_trigger === 3) {
-                    $conditional = $this->filter->varInt($command_values['conditional']);
-                    if (empty($conditional)) {
-                        $conditional_error = 'Wrong event';
-                    } else {
-                        $event_id = $conditional;
-                    }
-                } elseif ($task_trigger === 4) {
-                    if (!$this->filter->varCron($command_values['conditional'])) {
-                        $conditional_error = 'Wrong Cron, syntax must be a cron expression * * * * *';
-                    } else {
-                        $crontime = $command_values['conditional'];
-                    }
-                }
-
-                if (!empty($conditional_error)) {
-                    return Response::stdReturn(false, $conditional_error, false, $response_extra);
-                }
-
-                $task_data = [
-                    'hid' => $hid,
-                    'pb_id' => $playbook_id,
-                    'trigger_type' => $task_trigger,
-                    'task_name' => $task_name,
-                    'next_task' => $next_task_id,
-                    'disable' => $disable_task,
-                ];
-
-                if (isset($event_id)) {
-                    $task_data['event_id'] =  $event_id;
-                }
-                if (isset($crontime)) {
-                    $task_data['crontime'] = $crontime;
-                }
-                /*
-                if (!isset($ansible_groups)) {
-                    $task_data['groups'] =  $ansible_groups;
-                }
-                */
                 $response = $this->ansibleService->createTask($task_data);
 
                 if ($response['status'] === 'success') {
@@ -238,8 +191,18 @@ class CmdTaskAnsibleController
                 } else {
                     return Response::stdReturn(false, $response['error_msg'], false, $response_extra);
                 }
-            case 'update_task':
-                return Response::stdReturn(false, 'Unknown command', false, $response_extra);
+            case 'update_host_task':
+                $task_data = $this->checkTaskFields($tid, $command, $command_values);
+                if (isset($task_data['status']) && $task_data['status'] == 'error') {
+                    return Response::stdReturn(false, $task_data['error_msg'], false, $response_extra);
+                }
+                $response = $this->ansibleService->updateTask($tid, $task_data);
+
+                if ($response['status'] === 'success') {
+                    return Response::stdReturn(true, $response['response_msg'], false, $response_extra);
+                } else {
+                    return Response::stdReturn(false, $response['error_msg'], false, $response_extra);
+                }
             case 'force_exec_task':
                 return Response::stdReturn(false, 'Unknown command', false, $response_extra);
             default:
@@ -293,5 +256,80 @@ class CmdTaskAnsibleController
             return Response::stdReturn(true, 'Deleted ansible var', false, ['commnand' => $command]);
         }
         return Response::stdReturn(false, 'Error Deleting ansible var', false, ['command' => $command]);
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param string $command
+     * @param array<string, int|string> $command_values
+     * @return array
+     */
+    private function checkTaskFields(int $id, string $command, array $command_values)
+    {
+        $playbook_id = $this->filter->varInt($command_values['playbook']);
+        $next_task_id = $this->filter->varInt($command_values['next_task']);
+        $task_trigger = $this->filter->varInt($command_values['task_trigger']);
+        $ansible_groups = $this->filter->varInt($command_values['groups']);
+        $disable_task = $this->filter->varBool($command_values['disable_task']);
+        $task_name = $this->filter->varString($command_values['task_name']);
+
+        empty($disable_task) ? $disable_task = 0 : null;
+
+        if ($task_trigger === 3) {
+            $conditional = $this->filter->varInt($command_values['conditional']);
+            if (empty($conditional)) {
+                $conditional_error = 'Wrong event';
+            } else {
+                $event_id = $conditional;
+            }
+        } elseif ($task_trigger === 4) {
+            if (!$this->filter->varCron($command_values['conditional'])) {
+                $conditional_error = 'Wrong Cron, syntax must be a cron expression * * * * *';
+            } else {
+                $crontime = $command_values['conditional'];
+            }
+        } elseif ($task_trigger === 5) {
+            $interval_seconds = $this->filter->varInterval($command_values['conditional']);
+            if (!$interval_seconds) {
+                $conditional_error = 'Wrong interval 5m 5h 1d 1w 1mo 1y';
+            } else {
+                $task_interval = $command_values['conditional'];
+            }
+        }
+
+        if (!empty($conditional_error)) {
+            return ['status' => 'error', 'error_msg' => $conditional_error];
+        }
+
+        $task_data = [
+            'pb_id' => $playbook_id,
+            'trigger_type' => $task_trigger,
+            'task_name' => $task_name,
+            'next_task' => $next_task_id,
+            'disable' => $disable_task,
+        ];
+        if ($command == 'create_host_task') {
+            $task_data['hid'] = $id;
+        }
+        if (isset($event_id)) {
+            $task_data['event_id'] =  $event_id;
+        }
+        if (isset($crontime)) {
+            $task_data['crontime'] = $crontime;
+        }
+        if (!empty($interval_seconds) && is_numeric($interval_seconds)) {
+            $task_data['interval_seconds'] = $interval_seconds;
+        }
+        if (!empty($task_interval)) {
+            $task_data['task_interval'] = $task_interval;
+        }
+         /*
+        if (!isset($ansible_groups)) {
+            $task_data['groups'] =  $ansible_groups;
+        }
+        */
+
+        return $task_data;
     }
 }

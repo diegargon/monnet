@@ -309,11 +309,11 @@ $(document).ready(function () {
             case 'create_host_task':
                 requestHostDetails('create_host_task', requestData);
                 break;
-            case 'delete_task':
-                requestHostDetails('delete_task', { id: taskId });
+            case 'delete_host_task':
+                requestHostDetails('delete_host_task', { id: taskId });
                 break;
-            case 'update_task':
-                requestHostDetails('update_task', requestData);
+            case 'update_host_task':
+                requestHostDetails('update_host_task', requestData);
                 break;
             case 'force_exec_task':
                 requestHostDetails('force_exec_task', { id: taskId });
@@ -356,6 +356,13 @@ function initTasks() {
             inputText.name = `conditional[${row.data('id')}]`;
             inputText.placeholder = "Cron time * * * * *"; 
             conditionalField.appendChild(inputText);
+        } else if (selectedValue === 5) {          
+            const inputText = document.createElement("input");
+            conditionalField.innerHTML = "";
+            inputText.type = "text";
+            inputText.name = `conditional[${row.data('id')}]`;
+            inputText.placeholder = "Interval 5m/1h/1w/1mo/1y"; 
+            conditionalField.appendChild(inputText);            
         } else {
             conditionalField.innerHTML = "";
         }
@@ -696,8 +703,8 @@ function requestHostDetails(command, command_values = []) {
                 }
                 /* Tasks */
                 if (
-                    ['delete_task', 'create_host_task', 
-                     'update_task', 'force_exec_task']
+                    ['delete_host_task', 'create_host_task', 
+                     'update__host_task', 'force_exec_task']
                     .includes(jsonData.command)
                 ) {
                     if(jsonData.response_msg) {

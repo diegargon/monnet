@@ -162,14 +162,38 @@ class AnsibleService
         return $status;
     }
 
+    /**
+     *
+     * @param array<string, int|string> $task_data
+     * @return array<string, int|string>
+     */
     public function createTask(array $task_data): array
     {
-
         if ($this->cmdAnsibleModel->createTask($task_data)) {
             return ['status' => 'success', 'response_msg' => 'success'];
         }
 
         return ['status' => 'error', 'error_msg' => 'Error creating task'];
+    }
+
+    /**
+     * @param int $task_id
+     * @param array<string, int|string> $task_data
+     * @return array<string, int|string>
+     */
+    public function updateTask(int $task_id, array $task_data): array
+    {
+        $task = $this->cmdAnsibleModel->getTaskById($task_id);
+
+        if (!$task) {
+            return ['status' => 'error', 'response_msg' => 'task id not exists: '. $task_id ];
+        }
+
+        if ($this->cmdAnsibleModel->updateTask($task_id, $task_data)) {
+            return ['status' => 'success', 'response_msg' => 'success'];
+        }
+
+        return ['status' => 'error', 'error_msg' => 'Error updating task'];
     }
     /**
      *

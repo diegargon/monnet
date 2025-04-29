@@ -1148,4 +1148,56 @@ class Filter
 
         return preg_match($pattern, $value) === 1;
     }
+
+    /**
+     *
+     * @param mixed $value
+     * @return int|null
+     */
+    public function varInterval(mixed $value): ?int
+    {
+        if (!is_string($value)) {
+            return null;
+        }
+
+        $pattern = '/^(\d+)(m|h|d|w|mo|y)$/';
+        if (!preg_match($pattern, trim($value), $matches)) {
+            return null;
+        }
+
+        $amount = (int)$matches[1];
+        $unit = $matches[2];
+
+        switch ($unit) {
+            case 'm':
+                $seconds = $amount * 60;
+                break;
+            case 'h':
+                $seconds = $amount * 3600;
+                break;
+            case 'd':
+                $seconds = $amount * 86400;
+                break;
+            case 'w':
+                $seconds = $amount * 604800;
+                break;
+            case 'mo':
+                $seconds = $amount * 2592000;
+                break;
+            case 'y':
+                $seconds = $amount * 31536000;
+                break;
+            default:
+                $seconds = 0;
+        }
+
+        /*
+        return [
+            'amount' => $amount,
+            'unit' => $unit,
+            'seconds' => $seconds
+        ];
+        */
+        return $seconds;
+    }
 }

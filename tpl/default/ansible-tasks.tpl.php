@@ -64,8 +64,11 @@
                     </select>
                     <?php
                 endif;
-                if ($task['trigger_type'] == 4) : # Scheduler
+                if ($task['trigger_type'] == 4) : # Cron Scheduler
                     echo '<input type="text" name="conditional" value="' . $task['crontime'] . '"/>';
+                endif;
+                if ($task['trigger_type'] == 5) : # Interval
+                    echo '<input type="text" name="conditional" value="' . $task['task_interval'] . '"/>';
                 endif;
                 ?>
             </td>
@@ -92,8 +95,8 @@
                 </select>
             </td>
             <td>
-                <button type="submit" data-action="delete_task">Borrar</button>
-                <button type="submit" data-action="update_task">Modificar</button>
+                <button type="submit" data-action="delete_host_task">Borrar</button>
+                <button type="submit" data-action="update_host_task">Modificar</button>
                 <button type="submit" data-action="force_exec_task">Forzar</button>
             </td>
         </tr>
