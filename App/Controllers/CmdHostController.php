@@ -900,12 +900,11 @@ class CmdHostController
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
-    public function submitRemoteHost(array $command_values): array
+    public function submitHost(array $command_values): array
     {
         $host = [];
         $ip = $domain = false;
-        $hosts = $this->ctx->get('H'
-                . 'osts');
+        $hosts = $this->ctx->get('Hosts');
         $lng = $this->ctx->get('lng');
 
         $ip = $this->filter->varIP($command_values['value']);
@@ -920,9 +919,12 @@ class CmdHostController
             $host['hostname'] = $domain;
         }
 
-        if (!empty($host['ip']) && !$this->ctx->get('Networks')->isLocal($host['ip'])) {
+        if (!empty($host['ip'])) {
             $network_match = $this->ctx->get('Networks')->matchNetwork($host['ip']);
-            if (!valid_array($network_match)) {
+            if (
+                !valid_array($network_match) ||
+                $this->ctx->get('Networks')->isLocal($host['ip']) && $network_match['network'] == '0.0.0.0/0'
+            ) {
                 return Response::stdReturn(false, $lng['L_ERR_NOT_NET_CONTAINER']);
             } else {
                 if ($hosts->getHostByIP($host['ip'])) {

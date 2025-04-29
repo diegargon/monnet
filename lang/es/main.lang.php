@@ -11,6 +11,7 @@ $lng = [
 //A
     'L_ADDED' => 'Añadido',
     'L_ADD' => 'Añadir',
+    'L_ADD_HOST' => 'Añadir Host',
     'L_ADD_HOST_CAT' => 'Añadir categoria para hosts',
     'L_ADD_BOOKMARKS_CAT' => 'Añadir categoria para bookmarks',
     'L_APPLINKS' => 'Web apps',
@@ -202,7 +203,6 @@ $lng = [
     'L_REMOVE' => 'Eliminar',
     'L_REBOOT' => 'Reiniciar',
     'L_REFRESHED' => 'Refrescado',
-    'L_REMOTE_HOST' => 'Host Remoto',
     'L_ROL' => 'Rol',
     'L_REMOTE_PORT_CHECK' => 'Comprobacion remota de puertos',
     'L_RESERVE' => 'Reservar',

@@ -249,7 +249,7 @@ class CommandRouter
                 break;
             case 'submitHost':
                 $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitRemoteHost($command_values);
+                $response = $hostController->submitHost($command_values);
                 break;
             case 'submitNewHostCat':
                 $hostController = new CmdHostController($this->ctx);
@@ -386,6 +386,7 @@ class CommandRouter
                 ];
                 break;
         endswitch;
+        $response['command_receive'] = $command;
 
         return $response;
     }

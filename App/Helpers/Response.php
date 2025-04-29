@@ -36,6 +36,7 @@ class Response
             $response = [
                 'command_error' => 1,
                 'command_error_msg' => $msg,
+                'response_msg' => $msg,
             ];
         }
         if ($force_reload) {

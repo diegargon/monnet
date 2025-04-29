@@ -79,6 +79,15 @@
                         }
                     }
 
+                    if (jsonData.command_receive === 'submitHost') {
+                        if(jsonData.response_msg) {
+                            $('#stdbox-status-msg').html(jsonData.response_msg);
+                        }
+                        if(jsonData.command_success === 1) {
+                            closeStdContainer();
+                        }
+                    }
+
                     if (
                             jsonData.command_receive === 'removeBookmarkCat' &&
                             jsonData.command_error === 0 &&

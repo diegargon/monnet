@@ -61,10 +61,10 @@
             <span class="opt_labels"><?= $lng['L_BOOKMARKS'] ?></span>
         </div>
         <div class="addhost_ctrl">
-            <button id="addHostBox" class="button-ctrl" type="submit" data-title="<?= $lng['L_REMOTE_HOST'] ?>">
+            <button id="addHostBox" class="button-ctrl" type="submit" data-title="<?= $lng['L_ADD_HOST'] ?>">
                 <img class="add_link" src="./tpl/default/img/add.png" title="<?= $lng['L_ADD'] ?>">
             </button>
-            <span class="opt_labels"><?= $lng['L_REMOTE_HOST'] ?></span>
+            <span class="opt_labels"><?= $lng['L_ADD_HOST'] ?></span>
         </div>
         <div class="general_ctrl">
             <button id="requestPool"
