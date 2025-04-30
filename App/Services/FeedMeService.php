@@ -5,8 +5,6 @@
  *
  * Servicio para procesar solicitudes de agentes y manejar actualizaciones de hosts.
  *
- * @package App\Services
- * @subpackage FeedMeService
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
@@ -82,6 +80,9 @@ class FeedMeService
         $command = $request['cmd'];
         $host_id = (int) $request['id'];
         $host = $this->hostService->getHostById($host_id);
+        if (!$host) {
+            return ['error' => 'Host not found'];
+        }
         $rdata = $request['data'];
         $host_update_values = [];
 
@@ -127,7 +128,7 @@ class FeedMeService
                     $this->notificationLog($request['name'], $host_id, $rdata);
                     break;
                 default:
-                    \Log::warning('Notification receive with unknown reference: ' . $rdata['name']);
+                    \Log::warning('Notification receive with unknown reference: '. $request['name']);
             endswitch;
         }
 
@@ -151,6 +152,9 @@ class FeedMeService
     public function processStarting(int $host_id, array $rdata): array
     {
         $host = $this->hostService->getHostById($host_id);
+        if (!$host) {
+            return [];
+        }
         $host_update_values = [];
 
         if (!empty($rdata['ncpu'])) {
@@ -422,7 +426,7 @@ class FeedMeService
             return ['error' => 'Invalid Token'];
         }
 
-        return ['success'];
+        return ['success' => true];
     }
 
     /**
@@ -481,12 +485,13 @@ class FeedMeService
     private function notificationLog(string $request_name, int $host_id, array $rdata): void
     {
         $event_type = !empty($rdata['event_type']) ? $rdata['event_type'] : 0;
-        $log_type = isset(
-            $rdata['log_type']) ? $rdata['log_type'] : (!empty($rdata['event_type']) ? \LogType::EVENT : 0
-        );
+        $log_type = isset($rdata['log_type'])
+            ? $rdata['log_type']
+            : (!empty($rdata['event_type']) ? \LogType::EVENT : 0);
         $log_level = isset($rdata['log_level']) ? $rdata['log_level'] : 7;
         $log_msg = "Notification: $request_name";
         isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
+
         if (!empty($rdata['event_value'])) {
             $log_msg .= ' Event value: ' . $rdata['event_value'];
         }

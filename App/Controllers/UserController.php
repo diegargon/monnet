@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
 */
@@ -21,14 +19,12 @@ use App\Helpers\Response;
 class UserController
 {
     private $ctx;
-    private Filter $filter;
     private \User $user;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->user = $ctx->get('User');
-        $this->filter = new Filter();
     }
 
     /**
@@ -39,7 +35,7 @@ class UserController
      */
     public function setPref(string $command, array $command_values): array
     {
-        $num = $this->filter->varInt($command_values['value']);
+        $num = Filter::varInt($command_values['value']);
 
         if (!is_numeric($num)) {
             return Response::stdReturn(true, $command . ': fail');
@@ -76,7 +72,7 @@ class UserController
      */
     public function toggleHostsCat(string $command, array $command_values): array
     {
-        $id = $this->filter->varInt($command_values['id']);
+        $id = Filter::varInt($command_values['id']);
         $response = $this->user->toggleHostsCat($id);
         $extra = [
             'command_receive' => $command,
@@ -93,7 +89,7 @@ class UserController
      */
     public function onlyOneHostsCat(string $command, array $command_values): array
     {
-        $id = $this->filter->varInt($command_values['id']);
+        $id = Filter::varInt($command_values['id']);
         $categories_state = $this->user->getHostsCatState();
 
         $ones = 0;
@@ -122,7 +118,7 @@ class UserController
      */
     public function changeBookmarksTab(array $command_values): array
     {
-        $id = $this->filter->varInt($command_values['id']);
+        $id = Filter::varInt($command_values['id']);
         $this->user->setPref('default_bookmarks_tab', $id);
 
         return Response::stdReturn(true, 'ok');

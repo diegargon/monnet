@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 namespace App\Services;
@@ -88,7 +86,8 @@ Class NetworksService
         $networks = $this->networksModel->getAllNetworks();
         if (valid_array($networks)) {
             usort($networks, fn($a, $b) =>
-                ((int)explode('/', $b['network'])[1]) <=> ((int)explode('/', $a['network'])[1]));
+                ((int)explode('/', $b['network'])[1] ?? 0) <=> ((int)explode('/', $a['network'])[1] ?? 0)
+            );
 
             foreach ($networks as $net) {
                 $this->cacheNetwork($net);
@@ -296,17 +295,16 @@ Class NetworksService
         $defaultNetwork = false;
 
         foreach ($this->networks as $network) {
-            [$networkAddr, $subnetMask] = explode('/', $network['network']);
+            [$networkAddr, $subnetMask] = explode('/', $network['network']) + [null, null];
             $subnetMask = (int)$subnetMask;
             $networkAddrLong = ip2long($networkAddr);
 
-            if ($networkAddrLong === false) {
+            if ($networkAddrLong === false || $subnetMask === null) {
                 continue;
             }
 
-            $broadcastAddr = $networkAddrLong | ~(pow(2, (32 - $subnetMask)) - 1);
-
-            if (($ip_long & ~($broadcastAddr)) == ($networkAddrLong & ~($broadcastAddr))) {
+            $subnetMaskLong = -1 << (32 - $subnetMask);
+            if (($ip_long & $subnetMaskLong) === ($networkAddrLong & $subnetMaskLong)) { // Fix bitwise operation
                 return $network;
             }
 

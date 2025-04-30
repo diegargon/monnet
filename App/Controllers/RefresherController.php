@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -61,8 +59,10 @@ class RefresherController
 
         $hosts = $this->refresherService->getHostsView($view_other_hosts, $view_highlight);
         $hosts = $this->view->formatHosts($hosts);
-        // Ordenar por nombre para la vista
-        order($hosts, 'display_name');
+
+        usort($hosts, function ($a, $b) {
+            return strcmp($a['display_name'], $b['display_name']);
+        });
 
         $hosts_highlight = [];
         $hosts_other = [];

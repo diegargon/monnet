@@ -285,13 +285,15 @@ function dump_in_json(mixed $var): void
  */
 function isEmpty(&$var): bool
 {
-    if (!isset($var)) :
+    // Verifica si la variable no está definida o es null
+    if (!isset($var) || $var === null) {
         return true;
-    endif;
+    }
 
-    if ($var === '' || (is_array($var) && $var === [])) :
+    // Verifica si la variable es una cadena vacía o un array vacío
+    if ($var === '' || (is_array($var) && empty($var))) {
         return true;
-    endif;
+    }
 
     return false;
 }

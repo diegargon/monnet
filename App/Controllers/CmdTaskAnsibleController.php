@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -19,13 +17,11 @@ use App\Services\EncryptionService;
 class CmdTaskAnsibleController
 {
     private \AppContext $ctx;
-    private Filter $filter;
     private AnsibleService $ansibleService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ansibleService = new AnsibleService($ctx);
-        $this->filter = new Filter();
         $this->ctx = $ctx;
     }
 
@@ -37,19 +33,16 @@ class CmdTaskAnsibleController
      */
     public function execPlaybook(string $command, array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $playbook = $this->filter->varString($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $playbook = Filter::varString($command_values['value']);
         $extra_vars = [];
-        if (!empty($this->filter->varBool($command_values['as_html']))) {
-            $as_html = 1;
-        } else {
-            $as_html = 0;
-        }
+        $as_html = !empty(Filter::varBool($command_values['as_html'])) ? 1 : 0;
+
         if (empty($playbook)) {
             return Response::stdReturn(false, 'Playbook its mandatory');
         }
         if (!empty($command_values['extra_vars'])) {
-            $extra_vars = $this->filter->varJson($command_values['extra_vars']);
+            $extra_vars = Filter::varJson($command_values['extra_vars']);
         }
 
         if ($command == 'playbook_exec') {
@@ -80,22 +73,14 @@ class CmdTaskAnsibleController
      */
     public function getSystemLogs(string $command, array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        if (isset($command_values['value'])) {
-            $value = $this->filter->varInt($command_values['value']);
-        } else {
-            $value = 25;
-        }
+        $target_id = Filter::varInt($command_values['id']);
+        $value = isset($command_values['value']) ? Filter::varInt($command_values['value']) : 25;
 
         $lng = $this->ctx->get('lng');
         $hosts = $this->ctx->get('Hosts');
         $host = $hosts->getHostById($target_id);
 
-        if ($command === 'syslog-load') {
-            $playbook = 'std-syslog-linux';
-        } else {
-            $playbook = 'std-journald-linux';
-        }
+        $playbook = $command === 'syslog-load' ? 'std-syslog-linux' : 'std-journald-linux';
 
         if (valid_array($host) && $host['ansible_enabled']) {
             $extra_vars = [];
@@ -133,7 +118,7 @@ class CmdTaskAnsibleController
      */
     public function handleShutdownReboot(string $command, array $command_values): array
     {
-        $hid = $this->filter->varInt($command_values['id']);
+        $hid = Filter::varInt($command_values['id']);
         if (!$hid) {
             return Response::stdReturn(false, 'id error');
         }
@@ -157,11 +142,11 @@ class CmdTaskAnsibleController
     {
         switch ($command) :
             case 'create_host_task':
-                $hid = $this->filter->varInt($command_values['hid']);
+                $hid = Filter::varInt($command_values['hid']);
                 break;
             case 'update_host_task':
             case 'delete_host_task':
-                $tid = $this->filter->varInt($command_values['id']);
+                $tid = Filter::varInt($command_values['id']);
                 break;
             default:
                 $hid = 0;
@@ -218,10 +203,10 @@ class CmdTaskAnsibleController
      */
     public function addAnsibleVar(string $command, array $command_values): array
     {
-        $hid = $this->filter->varInt($command_values['host_id']);
-        $var_name = $this->filter->varStrict($command_values['var_name']);
-        $var_value = $this->filter->varStrict($command_values['var_value']);
-        $var_type = $this->filter->varString($command_values['var_type']);
+        $hid = Filter::varInt($command_values['host_id']);
+        $var_name = Filter::varStrict($command_values['var_name']);
+        $var_value = Filter::varStrict($command_values['var_value']);
+        $var_type = Filter::varString($command_values['var_type']);
 
         if ($var_type === "encrypt_value") {
             $vtype = 1;
@@ -251,7 +236,7 @@ class CmdTaskAnsibleController
     public function delAnsibleVar(string $command, array $command_values): array
     {
         $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
-        $id = $this->filter->varInt($command_values['id']);
+        $id = Filter::varInt($command_values['id']);
         if ($cmdAnsibleModel->delAnsibleVar($id)) {
             return Response::stdReturn(true, 'Deleted ansible var', false, ['commnand' => $command]);
         }
@@ -267,30 +252,30 @@ class CmdTaskAnsibleController
      */
     private function checkTaskFields(int $id, string $command, array $command_values)
     {
-        $playbook_id = $this->filter->varInt($command_values['playbook']);
-        $next_task_id = $this->filter->varInt($command_values['next_task']);
-        $task_trigger = $this->filter->varInt($command_values['task_trigger']);
-        $ansible_groups = $this->filter->varInt($command_values['groups']);
-        $disable_task = $this->filter->varBool($command_values['disable_task']);
-        $task_name = $this->filter->varString($command_values['task_name']);
+        $playbook_id = Filter::varInt($command_values['playbook']);
+        $next_task_id = Filter::varInt($command_values['next_task']);
+        $task_trigger = Filter::varInt($command_values['task_trigger']);
+        $ansible_groups = Filter::varInt($command_values['groups']);
+        $disable_task = Filter::varBool($command_values['disable_task']);
+        $task_name = Filter::varString($command_values['task_name']);
 
         empty($disable_task) ? $disable_task = 0 : null;
 
         if ($task_trigger === 3) {
-            $conditional = $this->filter->varInt($command_values['conditional']);
+            $conditional = Filter::varInt($command_values['conditional']);
             if (empty($conditional)) {
                 $conditional_error = 'Wrong event';
             } else {
                 $event_id = $conditional;
             }
         } elseif ($task_trigger === 4) {
-            if (!$this->filter->varCron($command_values['conditional'])) {
+            if (!Filter::varCron($command_values['conditional'])) {
                 $conditional_error = 'Wrong Cron, syntax must be a cron expression * * * * *';
             } else {
                 $crontime = $command_values['conditional'];
             }
         } elseif ($task_trigger === 5) {
-            $interval_seconds = $this->filter->varInterval($command_values['conditional']);
+            $interval_seconds = Filter::varInterval($command_values['conditional']);
             if (!$interval_seconds) {
                 $conditional_error = 'Wrong interval 5m 5h 1d 1w 1mo 1y';
             } else {

@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
  */
@@ -18,13 +16,11 @@ use App\Helpers\Response;
 
 class ConfigController
 {
-    private Filter $filter;
     private \AppContext $ctx;
     private \Config $ncfg;
 
     public function __construct(\AppContext $ctx)
     {
-        $this->filter = new Filter();
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');
     }

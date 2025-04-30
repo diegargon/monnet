@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -22,15 +20,12 @@ class LogHostsController
     private \DBManager $db;
     private LogHostsModel $logHostsModel;
     private LogHostsService $logHostsService;
-    private Filter $filter;
     private TemplateService $templateService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->db = $ctx->get('DBManager');
-
-        $this->filter = new Filter();
         $this->logHostsModel = new LogHostsModel($this->db);
         $this->logHostsService = new LogHostsService($ctx);
         $this->templateService = new TemplateService($ctx);
@@ -43,7 +38,7 @@ class LogHostsController
      */
     public function logsReload(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $field = 'logs-reload';
         $response = $this->logHostsService->getLogs($target_id, $command_values);
 
@@ -57,8 +52,8 @@ class LogHostsController
      */
     public function ackHostLog(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'ack';
 
         if (!is_numeric($target_id)) {

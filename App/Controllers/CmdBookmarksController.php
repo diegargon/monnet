@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -16,13 +14,11 @@ use App\Helpers\Response;
 
 class CmdBookmarksController
 {
-    private Filter $filter;
     private \AppContext $ctx;
     private TemplateService $templateService;
 
     public function __construct(\AppContext $ctx)
     {
-        $this->filter = new Filter();
         $this->ctx = $ctx;
         $this->templateService = new TemplateService($ctx);
     }
@@ -36,7 +32,7 @@ class CmdBookmarksController
     {
         $lng = $this->ctx->get('lng');
 
-        $value_command = $this->filter->varJson($command_values['value']);
+        $value_command = Filter::varJson($command_values['value']);
         $decodedJson = json_decode($value_command, true);
 
         if ($decodedJson === null) {
@@ -49,24 +45,24 @@ class CmdBookmarksController
         }
 
         // Validar campos
-        if (!$this->filter->varString($new_bookmark['name'])) {
+        if (!Filter::varString($new_bookmark['name'])) {
             return Response::stdReturn(false, "{$lng['L_NAME']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
-        if (!$this->filter->varString($new_bookmark['image_type'])) {
+        if (!Filter::varString($new_bookmark['image_type'])) {
             return Response::stdReturn(false, "{$lng['L_IMAGE_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
-        if (!$this->filter->varInt($new_bookmark['cat_id'])) {
+        if (!Filter::varInt($new_bookmark['cat_id'])) {
             return Response::stdReturn(false, "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
         if (
-            !$this->filter->varUrl($new_bookmark['urlip']) &&
-            !$this->filter->varIP($new_bookmark['urlip'])
+            !Filter::varUrl($new_bookmark['urlip']) &&
+            !Filter::varIP($new_bookmark['urlip'])
         ) {
             return Response::stdReturn(false, "{$lng['L_URLIP']}:{$lng['L_ERROR_EMPTY_INVALID']}");
         }
         if (
-            !$this->filter->varInt($new_bookmark['weight']) &&
-            ($this->filter->varInt($new_bookmark['weight']) !== 0)
+            !Filter::varInt($new_bookmark['weight']) &&
+            (Filter::varInt($new_bookmark['weight']) !== 0)
         ) {
             return Response::stdReturn(false, "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
@@ -76,7 +72,7 @@ class CmdBookmarksController
                 return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
             } else {
                 if (
-                        !$this->filter->varCustomString($new_bookmark['field_img'], '.', 255) ||
+                        !Filter::varCustomString($new_bookmark['field_img'], '.', 255) ||
                         !file_exists('bookmarks_icons/')
                 ) {
                     return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
@@ -85,7 +81,7 @@ class CmdBookmarksController
         }
 
         if ($new_bookmark['image_type'] == 'url' && !empty($new_bookmark['field_img'])) {
-            if (!$this->filter->varUrl($new_bookmark['field_img'])) {
+            if (!Filter::varUrl($new_bookmark['field_img'])) {
                 return Response::stdReturn(false, "{$lng['L_ERROR_URL_INVALID']}");
             }
         }
@@ -108,8 +104,8 @@ class CmdBookmarksController
     public function updateBookmark(array $command_values): array
     {
         $lng = $this->ctx->get('lng');
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value_command = $this->filter->varJson($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value_command = Filter::varJson($command_values['value']);
         $decodedJson = json_decode($value_command, true);
 
         if ($decodedJson === null) {
@@ -122,27 +118,27 @@ class CmdBookmarksController
         }
 
         // Validar campos del bookmark
-        if (!$this->filter->varInt($bookmark['bookmark_id'])) {
+        if (!Filter::varInt($bookmark['bookmark_id'])) {
             return Response::stdReturn(false, "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
-        if (!$this->filter->varString($bookmark['name'])) {
+        if (!Filter::varString($bookmark['name'])) {
             return Response::stdReturn(false, "{$lng['L_NAME']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
-        if (!$this->filter->varString($bookmark['image_type'])) {
+        if (!Filter::varString($bookmark['image_type'])) {
             return Response::stdReturn(false, "{$lng['L_IMAGE_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
-        if (!$this->filter->varInt($bookmark['cat_id'])) {
+        if (!Filter::varInt($bookmark['cat_id'])) {
             return Response::stdReturn(false, "{$lng['L_TYPE']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
         if (
-            !$this->filter->varUrl($bookmark['urlip']) &&
-            !$this->filter->varIP($bookmark['urlip'])
+            !Filter::varUrl($bookmark['urlip']) &&
+            !Filter::varIP($bookmark['urlip'])
         ) {
             return Response::stdReturn(false, "{$lng['L_URLIP']}:{$lng['L_ERROR_EMPTY_INVALID']}");
         }
         if (
-                !$this->filter->varInt($bookmark['weight']) &&
-                ($this->filter->varInt($bookmark['weight']) !== 0)
+                !Filter::varInt($bookmark['weight']) &&
+                (Filter::varInt($bookmark['weight']) !== 0)
         ) {
             return Response::stdReturn(false, "{$lng['L_WEIGHT']}: {$lng['L_ERROR_EMPTY_INVALID']}");
         }
@@ -152,7 +148,7 @@ class CmdBookmarksController
                 return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
             } else {
                 if (
-                        !$this->filter->varCustomString($bookmark['field_img'], '.', 255) ||
+                        !Filter::varCustomString($bookmark['field_img'], '.', 255) ||
                         !file_exists('bookmarks_icons/')
                 ) {
                     return Response::stdReturn(false, "{$lng['L_LINK']}: {$lng['L_ERROR_EMPTY_INVALID']}");
@@ -161,7 +157,7 @@ class CmdBookmarksController
         endif;
 
         if ($bookmark['image_type'] == 'url' && !empty($bookmark['field_img'])) :
-            if (!$this->filter->varUrl($bookmark['field_img'])) {
+            if (!Filter::varUrl($bookmark['field_img'])) {
                 return Response::stdReturn(false, "{$lng['L_ERROR_URL_INVALID']}");
             }
         endif;
@@ -183,7 +179,7 @@ class CmdBookmarksController
      */
     public function removeBookmark(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
 
         if ($this->ctx->get('Items')->remove($target_id)) {
             return Response::stdReturn(true, 'Bookmark removed successfully');
@@ -201,7 +197,7 @@ class CmdBookmarksController
     public function mgmtBookmark(string $command, array $command_values): array
     {
         $categories = $this->ctx->get('Categories');
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $tdata = [];
         $items = $this->ctx->get('Items');
         $ncfg =  $this->ctx->get('Config');
@@ -248,7 +244,7 @@ class CmdBookmarksController
      */
     public function submitBookmarkCat(array $command_values): array
     {
-        $value = $this->filter->varString($command_values['value']);
+        $value = Filter::varString($command_values['value']);
         $response = $this->ctx->get('Categories')->create(2, $value);
 
         if ($response['success'] == 1) {
@@ -267,7 +263,7 @@ class CmdBookmarksController
     public function removeBookmarkCat(array $command_values): array
     {
         $lng = $this->ctx->get('lng');
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
 
         if ($target_id === 50) {
             return Response::stdReturn(false, $lng['L_ERR_CAT_NODELETE']);

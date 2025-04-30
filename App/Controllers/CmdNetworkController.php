@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -17,7 +15,6 @@ use App\Helpers\Response;
 
 class CmdNetworkController
 {
-    private Filter $filter;
     private \AppContext $ctx;
     private TemplateService $templateService;
     private HostService $hostService;
@@ -25,7 +22,6 @@ class CmdNetworkController
     public function __construct(\AppContext $ctx)
     {
         $this->templateService = new TemplateService($ctx);
-        $this->filter = new Filter();
         $this->ctx = $ctx;
     }
 
@@ -37,11 +33,11 @@ class CmdNetworkController
      */
     public function manageNetworks(string $command, array $command_values): array
     {
-        $action = $this->filter->varString($command_values['action']);
-        $target_id = $this->filter->varInt($command_values['id']);
+        $action = Filter::varString($command_values['action']);
+        $target_id = Filter::varInt($command_values['id']);
 
         if (isset($command_values['value'])) {
-            $value_command = $this->filter->varJson($command_values['value']);
+            $value_command = Filter::varJson($command_values['value']);
         } else {
             $value_command = '';
         }
@@ -138,8 +134,8 @@ class CmdNetworkController
         $user = $this->ctx->get('User');
         $username = $user->getUsername();
 
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value_command = $this->filter->varIP($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value_command = Filter::varIP($command_values['value']);
 
         $reserved_host = [
             'title' => $username. 'Reserved',
@@ -188,7 +184,7 @@ class CmdNetworkController
         unset($new_network['networkCIDR']);
         $new_network['network'] = $network_plus_cidr;
 
-        if (!$this->filter->varNetwork($network_plus_cidr)) :
+        if (!Filter::varNetwork($network_plus_cidr)) :
             $data['error'] = 1;
             $data['error_msg'] .= $lng['L_NETWORK'] . ' ' . $lng['L_INVALID'] . '<br/>';
         endif;

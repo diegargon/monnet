@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -20,12 +18,10 @@ class CmdAnsibleReportController
     private CmdAnsibleReportModel $reportModel;
     private AnsibleService $ansibleService;
     private \AppContext $ctx;
-    private Filter $filter;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->filter = new Filter();
         $this->reportModel = new CmdAnsibleReportModel($ctx);
     }
 
@@ -36,7 +32,7 @@ class CmdAnsibleReportController
      */
     public function deleteReport(string $command, array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
 
         $extra = [
             'command_receive' => $command,
@@ -57,7 +53,7 @@ class CmdAnsibleReportController
      */
     public function viewReport(string $command, array $command_values): array
     {
-        $report_id = $this->filter->varInt($command_values['id']);
+        $report_id = Filter::varInt($command_values['id']);
 
         $extra = [
             'command_receive' => $command,
