@@ -599,7 +599,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#term_output').html('Error');
                     }
                 }
-
+                
                 /* Tex Notes */
                 if (jsonData.command_receive === 'load_notes') {
                     $('#textnotes').html(jsonData.response_msg);
@@ -680,7 +680,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#playbook_content').html(jsonData.response_msg);
 
                     }
-                }
+                }                
                 /* Playbacks exec */
                 if (jsonData.command_receive === 'playbook_exec') {
                     if (jsonData.command_success === 1) {
@@ -712,6 +712,14 @@ function requestHostDetails(command, command_values = []) {
                     }
                     if(jsonData.command_error_msg) {
                         $('#tasks_status_msg').html(jsonData.command_error_msg);
+                    }
+                }
+                /* Delete port */
+                if (jsonData.command_receive === 'deleteHostPort') {
+                    $('.status_msg').html(jsonData.response_msg);
+                  
+                    if (jsonData.command_success === 1 && jsonData.port_id) {
+                        $('.current_agent_ports option[value="' + jsonData.port_id + '"]').remove();
                     }
                 }
             })

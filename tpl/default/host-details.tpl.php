@@ -160,6 +160,7 @@ $h_misc = $tdata['host_details']['misc'];
                 ?>
                 <div class="host-item"><?= $h_misc['mac_vendor'] ?> </div>
             <?php } ?>
+            <div class="status_msg"></div>
         </div>
 
         <!-- /HOST COMMON BAR -->

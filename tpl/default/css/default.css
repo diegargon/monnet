@@ -989,6 +989,12 @@ input:checked + .slider:before {
     font-weight: bold;
     font-size: 15px;
 }
+.status_msg {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    padding-left: 5px;
+}
 .ctrl_fieldset {
     border: 1px solid #514d4d;
     border-radius: 5px;

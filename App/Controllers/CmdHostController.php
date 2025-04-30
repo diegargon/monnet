@@ -289,16 +289,16 @@ class CmdHostController
      */
     public function deleteHostPort(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $port_id = $this->filter->varInt($command_values['id']);
         $field = 'delete_port';
 
-        if (!is_numeric($target_id)) {
+        if (!is_numeric($port_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");
         }
-        if ($this->cmdHostModel->deletePort($target_id)) {
-            return Response::stdReturn(true, "$field: success $target_id");
+        if ($this->cmdHostModel->deletePort($port_id)) {
+            return Response::stdReturn(true, "$field: success $port_id", false, ['port_id' => $port_id]);
         } else {
-            return Response::stdReturn(false, "$field: Error adding port");
+            return Response::stdReturn(false, "$field: Error adding port $port_id");
         }
     }
 
