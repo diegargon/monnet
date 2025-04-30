@@ -52,12 +52,13 @@ $(document).ready(function () {
         }
     });
 
-    $('#display_ipv6').on('change', function () {
+    // Toggle visibility ipv6 ports
+    $(document).on("change", "#display_ipv6", function () {        
         $('.port_ipv6').css('display', this.checked ? 'inline-flex' : 'none');
     });
 
-    // Toggle para Local Ports
-    $('#display_local').on('change', function () {
+    // Toggle visibility local ports
+    $(document).on("change", "#display_local", function () {        
         $('.port_local').css('display', this.checked ? 'inline-flex' : 'none');
     });
 
