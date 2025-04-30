@@ -63,7 +63,6 @@ class CmdHostController
         $this->hostViewBuilder = new HostViewBuilder($ctx);
 
 
-        $this->filter = new Filter();
         $this->ctx = $ctx;
     }
 
@@ -75,7 +74,7 @@ class CmdHostController
      */
     public function getHostDetails(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $field = 'getHostDetails';
 
         if (!is_numeric($target_id)) {
@@ -109,7 +108,7 @@ class CmdHostController
         /*
          * TODO: Actually reload send all html/js again
          */
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $field = 'reloadStatsView';
 
         if (!is_numeric($target_id)) {
@@ -140,7 +139,7 @@ class CmdHostController
      */
     public function removeHost(string $command, array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $field = 'removeHost';
 
         if (!is_numeric($target_id)) {
@@ -163,9 +162,9 @@ class CmdHostController
      */
     public function updateHost(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $field = $this->filter->varString($command_values['field']);
-        $value = $this->filter->varString($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $field = Filter::varString($command_values['field']);
+        $value = Filter::varString($command_values['value']);
 
         if (!is_numeric($target_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");
@@ -186,8 +185,8 @@ class CmdHostController
      */
     public function toggleDisablePing(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'disable_ping';
 
         if (!is_numeric($target_id)) {
@@ -209,8 +208,8 @@ class CmdHostController
     public function setCheckPorts(array $command_values): array
     {
         // 1 ping 2 TCP/UDP
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'check_method';
 
         if (!is_numeric($target_id)) {
@@ -232,7 +231,7 @@ class CmdHostController
      */
     public function submitHostToken(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $field = 'createHostToken';
 
         if (!is_numeric($target_id)) {
@@ -254,11 +253,11 @@ class CmdHostController
      */
     public function addRemotePort(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $pnumber = isset($command_values['value']) ?
-                $this->filter->varInt($command_values['value']) : null;
+                Filter::varInt($command_values['value']) : null;
         $protocol = isset($command_values['protocol']) ?
-                $this->filter->varInt($command_values['protocol']) : null;
+                Filter::varInt($command_values['protocol']) : null;
         $field = 'addRemotePort';
 
         if ($target_id === null || $target_id <= 0 || $pnumber === null || $protocol === null) {
@@ -289,7 +288,7 @@ class CmdHostController
      */
     public function deleteHostPort(array $command_values): array
     {
-        $port_id = $this->filter->varInt($command_values['id']);
+        $port_id = Filter::varInt($command_values['id']);
         $field = 'delete_port';
 
         if (!is_numeric($port_id)) {
@@ -310,8 +309,8 @@ class CmdHostController
      */
     public function submitCustomServiceName(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varString($command_values['value']);
         $field = 'custom_service';
 
         if (!is_numeric($target_id)) {
@@ -333,8 +332,8 @@ class CmdHostController
      */
     public function submitTitle(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varString($command_values['value']);
         $field = 'title';
 
         if (!is_numeric($target_id)) {
@@ -355,8 +354,8 @@ class CmdHostController
      */
     public function setHostDisable(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'disable';
 
         if (!is_numeric($target_id)) {
@@ -378,8 +377,8 @@ class CmdHostController
      */
     public function submitHostname(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varDomain($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varDomain($command_values['value']);
         $field = 'hostname';
 
         if (!is_numeric($target_id)) {
@@ -400,8 +399,8 @@ class CmdHostController
      */
     public function submitOwner(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varString($command_values['value']);
         $field = 'owner';
 
         if (!is_numeric($target_id)) {
@@ -421,8 +420,8 @@ class CmdHostController
      */
     public function submitHostTimeout(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varFloat($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varFloat($command_values['value']);
         $field = 'timeout';
 
         if (!is_numeric($target_id)) {
@@ -442,8 +441,8 @@ class CmdHostController
      */
     public function submitChangeHostCategory(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varString($command_values['value']);
         $field = 'category';
 
         if (
@@ -468,7 +467,7 @@ class CmdHostController
      */
     public function submitNewHostsCat(array $command_values): array
     {
-        $value = $this->filter->varString($command_values['value']);
+        $value = Filter::varString($command_values['value']);
         $response = $this->ctx->get('Categories')->create(1, $value);
 
         if ($response['success'] == 1) {
@@ -486,7 +485,7 @@ class CmdHostController
     public function powerOn(array $command_values): array
     {
         $hosts = $this->ctx->get('Hosts');
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $host = $hosts->getHostById($target_id);
 
         if (valid_array($host) && !empty($host['mac'])) {
@@ -505,8 +504,8 @@ class CmdHostController
      */
     public function submitManufacture(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varString($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varString($command_values['value']);
         $field = 'manufacture';
 
         if (!is_numeric($target_id)) {
@@ -526,8 +525,8 @@ class CmdHostController
      */
     public function submitMachineType(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'machine_type';
 
         if (!is_numeric($target_id)) {
@@ -547,8 +546,8 @@ class CmdHostController
      */
     public function submitSysAval(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'sys_availability';
 
         if (!is_numeric($target_id)) {
@@ -568,8 +567,8 @@ class CmdHostController
      */
     public function submitOS(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'os';
 
         if (!is_numeric($target_id)) {
@@ -589,8 +588,8 @@ class CmdHostController
      */
     public function submitOSVersion(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'os_version';
 
         if (!is_numeric($target_id)) {
@@ -610,8 +609,8 @@ class CmdHostController
      */
     public function submitSystemType(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'system_type';
 
         if (!is_numeric($target_id)) {
@@ -630,8 +629,8 @@ class CmdHostController
      */
     public function submitAccessType(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $field = 'access_type';
 
         if (!is_numeric($target_id)) {
@@ -650,8 +649,8 @@ class CmdHostController
      */
     public function submitAccessLink(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varUrl($command_values['value'], 255);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varUrl($command_values['value'], 255);
         $field = 'access_link';
 
         if (!is_numeric($target_id) || empty($value)) {
@@ -705,7 +704,7 @@ class CmdHostController
      */
     public function clearHostAlarms(array $command_values): array
     {
-        $hid = $this->filter->varInt($command_values['id']);
+        $hid = Filter::varInt($command_values['id']);
         $user = $this->ctx->get('User');
         $username = $user->getUsername();
         $lng = $this->ctx->get('lng');
@@ -728,8 +727,8 @@ class CmdHostController
      */
     public function setHostAlarms(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
         $msg = $this->cmdHostModel->updateMiscByID($target_id, ['disable_alarms' => $value]);
 
         return Response::stdReturn(true, $msg);
@@ -742,8 +741,8 @@ class CmdHostController
      */
     public function toggleMailAlarms(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
 
         $msg = $this->cmdHostModel->updateMiscByID($target_id, ['email_alarms' => $value]);
 
@@ -757,8 +756,8 @@ class CmdHostController
      */
     public function toggleAlarmType(string $command, array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
 
         $msg = $this->cmdHostModel->updateMiscByID($target_id, [$command => $value]);
 
@@ -772,8 +771,8 @@ class CmdHostController
      */
     public function toggleEmailAlarmType(string $command, array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
 
         $msg = $this->cmdHostModel->updateMiscByID($target_id, [$command => $value]);
 
@@ -786,7 +785,7 @@ class CmdHostController
      */
     public function setEmailList(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $value = $command_values['value'];
 
         $string = implode(",", $value);
@@ -863,7 +862,7 @@ class CmdHostController
     public function setHighlight(array $command_values): array
     {
         $field = 'setHighlight';
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $value = (empty($command_values['value'])) ? 0 : 1;
 
         $update['highlight'] = $value;
@@ -882,7 +881,7 @@ class CmdHostController
      */
     public function setHostAnsible(array $command_values): array
     {
-        $target_id = $this->filter->varInt($command_values['id']);
+        $target_id = Filter::varInt($command_values['id']);
         $field = 'setHostAnsible';
         $value = (empty($command_values['value'])) ? 0 : 1;
 
@@ -907,9 +906,9 @@ class CmdHostController
         $hosts = $this->ctx->get('Hosts');
         $lng = $this->ctx->get('lng');
 
-        $ip = $this->filter->varIP($command_values['value']);
+        $ip = Filter::varIP($command_values['value']);
         if (empty($ip)) {
-            $domain = $this->filter->varDomain($command_values['value']);
+            $domain = Filter::varDomain($command_values['value']);
         } else {
             $host['ip'] = $ip;
         }
@@ -948,8 +947,8 @@ class CmdHostController
     public function saveNote(array $command_values): array
     {
         $field = 'saveNote';
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value_command = $this->filter->varUTF8($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value_command = Filter::varUTF8($command_values['value']);
 
         if ($value_command) {
             $content = urldecode($value_command);
@@ -972,8 +971,8 @@ class CmdHostController
     public function setAlwaysOn(array $command_values): array
     {
         $field = 'always_on';
-        $target_id = $this->filter->varInt($command_values['id']);
-        $value = $this->filter->varInt($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
 
         if ($this->cmdHostModel->updateMiscByID($target_id, ['always_on' => $value])) {
             return Response::stdReturn(true, $field . ': success', true);
@@ -999,14 +998,14 @@ class CmdHostController
         string $field,
         string $filterType = 'int'
     ): array {
-        $hid = $this->filter->varInt($command_values['id']);
+        $hid = Filter::varInt($command_values['id']);
 
         switch ($filterType) {
             case 'int':
-                $value = $this->filter->varInt($command_values['value']);
+                $value = Filter::varInt($command_values['value']);
                 break;
             case 'string':
-                $value = $this->filter->varString($command_values['value']);
+                $value = Filter::varString($command_values['value']);
                 break;
             default:
                 return Response::stdReturn(false, "$field: Invalid filter type");
@@ -1038,7 +1037,7 @@ class CmdHostController
     /*
     public function submitMiscField(array $command_values, string $field, callable $filter_function): array
     {
-        $hid = $this->filter->varInt($command_values['id']);
+        $hid = Filter::varInt($command_values['id']);
         $value = $filter_function($command_values['value']);
 
         if (!is_numeric($hid)) {
@@ -1060,8 +1059,8 @@ class CmdHostController
      */
     public function handleTabChange(array $command_values): array
     {
-        $tabName = $this->filter->varString($command_values['value']);
-        $target_id = $this->filter->varInt($command_values['id']);
+        $tabName = Filter::varString($command_values['value']);
+        $target_id = Filter::varInt($command_values['id']);
         $extra = [];
 
         switch ($tabName) :
