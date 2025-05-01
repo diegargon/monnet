@@ -138,7 +138,6 @@ $lng = [
     'L_LAST_UPDATE' => 'Actualizado',
     'L_LOGIN' => 'Identificarse',
     'L_LOGOUT' => 'Salir',
-    'L_LAST_SEEN' => 'Ultima vez online:',
     'L_LAST_PING_CHECK' => 'Ultimo Ping',
     'L_LATENCY' => 'Latencia',
     'L_LOAD' => 'Carga',

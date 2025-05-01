@@ -571,6 +571,29 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
+
+    // 0.63
+    $update = 0.63;
+    if ($db_version == 0.00) {
+        try {
+            $db->query("ALTER TABLE hosts DROP COLUMN access_method;");
+            $db->query("ALTER TABLE hosts DROP COLUMN status;");
+            //$db->query("
+            //");
+            $db->query("START TRANSACTION");
+            //$db->query("
+            //");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+
     // Template
     $update = 0.00;
     if ($db_version == 0.00) {

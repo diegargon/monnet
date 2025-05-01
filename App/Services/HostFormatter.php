@@ -55,14 +55,6 @@ class HostFormatter
             $host['online_image'] = 'tpl/' . $theme . '/img/red2.png';
         endif;
 
-        if (!empty($host['last_seen'])) :
-            $host['f_last_seen'] = utc_to_tz(
-                $host['last_seen'],
-                $ncfg->get('default_timezone'),
-                $ncfg->get('datetime_format')
-            );
-        endif;
-
         if (!empty($host['last_check'])) :
             $host['f_last_check'] = utc_to_tz(
                 $host['last_check'],

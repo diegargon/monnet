@@ -280,17 +280,6 @@ $h_misc = $tdata['host_details']['misc'];
                     <?php endif; ?>
 
                     <?php
-                    if (
-                            empty($tdata['host_details']['online']) &&
-                            !empty($tdata['host_details']['f_last_seen'])
-                    ) {
-                        ?>
-                        <div>
-                            <span class="resume_label"><?= $lng['L_LAST_SEEN'] ?>:</span>
-                            <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
-                        </div>
-                    <?php } ?>
-                    <?php
                     if (!empty($tdata['host_details']['ncpu'])) {
                         ?>
                         <div>
@@ -298,12 +287,14 @@ $h_misc = $tdata['host_details']['misc'];
                             <span class="cpu_field"><?= $h_misc['ncpu'] ?></span>
                         </div>
                     <?php } ?>
+
                     <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
                         <div>
                             <span class="resume_label"><?= $lng['L_LAST_PING_CHECK'] ?>: </span>
                             <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
                         </div>
                     <?php endif; ?>
+
                     <?php if (!empty($h_misc['agent_last_contact'])) : ?>
                         <div>
                             <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>
