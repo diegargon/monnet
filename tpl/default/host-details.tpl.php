@@ -1,9 +1,7 @@
 <?php
 /**
- *
+ * Host Details Template
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -468,6 +466,13 @@ $h_misc = $tdata['host_details']['misc'];
                            id="alarm_newport_disable"
                            data-command="alarm_newport_disable"
                            <?= !empty($h_misc['alarm_newport_disable']) ? 'checked' : null ?>
+                           >
+                    <label for=""><?= $lng['L_ALARM_HOSTNAME']?>:</label>
+                    <input disable type="hidden" id="alarm_hostname_disable" value="0">
+                    <input disable type="checkbox"
+                           id="alarm_hostname_disable"
+                           data-command="alarm_hostname_disable"
+                           <?= !empty($h_misc['alarm_hostname_disable']) ? 'checked' : null ?>
                            >
                     <br/>
                     <label for="enableEmailAlarms"><?= $lng['L_EMAIL_ALARMS'] ?>:</label>

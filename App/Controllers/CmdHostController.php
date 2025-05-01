@@ -98,7 +98,7 @@ class CmdHostController
      *
      * @param string $command
      * @param array<string, string|int> $command_values
-     * @return array <string, string|int>
+     * @return array<string, mixed>
      */
     public function reloadStatsView(string $command, array $command_values): array
     {
@@ -155,7 +155,7 @@ class CmdHostController
      * Actualiza la información de un host.
      *
      * @param array<string, string|int> $command_values Los valores del comando.
-     * @return array<string, string|int> Respuesta en formato JSON.
+     * @return array<string, mixed>
      */
     public function updateHost(array $command_values): array
     {
@@ -246,7 +246,7 @@ class CmdHostController
      * Agrega un puerto remoto a un host.
      *
      * @param array<string, string|int> $command_values Los valores del comando.
-     * @return array<string, string|int> Respuesta en formato JSON.
+     * @return array<string, mixed>
      */
     public function addRemotePort(array $command_values): array
     {
@@ -1051,8 +1051,7 @@ class CmdHostController
     /**
      *
      * @param array<string, string|int> $command_values
-     *
-     * return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function handleTabChange(array $command_values): array
     {

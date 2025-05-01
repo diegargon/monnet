@@ -3,7 +3,7 @@
 /**
  * FeedMeService
  *
- * Servicio para procesar solicitudes de agentes y manejar actualizaciones de hosts.
+ * Service to process agent requests and handle host updates.
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
@@ -19,12 +19,12 @@ use App\Models\CmdStats;
 class FeedMeService
 {
     /**
-     * @var \AppContext $ctx Contexto
+     * @var \AppContext $ctx Context
      */
     private \AppContext $ctx;
 
     /**
-     * @var HostService $hostService Servicio para manejar hosts.
+     * @var HostService $hostService Service to handle hosts.
      */
     private HostService $hostService;
 
@@ -49,9 +49,9 @@ class FeedMeService
     private \DBManager $db;
 
     /**
-     * Constructor de FeedMeService.
+     * Constructor of FeedMeService.
      *
-     * @param \AppContext $ctx Contexto de la aplicación.
+     * @param \AppContext $ctx Application context.
      */
     public function __construct(\AppContext $ctx)
     {
@@ -62,7 +62,7 @@ class FeedMeService
     }
 
     /**
-     * Destruct
+     * Destructor
      */
     public function __destruct()
     {
@@ -70,10 +70,10 @@ class FeedMeService
     }
 
     /**
-     * Procesa una solicitud del agente.
+     * Processes an agent request.
      *
-     * @param array<string, mixed> $request Datos de la solicitud.
-     * @return array<string, mixed> Respuesta procesada.
+     * @param array<string, mixed> $request Request data.
+     * @return array<string, mixed> Processed response.
      */
     public function processRequest(array $request): array
     {
@@ -143,11 +143,11 @@ class FeedMeService
     }
 
     /**
-     * Procesa datos de inicio enviados por el agente.
+     * Processes startup data sent by the agent.
      *
-     * @param int $host_id ID del host.
-     * @param array<string, string|int> $rdata Datos enviados por el agente.
-     * @return array<string, string|int> Valores actualizados del host.
+     * @param int $host_id Host ID.
+     * @param array<string, string|int> $rdata Data sent by the agent.
+     * @return array<string, string|int> Updated host values.
      */
     public function processStarting(int $host_id, array $rdata): array
     {
@@ -172,11 +172,11 @@ class FeedMeService
     }
 
     /**
-     * Procesa estadísticas enviadas por el agente.
+     * Processes statistics sent by the agent.
      *
-     * @param int $host_id ID del host.
-     * @param array<string, string|int> $rdata Datos de estadísticas.
-     * @return bool Indica si el procesamiento fue exitoso.
+     * @param int $host_id Host ID.
+     * @param array<string, mixed> $rdata Statistics data.
+     * @return bool Indicates whether the processing was successful.
      */
     public function processStats(int $host_id, array $rdata): bool
     {
@@ -220,11 +220,11 @@ class FeedMeService
     }
 
     /**
-     * Procesa port info provided by agent
+     * Processes port information provided by the agent.
      *
-     * @param int $host_id ID del host.
-     * @param array<string, string|int> $rdata Datos de puertos.
-     * @return bool Indica si el procesamiento fue exitoso.
+     * @param int $host_id Host ID.
+     * @param array<string, mixed> $rdata Port data.
+     * @return bool Indicates whether the processing was successful.
      */
     public function processPorts(int $host_id, array $rdata): bool
     {
@@ -238,11 +238,11 @@ class FeedMeService
     }
 
     /**
-     * Update ports
+     * Updates port information.
      *
-     * @param int $host_id ID del host.
-     * @param array<string, string|int> $listen_ports Ports
-     * @return bool success|fail.
+     * @param int $host_id Host ID.
+     * @param array<int, array<string, mixed>> $listen_ports Ports data.
+     * @return bool Indicates success or failure.
      */
     public function updateListenPorts(int $host_id, array $listen_ports): bool
     {
@@ -347,12 +347,12 @@ class FeedMeService
     }
 
     /**
-     * Ping data. Agent Provided
+     * Handles ping data provided by the agent.
      *
-     * @param int $host_id ID del host.
-     * @param array<string, string|int> $host_update_values  Update fields
-     * @param array<string, mixed> $rdata
-     * @return array<string, string|int> return added values.
+     * @param int $host_id Host ID.
+     * @param array<string, string|int> $host_update_values Fields to update.
+     * @param array<string, mixed> $rdata Data from the agent.
+     * @return array<string, string|int> Additional values to update.
      */
     private function processPingData(int $host_id, array $host_update_values, array $rdata): array
     {
@@ -378,12 +378,12 @@ class FeedMeService
     }
 
     /**
-     * Response to agent
+     * Prepares a response for the agent.
      *
-     * @param string $command Command
-     * @param array<string, string|int> $request
-     * @param int $interval
-     * @return array<string, string|int> response
+     * @param string $command Command name.
+     * @param array<string, mixed> $request Request data.
+     * @param int $interval Refresh interval.
+     * @return array<string, string|int> Response data.
      */
     private function prepareResponse(string $command, array $request, int $interval): array
     {
@@ -409,12 +409,12 @@ class FeedMeService
     }
 
     /**
-     * Validate request
+     * Validates the agent's request.
      *
-     * @param array<string, string|int> $host host data
-     * @param string $token Auth Toeken
-     * @param int $host_id  Host id.
-     * @return array<string, string|int> result array success|error.
+     * @param array<string, mixed> $host Host data.
+     * @param string $token Authentication token.
+     * @param int $host_id Host ID.
+     * @return array<string, string|int> Result array indicating success or error.
      */
     private function validateHostRequest(array $host, string $token, int $host_id): array
     {
@@ -430,9 +430,9 @@ class FeedMeService
     }
 
     /**
-     * Obtiene el intervalo predeterminado para el agente.
+     * Gets the default interval for the agent.
      *
-     * @return int Intervalo en segundos.
+     * @return int Interval in seconds.
      */
     private function getAgentInterval(): int
     {
@@ -448,12 +448,12 @@ class FeedMeService
     }
 
     /**
-     * Prepara los valores de actualización del host.
+     * Prepares the host's update values.
      *
-     * @param array<string, string|int> $host Datos actuales del host.
-     * @param array<string, string|int> $request Datos de la solicitud.
-     * @param int $interval Intervalo de actualización.
-     * @return array<string, string|int> Valores preparados para la actualización.
+     * @param array<string, mixed> $host Current host data.
+     * @param array<string, mixed> $request Request data.
+     * @param int $interval Update interval.
+     * @return array<string, string|int> Prepared update values.
      */
     private function prepareHostUpdateValues(array $host, array $request, int $interval): array
     {
@@ -475,11 +475,11 @@ class FeedMeService
     }
 
     /**
-     * Registra un log de notificación.
+     * Logs a notification.
      *
-     * @param string $request_name Nombre de la solicitud.
-     * @param int $host_id ID del host.
-     * @param array<string, mixed> $rdata Datos de la notificación.
+     * @param string $request_name Name of the request.
+     * @param int $host_id Host ID.
+     * @param array<string, mixed> $rdata Notification data.
      * @return void
      */
     private function notificationLog(string $request_name, int $host_id, array $rdata): void

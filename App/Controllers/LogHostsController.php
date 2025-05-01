@@ -1,6 +1,9 @@
 <?php
 
 /**
+ * LogHostsController
+ *
+ * Handles operations related to host logs.
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
@@ -32,9 +35,10 @@ class LogHostsController
     }
 
     /**
+     * Reloads logs for a specific host.
      *
-     * @param array<string, string|int> $command_values
-     * @return array<string, string|int>
+     * @param array<string, string|int> $command_values Command values.
+     * @return array<string, string|int> Response in JSON format.
      */
     public function logsReload(array $command_values): array
     {
@@ -46,9 +50,10 @@ class LogHostsController
     }
 
     /**
+     * Acknowledges a host log.
      *
-     * @param array<string, string|int> $command_values
-     * @return array<string, string|int>
+     * @param array<string, string|int> $command_values Command values.
+     * @return array<string, string|int> Response in JSON format.
      */
     public function ackHostLog(array $command_values): array
     {
@@ -66,10 +71,11 @@ class LogHostsController
         return Response::stdReturn(false, "$field: error");
     }
 
-     /**
+    /**
+     * Retrieves events based on the given command.
      *
-     * @param string $command
-     * @return array<string, string|int>
+     * @param string $command Command name.
+     * @return array<string, string|int> Response in JSON format.
      */
     public function getEvents(string $command): array
     {

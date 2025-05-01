@@ -1,10 +1,8 @@
 <?php
 
 /**
- *
+ * Router for handling commands in the application.
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -32,9 +30,9 @@ class CommandRouter
      *
      * @param string $command
      * @param array<string, string|int> $command_values
-     * @return string
+     * @return array<string, mixed> // Corrected return type
      */
-    public function handleCommand(string $command, array $command_values)
+    public function handleCommand(string $command, array $command_values): array
     {
         $response = [];
 
@@ -142,6 +140,7 @@ class CommandRouter
             case 'alarm_port_disable':
             case 'alarm_macchange_disable':
             case 'alarm_newport_disable':
+            case 'alarm_hostname_disable':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->toggleAlarmType($command, $command_values);
                 break;

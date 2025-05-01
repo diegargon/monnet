@@ -63,6 +63,7 @@ class Hosts
         'alarm_port_disable',
         'alarm_macchange_disable',
         'alarm_newport_disable',
+        'alarm_hostname_disable',
         'alarm_ping_email',
         'alarm_port_email',
         'alarm_macchange_email',

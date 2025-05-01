@@ -1,6 +1,9 @@
 <?php
 
 /**
+ * Filter
+ *
+ * Provides utility methods for validating and sanitizing input data.
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
@@ -11,11 +14,11 @@ namespace App\Services;
 class Filter
 {
     /**
-     * $_GET and call varInt - Check for int
+     * Retrieves an integer from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return int|null
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return int|null The validated integer or null if invalid.
      */
     public static function getInt(mixed $val, int $size = PHP_INT_MAX): ?int
     {
@@ -27,10 +30,11 @@ class Filter
     }
 
     /**
-     * $_POST and call varInt - Check for int
-     * @param mixed $val
-     * @param int $size
-     * @return int|null
+     * Retrieves an integer from $_POST and validates it.
+     *
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return int|null The validated integer or null if invalid.
      */
     public static function postInt(mixed $val, int $size = PHP_INT_MAX): ?int
     {
@@ -42,11 +46,11 @@ class Filter
     }
 
     /**
-     * Check for int
+     * Validates an integer.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return int|null
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return int|null The validated integer or null if invalid.
      */
     public static function varInt(mixed $val, int $size = PHP_INT_MAX): ?int
     {
@@ -59,33 +63,35 @@ class Filter
     }
 
     /**
-     * Check for float
+     * Validates a float.
      *
-     * @param mixed $val
-     * @param float $maxValue Maximum allowed value
-     * @return float|null Returns the float value or null if invalid
+     * @param mixed $val The value to validate.
+     * @param float $maxValue Maximum allowed value.
+     * @return float|null The validated float or null if invalid.
      */
     public static function varFloat(mixed $val, float $maxValue = PHP_FLOAT_MAX): ?float
     {
         $tVal = trim((string)$val);
 
-        // Check if the value is numeric and doesn't exceed maximum allowed value
+        // Check if the value is numeric and doesn't exceed the maximum allowed value.
         if (!is_numeric($tVal) || (float)$tVal > $maxValue) {
             return null;
         }
 
         return (float)$tVal;
     }
+
     /*
      * Parse get/post/var
      * Simple String words without accents or special characters
      */
 
     /**
+     * Retrieves a string from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|null
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|null The validated string or null if invalid.
      */
     public static function getString(mixed $val, int $size = PHP_INT_MAX): ?string
     {
@@ -97,12 +103,12 @@ class Filter
     }
 
     /**
+     * Retrieves a string from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|null
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|null The validated string or null if invalid.
      */
-
     public static function postString(mixed $val, int $size = PHP_INT_MAX): ?string
     {
         if (empty($_POST[$val])) {
@@ -113,15 +119,15 @@ class Filter
     }
 
     /**
+     * Validates a string.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|null
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|null The validated string or null if invalid.
      */
-
     public static function varString(mixed $val, int $size = PHP_INT_MAX): ?string
     {
-        //Valida un string simple
+        // Validate a simple string
         if (empty($val)) {
             return null;
         }
@@ -137,10 +143,11 @@ class Filter
     }
 
     /**
-     * Sanitize Array, can be array or string post/get value, check to avoid json
-     * @param mixed $input
-     * @param string $method default var or post/get
-     * @return array<mixed,mixed>
+     * Sanitizes an array, can be an array or string post/get value, checks to avoid JSON.
+     *
+     * @param mixed $input The input to sanitize.
+     * @param string $method The method to use (default: 'var', 'post', or 'get').
+     * @return array<mixed,mixed> The sanitized array.
      */
     public static function sanArray(mixed $input, string $method = 'var'): array
     {
@@ -165,21 +172,21 @@ class Filter
                 if (is_float($value)) {
                     $var_ary[$key] = (float) $value;
                 } elseif (is_numeric($value)) {
-                    //String float is numeric but not float is_float  not work
+                    // String float is numeric but not float is_float not work
                     if (strpos((string) $value, '.') !== false) {
                         $var_ary[$key] = (float) $value;
                     } else {
-                         // Cast to int if it's a valid integer
+                        // Cast to int if it's a valid integer
                         $var_ary[$key] = (int) $value;
                     }
                 } else {
-                    // Verifica si el valor es JSON válido
+                    // Check if the value is valid JSON
                     $decodedJson = json_decode($value, true);
                     if (json_last_error() === JSON_ERROR_NONE) {
-                        // Si es JSON válido, mantenlo como está
+                        // If it's valid JSON, keep it as is
                         $var_ary[$key] = $value;
                     } else {
-                        // Si no es JSON, sanitiza como cadena
+                        // If it's not JSON, sanitize as a string
                         $var_ary[$key] = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: null;
                     }
                 }
@@ -190,11 +197,11 @@ class Filter
     }
 
     /**
-     * UTF8
+     * Retrieves a UTF-8 string from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated UTF-8 string or false if invalid.
      */
     public static function getUtf8(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -206,10 +213,11 @@ class Filter
     }
 
     /**
+     * Retrieves a UTF-8 string from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated UTF-8 string or false if invalid.
      */
     public static function postUtf8(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -221,10 +229,11 @@ class Filter
     }
 
     /**
+     * Validates a UTF-8 string.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated UTF-8 string or false if invalid.
      */
     public static function varUtf8(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -238,11 +247,11 @@ class Filter
     }
 
     /**
-     * URL
+     * Retrieves a URL from $_GET and validates it.
      *
-     * @param string $val
-     * @param int $size
-     * @return string|false
+     * @param string $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated URL or false if invalid.
      */
     public static function getUrl(string $val, int $size = PHP_INT_MAX): string|false
     {
@@ -254,10 +263,11 @@ class Filter
     }
 
     /**
+     * Retrieves a URL from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated URL or false if invalid.
      */
     public static function postUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -269,10 +279,11 @@ class Filter
     }
 
     /**
+     * Validates a URL.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated URL or false if invalid.
      */
     public static function varUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -287,10 +298,11 @@ class Filter
     }
 
     /**
+     * Retrieves an image URL from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated image URL or false if invalid.
      */
     public static function getImgUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -302,10 +314,11 @@ class Filter
     }
 
     /**
+     * Retrieves an image URL from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated image URL or false if invalid.
      */
     public static function postImgUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -317,10 +330,11 @@ class Filter
     }
 
     /**
+     * Validates an image URL.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated image URL or false if invalid.
      */
     public static function varImgUrl(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -330,13 +344,13 @@ class Filter
             return false;
         }
 
-        // Validar que la URL tenga un esquema válido (http o https)
+        // Validate that the URL has a valid scheme (http or https)
         $urlParts = parse_url($val);
         if (!isset($urlParts['scheme']) || !in_array($urlParts['scheme'], ['http', 'https'])) {
             return false;
         }
 
-        // Validar que la extensión del archivo esté en la lista permitida
+        // Validate that the file extension is in the allowed list
         if (empty($urlParts['path'])) :
             return false;
         endif;
@@ -349,11 +363,11 @@ class Filter
     }
 
     /**
-     * AZaz
+     * Retrieves an alphanumeric string from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated alphanumeric string or false if invalid.
      */
     public static function postAzChar(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -365,10 +379,11 @@ class Filter
     }
 
     /**
+     * Retrieves an alphanumeric string from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated alphanumeric string or false if invalid.
      */
     public static function getAzChar(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -380,11 +395,12 @@ class Filter
     }
 
     /**
+     * Validates an alphanumeric string.
      *
-     * @param mixed $var
-     * @param int|null $max_size
-     * @param int|null $min_size
-     * @return string|false
+     * @param mixed $var The value to validate.
+     * @param int|null $max_size Maximum allowed size.
+     * @param int|null $min_size Minimum allowed size.
+     * @return string|false The validated alphanumeric string or false if invalid.
      */
     public static function varAzChar(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
@@ -404,11 +420,11 @@ class Filter
     }
 
     /**
-     * [0-9][A-Za-z]
+     * Retrieves an alphanumeric string from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated alphanumeric string or false if invalid.
      */
     public static function postAlphanum(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -420,10 +436,11 @@ class Filter
     }
 
     /**
+     * Retrieves an alphanumeric string from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated alphanumeric string or false if invalid.
      */
     public static function getAlphanum(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -435,11 +452,12 @@ class Filter
     }
 
     /**
+     * Validates an alphanumeric string.
      *
-     * @param mixed $var
-     * @param int|null $max_size
-     * @param int|null $min_size
-     * @return string|false
+     * @param mixed $var The value to validate.
+     * @param int|null $max_size Maximum allowed size.
+     * @param int|null $min_size Minimum allowed size.
+     * @return string|false The validated alphanumeric string or false if invalid.
      */
     public static function varAlphanum(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
@@ -471,11 +489,11 @@ class Filter
     }
 
     /**
-     * Username
+     * Retrieves a username from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated username or false if invalid.
      */
     public static function postUsername(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -487,10 +505,11 @@ class Filter
     }
 
     /**
+     * Retrieves a username from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated username or false if invalid.
      */
     public static function getUsername(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -502,15 +521,16 @@ class Filter
     }
 
     /**
+     * Validates a username.
      *
-     * @param mixed $var
-     * @param int|null $max_size
-     * @param int|null $min_size
-     * @return string|false
+     * @param mixed $var The value to validate.
+     * @param int|null $max_size Maximum allowed size.
+     * @param int|null $min_size Minimum allowed size.
+     * @return string|false The validated username or false if invalid.
      */
     public static function varUsername(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
-        //Filter name, only az, no special chars, no spaces
+        // Filter name, only az, no special chars, no spaces
         $length = strlen($var);
 
         if (
@@ -535,11 +555,11 @@ class Filter
     }
 
     /**
-     * Email
+     * Retrieves an email from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated email or false if invalid.
      */
     public static function postEmail(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -551,10 +571,11 @@ class Filter
     }
 
     /**
+     * Retrieves an email from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated email or false if invalid.
      */
     public static function getEmail(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -566,30 +587,31 @@ class Filter
     }
 
     /**
+     * Validates an email.
      *
-     * @param mixed $var
-     * @param int|null $max_size
-     * @param int|null $min_size
-     * @return string|false
+     * @param mixed $var The value to validate.
+     * @param int|null $max_size Maximum allowed size.
+     * @param int|null $min_size Minimum allowed size.
+     * @return string|false The validated email or false if invalid.
      */
     public static function varEmail(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
         $length = strlen($var);
 
-        // Validar longitud y formato de correo electrónico
+        // Validate length and email format
         if (
             empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
         ) {
             return false;
         }
 
-        // Mejora: Utilizar filter_var para verificar el formato de correo electrónico
+        // Improvement: Use filter_var to check email format
         if (!filter_var($var, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
         return $var;
-        //Validate email
+        // Validate email
         /*
           if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
           (!empty($min_size) && (strlen($var) < $min_size))) {
@@ -601,11 +623,11 @@ class Filter
     }
 
     /**
-     * Strict Chars: at least [A-z][0-9] _
+     * Retrieves a strict alphanumeric string from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated strict alphanumeric string or false if invalid.
      */
     public static function postStrict(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -617,10 +639,11 @@ class Filter
     }
 
     /**
+     * Retrieves a strict alphanumeric string from $_GET and validates it.
      *
-     * @param string $val
-     * @param int $size
-     * @return string|false
+     * @param string $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated strict alphanumeric string or false if invalid.
      */
     public static function getStrict(string $val, int $size = PHP_INT_MAX): string|false
     {
@@ -632,11 +655,12 @@ class Filter
     }
 
     /**
+     * Validates a strict alphanumeric string.
      *
-     * @param mixed $var
-     * @param int|null $max_size
-     * @param int|null $min_size
-     * @return string|false
+     * @param mixed $var The value to validate.
+     * @param int|null $max_size Maximum allowed size.
+     * @param int|null $min_size Minimum allowed size.
+     * @return string|false The validated strict alphanumeric string or false if invalid.
      */
     public static function varStrict(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
@@ -656,11 +680,11 @@ class Filter
     }
 
     /**
-     * Password
+     * Retrieves a password from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated password or false if invalid.
      */
     public static function postPassword(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -672,10 +696,11 @@ class Filter
     }
 
     /**
+     * Retrieves a password from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated password or false if invalid.
      */
     public static function getPassword(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -687,30 +712,31 @@ class Filter
     }
 
     /**
+     * Validates a password.
      *
-     * @param mixed $var
-     * @param int|null $max_size
-     * @param int|null $min_size
-     * @return string|false
+     * @param mixed $var The value to validate.
+     * @param int|null $max_size Maximum allowed size.
+     * @param int|null $min_size Minimum allowed size.
+     * @return string|false The validated password or false if invalid.
      */
     public static function varPassword(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
-        //Password validate safe password
+        // Password validate safe password
         if (
             (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
         ) {
             return false;
         }
-        //TODO
+        // TODO
         return $var;
     }
 
     /**
-     * IP
+     * Retrieves an IP address from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated IP address or false if invalid.
      */
     public static function getIP(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -722,10 +748,11 @@ class Filter
     }
 
     /**
+     * Retrieves an IP address from $_POST and validates it.
      *
-     * @param string $val
-     * @param int $size
-     * @return string|false
+     * @param string $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated IP address or false if invalid.
      */
     public static function postIP(string $val, int $size = PHP_INT_MAX): string|false
     {
@@ -737,10 +764,11 @@ class Filter
     }
 
     /**
+     * Validates an IP address.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated IP address or false if invalid.
      */
     public static function varIP(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -753,11 +781,11 @@ class Filter
     }
 
     /**
-     * Network
+     * Retrieves a network address from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return bool
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return bool True if valid, false otherwise.
      */
     public static function getNetwork(mixed $val, int $size = PHP_INT_MAX): bool
     {
@@ -769,10 +797,11 @@ class Filter
     }
 
     /**
+     * Retrieves a network address from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return bool
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return bool True if valid, false otherwise.
      */
     public static function postNetwork(mixed $val, int $size = PHP_INT_MAX): bool
     {
@@ -784,10 +813,11 @@ class Filter
     }
 
     /**
+     * Validates a network address.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return bool
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return bool True if valid, false otherwise.
      */
     public static function varNetwork(mixed $val, int $size = PHP_INT_MAX): bool
     {
@@ -815,10 +845,11 @@ class Filter
 
 
     /**
-     * POST PATH
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * Retrieves a path from $_GET and validates it.
+     *
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated path or false if invalid.
      */
     public static function getPath(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -830,10 +861,11 @@ class Filter
     }
 
     /**
+     * Retrieves a path from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated path or false if invalid.
      */
     public static function postPath(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -845,10 +877,11 @@ class Filter
     }
 
     /**
+     * Validates a path.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated path or false if invalid.
      */
     public static function varPath(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -856,7 +889,7 @@ class Filter
             return false;
         }
 
-        // Filtrar el path para permitir solo caracteres alfanuméricos, guiones bajos (_) y barras diagonales (/)
+        // Filter the path to allow only alphanumeric characters, underscores (_), and slashes (/)
         $filtered_path = preg_replace('/[^a-zA-Z0-9_\/]/', '', $val);
 
         if ($filtered_path !== $val) {
@@ -866,10 +899,11 @@ class Filter
     }
 
     /**
+     * Retrieves a file path from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated file path or false if invalid.
      */
     public static function getPathFile(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -881,10 +915,11 @@ class Filter
     }
 
     /**
+     * Retrieves a file path from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated file path or false if invalid.
      */
     public static function postPathFile(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -896,10 +931,11 @@ class Filter
     }
 
     /**
+     * Validates a file path.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated file path or false if invalid.
      */
     public static function varPathFile(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -907,7 +943,7 @@ class Filter
             return false;
         }
 
-        // Filtrar el path para permitir solo caracteres alfanuméricos, guiones bajos (_) y barras diagonales (/)
+        // Filter the path to allow only alphanumeric characters, underscores (_), slashes (/), dots (.), and hyphens (-)
         $filtered_path = preg_replace('/[^a-zA-Z0-9_\/.-]/', '', $val);
 
         if ($filtered_path !== $val) {
@@ -925,13 +961,13 @@ class Filter
     }
 
     /**
-     * Custom String
+     * Retrieves a custom string from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param string $validSpecial
-     * @param int $max_size
-     * @param int $min_size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param string $validSpecial The valid special characters.
+     * @param int $max_size Maximum allowed size.
+     * @param int $min_size Minimum allowed size.
+     * @return string|false The validated custom string or false if invalid.
      */
     public static function postCustomString(
         mixed $val,
@@ -947,12 +983,13 @@ class Filter
     }
 
     /**
+     * Retrieves a custom string from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param string $validSpecial
-     * @param int $max_size
-     * @param int $min_size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param string $validSpecial The valid special characters.
+     * @param int $max_size Maximum allowed size.
+     * @param int $min_size Minimum allowed size.
+     * @return string|false The validated custom string or false if invalid.
      */
     public static function getCustomString(
         mixed $val,
@@ -968,12 +1005,13 @@ class Filter
     }
 
     /**
+     * Validates a custom string.
      *
-     * @param mixed $var
-     * @param string $validSpecialChars
-     * @param int $max_size
-     * @param int $min_size
-     * @return string|false
+     * @param mixed $var The value to validate.
+     * @param string $validSpecialChars The valid special characters.
+     * @param int $max_size Maximum allowed size.
+     * @param int $min_size Minimum allowed size.
+     * @return string|false The validated custom string or false if invalid.
      */
     public static function varCustomString(
         mixed $var,
@@ -981,7 +1019,7 @@ class Filter
         int $max_size = null,
         int $min_size = null
     ): string|false {
-        // Define el conjunto predeterminado de caracteres (AZaz y números)
+        // Define the default set of characters (AZaz and numbers)
         $validChars = 'A-Za-z0-9';
 
         $escapedSpecial = preg_quote($validSpecialChars, '/');
@@ -1005,11 +1043,11 @@ class Filter
     }
 
     /**
-     * Domain
+     * Retrieves a domain from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated domain or false if invalid.
      */
     public static function getDomain(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -1021,10 +1059,11 @@ class Filter
     }
 
     /**
+     * Retrieves a domain from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated domain or false if invalid.
      */
     public static function postDomain(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -1036,10 +1075,11 @@ class Filter
     }
 
     /**
+     * Validates a domain.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated domain or false if invalid.
      */
     public static function varDomain(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -1057,11 +1097,11 @@ class Filter
     }
 
     /**
-     * Hostname
+     * Retrieves a hostname from $_GET and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated hostname or false if invalid.
      */
     public static function getHostname(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -1073,10 +1113,11 @@ class Filter
     }
 
     /**
+     * Retrieves a hostname from $_POST and validates it.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated hostname or false if invalid.
      */
     public static function postHostname(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -1088,10 +1129,11 @@ class Filter
     }
 
     /**
+     * Validates a hostname.
      *
-     * @param mixed $val
-     * @param int $size
-     * @return string|false
+     * @param mixed $val The value to validate.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated hostname or false if invalid.
      */
     public static function varHostname(mixed $val, int $size = PHP_INT_MAX): string|false
     {
@@ -1108,9 +1150,10 @@ class Filter
     }
 
     /**
+     * Validates a JSON string.
      *
-     * @param mixed $json
-     * @return string|null
+     * @param mixed $json The JSON string to validate.
+     * @return string|null The validated JSON string or null if invalid.
      */
     public static function varJson(mixed $json): ?string
     {
@@ -1118,9 +1161,10 @@ class Filter
     }
 
     /**
-     * Return the bool true/false or null if is not a boolean
-     * @param mixed $value
-     * @return bool|null
+     * Validates a boolean value.
+     *
+     * @param mixed $value The value to validate.
+     * @return bool|null The validated boolean or null if invalid.
      */
     public static function varBool(mixed $value): ?bool
     {
@@ -1130,27 +1174,29 @@ class Filter
     }
 
     /**
+     * Validates a cron expression.
      *
-     * @param mixed $value
-     * @return bool
+     * @param mixed $value The cron expression to validate.
+     * @return bool True if valid, false otherwise.
      */
     public static function varCron(mixed $value): bool
     {
         $pattern = '/^
-            (\*(\/[1-9]\d*)?|([0-5]?\d)(-[0-5]?\d)?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|([0-5]?\d)(-[0-5]?\d)?(\/[1-9]\d*)?))*\s  # Minutos
-            (\*(\/[1-9]\d*)?|([01]?\d|2[0-3])(-([01]?\d|2[0-3]))?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|([01]?\d|2[0-3])(-([01]?\d|2[0-3]))?(\/[1-9]\d*)?))*\s  # Horas
-            (\*(\/[1-9]\d*)?|([1-9]|[12]\d|3[01])(-([1-9]|[12]\d|3[01]))?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|([1-9]|[12]\d|3[01])(-([1-9]|[12]\d|3[01]))?(\/[1-9]\d*)?))*\s  # Días del mes
-            (\*(\/[1-9]\d*)?|(0?[1-9]|1[0-2])(-(0?[1-9]|1[0-2]))?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|(0?[1-9]|1[0-2])(-(0?[1-9]|1[0-2]))?(\/[1-9]\d*)?))*\s  # Meses
-            (\*(\/[1-9]\d*)?|([0-6])(-([0-6]))?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|([0-6])(-([0-6]))?(\/[1-9]\d*)?))*  # Días de la semana
+            (\*(\/[1-9]\d*)?|([0-5]?\d)(-[0-5]?\d)?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|([0-5]?\d)(-[0-5]?\d)?(\/[1-9]\d*)?))*\s  # Minutes
+            (\*(\/[1-9]\d*)?|([01]?\d|2[0-3])(-([01]?\d|2[0-3]))?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|([01]?\d|2[0-3])(-([01]?\d|2[0-3]))?(\/[1-9]\d*)?))*\s  # Hours
+            (\*(\/[1-9]\d*)?|([1-9]|[12]\d|3[01])(-([1-9]|[12]\d|3[01]))?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|([1-9]|[12]\d|3[01])(-([1-9]|[12]\d|3[01]))?(\/[1-9]\d*)?))*\s  # Days of the month
+            (\*(\/[1-9]\d*)?|(0?[1-9]|1[0-2])(-(0?[1-9]|1[0-2]))?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|(0?[1-9]|1[0-2])(-(0?[1-9]|1[0-2]))?(\/[1-9]\d*)?))*\s  # Months
+            (\*(\/[1-9]\d*)?|([0-6])(-([0-6]))?(\/[1-9]\d*)?)(,(\*(\/[1-9]\d*)?|([0-6])(-([0-6]))?(\/[1-9]\d*)?))*  # Days of the week
         $/x';
 
         return preg_match($pattern, $value) === 1;
     }
 
     /**
+     * Validates an interval string.
      *
-     * @param mixed $value
-     * @return int|null
+     * @param mixed $value The interval string to validate.
+     * @return int|null The interval in seconds or null if invalid.
      */
     public static function varInterval(mixed $value): ?int
     {
