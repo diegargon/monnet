@@ -98,7 +98,7 @@ class LogHostsService
         endif;
 
         $tdata['keysToShow'] = ['id', 'host', 'level', 'log_type', 'event_type', 'msg', 'ack', 'date'];
-        $tdata['logs'] = $this->formatEventsLogs($this->logHostsModel->getLogs($log_opts));
+        $tdata['logs'] = $this->formatEventsLogs($this->logHostsModel->getLogsHosts($log_opts));
 
         return $tdata;
     }
