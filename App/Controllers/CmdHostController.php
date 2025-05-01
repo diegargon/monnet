@@ -714,7 +714,7 @@ class CmdHostController
         $this->cmdHostModel->updateByID($hid, $values);
 
         \Log::logHost(\LogLevel::NOTICE, $hid, $lng['L_CLEAR_ALARMS_BITS_BY'] . ': ' . $username);
-        return Response::stdReturn(true, 'ok');
+        return Response::stdReturn(true, 'ok', true);
     }
 
     /**
