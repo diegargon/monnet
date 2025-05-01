@@ -574,10 +574,23 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
     // 0.63
     $update = 0.63;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.62) {
         try {
             $db->query("ALTER TABLE hosts DROP COLUMN access_method;");
             $db->query("ALTER TABLE hosts DROP COLUMN status;");
+            $db->query("ALTER TABLE tasks ADD COLUMN pid VARCHAR(255) DEFAULT 'std-ansible-ping';");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed: ' . $e->getMessage());
+        }
+    }
+    // 0.64
+    $update = 0.64;
+    if ($db_version == 0.00) {
+        try {
             //$db->query("
             //");
             $db->query("START TRANSACTION");
@@ -588,11 +601,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db_version = $update;
             Log::notice("Update version to $update successful");
         } catch (Exception $e) {
+            $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-
 
     // Template
     $update = 0.00;

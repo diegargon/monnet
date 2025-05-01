@@ -33,6 +33,7 @@ class CmdTaskAnsibleController
      */
     public function execPlaybook(string $command, array $command_values): array
     {
+        // TODO: to string playbook id will be string
         $target_id = Filter::varInt($command_values['id']);
         $playbook = Filter::varString($command_values['value']);
         $extra_vars = [];
