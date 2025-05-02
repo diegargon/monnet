@@ -1,14 +1,12 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
 $(document).ready(function () {
-    let autoReloadStates = {}; // Guardar el estado de cada botón
-    let autoReloadIntervals = {}; // Guardar los intervalos de cada botón
+    let autoReloadStates = {}; // Button state
+    let autoReloadIntervals = {}; // Button Intevals
 
     $(document).off("click", "button[id^='auto_reload_']").on("click", "button[id^='auto_reload_']", function () {
         const buttonId = $(this).attr('id'); // Obtener el ID del botón
@@ -211,7 +209,7 @@ $(document).ready(function () {
         if (invalidEmails.length > 0) {
             $("#email_feedback").text("Invalid emails: " + invalidEmails.join(", "));
         } else {
-            $("#email_feedback").text(""); // Limpiar retroalimentación si todo es válido
+            $("#email_feedback").text(""); // Clean
         }
 
         //console.log("Valid emails:", validEmails);
@@ -369,6 +367,9 @@ function initTasks() {
         }
     });
 
+}
+
+function test_initializePlaybookForm() {
 }
 
 function initializePlaybookForm() {
@@ -650,6 +651,44 @@ function requestHostDetails(command, command_values = []) {
                                     : `<option value="${option.id}">${option.vkey}: ${option.vvalue}</option>`;
                             }).join('');
                             $('#ans_var_list').html(optionsHtml);
+                        }
+                        if (jsonData.response_msg.playbooks_metadata_test) {
+                            const $playbookSelect = $('#playbook_select').empty();
+                            const playbooksMap = {};
+
+                            // Opción por defecto
+                            $playbookSelect.append(
+                                $('<option>', { 
+                                    value: '', 
+                                    text: 'Selecciona un playbook', 
+                                    selected: true, 
+                                    disabled: true 
+                                })
+                            );
+
+                            // Sort with exception
+                            jsonData.response_msg.playbooks_metadata
+                                .sort((a, b) => 
+                                    a.id === 'std-install-monnet-agent-systemd' ? -1 : 
+                                    b.id === 'std-install-monnet-agent-systemd' ? 1 : 
+                                    0
+                                )
+                                .forEach(playbook => {
+                                    playbooksMap[playbook.id] = playbook;
+
+                                    // Crear opción con data-attributes (solo para datos básicos)
+                                    $playbookSelect.append(
+                                        $('<option>', {
+                                            value: playbook.id,
+                                            text: playbook.name,
+                                            'data-description': playbook.description || '',
+                                            'data-os': playbook.os.join(', ') || ''
+                                        })
+                                    );
+                                });
+
+                            // Save 
+                            $playbookSelect.data('playbooksMap', playbooksMap);                  
                         }
                     } else {
                         $('#reports-table').html(jsonData.command_error_msg);

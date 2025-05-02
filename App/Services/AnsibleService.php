@@ -199,6 +199,19 @@ class AnsibleService
         $ansible['reports_list'] = $this->getHostHeadsReports($host_id);
         $ansible['ansible_vars'] = $this->cmdAnsibleModel->getAnsibleVarsByHostId($host_id);
 
+        $gwRequest = new GwRequest($this->ctx);
+        $request = [
+            'command' => 'get_all_playbooks_metadata',
+            'module' => 'ansible',
+        ];
+        $responseArray = $gwRequest->request($request);
+
+        if ($responseArray['status'] == 'error')  {
+            $ansible['errors'][] = $responseArray['error_msg'];
+        } else {
+            $ansible['playbooks_metadata'] = $responseArray['result'];
+        }
+
         return $ansible;
     }
 

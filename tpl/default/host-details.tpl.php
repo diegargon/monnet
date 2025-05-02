@@ -945,6 +945,7 @@ $h_misc = $tdata['host_details']['misc'];
                  data-playbooks='<?= json_encode($ncfg->get('playbooks')); ?>'>
                 <div class="left-details-column">
                     <div>
+                        <p>Playbooks disponibles: <span id="playbook_count">0</span></p>
                         <select id="playbook_select">
                             <option value=""><?= $lng['L_SEL_PLAYBOOK']?></option>
                         </select>
@@ -952,6 +953,9 @@ $h_misc = $tdata['host_details']['misc'];
                         <input id="as_html" type="checkbox" checked>
                         <button id="pbqueue_btn"><?= $lng['L_ENQUEUE'] ?></button>
                         <button id="pbexec_btn">Exec</button>
+                        <div id="tags_filter">
+                            <h5>Filtrar por tags:</h5>
+                        </div>
                         <div class="ansible_vars">
                             <input type="hidden" data-hid="<?= $tdata['host_details']['id'] ?>"></input>
                             <input type="text" data-name="ans_var_name" size="10" placeholder="Var name"></input>
