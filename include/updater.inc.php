@@ -593,9 +593,14 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             //$db->query("
             //");
+            // Clear old host in this nework 0/1
+            $db->query("ALTER TABLE `networks` ADD `clear` TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
-            //$db->query("
-            //");
+            // Clean never seen again host time
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('clean_host_days', JSON_QUOTE('30'), 1, 104, NULL, 0);
+            ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
