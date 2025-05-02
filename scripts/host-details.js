@@ -592,7 +592,7 @@ function requestHostDetails(command, command_values = []) {
                 if (
                     jsonData.command_receive === 'logs-reload' ||
                     jsonData.command_receive === 'auto_reload_logs' ||
-                    (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'tab9')
+                    (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'logs-reload')
                     ) {
                     if (jsonData.command_success === 1) {
                         $('#term_output').html(jsonData.response_msg);
@@ -602,7 +602,10 @@ function requestHostDetails(command, command_values = []) {
                 }
                 
                 /* Tex Notes */
-                if (jsonData.command_receive === 'load_notes') {
+                if (
+                        jsonData.command_receive === 'load_notes' || 
+                        (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'load_notes')
+                ) {
                     $('#textnotes').html(jsonData.response_msg);
                 }
                 /* Syslog Journald load */

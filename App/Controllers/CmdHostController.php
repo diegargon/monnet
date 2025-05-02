@@ -1061,11 +1061,11 @@ class CmdHostController
 
         switch ($tabName) :
             case 'tab3':    # Notes
-                $cmd = 'load_notes';
+                $cmd_value = 'load_notes';
                 $response = $this->cmdHostNotesModel->getNotes($target_id);
                 break;
             case 'tab9':    # Log
-                $cmd = 'logs-reload';
+                $cmd_value = 'logs-reload';
                 $response = $this->logHostsService->getLogs($target_id, $command_values);
                 break;
             case 'tab10':   # Metrics
