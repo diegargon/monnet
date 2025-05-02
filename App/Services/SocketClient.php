@@ -13,11 +13,31 @@ class SocketClient
     private string $host;
     private int $port;
     private \Socket $socket;
+    private int $timeout = 5;
+    private int $chunkSize = 1024;
 
     public function __construct(string $host, int $port)
     {
+        if (!filter_var($host, FILTER_VALIDATE_IP) && !filter_var($host, FILTER_VALIDATE_DOMAIN)) {
+            throw new \InvalidArgumentException('Invalid host format');
+        }
+        if ($port < 1 || $port > 65535) {
+            throw new \InvalidArgumentException('Port must be between 1 and 65535');
+        }
+
         $this->host = $host;
         $this->port = $port;
+    }
+
+    /**
+     *
+     * @param int $seconds
+     * @return self
+     */
+    public function setTimeout(int $seconds): self
+    {
+        $this->timeout = $seconds;
+        return $this;
     }
 
     /**
@@ -47,25 +67,29 @@ class SocketClient
      */
     public function sendAndReceive(array $data): array
     {
-        $this->connect();
+        try {
+            $this->connect();
 
-        $encodedData = json_encode($data);
-        if ($encodedData === false) {
-            throw new \Exception('Invalid JSON encoding: ' . json_last_error_msg());
+            $encodedData = json_encode($data);
+            if ($encodedData === false) {
+                throw new \Exception('Invalid JSON encoding: ' . json_last_error_msg());
+            }
+
+            if (socket_write($this->socket, $encodedData, strlen($encodedData)) === false) {
+                throw new \RuntimeException('Socket write failed: ' . socket_strerror(socket_last_error($this->socket)));
+            }
+
+            $response = $this->readResponse();
+
+            $decodedResponse = json_decode($response, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('JSON decode error: ' . json_last_error_msg());
+            }
+
+            return $decodedResponse;
+        } finally {
+            $this->disconnect();
         }
-
-        socket_write($this->socket, $encodedData, strlen($encodedData));
-
-        $response = $this->readResponse();
-
-        socket_close($this->socket);
-
-        $decodedResponse = json_decode($response, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \Exception('JSON decode error: ' . json_last_error_msg());
-        }
-
-        return $decodedResponse;
     }
 
     /**
@@ -81,7 +105,7 @@ class SocketClient
         $jsonComplete = false;
 
         while (!$jsonComplete) {
-            $chunk = socket_read($this->socket, 1024);
+            $chunk = socket_read($this->socket, $this->chunkSize);
             if ($chunk === false) {
                 throw new \Exception('Error reading socket: ' . socket_strerror(socket_last_error($this->socket)));
             }
@@ -106,5 +130,21 @@ class SocketClient
         }
 
         return $response;
+    }
+
+    /**
+     * @return void
+     */
+    public function disconnect(): void
+    {
+        if ($this->socket !== null && is_resource($this->socket)) {
+            socket_close($this->socket);
+            $this->socket = null;
+        }
+    }
+
+    public function __destruct()
+    {
+        $this->disconnect();
     }
 }

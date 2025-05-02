@@ -8,16 +8,15 @@
 
 namespace App\Services;
 
-use App\Services\SocketClient;
 use App\Models\CmdAnsibleModel;
 use App\Models\CmdAnsibleReportModel;
 use App\Services\TemplateService;
 use App\Services\DateTimeService;
+use App\Services\GwRequest;
 
 class AnsibleService
 {
     private \AppContext $ctx;
-    private SocketClient $socketClient;
     private \Config $ncfg;
     private CmdAnsibleModel $cmdAnsibleModel;
     private TemplateService $templateService;
@@ -44,9 +43,6 @@ class AnsibleService
         $hosts = $this->ctx->get('Hosts');
         $networks = $this->ctx->get('Networks');
         $host = $hosts->getHostById($target_id);
-
-        $server_ip = $this->ncfg->get('ansible_server_ip');
-        $server_port = $this->ncfg->get('ansible_server_port');
 
         if ($playbook == 'std-install-monnet-agent-systemd') :
             if (empty($host['token'])) :
@@ -88,13 +84,12 @@ class AnsibleService
             'data' => $data
         ];
 
-        try {
-            $this->socketClient = new SocketClient($server_ip, $server_port);
-            $responseArray = $this->socketClient->sendAndReceive($send_data);
-        } catch (\Exception $e) {
-            return ['status' => 'error', 'error_msg' => $e->getMessage()];
-        }
+        $gwRequest = new GwRequest($this->ctx);
+        $responseArray = $gwRequest->request($send_data);
 
+        if (isset($responseArray['status']) && $responseArray['status'] == 'error'){
+            return $responseArray;
+        }
         if (
                 isset($responseArray['status']) &&
                 $responseArray['status'] === 'success' &&

@@ -1,0 +1,80 @@
+<?php
+
+/**
+ *
+ * @author diego/@/envigo.net
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ */
+
+namespace App\Services;
+
+use App\Services\SocketClient;
+use RuntimeException;
+
+class GwRequest
+{
+    /**
+     * @var \AppContext
+     */
+    private \AppContext $ctx;
+
+    /**
+     * @var SocketClient
+     */
+    private SocketClient $socketClient;
+
+    private string $server_ip;
+    private int $server_port;
+
+    public function __construct(\AppContext $ctx)
+    {
+        $this->ctx = $ctx;
+        $ncfg = $ctx->get('Config');
+
+        $this->server_ip = (string)$ncfg->get('ansible_server_ip');
+        $this->server_port = (int)$ncfg->get('ansible_server_port');
+
+        if(empty($this->server_ip)) {
+            return ['status' => 'error', 'GW: Wrong or empty server IP'];
+        }
+
+        if ($this->server_port < 1 || $this->server_port > 65535) {
+            throw new RuntimeException('GW: Invalid server port');
+        }
+
+        $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
+    }
+
+    /**
+     *
+     * @param array<string, mixed> $request
+     * @return array<string, mixed>
+     */
+    public function request(array $request): array
+    {
+        try {
+            $responseArray = $this->socketClient->sendAndReceive($request);
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'error_msg' => $e->getMessage()];
+        }
+        if (is_array($responseArray)) {
+            return $responseArray;
+        } else {
+            return ['status' => 'error', 'Unknown error receiving gw response'];
+        }
+    }
+
+    /**
+     *
+     * @return SocketClient
+     */
+    private function connect(): SocketClient
+    {
+        $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
+        if ($this->socketClient === null) {
+            $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
+        }
+
+        return $this->socketClient;
+    }
+}
