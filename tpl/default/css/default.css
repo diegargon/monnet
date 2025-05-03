@@ -1730,7 +1730,7 @@ input:checked + .slider:before {
 
 #reports-container {
     width: 50vw;
-    height: 25vh;
+    height: 15vh;
     overflow-y: auto;
     resize: vertical;
 }
@@ -1758,6 +1758,7 @@ input:checked + .slider:before {
 
 .checkbox-inline input[type="checkbox"] {
     margin-right: 5px;
+    margin-left: 2px;
     transform: scale(1.2);
     accent-color: #4CAF50;
 }
@@ -1775,7 +1776,7 @@ input:checked + .slider:before {
 .checkbox-inline span {
     color: #333;
     font-family: Arial, sans-serif;
-    font-size: 14px;
+    font-size: 11px;
 }
 
 .playbooks_counter {
