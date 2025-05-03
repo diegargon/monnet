@@ -21,6 +21,7 @@ class AnsibleService
     private CmdAnsibleModel $cmdAnsibleModel;
     private TemplateService $templateService;
     private CmdAnsibleReportModel $ansibleReportModel;
+    private array $playbooks_metadata = [];
 
     public function __construct(\AppContext $ctx)
     {
@@ -199,18 +200,25 @@ class AnsibleService
         $ansible['reports_list'] = $this->getHostHeadsReports($host_id);
         $ansible['ansible_vars'] = $this->cmdAnsibleModel->getAnsibleVarsByHostId($host_id);
 
-        $gwRequest = new GwRequest($this->ctx);
-        $request = [
-            'command' => 'get_all_playbooks_metadata',
-            'module' => 'ansible',
-        ];
-        $responseArray = $gwRequest->request($request);
+        // Get Playbooks Metada (Gw)
+        if (!$this->playbooks_metadata) {
+            $gwRequest = new GwRequest($this->ctx);
+            $request = [
+                'command' => 'get_all_playbooks_metadata',
+                'module' => 'ansible',
+            ];
+            $responseArray = $gwRequest->request($request);
 
-        if ($responseArray['status'] == 'error')  {
-            $ansible['errors'][] = $responseArray['error_msg'];
+            if ($responseArray['status'] == 'error')  {
+                $ansible['errors'][] = $responseArray['error_msg'];
+            } else {
+                $ansible['playbooks_metadata'] = $responseArray['result'];
+                $this->playbooks_metadata = $responseArray['result'];
+            }
         } else {
-            $ansible['playbooks_metadata'] = $responseArray['result'];
+            $ansible['playbooks_metadata'] = $this->playbooks_metadata;
         }
+
 
         return $ansible;
     }
