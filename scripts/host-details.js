@@ -533,7 +533,44 @@ function executePlaybookAction(pb_cmd) {
     requestHostDetails(pb_cmd, requestData);
 }
 
+function filterPlaybooks() {
+    const selectedTags = $('#tags_filter input:checked').map(function() {
+        return $(this).data('tag');
+    }).get();
 
+    console.log('Tags seleccionados:', selectedTags);
+
+    let visibleCount = 0;
+    $('#playbook_select option').each(function() {
+        if($(this).val() === '') return;
+
+        // Show own if none
+        if(selectedTags.length === 0) {
+            $(this).show();
+            visibleCount++;
+            return;
+        }
+
+        // Parse tags
+        let tags = [];
+        try {
+            const tagsData = $(this).attr('data-tags');
+            tags = tagsData ? JSON.parse(tagsData) : [];
+        } catch(e) {
+            console.error("Error parsing tags for:", $(this).val(), "Error:", e);
+            tags = [];
+        }
+
+        //console.log(`Playbook ${$(this).val()} tiene tags:`, tags);
+
+        // Show selected
+        const shouldShow = tags.some(tag => selectedTags.includes(tag));
+        $(this).toggle(shouldShow);
+        if(shouldShow) visibleCount++;
+    });
+
+    $('#playbook_count').text(visibleCount);
+}
 function requestHostDetails(command, command_values = []) {
     var requestData = {
         command: command,
@@ -689,45 +726,6 @@ function requestHostDetails(command, command_values = []) {
                                     </label>
                                 `);
                             });
-
-                            function filterPlaybooks() {
-                                const selectedTags = $('#tags_filter input:checked').map(function() {
-                                    return $(this).data('tag');
-                                }).get();
-
-                                console.log('Tags seleccionados:', selectedTags);
-
-                                let visibleCount = 0;
-                                $('#playbook_select option').each(function() {
-                                    if($(this).val() === '') return; // Saltar opción por defecto
-
-                                    // Si no hay tags seleccionados, mostrar todos y contar
-                                    if(selectedTags.length === 0) {
-                                        $(this).show();
-                                        visibleCount++;
-                                        return;
-                                    }
-
-                                    // Parse tags
-                                    let tags = [];
-                                    try {
-                                        const tagsData = $(this).attr('data-tags');
-                                        tags = tagsData ? JSON.parse(tagsData) : [];
-                                    } catch(e) {
-                                        console.error("Error parsing tags for:", $(this).val(), "Error:", e);
-                                        tags = [];
-                                    }
-
-                                    //console.log(`Playbook ${$(this).val()} tiene tags:`, tags);
-
-                                    // Mostrar si coincide con algún tag seleccionado
-                                    const shouldShow = tags.some(tag => selectedTags.includes(tag));
-                                    $(this).toggle(shouldShow);
-                                    if(shouldShow) visibleCount++;
-                                });
-
-                                $('#playbook_count').text(visibleCount);
-                            }
                             // Event Filter
                             $('#tags_filter').on('change', 'input[type="checkbox"]', filterPlaybooks);
 
