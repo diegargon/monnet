@@ -685,7 +685,7 @@ function requestHostDetails(command, command_values = []) {
                             allTags.forEach(tag => {
                                 $tagsContainer.append(`
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" data-tag="${tag}"> ${tag}
+                                        <input type="checkbox" data-tag="${tag}"> <span>${tag}<span>
                                     </label>
                                 `);
                             });
@@ -695,7 +695,7 @@ function requestHostDetails(command, command_values = []) {
                                     return $(this).data('tag');
                                 }).get();
 
-                                //console.log('Tags seleccionados:', selectedTags);
+                                console.log('Tags seleccionados:', selectedTags);
 
                                 let visibleCount = 0;
                                 $('#playbook_select option').each(function() {
@@ -708,7 +708,7 @@ function requestHostDetails(command, command_values = []) {
                                         return;
                                     }
 
-                                    // Parsear los tags de forma segura
+                                    // Parse tags
                                     let tags = [];
                                     try {
                                         const tagsData = $(this).attr('data-tags');
@@ -718,7 +718,7 @@ function requestHostDetails(command, command_values = []) {
                                         tags = [];
                                     }
 
-                                    console.log(`Playbook ${$(this).val()} tiene tags:`, tags);
+                                    //console.log(`Playbook ${$(this).val()} tiene tags:`, tags);
 
                                     // Mostrar si coincide con algún tag seleccionado
                                     const shouldShow = tags.some(tag => selectedTags.includes(tag));
