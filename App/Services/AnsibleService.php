@@ -471,6 +471,7 @@ class AnsibleService
      */
     private function buildSendData(array $host, string $playbook, array $extraVars = []): array
     {
+        //TODO Fixme playbook can be yaml or yml metadata must provided filename __source_file
         return [
             'playbook' => $playbook . '.yml',
             'extra_vars' => $extraVars,
