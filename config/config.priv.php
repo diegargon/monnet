@@ -9,8 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-$cfg['monnet_version'] = 0.63;
-$cfg['monnet_revision'] = 4;
+$cfg['monnet_version'] = 0.65;
+$cfg['monnet_revision'] = 1;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.170;
@@ -256,8 +256,10 @@ $cfg['task_trigger'] = [
     6 => ['name' => 'L_OTHER_TASK', 'id' => 6],
 ];
 
-/* TODO: Retrieve from monnet-gateway */
-
+/*
+ *  TODO: Retrieve from monnet-gateway
+ *  to delete already retrieve keep just for update reasons
+ */
 $cfg['playbooks'] = [
     [
         'id' => 1,
