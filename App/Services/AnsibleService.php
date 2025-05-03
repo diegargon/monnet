@@ -201,24 +201,16 @@ class AnsibleService
         $ansible['ansible_vars'] = $this->cmdAnsibleModel->getAnsibleVarsByHostId($host_id);
 
         // Get Playbooks Metada (Gw)
-        if (!$this->playbooks_metadata) {
-            $gwRequest = new GwRequest($this->ctx);
-            $request = [
-                'command' => 'get_all_playbooks_metadata',
-                'module' => 'ansible',
-            ];
-            $responseArray = $gwRequest->request($request);
-
-            if ($responseArray['status'] == 'error')  {
-                $ansible['errors'][] = $responseArray['error_msg'];
+        $pb_metadata_result = $this->setPbMetadata();
+        if (isset($pb_metadata_result['status'])) {
+            if ($pb_metadata_result['status'] == 'error') {
+                return $ansible['errors'][] = $pb_metadata_result['error_msg'];
             } else {
-                $ansible['playbooks_metadata'] = $responseArray['result'];
-                $this->playbooks_metadata = $responseArray['result'];
+                $ansible['playbooks_metadata'] = $this->playbooks_metadata;
             }
         } else {
-            $ansible['playbooks_metadata'] = $this->playbooks_metadata;
+            return $ansible['errors'][] = 'Unknown Error getting pb metadata';
         }
-
 
         return $ansible;
     }
@@ -420,5 +412,30 @@ class AnsibleService
             'ip' => $host['ip'],
             'user' => $this->ncfg->get('ansible_user') ?? 'ansible'
         ];
+    }
+
+    private function setPbMetadata(): array
+    {
+        if (!$this->playbooks_metadata) {
+            $gwRequest = new GwRequest($this->ctx);
+            $request = [
+                'command' => 'get_all_playbooks_metadata',
+                'module' => 'ansible',
+            ];
+            $req_result = $gwRequest->request($request);
+
+            if (isset($req_result['status']) && $req_result['status'] == 'success')  {
+                $this->playbooks_metadata = $req_result['result'];
+            } else {
+                return $req_result;
+            }
+        }
+
+        $response = [
+            'status' => 'success',
+        ];
+
+
+        return $response;
     }
 }
