@@ -7,7 +7,7 @@
 
 # MonNet
 
-MonNet is a hybrid of a homepage accessible from your web browser and a preview/summary of your network, featuring additional options.
+MonNet is app (web based) to a preview/summary  your network, featuring additional options.
 
 <p align="center">
 <img width="400" src="https://github.com/diegargon/monnet/blob/main/monnet.png?raw=true" width="100%">
@@ -17,13 +17,13 @@ MonNet is a hybrid of a homepage accessible from your web browser and a preview/
 
 MonNet is currently in an early version. issues may arise between versions. Compatibility is not guaranteed.
 
-Since Monnet is becoming more complex, i working in rewrite nearly all code, beware.
+Since Monnet is becoming more complex, i'm working in rewrite nearly all code, beware.
 
 I started implementing Ansible as a replacement for phpseclib as a method to connect to and retrieve data from hosts, automate installations and other tasks
 
 ## Breaking/Mayor changes
 
-* MonNet no uses the CRON scripts anymore, now MoNet Gateway is in charge, so the two CRON scripts need to be removed.
+* MonNet no uses the CRON scripts anymore, now MonNet Gateway is in charge, so the two CRON scripts need to be removed.
 
 # Features
 
@@ -31,15 +31,16 @@ I started implementing Ansible as a replacement for phpseclib as a method to con
     - Alarms/Warnings/Events (Agent)
     - A simple bookmarks dashboard
     - Basic IPAM
-    - Basic Hosts Stats (Agent)
-    - Linux Support (Ansible/Agent)
+    - Basic Hosts Stats
+    - Linux Support
     - Host Notes
-    - Get Host Logs (Via Ansible)
+    - Get Host data, and logs via Ansible.
     - Email Alerts
 
     Partially working Features
 
-    - Execute Playbooks (Ansible)
+    - Manually execute Ansible Playbooks
+    - Program Ansible Tasks
 
     Future Features:
 
@@ -54,9 +55,9 @@ For basic usage after the install process, you must add at least one network to 
 
 v0.0.0 Mayor.Minor.Revision
 
-Mayor/Minor implies database changes or other code mayor changes.
-
 Revision version implied only code changes, never database changes.
+
+Mayor.Minor more relevant changes
 
 ## LICENSE
 
@@ -89,13 +90,6 @@ Python
 Mysql/MariaDB:
     Tested MySQL >= 8
     You can install locally or use a remote machine with mysql.
-
-arp
-    Optional for get mac's address, only work on the same network (other method will added in the future).
-
-```
-    apt install net-tools
-```
 
 ## Initial database settings
 
@@ -165,7 +159,7 @@ $ nano /etc/crontab
 */15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
 
-## Composer
+## Composer (OBSOLETE)
 
 Necessary if you want support for send mails. (Probably will migrate this to Monnet Gateway in the future))
 
