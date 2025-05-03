@@ -372,50 +372,38 @@ function initTasks() {
 function initializePlaybookSelect(playbooksMap) {
     $('#playbook_select').change(function () {
         const selectedPlaybookId = $(this).val();
-        const playbook = playbooksMap[selectedPlaybookId];  // Accedemos al playbook desde playbooksMap
+        const playbook = playbooksMap[selectedPlaybookId];
 
         if (playbook) {
-            $('#playbook_desc').text(playbook.description || '');  // Usamos description en lugar de desc
+            $('#playbook_desc').text(playbook.description || '');
             $('#vars_container').empty();
 
-            // Si existen string_vars, agregar los campos de texto
-            if (playbook.string_vars) {
-                playbook.string_vars.forEach(function (varName) {
-                    $('#vars_container').append(`
-                        <label for="${varName}">${varName}:</label>
-                        <input type="text" id="${varName}" size="10" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
-                    `);
-                });
-            }
-            if (playbook.numeric_vars) {
-                playbook.numeric_vars.forEach(function (varName) {
-                    $('#vars_container').append(`
-                        <label for="${varName}">${varName}:</label>
-                        <input type="number" id="${varName}" size="5" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
-                    `);
-                });
-            }
-            if (playbook.password_vars) {
-                playbook.password_vars.forEach(function (varName) {
-                    $('#vars_container').append(`
-                        <div class="password-container">
-                        <label for="${varName}">${varName}:</label>
-                        <input type="password" id="${varName}" size="10" name="extra_vars[${varName}]"  class="password-input" placeholder="Enter ${varName}">
-                        <span class="toggle-password">👁️</span>
-                        </div>
-                    `);
-                });
+            if (playbook.vars && playbook.vars.length > 0) {
+                playbook.vars.forEach(function (variable) {
+                    // Tooltip cration
+                    let tooltipText = variable.description || variable.name;
 
-                $('#vars_container').off("click", ".toggle-password").on("click", ".toggle-password", function () {
-                    const passwordInput = $(this).prev(".password-input");
-                    const inputType = passwordInput.attr("type");
-                    passwordInput.attr("type", inputType === "password" ? "text" : "password");
+                    if (variable.default !== undefined) {
+                        tooltipText += `\nDefault: ${variable.default}`;
+                    }
+
+                    // Element creation
+                    const varElement = $('<span>', {
+                        class: 'variable-tag' + (variable.required ? ' required' : ''),
+                        text: variable.name,
+                        title: tooltipText,
+                        css: {
+                            'cursor': 'help'
+                        }
+                    });
+
+                    $('#vars_container').append(varElement);
                 });
             }
         } else {
             // Limpiar si no hay playbook seleccionado
             $('#playbook_desc').empty();
-            $('#vars_container').empty();  // Corregí el selector que faltaba el #
+            $('#vars_container').empty();
         }
     });
 }
