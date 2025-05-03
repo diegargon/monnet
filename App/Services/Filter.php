@@ -120,7 +120,7 @@ class Filter
 
     /**
      * Validates a string.
-     *
+     * Not Allowed: ! @ # $ % ^ & * ( ) , . ? " : { } | < > + spaces
      * @param mixed $val The value to validate.
      * @param int $size Maximum allowed size.
      * @return string|null The validated string or null if invalid.
@@ -655,7 +655,7 @@ class Filter
     }
 
     /**
-     * Validates a strict alphanumeric string.
+     * Validates a strict alphanumeric string + _ + -.
      *
      * @param mixed $var The value to validate.
      * @param int|null $max_size Maximum allowed size.
@@ -672,7 +672,7 @@ class Filter
             return false;
         }
 
-        if (!preg_match('/^[A-Za-z0-9_]+$/', $var)) {
+        if (!preg_match('/^[A-Za-z0-9_-]+$/', $var)) {
             return false;
         }
 
@@ -1243,5 +1243,23 @@ class Filter
         ];
         */
         return $seconds;
+    }
+
+    /**
+     * Retrieves and validates the HTTP_HOST from $_SERVER.
+     *
+     * @return string|false The validated HTTP_HOST or false if invalid.
+     */
+    public static function getServerHost(): string|false
+    {
+        if (empty($_SERVER['HTTP_HOST'])) {
+            return false;
+        }
+
+        // Validate the HTTP_HOST as a domain or IP
+        $host = filter_var($_SERVER['HTTP_HOST'], FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)
+            ?: filter_var($_SERVER['HTTP_HOST'], FILTER_VALIDATE_IP);
+
+        return $host !== false ? $host : false;
     }
 }
