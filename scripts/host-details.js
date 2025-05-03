@@ -692,6 +692,7 @@ function requestHostDetails(command, command_values = []) {
                             )];
 
                             const $tagsContainer = $('#tags_filter');
+                            $tagsContainer.html('');
                             allTags.forEach(tag => {
                                 $tagsContainer.append(`
                                     <label class="checkbox-inline">
