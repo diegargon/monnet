@@ -369,7 +369,55 @@ function initTasks() {
 
 }
 
-function initializePlaybookForm() {
+function initializePlaybookSelect(playbooksMap) {
+    $('#playbook_select').change(function () {
+        const selectedPlaybookId = $(this).val();
+        const playbook = playbooksMap[selectedPlaybookId];  // Accedemos al playbook desde playbooksMap
+
+        if (playbook) {
+            $('#playbook_desc').text(playbook.description || '');  // Usamos description en lugar de desc
+            $('#vars_container').empty();
+
+            // Si existen string_vars, agregar los campos de texto
+            if (playbook.string_vars) {
+                playbook.string_vars.forEach(function (varName) {
+                    $('#vars_container').append(`
+                        <label for="${varName}">${varName}:</label>
+                        <input type="text" id="${varName}" size="10" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
+                    `);
+                });
+            }
+            if (playbook.numeric_vars) {
+                playbook.numeric_vars.forEach(function (varName) {
+                    $('#vars_container').append(`
+                        <label for="${varName}">${varName}:</label>
+                        <input type="number" id="${varName}" size="5" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
+                    `);
+                });
+            }
+            if (playbook.password_vars) {
+                playbook.password_vars.forEach(function (varName) {
+                    $('#vars_container').append(`
+                        <div class="password-container">
+                        <label for="${varName}">${varName}:</label>
+                        <input type="password" id="${varName}" size="10" name="extra_vars[${varName}]"  class="password-input" placeholder="Enter ${varName}">
+                        <span class="toggle-password">👁️</span>
+                        </div>
+                    `);
+                });
+
+                $('#vars_container').off("click", ".toggle-password").on("click", ".toggle-password", function () {
+                    const passwordInput = $(this).prev(".password-input");
+                    const inputType = passwordInput.attr("type");
+                    passwordInput.attr("type", inputType === "password" ? "text" : "password");
+                });
+            }
+        } else {
+            // Limpiar si no hay playbook seleccionado
+            $('#playbook_desc').empty();
+            $('#vars_container').empty();  // Corregí el selector que faltaba el #
+        }
+    });
 }
 
 function _initializePlaybookForm() {
@@ -496,9 +544,6 @@ function changeHDTab(id, tabId) {
     selectedTab.classList.add('active');
     if (['tab3', 'tab9', 'tab10','tab15', 'tab20'].includes(tabId)) {
         requestHostDetails('changeHDTab', {id: id, value: tabId});
-    }
-    if (['tab20'].includes(tabId)) {
-        initializePlaybookForm();
     }
     if (['tab15'].includes(tabId)) {
         initTasks();
@@ -682,10 +727,10 @@ function requestHostDetails(command, command_values = []) {
                             $('#reports-table').html(jsonData.response_msg.reports_list);
                         }
                         if (jsonData.response_msg.ansible_vars) {
-                            console.log("Ansible Vars:", jsonData.response_msg.ansible_vars);
+                            //console.log("Ansible Vars:", jsonData.response_msg.ansible_vars);
                             let optionsHtml = jsonData.response_msg.ansible_vars.map(option => {
                                 return option.vtype === 1
-                                    ? `<option value="${option.id}">${option.vkey}: ****)</option>`
+                                    ? `<option value="${option.id}">${option.vkey}: ****</option>`
                                     : `<option value="${option.id}">${option.vkey}: ${option.vvalue}</option>`;
                             }).join('');
                             $('#ans_var_list').html(optionsHtml);
@@ -712,7 +757,7 @@ function requestHostDetails(command, command_values = []) {
                                         })
                                     );
                                 });
-
+                            console.log(playbooksMap);
                             // Tags
                             const allTags = [...new Set(
                                 jsonData.response_msg.playbooks_metadata.flatMap(p => Array.isArray(p.tags) ? p.tags : [])
@@ -731,6 +776,7 @@ function requestHostDetails(command, command_values = []) {
 
                             // Filter
                             filterPlaybooks();
+                            initializePlaybookSelect(playbooksMap);
                         }
                     } else {
                         $('#reports-table').html(jsonData.command_error_msg);

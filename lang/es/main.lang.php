@@ -41,6 +41,7 @@ $lng = [
     'L_ALARMS_DISABLE' => 'Alarmas deshabilitadas',
     'L_ALWAYS_ON' => 'Always On',
     'L_ADD_VAR' => 'Añadir Ansible Var',
+    'L_AVAILABLE_PB' => 'Playbooks disponibles',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
