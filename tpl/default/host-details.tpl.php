@@ -905,12 +905,6 @@ $h_misc = $tdata['host_details']['misc'];
                             <td id="conditional_field"></td>
                             <td>
                                 <select id="playbooks" name="playbooks">
-                                    <option value="" disable selected>No select</option>
-                                    <?php
-                                    foreach ($ncfg->get('playbooks') as $playbook) :
-                                        print("<option value={$playbook['id']}>{$playbook['name']}</option>");
-                                    endforeach;
-                                    ?>
                                 </select>
                             </td>
                             <td> <!-- Groups -->
@@ -941,8 +935,7 @@ $h_misc = $tdata['host_details']['misc'];
         <!-- /TAB15 --><!-- /Tasks -->
         <!-- TAB20 --><!-- Ansible -->
         <div id="tab20" class="host-details-tab-content">
-            <div id="ansible_container" class="ansible_container"
-                 data-playbooks='<?= json_encode($ncfg->get('playbooks')); ?>'>
+            <div id="ansible_container" class="ansible_container">
                 <div class="left-details-column">
                     <div>
                         <div class="playbooks_counter"><?= $lng['L_AVAILABLE_PB']?>: <span id="playbook_count">0</span></div>

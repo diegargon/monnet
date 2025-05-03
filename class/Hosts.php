@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
@@ -929,62 +927,6 @@ class Hosts
             return $this->getDisplayName($this->hosts[$host_id]);
         }
         return $host_id;
-    }
-
-    /**
-     *
-     * @param int $id
-     * @param array<string|int> $opts
-     * @return array<int, array<string, string>>
-     */
-    public function getReports(int $id, array $opts = []): array
-    {
-        /*
-         * $opts['head'] = int avoid report column
-         * $opts['rtype'] = int 1 manual 2 task
-         * $opt['source_id'] = task_id when task or user_id when manual
-         */
-        $query = "SELECT";
-
-        if (!empty($opts['head'])) {
-            $query .= ' id, host_id, pb_id, source_id, date ';
-        } else {
-            $query .= ' * ';
-        }
-        $query .= 'FROM reports WHERE host_id = ' . $id;
-
-        if (!empty($opts['source_id'])) {
-            $query .= ' AND source_id = ' . $opts['source_id'];
-        }
-        if (!empty($opts['rtype'])) {
-            $query .= ' AND rtype = ' . $opts['rtype'];
-        }
-
-        if (!empty($opts['order']) && ($opts['order'] == 'ASC' || $opts['order'] == 'DESC')) {
-            $query .= ' ORDER BY date ' . $opts['order'];
-        }
-        $results = $this->db->query($query);
-        if (!$results) {
-            return [];
-        }
-        $rows = $this->db->fetchAll($results);
-        $user = $this->ctx->get('User');
-        foreach ($rows as &$row) {
-            //if ((int)$row['rtype'] === 1) {
-                //Username by source_id
-            //}
-            foreach ($this->ncfg->get('playbooks') as $playbook) :
-                if ($playbook['id'] == $row['pb_id']) :
-                    $row['pb_name'] = $playbook['name'] . ' - ' . $playbook['desc'];
-                    break;
-                endif;
-            endforeach;
-
-            $timezone = $user->getTimeZone();
-            $row['user_date'] = utc_to_tz($row['date'], $timezone, $this->ncfg->get('datetime_format'));
-            unset($row['date']);
-        }
-        return $rows;
     }
 
     /**

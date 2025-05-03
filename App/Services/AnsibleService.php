@@ -13,6 +13,7 @@ use App\Models\CmdAnsibleReportModel;
 use App\Services\TemplateService;
 use App\Services\DateTimeService;
 use App\Services\GwRequest;
+use App\Services\Filter;
 
 class AnsibleService
 {
@@ -46,11 +47,11 @@ class AnsibleService
         $host = $hosts->getHostById($target_id);
 
         if ($playbook == 'std-install-monnet-agent-systemd') :
-            if (empty($host['token'])) :
+            if (empty($host['token'])) {
                 $token = $hosts->createHostToken($target_id);
-            else :
+            } else {
                 $token = $host['token'];
-            endif;
+            }
             /* Set default config */
             $agent_config = [
                 "id" => $host['id'],
@@ -58,7 +59,7 @@ class AnsibleService
                 "log_level" => 'info',
                 "default_interval" => $this->ncfg->get('agent_default_interval'),
                 "ignore_cert" => $this->ncfg->get('agent_allow_selfcerts'),
-                "server_host" => $_SERVER['HTTP_HOST'], //TODO Filter?
+                "server_host" => Filter::getServerHost() ?: 'localhost',
                 "mem_alert_threshold" => $this->ncfg->get('default_mem_alert_threshold'),
                 "mem_warn_threshold" => $this->ncfg->get('default_mem_warn_threshold'),
                 "disks_alert_threshold" => $this->ncfg->get('default_disks_alert_threshold'),
@@ -75,6 +76,9 @@ class AnsibleService
                 $agent_config['agent_default_interval'] = $this->ncfg->get('agent_default_interval');
             }
             $extra_vars['agent_config'] = json_encode($agent_config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return ['status' => 'error', 'error_msg' => 'Error encoding JSON: ' . json_last_error_msg()];
+            }
         endif;
 
         $data = $this->buildSendData($host, $playbook, $extra_vars);
@@ -103,7 +107,7 @@ class AnsibleService
                 $pb_data = [
                     'host_id' => $host['id'],
                     'source_id' => $user->getId(),
-                    'pb_id' => $playbook_id,
+                    'pid' => $playbook_id,
                     'rtype' => 1, //Manual
                     'report' => json_encode($responseArray),
                 ];
@@ -134,19 +138,23 @@ class AnsibleService
      */
     public function queueTask(int $hid, int $trigger_type, string $playbook, array $extra_vars = [])
     {
-        $pb_id = $this->findPlaybookId($playbook);
+        $pid = $this->findPlaybookId($playbook);
 
-        if (empty($pb_id)) {
-            return ['status' => 'error', 'error_msg' => 'pb id not exists'];
+        if (empty($pid)) {
+            return ['status' => 'error', 'error_msg' => 'pid not exists'];
         }
 
         $task_data = [
             'hid' => $hid,
-            'pb_id' => $pb_id,
+            'pid' => $pid,
             'trigger_type' => $trigger_type,
             'task_name' => $playbook,
             'extra' => json_encode($extra_vars),
         ];
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return ['status' => 'error', 'error_msg' => 'Error encoding JSON: ' . json_last_error_msg()];
+        }
+
         if ($this->cmdAnsibleModel->createTask($task_data)) {
             $status = ['status' => 'success', 'response_msg' => 'success'];
         } else {
@@ -163,6 +171,12 @@ class AnsibleService
      */
     public function createTask(array $task_data): array
     {
+        /*
+        $task_data['extra'] = json_encode($task_data['extra']);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return ['status' => 'error', 'error_msg' => 'Error encoding JSON: ' . json_last_error_msg()];
+        }
+        */
         if ($this->cmdAnsibleModel->createTask($task_data)) {
             return ['status' => 'success', 'response_msg' => 'success'];
         }
@@ -183,6 +197,12 @@ class AnsibleService
             return ['status' => 'error', 'response_msg' => 'task id not exists: '. $task_id ];
         }
 
+        /*
+        $task_data['extra'] = json_encode($task_data['extra']);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return ['status' => 'error', 'error_msg' => 'Error encoding JSON: ' . json_last_error_msg()];
+        }
+        */
         if ($this->cmdAnsibleModel->updateTask($task_id, $task_data)) {
             return ['status' => 'success', 'response_msg' => 'success'];
         }
@@ -238,9 +258,9 @@ class AnsibleService
         $ncfg = $this->ctx->get('Config');
         //format TODO: Move
         foreach ($reports as &$report) {
-            $playbook = $this->getPbById($report['pb_id']);
+            $playbook = $this->getPbById($report['pid']);
             if ($playbook) {
-                $report['pb_name'] = $playbook['name'] . ' - ' . $playbook['desc'];
+                $report['pb_name'] = $playbook['name'] . ' - ' . $playbook['description'];
             }
             $timezone = $user->getTimeZone();
             $time_format = $ncfg->get('datetime_format');
@@ -304,27 +324,41 @@ class AnsibleService
     /**
      *
      * @param string $pb_name
-     * @return int
+     * @return string
      */
-    public function getPbIdByName(string $pb_name): int
+    public function getPbIdByName(string $pb_name): string
     {
-        foreach ($this->ncfg->get('playbooks') as $play) {
-            if ($play['name'] === $pb_name) :
-                return $play['id'];
-            endif;
+        // Ensure playbook metadata is loaded
+        $pb_metadata_result = $this->setPbMetadata();
+        if (isset($pb_metadata_result['status']) && $pb_metadata_result['status'] === 'error') {
+            \Log::error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
+            return '';
         }
 
-        return 0;
+        foreach ($this->playbooks_metadata as $play) {
+            if ($play['name'] === $pb_name) {
+                return $play['id'];
+            }
+        }
+
+        return '';
     }
 
     /**
      *
-     * @param int $id
+     * @param string $id
      * @return array<string, string|int
      */
-    public function getPbById(int $id): array
+    public function getPbById(string $id): array
     {
-        foreach ($this->ncfg->get('playbooks') as $play) {
+        // Ensure playbook metadata is loaded
+        $pb_metadata_result = $this->setPbMetadata();
+        if (isset($pb_metadata_result['status']) && $pb_metadata_result['status'] === 'error') {
+            \Log::error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
+            return [];
+        }
+
+        foreach ($this->playbooks_metadata as $play) {
             if ($play['id'] === $id) :
                 return $play;
             endif;
@@ -375,11 +409,34 @@ class AnsibleService
         ];
     }
 
-    public function getHostTasks(int $hid)
+    /**
+     *
+     * @param int $hid
+     * @return array<string, mixed>
+     */
+    public function getHostTasks(int $hid): array
     {
         $tdata['host_tasks'] = $this->cmdAnsibleModel->getHostsTasks($hid);
 
-        return  $this->templateService->getTpl('ansible-tasks', $tdata);
+        $this->setPbMetadata();
+
+        if (!empty($this->playbooks_metadata)) {
+            $tdata['pb_meta'] = $this->playbooks_metadata;
+        } else {
+            $tdata['pb_meta'] = [];
+        }
+
+        $pb_sel = '<option value="" disable selected>No select</option>';
+        foreach ($this->playbooks_metadata as $playbook) {
+            $pb_sel .= "<option value={$playbook['id']}>{$playbook['name']}</option>";
+        }
+
+        $response = [
+            'tasks_list' => $this->templateService->getTpl('ansible-tasks', $tdata),
+            'pb_sel' => $pb_sel,
+        ];
+
+        return  $response;
     }
 
     /**
@@ -389,11 +446,19 @@ class AnsibleService
      */
     private function findPlaybookId(string $playbook): ?int
     {
-        foreach ($this->ncfg->get('playbooks') as $pb) {
+        // Ensure playbook metadata is loaded
+        $pb_metadata_result = $this->setPbMetadata();
+        if (isset($pb_metadata_result['status']) && $pb_metadata_result['status'] === 'error') {
+            \Log::error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
+            return null;
+        }
+
+        foreach ($this->playbooks_metadata as $pb) {
             if ($pb['name'] === $playbook) {
                 return $pb['id'];
             }
         }
+
         return null;
     }
 
@@ -414,6 +479,30 @@ class AnsibleService
         ];
     }
 
+    /**
+     *
+     * @return array<string, string|int>
+     */
+    public function getPbIds(): array
+    {
+        $gwRequest = new GwRequest($this->ctx);
+        $request = [
+            'command' => 'get_all_playbooks_ids',
+            'module' => 'ansible',
+        ];
+        $req_result = $gwRequest->request($request);
+
+        if (isset($req_result['status']) && $req_result['status'] == 'success')  {
+            return $req_result['result'];
+        }
+
+        return [];
+    }
+
+    /**
+     *
+     * @return array<string, string|int>
+     */
     private function setPbMetadata(): array
     {
         if (!$this->playbooks_metadata) {

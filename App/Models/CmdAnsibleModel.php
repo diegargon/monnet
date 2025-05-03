@@ -12,7 +12,7 @@
   TABLA TASK
   `id`
   `hid`             host id, ver posibilidad de rango en el futuro
-  `pb_id`           playbook a ejecutar
+  `pid`           playbook a ejecutar
   `trigger_type`    tipo de trigger 1 manual  2 temporizaedo 3 otra task 4 evento
   `last_triggered`  ultima vez que se ejecuto
   `task_name`       nombre comun

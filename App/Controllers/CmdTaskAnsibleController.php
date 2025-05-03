@@ -253,14 +253,23 @@ class CmdTaskAnsibleController
      */
     private function checkTaskFields(int $id, string $command, array $command_values)
     {
-        $playbook_id = Filter::varInt($command_values['playbook']);
+        //$playbook_id = Filter::varString($command_values['playbook']);
+        $playbook_id = $command_values['playbook'];
         $next_task_id = Filter::varInt($command_values['next_task']);
         $task_trigger = Filter::varInt($command_values['task_trigger']);
         $ansible_groups = Filter::varInt($command_values['groups']);
         $disable_task = Filter::varBool($command_values['disable_task']);
         $task_name = Filter::varString($command_values['task_name']);
 
+        if (empty($playbook_id)) {
+            return ['status' => 'error', 'error_msg' => 'Playbook id: ', $playbook_id];
+        }
+
+        if (empty($task_name)) {
+            return ['status' => 'error', 'error_msg' => 'Task name: ', $task_name];
+        }
         empty($disable_task) ? $disable_task = 0 : null;
+
 
         if ($task_trigger === 3) {
             $conditional = Filter::varInt($command_values['conditional']);
@@ -289,7 +298,7 @@ class CmdTaskAnsibleController
         }
 
         $task_data = [
-            'pb_id' => $playbook_id,
+            'pid' => $playbook_id,
             'trigger_type' => $task_trigger,
             'task_name' => $task_name,
             'next_task' => $next_task_id,

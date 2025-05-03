@@ -1058,6 +1058,7 @@ class CmdHostController
         $tabName = Filter::varString($command_values['value']);
         $target_id = Filter::varInt($command_values['id']);
         $extra = [];
+        $cmd = 'changeHDTab';
 
         switch ($tabName) :
             case 'tab3':    # Notes
@@ -1069,17 +1070,14 @@ class CmdHostController
                 $response = $this->logHostsService->getLogs($target_id, $command_values);
                 break;
             case 'tab10':   # Metrics
-                $cmd = 'changeHDTab';
                 $cmd_value =  'tab10';
                 $response = $this->hostMetricsService->getMetricsGraph($target_id);
                 break;
             case 'tab15':   # Tasks
-                $cmd = 'changeHDTab';
                 $cmd_value = 'tab15';
                 $response = $this->ansibleService->getHostTasks($target_id);
                 break;
             case 'tab20':   # Ansible
-                $cmd = 'changeHDTab';
                 $cmd_value = 'tab20';
                 $response = $this->ansibleService->getAnsibleTabDetails($target_id);
                 break;

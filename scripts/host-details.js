@@ -713,7 +713,8 @@ function requestHostDetails(command, command_values = []) {
                 }
                 if (jsonData.command_receive === 'changeHDTab'  && jsonData.command_value === 'tab15') {
                     if (jsonData.command_success === 1) {
-                        $('#tasks-list').html(jsonData.response_msg);
+                        $('#tasks-list').html(jsonData.response_msg.tasks_list);
+                        $('#playbooks').html(jsonData.response_msg.pb_sel);
                     } else {
                         $('#tasks-list').html(jsonData.command_error_msg);
                     }

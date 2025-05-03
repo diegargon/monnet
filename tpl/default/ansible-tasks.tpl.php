@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -75,8 +73,8 @@
             <td>
                 <select name="playbooks[<?= $task_id ?>]">
                     <option value="" disabled selected>No select</option>
-                    <?php foreach ($ncfg->get('playbooks') as $playbook) :
-                        $selected = ($playbook['id'] == $task['pb_id']) ? 'selected' : ''; ?>
+                    <?php foreach ($tdata['pb_meta'] as $playbook) :
+                        $selected = ($playbook['id'] == $task['pid']) ? 'selected' : ''; ?>
                         <option value="<?= $playbook['id'] ?>" <?= $selected ?>><?= $playbook['name'] ?></option>
                     <?php endforeach; ?>
                 </select>
