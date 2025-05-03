@@ -886,10 +886,11 @@ input:checked + .slider:before {
 .host-details-tabs-head:hover {
     color: gray;
 }
+
 .host-details-tab-content {
     display: none;
-
 }
+
 .host-details-tab-content.active {
     display: inline-block;
     width: 99%;
@@ -898,7 +899,6 @@ input:checked + .slider:before {
     padding: 5px 0px 5px 5px;
     /* resize: both; */
     /* overflow-y: scroll; */
-
 }
 
 .host-details-tab-content textarea {

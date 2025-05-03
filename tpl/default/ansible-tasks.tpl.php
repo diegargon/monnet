@@ -33,7 +33,7 @@
             <td>
                 <input type="hidden" name="hid" value="<?= $task['hid'] ?>"/>
                 <input
-                    type="text" size="20" max-size="20"
+                    type="text" size="12" max-size="20"
                     name="task_name[<?= $task_id ?>]"
                     value="<?= $task['task_name'] ?>"
                     required
@@ -63,10 +63,10 @@
                     <?php
                 endif;
                 if ($task['trigger_type'] == 4) : # Cron Scheduler
-                    echo '<input type="text" name="conditional" value="' . $task['crontime'] . '"/>';
+                    echo '<input type="text" size="15" name="conditional" value="' . $task['crontime'] . '"/>';
                 endif;
                 if ($task['trigger_type'] == 5) : # Interval
-                    echo '<input type="text" name="conditional" value="' . $task['task_interval'] . '"/>';
+                    echo '<input type="text" size="5" name="conditional" value="' . $task['task_interval'] . '"/>';
                 endif;
                 ?>
             </td>

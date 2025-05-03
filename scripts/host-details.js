@@ -352,6 +352,7 @@ function initTasks() {
             const inputText = document.createElement("input");
             conditionalField.innerHTML = "";
             inputText.type = "text";
+            inputText.size = 15;
             inputText.name = `conditional[${row.data('id')}]`;
             inputText.placeholder = "Cron time * * * * *";
             conditionalField.appendChild(inputText);
@@ -359,6 +360,7 @@ function initTasks() {
             const inputText = document.createElement("input");
             conditionalField.innerHTML = "";
             inputText.type = "text";
+            inputText.size = 5;
             inputText.name = `conditional[${row.data('id')}]`;
             inputText.placeholder = "Interval 5m/1h/1w/1mo/1y";
             conditionalField.appendChild(inputText);
