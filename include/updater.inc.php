@@ -578,7 +578,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             $db->query("ALTER TABLE hosts DROP COLUMN access_method;");
             $db->query("ALTER TABLE hosts DROP COLUMN status;");
-            $db->query("ALTER TABLE tasks ADD COLUMN pid VARCHAR(255) DEFAULT 'std-ansible-ping';");
+            $db->query("ALTER TABLE tasks ADD COLUMN pid VARCHAR(255) DEFAULT 'std-ansible-ping' AFTER hid;");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
             Log::notice("Update version to $update successful");
@@ -589,11 +589,19 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
     // 0.64
     $update = 0.64;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.63) {
         try {
             //$db->query("
             //");
-            // Clear old host in this nework 0/1
+            $db->query("ALTER TABLE reports ADD COLUMN pid VARCHAR(255) AFTER host_id;");
+            $db->query("ALTER TABLE tasks MODIFY pb_id INT NULL;");
+            foreach ($ncfg->get('playbooks') as $playbook) {
+                $pbId = (int)$playbook['id'];
+                $pname = $playbook['name'];
+
+                $db->query("UPDATE reports SET pid = '$pname' WHERE pb_id = $pbId");
+            }
+            // Option to Clear to allow old hosts in this nework 0/1
             $db->query("ALTER TABLE `networks` ADD `clear` TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
             // Clean never seen again host time
@@ -601,6 +609,44 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('clean_host_days', JSON_QUOTE('30'), 1, 104, NULL, 0);
             ");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // 0.65
+    $update = 0.65;
+    if ($db_version == 0.64) {
+        try {
+            $db->query("ALTER TABLE tasks MODIFY pb_id INT NULL;");
+            $db->query("ALTER TABLE reports MODIFY pb_id INT NULL;");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // 0.66
+    $update = 0.66;
+    if ($db_version == 0.00) {
+        try {
+            $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
+            $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
+            $db->query("ALTER TABLE tasks DROP COLUMN extra;");
+            //$db->query("
+            //");
+            $db->query("START TRANSACTION");
+            //$db->query("
+            //");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
