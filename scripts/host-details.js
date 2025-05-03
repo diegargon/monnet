@@ -51,12 +51,12 @@ $(document).ready(function () {
     });
 
     // Toggle visibility ipv6 ports
-    $(document).on("change", "#display_ipv6", function () {        
+    $(document).on("change", "#display_ipv6", function () {
         $('.port_ipv6').css('display', this.checked ? 'inline-flex' : 'none');
     });
 
     // Toggle visibility local ports
-    $(document).on("change", "#display_local", function () {        
+    $(document).on("change", "#display_local", function () {
         $('.port_local').css('display', this.checked ? 'inline-flex' : 'none');
     });
 
@@ -66,10 +66,10 @@ $(document).ready(function () {
         var logSize = $('#log_size').val();
         requestHostDetails('logs-reload', {id: hostId, log_level: logLevel, log_size: logSize});
     });
-    
+
     $(document).on("change", "#log_level", function () {
         $("#logs_reload_btn").trigger("click");
-    }); 
+    });
 
     $(document).off("click", "#pbqueue_btn").on("click", "#pbqueue_btn", function () {
         executePlaybookAction('pbqueue');
@@ -346,22 +346,22 @@ function initTasks() {
                 option.value = value;
                 option.textContent = key;
                 dynamicSelect.appendChild(option);
-            }        
+            }
             conditionalField.appendChild(dynamicSelect);
-        } else if (selectedValue === 4) {          
+        } else if (selectedValue === 4) {
             const inputText = document.createElement("input");
             conditionalField.innerHTML = "";
             inputText.type = "text";
             inputText.name = `conditional[${row.data('id')}]`;
-            inputText.placeholder = "Cron time * * * * *"; 
+            inputText.placeholder = "Cron time * * * * *";
             conditionalField.appendChild(inputText);
-        } else if (selectedValue === 5) {          
+        } else if (selectedValue === 5) {
             const inputText = document.createElement("input");
             conditionalField.innerHTML = "";
             inputText.type = "text";
             inputText.name = `conditional[${row.data('id')}]`;
-            inputText.placeholder = "Interval 5m/1h/1w/1mo/1y"; 
-            conditionalField.appendChild(inputText);            
+            inputText.placeholder = "Interval 5m/1h/1w/1mo/1y";
+            conditionalField.appendChild(inputText);
         } else {
             conditionalField.innerHTML = "";
         }
@@ -369,10 +369,10 @@ function initTasks() {
 
 }
 
-function test_initializePlaybookForm() {
+function initializePlaybookForm() {
 }
 
-function initializePlaybookForm() {
+function _initializePlaybookForm() {
     // Obtener el array de playbooks directamente desde el atributo data-playbooks
     const playbooks = $('#ansible_container').data('playbooks'); //devuelve un objeto
 
@@ -533,6 +533,7 @@ function executePlaybookAction(pb_cmd) {
     requestHostDetails(pb_cmd, requestData);
 }
 
+
 function requestHostDetails(command, command_values = []) {
     var requestData = {
         command: command,
@@ -601,10 +602,10 @@ function requestHostDetails(command, command_values = []) {
                         $('#term_output').html('Error');
                     }
                 }
-                
+
                 /* Tex Notes */
                 if (
-                        jsonData.command_receive === 'load_notes' || 
+                        jsonData.command_receive === 'load_notes' ||
                         (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'load_notes')
                 ) {
                     $('#textnotes').html(jsonData.response_msg);
@@ -618,7 +619,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#term_output').html(jsonData.response_msg);
                     } else if (jsonData.command_error_msg) {
                         $('#term_output').html(jsonData.command_error_msg);
-                    } else {                        
+                    } else {
                         $('#term_output').html('Error');
                     }
                 }
@@ -652,43 +653,84 @@ function requestHostDetails(command, command_values = []) {
                             }).join('');
                             $('#ans_var_list').html(optionsHtml);
                         }
-                        if (jsonData.response_msg.playbooks_metadata_test) {
+                        if (jsonData.response_msg.playbooks_metadata) {
                             const $playbookSelect = $('#playbook_select').empty();
                             const playbooksMap = {};
 
-                            // Opción por defecto
-                            $playbookSelect.append(
-                                $('<option>', { 
-                                    value: '', 
-                                    text: 'Selecciona un playbook', 
-                                    selected: true, 
-                                    disabled: true 
-                                })
-                            );
+                            // Default
+                            $playbookSelect.append('<option value="" selected>Selecciona un playbook</option>');
 
-                            // Sort with exception
+                            // Procesar playbooks
                             jsonData.response_msg.playbooks_metadata
-                                .sort((a, b) => 
-                                    a.id === 'std-install-monnet-agent-systemd' ? -1 : 
-                                    b.id === 'std-install-monnet-agent-systemd' ? 1 : 
-                                    0
-                                )
+                                .sort((a, b) => a.id === 'std-install-monnet-agent-systemd' ? -1 : b.id === 'std-install-monnet-agent-systemd' ? 1 : 0)
                                 .forEach(playbook => {
                                     playbooksMap[playbook.id] = playbook;
 
-                                    // Crear opción con data-attributes (solo para datos básicos)
                                     $playbookSelect.append(
                                         $('<option>', {
                                             value: playbook.id,
                                             text: playbook.name,
-                                            'data-description': playbook.description || '',
-                                            'data-os': playbook.os.join(', ') || ''
+                                            'data-tags': JSON.stringify(Array.isArray(playbook.tags) ? playbook.tags : []),
+                                            'data-description': playbook.description || ''
                                         })
                                     );
                                 });
 
-                            // Save 
-                            $playbookSelect.data('playbooksMap', playbooksMap);                  
+                            // Tags
+                            const allTags = [...new Set(
+                                jsonData.response_msg.playbooks_metadata.flatMap(p => Array.isArray(p.tags) ? p.tags : [])
+                            )];
+
+                            const $tagsContainer = $('#tags_filter');
+                            allTags.forEach(tag => {
+                                $tagsContainer.append(`
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" data-tag="${tag}"> ${tag}
+                                    </label>
+                                `);
+                            });
+
+                            function filterPlaybooks() {
+                                const selectedTags = $('#tags_filter input:checked').map(function() {
+                                    return $(this).data('tag');
+                                }).get();
+                                console.log('Tags seleccionados:', selectedTags);
+                                if(selectedTags.length === 0) {
+                                    $('#playbook_select option').show();
+                                    $('#playbook_count').text($('#playbook_select option').length - 1);
+                                    return;
+                                }
+                                // Filtrar playbooks
+                                let visibleCount = 0;
+                                $('#playbook_select option').each(function() {
+                                    if($(this).val() === '') return; // Saltar opción por defecto
+
+                                    // Parse tags
+                                    let tags = [];
+                                    try {
+                                        const tagsData = $(this).attr('data-tags');
+                                        tags = tagsData ? JSON.parse(tagsData) : [];
+                                    } catch(e) {
+                                        console.error("Error parsing tags for:", $(this).val(), "Error:", e);
+                                        tags = [];
+                                    }
+
+                                    console.log(`Playbook ${$(this).val()} tiene tags:`, tags);
+
+                                    // Mostrar si coincide con algún tag seleccionado o si no hay selección
+                                    const shouldShow = selectedTags.length === 0 ||
+                                                     tags.some(tag => selectedTags.includes(tag));
+
+                                    $(this).toggle(shouldShow);
+                                    if(shouldShow) visibleCount++;
+                                });
+                                $('#playbook_count').text(visibleCount);
+                            }
+                            // Event Filter
+                            $('#tags_filter').on('change', 'input[type="checkbox"]', filterPlaybooks);
+
+                            // Filter
+                            filterPlaybooks();
                         }
                     } else {
                         $('#reports-table').html(jsonData.command_error_msg);
@@ -723,7 +765,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#playbook_content').html(jsonData.response_msg);
 
                     }
-                }                
+                }
                 /* Playbacks exec */
                 if (jsonData.command_receive === 'playbook_exec') {
                     if (jsonData.command_success === 1) {
@@ -746,7 +788,7 @@ function requestHostDetails(command, command_values = []) {
                 }
                 /* Tasks */
                 if (
-                    ['delete_host_task', 'create_host_task', 
+                    ['delete_host_task', 'create_host_task',
                      'update__host_task', 'force_exec_task']
                     .includes(jsonData.command)
                 ) {
@@ -760,7 +802,7 @@ function requestHostDetails(command, command_values = []) {
                 /* Delete port */
                 if (jsonData.command_receive === 'deleteHostPort') {
                     $('.status_msg').html(jsonData.response_msg);
-                  
+
                     if (jsonData.command_success === 1 && jsonData.port_id) {
                         $('.current_agent_ports option[value="' + jsonData.port_id + '"]').remove();
                     }
