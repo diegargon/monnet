@@ -945,23 +945,29 @@ input:checked + .slider:before {
     float: left;
     border: 0px solid blue;
 }
+
 .host-controls-right {
     float: right;
     border: 0px solid blue;
     margin: 3px 2px 0px 0px;
 }
+
 .host-details-close input  {
 }
+
 .host-details-form-close {
     display: inline-block;
     border: 0px solid blue;
 }
+
 .action-icon {
     width: 20px;
 }
+
 .action-icon-tab {
     width: 15px;
 }
+
 .power-off {
     background: white;
     border-radius: 8px;
@@ -1011,12 +1017,14 @@ input:checked + .slider:before {
     padding-bottom: 40px;
     overflow: auto;
 }
+
 .profile_box {
     display: block;
     border: 0px solid red;
     margin: 0 auto;
     width: 300px;
 }
+
 .profile_box input {
     padding: 10px;
     border: 1px solid #4CAF50; /* Borde verde */
@@ -1025,15 +1033,18 @@ input:checked + .slider:before {
     background-color: #DFF2DF; /* Fondo verde claro */
     color: #333; /* Texto oscuro para contraste */
 }
+
 .profile_box input:focus {
     border-color: #5cb85c;
     background-color: #dff0d8;
     box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
 }
+
 .profile_box input:placeholder {
     color: #666;
 
 }
+
 .login_button {
     padding: 10px 15px;
     background-color: #4CAF50;
@@ -1043,9 +1054,11 @@ input:checked + .slider:before {
     cursor: pointer;
     margin-top: 2px;
 }
+
 .login_button:hover {
     background-color: #45a049
 }
+
 .top_button_bar {
     display: flex;
     border: 0px solid blue;
@@ -1054,6 +1067,7 @@ input:checked + .slider:before {
     top: 10px;
     margin: auto;
 }
+
 .top_button_bar a {
     /* display: flex;*/
     border: 0px solid yellow;
@@ -1061,12 +1075,14 @@ input:checked + .slider:before {
     margin: 0px;
     overflow: auto;
 }
+
 .top_button_bar img {
     width: 30px;
     padding: 0px;
     margin: 0px;
     border: 0px solid blue;
 }
+
 .bar_button_container {
     float: left;
     margin: 0px;
@@ -1080,16 +1096,19 @@ input:checked + .slider:before {
     text-align: center;
     vertical-align: middle;
 }
+
 .add_link, .close_link, .settings_link{
     width: 16px;
     padding-left: 0px;
 }
+
 .button-ctrl {
     border: none;
     padding: 0;
     background: none;
     cursor: pointer;
 }
+
 #stdbox-container, #mgmt-bookmark-container, #mgmt-network-container, #pool-container {
     display: none;
     position: absolute;
@@ -1106,6 +1125,7 @@ input:checked + .slider:before {
     z-index: 2;
     background-color: rgb(55, 50, 37);
 }
+
 .td-network-fields {
     display: flex;
     padding-left: 5pX;
@@ -1113,6 +1133,7 @@ input:checked + .slider:before {
 .td-network-fields input {
     padding-left: 5px;
 }
+
 .front-container-bar {
     display: inline-block;
     vertical-align: middle;
@@ -1123,22 +1144,27 @@ input:checked + .slider:before {
     margin: 0px;
     background-color: #808080;
 }
+
 .front-container-bar-title {
     float:left;
     margin: 1px 0px 0px 1px;
 }
+
 #addBookmarkForm label, #addNetworkForm label {
     display: block;
     margin-bottom: 5px;
 }
+
 .form_container {
     margin: 10px;
 }
+
 .form_container label {
     display: block;
     margin-top: 5px;
     margin-bottom: 4px;
 }
+
 #addBookmarkForm input[type="text"], #addNetworkForm input[type="text"] {
     padding: 2px;
     margin-bottom: 5px;
@@ -1146,15 +1172,19 @@ input:checked + .slider:before {
     border-radius: 4px;
     box-sizing: border-box;
 }
+
 #close_addbookmark, #close_mgmtbookmark, #close_mgmt_network, #close_pool {
     float:left;
 }
+
 #weight {
     width: 50px !important;
 }
+
 #cat_id {
     width: 150px !important;
 }
+
 #addBookmarkForm input[type="submit"], #addNetworkForm input[type="submit"], #addHost input[type="submit"] {
     display: block;
     width: auto;
@@ -1166,17 +1196,21 @@ input:checked + .slider:before {
     border-radius: 4px;
     cursor: pointer;
 }
+
 #status_msg,#error_msg, #network_status_msg, #network_error_msg {
     width: 100%;
     text-align: center;
     margin-top: 10px;
 }
+
 #status_msg, #network_status_msg {
     color: green;
 }
+
 #error_msg, #network_error_msg {
     color: red;
 }
+
 #textarea_logs {
     display: block;
     resize: both;
@@ -1199,11 +1233,13 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
 }
+
 .category img {
     width: 15px;
     height: 15px;
     margin: 0px 4px 0px 4px;
 }
+
 .category a {
     display: flex;
     text-decoration: none;
@@ -1211,29 +1247,35 @@ input:checked + .slider:before {
     margin: 5px 0px 5px 0px;
 
 }
+
 .category a:hover {
     box-shadow: 6px 6px 6px rgba(255,0,0,0.40), 6px 6px 6px rgba(255,0,0,0.40);
 }
+
 .cat_name {
     text-transform: uppercase;
     word-break: keep-all;
 }
+
 .hosts_totals {
     display: flex;
     align-items: center;
     font-weight: 400;
     margin-right: 10px;
 }
+
 .term_container {
     box-sizing: border-box;
     background-color: transparent;
     border: 1px solid black;
     border-radius: 2rem;
 }
+
 .term_crystal {
     border:0px solid red;
     position:relative;
 }
+
 .frame {
     background-color: transparent;
     border-radius: 2rem;
@@ -1249,6 +1291,7 @@ input:checked + .slider:before {
     height: 300px;
     overflow: auto;
 }
+
 .term_output {
     /* color: #00fa00; */
     color: #fff;
@@ -1262,6 +1305,7 @@ input:checked + .slider:before {
     /* letter-spacing: -1.5px; */
     word-break: break-word;
 }
+
 .glow {
     animation: crt-glow 60s infinite;
     /*
@@ -1275,41 +1319,51 @@ input:checked + .slider:before {
     */
     opacity: 0.15;
 }
+
 .footer-bar {
     border: 0px solid pink;
     width: 95%;
     margin: 0 auto;
 }
+
 .footer-left-element  {
     display: inline-flex;
 }
+
 .footer-right-element {
     float: right;
 }
+
 .clearfix {
     clear: both; /* Limpiar los flotadores */
 }
+
 .delete_bookmark, .edit_bookmark {
     display: none;
     position: absolute;
     z-index: 1;
 }
+
 .delete_bookmark {
     top: 5px;
     right: 2px;
 
 }
+
 .edit_bookmark {
     top: 30px;
     right: 2px;
 }
+
 .disabled-link {
     pointer-events: none;
     background-color: black !important;
 }
+
 .disabled-link, .item-thumb{
     background-color: #1c1c1c !important;
 }
+
 .disabled-link img{
     opacity: 0.2;
 }
@@ -1329,14 +1383,11 @@ input:checked + .slider:before {
     top: 20px;
     z-index: 1;
 }
+
 .dropdown:hover .dropdown-content {
     display: block;
 }
-/*
-#tab9 .frame {
-    height: 145px;
-}
-*/
+
 #config_status_msg {
     width: 100%;
     font-size: 12px;
@@ -1345,6 +1396,7 @@ input:checked + .slider:before {
     text-align: center;
     border:0px solid red;
 }
+
 .min-details-hidden {
     display: flex;
     padding: 0px;
@@ -1360,9 +1412,11 @@ input:checked + .slider:before {
     right: 3px;
     height: 70%;
 }
+
 .min-details-hidden img {
     display: none;
 }
+
 .min-details-hidden:hover {
     width: 70px;
     background-color: rgb(41, 40, 40);
@@ -1419,15 +1473,18 @@ input:checked + .slider:before {
 .config_container, .resume_container {
     display: flex;
 }
+
 .ansible_container {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
 }
+
 .left-config-column, .right-config-column, .resume-left-column, .resume-right-column {
     border: 0px solid red;
     width: 49%;
 }
+
 .left-details-column, .right-details-column {
     border: 0px solid red;
     width: 50%;
@@ -1435,12 +1492,14 @@ input:checked + .slider:before {
     padding: 2px;
     border: 0px solid #ccc;
 }
+
 .bottom-details-row {
     width: 100%;
     box-sizing: border-box;
     padding: 2px;
     border: 0px solid #aaa;
 }
+
 .logs_header {
     display: inline-flex;
 }
@@ -1596,6 +1655,7 @@ input:checked + .slider:before {
     white-space: pre;
     text-align: center;
 }
+
 .progress-bar:hover::after {
     opacity: 1;
 }
@@ -1609,6 +1669,7 @@ input:checked + .slider:before {
     display: none;
     color: #00bfff;
 }
+
 .port_local {
     display: none;
     color: #bf5515;
@@ -1719,6 +1780,21 @@ input:checked + .slider:before {
 
 .playbooks_counter {
     display:block;
+}
+
+.variable-tag {
+    display: inline-block;
+    margin: 2px 5px;
+    padding: 3px 8px;
+    background-color: #a89f9f;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.variable-tag.required {
+    background-color: #ffcccc;
+    color: #c00;
+    font-weight: bold;
 }
 
 @keyframes crt-glow {
