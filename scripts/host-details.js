@@ -408,66 +408,6 @@ function initializePlaybookSelect(playbooksMap) {
     });
 }
 
-function _initializePlaybookForm() {
-    // Obtener el array de playbooks directamente desde el atributo data-playbooks
-    const playbooks = $('#ansible_container').data('playbooks'); //devuelve un objeto
-
-    // Llenar el dropdown con los nombres de los playbooks
-    playbooks.forEach(function (playbook) {
-        $('#playbook_select').append('<option value="' + playbook.name + '">' + playbook.name + '</option>');
-    });
-
-    // Evento para cuando se selecciona un playbook
-    $('#playbook_select').change(function () {
-        const selectedPlaybook = $(this).val();
-        const playbook = playbooks.find(pb => pb.name === selectedPlaybook);
-
-        if (playbook) {
-            $('#playbook_desc').text(playbook.desc);
-            $('#vars_container').empty();
-
-            // Si existen string_vars, agregar los campos de texto
-            if (playbook.string_vars) {
-                playbook.string_vars.forEach(function (varName) {
-                    $('#vars_container').append(`
-                        <label for="${varName}">${varName}:</label>
-                        <input type="text" id="${varName}" size="10" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
-                    `);
-                });
-            }
-            if (playbook.numeric_vars) {
-                playbook.numeric_vars.forEach(function (varName) {
-                    $('#vars_container').append(`
-                        <label for="${varName}">${varName}:</label>
-                        <input type="number" id="${varName}" size="5" name="extra_vars[${varName}]" placeholder="Enter ${varName}">
-                    `);
-                });
-            }
-            if (playbook.password_vars) {
-                playbook.password_vars.forEach(function (varName) {
-                    $('#vars_container').append(`
-                        <div class="password-container">
-                        <label for="${varName}">${varName}:</label>
-                        <input type="password" id="${varName}" size="10" name="extra_vars[${varName}]"  class="password-input" placeholder="Enter ${varName}">
-                        <span class="toggle-password">👁️</span>
-                        </div>
-                    `);
-                });
-
-                $('#vars_container').off("click", ".toggle-password").on("click", ".toggle-password", function () {
-                    const passwordInput = $(this).prev(".password-input");
-                    const inputType = passwordInput.attr("type");
-                    passwordInput.attr("type", inputType === "password" ? "text" : "password");
-                });
-            }
-        } else {
-            // Limpiar si no hay playbook seleccionado
-            $('#playbook_desc').empty();
-            $('vars_container').empty();
-        }
-    });
-}
-
 function toggleSection(id) {
     const section = document.getElementById(id);
     const toggleButton = document.querySelector(`[onclick="toggleSection('${id}')"]`);
