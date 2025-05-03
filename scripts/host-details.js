@@ -694,18 +694,21 @@ function requestHostDetails(command, command_values = []) {
                                 const selectedTags = $('#tags_filter input:checked').map(function() {
                                     return $(this).data('tag');
                                 }).get();
-                                console.log('Tags seleccionados:', selectedTags);
-                                if(selectedTags.length === 0) {
-                                    $('#playbook_select option').show();
-                                    $('#playbook_count').text($('#playbook_select option').length - 1);
-                                    return;
-                                }
-                                // Filtrar playbooks
+
+                                //console.log('Tags seleccionados:', selectedTags);
+
                                 let visibleCount = 0;
                                 $('#playbook_select option').each(function() {
                                     if($(this).val() === '') return; // Saltar opción por defecto
 
-                                    // Parse tags
+                                    // Si no hay tags seleccionados, mostrar todos y contar
+                                    if(selectedTags.length === 0) {
+                                        $(this).show();
+                                        visibleCount++;
+                                        return;
+                                    }
+
+                                    // Parsear los tags de forma segura
                                     let tags = [];
                                     try {
                                         const tagsData = $(this).attr('data-tags');
@@ -717,13 +720,12 @@ function requestHostDetails(command, command_values = []) {
 
                                     console.log(`Playbook ${$(this).val()} tiene tags:`, tags);
 
-                                    // Mostrar si coincide con algún tag seleccionado o si no hay selección
-                                    const shouldShow = selectedTags.length === 0 ||
-                                                     tags.some(tag => selectedTags.includes(tag));
-
+                                    // Mostrar si coincide con algún tag seleccionado
+                                    const shouldShow = tags.some(tag => selectedTags.includes(tag));
                                     $(this).toggle(shouldShow);
                                     if(shouldShow) visibleCount++;
                                 });
+
                                 $('#playbook_count').text(visibleCount);
                             }
                             // Event Filter
