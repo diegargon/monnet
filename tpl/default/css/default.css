@@ -637,18 +637,32 @@ input:checked + .slider:before {
     padding: 1px;
     overflow: hidden;
 }
+
 .host-glow-red {
-    background-color: rgb(66, 22, 22);
-    animation: GlowOffColor 2s linear infinite;
+    background-color: rgb(66, 22, 22); /* Rojo oscuro */
+    animation: GlowRed 2s linear infinite;
 }
+
 .host-glow-green {
-    background-color: rgb(16, 32, 16);
-    animation: GlowOnColor 2s linear infinite;
+    background-color: rgb(16, 32, 16); /* Verde oscuro */
+    animation: GlowGreen 2s linear infinite;
 }
+
 .host-glow-orange {
-    background-color: rgb(104, 68, 2);
-    animation: GlowOrangeColor 2s linear infinite;
+    background-color: rgb(16, 32, 16); /* Naranja oscuro */
+    animation: GlowOrange 2s linear infinite;
 }
+
+.host-glow-purple {
+    background-color: rgb(50, 5, 30);  /* Purpura oscuro */
+    animation: GlowPurple 2s linear infinite;
+}
+
+.host-glow-gray {
+    background-color: rgb(40, 40, 40); /* Gris neutro */
+    animation: GlowGray 2s linear infinite;
+}
+
 .hosts-title {
     display: inline-block;
     padding: 0;
@@ -1888,19 +1902,19 @@ input:checked + .slider:before {
     }
 }
 
-@keyframes GlowOnColor {
+@keyframes GlowGreen {
     0% {
         background-color: rgb(16, 32, 16);
     }
     50% {
         background-color: rgb(24, 55, 24);
-    }
+    } /* Verde más claro */
     100% {
         background-color: rgb(16, 32, 16);
     }
 }
 
-@keyframes GlowOffColor {
+@keyframes GlowRed {
     0% {
         background-color: rgb(66, 22, 22);
     }
@@ -1912,18 +1926,40 @@ input:checked + .slider:before {
     }
 }
 
-
-@keyframes GlowOrangeColor {
+@keyframes GlowOrange {
     0% {
-        background-color: rgb(104, 68, 2);
+        background-color: rgb(80, 45, 0);
+    }     /* Oscuro (tono tierra) */
+    50% {
+        background-color: rgb(120, 65, 10);
+    }
+    100% {
+        background-color: rgb(80, 45, 0);
+    }
+}
 
+@keyframes GlowPurple {
+    0% {
+        background-color: rgb(50, 5, 30);
     }
     50% {
-        background-color: rgb(136, 77, 45);
-
-
+        background-color: rgb(90, 15, 60);
     }
+    100% {
+        background-color: rgb(50, 5, 30);
+    }
+}
 
+@keyframes GlowGray {
+    0% {
+        background-color: rgb(40, 40, 40);
+    }
+    50% {
+        background-color: rgb(80, 80, 80);
+    }
+    100% {
+        background-color: rgb(40, 40, 40);
+    }
 }
 
 
