@@ -245,7 +245,7 @@ class RefresherView
         $minutes_diff = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
 
         if ($minutes_diff > 0 && $minutes_diff <= $this->ncfg->get('glow_time')) {
-            $host_view['glow_tag'] = $vhost['online'] ? ' host-glow-green' : ' host-glow-red';
+            $host_view['glow_tag'] = $vhost['online'] ? 'host-glow-green' : 'host-glow-red';
         }
     }
 

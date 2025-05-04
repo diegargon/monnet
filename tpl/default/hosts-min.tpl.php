@@ -24,7 +24,7 @@ if (empty($tdata['hosts'])) {
         <div id="hosts-container" class="hosts-container">
             <a onclick="submitCommand('host-details', {id: <?= $host['id'] ?>})"
                href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['details'] ?>">
-                <div class="hosts-thumb shadow1<?= $host['glow_tag'] ?>">
+                <div class="hosts-thumb shadow1 <?= $host['glow_tag'] ?>">
                     <?php
                     if (!empty($host['misc']['machine_type']) && (int) $host['misc']['machine_type'] == 2) :
                         echo "<div class=\"vm-mark\"></div>";
