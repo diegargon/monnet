@@ -33,8 +33,7 @@ class CmdTaskAnsibleController
      */
     public function execPlaybook(string $command, array $command_values): array
     {
-        // TODO: to string playbook id will be string
-        $target_id = Filter::varInt($command_values['id']);
+        $hid = Filter::varInt($command_values['id']);
         $playbook = Filter::varString($command_values['value']);
         $extra_vars = [];
         $as_html = !empty(Filter::varBool($command_values['as_html'])) ? 1 : 0;
@@ -47,12 +46,12 @@ class CmdTaskAnsibleController
         }
 
         if ($command == 'playbook_exec') {
-            $response = $this->ansibleService->runPlaybook($target_id, $playbook, $extra_vars);
+            $response = $this->ansibleService->runPlaybook($hid, $playbook, $extra_vars);
             if (($response['status'] === 'success') && $as_html) {
                 $response = $this->ansibleService->asHtml($response['response_msg']);
             }
         } elseif ($command === 'pbqueue') {
-            $response = $this->ansibleService->queueTask($target_id, 1, $playbook, $extra_vars);
+            $response = $this->ansibleService->queueTask($hid, 1, $playbook, $extra_vars);
         } else {
             return Response::stdReturn(false, 'Unknown Ansible Command');
         }
