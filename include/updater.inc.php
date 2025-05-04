@@ -639,6 +639,28 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.66;
     if ($db_version == 0.00) {
         try {
+            //$db->query("
+            //");
+            $db->query("START TRANSACTION");
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('server_endpoint', JSON_QUOTE('/feedme.php'), 0, 103, NULL, 0);
+            ");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // 0.67
+    $update = 0.67;
+    if ($db_version == 0.00) {
+        try {
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
