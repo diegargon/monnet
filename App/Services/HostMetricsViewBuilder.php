@@ -20,6 +20,15 @@ class HostMetricsViewBuilder
         $this->templateService = new TemplateService($ctx);
     }
 
+    /**
+     * Build the metrics graph template
+     *
+     * @param int $hid Host ID
+     * @param string $title Graph title
+     * @param int $type Graph type (1: ping, 2: loadavg, 3: iowait, 4: memory)
+     * @param array $metrics Metrics data
+     * @return string Rendered template
+     */
     public function build(int $hid, string $title, int $type, array $metrics)
     {
         $tdata = [

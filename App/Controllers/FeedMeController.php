@@ -2,25 +2,23 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /*
-  {
-      cmd: ping
-      token: string
-      version: 0.1
-      data: []
-  }
-  {
-      cmd: pong
-      token: string
-      version: 0.1
-      response_msg: true
-      refresh: 5 // Inform when is the next update
-      data: []
-  }
+    {
+        cmd: ping
+        token: string
+        version: 0.1
+        data: []
+    }
+    {
+        cmd: pong
+        token: string
+        version: 0.1
+        response_msg: true
+        refresh: 5 // Inform when is the next update
+        data: []
+    }
 
     Notifications
         {

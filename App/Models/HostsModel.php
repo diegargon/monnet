@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -123,7 +121,7 @@ class HostsModel
                 SUM(ansible_enabled = 1) as ansible_hosts,
                 SUM(ansible_fail = 1) as ansible_hosts_fail,
                 SUM(ansible_enabled = 1 AND online = 1) AS ansible_online
-              FROM hosts
+            FROM hosts
         ");
         if ($result) {
             $stats = $this->db->fetch($result) ?: [];

@@ -41,7 +41,7 @@ class LogSystemService
      */
     public function get(array $opts): array
     {
-         return $this->logSystemModel->getSystemDBLogs($opts);
+        return $this->logSystemModel->getSystemDBLogs($opts);
     }
 
     /**

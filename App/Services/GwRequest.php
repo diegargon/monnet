@@ -23,7 +23,14 @@ class GwRequest
      */
     private SocketClient $socketClient;
 
+    /**
+     * @var string
+     */
     private string $server_ip;
+
+    /**
+     * @var int
+     */
     private int $server_port;
 
     public function __construct(\AppContext $ctx)

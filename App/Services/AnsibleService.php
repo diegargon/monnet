@@ -239,7 +239,7 @@ class AnsibleService
         return $ansible;
     }
 
-     /**
+    /**
      * Gets the Ansible reports for a host applying the template
      *
      * @param int $host_id El ID del host.
@@ -309,7 +309,7 @@ class AnsibleService
         }
         foreach ($result['plays'] as $play) :
             if (!isset($play['tasks']) || !is_array($play['tasks'])) {
-               return $debug_lines = 'Ansible result Tasks Format Error';
+                return $debug_lines = 'Ansible result Tasks Format Error';
             }
             foreach ($play['tasks'] as $task) :
                 if (isset($task['hosts'][$host_ip]['action']) && $task['hosts'][$host_ip]['action'] == 'debug') {

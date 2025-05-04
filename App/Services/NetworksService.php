@@ -33,7 +33,8 @@ Class NetworksService
      */
     private AppContext $ctx;
 
-    public function __construct(\AppContext $ctx) {
+    public function __construct(\AppContext $ctx)
+    {
         $this->ctx = $ctx;
         $db = $ctx->get('DBManager');
         $this->networksModel = new NetworksModel($db);
@@ -109,8 +110,8 @@ Class NetworksService
             'only_online' => (int) $network['only_online'],
             'disable' => (int) $network['disable'],
             'pool' => $this->ctx->get('Config')->get('monnet_version') >= 0.44
-                      ? $network['pool']
-                      : null
+                    ? $network['pool']
+                    : null
         ];
     }
 
@@ -381,5 +382,4 @@ Class NetworksService
 
         return $ip_list;
     }
-
 }

@@ -156,7 +156,7 @@ class CmdTaskAnsibleController
             'command' => $command,
         ];
 
-         switch ($command) :
+        switch ($command) :
             case 'delete_host_task':
                 $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
                 if ($cmdAnsibleModel->deleteTask($tid)) {
@@ -318,7 +318,7 @@ class CmdTaskAnsibleController
         if (!empty($task_interval)) {
             $task_data['task_interval'] = $task_interval;
         }
-         /*
+        /*
         if (!isset($ansible_groups)) {
             $task_data['groups'] =  $ansible_groups;
         }

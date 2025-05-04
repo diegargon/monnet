@@ -36,6 +36,7 @@ class HostService
         $this->hostFormatter = new HostFormatter($ctx);
         $this->ansibleService = new AnsibleService($ctx);
     }
+
     public function __destruct()
     {
         unset($this->ctx, $this->ncfg);
@@ -47,12 +48,17 @@ class HostService
         unset($this->hostsModel);
     }
 
+    /**
+     * @param int $id
+     * @return array<string, string|int>
+     */
     public function getHostById(int $id): array
     {
         $host = $this->cmdHostModel->getHostById($id);
 
         return $host;
     }
+
     /**
      *
      * @param int $target_id

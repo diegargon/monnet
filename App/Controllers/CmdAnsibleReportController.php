@@ -25,7 +25,7 @@ class CmdAnsibleReportController
         $this->reportModel = new CmdAnsibleReportModel($ctx);
     }
 
-     /**
+    /**
      * @param string $command
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>

@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -14,11 +12,12 @@ class NetworksModel
 {
     private \DBManager $db;
 
-    public function __construct(\DBManager $db) {
+    public function __construct(\DBManager $db)
+    {
         $this->db = $db;
     }
 
-   public function getAllNetworks(): array
+    public function getAllNetworks(): array
     {
         $query = $this->db->selectAll('networks');
         return $this->db->fetchAll($query);
@@ -63,4 +62,3 @@ class NetworksModel
         return (bool) $this->db->fetch($query);
     }
 }
-

@@ -469,15 +469,15 @@ class Filter
             return false;
         }
         /*
-          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-          (!empty($min_size) && (strlen($var) < $min_size))
-          ) {
-          return false;
-          }
+            if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
+            (!empty($min_size) && (strlen($var) < $min_size))
+            ) {
+            return false;
+            }
 
-          if (!preg_match('/^[A-Za-z0-9]+$/', $var)) {
-          return false;
-          }
+            if (!preg_match('/^[A-Za-z0-9]+$/', $var)) {
+            return false;
+            }
          *
          */
         if (!ctype_alnum($var)) {
@@ -539,14 +539,13 @@ class Filter
             return false;
         }
         /*
-          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-          (!empty($min_size) && (strlen($var) < $min_size))) {
-          return false;
-          }
+            if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
+            (!empty($min_size) && (strlen($var) < $min_size))) {
+            return false;
+            }
 
-          return $var;
-         *
-         */
+            return $var;
+        */
 
         if (!preg_match('/^[A-Za-z]+$/', $var)) {
             return false;
@@ -1236,11 +1235,11 @@ class Filter
         }
 
         /*
-        return [
-            'amount' => $amount,
-            'unit' => $unit,
-            'seconds' => $seconds
-        ];
+            return [
+                'amount' => $amount,
+                'unit' => $unit,
+                'seconds' => $seconds
+            ];
         */
         return $seconds;
     }

@@ -21,11 +21,11 @@ $h_misc = $tdata['host_details']['misc'];
             <div class="host-controls-left">
                 <button id="close_host_details" type="submit"  class="button-ctrl">
                     <img src="tpl/<?= $ncfg->get('theme') ?>/img/close.png"
-                         alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
+                        alt="<?= $lng['L_CLOSE'] ?>" title="<?= $lng['L_CLOSE'] ?>" />
                 </button>
                 <button id="max_host_details" type="submit"  class="button-ctrl">
                     <img src="tpl/<?= $ncfg->get('theme') ?>/img/maximize.png"
-                         alt="<?= $lng['L_MAXIMIZE'] ?>" title="<?= $lng['L_MAXIMIZE'] ?>" />
+                        alt="<?= $lng['L_MAXIMIZE'] ?>" title="<?= $lng['L_MAXIMIZE'] ?>" />
                 </button>
                 <div class="host-details-tabs-head-container">
                     <button id="tab1_btn" class="host-details-tabs-head" data-tab="1"
@@ -54,14 +54,14 @@ $h_misc = $tdata['host_details']['misc'];
                         <?= $lng['L_CONFIG'] ?>
                     </button>
                 <?php
-                   if ($tdata['host_details']['agent_installed']) :
+                if ($tdata['host_details']['agent_installed']) :
                 ?>
                     <button id="tab16_btn" class="host-details-tabs-head" data-tab="16"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab16')">
                         <?= $lng['L_AGENT'] ?>
                     </button>
                 <?php
-                    endif;
+                endif;
                 ?>
                     <button id="tab13_btn" class="host-details-tabs-head" data-tab="13"
                             onclick="changeHDTab(<?= $tdata['host_details']['id']?>, 'tab13')">
@@ -82,8 +82,8 @@ $h_misc = $tdata['host_details']['misc'];
             <div class="host-controls-right">
                 <?php if (!empty($tdata['host_details']['mac']) && empty($tdata['host_details']['online'])) : ?>
                     <input onClick="submitCommand('power_on', {id: <?= $tdata['host_details']['id'] ?>})" type="image"
-                           class="action-icon power-off" src="tpl/<?= $ncfg->get('theme') ?>/img/power-off.png"
-                           alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
+                        class="action-icon power-off" src="tpl/<?= $ncfg->get('theme') ?>/img/power-off.png"
+                        alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
                 <?php endif; ?>
                 <?php
                 if (
@@ -92,51 +92,51 @@ $h_misc = $tdata['host_details']['misc'];
                 ) {
                     ?>
                     <input onClick="submitCommand('shutdown', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
-                           class="action-icon power-on" src="tpl/<?= $ncfg->get('theme') ?>/img/power-on.png"
-                           alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
+                        class="action-icon power-on" src="tpl/<?= $ncfg->get('theme') ?>/img/power-on.png"
+                        alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
                 <?php } ?>
                 <?php if (!empty($tdata['host_details']['ansible_enabled'])) : ?>
                 <input onClick="submitCommand('reboot', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
-                           class="action-icon reboot" src="tpl/<?= $ncfg->get('theme') ?>/img/reboot.png"
-                           alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
+                    class="action-icon reboot" src="tpl/<?= $ncfg->get('theme') ?>/img/reboot.png"
+                    alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>
                 <?php endif; ?>
                 <input onClick="confirmSubmit('remove_host',{id:<?= $tdata['host_details']['id']?>})" type="image"
-                       class="action-icon remove" src="tpl/<?= $ncfg->get('theme') ?>/img/remove.png"
-                       alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>"/>
+                    class="action-icon remove" src="tpl/<?= $ncfg->get('theme') ?>/img/remove.png"
+                    alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>"/>
             </div> <!--host-controls-right -->
 
         </div>
         <!-- SECOND HEADED BAR -->
         <div class="host-details-main">
             <img class="hosts-item" src="<?= $tdata['host_details']['online_image'] ?>"
-                 alt=="<?= $tdata['host_details']['title_online'] ?>"
-                 title="<?= $tdata['host_details']['title_online'] ?>"/>
+                alt=="<?= $tdata['host_details']['title_online'] ?>"
+                title="<?= $tdata['host_details']['title_online'] ?>"/>
             <?php if (!empty($tdata['host_details']['manufacture_image'])) : ?>
                 <img class="fab" src="<?= $tdata['host_details']['manufacture_image'] ?>"
-                     alt="<?= $tdata['host_details']['manufacture_name'] ?>"
-                     title="<?= $tdata['host_details']['manufacture_name'] ?>"/>
+                    alt="<?= $tdata['host_details']['manufacture_name'] ?>"
+                    title="<?= $tdata['host_details']['manufacture_name'] ?>"/>
             <?php endif; ?>
 
             <?php if (!empty($tdata['host_details']['os_image'])) : ?>
                 <img class="fab" src="<?= $tdata['host_details']['os_image'] ?>"
-                     alt="<?= $tdata['host_details']['os_name'] ?>"
-                     title="<?= $tdata['host_details']['os_name'] ?>"/>
+                    alt="<?= $tdata['host_details']['os_name'] ?>"
+                    title="<?= $tdata['host_details']['os_name'] ?>"/>
             <?php endif; ?>
 
             <?php if (!empty($tdata['host_details']['system_type_image'])) : ?>
                 <img class="fab" src="<?= $tdata['host_details']['system_type_image'] ?>"
-                     alt="<?= $tdata['host_details']['system_type_name'] ?>"
-                     title="<?= $tdata['host_details']['system_type_name'] ?>"/>
+                    alt="<?= $tdata['host_details']['system_type_name'] ?>"
+                    title="<?= $tdata['host_details']['system_type_name'] ?>"/>
             <?php endif; ?>
             <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
                 <img class="fab" src="tpl/<?= $tdata['theme']?>/img/ansible.png"
-                     alt="ansible" title="ansible"/>
+                    alt="ansible" title="ansible"/>
             <?php endif; ?>
             <?php
             if (!empty($h_misc['machine_type']) && (int) $h_misc['machine_type'] === 2) :
                 ?>
                 <img class="fab" src="tpl/<?= $tdata['theme']?>/img/vm.png"
-                     alt="vm" title="vm"/>
+                    alt="vm" title="vm"/>
             <?php endif; ?>
             <div class="host-item"><?= $tdata['host_details']['title'] ?> </div>
             <?php if (!empty($tdata['host_details']['hostname'])) : ?>
@@ -204,7 +204,7 @@ $h_misc = $tdata['host_details']['misc'];
                         $port_name = !empty($port['custom_service']) ? $port['custom_service'] : $port['service'];
                         ?>
                         <div class="port_container <?= !empty($port['class']) ? $port['class'] : null ?> "
-                             data-tooltip="<?= $port['pnumber'] .
+                            data-tooltip="<?= $port['pnumber'] .
                                 '/' . $port['protocol'] .
                                 ' ' . $port['ip_version'] .
                                 ' ' . $port['interface']
@@ -311,7 +311,7 @@ $h_misc = $tdata['host_details']['misc'];
                     <?php if (!empty($h_misc['access_link'])) : ?>
                         <div>
                             <a href="<?= $h_misc['access_link'] ?>"
-                               target="_blank"><?= $h_misc['access_link'] ?>
+                                target="_blank"><?= $h_misc['access_link'] ?>
                             </a>
                         </div>
                     <?php endif; ?>
@@ -367,7 +367,7 @@ $h_misc = $tdata['host_details']['misc'];
         <div id="tab3" class="host-details-tab-content">
             <!-- <div class="textarea-bar"></div> -->
             <input type="number" id="host_note_id" style="display:none"
-                   readonly value="<?= $tdata['host_details']['notes_id'] ?>"/>
+                readonly value="<?= $tdata['host_details']['notes_id'] ?>"/>
             <textarea
                 id="textnotes"
                 name="textnotes"
@@ -426,45 +426,45 @@ $h_misc = $tdata['host_details']['misc'];
                     <input type="hidden" id="disableAlarms" value="0">
                     <input
                         onchange="submitCommand('setHostAlarms',
-                                    {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
+                            {id: <?= $tdata['host_details']['id']?>, value: this.checked})"
                             type="checkbox" id="disableAlarms"
-                           <?= !empty($h_misc['disable_alarms']) ? 'checked' : null ?>>
+                            <?= !empty($h_misc['disable_alarms']) ? 'checked' : null ?>>
                     <div><?= $lng['L_DISABLE_PER_TYPE']?></div>
                     <label for=""><?= $lng['L_ALARM_PING']?>:</label>
                     <input type="hidden" id="alarm_ping_disable" value="0">
                     <input type="checkbox"
-                           id="alarm_ping_disable"
-                           data-command="alarm_ping_disable"
-                           <?= !empty($h_misc['alarm_ping_disable']) ? 'checked' : null ?>
-                           >
+                        id="alarm_ping_disable"
+                        data-command="alarm_ping_disable"
+                        <?= !empty($h_misc['alarm_ping_disable']) ? 'checked' : null ?>
+                        >
                     <label for=""><?= $lng['L_ALARM_PING_PORT']?>:</label>
                     <input type="hidden" id="alarm_port_disable" value="0">
                     <input type="checkbox"
-                           id="alarm_port_disable"
-                           data-command="alarm_port_disable"
-                           <?= !empty($h_misc['alarm_port_disable']) ? 'checked' : null ?>
-                           >
+                        id="alarm_port_disable"
+                        data-command="alarm_port_disable"
+                        <?= !empty($h_misc['alarm_port_disable']) ? 'checked' : null ?>
+                        >
                     <label for=""><?= $lng['L_ALARM_MACCHANGE']?>:</label>
                     <input type="hidden" id="alarm_macchange_disable" value="0">
                     <input type="checkbox"
-                           id="alarm_macchange_disable"
-                           data-command="alarm_macchange_disable""
-                           <?= !empty($h_misc['alarm_macchange_disable']) ? 'checked' : null ?>
-                           >
+                        id="alarm_macchange_disable"
+                        data-command="alarm_macchange_disable""
+                        <?= !empty($h_misc['alarm_macchange_disable']) ? 'checked' : null ?>
+                        >
                     <label for=""><?= $lng['L_ALARM_NEW_PORT']?>:</label>
                     <input disable type="hidden" id="alarm_newport_disable" value="0">
                     <input disable type="checkbox"
-                           id="alarm_newport_disable"
-                           data-command="alarm_newport_disable"
-                           <?= !empty($h_misc['alarm_newport_disable']) ? 'checked' : null ?>
-                           >
+                        id="alarm_newport_disable"
+                        data-command="alarm_newport_disable"
+                        <?= !empty($h_misc['alarm_newport_disable']) ? 'checked' : null ?>
+                        >
                     <label for=""><?= $lng['L_ALARM_HOSTNAME']?>:</label>
                     <input disable type="hidden" id="alarm_hostname_disable" value="0">
                     <input disable type="checkbox"
-                           id="alarm_hostname_disable"
-                           data-command="alarm_hostname_disable"
-                           <?= !empty($h_misc['alarm_hostname_disable']) ? 'checked' : null ?>
-                           >
+                        id="alarm_hostname_disable"
+                        data-command="alarm_hostname_disable"
+                        <?= !empty($h_misc['alarm_hostname_disable']) ? 'checked' : null ?>
+                    >
                     <br/>
                     <label for="enableEmailAlarms"><?= $lng['L_EMAIL_ALARMS'] ?>:</label>
                     <input
@@ -477,49 +477,49 @@ $h_misc = $tdata['host_details']['misc'];
                     <label for=""><?= $lng['L_ALARM_PING']?>:</label>
                     <input type="hidden" id="alarm_ping_email" value="0">
                     <input type="checkbox"
-                           id="alarm_ping_email"
-                           data-command="alarm_ping_email"
-                           <?= !empty($h_misc['alarm_ping_email']) ? 'checked' : null ?>
-                           >
+                        id="alarm_ping_email"
+                        data-command="alarm_ping_email"
+                        <?= !empty($h_misc['alarm_ping_email']) ? 'checked' : null ?>
+                    >
                     <label for=""><?= $lng['L_ALARM_PING_PORT']?>:</label>
                     <input type="hidden" id="alarm_port_email" value="0">
                     <input type="checkbox"
-                           id="alarm_port_email"
-                           data-command="alarm_port_email"
-                           <?= !empty($h_misc['alarm_port_email']) ? 'checked' : null ?>
-                           >
+                        id="alarm_port_email"
+                        data-command="alarm_port_email"
+                        <?= !empty($h_misc['alarm_port_email']) ? 'checked' : null ?>
+                        >
                     <label for=""><?= $lng['L_ALARM_MACCHANGE']?>:</label>
                     <input type="hidden" id="alarm_macchange_email" value="0">
                     <input type="checkbox"
-                           id="alarm_macchange_email"
-                           data-command="alarm_macchange_email"
-                           <?= !empty($h_misc['alarm_macchange_email']) ? 'checked' : null ?>
-                           >
+                        id="alarm_macchange_email"
+                        data-command="alarm_macchange_email"
+                        <?= !empty($h_misc['alarm_macchange_email']) ? 'checked' : null ?>
+                    >
                     <label for=""><?= $lng['L_ALARM_NEW_PORT']?>:</label>
                     <input disable type="hidden" id="alarm_newport_email" value="0">
                     <input disable type="checkbox"
-                           id="alarm_newport_email"
-                           data-command="alarm_newport_email"
-                           <?= !empty($h_misc['alarm_newport_email']) ? 'checked' : null ?>
-                           >
+                        id="alarm_newport_email"
+                        data-command="alarm_newport_email"
+                        <?= !empty($h_misc['alarm_newport_email']) ? 'checked' : null ?>
+                    >
                     <br/>
                     <label for="alarm_emails">Emails (Comma Separated)</label><br/>
                     <input type="text"
-                           size="50"
-                           id="alarm_emails"
-                           placeholder="Enter emails separated by commas"
-                           value="<?php
+                        size="50"
+                        id="alarm_emails"
+                        placeholder="Enter emails separated by commas"
+                        value="<?php
                             if (!empty($h_misc['email_list'])) {
                                 echo $h_misc['email_list'];
                             }
                             ?>"
-                           >
+                    >
                     <div id="email_feedback" style="color: red; font-size: 0.9em;"></div>
                 </div>
                 <div>
                     <button id="clear_host_alarms"
-                             onclick="submitCommand('clearHostAlarms',{id: <?= $tdata['host_details']['id'] ?>})">
-                            <?= $lng['L_CLEAR_ALARMS_BITS'] ?>
+                        onclick="submitCommand('clearHostAlarms',{id: <?= $tdata['host_details']['id'] ?>})">
+                        <?= $lng['L_CLEAR_ALARMS_BITS'] ?>
                     </button>
                 </div>
             </div>
@@ -533,9 +533,9 @@ $h_misc = $tdata['host_details']['misc'];
                     <div class="">
                         <label for="chkHighlight"><?= $lng['L_HIGHLIGHT_HOSTS'] ?>:</label>
                         <input type="checkbox"
-                               id="chkHighlight" <?= $tdata['host_details']['highlight'] ? 'checked' : null ?>>
+                            id="chkHighlight" <?= $tdata['host_details']['highlight'] ? 'checked' : null ?>>
                         <input type="number" id="host_id" name="host_id"
-                               style="display:none;" readonly value="<?= $tdata['host_details']['id'] ?>"/>
+                            style="display:none;" readonly value="<?= $tdata['host_details']['id'] ?>"/>
                     </div>
                     <?php if ($ncfg->get('ansible')) : ?>
                     <div class="">
@@ -568,13 +568,13 @@ $h_misc = $tdata['host_details']['misc'];
                     <div class="">
                         <label for="host-title"><?= $lng['L_DISPLAY_NAME'] ?></label><br />
                         <input type="text" id="host-title" size="12" max-size="15" name="host-title"
-                               value="<?= $tdata['host_details']['title'] ?>"/>
+                            value="<?= $tdata['host_details']['title'] ?>"/>
                         <button id="submitTitle"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
                         <label for="host-name"><?= $lng['L_HOSTNAME'] ?></label><br />
                         <input type="text" id="host-name" size="30" max-size="40" name="host-title"
-                               value="<?= $tdata['host_details']['hostname'] ?>"/>
+                            value="<?= $tdata['host_details']['hostname'] ?>"/>
                         <button id="submitHostname"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
@@ -623,7 +623,7 @@ $h_misc = $tdata['host_details']['misc'];
                     <div class="">
                         <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
                         <input type="text" size="32" id="host_token" name="host_token"
-                               value="<?= $tdata['host_details']['token'] ?>" readonly/>
+                            value="<?= $tdata['host_details']['token'] ?>" readonly/>
                         <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
                     </div>
                 </div>
@@ -720,7 +720,7 @@ $h_misc = $tdata['host_details']['misc'];
                     <div class="">
                         <label for="os_version"><?= $lng['L_VERSION'] ?>: </label><br/>
                         <input type="text" size="20" id="os_version" name="os_version"
-                               value="<?= $h_misc['os_version'] ?? '' ?>" />
+                            value="<?= $h_misc['os_version'] ?? '' ?>" />
                         <button id="submitOSVersion"><?= $lng['L_SEND'] ?></button>
                     </div>
                 </div>
@@ -738,12 +738,12 @@ $h_misc = $tdata['host_details']['misc'];
                         <label for="disable_ping"><?= $lng['L_PING_CHECK_DISABLE'] ?>: </label>
                         <input type="hidden" id="disable_ping" value="0"/>
                         <input type="checkbox" id="disable_ping"
-                               <?= !empty($h_misc['disable_ping']) ? 'checked' : null ?>><br />
+                            <?= !empty($h_misc['disable_ping']) ? 'checked' : null ?>><br />
                     </div>
                     <div class="">
                         <label for="checkport"><?= $lng['L_REMOTE_PORT_CHECK'] ?>: </label>
                         <input type="checkbox" id="checkports_enabled"
-                               <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
+                            <?= $tdata['host_details']['check_method'] == 2 ? 'checked' : null ?>><br />
                         <input type="number" id="port_number" name="port_number" size="5", min="0" max="65535">
                         <select id="port_protocol">
                             <option value="1">TCP Socket</option>
@@ -783,7 +783,7 @@ $h_misc = $tdata['host_details']['misc'];
                         <input
                             size="4" max-size="4" step="0.1" min="0.1" max="5"
                             type="number" id="host_timeout" name="host_timeout"
-                               value="<?=
+                            value="<?=
                                 !empty($h_misc['timeout']) ?
                                 $h_misc['timeout'] : $ncfg->get('port_timeout_local');
                                 ?>"
@@ -909,13 +909,13 @@ $h_misc = $tdata['host_details']['misc'];
                             </td>
                             <td> <!-- Groups -->
                                 <select id="ansible_groups" name="ansible_groups">
-                                  <option value="0" selected disabled><?= $lng['L_THIS_SYSTEM'] ?></option>
+                                    <option value="0" selected disabled><?= $lng['L_THIS_SYSTEM'] ?></option>
                                 </select>
                             </td>
                             <td><input type="checkbox" id="disable_task" name="disable_task"></td>
                             <td>
                                 <select id="next_task" name="next_task">
-                                  <option value="0" selected>No Next Task</option>
+                                    <option value="0" selected>No Next Task</option>
                                 </select>
                             </td>
                             <td>
@@ -1004,7 +1004,7 @@ $h_misc = $tdata['host_details']['misc'];
                     max-size="2"
                     type="number"
                     value="<?= $h_misc['mem_alert_threshold']?>"
-                 />
+                />
                 <label for="mem_warn_threshold"><?= $lng['L_WARNS'] ?></label>
                 <input
                     id="mem_warn_threshold"

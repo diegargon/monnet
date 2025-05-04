@@ -9,8 +9,19 @@ namespace App\Services;
 
 class EncryptionService
 {
+    /**
+     * @var \Config
+     */
     private \Config $ncfg;
+
+    /**
+     * @var string
+     */
     private string $publicKey;
+
+    /**
+     * @var string
+     */
     private string $cipherType;
 
     public function __construct(\AppContext $ctx, string $cipherType = 'RSA')
