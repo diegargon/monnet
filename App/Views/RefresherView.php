@@ -94,10 +94,12 @@ class RefresherView
 
             if (!empty($host['display_name'])) {
                 $log['display_name'] = '[' . $host['display_name'] . ']';
-            } elseif (!empty($host['ip'])) {
-                $log['display_name'] = '[' . $host['ip'] . ']';
+            } elseif (!empty($host['title'])) {
+                $log['display_name'] = '[' . $host['title'] . ']';
+            } elseif (!empty($host['hostname'])) {
+                $log['display_name'] = '[' . strstr($host['hostname'], '.', true) . ']';
             } else {
-                $log['display_name'] = '[' . $log['host_id'] . ']';
+                $log['display_name'] = '[' . $host['ip'] . ']';
             }
         }
 
