@@ -1,8 +1,8 @@
 <?php
 /**
- *
- * @author diego/@/envigo.net
-  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+  *
+  * @author diego/@/envigo.net
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
 namespace App\Models;
@@ -17,16 +17,21 @@ class CmdHostModel
     }
 
     /**
+     * Retrieves a host by its ID.
      *
-     * @param int $hid
-     * @return array<string, mixed>|null
+     * @param int $hid The ID of the host.
+     * @return array<string, mixed>|null The host data or null if not found.
+     * @throws \RuntimeException If the query fails.
      */
     public function getHostById(int $hid): ?array
     {
-        $query = "SELECT * FROM hosts WHERE id = :id";
-        $params = ['id' => $hid];
-
-        return $this->db->qfetch($query, $params);
+        try {
+            $query = "SELECT * FROM hosts WHERE id = :id";
+            $params = ['id' => $hid];
+            return $this->db->qfetch($query, $params);
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error fetching host by ID: " . $e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -51,15 +56,20 @@ class CmdHostModel
     }
 
     /**
-     * Actualiza un host by id.
+     * Updates a host by its ID.
      *
-     * @param int $hid El ID del host.
-     * @param array<string, string|int> $data Los datos a actualizar.
-     * @return bool True si se actualizó correctamente, False en caso contrario.
+     * @param int $hid The ID of the host.
+     * @param array<string, mixed> $data The data to update.
+     * @return bool True if the update was successful, false otherwise.
+     * @throws \RuntimeException If the update fails.
      */
     public function updateByID(int $hid, array $data): bool
     {
-        return $this->db->update('hosts', $data, 'id = :id', ['id' => $hid]);
+        try {
+            return $this->db->update('hosts', $data, 'id = :id', ['id' => $hid]);
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error updating host by ID: " . $e->getMessage(), 0, $e);
+        }
     }
 
     public function update(array $field, string $condition, $params): bool
@@ -95,13 +105,19 @@ class CmdHostModel
     }
 
     /**
+     * Adds a port to the database.
      *
-     * @param array<string, string|int> $port_data
-     * @return bool
+     * @param array<string, mixed> $port_data The port data to insert.
+     * @return bool True if the insertion was successful, false otherwise.
+     * @throws \RuntimeException If the insertion fails.
      */
     public function addPort(array $port_data): bool
     {
-        return $this->db->insert('ports', $port_data);
+        try {
+            return $this->db->insert('ports', $port_data);
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error adding port: " . $e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -121,10 +137,15 @@ class CmdHostModel
      * @param int $port_id El ID del puerto.
      * @param array<string, string|int> $data Los datos a actualizar.
      * @return bool True si se actualizó correctamente, False en caso contrario.
+     * @throws \RuntimeException Si la actualización falla.
      */
     public function updatePort(int $port_id, array $data): bool
     {
-        return $this->db->update('ports', $data, 'id = :id', ['id' => $port_id]);
+        try {
+            return $this->db->update('ports', $data, 'id = :id', ['id' => $port_id]);
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error updating port: " . $e->getMessage(), 0, $e);
+        }
     }
 
     /**

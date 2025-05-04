@@ -106,6 +106,14 @@ class HostService
         // Agent provided port list (2)
         if ($hostDetails['agent_installed']) {
             $agent_ports = $this->cmdHostModel->getHostScanPorts($target_id, 2);
+
+            // Agent ports are sorted by online status
+            usort($agent_ports, function($a, $b) {
+                if ($a['online'] == $b['online']) {
+                    return 0;
+                }
+                return ($a['online'] < $b['online']) ? -1 : 1;
+            });
             //Formatting
             foreach ($agent_ports as $key_port => $port) :
                 if (isset($port['interface'])) :

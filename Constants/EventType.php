@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -28,4 +26,7 @@ class EventType
     public const HOST_BECOME_OFF = 15;
     public const NEW_HOST_DISCOVERY = 16;
     public const CERT_ERROR = 17;
+    public const PORT_NEW_LOCAL = 18;
+    public const PORT_UP_LOCAL = 19;
+    public const PORT_DOWN_LOCAL = 20;
 }

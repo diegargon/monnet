@@ -77,69 +77,74 @@ class FeedMeService
      */
     public function processRequest(array $request): array
     {
-        $command = $request['cmd'];
-        $host_id = (int) $request['id'];
-        $host = $this->hostService->getHostById($host_id);
-        if (!$host) {
-            return ['error' => 'Host not found'];
+        try {
+            $command = $request['cmd'];
+            $host_id = (int) $request['id'];
+            $host = $this->hostService->getHostById($host_id);
+            if (!$host) {
+                return ['error' => 'Host not found'];
+            }
+            $rdata = $request['data'];
+            $host_update_values = [];
+
+            $validated_response = $this->validateHostRequest($host, $request['token'], $host_id);
+            if (!empty($validated_response['error'])) {
+                return $validated_response;
+            }
+
+            //$agent_logId = '[AGENT v' . $request['version'] . '][' . $host['display_name'] . '] ';
+
+            $agent_default_interval = $this->getAgentInterval();
+
+            $host_update_values = $this->prepareHostUpdateValues($host, $request, $agent_default_interval);
+            if (empty($host['agent_installed'])) {
+                $host_update_values['agent_installed'] = 1;
+            }
+
+            if (!empty($request['name'])) {
+                switch ($request['name']) {
+                    case 'ping': //Ping come with real time data
+                        $ping_updates = $this->processPingData($host_id, $host_update_values, $rdata);
+                        if (!empty($ping_updates)) {
+                            $host_update_values = array_merge($host_update_values, $ping_updates);
+                        }
+                        break;
+                    case 'send_stats': // Stats every 5min
+                        $this->processStats($host_id, $rdata);
+                        break;
+                    case 'listen_ports_info': //List ports and changes
+                        $this->processPorts($host_id, $rdata);
+                        break;
+                    case 'starting': //Only Startup info
+                        $starting_updates = $this->processStarting($host_id, $rdata);
+                        if (!empty($starting_updates)) {
+                            $host_update_values = array_merge($host_update_values, $starting_updates);
+                        }
+                        break;
+                    case 'high_iowait':
+                    case 'high_cpu_usage':
+                    case 'high_memory_usage':
+                    case 'high_disk_usage':
+                    case 'agent_shutdown':
+                        $this->notificationLog($request['name'], $host_id, $rdata);
+                        break;
+                    default:
+                        \Log::warning('Notification receive with unknown reference: '. $request['name']);
+                }
+            }
+
+            $update_response = $this->hostService->updateHost($host['id'], $host_update_values);
+            if (!empty($update_response['error'])) {
+                return $update_response;
+            }
+
+            $response = $this->prepareResponse($command, $request, $agent_default_interval);
+
+            return ['success' => true, 'response_data' => $response];
+        } catch (\Exception $e) {
+            \Log::error("Error processing request: " . $e->getMessage());
+            return ['error' => 'Internal server error'];
         }
-        $rdata = $request['data'];
-        $host_update_values = [];
-
-        $validated_response = $this->validateHostRequest($host, $request['token'], $host_id);
-        if (!empty($validated_response['error'])) {
-            return $validated_response;
-        }
-
-        //$agent_logId = '[AGENT v' . $request['version'] . '][' . $host['display_name'] . '] ';
-
-        $agent_default_interval = $this->getAgentInterval();
-
-        $host_update_values = $this->prepareHostUpdateValues($host, $request, $agent_default_interval);
-        if (empty($host['agent_installed'])) {
-            $host_update_values['agent_installed'] = 1;
-        }
-
-        if (!empty($request['name'])) {
-            switch ($request['name']) :
-                case 'ping': //Ping come with real time data
-                    $ping_updates = $this->processPingData($host_id, $host_update_values, $rdata);
-                    if (!empty($ping_updates)) {
-                        $host_update_values = array_merge($host_update_values, $ping_updates);
-                    }
-                    break;
-                case 'send_stats': // Stats every 5min
-                    $this->processStats($host_id, $rdata);
-                    break;
-                case 'listen_ports_info': //List ports and changes
-                    $this->processPorts($host_id, $rdata);
-                    break;
-                case 'starting': //Only Startup info
-                    $starting_updates = $this->processStarting($host_id, $rdata);
-                    if (!empty($starting_updates)) {
-                        $host_update_values = array_merge($host_update_values, $starting_updates);
-                    }
-                    break;
-                case 'high_iowait':
-                case 'high_cpu_usage':
-                case 'high_memory_usage':
-                case 'high_disk_usage':
-                case 'agent_shutdown':
-                    $this->notificationLog($request['name'], $host_id, $rdata);
-                    break;
-                default:
-                    \Log::warning('Notification receive with unknown reference: '. $request['name']);
-            endswitch;
-        }
-
-        $update_response = $this->hostService->updateHost($host['id'], $host_update_values);
-        if (!empty($update_response['error'])) {
-            return $update_response;
-        }
-
-        $response = $this->prepareResponse($command, $request, $agent_default_interval);
-
-        return ['success' => true, 'response_data' => $response];
     }
 
     /**
@@ -180,43 +185,53 @@ class FeedMeService
      */
     public function processStats(int $host_id, array $rdata): bool
     {
-        if (empty($this->cmdStats)) {
-            $this->cmdStats = new CmdStats($this->ctx);
+        try {
+            if (empty($this->cmdStats)) {
+                $this->cmdStats = new CmdStats($this->ctx);
+            }
+
+            $dateTimeService  = new DateTimeService();
+
+            if (!\isEmpty($rdata['load_avg_stats'])) {
+                if (
+                    isset($rdata['load_avg_stats']['1min']) &&
+                    is_numeric($rdata['load_avg_stats']['1min'])
+                ) {
+                    $stats_data = [
+                        'date' => $dateTimeService->dateNow(),
+                        'type' => 2,   //loadavg
+                        'host_id' => $host_id,
+                        'value' => $rdata['load_avg_stats']['5min']
+                    ];
+                    $this->cmdStats->insertStats($stats_data);
+                }
+            }
+
+            if (!\isEmpty($rdata['iowait_stats'])) {
+                $stats_data = [
+                    'date' => $dateTimeService->dateNow(),
+                    'type' => 3,   //iowait
+                    'host_id' => $host_id,
+                    'value' => $rdata['iowait_stats']
+                ];
+                $this->cmdStats->insertStats($stats_data);
+            }
+
+            if (!\isEmpty($rdata['mem_stats'])) {
+                $stats_data = [
+                    'date' => $dateTimeService->dateNow(),
+                    'type' => 4,   // Memory
+                    'host_id' => $host_id,
+                    'value' => $rdata['mem_stats']
+                ];
+                $this->cmdStats->insertStats($stats_data);
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error("Error processing stats: " . $e->getMessage());
+            return false;
         }
-
-        $dateTimeService  = new DateTimeService();
-
-        if (!\isEmpty($rdata['load_avg_stats'])) {
-            $stats_data = [
-                'date' => $dateTimeService->dateNow(),
-                'type' => 2,   //loadavg
-                'host_id' => $host_id,
-                'value' => $rdata['load_avg_stats']['5min']
-            ];
-            $this->cmdStats->insertStats($stats_data);
-        }
-
-        if (!\isEmpty($rdata['iowait_stats'])) {
-            $stats_data = [
-                'date' => $dateTimeService->dateNow(),
-                'type' => 3,   //iowait
-                'host_id' => $host_id,
-                'value' => $rdata['iowait_stats']
-            ];
-            $this->cmdStats->insertStats($stats_data);
-        }
-
-        if (!\isEmpty($rdata['mem_stats'])) {
-            $stats_data = [
-                'date' => $dateTimeService->dateNow(),
-                'type' => 4,   // Memory
-                'host_id' => $host_id,
-                'value' => $rdata['mem_stats']
-            ];
-            $this->cmdStats->insertStats($stats_data);
-        }
-
-        return true;
     }
 
     /**
@@ -228,13 +243,18 @@ class FeedMeService
      */
     public function processPorts(int $host_id, array $rdata): bool
     {
-        if (empty($rdata['listen_ports_info']) || !is_array($rdata['listen_ports_info'])) {
+        try {
+            if (empty($rdata['listen_ports_info']) || !is_array($rdata['listen_ports_info'])) {
+                return false;
+            }
+
+            $this->updateListenPorts($host_id, $rdata['listen_ports_info']);
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error("Error processing ports: " . $e->getMessage());
             return false;
         }
-
-        $this->updateListenPorts($host_id, $rdata['listen_ports_info']);
-
-        return true;
     }
 
     /**
@@ -246,104 +266,124 @@ class FeedMeService
      */
     public function updateListenPorts(int $host_id, array $listen_ports): bool
     {
-        $scan_type = 2; // Agent Based
+        try {
+            $scan_type = 2; // Agent Based
 
-        if (!isset($this->cmdHostModel)) {
-            $this->cmdHostModel = new CmdHostModel($this->db);
-        }
-        $dateTimeService  = new DateTimeService();
-
-        $db_host_ports = $this->cmdHostModel->getHostScanPorts($host_id, $scan_type);
-        $db_ports_map = [];
-
-        // Normalize TODO: to method?
-        foreach ($db_host_ports as $db_port) {
-            $interface = $db_port['interface'] ?? '';
-            $pnumber = (int) $db_port['pnumber'];
-            $protocol = (int) $db_port['protocol'];
-
-            if ($db_port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
-                $interface = "[{$interface}]";
+            if (!isset($this->cmdHostModel)) {
+                $this->cmdHostModel = new CmdHostModel($this->db);
             }
+            $dateTimeService  = new DateTimeService();
 
-            $key = "{$protocol}:$pnumber:{$interface}:{$db_port['ip_version']}";
-            $db_ports_map[$key] = $db_port;
-        }
+            $db_host_ports = $this->cmdHostModel->getHostScanPorts($host_id, $scan_type);
+            $db_ports_map = [];
 
-        foreach ($listen_ports as $port) {
-            $interface = $port['interface'] ?? '';
-            $pnumber = (int)$port['port'];
-            $protocol = ($port['protocol'] === 'tcp') ? 1 : 2;
+            // Normalize TODO: to method?
+            foreach ($db_host_ports as $db_port) {
+                $interface = $db_port['interface'] ?? '';
+                $pnumber = (int) $db_port['pnumber'];
+                $protocol = (int) $db_port['protocol'];
 
-            if ($port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
-                $interface = "[{$interface}]";
-            }
-            $ip_version = $port['ip_version'] ?? '';
-
-            $key = "{$protocol}:{$pnumber}:{$interface}:{$port['ip_version']}";
-
-            if (isset($db_ports_map[$key])) {
-                $db_port = $db_ports_map[$key];
-
-                if ($db_port['service'] !== $port['service']) {
-                    $warnmsg = 'Service name change detected: '
-                        . "({$db_port['service']}->{$port['service']}) ({$pnumber})";
-                    $this->hostService->setWarnOn(
-                        $host_id,
-                        $warnmsg,
-                        \LogType::EVENT_WARN,
-                        \EventType::SERVICE_NAME_CHANGE
-                    );
-
-                    $this->hostService->updatePort($db_port['id'], [
-                        "service" => $port['service'],
-                        "online" => 1,
-                        "last_check" => $dateTimeService->dateNow(),
-                    ]);
-                } elseif ($db_port['online'] == 0) {
-                    $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber)";
-                    $this->hostService->setWarnOn($host_id, $alertmsg, \LogType::EVENT_WARN, \EventType::PORT_UP);
-
-                    $this->hostService->updatePort($db_port['id'], [
-                        "online" => 1,
-                        "last_check" => $dateTimeService->dateNow(),
-                    ]);
+                if ($db_port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
+                    $interface = "[{$interface}]";
                 }
 
-                unset($db_ports_map[$key]);
-            } else {
-                \Log::warning($key);
-                $new_port_data = [
-                    'hid' => $host_id,
-                    'scan_type' => $scan_type,
-                    'protocol' => $protocol,
-                    'pnumber' => $pnumber,
-                    'online' => 1,
-                    'service' => $port['service'],
-                    'interface' => $interface,
-                    'ip_version' => $ip_version,
-                    'last_check' => $dateTimeService->dateNow(),
-                ];
-                $this->cmdHostModel->addPort($new_port_data);
-                $log_msg = "New port detected: $pnumber ({$port['service']})";
-                $this->hostService->setAlertOn($host_id, $log_msg, \LogType::EVENT_ALERT, \EventType::PORT_NEW);
-                unset($db_ports_map[$key]);
+                $key = "{$protocol}:$pnumber:{$interface}:{$db_port['ip_version']}";
+                $db_ports_map[$key] = $db_port;
             }
-        }
 
-        foreach ($db_ports_map as $db_port) {
-            if ($db_port['online'] == 1) {
-                $set = [
-                    'online' => 0,
-                    'last_check' => $dateTimeService->dateNow(),
-                ];
-                $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
-                $this->hostService->setAlertOn($host_id, $alertmsg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
-                $this->hostService->updatePort($db_port['id'], $set);
+            foreach ($listen_ports as $port) {
+                $interface = $port['interface'] ?? '';
+                $pnumber = (int)$port['port'];
+                $protocol = ($port['protocol'] === 'tcp') ? 1 : 2;
+
+                if ($port['ip_version'] === 'ipv6' && strpos($interface, ':') !== false && $interface[0] !== '[') {
+                    $interface = "[{$interface}]";
+                }
+                $ip_version = $port['ip_version'] ?? '';
+
+                $key = "{$protocol}:{$pnumber}:{$interface}:{$port['ip_version']}";
+
+                if (isset($db_ports_map[$key])) {
+                    $db_port = $db_ports_map[$key];
+
+                    if ($db_port['service'] !== $port['service']) {
+                        $warnmsg = 'Service name change detected: '
+                            . "({$db_port['service']}->{$port['service']}) ({$pnumber}) on {$interface} ({$ip_version})";
+                        # Do not alert on localhost ports
+                        if (strpos($interface, '127.') or strpos($interface, '[::]') === 0) {
+                            \Log::logHost(\LogLevel::NOTICE , $host_id, $warnmsg, \LogType::EVENT, \EventType::SERVICE_NAME_CHANGE);
+                        } else {
+                            $this->hostService->setWarnOn(
+                                $host_id,
+                                $warnmsg,
+                                \LogType::EVENT_WARN,
+                                \EventType::SERVICE_NAME_CHANGE
+                            );
+                        }
+                        $this->hostService->updatePort($db_port['id'], [
+                            "service" => $port['service'],
+                            "online" => 1,
+                            "last_check" => $dateTimeService->dateNow(),
+                        ]);
+                    } elseif ((int)$db_port['online'] === 0) {
+                        $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber) on $interface ($ip_version)";
+                        if (strpos($interface, '127.') or strpos($interface, '[::]') === 0) {
+                            \Log::logHost(\LogLevel::NOTICE , $host_id, $alertmsg, \LogType::EVENT, \EventType::PORT_UP_LOCAL);
+                        } else {
+                            $this->hostService->setWarnOn($host_id, $alertmsg, \LogType::EVENT_WARN, \EventType::PORT_UP);
+                        }
+
+                        $this->hostService->updatePort($db_port['id'], [
+                            "online" => 1,
+                            "last_check" => $dateTimeService->dateNow(),
+                        ]);
+                    }
+
+                    unset($db_ports_map[$key]);
+                } else {
+                    $new_port_data = [
+                        'hid' => $host_id,
+                        'scan_type' => $scan_type,
+                        'protocol' => $protocol,
+                        'pnumber' => $pnumber,
+                        'online' => 1,
+                        'service' => $port['service'],
+                        'interface' => $interface,
+                        'ip_version' => $ip_version,
+                        'last_check' => $dateTimeService->dateNow(),
+                    ];
+                    $this->cmdHostModel->addPort($new_port_data);
+                    $log_msg = "New port detected: $pnumber ({$port['service']}) on $interface ($ip_version)";
+
+                    # Do not alert on localhost ports
+                    if (strpos($interface, '127.') or strpos($interface, '[::]') === 0) {
+                        \Log::logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_NEW_LOCAL);
+                    } else {
+                        $this->hostService->setAlertOn($host_id, $log_msg, \EventType::PORT_NEW, \LogType::EVENT_ALERT);
+                    }
+
+
+                    unset($db_ports_map[$key]);
+                }
             }
-        }
 
-        return true;
+            foreach ($db_ports_map as $db_port) {
+                if ((int)$db_port['online'] === 1) {
+                    $set = [
+                        'online' => 0,
+                        'last_check' => $dateTimeService->dateNow(),
+                    ];
+                    $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
+                    $this->hostService->setAlertOn($host_id, $alertmsg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
+                    $this->hostService->updatePort($db_port['id'], $set);
+                }
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error("Error updating listen ports: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**

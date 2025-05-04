@@ -7,7 +7,7 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
- */
+*/
 class DBManager
 {
     private AppContext $ctx;
@@ -97,12 +97,12 @@ class DBManager
     }
 
     /**
-     * Execute an SQL query.
+     * Executes an SQL query and returns the prepared statement.
      *
-     * @param string $sql SQL query to execute.
-     * @param array<string, mixed> $params Query parameters.
-     * @return \PDOStatement Prepared statement after execution.
-     * @throws \RuntimeException If the statement preparation or execution fails.
+     * @param string $sql The SQL query to execute.
+     * @param array<string, mixed> $params The parameters to bind to the query.
+     * @return \PDOStatement The prepared statement after execution.
+     * @throws \RuntimeException If the query fails.
      */
     public function query(string $sql, array $params = []): \PDOStatement
     {
@@ -211,11 +211,12 @@ class DBManager
     /**
      * Update records in a table.
      *
-     * @param string $table Table name.
-     * @param array<string, mixed> $data Key-value pairs of columns and their new values.
-     * @param ?string $condition WHERE clause, e.g., 'id = :id'.
-     * @param array<string, mixed> $params Parameters for the condition clause.
-     * @return bool True on success, false on failure.
+     * @param string $table The name of the table.
+     * @param array<string, mixed> $data The data to update as key-value pairs.
+     * @param ?string $condition The WHERE clause for the update.
+     * @param array<string, mixed> $params The parameters for the WHERE clause.
+     * @return bool True if the update was successful, false otherwise.
+     * @throws \RuntimeException If the update fails.
      */
     public function update(string $table, array $data, ?string $condition, array $params = []): bool
     {
@@ -273,11 +274,12 @@ class DBManager
     }
 
     /**
-     * Insert a new record into a table.
+     * Inserts a new record into a table.
      *
-     * @param string $table Table name.
-     * @param array<string, mixed> $data Key-value pairs of columns and values to insert.
-     * @return bool True on success, false on failure.
+     * @param string $table The name of the table.
+     * @param array<string, mixed> $data The data to insert as key-value pairs.
+     * @return bool True if the insertion was successful, false otherwise.
+     * @throws \RuntimeException If the insertion fails.
      */
     public function insert(string $table, array $data): bool
     {
