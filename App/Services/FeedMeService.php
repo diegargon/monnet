@@ -307,10 +307,10 @@ class FeedMeService
                     $db_port = $db_ports_map[$key];
 
                     if ($db_port['service'] !== $port['service']) {
-                        $warnmsg = 'Service name change detected: '
-                            . "({$db_port['service']}->{$port['service']}) ({$pnumber}) on {$interface} ({$ip_version})";
+                        $warnmsg = 'Service name change detected on $interface '
+                            . "({$db_port['service']}->{$port['service']}) ({$pnumber}) ({$ip_version})";
                         # Do not alert on localhost ports
-                        if (strpos($interface, '127.') or strpos($interface, '[::]') === 0) {
+                        if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
                             \Log::logHost(\LogLevel::NOTICE , $host_id, $warnmsg, \LogType::EVENT, \EventType::SERVICE_NAME_CHANGE);
                         } else {
                             $this->hostService->setWarnOn(
@@ -326,8 +326,8 @@ class FeedMeService
                             "last_check" => $dateTimeService->dateNow(),
                         ]);
                     } elseif ((int)$db_port['online'] === 0) {
-                        $alertmsg = "Port UP detected: ({$port['service']}) ($pnumber) on $interface ($ip_version)";
-                        if (strpos($interface, '127.') or strpos($interface, '[::]') === 0) {
+                        $alertmsg = "Port UP detected on $interface ({$port['service']}) ($pnumber)($ip_version)";
+                        if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
                             \Log::logHost(\LogLevel::NOTICE , $host_id, $alertmsg, \LogType::EVENT, \EventType::PORT_UP_LOCAL);
                         } else {
                             $this->hostService->setWarnOn($host_id, $alertmsg, \LogType::EVENT_WARN, \EventType::PORT_UP);
@@ -353,10 +353,10 @@ class FeedMeService
                         'last_check' => $dateTimeService->dateNow(),
                     ];
                     $this->cmdHostModel->addPort($new_port_data);
-                    $log_msg = "New port detected: $pnumber ({$port['service']}) on $interface ($ip_version)";
+                    $log_msg = "New port detected on $interface $pnumber ({$port['service']})($ip_version)";
 
                     # Do not alert on localhost ports
-                    if (strpos($interface, '127.') or strpos($interface, '[::]') === 0) {
+                    if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
                         \Log::logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_NEW_LOCAL);
                     } else {
                         $this->hostService->setAlertOn($host_id, $log_msg, \EventType::PORT_NEW, \LogType::EVENT_ALERT);
@@ -373,8 +373,12 @@ class FeedMeService
                         'online' => 0,
                         'last_check' => $dateTimeService->dateNow(),
                     ];
-                    $alertmsg = "Port DOWN detected: {$db_port['pnumber']} ({$db_port['service']})";
-                    $this->hostService->setAlertOn($host_id, $alertmsg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
+                    $log_msg = "Port DOWN detected on {$interface} {$db_port['pnumber']} ({$db_port['service']})";
+                    if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
+                        \Log::logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_DOWN_LOCAL);
+                    } else {
+                        $this->hostService->setAlertOn($host_id, $log_msg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
+                    }
                     $this->hostService->updatePort($db_port['id'], $set);
                 }
             }
