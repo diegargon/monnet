@@ -83,6 +83,9 @@ class AnsibleService
 
         $data = $this->buildSendData($host, $playbook, $extra_vars);
 
+        $playbook_id = $this->getPbIdByName($playbook);
+        $data['pid'] = $playbook_id;
+
         $send_data = [
             'command' => 'playbook_exec',
             'module' => 'ansible',
@@ -101,8 +104,7 @@ class AnsibleService
                 isset($responseArray['result'])
         ) {
             /* SUCCESS */
-            $playbook_id = $this->getPbIdByName($playbook);
-
+            /* REMOVE GW Insert de report
             if ($playbook_id) {
                 $pb_data = [
                     'host_id' => $host['id'],
@@ -116,6 +118,8 @@ class AnsibleService
                 }
                 $this->ansibleReportModel->insertReport($pb_data);
             }
+             *
+             */
 
             return ['status' => 'success', 'response_msg' => $responseArray];
         }
@@ -472,11 +476,14 @@ class AnsibleService
     private function buildSendData(array $host, string $playbook, array $extraVars = []): array
     {
         //TODO Fixme playbook can be yaml or yml metadata must provided filename __source_file
+        $user = $this->ctx->get('User');
         return [
             'playbook' => $playbook . '.yml',
             'extra_vars' => $extraVars,
             'ip' => $host['ip'],
-            'user' => $this->ncfg->get('ansible_user') ?? 'ansible'
+            'host_id' => $host['id'],
+            'user' => $this->ncfg->get('ansible_user') ?? 'ansible',
+            'source_id' => $user->getId()
         ];
     }
 
