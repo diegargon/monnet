@@ -11,6 +11,7 @@ namespace App\Services;
 use App\Models\CmdHostModel;
 use App\Models\LogHostsModel;
 use App\Models\HostsModel;
+use App\Services\DateTimeService;
 
 class HostService
 {
@@ -427,7 +428,12 @@ class HostService
     public function setAlertOn(int $id, string $msg, int $log_type, int $event_type): void
     {
         \Log::logHost(\LogLevel::ALERT, $id, $msg, $log_type, $event_type);
-        $this->cmdHostModel->updateByID($id, ['alert' => 1]);
+        $dateTime = new DateTimeService();
+        $update = [
+            'alert' => 1,
+            'glow' => $dateTime->dateNow(),
+        ];
+        $this->cmdHostModel->updateByID($id, $update);
     }
 
     /**
@@ -440,7 +446,12 @@ class HostService
     public function setWarnOn(int $id, string $msg, int $log_type, int $event_type): void
     {
         \Log::logHost(\LogLevel::WARNING, $id, $msg, $log_type, $event_type);
-        $this->cmdHostModel->updateByID($id, ['warn' => 1]);
+        $dateTime = new DateTimeService();
+        $update = [
+            'warn' => 1,
+            'glow' => $dateTime->dateNow(),
+        ];
+        $this->cmdHostModel->updateByID($id, $update);
     }
 
     /**
