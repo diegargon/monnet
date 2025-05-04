@@ -14,7 +14,7 @@ namespace App\Services;
 use App\Services\HostService;
 use App\Services\DateTimeService;
 use App\Models\CmdHostModel;
-use App\Models\CmdStats;
+use App\Models\CmdStatsModel;
 
 class FeedMeService
 {
@@ -29,9 +29,9 @@ class FeedMeService
     private HostService $hostService;
 
     /**
-     * @var CmdStats $cmdStats Model Stats
+     * @var CmdStatsModel $cmdStatsModel Model Stats
      */
-    private CmdStats $cmdStats;
+    private CmdStatsModel $cmdStatsModel;
 
     /**
      * @var CmdHostModel $cmdHostModel Model host data
@@ -186,8 +186,8 @@ class FeedMeService
     public function processStats(int $host_id, array $rdata): bool
     {
         try {
-            if (empty($this->cmdStats)) {
-                $this->cmdStats = new CmdStats($this->ctx);
+            if (empty($this->cmdStatsModel)) {
+                $this->cmdStatsModel = new CmdStatsModel($this->ctx);
             }
 
             $dateTimeService  = new DateTimeService();
@@ -203,7 +203,7 @@ class FeedMeService
                         'host_id' => $host_id,
                         'value' => $rdata['load_avg_stats']['5min']
                     ];
-                    $this->cmdStats->insertStats($stats_data);
+                    $this->cmdStatsModel->insertStats($stats_data);
                 }
             }
 
@@ -214,7 +214,7 @@ class FeedMeService
                     'host_id' => $host_id,
                     'value' => $rdata['iowait_stats']
                 ];
-                $this->cmdStats->insertStats($stats_data);
+                $this->cmdStatsModel->insertStats($stats_data);
             }
 
             if (!\isEmpty($rdata['mem_stats'])) {
@@ -224,7 +224,7 @@ class FeedMeService
                     'host_id' => $host_id,
                     'value' => $rdata['mem_stats']
                 ];
-                $this->cmdStats->insertStats($stats_data);
+                $this->cmdStatsModel->insertStats($stats_data);
             }
 
             return true;

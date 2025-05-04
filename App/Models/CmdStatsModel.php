@@ -7,7 +7,7 @@
 
 namespace App\Models;
 
-class CmdStats
+class CmdStatsModel
 {
     private \AppContext $ctx;
     private \DBManager $db;
