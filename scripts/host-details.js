@@ -609,9 +609,9 @@ function requestHostDetails(command, command_values = []) {
                     (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'logs-reload')
                     ) {
                     if (jsonData.command_success === 1) {
-                        $('#term_output').html(jsonData.response_msg);
+                        $('#term-output').html(jsonData.response_msg);
                     } else {
-                        $('#term_output').html('Error');
+                        $('#term-output').html('Error');
                     }
                 }
 
@@ -628,11 +628,11 @@ function requestHostDetails(command, command_values = []) {
                     jsonData.command_receive === 'journald-load'
                     ) {
                     if (jsonData.command_success === 1) {
-                        $('#term_output').html(jsonData.response_msg);
+                        $('#term-output').html(jsonData.response_msg);
                     } else if (jsonData.command_error_msg) {
-                        $('#term_output').html(jsonData.command_error_msg);
+                        $('#term-output').html(jsonData.command_error_msg);
                     } else {
-                        $('#term_output').html('Error');
+                        $('#term-output').html('Error');
                     }
                 }
 

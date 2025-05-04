@@ -17,7 +17,7 @@
 <div id="term_container<?= isset($tdata['host_id']) ? '_' . $tdata['host_id'] : null; ?>" class="term_container">
     <div class="term_crystal">
         <div id="term_frame" class="frame glow">
-            <div  id="term_output" class="term_output">
+            <div  id="term-output" class="term-output">
                 <?php
                 if (valid_array($tdata['term_logs'])) {
                     echo implode('', $tdata['term_logs']);
