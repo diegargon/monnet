@@ -641,6 +641,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             # Option mark view report
             $db->query("ALTER TABLE reports ADD COLUMN ack TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
+            # Option to configure de server_endpoint
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('server_endpoint', JSON_QUOTE('/feedme.php'), 0, 103, NULL, 0);
@@ -660,6 +661,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.67;
     if ($db_version == 0.00) {
         try {
+            # Removed unused
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
