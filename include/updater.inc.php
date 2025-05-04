@@ -666,6 +666,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
             $db->query("ALTER TABLE tasks DROP COLUMN online_change;");
+            $db->query("ALTER TABLE hosts DROP COLUMN last_seen;");
             //$db->query("
             //");
             $db->query("START TRANSACTION");
