@@ -262,9 +262,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            /* Usado para extra_vars u otros en JSON format */
+            /* DONE Usado para extra_vars u otros en JSON format */
             $db->query("ALTER TABLE `tasks` ADD `extra` JSON NULL DEFAULT NULL");
-            /* Task scheduler */
+            /* DONE Task scheduler */
             $db->query("ALTER TABLE `tasks` ADD `task_interval` VARCHAR(10) DEFAULT NULL");
             $db->query("ALTER TABLE `tasks` ADD `interval_seconds` INT DEFAULT NULL");
             $db->query("ALTER TABLE `tasks` ADD `next_trigger` DATETIME NULL AFTER `last_triggered`;");
@@ -295,8 +295,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            //$db->query("
-            //");
             $db->query("
                 CREATE TABLE IF NOT EXISTS `ansible_vars` (
                   `id` int NOT NULL AUTO_INCREMENT,
@@ -323,6 +321,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
+            /* DONE */
             $db->query("ALTER TABLE `tasks` ADD `event_id` INT DEFAULT 0");
             $db->query("ALTER TABLE `tasks` ADD `crontime` VARCHAR(255)");
             $db->query("ALTER TABLE `tasks` ADD `groups` VARCHAR(255)");
@@ -389,8 +388,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ('default_disks_warn_threshold', JSON_QUOTE('80'), 1, 103, NULL, 0);
             ");
 
-            //$db->query("
-            //");
             $db->query("COMMIT");
             $db_version = $update;
             Log::notice("Update version to $update successful");
@@ -548,7 +545,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db_version = $update;
             # getTotalsStats
             $db->query("ALTER TABLE `hosts` ADD `agent_online` TINYINT(1) NOT NULL DEFAULT 0;");
-            # Rerbuild User
+            # For rebuild User
             $db->query("
                 CREATE TABLE `sessions` (
                   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -576,8 +573,10 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.63;
     if ($db_version == 0.62) {
         try {
+            /* Remove unused */
             $db->query("ALTER TABLE hosts DROP COLUMN access_method;");
             $db->query("ALTER TABLE hosts DROP COLUMN status;");
+            /* DONE change pb_id to pid */
             $db->query("ALTER TABLE tasks ADD COLUMN pid VARCHAR(255) DEFAULT 'std-ansible-ping' AFTER hid;");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
@@ -591,8 +590,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.64;
     if ($db_version == 0.63) {
         try {
-            //$db->query("
-            //");
+            /* DONE change pb_id to pid */
             $db->query("ALTER TABLE reports ADD COLUMN pid VARCHAR(255) AFTER host_id;");
             $db->query("ALTER TABLE tasks MODIFY pb_id INT NULL;");
             foreach ($ncfg->get('playbooks') as $playbook) {
@@ -601,10 +599,10 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
                 $db->query("UPDATE reports SET pid = '$pname' WHERE pb_id = $pbId");
             }
-            // Option to Clear to allow old hosts in this nework 0/1
+            // Option to implemente clear offline hosts if this options is active 0/1
             $db->query("ALTER TABLE `networks` ADD `clear` TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
-            // Clean never seen again host time
+            // Enable Clean never seen again host time
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('clean_host_days', JSON_QUOTE('30'), 1, 104, NULL, 0);
@@ -624,6 +622,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.65;
     if ($db_version == 0.64) {
         try {
+            /* DONE Set unused to allow null  before delete */
             $db->query("ALTER TABLE tasks MODIFY pb_id INT NULL;");
             $db->query("ALTER TABLE reports MODIFY pb_id INT NULL;");
             $ncfg->set('db_monnet_version', $update, 1);
@@ -639,8 +638,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.66;
     if ($db_version == 0.00) {
         try {
-            //$db->query("
-            //");
+            # Option mark view report
+            $db->query("ALTER TABLE reports ADD COLUMN ack TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
