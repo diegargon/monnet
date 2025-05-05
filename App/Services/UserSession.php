@@ -18,7 +18,7 @@ class UserSession
     private UserModel $userModel;
     private SessionsModel $sessionModel;
     private const REMEMBER_COOKIE = 'sid';
-    
+
     private \Config $ncfg;
     private array $user = [];
     private int $session_expire;
@@ -40,11 +40,11 @@ class UserSession
     {
         $user['logged_in'] = true;
         $this->user = $user;
-        $this->saveSession($user['id']);
+        $this->createDBSession($user['id']);
     }
 
     public function isLoggedIn(): bool
-    {        
+    {
         if (!$this->user) {
             return false;
         }
@@ -98,7 +98,7 @@ class UserSession
         return false;
     }
 
-    public function saveSession(int $userId): string
+    public function createDBSession(int $userId): string
     {
         $sid = session_id();
 
@@ -156,4 +156,34 @@ class UserSession
         $this->user = [];
     }
 
+    public function rememberSession(int $userId): void
+    {
+        $sid = $this->userSession->saveSession($userId);
+
+        if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
+            setcookie('uid', $userId, [
+                'expires' => time() + $this->session_expire,
+                'secure' => true,
+                'samesite' => 'lax',
+            ]);
+            setcookie(self::REMEMBER_COOKIE, $sid, [
+                'expires' => time() + $this->session_expire,
+                'secure' => true,
+                'samesite' => 'lax',
+            ]);
+        } else {
+            setcookie(
+                'uid',
+                $userId,
+                time() + $this->session_expire,
+                $this->ncfg->get('rel_path')
+            );
+            setcookie(
+                self::REMEMBER_COOKIE,
+                $sid,
+                time() + $this->session_expire,
+                $this->ncfg->get('rel_path')
+            );
+        }
+    }
 }

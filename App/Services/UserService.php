@@ -14,10 +14,7 @@ use App\Services\UserSession;
 
 class UserService
 {
-
-    private const REMEMBER_COOKIE = 'sid';
     private \AppContext $ctx;
-
     private UserModel $userModel;
     private UserSession $userSession;
     private LogSystemService $logSystem;
@@ -34,7 +31,6 @@ class UserService
         $this->logSystem = new LogSystemService($ctx);
         $this->ncfg = $ctx->get('Config');
         $this->session_expire = (int) $this->ncfg->get('sid_expire');
-
         $this->userSession->tryAutoLogin();
     }
 
@@ -48,7 +44,7 @@ class UserService
         $this->userSession->set($user);
 
         if ($remember) {
-            $this->rememberSession($user['id']);
+            $this->userSession->rememberSession($user['id']);
         }
         unset($user['password']);
 
@@ -60,6 +56,11 @@ class UserService
         $user = $this->userSession->getCurrentUser();
 
         return $user ? true : false;
+    }
+
+    public function getCurrentUser(): array
+    {
+        return $this->userSession->getCurrentUser();
     }
 
     public function getUser(int $userId): array
@@ -173,38 +174,7 @@ class UserService
     public function getCurrentUser(): ?array
     {
         $userId = $this->userSession->getUserId();
-        
+
         return $userId ? $this->getUser($userId) : null;
-    }
-
-    private function rememberSession(int $userId): void
-    {
-        $sid = $this->userSession->saveSession($userId);
-
-        if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
-            setcookie('uid', $userId, [
-                'expires' => time() + $this->session_expire,
-                'secure' => true,
-                'samesite' => 'lax',
-            ]);
-            setcookie(self::REMEMBER_COOKIE, $sid, [
-                'expires' => time() + $this->session_expire,
-                'secure' => true,
-                'samesite' => 'lax',
-            ]);
-        } else {
-            setcookie(
-                'uid',
-                $userId,
-                time() + $this->session_expire,
-                $this->ncfg->get('rel_path')
-            );
-            setcookie(
-                self::REMEMBER_COOKIE,
-                $sid,
-                time() + $this->session_expire,
-                $this->ncfg->get('rel_path')
-            );
-        }
     }
 }
