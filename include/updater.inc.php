@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
@@ -636,14 +634,21 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
     // 0.66
     $update = 0.66;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.65) {
         try {
-            # Option mark view report
-            $db->query("ALTER TABLE reports ADD COLUMN ack TINYINT NOT NULL DEFAULT '0';");
+            # DONNE Rename fields
+            $db->query("ALTER TABLE sessions CHANGE created_at created DATETIME");
+            $db->query("ALTER TABLE sessions CHANGE expired_at expire DATETIME");
+            $db->query("ALTER TABLE sessions CHANGE last_active_at last_active DATETIME");
+            # Modify
+            $db->query("ALTER TABLE users MODIFY COLUMN timezone VARCHAR(32);");
+            $db->query("ALTER TABLE users MODIFY COLUMN password VARCHAR(255);");
             $db->query("START TRANSACTION");
             # Option to configure de server_endpoint
+            # agegent log level actully use string "info" change it
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('agent_log_level', JSON_QUOTE('5'), 1, 103, NULL, 0),
                 ('server_endpoint', JSON_QUOTE('/feedme.php'), 0, 103, NULL, 0);
             ");
             $db->query("COMMIT");
@@ -662,12 +667,38 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     if ($db_version == 0.00) {
         try {
             # Removed unused
-            $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
-            $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
-            $db->query("ALTER TABLE tasks DROP COLUMN extra;");
             $db->query("ALTER TABLE tasks DROP COLUMN online_change;");
             $db->query("ALTER TABLE hosts DROP COLUMN last_seen;");
             $db->query("ALTER TABLE hosts DROP COLUMN encrypted;");
+            $db->query("START TRANSACTION");
+            # Option mark view report
+            $db->query("ALTER TABLE reports ADD COLUMN ack TINYINT NOT NULL DEFAULT '0';");
+            //$db->query("
+            //");
+            # sid expire remove from config.priv
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('sid_expire', JSON_QUOTE('604.800'), 1, 10, NULL, 0);
+            ");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // 0.68
+    $update = 0.68;
+    if ($db_version == 0.00) {
+        try {
+            # Remove Unused
+            $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
+            $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
+            $db->query("ALTER TABLE tasks DROP COLUMN extra;");
             //$db->query("
             //");
             $db->query("START TRANSACTION");
@@ -683,7 +714,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-
     // Template
     $update = 0.00;
     if ($db_version == 0.00) {

@@ -446,9 +446,9 @@ class AnsibleService
     /**
      *
      * @param string $playbook
-     * @return int|null
+     * @return string|null
      */
-    private function findPlaybookId(string $playbook): ?int
+    private function findPlaybookId(string $playbook): ?string
     {
         // Ensure playbook metadata is loaded
         $pb_metadata_result = $this->setPbMetadata();

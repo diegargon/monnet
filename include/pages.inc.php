@@ -9,7 +9,9 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+use App\Services\UserService;
 /**
+ *
  *
  * @param AppContext $ctx
  * @return array<string,string>
@@ -377,6 +379,8 @@ function page_user(AppContext $ctx): array
 {
     $page = [];
 
+    //$userService = new UserService($ctx);
+    //$user = $userService->getUser($uid);
     $ncfg = $ctx->get('Config');
 
     $page = page_common_head($ctx);
@@ -391,5 +395,13 @@ function page_user(AppContext $ctx): array
     //$page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     //$page['web_main']['scriptlink'][] = './scripts/background.js';
 
+    $page['load_tpl'][] = [
+        'file' => 'user',
+        'place' => 'left_col_pre',
+    ];
+    $page['load_tpl'][] = [
+        'file' => 'user-mgmt',
+        'place' => 'center_col',
+    ];
     return $page;
 }
