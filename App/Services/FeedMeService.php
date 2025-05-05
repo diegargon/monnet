@@ -160,8 +160,9 @@ class FeedMeService
         if (!$host) {
             return [];
         }
+        \Log::logHost($rdata['log_level'], $host_id, $rdata['msg'], $rdata['log_type'], $rdata['event_type']);
         $host_update_values = [];
-
+        
         if (!empty($rdata['ncpu'])) {
             if (!isset($host['misc']['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) {
                 $host_update_values['misc']['ncpu'] = $rdata['ncpu'];
