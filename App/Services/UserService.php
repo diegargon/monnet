@@ -45,13 +45,11 @@ class UserService
         if (!$user || !password_verify($password, $user['password'])) {
             throw new \RuntimeException("Credenciales inválidas");
         }
-
         $this->userSession->set($user);
 
         if ($remember) {
             $this->rememberSession($user['id']);
         }
-
         unset($user['password']);
 
         return $user;
@@ -69,13 +67,11 @@ class UserService
         if ($userId <= 0) {
             return [];
         }
-
         $user = $this->userModel->getById($userId);
 
         if (!$user) {
             return [];
         }
-
         unset($user['password']);
         unset($user['sid']);
 
@@ -84,7 +80,6 @@ class UserService
 
     public function register(array $userData): array
     {
-
         if (empty($userData['email']) || !filter_var($userData['email'], FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException("Email inválido");
         }
@@ -98,7 +93,6 @@ class UserService
         }
 
         $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
-
         $userId = $this->userModel->create($userData);
 
         return $this->getUser($userId);
@@ -122,7 +116,6 @@ class UserService
         if (!empty($userData['password'])) {
             $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
         }
-
         $this->userModel->update($userId, $userData);
 
         return  true;
@@ -180,6 +173,7 @@ class UserService
     public function getCurrentUser(): ?array
     {
         $userId = $this->userSession->getUserId();
+        
         return $userId ? $this->getUser($userId) : null;
     }
 
