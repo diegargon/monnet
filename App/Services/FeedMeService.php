@@ -512,8 +512,11 @@ class FeedMeService
             $values['misc']['agent_version'] = (string) $request['version'];
         }
 
-        if ((int) $host['online'] !== 1) {
+        if ((int)$host['online'] !== 1) {
             $values['online'] = 1;
+        }
+        if ((int)$host['agent_online'] !== 1) {
+            $values['agent_online'] = 1;
         }
 
         return $values;
