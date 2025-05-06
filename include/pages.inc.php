@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
@@ -378,12 +376,11 @@ function page_privacy(AppContext $ctx): array
 function page_user(AppContext $ctx): array
 {
     $page = [];
-
-    //$userService = new UserService($ctx);
-    //$user = $userService->getUser($uid);
+    $user = $ctx->get('User');
     $ncfg = $ctx->get('Config');
-
+    $user->getCurrentUser();
     $page = page_common_head($ctx);
+
     /* Top Buttons */
     $page['load_tpl'][] = [
         'file' => 'topbuttoms',
