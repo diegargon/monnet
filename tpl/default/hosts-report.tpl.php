@@ -45,7 +45,11 @@
                                 alt="online_status"
                                 title="Off">
                             <?php
-                        elseif ($key === 'log_msgs' && is_array($host['log_msgs'])) :
+                        elseif ($key === 'log_msgs') :
+                            if (!isset($host['log_msgs']) || !is_array($host['log_msgs'])) {
+                                # Alert/Warn on but Logs probably ACK skip
+                                continue;
+                            }
                             foreach ($host['log_msgs'] as $log_msg) :
                                 ?>
                             <div>
