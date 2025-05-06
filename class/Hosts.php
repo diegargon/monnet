@@ -67,7 +67,6 @@ class Hosts
         'alarm_macchange_email',
         'alarm_newport_email',
         'email_list',
-        'agent_online',
         'agent_next_report', /* Timesstamp for next report */
         'agent_last_contact',
         'agent_version',
@@ -1074,7 +1073,7 @@ class Hosts
             /* Agent */
             if (!empty($this->hosts[$id]['agent_installed'])) :
                 $this->agents++;
-                if (!$host['online'] || empty($this->hosts[$id]['misc']['agent_online'])) :
+                if (!$host['online'] || empty($this->hosts[$id]['agent_online'])) :
                     $this->agents_off++;
                 endif;
 
@@ -1106,7 +1105,7 @@ class Hosts
                 endif;
             endif;
 
-         } // LOOP FIN
+         } // LOOP END
 
         return true;
     }
