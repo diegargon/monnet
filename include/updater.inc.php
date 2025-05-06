@@ -11,7 +11,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 {
     Log::notice("Triggered updater File version: $files_version DB version: $db_version");
 
-    // 0.44
+    // 0.44 COMPLETED
     if ($db_version < 0.44) {
         try {
             $ncfg->set('db_monnet_version', 0.44, 1);
@@ -80,7 +80,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-   // 0.45 Template
+   // 0.45 COMPLETED
     if ($db_version < 0.45) {
         try {
             $ncfg->set('db_monnet_version', 0.45, 1);
@@ -108,7 +108,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.47 Template
+    // 0.47 COMPLETED
     if ($db_version < 0.47) {
         try {
             $ncfg->set('db_monnet_version', 0.47, 1);
@@ -148,7 +148,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-  // 0.48 Template
+  // 0.48
     if ($db_version < 0.48) {
         try {
             $ncfg->set('db_monnet_version', 0.48, 1);
@@ -166,7 +166,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-  // 0.49 Template
+  // 0.49 COMPLETED
     if ($db_version < 0.49) {
         try {
             $ncfg->set('db_monnet_version', 0.49, 1);
@@ -187,7 +187,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
 
-    // 0.50 Template
+    // 0.50 COMPLETED
     $update = 0.50;
     if ($db_version < $update) {
         try {
@@ -204,11 +204,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 ALTER TABLE `reports` ADD `source_id` INT DEFAULT '0' AFTER `host_id`;
             ");
-            // Permitir deshabilitar la tarea
+            // DONE Permitir deshabilitar la tarea
             $db->query("
                 ALTER TABLE `tasks` ADD `disable` TINYINT(1) DEFAULT '0' AFTER `next_task`;
             ");
-            // Nombre de la tarea
+            // DONE Nombre de la tarea
             $db->query("
                 ALTER TABLE `tasks` ADD `task_name` VARCHAR(100) NOT NULL AFTER `hid`;
             ");
@@ -216,11 +216,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("
                 ALTER TABLE `tasks` ADD `trigger_type` SMALLINT NOT NULL AFTER `hid`;
             ");
-            // Id del playbook a ejecutar config.priv
+            // DONE Id del playbook a ejecutar config.priv
             $db->query("
                 ALTER TABLE `tasks` ADD `pb_id` SMALLINT NOT NULL AFTER `hid`;
             ");
-            // Ultima vez que se ejecuto
+            // DONE Ultima vez que se ejecuto
             $db->query("
                 ALTER TABLE `tasks` ADD `last_triggered` DATETIME NULL AFTER `trigger_type`;
             ");
@@ -239,6 +239,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
+    // 0.51 COMPLETED
     $update = 0.51;
     if ($db_version < $update) {
         try {
@@ -256,6 +257,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
+    // 0.52 COMPLETED
     $update = 0.52;
     if ($db_version < $update) {
         try {
@@ -275,6 +277,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
+    // 0.53 COMPLETED
     $update = 0.53;
     if ($db_version < $update) {
         try {
@@ -289,6 +292,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
+    // 0.54 COMPLETED
     $update = 0.54;
     if ($db_version < $update) {
         try {
@@ -314,7 +318,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // 0.55
+    // 0.55 COMPLETED
     $update = 0.55;
     if ($db_version < $update) {
         try {
@@ -331,22 +335,20 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // 0.56
+    // 0.56 COMPLETED
     $update = 0.56;
     if ($db_version < $update) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
-            # Unused
+            # DONE DROP Unused
             $result = $db->query("SHOW COLUMNS FROM `hosts` LIKE 'access_results'");
             if ($result && $result->num_rows > 0) {
                 $db->query("ALTER TABLE `hosts` DROP COLUMN `access_results`");
             }
             $result = $db->query("SHOW COLUMNS FROM `hosts` LIKE 'fingerprint'");
-            # Unused
             if ($result && $result->num_rows > 0) {
                 $db->query("ALTER TABLE `hosts` DROP COLUMN `fingerprint`");
             }
-            # Unused
             $result = $db->query("SHOW COLUMNS FROM `hosts` LIKE 'latency'");
             if ($result && $result->num_rows > 0) {
                 $db->query("ALTER TABLE `hosts` DROP COLUMN `latency`");
@@ -385,7 +387,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ('default_disks_alert_threshold', JSON_QUOTE('90'), 1, 103, NULL, 0),
                 ('default_disks_warn_threshold', JSON_QUOTE('80'), 1, 103, NULL, 0);
             ");
-
             $db->query("COMMIT");
             $db_version = $update;
             Log::notice("Update version to $update successful");
@@ -396,7 +397,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // Update 0.57
+    //Update 0.57 COMPLETED
     $update = 0.57;
     if ($db_version == 0.56) {
         try {
@@ -435,11 +436,12 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // 0.59
+    // 0.59 COMPLETED
     $update = 0.59;
     if ($db_version == 0.57 || $db_version == 0.58) {
         try {
             $ncfg->set('db_monnet_version', $update, 1);
+            # DONE pass config
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('log_level', JSON_QUOTE('5'), 1, 105, NULL, 0),
@@ -477,6 +479,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 WHERE TABLE_SCHEMA = DATABASE()
                   AND TABLE_NAME = 'ports'
                   AND COLUMN_NAME = 'last_change'");
+            # DONE DROP unused
             if ($columnExists->num_rows > 0) {
                 $db->query("ALTER TABLE `ports` DROP COLUMN `last_change`");
             }
@@ -489,7 +492,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // 0.60
+    // 0.60 COMPLETED
     $update = 0.60;
     if ($db_version == 0.59) {
         Log::warning("Init version $update");
@@ -524,7 +527,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         Log::warning("Update version to $update successful");
     }
 
-    // 0.61 test
+    // 0.61 COMPLETED
     $update = 0.61;
     if ($db_version == 0.60) {
         try {
@@ -671,9 +674,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE tasks DROP COLUMN online_change;");
             $db->query("ALTER TABLE hosts DROP COLUMN last_seen;");
             $db->query("ALTER TABLE hosts DROP COLUMN encrypted;");
+            # linked: id hypervisor or other host depend to allow link vms/containers
+            $db->query("ALTER TABLE `hosts` ADD `linked` INT NULL DEFAULT 0;");
             $db->query("START TRANSACTION");
             # Option mark view report
             $db->query("ALTER TABLE reports ADD COLUMN ack TINYINT NOT NULL DEFAULT '0';");
+            # Option mark the status of the task 0 success 1 failed
+            $db->query("ALTER TABLE reports ADD COLUMN status TINYINT NOT NULL DEFAULT '0';");
             //$db->query("
             //");
             # sid expire remove from config.priv
