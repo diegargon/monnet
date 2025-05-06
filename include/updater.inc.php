@@ -678,6 +678,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             # sid expire remove from config.priv
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('agent_internal_host', JSON_QUOTE(''), 0, 103, NULL, 0);
                 ('sid_expire', JSON_QUOTE('604.800'), 1, 10, NULL, 0);
             ");
             $db->query("COMMIT");

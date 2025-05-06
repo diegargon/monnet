@@ -267,6 +267,10 @@ class CmdTaskAnsibleController
         if (empty($task_name)) {
             return ['status' => 'error', 'error_msg' => 'Task name: ', $task_name];
         }
+
+        if (empty($task_trigger)) {
+            return ['status' => 'error', 'error_msg' => 'Task trigger can not be empty'];
+        }
         empty($disable_task) ? $disable_task = 0 : null;
 
 
