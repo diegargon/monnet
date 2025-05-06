@@ -12,6 +12,7 @@ use App\Models\CmdHostModel;
 use App\Models\LogHostsModel;
 use App\Models\HostsModel;
 use App\Services\DateTimeService;
+use App\Services\Filter;
 
 class HostService
 {
@@ -73,6 +74,38 @@ class HostService
         unset($this->hostsModel);
     }
 
+    /**
+     *
+     * @param array<string, int|string> $host_data
+     * @return bool
+     */
+
+    /*
+    public function add(array $host): bool
+    {
+        // Added by hostname we need the ip always
+        if (empty($host['ip']) && !empty($host['hostname'])) {
+            if (!Filter::varDomain($host['hostname'])) :
+                return false;
+            endif;
+            $host['ip'] = gethostbyname($host['hostname']);
+            if (!$host['ip']) :
+                return false;
+            endif;
+        }
+
+        if(!empty($host['misc'])) {
+            $encoded_misc = $this->encodeMisc($host['misc']);
+            if (!$encoded_misc) {
+                return false;
+            }
+
+            $host['misc'] = $encoded_misc;
+            unset($encoded_misc);
+        }
+    }
+    */
+    
     /**
      * @param int $id
      * @return array<string, string|int>
