@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
@@ -93,6 +91,15 @@ class User
      * @return array<string,string|int|null>
      */
     public function getUser(): array
+    {
+        return $this->user;
+    }
+
+    /**
+     * Same as getUser for easy migration later
+     * @return array<string,string|int|null>
+     */
+    public function getCurrentUser(): array
     {
         return $this->user;
     }
