@@ -170,11 +170,4 @@ class UserService
     {
         $this->userSession->logout();
     }
-
-    public function getCurrentUser(): ?array
-    {
-        $userId = $this->userSession->getUserId();
-
-        return $userId ? $this->getUser($userId) : null;
-    }
 }
