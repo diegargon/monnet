@@ -19,6 +19,15 @@ class HostsModel
 
     /**
      *
+     * @param array<string, int|string> $host_data
+     * @return bool
+     */
+    public function add(array $host_data): bool
+    {
+        return $this->db->insert('hosts', $host_data);
+    }
+    /**
+     *
      * @return array<string, mixed>
      */
     public function getAll(): array
