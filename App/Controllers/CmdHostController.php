@@ -32,22 +32,21 @@ class CmdHostController
 {
     private CmdHostModel $cmdHostModel;
     private CmdHostNotesModel $cmdHostNotesModel;
+
     private LogHostsService $logHostsService;
     private HostMetricsService $hostMetricsService;
-    private HostViewBuilder $hostViewBuilder;
+    private AnsibleService $ansibleService;
     private HostService $hostService;
+
+    private HostViewBuilder $hostViewBuilder;
     private HostFormatter $hostFormatter;
 
     private \AppContext $ctx;
-    private AnsibleService $ansibleService;
-
     private \DBManager $db;
 
     public function __construct(\AppContext $ctx)
     {
-
         $this->db = $ctx->get('DBManager');
-
         $this->hostService = new HostService($ctx);
         $this->ansibleService = new AnsibleService($ctx);
         $this->logHostsService = new LogHostsService($ctx);
@@ -58,7 +57,6 @@ class CmdHostController
 
         $this->hostFormatter = new HostFormatter($ctx);
         $this->hostViewBuilder = new HostViewBuilder($ctx);
-
 
         $this->ctx = $ctx;
     }
@@ -228,17 +226,18 @@ class CmdHostController
      */
     public function submitHostToken(array $command_values): array
     {
-        $target_id = Filter::varInt($command_values['id']);
+        $hid = Filter::varInt($command_values['id']);
         $field = 'createHostToken';
 
-        if (!is_numeric($target_id)) {
+        if (!is_numeric($hid) && $hid <= 0) {
             return Response::stdReturn(false, "$field: Invalid input data");
         }
 
-        if ($this->cmdHostModel->createHostToken($target_id)) {
-            return Response::stdReturn(true, "$field: success $target_id");
+        $token = $this->hostService->createToken($hid);
+        if ($token) {
+            return Response::stdReturn(true, "Created token for id $hid", false, ['token' => $token]);
         } else {
-            return Response::stdReturn(false, "$field: Error creating token");
+            return Response::stdReturn(false, "Create token for id $hid fail");
         }
     }
 
@@ -988,7 +987,6 @@ class CmdHostController
      *
      * @return array<string, mixed>
      */
-
     public function updateHostField(
         string $command,
         array $command_values,
