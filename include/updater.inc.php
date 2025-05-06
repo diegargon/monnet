@@ -598,6 +598,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 $db->query("UPDATE reports SET pid = '$pname' WHERE pb_id = $pbId");
             }
             // Option to implemente clear offline hosts if this options is active 0/1
+            // GW must do a task host clean
             $db->query("ALTER TABLE `networks` ADD `clear` TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
             // Enable Clean never seen again host time
@@ -636,16 +637,16 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.66;
     if ($db_version == 0.65) {
         try {
-            # DONNE Rename fields
+            # DONE Rename fields
             $db->query("ALTER TABLE sessions CHANGE created_at created DATETIME");
             $db->query("ALTER TABLE sessions CHANGE expired_at expire DATETIME");
             $db->query("ALTER TABLE sessions CHANGE last_active_at last_active DATETIME");
-            # Modify
+            # DONE Modify
             $db->query("ALTER TABLE users MODIFY COLUMN timezone VARCHAR(32);");
             $db->query("ALTER TABLE users MODIFY COLUMN password VARCHAR(255);");
             $db->query("START TRANSACTION");
             # Option to configure de server_endpoint
-            # agegent log level actully use string "info" change it
+            # agent log level actully use string "info" change it on Agent
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_log_level', JSON_QUOTE('5'), 1, 103, NULL, 0),
