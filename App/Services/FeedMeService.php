@@ -162,7 +162,7 @@ class FeedMeService
         }
         \Log::logHost($rdata['log_level'], $host_id, $rdata['msg'], $rdata['log_type'], $rdata['event_type']);
         $host_update_values = [];
-        
+
         if (!empty($rdata['ncpu'])) {
             if (!isset($host['misc']['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) {
                 $host_update_values['misc']['ncpu'] = $rdata['ncpu'];
@@ -308,7 +308,7 @@ class FeedMeService
                     $db_port = $db_ports_map[$key];
 
                     if ($db_port['service'] !== $port['service']) {
-                        $warnmsg = 'Service name change detected on $interface '
+                        $warnmsg = "Service name change detected on $interface "
                             . "({$db_port['service']}->{$port['service']}) ({$pnumber}) ({$ip_version})";
                         # Do not alert on localhost ports
                         if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
