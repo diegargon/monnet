@@ -140,58 +140,61 @@ class CmdTaskAnsibleController
      */
     public function mgmtTask(string $command, array $command_values): array
     {
+        $response_add = [
+            'command' => $command,
+        ];
         switch ($command) :
             case 'create_host_task':
                 $hid = Filter::varInt($command_values['hid']);
+                $response_add['hid'] = $hid;
                 break;
             case 'update_host_task':
             case 'delete_host_task':
                 $tid = Filter::varInt($command_values['id']);
+                $response_add['tid'] = $tid;
                 break;
             default:
                 $hid = 0;
         endswitch;
 
-        $response_extra = [
-            'command' => $command,
-        ];
-
         switch ($command) :
             case 'delete_host_task':
                 $cmdAnsibleModel = new CmdAnsibleModel($this->ctx);
                 if ($cmdAnsibleModel->deleteTask($tid)) {
-                    return Response::stdReturn(true, 'Delete Task Success', false, $response_extra);
+                    return Response::stdReturn(true, 'Delete Task Success', false, $response_add);
                 } else {
-                    return Response::stdReturn(false, 'Error deleting task', false, $response_extra);
+                    return Response::stdReturn(false, 'Error deleting task', false, $response_add);
                 }
+                break;
             case 'create_host_task':
                 $task_data = $this->checkTaskFields($hid, $command, $command_values);
                 if (isset($task_data['status']) && $task_data['status'] == 'error') {
-                    return Response::stdReturn(false, $task_data['error_msg'], false, $response_extra);
+                    return Response::stdReturn(false, $task_data['error_msg'], false, $response_add);
                 }
                 $response = $this->ansibleService->createTask($task_data);
 
                 if ($response['status'] === 'success') {
-                    return Response::stdReturn(true, $response['response_msg'], false, $response_extra);
+                    return Response::stdReturn(true, $response['response_msg'], false, $response_add);
                 } else {
-                    return Response::stdReturn(false, $response['error_msg'], false, $response_extra);
+                    return Response::stdReturn(false, $response['error_msg'], false, $response_add);
                 }
+                break;
             case 'update_host_task':
                 $task_data = $this->checkTaskFields($tid, $command, $command_values);
                 if (isset($task_data['status']) && $task_data['status'] == 'error') {
-                    return Response::stdReturn(false, $task_data['error_msg'], false, $response_extra);
+                    return Response::stdReturn(false, $task_data['error_msg'], false, $response_add);
                 }
                 $response = $this->ansibleService->updateTask($tid, $task_data);
 
                 if ($response['status'] === 'success') {
-                    return Response::stdReturn(true, $response['response_msg'], false, $response_extra);
+                    return Response::stdReturn(true, $response['response_msg'], false, $response_add);
                 } else {
-                    return Response::stdReturn(false, $response['error_msg'], false, $response_extra);
+                    return Response::stdReturn(false, $response['error_msg'], false, $response_add);
                 }
+                break;
             case 'force_exec_task':
-                return Response::stdReturn(false, 'Unknown command', false, $response_extra);
             default:
-                return Response::stdReturn(false, 'Unknown command', false, $response_extra);
+                return Response::stdReturn(false, 'Unknown command', false, $response_add);
         endswitch;
     }
 
