@@ -80,7 +80,7 @@
                 </select>
             </td>
             <td>
-                <select name="ansible_groups[<?= $task_id ?>]">
+                <select name="ansible_groups[<?= $task_id ?>]" disabled>
                     <option value="0" selected disabled><?= $lng['L_THIS_SYSTEM'] ?></option>
                 </select>
             </td>
@@ -88,7 +88,7 @@
                 <input type="checkbox" name="disable_task[<?= $task_id ?>]" <?= $task['disable'] ? 'checked' : '' ?>>
             </td>
             <td>
-                <select name="next_task[<?= $task_id ?>]">
+                <select name="next_task[<?= $task_id ?>]" disabled>
                     <option value="0" selected disabled>No Next Task</option>
                 </select>
             </td>

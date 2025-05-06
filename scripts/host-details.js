@@ -50,6 +50,13 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", "#submitHostToken", function () {
+        var hostId = $('#host_id').val();
+        if (hostId) {
+            requestHostDetails('submitHostToken', {id: hostId});
+        }
+    });
+    
     // Toggle visibility ipv6 ports
     $(document).on("change", "#display_ipv6", function () {
         $('.port_ipv6').css('display', this.checked ? 'inline-flex' : 'none');
@@ -360,9 +367,9 @@ function initTasks() {
             const inputText = document.createElement("input");
             conditionalField.innerHTML = "";
             inputText.type = "text";
-            inputText.size = 5;
+            inputText.size = 10;
             inputText.name = `conditional[${row.data('id')}]`;
-            inputText.placeholder = "Interval 5m/1h/1w/1mo/1y";
+            inputText.placeholder = "5[m:h:w:mo:y]";
             conditionalField.appendChild(inputText);
         } else {
             conditionalField.innerHTML = "";
@@ -582,7 +589,15 @@ function requestHostDetails(command, command_values = []) {
                 if (jsonData.login === "fail") {
                     location.href = '';
                 }
-
+                /* Host Config */
+                if (jsonData.command_receive === 'submitHostToken') {
+                    if (jsonData.command_success === 1) {
+                        $('.status_msg').html(jsonData.response_msg);
+                        $('#host_token').val(jsonData.token);
+                    } else {
+                        $('.status_msg').html('Token Error');
+                    }                    
+                }
                 if (jsonData.command_receive === 'auto_reload_host_details') {
                     host_details = jsonData.host_details;
 
@@ -651,7 +666,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#graphs_container').html('Error');
                     }
                 }
-                if (jsonData.command_receive === 'changeHDTab'  && jsonData.command_value === 'tab20') {
+                if (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'tab20') {
                     if (jsonData.command_success === 1) {
                         if (jsonData.response_msg.reports_list) {
                             $('#reports-table').html(jsonData.response_msg.reports_list);
@@ -771,6 +786,18 @@ function requestHostDetails(command, command_values = []) {
                     .includes(jsonData.command)
                 ) {
                     if(jsonData.response_msg) {
+                        // Refresh on create
+                        if (jsonData.hid) {
+                            requestHostDetails('changeHDTab', {id: jsonData.hid, value: 'tab15'});
+                        }
+                        // Remove on delete
+                        if (jsonData.tid && jsonData.command === 'delete_host_task') {
+                            $('#tasksTable').find('tr').each(function() {
+                                if ($(this).data('id') === jsonData.tid) {
+                                    $(this).remove();
+                                }                                
+                            });
+                        }
                         $('#tasks_status_msg').html(jsonData.response_msg);
                     }
                     if(jsonData.command_error_msg) {

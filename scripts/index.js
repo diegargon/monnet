@@ -1,9 +1,7 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
 function changeBookmarksTab(tabId) {
@@ -280,12 +278,6 @@ $(document).ready(function () {
         var hostId = $('#host_id').val();
         if (stValue && hostId) {
             submitCommand('submitSystemType', {id: hostId, value: stValue});
-        }
-    });
-    $(document).on("click", "#submitHostToken", function () {
-        var hostId = $('#host_id').val();
-        if (hostId) {
-            submitCommand('submitHostToken', {id: hostId});
         }
     });
 

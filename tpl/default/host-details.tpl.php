@@ -908,13 +908,13 @@ $h_misc = $tdata['host_details']['misc'];
                                 </select>
                             </td>
                             <td> <!-- Groups -->
-                                <select id="ansible_groups" name="ansible_groups">
+                                <select id="ansible_groups" disabled name="ansible_groups">
                                     <option value="0" selected disabled><?= $lng['L_THIS_SYSTEM'] ?></option>
                                 </select>
                             </td>
                             <td><input type="checkbox" id="disable_task" name="disable_task"></td>
                             <td>
-                                <select id="next_task" name="next_task">
+                                <select id="next_task" name="next_task" disabled>
                                     <option value="0" selected>No Next Task</option>
                                 </select>
                             </td>
