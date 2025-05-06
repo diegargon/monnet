@@ -123,7 +123,6 @@ class RefresherService
         $total = $this->hostsModel->getTotalsStats();
         $online = $total['total_online'];
         $total['total_offline'] = $total['total_hosts'] - $online;
-        $total['agent_online'] = $total['agent_installed'] - $total['agent_offline'];
         if ($ncfg->get('ansible')) {
             $total['ansible_hosts_off'] = $total['ansible_hosts'] - $total['ansible_online'];
         }
