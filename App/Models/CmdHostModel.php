@@ -1,7 +1,7 @@
 <?php
 /**
-  *
-  * @author diego/@/envigo.net
+ *
+ * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -78,14 +78,14 @@ class CmdHostModel
     }
 
     /**
-     * Crea un token para un host.
+     * Insert a host token
      *
      * @param int $hid El ID del host.
+     * @param string token
      * @return bool True si se creó correctamente, False en caso contrario.
      */
-    public function createHostToken(int $hid): bool
+    public function submitHostToken(int $hid, string $token): bool
     {
-        $token = bin2hex(random_bytes(16));
         return $this->db->update('hosts', ['token' => $token], 'id = :id', ['id' => $hid]);
     }
 

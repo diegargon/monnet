@@ -15,14 +15,38 @@ use App\Services\DateTimeService;
 
 class HostService
 {
+    /**
+     * @var CmdHostModel
+     */
     private CmdHostModel $cmdHostModel;
+    /**
+     * @var LogHostsModel
+     */
     private LogHostsModel $logHostsModel;
+    /**
+     * @var HostFormatter
+     */
     private HostFormatter $hostFormatter;
+    /**
+     * @var AnsibleService
+     */
     private AnsibleService $ansibleService;
+    /**
+     * @var HostsModel
+     */
     private HostsModel $hostsModel;
 
+    /**
+     * @var \AppContext
+     */
     private \AppContext $ctx;
+    /**
+     * @var \Config
+     */
     private \Config $ncfg;
+    /**
+     * @var \DBManager
+     */
     private \DBManager $db;
 
     public function __construct(\AppContext $ctx)
@@ -134,6 +158,11 @@ class HostService
         return $hostDetails;
     }
 
+    /**
+     *
+     * @param array<string, mixed> $filters
+     * @return array
+     */
     public function getFiltered(array $filters): array
     {
         $hosts = $this->hostsModel->getFiltered($filters);
@@ -465,6 +494,12 @@ class HostService
         return $this->cmdHostModel->updatePort($id, $port_update);
     }
 
+    /**
+     *
+     * @param int $n_origin_id
+     * @param int $n_new_id
+     * @return bool
+     */
     public function switchHostsNetwork(int $n_origin_id, int $n_new_id): bool
     {
         $field['network'] = $n_new_id;
@@ -472,5 +507,20 @@ class HostService
         $params['origin_network'] = $n_origin_id;
 
         return $this->cmdHostModel->update($field, $condition, $params);
+    }
+
+    /**
+     *
+     * @param int $hid
+     * @return string|null
+     */
+    public function createToken(int $hid): ?string
+    {
+        $token = bin2hex(random_bytes(16));
+        if ($this->cmdHostModel->submitHostToken($hid, $token)) {
+            return $token;
+        }
+
+        return null;
     }
 }
