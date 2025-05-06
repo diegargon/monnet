@@ -539,12 +539,12 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.62
+    // 0.62 PENDING
     $update = 0.62;
     if ($db_version == 0.61) {
         try {
             $db_version = $update;
-            # getTotalsStats
+            # DONE getTotalsStats
             $db->query("ALTER TABLE `hosts` ADD `agent_online` TINYINT(1) NOT NULL DEFAULT 0;");
             # For rebuild User
             $db->query("
@@ -570,7 +570,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
 
-    // 0.63
+    // 0.63 DONE
     $update = 0.63;
     if ($db_version == 0.62) {
         try {
@@ -587,11 +587,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed: ' . $e->getMessage());
         }
     }
-    // 0.64
+    // 0.64 PENDING
     $update = 0.64;
     if ($db_version == 0.63) {
         try {
-            /* DONE change pb_id to pid */
+            /* DONE change pb_id to allow null to use pid */
             $db->query("ALTER TABLE reports ADD COLUMN pid VARCHAR(255) AFTER host_id;");
             $db->query("ALTER TABLE tasks MODIFY pb_id INT NULL;");
             foreach ($ncfg->get('playbooks') as $playbook) {
@@ -636,7 +636,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.66
+    // 0.66 PENDING
     $update = 0.66;
     if ($db_version == 0.65) {
         try {
@@ -648,8 +648,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE users MODIFY COLUMN timezone VARCHAR(32);");
             $db->query("ALTER TABLE users MODIFY COLUMN password VARCHAR(255);");
             $db->query("START TRANSACTION");
-            # Option to configure de server_endpoint
-            # agent log level actully use string "info" change it on Agent
+            # DONE: Option to configure de server_endpoint
+            # PENDING: agent log level actully use string "info" change it on Agent
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_log_level', JSON_QUOTE('5'), 1, 103, NULL, 0),

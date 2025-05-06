@@ -108,8 +108,9 @@ class HostsModel
     {
         $stats = [];
 
-        //TODO: SUM(agent_online = 0) as agent_offline,
-
+        /* OLD
+         SUM(agent_installed = 1 and online = 0) AS agent_offline,
+        */
         $result = $this->db->query("
             SELECT
                 COUNT(*) AS total_hosts,
@@ -117,7 +118,8 @@ class HostsModel
                 SUM(alert > 0) AS alerts,
                 SUM(warn > 0) AS warns,
                 SUM(agent_installed = 1) as agent_installed,
-                SUM(agent_installed = 1 and online = 0) AS agent_offline,
+                SUM(agent_installed and agent_online = 0) as agent_offline,
+                SUM(agent_installed and agent_online = 1) as agent_online,
                 SUM(ansible_enabled = 1) as ansible_hosts,
                 SUM(ansible_fail = 1) as ansible_hosts_fail,
                 SUM(ansible_enabled = 1 AND online = 1) AS ansible_online
