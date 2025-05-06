@@ -668,10 +668,10 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
     // 0.67
     $update = 0.67;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.66) {
         try {
             # Removed unused
-            $db->query("ALTER TABLE tasks DROP COLUMN online_change;");
+            $db->query("ALTER TABLE hosts DROP COLUMN online_change;");
             $db->query("ALTER TABLE hosts DROP COLUMN last_seen;");
             $db->query("ALTER TABLE hosts DROP COLUMN encrypted;");
             # linked: id hypervisor or other host depend to allow link vms/containers
@@ -686,7 +686,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             # sid expire remove from config.priv
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
-                ('agent_internal_host', JSON_QUOTE(''), 0, 103, NULL, 0);
+                ('agent_internal_host', JSON_QUOTE(''), 0, 103, NULL, 0),
                 ('sid_expire', JSON_QUOTE('604.800'), 1, 10, NULL, 0);
             ");
             $db->query("COMMIT");
