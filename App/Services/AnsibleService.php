@@ -481,7 +481,7 @@ class AnsibleService
             'playbook' => $playbook . '.yml',
             'extra_vars' => $extraVars,
             'ip' => $host['ip'],
-            'host_id' => $host['id'],
+            'hid' => $host['id'],
             'user' => $this->ncfg->get('ansible_user') ?? 'ansible',
             'source_id' => $user->getId()
         ];
