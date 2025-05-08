@@ -980,6 +980,9 @@ $h_misc = $tdata['host_details']['misc'];
         </div>
         <!-- /TAB20 -->
         <!-- TAB16 --><!-- Agent  -->
+        <?php
+        if ($tdata['host_details']['agent_installed']) :
+        ?>
         <div id="tab16" class="host-details-tab-content">
             <div id="agent_container" class="agent_container">
                 <div>Log Level</div>
@@ -1036,6 +1039,7 @@ $h_misc = $tdata['host_details']['misc'];
                 />
             </div>
         </div>
+        <?php endif; ?>
         <!-- /TAB16 -->
     </div> <!-- host-details-container -->
     <!-- host-details -->
