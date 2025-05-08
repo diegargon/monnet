@@ -9,6 +9,7 @@ namespace App\Services;
 
 use App\Models\NetworksModel;
 use App\Services\Filter;
+use App\Services\HostService;
 
 Class NetworksService
 {
@@ -28,10 +29,9 @@ Class NetworksService
     private array $networks = [];
 
     /**
-     *
-     * @var AppContext
+     * @var \AppContext
      */
-    private AppContext $ctx;
+    private \AppContext $ctx;
 
     public function __construct(\AppContext $ctx)
     {
@@ -116,12 +116,18 @@ Class NetworksService
     }
 
 
-    public function addNetwork(array $set): int
+    /**
+     *
+     * @param array<string, string|int> $set
+     * @return int|bool
+     */
+    public function addNetwork(array $set): int|bool
     {
         $cidr = $set['network'] ?? '';
 
         if ($this->networkExistsByCIDR($cidr)) {
-            throw new RuntimeException("La red $cidr ya existe");
+            \Log::error("Network already exists: " . $cidr);
+            return false;
         }
 
         $id = $this->networksModel->addNetwork($set);
@@ -130,6 +136,11 @@ Class NetworksService
         return $id;
     }
 
+    /**
+     *
+     * @param string $cidr
+     * @return bool
+     */
     private function networkExistsByCIDR(string $cidr): bool
     {
         foreach ($this->networks as $network) {
@@ -147,7 +158,6 @@ Class NetworksService
      * @param array<string|int,string> $set
      * @return void
      */
-
     public function updateNetwork(int $id, array $set): void
     {
         $this->networksModel->updateNetwork($id, $set);
@@ -228,7 +238,12 @@ Class NetworksService
             $this->loadAllNetworks();
         }
 
-        $hosts = $this->ctx->get('Hosts');
+        $hostService = new HostService($this->ctx);
+
+        $hosts = $hostService->getAll();
+        if (is_bool($hosts)) {
+            return false;
+        }
         $pool_networks = array_filter($this->networks, fn($network) =>
             (int)$network['pool'] === 1 && empty($network['disable'])
         );
@@ -240,7 +255,7 @@ Class NetworksService
         $free_ips = [];
 
         foreach ($pool_networks as $netpool) {
-            $hosts_list = $hosts->getHostsByNetworkId($netpool['id']);
+            $hosts_list = $hostService->getHostsByNetworkId($netpool['id']);
 
             // Get known hosts ips
             $used_ips = array_filter($hosts_list, function ($host) use ($netpool) {
@@ -350,12 +365,13 @@ Class NetworksService
             }
 
             if (empty($network['network']) || Filter::varNetwork($network['network']) === false) {
-                Log::error("Invalid network detected: " . $network['network']);
+                \Log::error("Invalid network detected: " . $network['network']);
                 continue;
             }
 
             // Skip networks starting with "0" (used for internet hosts)
-            if (str_starts_with($network['network'], "0")) {
+            //PHP8 if (str_starts_with($network['network'], "0")) {
+            if (strpos($network['network'], "0") === 0) {
                 continue;
             }
 
@@ -363,7 +379,7 @@ Class NetworksService
             $prefix = (int)$prefix;
 
             if (!filter_var($network_address, FILTER_VALIDATE_IP)) {
-                Log::error("Invalid IP in network configuration: " . $network['network']);
+                \Log::error("Invalid IP in network configuration: " . $network['network']);
                 continue;
             }
 
