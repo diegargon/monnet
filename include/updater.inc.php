@@ -735,6 +735,31 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+
+    // 0.69 Update Test
+    $update = 0.69;
+    if ($db_version == 0.68) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+    // 0.70 Update Test
+    $update = 0.70;
+    if ($db_version == 0.69) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
     // Later
     $update = 0.00;
     if ($db_version == 0.00) {
@@ -783,29 +808,48 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
  */
 if (!$db->isConn()) {
     echo "No Dabase Connection Error";
+    exit();
 }
 $lockFile = '/tmp/monnet_update.lock';
 $db_version = (float) $ncfg->get('db_monnet_version');
+$files_version = (float) $ncfg->get('monnet_version');
+$maxLockTime = 120;
 
-$lockDir = $lockFile . '.lockdir';
+if ($db_version && ($files_version > $db_version)) {
+        $trigger = true;
 
-if ($db_version) {
-    $files_version = (float) $ncfg->get('monnet_version');
+        $fp = fopen($lockFile, 'w+');
+        if (!$fp) {
+            Log::error("Can not lock for update");
+            $trigger = false;
+        }
 
-    if (($files_version > $db_version) && !is_dir($lockDir)) {
-        if (@mkdir($lockDir)) {
+        if ($trigger && !flock($fp, LOCK_EX | LOCK_NB)) {
+            $lockTime = filemtime($lockFile);
+            if (time() - $lockTime > $maxLockTime) {
+                Log::warning("Eliminando lock antiguo");
+                fclose($fp);
+                unlink($lockFile);
+                $trigger = true;
+            } else {
+                Log::info("Actualización ya en curso");
+                fclose($fp);
+                $trigger = false;
+            }
+        }
+
+        if ($trigger) {
             try {
-                Log::notice('Triggered Update');
+                Log::notice('Triggered Update '. $files_version);
                 trigger_update($ncfg, $db, $db_version, $files_version);
             } catch (Throwable $e) {
                 Log::error('Update failed: ' . $e->getMessage());
             } finally {
-                if (is_dir($lockDir)) {
-                    rmdir($lockDir);
+                if (isset($fp) && is_resource($fp)) {
+                    flock($fp, LOCK_UN);
+                    fclose($fp);
                 }
+                @unlink($lockFile);
             }
-        } else {
-            Log::info("Another update is already in progress.");
         }
-    }
 }
