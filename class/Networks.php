@@ -273,7 +273,7 @@ class Networks
             /*
              * Jump 0.0.0.0 (we use 0.* for add internet host)
              */
-            if (str_starts_with($net['network'], "0")) {
+            if (strpos($net['network'], "0") === 0) {
                 continue;
             }
             Log::debug("Ping networks " . array2string($net));
