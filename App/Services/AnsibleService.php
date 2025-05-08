@@ -228,12 +228,14 @@ class AnsibleService
         $pb_metadata_result = $this->setPbMetadata();
         if (isset($pb_metadata_result['status'])) {
             if ($pb_metadata_result['status'] == 'error') {
-                return $ansible['errors'][] = $pb_metadata_result['error_msg'];
+                $ansible['errors'][] = $pb_metadata_result['error_msg'];
+                return $ansible;
             } else {
                 $ansible['playbooks_metadata'] = $this->playbooks_metadata;
             }
         } else {
-            return $ansible['errors'][] = 'Unknown Error getting pb metadata';
+            $ansible['errors'][] = 'Unknown Error getting pb metadata';
+            return $ansible;
         }
 
         return $ansible;
