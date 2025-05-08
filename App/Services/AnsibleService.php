@@ -195,18 +195,6 @@ class AnsibleService
      */
     public function updateTask(int $task_id, array $task_data): array
     {
-        $task = $this->cmdAnsibleModel->getTaskById($task_id);
-
-        if (!$task) {
-            return ['status' => 'error', 'response_msg' => 'task id not exists: '. $task_id ];
-        }
-
-        /*
-        $task_data['extra'] = json_encode($task_data['extra']);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return ['status' => 'error', 'error_msg' => 'Error encoding JSON: ' . json_last_error_msg()];
-        }
-        */
         if ($this->cmdAnsibleModel->updateTask($task_id, $task_data)) {
             return ['status' => 'success', 'response_msg' => 'success'];
         }

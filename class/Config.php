@@ -28,6 +28,7 @@
  * ccat
  *      0 (hidden)
  *      1 (general)
+ *      4 (Gateway)
  *      5 (Format)
  *      101 (mail)
  *      102 Ansible

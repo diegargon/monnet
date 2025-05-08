@@ -708,10 +708,31 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
+            # System_type to rol
+            $db->query("ALTER TABLE `hosts` ADD `rol` INT NULL DEFAULT 0;");
+            # Counter for other task  and disable uniq tasks
+            $db->query("ALTER TABLE `tasks` ADD `done` INT NULL DEFAULT 0;");
+            # Renaming
             $db->query("UPDATE `config`
                 SET `ckey` = 'clean_hosts_days'
                 WHERE `ckey` = 'clean_host_days';
             ");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+    // Later
+    $update = 0.00;
+    if ($db_version == 0.00) {
+        try {
+            $db->query("ALTER TABLE `users` ADD `rol` INT NULL DEFAULT 0;");
+            //$db->query("
+            //");
             $db->query("START TRANSACTION");
             //$db->query("
             //");
@@ -725,6 +746,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+
     // Template
     $update = 0.00;
     if ($db_version == 0.00) {
