@@ -19,24 +19,23 @@ class NetworksModel
 
     public function getAllNetworks(): array
     {
-        $query = $this->db->selectAll('networks');
-        return $this->db->fetchAll($query);
+        return $this->db->select('networks');
     }
 
     public function addNetwork(array $data): int
     {
         $this->db->insert('networks', $data);
-        return $this->db->insertID();
+        return $this->db->lastInsertId();
     }
 
     public function updateNetwork(int $id, array $data): void
     {
-        $this->db->upsert('networks', $data, ['id' => $id]);
+        $this->db->update('networks', $data, 'id = :id', ['id' => $id]);
     }
 
     public function deleteNetwork(int $id): void
     {
-        $this->db->query("DELETE FROM networks WHERE id=$id");
+        $this->db->delete('networks', 'id = :id', ['id' => $id]);
     }
 
     /**
@@ -47,10 +46,7 @@ class NetworksModel
      */
     public function getNetworkByID(int $id): array|false
     {
-        $query = $this->db->select('networks', ['id' => $id]);
-        $result = $this->db->fetch($query);
-
-        return $result ?: false;
+        return $this->db->selectOne('networks', ['*'], 'id = :id', ['id' => $id]);
     }
 
     /**
@@ -58,7 +54,6 @@ class NetworksModel
      */
     public function networkExistsByCIDR(string $cidr): bool
     {
-        $query = $this->db->select('networks', ['network' => $cidr]);
-        return (bool) $this->db->fetch($query);
+        return (bool) $this->db->selectOne('networks', ['*'], 'network = :cidr', ['cidr' => $cidr]);
     }
 }

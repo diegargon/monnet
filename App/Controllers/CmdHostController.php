@@ -948,7 +948,7 @@ class CmdHostController
 
         if ($value_command) {
             $content = urldecode($value_command);
-            if (str_starts_with($content, ":clear")) {
+            if (strpos($content, ":clear") === 0) {
                 $content = '';
             }
             $update['content'] = $content;

@@ -13,6 +13,7 @@ use App\Models\LogHostsModel;
 use App\Models\HostsModel;
 use App\Services\DateTimeService;
 use App\Services\Filter;
+use App\Services\NetworksService;
 
 class HostService
 {
@@ -50,10 +51,16 @@ class HostService
      */
     private \DBManager $db;
 
+    /**
+     * @var array
+     */
+    private array $lng;
+
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');
+        $this->lng = $ctx->get('lng');
         $this->db = $ctx->get('DBManager');
         $this->cmdHostModel = new CmdHostModel($this->db);
         $this->logHostsModel = new LogHostsModel($this->db);
@@ -77,35 +84,73 @@ class HostService
     /**
      *
      * @param array<string, int|string> $host_data
-     * @return bool
+     * @return array<string, string|int>
      */
-
-    /*
-    public function add(array $host): bool
+    public function add(array $host): array
     {
         // Added by hostname we need the ip always
         if (empty($host['ip']) && !empty($host['hostname'])) {
-            if (!Filter::varDomain($host['hostname'])) :
-                return false;
-            endif;
+            if (!Filter::varDomain($host['hostname'])) {
+                return ['status' => 'error', 'error_msg' => 'Adding host: Wrong hostname'];
+            }
             $host['ip'] = gethostbyname($host['hostname']);
-            if (!$host['ip']) :
-                return false;
-            endif;
+        }
+        if (!$host['ip']) {
+            return ['status' => 'error', 'error_msg' => 'Adding host: No IP or can not resolve hostname'];
+        }
+
+        if (empty($host['hostname'])) {
+            $host['hostname'] = gethostbyaddr($host['ip']);
         }
 
         if(!empty($host['misc'])) {
             $encoded_misc = $this->encodeMisc($host['misc']);
             if (!$encoded_misc) {
-                return false;
+                return ['status' => 'error', 'error_msg' => 'Adding host: Error encoding misc'];
             }
-
             $host['misc'] = $encoded_misc;
             unset($encoded_misc);
         }
+
+        $networkService = new NetworksService($this->ctx);
+        $network_match = $networkService->matchNetwork($host['ip']);
+
+        $this->hostsModel->add($host);
+
+        $host_id = $this->hostsModel->insertId();
+        if (!empty($host['hostname'])) {
+            $display_name = $host['hostname'];
+        } else {
+            $display_name = $host['ip'];
+        }
+
+        if (
+            !valid_array($network_match) ||
+            $networkService->isLocal($host['ip']) && $network_match['network'] == '0.0.0.0/0'
+        ) {
+            return ['status' => 'error', 'error_msg' => $this->lng['L_ERR_NOT_NET_CONTAINER']];
+        } else {
+            if ($this->getHostByIP($host['ip'])) {
+                return ['status' => 'error', 'error_msg' => $this->lng['L_ERR_DUP_IP']];
+            }
+        }
+
+        $host['network'] = $network_match['id'];
+
+        $this->hostsModel->add($host);
+
+        $log_msg = 'Found new host: ' . $display_name . ' on network ' . $network_match['name'];
+        \Log::logHost(
+            \LogLevel::WARNING,
+            $host_id,
+            $log_msg,
+            \LogType::EVENT_WARN,
+            \EventType::NEW_HOST_DISCOVERY
+        );
+
+        return ['status' => 'success', 'response_msg' => $this->lng['L_OK']];
     }
-    */
-    
+
     /**
      * @param int $id
      * @return array<string, string|int>
@@ -126,37 +171,34 @@ class HostService
     {
         $hostDetails = $this->cmdHostModel->getHostById($target_id);
 
-        if (!$hostDetails) {
-            return ['error' => 'No details found for the host'];
-        }
-
         if (!empty($hostDetails['misc'])) {
             $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
             /* TODO: Migrate: keep misc values in misc then delete this */
             $hostDetails = array_merge($hostDetails, $hostDetails['misc']);
-
-            if (!isset($hostDetails['misc']['mem_alert_threshold'])) {
-                $hostDetails['misc']['mem_alert_threshold'] = $this->ncfg->get('default_mem_alert_threshold');
-            }
-            if (!isset($hostDetails['misc']['mem_warn_threshold'])) {
-                $hostDetails['misc']['mem_warn_threshold'] = $this->ncfg->get('default_mem_warn_threshold');
-            }
-            if (!isset($hostDetails['misc']['disks_alert_threshold'])) {
-                $hostDetails['misc']['disks_alert_threshold'] = $this->ncfg->get('default_disks_alert_threshold');
-            }
-            if (!isset($hostDetails['misc']['disks_warn_threshold'])) {
-                $hostDetails['misc']['disks_warn_threshold'] = $this->ncfg->get('default_disks_warn_threshold');
-            }
-            /*
-            if (!isset($hostDetails['misc']['cpu_alert_threshold'])) {
-                $hostDetails['misc']['cpu_alert_threshold'] = $this->ncfg->get('default_cpu_alert_threshold');
-
-            }
-            if (!isset($hostDetails['misc']['cpu_warn_threshold'])) {
-                $hostDetails['misc']['cpu_warn_threshold'] = $this->ncfg->get('default_cpu_warn_threshold');
-            }
-            */
         }
+
+        if (!isset($hostDetails['misc']['mem_alert_threshold'])) {
+            $hostDetails['misc']['mem_alert_threshold'] = $this->ncfg->get('default_mem_alert_threshold');
+        }
+        if (!isset($hostDetails['misc']['mem_warn_threshold'])) {
+            $hostDetails['misc']['mem_warn_threshold'] = $this->ncfg->get('default_mem_warn_threshold');
+        }
+        if (!isset($hostDetails['misc']['disks_alert_threshold'])) {
+            $hostDetails['misc']['disks_alert_threshold'] = $this->ncfg->get('default_disks_alert_threshold');
+        }
+        if (!isset($hostDetails['misc']['disks_warn_threshold'])) {
+            $hostDetails['misc']['disks_warn_threshold'] = $this->ncfg->get('default_disks_warn_threshold');
+        }
+        /*
+        if (!isset($hostDetails['misc']['cpu_alert_threshold'])) {
+            $hostDetails['misc']['cpu_alert_threshold'] = $this->ncfg->get('default_cpu_alert_threshold');
+
+        }
+        if (!isset($hostDetails['misc']['cpu_warn_threshold'])) {
+            $hostDetails['misc']['cpu_warn_threshold'] = $this->ncfg->get('default_cpu_warn_threshold');
+        }
+        */
+
         $hostDetails = $this->hostFormatter->format($hostDetails);
 
         // Get remote  ports (1)
@@ -555,5 +597,25 @@ class HostService
         }
 
         return null;
+    }
+
+    public function getHostByIP(string $ip): array
+    {
+        return $this->hostsModel->getHostByIP($ip);
+    }
+
+    public function getAll(): array
+    {
+        return $this->hostsModel->getAll();
+    }
+
+    /**
+     *
+     * @param int $network_id
+     * @return array<string,mixed>
+     */
+    public function getHostsByNetworkId(int $network_id): array
+    {
+        return $this->hostsModel->getHostsByNetworkId($network_id);
     }
 }

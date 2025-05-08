@@ -100,6 +100,7 @@ Class NetworksService
     private function cacheNetwork(array $network): void
     {
         $id = (int) $network['id'];
+        $network['only_online'] = $network['only_online'] ?? 0;
         $this->networks[$id] = [
             'id' => $id,
             'network' => $network['network'],
@@ -121,6 +122,7 @@ Class NetworksService
      * @param array<string, string|int> $set
      * @return int|bool
      */
+    /* TODO RETURN UI ERROR */
     public function addNetwork(array $set): int|bool
     {
         $cidr = $set['network'] ?? '';
@@ -370,7 +372,6 @@ Class NetworksService
             }
 
             // Skip networks starting with "0" (used for internet hosts)
-            //PHP8 if (str_starts_with($network['network'], "0")) {
             if (strpos($network['network'], "0") === 0) {
                 continue;
             }

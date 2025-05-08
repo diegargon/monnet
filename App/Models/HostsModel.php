@@ -26,6 +26,14 @@ class HostsModel
     {
         return $this->db->insert('hosts', $host_data);
     }
+
+    /**
+     * @return int
+     */
+    public function insertId(): int
+    {
+        return $this->db->lastInsertId();
+    }
     /**
      *
      * @return array<string, mixed>
@@ -150,5 +158,38 @@ class HostsModel
     public function update(int $id, array $data): bool
     {
         return $this->db->update('hosts', $data, 'id = :id', ['id' => $id]);
+    }
+
+    /**
+     *
+     * @param string $ip
+     * @return array<string, string|int>
+     */
+    public function getHostByIP(string $ip): array
+    {
+        $query = "SELECT * FROM hosts WHERE ip = :ip";
+        $params = ['ip' => $ip];
+        $result = $this->db->qfetch($query, $params);
+
+        if (is_bool($result)) {
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get hosts by network ID
+     *
+     * @param int $network_id Host ID
+     * @return array<string, string|int> Host data
+     */
+    public function getHostsByNetworkId(int $network_id): array
+    {
+        $query = "SELECT * FROM hosts WHERE network = :nid";
+        $params = ['nid' => $network_id];
+        $result = $this->db->qfetchAll($query, $params);
+
+        return $result;
     }
 }

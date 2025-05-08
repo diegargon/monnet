@@ -708,8 +708,10 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
-            //$db->query("
-            //");
+            $db->query("UPDATE `config`
+                SET `ckey` = 'clean_hosts_days'
+                WHERE `ckey` = 'clean_host_days';
+            ");
             $db->query("START TRANSACTION");
             //$db->query("
             //");

@@ -11,6 +11,7 @@ namespace App\Controllers;
 use App\Services\HostService;
 use App\Services\Filter;
 use App\Services\TemplateService;
+use App\Services\NetworksService;
 use App\Helpers\Response;
 
 class CmdNetworkController
@@ -18,10 +19,12 @@ class CmdNetworkController
     private \AppContext $ctx;
     private TemplateService $templateService;
     private HostService $hostService;
+    private NetworksService $networksService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->templateService = new TemplateService($ctx);
+        $this->networksService = new NetworksService($ctx);
         $this->ctx = $ctx;
     }
 
@@ -34,7 +37,7 @@ class CmdNetworkController
     public function manageNetworks(string $command, array $command_values): array
     {
         $action = Filter::varString($command_values['action']);
-        $target_id = Filter::varInt($command_values['id']);
+        $network_id = Filter::varInt($command_values['id']);
 
         if (isset($command_values['value'])) {
             $value_command = Filter::varJson($command_values['value']);
@@ -42,41 +45,63 @@ class CmdNetworkController
             $value_command = '';
         }
 
-        $networks = $this->ctx->get('Networks');
-
-        if (!empty($action) && is_numeric($target_id)) :
+        if (!empty($action) && is_numeric($network_id)) :
             if ($action === 'remove') {
-                $networks->removeNetwork($target_id);
+                $this->networksService->removeNetwork($network_id);
+                return Response::stdReturn(
+                        true,
+                        'Network removed successful',
+                        true,
+                        ['nid' => $network_id, 'action' => $action]
+                    );
                 // Update existing host to default 1
                 // TODO Uncomment and test
                 #if (!isset($this->hostService)) {
-                #    $this->hostService->switchHostsNetwork($target_id, 1);
+                #    $this->hostService->switchHostsNetwork($network_id, 1);
                 #}
                 //TODO: remove host on that network?
             } elseif ($action === 'update' || $action === 'add') {
                 $decodedJson = json_decode((string) $value_command, true);
 
                 if ($decodedJson === null) {
-                    return Response::stdReturn(false, 'JSON Invalid');
+                    return Response::stdReturn(
+                            false, 'JSON Invalid',
+                            false,
+                            ['nid' => $network_id, 'action' => $action]
+                        );
                 }
                 $val_net_data = $this->validateNetData($command_values['action'], $decodedJson);
 
                 if (!empty($val_net_data['error'])) {
-                    return Response::stdReturn(false, $val_net_data['error_msg']);
+                    return Response::stdReturn(
+                            false,
+                            $val_net_data['error_msg'],
+                            false,
+                            ['nid' => $network_id, 'action' => $action]
+                        );
                 }
 
                 if ($action === 'add') {
-                    $this->ctx->get('Networks')->addNetwork($val_net_data);
-                    return Response::stdReturn(true, 'add ok', true);
+                    $this->networksService->addNetwork($val_net_data);
+                    return Response::stdReturn(
+                            true,
+                            'Network added successful, reopen to check',
+                            true,
+                            ['action' => $action]
+                        );
                 }
                 if ($action === 'update') {
-                    $this->ctx->get('Networks')->updateNetwork($target_id, $val_net_data);
-                    return Response::stdReturn(true, 'update ok', true);
+                    $this->networksService->updateNetwork($network_id, $val_net_data);
+                    return Response::stdReturn(true,
+                            'Network updated succesful',
+                            true,
+                            ['nid' => $network_id, 'action' => $action]
+                        );
                 }
             }
         endif;
 
-        $f_networks = $networks->getNetworks();
+        $f_networks = $this->networksService->getNetworks();
         foreach ($f_networks as $nid => $network) :
             list($ip, $cidr) = explode('/', $network['network']);
             $f_networks[$nid]['ip'] = $ip;
@@ -90,6 +115,7 @@ class CmdNetworkController
 
         $extra = [
             'command_receive' => $command,
+            'action' => 'mgmt',
             'mgmt_networks' => [
                 'cfg' => ['place' => '#left-container'],
                 'data' => $this->templateService->getTpl('mgmt-networks', $tdata)
@@ -104,9 +130,9 @@ class CmdNetworkController
      */
     public function requestPoolIPs(): array
     {
-        $networks = $this->ctx->get('Networks');
         $lng = $this->ctx->get('lng');
-        $tdata['networks'] = $networks->getPoolIPs(2) ?? [];
+
+        $tdata['networks'] = $this->networksService->getPoolIPs(2) ?? [];
 
         if (empty($tdata['networks'])) :
             $tdata['status_msg'] = $lng['L_NO_POOLS'];
@@ -134,13 +160,13 @@ class CmdNetworkController
         $user = $this->ctx->get('User');
         $username = $user->getUsername();
 
-        $target_id = Filter::varInt($command_values['id']);
+        $network_id = Filter::varInt($command_values['id']);
         $value_command = Filter::varIP($command_values['value']);
 
         $reserved_host = [
             'title' => $username. 'Reserved',
             'ip' => $value_command,
-            'network' => $target_id
+            'network' => $network_id
         ];
         if ($hosts->addHost($reserved_host)) {
             return Response::stdReturn(true, 'Reserved', true);
@@ -197,7 +223,7 @@ class CmdNetworkController
             $data['error_msg'] .= 'Scan ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
         endif;
 
-        $networks_list = $this->ctx->get('Networks')->getNetworks();
+        $networks_list = $this->networksService->getNetworks();
         foreach ($networks_list as $net) {
             if ($net['name'] == $new_network['name']) {
                 if (
@@ -205,7 +231,7 @@ class CmdNetworkController
                     ((int)$net['id'] !== (int)$new_network['id'])
                 ) :
                     $data['error'] = 1;
-                    $data['error_msg'] = 'Name must be unique<br/>';
+                    $data['error_msg'] .= 'Name must be unique<br/>';
                 endif;
             }
             if ($net['network'] == $network_plus_cidr) {
@@ -214,7 +240,7 @@ class CmdNetworkController
                     ((int)$net['id'] !== (int)$new_network['id'])
                 ) :
                     $data['error'] = 1;
-                    $data['error_msg'] = 'Network must be unique<br/>';
+                    $data['error_msg'] .= 'Network must be unique<br/>';
                 endif;
             }
         }
@@ -223,8 +249,8 @@ class CmdNetworkController
         }
 
         if (
-            str_starts_with($new_network['network'], "0") ||
-            !$this->ctx->get('Networks')->isLocal($new_network['network'])
+            (strpos($new_network['network'], "0") === 0)||
+            !$this->networksService->isLocal($new_network['network'])
         ) :
             $new_network['vlan'] = 0;
             $new_network['scan'] = 0;

@@ -221,16 +221,25 @@
                     /* Mgmt Networks */
                     if (jsonData.command_receive === 'mgmtNetworks') {
                         if (jsonData.command_success > 0) {
-                            $('#mgmt-network-container').remove();
-                            if ($.isEmptyObject(jsonData.mgmt_networks.cfg)) {
-                                console.log('Error en la solicitud mgmt-bookmark:');
-                                return;
+                            if (jsonData.action === 'mgmt') {
+                                $('#mgmt-network-container').remove();
+                                let position = jsonData.mgmt_networks.cfg.place;
+                                $(position).prepend(jsonData.mgmt_networks.data);
+                                var mgmtNetwork = $(position).find("#mgmt-network-container");
+                                makeDraggable(mgmtNetwork);
+                                mgmtNetwork.css('display', 'block');
+                            } else if (jsonData.action === 'update') {
+                                //
+                            } else if (jsonData.action === 'remove' && jsonData.nid) {
+                                $('tr[data-id="' + jsonData.nid + '"]').remove();
+                            } else if (jsonData.action === 'add') {
+                                $('#networkName').val('');
+                                $('#network').val('');
+                                $('#network_cidr').val('');
                             }
-                            let position = jsonData.mgmt_networks.cfg.place;
-                            $(position).prepend(jsonData.mgmt_networks.data);
-                            var mgmtNetwork = $(position).find("#mgmt-network-container");
-                            makeDraggable(mgmtNetwork);
-                            mgmtNetwork.css('display', 'block');
+                            if (jsonData.response_msg && jsonData.action !== 'mgmt') {
+                                $('#network_status_msg').html(jsonData.response_msg);
+                            }
                         }
                         if (jsonData.command_error_msg){
                             $("#network_status_msg").html(jsonData.command_error_msg);
