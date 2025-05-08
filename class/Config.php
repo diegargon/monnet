@@ -11,24 +11,30 @@
 /**
  * Clase config
  * ctype =
- *          0 (string)
- *          1 (int)
- *          2 (bool)
- *          3 (float)
- *          4 (date)
- *          5 (url)
- *          6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
- *          7 (password) (TODO)
- *          8 (email) (No yet)
- *         10 (text/textbox)
+ *      0 (string)
+ *      1 (int)
+ *      2 (bool)
+ *      3 (float)
+ *      4 (date)
+ *      5 (url)
+ *      6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
+ *      7 (password) (TODO)
+ *      8 (email) (No yet)
+ *      10 (text/textbox)
  *
  *
  * ('keyname', JSON_QUOTE('key_value'), ctype, ccat, cdesc, cuid=0);
  *
  * ccat
- * 0 (hidden), 1 (general), 5(Format) 101 (mail),
- * 102 Ansible 103 (Agent) 104 (Purge) 105 (Logging)
- * 106 Network
+ *      0 (hidden)
+ *      1 (general)
+ *      5 (Format)
+ *      101 (mail)
+ *      102 Ansible
+ *      103 (Agent)
+ *      104 (Purge)
+ *      105 (Logging)
+ *      106 Network
  */
 class Config
 {
@@ -123,7 +129,7 @@ class Config
 
     /**
      *
-     * @return array<mixed>
+     * @return array<string, mixed>
      */
     public function getAll(): mixed
     {
