@@ -29,6 +29,11 @@
             class="settings-tabs-head"><?= $lng['L_UI'];?>
         </button>
         <button
+            id="settings_tab_4"
+            onclick="changeSettingsTab(4)"
+            class="settings-tabs-head">Gateway
+        </button>
+        <button
             id="settings_tab_5"
             onclick="changeSettingsTab(5)"
             class="settings-tabs-head"><?= $lng['L_FORMAT'];?>

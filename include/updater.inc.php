@@ -684,6 +684,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             //$db->query("
             //");
             # sid expire remove from config.priv
+            # agent_internal_host gw must use if set
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_internal_host', JSON_QUOTE(''), 0, 103, NULL, 0),
@@ -702,7 +703,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
     // 0.68
     $update = 0.68;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.67) {
         try {
             # Remove Unused
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
@@ -710,14 +711,22 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
             # System_type to rol
             $db->query("ALTER TABLE `hosts` ADD `rol` INT NULL DEFAULT 0;");
-            # Counter for other task  and disable uniq tasks
+            # Counter for other task and disable uniq tasks
             $db->query("ALTER TABLE `tasks` ADD `done` INT NULL DEFAULT 0;");
             # Renaming
             $db->query("UPDATE `config`
                 SET `ckey` = 'clean_hosts_days'
                 WHERE `ckey` = 'clean_host_days';
             ");
-            $db->query("COMMIT");
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('gw_send_logs_intvl', JSON_QUOTE('20'), 1, 4, NULL, 0),
+                ('gw_discover_host_intvl', JSON_QUOTE('130'), 1, 4, NULL, 0),
+                ('gw_host_checker_intvl', JSON_QUOTE('300'), 1, 4, NULL, 0),
+                ('gw_prune_intvl', JSON_QUOTE('86400'), 1, 4, NULL, 0),
+                ('gw_ansible_tasks_intvl', JSON_QUOTE('60'), 1, 4, NULL, 0),
+                ('agent_internal_host', JSON_QUOTE(''), 0, 103, NULL, 0)
+            ");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
             Log::notice("Update version to $update successful");
