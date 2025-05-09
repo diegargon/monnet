@@ -153,7 +153,7 @@ class AnsibleService
             'pid' => $pid,
             'trigger_type' => $trigger_type,
             'task_name' => $playbook,
-            'extra' => json_encode($extra_vars),
+            /* 'extra' => json_encode($extra_vars), */
         ];
         if (json_last_error() !== JSON_ERROR_NONE) {
             return ['status' => 'error', 'error_msg' => 'Error encoding JSON: ' . json_last_error_msg()];
