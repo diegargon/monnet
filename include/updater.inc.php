@@ -762,13 +762,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.71 WAIT / PENDING
+    // 0.71 DONE
     $update = 0.71;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.70) {
         try {
             $db->query("START TRANSACTION");
             $db->query("UPDATE `config`
-                SET `vvalue` = JSON_QUOTE('info')
+                SET `cvalue` = JSON_QUOTE('info')
                 WHERE `ckey` = 'agent_log_level';
             ");
             $db->query("UPDATE `config`
@@ -776,7 +776,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 WHERE `ckey` = 'agent_log_level';
             ");
             $db->query("UPDATE `config`
-                SET `vvalue` = JSON_QUOTE('1320')
+                SET `cvalue` = JSON_QUOTE('1320')
                 WHERE `ckey` = 'gw_discover_host_intvl';
             ");
             $db->query("COMMIT");
