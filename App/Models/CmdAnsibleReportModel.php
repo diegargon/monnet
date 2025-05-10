@@ -53,7 +53,7 @@ class CmdAnsibleReportModel
         $query = 'SELECT';
         $params = [];
 
-        $query .= !empty($opts['head']) ? ' id, host_id, pid, source_id, date ' : ' * ';
+        $query .= !empty($opts['head']) ? ' id, host_id, pid, source_id, date, ack, status ' : ' * ';
         $query .= ' FROM reports';
 
         $conditions = [];
