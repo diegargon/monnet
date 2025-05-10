@@ -1847,6 +1847,14 @@ input:checked + .slider:before {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.task-fail-bg, .report_fail_bg {
+    background-color: #2b0200;
+}
+
+.task_success_bg, .report_success_bg {
+    background-color: #121c08;
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;

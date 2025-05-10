@@ -23,11 +23,13 @@
             <td><label for="ansible_groups"><?= $lng['L_GROUPS']?></label></td>
             <td><label for="disable_task"><?= $lng['L_DISABLE']?></label></td>
             <td><label for="next_task"><?= $lng['L_NEXT_TASK']?></label></td>
+            <td><label for="task_done"><?= $lng['L_DONE']?></label></td>
             <td></td>
         </tr>
     <?php
     foreach ($tdata['host_tasks'] as $task) :
         $task_id = $task['id'];
+        $task['trigger_type'] == 1 && $task['done'] > 0 ? $disabled = ' disabled' : $disabled = '';
     ?>
         <tr data-id="<?= $task_id ?>">
             <td>
@@ -37,10 +39,11 @@
                     name="task_name[<?= $task_id ?>]"
                     value="<?= $task['task_name'] ?>"
                     required
+                    <?= $disabled ?>
                 >
             </td>
             <td>
-                <select name="task_trigger[<?= $task_id ?>]" required>
+                <select name="task_trigger[<?= $task_id ?>]" required <?= $disabled ?>>
                     <option value="" disabled selected>Select Trigger</option>
                     <?php foreach ($ncfg->get('task_trigger') as $trigger) :
                         $selected = ($trigger['id'] == $task['trigger_type']) ? 'selected' : ''; ?>
@@ -52,7 +55,7 @@
                 <?php
                 if ($task['trigger_type'] == 3) : # Event
                     ?>
-                    <select id="conditional">
+                    <select id="conditional" <?= $disabled ?>>
                         <?php
                         foreach (\EventType::getConstants() as $value => $name) :
                             $value === $task['event_id'] ? $event_selected = 'selected' : $event_selected = null;
@@ -71,7 +74,7 @@
                 ?>
             </td>
             <td>
-                <select name="playbooks[<?= $task_id ?>]">
+                <select name="playbooks[<?= $task_id ?>]" <?= $disabled ?>>
                     <option value="" disabled selected>No select</option>
                     <?php foreach ($tdata['pb_meta'] as $playbook) :
                         $selected = ($playbook['id'] == $task['pid']) ? 'selected' : ''; ?>
@@ -85,17 +88,24 @@
                 </select>
             </td>
             <td>
-                <input type="checkbox" name="disable_task[<?= $task_id ?>]" <?= $task['disable'] ? 'checked' : '' ?>>
+                <input
+                    type="checkbox"
+                    name="disable_task[<?= $task_id ?>]" <?= $task['disable'] ? 'checked' : '' ?>
+                    <?= $disabled ?>
+                >
             </td>
             <td>
-                <select name="next_task[<?= $task_id ?>]" disabled>
+                <select name="next_task[<?= $task_id ?>]" <?= $disabled ?> disabled>
                     <option value="0" selected disabled>No Next Task</option>
                 </select>
             </td>
             <td>
+                <div class="task_done"><?= $task['done'] ?></div>
+            </td>
+            <td>
                 <button type="submit" data-action="delete_host_task">Borrar</button>
-                <button type="submit" data-action="update_host_task">Modificar</button>
-                <button type="submit" data-action="force_exec_task">Forzar</button>
+                <button type="submit" data-action="update_host_task" <?= $disabled ?>>Modificar</button>
+                <button type="submit" data-action="force_exec_task" <?= $disabled ?>>Forzar</button>
             </td>
         </tr>
     <?php

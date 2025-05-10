@@ -70,6 +70,7 @@ $lng = [
     'L_DETAIL_VIEW' => 'Vista detallada',
     'L_DISABLE' => 'Deshabilitar',
     'L_DISKS' => 'Discos',
+    'L_DONE' => 'Realizada',
     //E
 //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',
