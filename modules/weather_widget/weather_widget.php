@@ -40,7 +40,7 @@ function weather_widget(\Config $ncfg, array $lng): ?array
  *
  * @param Config $ncfg
  *
- * @return array<string, mixed>|null
+ * @return mixed
  */
 function request_weather(\Config $ncfg): mixed
 {
@@ -55,12 +55,17 @@ function request_weather(\Config $ncfg): mixed
 
     $response = curl_get($ApiUrl);
 
-    $data = json_decode($response);
+    if ($response) {
+        $response = json_decode($response);
 
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        Log::warning("Weather: Error al decodificar JSON: " . json_last_error_msg());
-        return null;
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            Log::warning("Weather: Error al decodificar JSON: " . json_last_error_msg());
+            return null;
+        }
+
+    } else {
+        $response = null;
     }
 
-    return $data;
+    return $response;
 }
