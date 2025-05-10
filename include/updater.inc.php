@@ -674,7 +674,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE hosts DROP COLUMN online_change;");
             $db->query("ALTER TABLE hosts DROP COLUMN last_seen;");
             $db->query("ALTER TABLE hosts DROP COLUMN encrypted;");
-            # linked: id hypervisor or other host depend to allow link vms/containers
+            # linked: id hypervisor or other host
+            # depend to allow link vms/containers
+            # depends de rol en la tabla no en mic para buscar hypervisors
             $db->query("ALTER TABLE `hosts` ADD `linked` INT NULL DEFAULT 0;");
             $db->query("START TRANSACTION");
             # Option mark view report
@@ -709,7 +711,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
-            # System_type to rol
+            # system_type to rol
             $db->query("ALTER TABLE `hosts` ADD `rol` INT NULL DEFAULT 0;");
             # Counter for other task and disable uniq tasks
             $db->query("ALTER TABLE `tasks` ADD `done` INT NULL DEFAULT 0;");
