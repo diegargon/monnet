@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 global $cfg_db;
@@ -22,9 +20,7 @@ $cfg_db['dbcharset'] = 'utf8';
 $cfg['path'] = '/var/www/html';
 $cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
-$cfg['sid_expire'] = 99999;
 
-//Web UI refresh time
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 
 /* Modules Config */
