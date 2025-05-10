@@ -1,12 +1,15 @@
 <?php
 
 /**
+ * Gateway related services
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
 namespace App\Services;
+
+use App\Gateway\GwRequest;
 
 class GatewayService
 {
@@ -26,7 +29,7 @@ class GatewayService
     {
         $send_data = [
             'command' => 'restart-daemon',
-            'module' => 'gateway',
+            'module' => 'gateway-daemon',
         ];
 
         return $this->sendCommand($send_data);
@@ -41,7 +44,7 @@ class GatewayService
     {
         $send_data = [
             'command' => 'reload-pbmeta',
-            'module' => 'gateway',
+            'module' => 'gateway-daemon',
         ];
 
         return $this->sendCommand($send_data);
@@ -56,8 +59,9 @@ class GatewayService
     {
         $send_data = [
             'command' => 'reload-config',
-            'module' => 'gateway',
+            'module' => 'gateway-daemon',
         ];
+
 
         return $this->sendCommand($send_data);
     }
@@ -70,7 +74,7 @@ class GatewayService
      */
     public function sendCommand(array $send_data): array
     {
-        $gwRequest = new \App\Gateway\GwRequest($this->ctx);
+        $gwRequest = new GwRequest($this->ctx);
         $response = $gwRequest->request($send_data);
 
         if (!isset($response['status'])) {
@@ -78,14 +82,14 @@ class GatewayService
         }
 
         if ($response['status'] === 'success') {
-            if (empty($response['response_msg'])) {
+            if (empty($response['message'])) {
                 return ['status' => 'error', 'error_msg' => 'Status success but empty response'];
             }
-            return ['status' => 'success', 'response_msg' => $response['response_msg']];
+            return ['status' => 'success', 'response_msg' => $response['message']];
         }
 
         $error_msg = 'Gateway command error: ';
-        if (isset($response['error_msg'])) {
+        if (isset($response['message'])) {
             $error_msg .= $response['error_msg'];
         } else {
             $error_msg .= 'Unknown response from gateway';

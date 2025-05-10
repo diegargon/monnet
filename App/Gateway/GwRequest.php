@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Handle Gateway request, abstract Gateway Service from Socket mechanism
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)

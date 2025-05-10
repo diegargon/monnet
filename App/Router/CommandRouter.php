@@ -2,6 +2,7 @@
 
 /**
  * Router for handling commands in the application.
+ *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
@@ -16,6 +17,7 @@ use App\Controllers\CmdTaskAnsibleController;
 use App\Controllers\CmdAnsibleReportController;
 use App\Controllers\UserController;
 use App\Controllers\ConfigController;
+use App\Controllers\GatewayController;
 
 class CommandRouter
 {
@@ -259,17 +261,6 @@ class CommandRouter
                 $response = $hostController->powerOn($command_values);
                 break;
 
-            /**
-             * Ansible Reports
-             */
-            case 'submitDeleteReport':
-                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
-                $response = $ansibleReportController->deleteReport($command, $command_values);
-                break;
-            case 'submitViewReport':
-                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
-                $response = $ansibleReportController->viewReport($command, $command_values);
-                break;
             /*
              *  Bookmarks
              */
@@ -342,6 +333,19 @@ class CommandRouter
                 $networkController = new CmdNetworkController($this->ctx);
                 $response = $networkController->submitPoolReserver($command_values);
                 break;
+
+            /**
+             * Ansible Reports
+             */
+            case 'submitDeleteReport':
+                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
+                $response = $ansibleReportController->deleteReport($command, $command_values);
+                break;
+            case 'submitViewReport':
+                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
+                $response = $ansibleReportController->viewReport($command, $command_values);
+                break;
+
             /*
              *  Task Ansible
              */
@@ -375,9 +379,13 @@ class CommandRouter
                 $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
                 $response = $taskAnsibleController->delAnsibleVar($command, $command_values);
                 break;
-            /*
-             *  Unknown command
-             */
+            # Gateway daemon
+            case 'restart-daemon':
+            case 'reload-pbmeta':
+            case 'reload-config';
+                $gatewayController = new GatewayController($this->ctx);
+                $response = $gatewayController->handleCommand($command);
+                break;
             default:
                 $response = [
                     'command_error' => 1,

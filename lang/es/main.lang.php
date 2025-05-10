@@ -207,7 +207,7 @@ $lng = [
     'L_RESERVE' => 'Reservar',
     'L_REPORTS' => 'Reports',
     'L_RESTART_G' => 'Reiniciar Gateway',
-    'L_REFRESH_PBMETA' => 'Recargar PB meta',
+    'L_REFRESH_PBMETA' => 'Recargar PB Meta',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',

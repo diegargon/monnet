@@ -102,7 +102,7 @@
         <legend class="ctrl_legend">Gateway</legend>
         <div class="general_ctrl">
             <button id="restart-gateway"
-                    onclick="submitCommand('',{id: 0, action: 'restart-daemon'})"
+                    onclick="submitCommand('restart-daemon',{id: 0})"
                     class="button-ctrl" type="submit">
                 <img class="settings_link"
                      src="./tpl/default/img/refresh.png" title="<?= $lng['L_RESTART_G'] ?>">
@@ -110,8 +110,8 @@
             <span class="opt_labels"><?= $lng['L_REBOOT'] ?></span>
         </div>
         <div class="general_ctrl">
-            <button id="refresh-pbmeta"
-                    onclick="submitCommand('',{id: 0, action: 'refresh-pbmeta'})"
+            <button id="reload-pbmeta"
+                    onclick="submitCommand('reload-pbmeta',{id: 0})"
                     class="button-ctrl" type="submit">
                 <img class="settings_link"
                      src="./tpl/default/img/refresh.png" title="<?= $lng['L_REFRESH_PBMETA'] ?>">
