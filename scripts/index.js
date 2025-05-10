@@ -450,7 +450,7 @@ $(document).ready(function () {
      // Resize code
 
     const $left = $('#left-container');
-    const $center = $('#center-container');
+    const $center = $('#right-container');
     const $hosts_cat = $('#hosts_cat');
 
     let startX, startWidthLeft, startWidthCenter;

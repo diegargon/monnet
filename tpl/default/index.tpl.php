@@ -43,15 +43,9 @@
             <?= !empty($tdata['left_col_post']) ? $tdata['left_col_post'] : null; ?>
         </div>
         <!-- Center -->
-        <div id="center-container" class="center-container">
+        <div id="right-container" class="right-container">
             <?= !empty($tdata['center_col']) ? $tdata['center_col'] : null; ?>
         </div>
-        <!-- Right -->
-        <!--
-        <div id="right-container" class="right-container">
-            <?= !empty($tdata['right_col']) ? $tdata['right_col'] : null; ?>
-        </div>
-        -->
     </div>
     <div id="bottom_container" class="bottom_container">
         <?= !empty($tdata['bottom_col']) ? $tdata['bottom_col'] : null; ?>

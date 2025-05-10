@@ -177,9 +177,6 @@ footer {
     width: max-content;
 }
 
-.left-container, .right-container {
-
-}
 .left-container {
     flex-grow: 1;
     border: 0px solid red;
@@ -188,7 +185,8 @@ footer {
     overflow: visible;
     margin-left: 5px;
 }
-.center-container {
+
+.right-container {
     flex-grow: 1;
     border: 0px solid yellow;
     margin-top: 5px;
@@ -197,12 +195,7 @@ footer {
     width: 21vw;
     margin-right: 5px;
 }
-.right-container {
-    flex: 0 0 auto;
-    border: 0px solid black;
-    margin-top: 5px;
-    overflow: hidden;
-}
+
 .search-container {
     text-align: center;
     border: 0px solid red;

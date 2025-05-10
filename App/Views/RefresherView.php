@@ -72,7 +72,7 @@ class RefresherView
 
         return [
             'data' => $this->templates->getTpl('term', ['term_logs' => $logs_lines]),
-            'cfg' => ['place' => '#center-container'],
+            'cfg' => ['place' => '#right-container'],
         ];
     }
 
