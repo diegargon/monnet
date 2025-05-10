@@ -19,7 +19,7 @@
                 <?php
                 foreach (
                     [
-                        'id', 'ip', 'cidr', 'name', 'pool', 'only_online', 'vlan', 'scan', 'weight', 'disable', ''
+                        'id', 'ip', 'cidr', 'name', 'pool', 'only_online', 'vlan', 'scan', 'weight', 'disable', 'occ'
                     ] as $header
                 ) : ?>
                     <th><?= $header ?></th>
@@ -102,6 +102,11 @@
                         <?php $checked = $row['disable'] ? 'checked' : ''; ?>
                         <input type="hidden" name="networkDisable_<?= $row['id']?>" value="0" />
                         <input type="checkbox" name="networkDisable_<?= $row['id']?>" value="1" <?= $checked ?> />
+                    </td>
+                    <td>
+                        <div class="occupancy">
+                            <?= $row['occupancy'] ?>%
+                        </div>
                     </td>
                     <td>
                         <button class="updateNetwork" data-id="<?= $row['id']?>"><?= $lng['L_UPDATE'] ?></button>

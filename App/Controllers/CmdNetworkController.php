@@ -101,12 +101,12 @@ class CmdNetworkController
             }
         endif;
 
-        $f_networks = $this->networksService->getNetworks();
-        foreach ($f_networks as $nid => $network) :
+        $f_networks = $this->networksService->getAllNetworksWithOccupancy();
+        foreach ($f_networks as $nid => $network) {
             list($ip, $cidr) = explode('/', $network['network']);
             $f_networks[$nid]['ip'] = $ip;
             $f_networks[$nid]['cidr'] = $cidr;
-        endforeach;
+        }
 
         $tdata = [];
 

@@ -242,10 +242,6 @@ Class NetworksService
 
         $hostService = new HostService($this->ctx);
 
-        $hosts = $hostService->getAll();
-        if (is_bool($hosts)) {
-            return false;
-        }
         $pool_networks = array_filter($this->networks, fn($network) =>
             (int)$network['pool'] === 1 && empty($network['disable'])
         );
@@ -258,6 +254,7 @@ Class NetworksService
 
         foreach ($pool_networks as $netpool) {
             $hosts_list = $hostService->getHostsByNetworkId($netpool['id']);
+            $num_hosts = count($hosts_list);
 
             // Get known hosts ips
             $used_ips = array_filter($hosts_list, function ($host) use ($netpool) {
@@ -268,11 +265,12 @@ Class NetworksService
             // Generate Ips
             [$network_address, $cidr] = explode('/', $netpool['network']);
             $subnet_mask = 32 - (int)$cidr;
-            $total_hosts = pow(2, $subnet_mask);
+            # Exclude network and broadcast address
+            $total_hosts = pow(2, $subnet_mask) - 2;
             $network_base = ip2long($network_address);
             $network_free_ips = [];
 
-            for ($i = 1; $i < $total_hosts - 1; $i++) {
+            for ($i = 1; $i < $total_hosts; $i++) {
                 $current_ip = long2ip($network_base + $i);
 
                 // if free we add to the pool
@@ -284,8 +282,13 @@ Class NetworksService
                 }
             }
 
+            // Calculate occupancy percentage
+            $used_count = count($used_ips);
+            $occupancy_percentage = ($used_count / $total_hosts) * 100;
+
             if (!empty($network_free_ips)) {
                 $netpool['pool'] = $network_free_ips;
+                $netpool['occupancy'] = round($occupancy_percentage, 2);
                 $free_ips[] = $netpool;
             }
         }
@@ -398,5 +401,33 @@ Class NetworksService
         }
 
         return $ip_list;
+    }
+
+    public function getAllNetworksWithOccupancy(): array
+    {
+        if (!$this->allNetworksLoaded) {
+            $this->loadAllNetworks();
+        }
+
+        $hostService = new HostService($this->ctx);
+        $networks_occu = [];
+
+        foreach ($this->networks as $network) {
+            $hosts_list = $hostService->getHostsByNetworkId($network['id']);
+            $used_ips = array_column($hosts_list, 'ip');
+
+            // Calcular el total de hosts disponibles
+            [$network_address, $cidr] = explode('/', $network['network']);
+            $subnet_mask = 32 - (int)$cidr;
+            $total_hosts = pow(2, $subnet_mask) - 2;
+
+            $used_count = count($used_ips);
+            $occupancy_percentage = ($used_count / $total_hosts) * 100;
+
+            $network['occupancy'] = round($occupancy_percentage, 2);
+            $networks_occu[] = $network;
+        }
+
+        return $networks_occu;
     }
 }

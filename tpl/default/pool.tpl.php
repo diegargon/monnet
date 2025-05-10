@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -37,6 +35,11 @@
                     <td>
                         <div class="network-ip">
                             <?= $pool_ip ?>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="network-occupancy">
+                            <?= $network_pool['occupancy'] ?>%
                         </div>
                     </td>
                     <td>
