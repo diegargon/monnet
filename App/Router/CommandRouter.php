@@ -291,7 +291,7 @@ class CommandRouter
             /*
              * Config
              */
-            case 'submitform':
+            case 'submitConfigform':
                 $cfgController = new ConfigController($this->ctx);
                 $response = $cfgController->setMultiple($command_values);
                 break;

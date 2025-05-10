@@ -191,13 +191,13 @@ function page_index(AppContext $ctx): array
         $page['bookmarks_head'] = $bookmarks_head;
         $page['load_tpl'][] = [
             'file' => 'bookmarks',
-            'place' => 'center_col',
+            'place' => 'right_col',
         ];
     }
     /* Add Stdbox */
     $page['load_tpl'][] = [
         'file' => 'stdbox',
-        'place' => 'center_col',
+        'place' => 'right_col',
     ];
 
     /* Host Cat */
@@ -208,7 +208,7 @@ function page_index(AppContext $ctx): array
     /* Host Footer */
     $page['load_tpl'][] = [
         'file' => 'footer-hosts',
-        'place' => 'left_col_post',
+        'place' => 'left_col',
     ];
 
     $page['hosts_categories'] = $user->getHostsCats();
@@ -336,7 +336,7 @@ function page_settings(AppContext $ctx): array
 
     $page['load_tpl'][] = [
         'file' => 'settings',
-        'place' => 'center_col',
+        'place' => 'left_col',
     ];
 
     return $page;
@@ -398,7 +398,7 @@ function page_user(AppContext $ctx): array
     ];
     $page['load_tpl'][] = [
         'file' => 'user-mgmt',
-        'place' => 'center_col',
+        'place' => 'right_col',
     ];
     return $page;
 }

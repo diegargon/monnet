@@ -1,8 +1,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -37,10 +35,33 @@ function sendFormData(button) {
     commandValues.id = 0;
 
     var requestData = {
-        command: 'submitform',
+        command: 'submitConfigform',
         command_values: commandValues
     };
-    $.post('submitter.php', requestData, function (response) {
-        console.log('Respuesta del servidor:', response);
+    $.post('submitter.php', requestData, function (response, textStatus, xhr) {
+        console.log(response);
+        var jsonData;
+        var contentType = xhr.getResponseHeader('Content-Type');
+
+        if (contentType && contentType.toLowerCase().includes('application/json')) {
+            jsonData = (typeof response === 'object') ? response : JSON.parse(response);
+        } else {
+            console.warn("Tipo de contenido inesperado:", contentType);
+            return;
+        }
+
+        if (jsonData.login === "fail") {
+            location.href = '';
+        }
+
+        if (jsonData.command_error) {
+            $('#status_msg').html(jsonData.error_msg);
+            return;
+        }
+
+        if (jsonData.command_success && jsonData.response_msg) {
+            success_msg = 'Changed ' + jsonData.response_msg + ' values';
+            $('#status_msg').html(success_msg);
+        }
     });
 }

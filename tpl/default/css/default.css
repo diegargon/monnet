@@ -1,8 +1,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
@@ -14,6 +12,7 @@
 html {
     height: 100%;
 }
+
 body {
     margin: 0;
     padding: 0;
@@ -98,25 +97,31 @@ tr:hover {
     max-height: 150px;
     justify-content: space-around;
 }
+
 #head-left {
     display: inline-flex;
     border: 0px solid #0E9700;
     width: 100%;
 }
+
 #head-center {
     display: inline-flex;
     border: 0px solid #5ac4e3;
 }
+
 #head-right {
     display: inline-flex;
     border: 0px solid #0E9700;
     width: 100%;
 }
+
 .head-left-content {
     display: inline-flex;
 }
+
 .head-center_content {
 }
+
 .head-right_content {
     display: inline-flex;
 }
@@ -124,25 +129,31 @@ tr:hover {
 footer {
     height: 5px;
 }
+
 .inline {
     display: inline;
 }
+
 .inline-flex {
     display: inline-flex;
 }
+
 .flex {
     display: flex;
 }
+
 .main {
     margin-top: 1vh;
     padding-bottom: 50px;
 }
+
 .main_align_container {
     display: flex;
     align-content: center;
     height: 100%;
     border: 0px solid red;
 }
+
 .main_container {
     display: flex;
     margin: auto;
@@ -151,10 +162,15 @@ footer {
     overflow: hidden;
     width: 100%;
 }
+
 .bookmarks-container, .settings-container {
     border: 0px solid red;
     /* float: left; */
     margin-bottom: 15px;
+}
+
+.settings-container {
+    float: right;
 }
 
 .weather-container {
@@ -165,6 +181,7 @@ footer {
     background-color: #2d3331;
     width: 120px;
 }
+
 .options-container {
     display: flex;
     /* float: left; */
@@ -232,15 +249,18 @@ footer {
     grid-template-rows: 80px;
     grid-template-rows: repeat(3, 75px); */
 }
+
 .item-container {
     width: 85px;
     height: 85px;
     position: relative;
 }
+
 .item_icon {
     width: 30px;
     border-radius: 5px;
 }
+
 .item_link {
     display: block;
     width: 100%;

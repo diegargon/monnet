@@ -36,15 +36,15 @@
 <!-- comment -->
 <div class="main_align_container">
     <div class="main_container">
-        <!-- left -->
+        <!-- Main left Column -->
         <div id="left-container" class="left-container">
             <?= !empty($tdata['left_col_pre']) ? $tdata['left_col_pre'] : null; ?>
             <div id="host_place"></div>
-            <?= !empty($tdata['left_col_post']) ? $tdata['left_col_post'] : null; ?>
+            <?= !empty($tdata['left_col']) ? $tdata['left_col'] : null; ?>
         </div>
-        <!-- Center -->
+        <!-- Main Right Column -->
         <div id="right-container" class="right-container">
-            <?= !empty($tdata['center_col']) ? $tdata['center_col'] : null; ?>
+            <?= !empty($tdata['right_col']) ? $tdata['right_col'] : null; ?>
         </div>
     </div>
     <div id="bottom_container" class="bottom_container">

@@ -11,6 +11,7 @@ namespace App\Controllers;
 
 use App\Services\Filter;
 use App\Helpers\Response;
+use App\Services\GatewayService;
 
 /* Temp Wrap Pre Migration */
 
@@ -33,8 +34,12 @@ class ConfigController
     public function setMultiple(array $values): array
     {
         // TODO 1111: Filter/check values
-        $changes = $this->ncfg->setMultiple($values);
+        $num_changes = $this->ncfg->setMultiple($values);
 
-        return Response::stdReturn(true, $changes);
+        if ($num_changes > 0) {
+            $gatewayService = new GatewayService(($this->ctx));
+            $gatewayService->reloadConfig();
+        }
+        return Response::stdReturn(true, $num_changes);
     }
 }
