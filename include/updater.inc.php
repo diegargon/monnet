@@ -679,9 +679,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             # depends de rol en la tabla no en mic para buscar hypervisors
             $db->query("ALTER TABLE `hosts` ADD `linked` INT NULL DEFAULT 0;");
             $db->query("START TRANSACTION");
-            # Option mark view report
+            # DONE Option mark view report
             $db->query("ALTER TABLE reports ADD COLUMN ack TINYINT NOT NULL DEFAULT '0';");
-            # Option mark the status of the task 0 success 1 failed
+            # DONE Option mark the status of the task 0 success 1 failed
             $db->query("ALTER TABLE reports ADD COLUMN status TINYINT NOT NULL DEFAULT '0';");
             //$db->query("
             //");
@@ -792,12 +792,12 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.72
+    // 0.72 PENDING
     $update = 0.72;
     if ($db_version == 0.00) {
         try {
-            //$db->query("
-            //");
+            # Mark task success/fail
+            $db->query("ALTER TABLE `tasks` ADD COLUMN status TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
             //$db->query("
             //");

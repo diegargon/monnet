@@ -71,6 +71,7 @@ $lng = [
     'L_DISABLE' => 'Deshabilitar',
     'L_DISKS' => 'Discos',
     'L_DONE' => 'Realizada',
+    'L_DATE' => 'Fecha',
     //E
 //ERROR
     'L_ERROR_EMPTY_INVALID' => 'Campo vacio o invalido',

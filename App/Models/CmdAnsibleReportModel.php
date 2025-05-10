@@ -10,11 +10,16 @@ namespace App\Models;
 
 class CmdAnsibleReportModel
 {
+    /** @var \AppContext */
     private \AppContext $ctx;
+
+    /** @var \DBManager */
+    private \DBManager $db;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->db = $this->ctx->get('DBManager');
     }
 
     /**
@@ -27,11 +32,10 @@ class CmdAnsibleReportModel
      */
     public function getDbReportById(int $rid): array
     {
-        $db = $this->ctx->get('DBManager');
         $query = 'SELECT * FROM reports WHERE id = :id';
         $params = [ 'id' => $rid ];
 
-        return $db->qfetch($query, $params);
+        return $this->db->qfetch($query, $params);
     }
 
     /**
@@ -48,8 +52,6 @@ class CmdAnsibleReportModel
      */
     public function getDbReports(array $opts): array
     {
-        $db = $this->ctx->get('DBManager');
-
         $query = 'SELECT';
         $params = [];
 
@@ -80,20 +82,39 @@ class CmdAnsibleReportModel
             $query .= ' ORDER BY date ' . $opts['order'];
         }
 
-        return $db->qfetchAll($query, $params);
+        return $this->db->qfetchAll($query, $params);
     }
 
-    public function delete($target_id)
+    /**
+     *
+     * @param int $rid
+     * @return bool
+     */
+    public function delete(int $rid): bool
     {
-        $db = $this->ctx->get('DBManager');
-        return $db->delete('reports', 'id = :id', ['id' => $target_id]);
+        return $this->db->delete('reports', 'id = :id', ['id' => $rid]);
     }
 
+    /**
+     *
+     * @param int $rid
+     * @param int $value
+     * @return bool
+     */
+    public function setAck(int $rid, int $value): bool
+    {
+        $set = ['ack' => $value];
+        return $this->db->update('reports', $set, 'id = :id', ['id' => $rid]);
+    }
+
+    /**
+     *
+     * @param array<string, mixed> $pb_data
+     * @return bool
+     */
     public function insertReport(array $pb_data): bool
     {
-        $db = $this->ctx->get('DBManager');
-
-        $result = $db->insert('reports', $pb_data);
+        $result = $this->db->insert('reports', $pb_data);
 
         return $result;
     }

@@ -50,13 +50,24 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('change', '.ack-checkbox', function() {
+        var reportId = $(this).data('report-id');
+
+        if(this.checked) {
+            check_value = 1;
+        } else {
+            check_value = 0;
+        }
+        requestHostDetails('ackReport', {id: reportId, value: check_value});
+    });
+
     $(document).on("click", "#submitHostToken", function () {
         var hostId = $('#host_id').val();
         if (hostId) {
             requestHostDetails('submitHostToken', {id: hostId});
         }
     });
-    
+
     // Toggle visibility ipv6 ports
     $(document).on("change", "#display_ipv6", function () {
         $('.port_ipv6').css('display', this.checked ? 'inline-flex' : 'none');
@@ -596,7 +607,7 @@ function requestHostDetails(command, command_values = []) {
                         $('#host_token').val(jsonData.token);
                     } else {
                         $('.status_msg').html('Token Error');
-                    }                    
+                    }
                 }
                 if (jsonData.command_receive === 'auto_reload_host_details') {
                     host_details = jsonData.host_details;
@@ -795,7 +806,7 @@ function requestHostDetails(command, command_values = []) {
                             $('#tasksTable').find('tr').each(function() {
                                 if ($(this).data('id') === jsonData.tid) {
                                     $(this).remove();
-                                }                                
+                                }
                             });
                         }
                         $('#tasks_status_msg').html(jsonData.response_msg);

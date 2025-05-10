@@ -32,14 +32,14 @@ class CmdAnsibleReportController
      */
     public function deleteReport(string $command, array $command_values): array
     {
-        $target_id = Filter::varInt($command_values['id']);
+        $rid = Filter::varInt($command_values['id']);
 
         $extra = [
             'command_receive' => $command,
-            'response_id' => $target_id,
+            'response_id' => $rid,
         ];
 
-        if ($this->reportModel->delete($target_id)) {
+        if ($this->reportModel->delete($rid)) {
             return Response::stdReturn(true, 'Report deleted successfully', false, $extra);
         } else {
             return Response::stdReturn(false, 'Error deleting report');
@@ -53,17 +53,17 @@ class CmdAnsibleReportController
      */
     public function viewReport(string $command, array $command_values): array
     {
-        $report_id = Filter::varInt($command_values['id']);
+        $rid = Filter::varInt($command_values['id']);
 
         $extra = [
             'command_receive' => $command,
-            'response_id' => $report_id,
+            'response_id' => $rid,
         ];
 
         if (!isset($this->ansibleService)) {
             $this->ansibleService = new AnsibleService($this->ctx);
         }
-        $response = $this->ansibleService->getHtmlReportById($report_id);
+        $response = $this->ansibleService->getHtmlReportById($rid);
 
         if ($response['status'] === 'success') {
             return Response::stdReturn(true, $response['response_msg'], false, $extra);
@@ -72,5 +72,15 @@ class CmdAnsibleReportController
         }
 
         return Response::stdReturn(false, 'Error viewReport');
+    }
+
+    public function ackReport(string $command, array $command_values): array
+    {
+        $rid = Filter::varInt($command_values['id']);
+        $value = Filter::varBool($command_values['value']);
+
+        $this->reportModel->setAck($rid, $value);
+
+        return Response::stdReturn(true, 'Ack Report');
     }
 }

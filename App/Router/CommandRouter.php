@@ -345,6 +345,10 @@ class CommandRouter
                 $ansibleReportController = new CmdAnsibleReportController($this->ctx);
                 $response = $ansibleReportController->viewReport($command, $command_values);
                 break;
+            case 'ackReport':
+                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
+                $response = $ansibleReportController->ackReport($command, $command_values);
+                break;
 
             /*
              *  Task Ansible

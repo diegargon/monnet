@@ -17,8 +17,16 @@
     <div class="form_container">
         <div id="report_status_msg"><?= isset($tdata['status_msg']) ? $tdata['status_msg'] : null ?></div>
         <table class="table-report">
-        <?php
+        <tr>
+            <td><label for="report_name"><?= $lng['L_NAME'] ?></label></td>
+            <td><label for="report_source">ID</label></td>
+            <td><label for="report_date"><?= $lng['L_DATE'] ?></label></td>
+            <td><label for="report_status"><?= $lng['L_STATUS'] ?></label></td>
+            <td><label for="report_status">ack</label></td>
+        </tr>
+    <?php
         foreach ($tdata['reports'] as $report) :
+            $status_ico = $report['status'] == 1 ? 'fail-icon' : 'success-icon';
             ?>
             <tr id="report_row_<?= $report['id']?>">
                 <td>
@@ -35,6 +43,17 @@
                     <div class="report-date">
                         <?= $report['user_date'] ?>
                     </div>
+                </td>
+                <td class="center">
+                    <div class="report-status <?= $status_ico ?>"></div>
+                </td>
+                <td>
+                    <input
+                        type="checkbox"
+                        class="ack-checkbox"
+                        name="ack_report[<?= $report['id'] ?>]" <?= $report['ack'] ? 'checked' : '' ?>
+                        data-report-id="<?= $report['id'] ?>"
+                    >
                 </td>
                 <td>
                     <button
