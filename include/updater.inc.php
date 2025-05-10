@@ -546,7 +546,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db_version = $update;
             # DONE getTotalsStats
             $db->query("ALTER TABLE `hosts` ADD `agent_online` TINYINT(1) NOT NULL DEFAULT 0;");
-            # For rebuild User
+            # To rebuild User
             $db->query("
                 CREATE TABLE `sessions` (
                   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -620,7 +620,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.65
+    // 0.65 DONE
     $update = 0.65;
     if ($db_version == 0.64) {
         try {
@@ -636,7 +636,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.66 PENDING
+    // 0.66 DONE
     $update = 0.66;
     if ($db_version == 0.65) {
         try {
@@ -649,7 +649,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE users MODIFY COLUMN password VARCHAR(255);");
             $db->query("START TRANSACTION");
             # DONE: Option to configure de server_endpoint
-            # PENDING: agent log level actully use string "info" change it on Agent
+            # DONE DISCARDING: agent log level will be string
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_log_level', JSON_QUOTE('5'), 1, 103, NULL, 0),
@@ -666,11 +666,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.67
+    // 0.67 PENDING
     $update = 0.67;
     if ($db_version == 0.66) {
         try {
-            # Removed unused
+            # DONE Removed unused
             $db->query("ALTER TABLE hosts DROP COLUMN online_change;");
             $db->query("ALTER TABLE hosts DROP COLUMN last_seen;");
             $db->query("ALTER TABLE hosts DROP COLUMN encrypted;");
@@ -683,8 +683,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE reports ADD COLUMN status TINYINT NOT NULL DEFAULT '0';");
             //$db->query("
             //");
-            # sid expire remove from config.priv
-            # agent_internal_host gw must use if set
+            # DONE sid expire remove from config.priv
+            # DONE agent_internal_host gw must use if set
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_internal_host', JSON_QUOTE(''), 0, 103, NULL, 0),
@@ -701,11 +701,11 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.68
+    // 0.68 PENDING
     $update = 0.68;
     if ($db_version == 0.67) {
         try {
-            # Remove Unused
+            # DONE Remove Unused
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
@@ -713,11 +713,12 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE `hosts` ADD `rol` INT NULL DEFAULT 0;");
             # Counter for other task and disable uniq tasks
             $db->query("ALTER TABLE `tasks` ADD `done` INT NULL DEFAULT 0;");
-            # Renaming
+            # DONE Renaming
             $db->query("UPDATE `config`
                 SET `ckey` = 'clean_hosts_days'
                 WHERE `ckey` = 'clean_host_days';
             ");
+            # DONE Gw Intervals
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('gw_send_logs_intvl', JSON_QUOTE('20'), 1, 4, NULL, 0),
@@ -736,7 +737,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.69 Update Test
+    // 0.69 DONE Update Test
     $update = 0.69;
     if ($db_version == 0.68) {
         try {
@@ -748,7 +749,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // 0.70 Update Test
+    // 0.70 DONE Update Test
     $update = 0.70;
     if ($db_version == 0.69) {
         try {
@@ -760,7 +761,56 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // Later
+
+    // 0.71 WAIT / PENDING
+    $update = 0.71;
+    if ($db_version == 0.00) {
+        try {
+            $db->query("START TRANSACTION");
+            $db->query("UPDATE `config`
+                SET `vvalue` = JSON_QUOTE('info')
+                WHERE `ckey` = 'agent_log_level';
+            ");
+            $db->query("UPDATE `config`
+                SET `ctype` = 0
+                WHERE `ckey` = 'agent_log_level';
+            ");
+            $db->query("UPDATE `config`
+                SET `vvalue` = JSON_QUOTE('1320')
+                WHERE `ckey` = 'gw_discover_host_intvl';
+            ");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // 0.72
+    $update = 0.72;
+    if ($db_version == 0.00) {
+        try {
+            //$db->query("
+            //");
+            $db->query("START TRANSACTION");
+            //$db->query("
+            //");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // Later / PENDING
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
@@ -827,12 +877,12 @@ if ($db_version && ($files_version > $db_version)) {
         if ($trigger && !flock($fp, LOCK_EX | LOCK_NB)) {
             $lockTime = filemtime($lockFile);
             if (time() - $lockTime > $maxLockTime) {
-                Log::warning("Eliminando lock antiguo");
+                Log::warning("Removing old updater lock");
                 fclose($fp);
                 unlink($lockFile);
                 $trigger = true;
             } else {
-                Log::info("Actualización ya en curso");
+                Log::info("Updating already start");
                 fclose($fp);
                 $trigger = false;
             }
