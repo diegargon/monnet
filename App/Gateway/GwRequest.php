@@ -6,9 +6,9 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-namespace App\Services;
+namespace App\Gateway;
 
-use App\Services\SocketClient;
+use App\Core\Network\SocketClient;
 use RuntimeException;
 
 class GwRequest
@@ -60,6 +60,7 @@ class GwRequest
     public function request(array $request): array
     {
         try {
+            # SendAndReceive trigger the connection
             $responseArray = $this->socketClient->sendAndReceive($request);
         } catch (\Exception $e) {
             return ['status' => 'error', 'error_msg' => $e->getMessage()];
