@@ -13,7 +13,8 @@ class EventType
     public const HIGH_MEMORY_USAGE = 2;
     public const HIGH_DISK_USAGE = 3;
     public const HIGH_CPU_USAGE = 4;
-    public const STARTING = 5;
+    public const STARTING = 5; /* DELETE */
+    public const AGENT_STARTING = 5;
     public const AGENT_SHUTDOWN = 6;
     public const SYSTEM_SHUTDOWN = 7;
     public const PORT_UP = 8;
