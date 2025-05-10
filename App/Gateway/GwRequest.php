@@ -68,7 +68,7 @@ class GwRequest
         if (is_array($responseArray)) {
             return $responseArray;
         } else {
-            return ['status' => 'error', 'Unknown error receiving gw response'];
+            return ['status' => 'error', 'error_msg' => 'Unknown error receiving gw response'];
         }
     }
 

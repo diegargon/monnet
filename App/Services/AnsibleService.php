@@ -4,6 +4,13 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ *
+ * Gateway
+ *  Module: ansible
+ *  Commands:
+ *   - get_all_playbooks_metadata
+ *   - get_all_playbooks_ids
+ *   - playbook_exec
  */
 
 namespace App\Services;
@@ -12,7 +19,8 @@ use App\Models\CmdAnsibleModel;
 use App\Models\CmdAnsibleReportModel;
 use App\Services\TemplateService;
 use App\Services\DateTimeService;
-use App\Services\GwRequest;
+use App\Services\LogSystemService;
+use App\Services\GatewayService;
 use App\Services\Filter;
 
 class AnsibleService
@@ -20,8 +28,11 @@ class AnsibleService
     private \AppContext $ctx;
     private \Config $ncfg;
     private CmdAnsibleModel $cmdAnsibleModel;
-    private TemplateService $templateService;
     private CmdAnsibleReportModel $ansibleReportModel;
+    private TemplateService $templateService;
+    private LogSystemService $logSystem;
+    private GatewayService $gatewayService;
+
     private array $playbooks_metadata = [];
 
     public function __construct(\AppContext $ctx)
@@ -30,6 +41,8 @@ class AnsibleService
         $this->ncfg = $ctx->get('Config');
         $this->cmdAnsibleModel = new CmdAnsibleModel($ctx);
         $this->templateService = new TemplateService($ctx);
+        $this->gatewayService = new GatewayService($ctx);
+        $this->logSystem = new LogSystemService($ctx);
     }
 
     /**
@@ -92,44 +105,7 @@ class AnsibleService
             'data' => $data
         ];
 
-        $gwRequest = new GwRequest($this->ctx);
-        $responseArray = $gwRequest->request($send_data);
-
-        if (isset($responseArray['status']) && $responseArray['status'] == 'error'){
-            return $responseArray;
-        }
-        if (
-                isset($responseArray['status']) &&
-                $responseArray['status'] === 'success' &&
-                isset($responseArray['result'])
-        ) {
-            /* SUCCESS */
-            /* REMOVE GW Insert de report
-            if ($playbook_id) {
-                $pb_data = [
-                    'host_id' => $host['id'],
-                    'source_id' => $user->getId(),
-                    'pid' => $playbook_id,
-                    'rtype' => 1, //Manual
-                    'report' => json_encode($responseArray),
-                ];
-                if (!isset($this->ansibleReportModel)) {
-                    $this->ansibleReportModel = new CmdAnsibleReportModel($this->ctx);
-                }
-                $this->ansibleReportModel->insertReport($pb_data);
-            }
-             *
-             */
-
-            return ['status' => 'success', 'response_msg' => $responseArray];
-        }
-
-        $error_msg = 'Ansible status error: ';
-        if (isset($responseArray['message'])) {
-            $error_msg .= $responseArray['message'];
-        }
-
-        return ['status' => 'error', 'error_msg' => $error_msg];
+        return $this->gatewayService->sendCommand($send_data);
     }
 
     /**
@@ -175,12 +151,6 @@ class AnsibleService
      */
     public function createTask(array $task_data): array
     {
-        /*
-        $task_data['extra'] = json_encode($task_data['extra']);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return ['status' => 'error', 'error_msg' => 'Error encoding JSON: ' . json_last_error_msg()];
-        }
-        */
         if ($this->cmdAnsibleModel->createTask($task_data)) {
             return ['status' => 'success', 'response_msg' => 'success'];
         }
@@ -209,24 +179,14 @@ class AnsibleService
     public function getAnsibleTabDetails(int $host_id): array
     {
 
-        $ansible['reports_list'] = $this->getHostHeadsReports($host_id);
-        $ansible['ansible_vars'] = $this->cmdAnsibleModel->getAnsibleVarsByHostId($host_id);
+        $response['reports_list'] = $this->getHostHeadsReports($host_id);
+        $response['ansible_vars'] = $this->cmdAnsibleModel->getAnsibleVarsByHostId($host_id);
 
-        // Get Playbooks Metada (Gw)
-        $pb_metadata_result = $this->setPbMetadata();
-        if (isset($pb_metadata_result['status'])) {
-            if ($pb_metadata_result['status'] == 'error') {
-                $ansible['errors'][] = $pb_metadata_result['error_msg'];
-                return $ansible;
-            } else {
-                $ansible['playbooks_metadata'] = $this->playbooks_metadata;
-            }
-        } else {
-            $ansible['errors'][] = 'Unknown Error getting pb metadata';
-            return $ansible;
+        if ($this->setPbMetadata()) {
+            $response['playbooks_metadata'] = $this->playbooks_metadata;
         }
 
-        return $ansible;
+        return $response;
     }
 
     /**
@@ -271,12 +231,12 @@ class AnsibleService
 
     /**
      *
-     * @param array<string, mixed> $response
+     * @param array<string, mixed> $report
      * @return array<string, string|int>
      */
-    public function asHtml(array $response): array
+    public function asHtml(array $report): array
     {
-        $response = $this->templateService->getTpl('ansible-report', $response);
+        $response = $this->templateService->getTpl('ansible-report', $report);
 
         return [
             'status' => 'success',
@@ -322,18 +282,14 @@ class AnsibleService
      */
     public function getPbIdByName(string $pb_name): string
     {
-        // Ensure playbook metadata is loaded
-        $pb_metadata_result = $this->setPbMetadata();
-        if (isset($pb_metadata_result['status']) && $pb_metadata_result['status'] === 'error') {
-            \Log::error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
-            return '';
-        }
-
-        foreach ($this->playbooks_metadata as $play) {
-            if ($play['name'] === $pb_name) {
-                return $play['id'];
+        if ($this->setPbMetadata()) {
+            foreach ($this->playbooks_metadata as $play) {
+                if ($play['name'] === $pb_name) {
+                    return $play['id'];
+                }
             }
         }
+        $this->logSystem->warning("Playbook name: $pb_name not found");
 
         return '';
     }
@@ -345,18 +301,14 @@ class AnsibleService
      */
     public function getPbById(string $id): array
     {
-        // Ensure playbook metadata is loaded
-        $pb_metadata_result = $this->setPbMetadata();
-        if (isset($pb_metadata_result['status']) && $pb_metadata_result['status'] === 'error') {
-            \Log::error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
-            return [];
+        if ($this->setPbMetadata()) {
+            foreach ($this->playbooks_metadata as $play) {
+                if ($play['id'] === $id) :
+                    return $play;
+                endif;
+            }
         }
-
-        foreach ($this->playbooks_metadata as $play) {
-            if ($play['id'] === $id) :
-                return $play;
-            endif;
-        }
+        $this->logSystem->warning("Playbook id: $id not found");
 
         return [];
     }
@@ -483,46 +435,55 @@ class AnsibleService
      */
     public function getPbIds(): array
     {
-        $gwRequest = new GwRequest($this->ctx);
         $request = [
             'command' => 'get_all_playbooks_ids',
             'module' => 'ansible',
         ];
-        $req_result = $gwRequest->request($request);
 
-        if (isset($req_result['status']) && $req_result['status'] == 'success')  {
-            return $req_result['result'];
-        }
-
-        return [];
+        return $this->gatewayService->sendCommand($request);
     }
 
     /**
      *
      * @return array<string, string|int>
      */
-    private function setPbMetadata(): array
+    public function getPbMetadata(): array
     {
-        if (!$this->playbooks_metadata) {
-            $gwRequest = new GwRequest($this->ctx);
-            $request = [
-                'command' => 'get_all_playbooks_metadata',
-                'module' => 'ansible',
-            ];
-            $req_result = $gwRequest->request($request);
+        $this->setPbMetadata();
 
-            if (isset($req_result['status']) && $req_result['status'] == 'success')  {
-                $this->playbooks_metadata = $req_result['result'];
-            } else {
-                return $req_result;
-            }
+        return $this->playbooks_metadata;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    private function setPbMetadata(): bool
+    {
+        if (!empty($this->playbooks_metadata)) {
+            return true;
         }
 
-        $response = [
-            'status' => 'success',
+        $request = [
+            'command' => 'get_all_playbooks_metadata',
+            'module' => 'ansible',
         ];
+        $response = $this->gatewayService->sendCommand($request);
 
+        if (!isset($response['status'])) {
+            $this->logSystem->warning('No status error setting pb metada');
+            return false;
+        }
 
-        return $response;
+        if ($response['status'] == 'success' && isset($response['response_msg']))  {
+            $this->playbooks_metadata = $response['response_msg'];
+            return true;
+        } elseif ($response['status'] == 'error' && isset($response['error_msg'])) {
+            $this->logSystem->warning($response['error_msg']);
+            return false;
+        }
+
+        $this->logSystem->warning('Unknown error setting pb metada');
+        return false;
     }
 }

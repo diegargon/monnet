@@ -97,4 +97,26 @@
             <span class="opt_labels"><?= $lng['L_EVENTS'] ?></span>
         </div>
     </fieldset>
+
+    <fieldset class="ctrl_fieldset">
+        <legend class="ctrl_legend">Gateway</legend>
+        <div class="general_ctrl">
+            <button id="restart-gateway"
+                    onclick="submitCommand('',{id: 0, action: 'restart-daemon'})"
+                    class="button-ctrl" type="submit">
+                <img class="settings_link"
+                     src="./tpl/default/img/refresh.png" title="<?= $lng['L_RESTART_G'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_REBOOT'] ?></span>
+        </div>
+        <div class="general_ctrl">
+            <button id="refresh-pbmeta"
+                    onclick="submitCommand('',{id: 0, action: 'refresh-pbmeta'})"
+                    class="button-ctrl" type="submit">
+                <img class="settings_link"
+                     src="./tpl/default/img/refresh.png" title="<?= $lng['L_REFRESH_PBMETA'] ?>">
+            </button>
+            <span class="opt_labels"><?= $lng['L_REFRESH_PBMETA'] ?></span>
+        </div>
+    </fieldset>
 </div>

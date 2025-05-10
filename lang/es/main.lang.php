@@ -3,8 +3,6 @@
 /**
  * ES
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 $lng = [
@@ -208,6 +206,8 @@ $lng = [
     'L_REMOTE_PORT_CHECK' => 'Comprobacion remota de puertos',
     'L_RESERVE' => 'Reservar',
     'L_REPORTS' => 'Reports',
+    'L_RESTART_G' => 'Reiniciar Gateway',
+    'L_REFRESH_PBMETA' => 'Recargar PB meta',
     //S
     'L_S_ONLINE' => 'On',
     'L_S_OFFLINE' => 'Off',
