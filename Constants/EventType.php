@@ -30,4 +30,6 @@ class EventType
     public const PORT_NEW_LOCAL = 18;
     public const PORT_UP_LOCAL = 19;
     public const PORT_DOWN_LOCAL = 20;
+    public const TASK_FAILURE = 21;
+    public const TASK_SUCCESS = 22;
 }
