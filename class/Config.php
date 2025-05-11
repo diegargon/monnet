@@ -3,12 +3,12 @@
 /**
  *
  * @author diego/@/envigo.net
-  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
 !defined('IN_WEB') ? exit : true;
 /**
- * Clase config
+ * Config class
  * ctype =
  *      0 (string)
  *      1 (int)
@@ -18,7 +18,7 @@
  *      5 (url)
  *      6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
  *      7 (password) (TODO)
- *      8 (email) (No yet)
+ *      8 (email) (Not yet)
  *      10 (text/textbox)
  *
  *
@@ -48,21 +48,21 @@ class Config
     private array $modifiedKeys = [];
 
     /**
-     * Constructor de la clase Config.
+     * Constructor of the Config class.
      *
-     * @param AppContext $ctx Contexto de la aplicación.
+     * @param AppContext $ctx Application context.
      */
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
 
-        // Registrar la función de guardado al cierre
+        // Register the save function on shutdown
         register_shutdown_function([$this, 'saveChanges']);
     }
 
     /**
      *
-     * @param array<int|string, mixed> $cfg Configuraciones iniciales.
+     * @param array<int|string, mixed> $cfg Initial configurations.
      * @return void
      */
     public function init(array $cfg): void
@@ -75,7 +75,7 @@ class Config
     }
 
     /**
-     * Carga las configuraciones desde la tabla `config` en la base de datos y las combina con las predefinidas.
+     * Loads configurations from the `config` table in the database and merges them with predefined ones.
      *
      * @return void
      */
@@ -91,9 +91,7 @@ class Config
                 $key = $row['ckey'];
                 $value = $this->parseRowValue($row['cvalue'], (int) $row['ctype']);
 
-                /*
-                 * DB Precedence only for keys with cat > 0
-                 */
+                // DB Precedence only for keys with cat > 0
                 if (
                     (isset($row['ccat']) && $row['ccat'] > 0) ||
                     !isset($this->cfg[$key])
@@ -107,10 +105,10 @@ class Config
     }
 
     /**
-     * Obtiene el valor de una clave de configuración.
+     * Gets the value of a configuration key.
      *
-     * @param string|int $key Clave de configuración.
-     * @return mixed Valor de la configuración o null si no existe.
+     * @param string|int $key Configuration key.
+     * @return mixed Configuration value or null if it does not exist.
      */
     public function get($key): mixed
     {
@@ -136,9 +134,9 @@ class Config
         return $this->cfg;
     }
     /**
-     * Obtiene todos los valores editables
+     * Gets all editable values.
      *
-     * @return mixed Valor de la configuración o null si no existe.
+     * @return mixed Configuration value or null if it does not exist.
      */
 
     public function getAllEditable()
@@ -174,16 +172,16 @@ class Config
     }
 
     /**
-     * Establece un valor en la configuración.
+     * Sets a value in the configuration.
      *
-     * @param mixed $key Clave de configuración.
-     * @param mixed $value Valor de configuración.
+     * @param mixed $key Configuration key.
+     * @param mixed $value Configuration value.
      * @param int $force_save
-     * @return int 1 if field change
+     * @return int 1 if field changed
      */
     public function set($key, $value, int $force_save = 0): int
     {
-        // If ctype exist is a database config key
+        // If ctype exists, it is a database config key
         if (isset($this->cfg[$key]['ctype'])) {
             $config = &$this->cfg[$key];
 
@@ -209,7 +207,7 @@ class Config
                 return 1;
             }
         } else {
-            /* No database value  avoid save to database */
+            /* No database value, avoid saving to database */
             $this->cfg['key']['value'] = $value;
         }
         if ($force_save) :
@@ -235,7 +233,7 @@ class Config
         return $changes;
     }
     /**
-     * Guarda los cambios en la base de datos. Called by register shudown
+     * Saves changes to the database. Called by register shutdown.
      *
      * @return void
      */
@@ -255,13 +253,13 @@ class Config
             $values[] = "('$escapedKey', '$escapedValue')";
         }
 
-        // Combina todas las filas en una sola consulta
+        // Combine all rows into a single query
         $query = "INSERT INTO config (ckey, cvalue) VALUES " . implode(', ', $values) . "
               ON DUPLICATE KEY UPDATE cvalue = VALUES(cvalue)";
 
         $db->query($query);
 
-        // Limpia el buffer de modificaciones
+        // Clear the modification buffer
         $this->modifiedKeys = [];
     }
 
