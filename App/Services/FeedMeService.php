@@ -126,6 +126,7 @@ class FeedMeService
                     case 'high_memory_usage':
                     case 'high_disk_usage':
                     case 'agent_shutdown':
+                    case 'system_shutdown':
                         $this->notificationLog($request['name'], $host_id, $rdata);
                         break;
                     default:
