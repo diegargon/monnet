@@ -3,10 +3,9 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
- * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+
 !defined('IN_WEB') ? exit : true;
 /**
  * Clase config
@@ -15,7 +14,7 @@
  *      1 (int)
  *      2 (bool)
  *      3 (float)
- *      4 (date)
+ *      4 (datetime)
  *      5 (url)
  *      6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
  *      7 (password) (TODO)
@@ -291,8 +290,9 @@ class Config
                 return (bool)$decodedValue;
             case 3: // float
                 return (float)$decodedValue;
-            case 4: // date
-                return (strtotime($decodedValue) !== false) ? $decodedValue : null;
+            case 4: // datetime
+                $timestamp = strtotime($decodedValue);
+                return ($timestamp !== false) ? date('Y-m-d H:i:s', $timestamp) : null;
             case 5: // url
                 //TODO Filter?
                 return (string) $decodedValue;
