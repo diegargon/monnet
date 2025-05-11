@@ -570,7 +570,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     }
 
 
-    // 0.63 DONE
+    // 0.63 COMPLETED
     $update = 0.63;
     if ($db_version == 0.62) {
         try {
@@ -601,7 +601,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 $db->query("UPDATE reports SET pid = '$pname' WHERE pb_id = $pbId");
             }
             // Option to implemente clear offline hosts if this options is active 0/1
-            // GW must do a task host clean
+            // TESTING GW must do a task host clean
             $db->query("ALTER TABLE `networks` ADD `clear` TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
             // Enable Clean never seen again host time
@@ -620,7 +620,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.65 DONE
+    // 0.65 COMPLETED
     $update = 0.65;
     if ($db_version == 0.64) {
         try {
@@ -636,7 +636,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.66 DONE
+    // 0.66 COMPLETED
     $update = 0.66;
     if ($db_version == 0.65) {
         try {
@@ -675,8 +675,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE hosts DROP COLUMN last_seen;");
             $db->query("ALTER TABLE hosts DROP COLUMN encrypted;");
             # linked: id hypervisor or other host
-            # depend to allow link vms/containers
-            # depends de rol en la tabla no en mic para buscar hypervisors
+            # link vms/containers to their host
+            # depends de rol en la tabla no en misc para buscar hypervisors
             $db->query("ALTER TABLE `hosts` ADD `linked` INT NULL DEFAULT 0;");
             $db->query("START TRANSACTION");
             # DONE Option mark view report
@@ -713,7 +713,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
             # system_type to rol
             $db->query("ALTER TABLE `hosts` ADD `rol` INT NULL DEFAULT 0;");
-            # Counter for other task and disable uniq tasks
+            # DONE Counter for other task and disable uniq tasks
             $db->query("ALTER TABLE `tasks` ADD `done` INT NULL DEFAULT 0;");
             # DONE Renaming
             $db->query("UPDATE `config`
@@ -739,7 +739,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.69 DONE Update Test
+    // 0.69 COMPLETED Update Test
     $update = 0.69;
     if ($db_version == 0.68) {
         try {
@@ -751,7 +751,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // 0.70 DONE Update Test
+    // 0.70 COMPLETED Update Test
     $update = 0.70;
     if ($db_version == 0.69) {
         try {
