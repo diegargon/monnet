@@ -16,9 +16,16 @@ use App\Helpers\Response;
 
 class CmdNetworkController
 {
+    /** @var \AppContext */
     private \AppContext $ctx;
+    
+    /** @var TemplateService */
     private TemplateService $templateService;
+
+    /** @var HostService */
     private HostService $hostService;
+
+    /** @var NetworksService*/
     private NetworksService $networksService;
 
     public function __construct(\AppContext $ctx)
@@ -49,11 +56,11 @@ class CmdNetworkController
             if ($action === 'remove') {
                 $this->networksService->removeNetwork($network_id);
                 return Response::stdReturn(
-                        true,
-                        'Network removed successful',
-                        true,
-                        ['nid' => $network_id, 'action' => $action]
-                    );
+                    true,
+                    'Network removed successful',
+                    true,
+                    ['nid' => $network_id, 'action' => $action]
+                );
                 // Update existing host to default 1
                 // TODO Uncomment and test
                 #if (!isset($this->hostService)) {
@@ -65,38 +72,38 @@ class CmdNetworkController
 
                 if ($decodedJson === null) {
                     return Response::stdReturn(
-                            false, 'JSON Invalid',
-                            false,
-                            ['nid' => $network_id, 'action' => $action]
-                        );
+                        false, 'JSON Invalid',
+                        false,
+                        ['nid' => $network_id, 'action' => $action]
+                    );
                 }
                 $val_net_data = $this->validateNetData($command_values['action'], $decodedJson);
 
                 if (!empty($val_net_data['error'])) {
                     return Response::stdReturn(
-                            false,
-                            $val_net_data['error_msg'],
-                            false,
-                            ['nid' => $network_id, 'action' => $action]
-                        );
+                        false,
+                        $val_net_data['error_msg'],
+                        false,
+                        ['nid' => $network_id, 'action' => $action]
+                    );
                 }
 
                 if ($action === 'add') {
                     $this->networksService->addNetwork($val_net_data);
                     return Response::stdReturn(
-                            true,
-                            'Network added successful, reopen to check',
-                            true,
-                            ['action' => $action]
-                        );
+                        true,
+                        'Network added successful, reopen to check',
+                        true,
+                        ['action' => $action]
+                    );
                 }
                 if ($action === 'update') {
                     $this->networksService->updateNetwork($network_id, $val_net_data);
                     return Response::stdReturn(true,
-                            'Network updated succesful',
-                            true,
-                            ['nid' => $network_id, 'action' => $action]
-                        );
+                        'Network updated succesful',
+                        true,
+                        ['nid' => $network_id, 'action' => $action]
+                    );
                 }
             }
         endif;
@@ -164,7 +171,7 @@ class CmdNetworkController
         $value_command = Filter::varIP($command_values['value']);
 
         $reserved_host = [
-            'title' => $username. 'Reserved',
+            'title' => $username . 'Reserved',
             'ip' => $value_command,
             'network' => $network_id
         ];
@@ -249,7 +256,7 @@ class CmdNetworkController
         }
 
         if (
-            (strpos($new_network['network'], "0") === 0)||
+            (strpos($new_network['network'], "0") === 0) ||
             !$this->networksService->isLocal($new_network['network'])
         ) :
             $new_network['vlan'] = 0;
