@@ -75,7 +75,11 @@ class GatewayService
     public function sendCommand(array $send_data): array
     {
         $gwRequest = new GwRequest($this->ctx);
-        $response = $gwRequest->request($send_data);
+        if ($gwRequest->connect()) {
+            $response = $gwRequest->request($send_data);
+        } else {
+            return ['status' => 'error', 'error_msg' => 'sendCommand: Can not connect'];
+        }
 
         if (!isset($response['status'])) {
             return ['status' => 'error', 'error_msg' => 'Gateway response without status'];

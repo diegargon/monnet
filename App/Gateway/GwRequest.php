@@ -7,6 +7,8 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
+# TODO must throw exceptions, GatewayService must catch that exceptions and return the status.
+
 namespace App\Gateway;
 
 use App\Core\Network\SocketClient;
@@ -49,8 +51,20 @@ class GwRequest
         if ($this->server_port < 1 || $this->server_port > 65535) {
             throw new RuntimeException('GW: Invalid server port');
         }
+    }
 
+    /**
+     *
+     * @return SocketClient
+     */
+    public function connect(): SocketClient
+    {
         $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
+        if ($this->socketClient === null) {
+            $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
+        }
+
+        return $this->socketClient;
     }
 
     /**
@@ -71,19 +85,5 @@ class GwRequest
         } else {
             return ['status' => 'error', 'error_msg' => 'Unknown error receiving gw response'];
         }
-    }
-
-    /**
-     *
-     * @return SocketClient
-     */
-    private function connect(): SocketClient
-    {
-        $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
-        if ($this->socketClient === null) {
-            $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
-        }
-
-        return $this->socketClient;
     }
 }
