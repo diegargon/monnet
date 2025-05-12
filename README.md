@@ -75,6 +75,30 @@ The automatic/fast method is using the docker-compose.yml
 
 Here the manual process.
 
+## MonNet Update
+
+At this momment only 'git pull' is avaible, will handle database updates.
+
+IMPORTANT:
+
+You must stop the monnet-gateway.service before upgrade MonNet. Certain database upgrades can
+get locked due if the monnet-gateway service is running.
+
+That is the safest way. If you forget you always can restart via UI or command line
+
+In a systemd SO
+
+```
+systemctl stop monnet
+```
+
+do the git pull on monnet directory
+
+```
+systemctl start monnet
+```
+
+
 ## Deps
 
 LAMP
