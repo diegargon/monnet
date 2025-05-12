@@ -600,8 +600,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
                 $db->query("UPDATE reports SET pid = '$pname' WHERE pb_id = $pbId");
             }
-            // Option to implemente clear offline hosts if this options is active 0/1
-            // TESTING GW must do a task host clean
+            // DONE Option to implemente clear offline hosts if this options is active 0/1
+            // DONE changed to clean. GW must do a task host clean
             $db->query("ALTER TABLE `networks` ADD `clear` TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
             // Enable Clean never seen again host time
@@ -794,10 +794,12 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
     // 0.72 PENDING
     $update = 0.72;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.71) {
         try {
             # Mark task success/fail
             $db->query("ALTER TABLE `tasks` ADD COLUMN status TINYINT NOT NULL DEFAULT '0';");
+            # Clean old host moved from clear G: Change M: Implement
+            $db->query("ALTER TABLE `networks` ADD `clean` TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
             //$db->query("
             //");
@@ -840,6 +842,9 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
+            # To delete After change name in use to clean in G
+            $db->query("ALTER TABLE `networks` DROP COLUMN clear;");
+            # User rols
             $db->query("ALTER TABLE `users` ADD `rol` INT NULL DEFAULT 0;");
             //$db->query("
             //");
