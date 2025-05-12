@@ -16,24 +16,16 @@ use RuntimeException;
 
 class GwRequest
 {
-    /**
-     * @var \AppContext
-     */
+    /** @var \AppContext */
     private \AppContext $ctx;
 
-    /**
-     * @var SocketClient
-     */
+    /** @var SocketClient */
     private SocketClient $socketClient;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private string $server_ip;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private int $server_port;
 
     public function __construct(\AppContext $ctx)
@@ -55,14 +47,16 @@ class GwRequest
 
     /**
      *
+     * @param int $timeout
      * @return SocketClient
      */
-    public function connect(): SocketClient
+    public function connect(int $timeout = 1): SocketClient
     {
         $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
         if ($this->socketClient === null) {
             $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
         }
+        $this->socketClient->setTimeout($timeout);
 
         return $this->socketClient;
     }

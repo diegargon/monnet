@@ -1863,6 +1863,37 @@ input:checked + .slider:before {
     background-repeat: no-repeat;
 }
 
+.led {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin: 1px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.led-ok {
+    background-color: #2a8f55;
+    box-shadow: 0 0 10px #2ecc71;
+}
+
+.led-warning {
+    background-color: #f39c12;
+    box-shadow: 0 0 10px #f39c12;
+}
+
+.led-danger {
+    background-color: #e74c3c;
+    box-shadow: 0 0 10px #e74c3c;
+}
+.led-off {
+    background-color: #ccc;
+}
+
+.blink {
+    animation: blink-animation 1s ease-in-out infinite;
+}
+
 @keyframes crt-glow {
     0% {
         opacity: 0.5;
@@ -2011,6 +2042,12 @@ input:checked + .slider:before {
     100% {
         background-color: rgb(40, 40, 40);
     }
+}
+
+@keyframes blink-animation {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
 }
 
 @media (max-width: 600px) {

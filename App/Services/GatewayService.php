@@ -13,7 +13,11 @@ use App\Gateway\GwRequest;
 
 class GatewayService
 {
+    /** @var \AppContext */
     private \AppContext $ctx;
+
+    /** @var int */
+    private int $socket_timeout = 1;
 
     public function __construct(\AppContext $ctx)
     {
@@ -67,6 +71,22 @@ class GatewayService
     }
 
     /**
+     *
+     * @return array<string, mixed>
+     */
+    public function pingGateway(): array
+    {
+        $data = ['timestamp' => microtime(true)];
+        $send_data = [
+            'command' => 'ping',
+            'module' => 'gateway-daemon',
+            'data' => $data,
+        ];
+
+        return $this->sendCommand($send_data);
+    }
+    
+    /**
      * Helper method to send a command via the gateway.
      *
      * @param array<string, string|int> $send_data
@@ -75,7 +95,7 @@ class GatewayService
     public function sendCommand(array $send_data): array
     {
         $gwRequest = new GwRequest($this->ctx);
-        if ($gwRequest->connect()) {
+        if ($gwRequest->connect($this->socket_timeout)) {
             $response = $gwRequest->request($send_data);
         } else {
             return ['status' => 'error', 'error_msg' => 'sendCommand: Can not connect'];
@@ -89,12 +109,14 @@ class GatewayService
             if (empty($response['message'])) {
                 return ['status' => 'error', 'error_msg' => 'Status success but empty response'];
             }
-            return ['status' => 'success', 'response_msg' => $response['message']];
+            // TODO GW must use response_msg;
+            $response['response_msg'] = $response['message'];
+            return $response;
         }
 
         $error_msg = 'Gateway command error: ';
         if (isset($response['message'])) {
-            $error_msg .= $response['error_msg'];
+            $error_msg .= $response['message'];
         } else {
             $error_msg .= 'Unknown response from gateway';
         }

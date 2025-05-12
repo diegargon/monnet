@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -17,6 +15,28 @@
     $(document).ready(function () {
         refresh();
     });
+
+    function updatePingStatus(responseData) {
+        const maxLatencyWarning = 1.5;  // ms - amarillo/naranja
+        const maxLatencyDanger = 2.5;   // ms - rojo
+        const led = $('#heartbeatLed');
+
+        // Clean all tags
+        led.removeClass('led-ok led-off led-warning led-danger blink');
+        led.attr('title', 'Gateway Status: ' + responseData.latency_ms + 'ms');
+        if (responseData.latency_ms >= maxLatencyDanger) {
+            led.addClass('led-danger blink');
+        } else if (responseData.latency_ms >= maxLatencyWarning) {
+            led.addClass('led-warning blink');
+        } else {
+            led.addClass('led-ok blink');
+        }
+    }
+
+    function updatePingStatusToError() {
+        const led = $('#heartbeatLed');
+        led.removeClass('led-ok led-off led-warning blink').addClass('led-danger');
+    }
 
     function refresh(force = 0) {
         var requestData = {};
@@ -122,6 +142,15 @@
                         });
                     }
 
+                    if (
+                        "ping" in jsonData &&
+                        "status" in jsonData.ping &&
+                        jsonData.ping.status === 'success'
+                    ) {
+                        updatePingStatus(jsonData.ping);
+                    } else {
+                        updatePingStatusToError();
+                    }
                 })
                 .fail(function (xhr, status, error) {
                     console.error('Error en la solicitud AJAX: refresher', status, error);
@@ -129,6 +158,6 @@
         // Avoid set auto-refresh when a force call is execute
         if (!force) {
             setTimeout(refresh, <?= $ncfg->get('refresher_time') * 60000 ?>);
-    }
+        }
     }
 </script>

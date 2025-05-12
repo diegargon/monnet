@@ -10,6 +10,7 @@ namespace App\Controllers;
 use App\Services\RefresherService;
 use App\Views\RefresherView;
 use App\Services\TemplateService;
+use App\Services\GatewayService;
 
 class RefresherController
 {
@@ -17,6 +18,7 @@ class RefresherController
     private $view;
     private \Config $ncfg;
     private RefresherService $refresherService;
+    private GatewayService $gwService;
 
     public function __construct($ctx)
     {
@@ -25,6 +27,7 @@ class RefresherController
         $templates = new TemplateService($ctx);
         $this->view = new RefresherView($ctx, $templates);
         $this->refresherService  = new RefresherService($ctx);
+        $this->gwService = new GatewayService($ctx);
     }
 
     /**
@@ -200,6 +203,9 @@ class RefresherController
         /*
          *  Host Down Bar
          */
+
+        // Ping the Gateway
+        $data['ping'] = $this->gwService->pingGateway();
 
         $cli_last_run = 'Never';
         if ($ncfg->get('cli_last_run')) {
