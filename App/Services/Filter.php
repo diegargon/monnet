@@ -780,6 +780,16 @@ class Filter
     }
 
     /**
+     * Get and Validate remote addr
+     * @return string
+     */
+    public static function getRemoteIp(): string {
+        $ip = trim($_SERVER['REMOTE_ADDR']);
+
+        return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '0.0.0.0';
+    }
+
+    /**
      * Retrieves a network address from $_GET and validates it.
      *
      * @param mixed $val The key to retrieve.

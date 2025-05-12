@@ -15,6 +15,7 @@ use App\Services\HostService;
 use App\Services\DateTimeService;
 use App\Models\CmdHostModel;
 use App\Models\CmdStatsModel;
+use App\Services\Filter;
 
 class FeedMeService
 {
@@ -465,11 +466,23 @@ class FeedMeService
     private function validateHostRequest(array $host, string $token, int $host_id): array
     {
         if (!$host) {
-            \Log::error("Host not found, requested id:" . $host_id);
-            return ['error' => 'Host not found'];
-        } elseif (empty($host['token']) || $host['token'] !== $token) {
-            \Log::warning("Invalid Token receive from id:" . $host_id);
-            return ['error' => 'Invalid Token'];
+            $error_msg = 'Host not found, requested id:' . $host_id;
+        }
+        if (empty($host['token']) || $host['token'] !== $token) {
+            $msg = 'Invalid Token receive from id:' . $host_id;
+        }
+        if (empty($host['ip'])) {
+            $msg = "Invalid Token receive from id:" . $host_id;
+        }
+
+        $remote_ip = Filter::getRemoteIp();
+        if ($host['ip'] != $remote_ip ) {
+            $msg = "Empty or wrong ip receive, expected {$host['ip']} receive $remote_ip";
+        }
+
+        if (!empty($error_msg)) {
+            \Log::error($msg);
+            return ['error' => $msg];
         }
 
         return ['success' => true];
