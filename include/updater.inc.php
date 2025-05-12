@@ -832,21 +832,17 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
     // 0.74
     $update = 0.74;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.73) {
         try {
-            //$db->query("
-            //");
             # For renaming fields
             # + clean_done_tasks for clean uniq tasks done
             # clean not seen interval for purge host on clean networks
             $db->query("START TRANSACTION");
+            $db->query("UPDATE `config` SET `cvalue` = JSON_QUOTE('604800') WHERE `ckey` = 'sid_expire';");
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
-                ('clean_not_seen_hosts_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
-                ('clean_task_done_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
-                ('clean_logs_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
-                ('clean_stats_intvl', JSON_QUOTE('15'), 1, 104, NULL, 0),
-                ('clean_reports_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0);
+                ('clear_not_seen_hosts_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
+                ('clear_task_done_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0);
             ");
 
             $db->query("COMMIT");
