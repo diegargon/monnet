@@ -58,6 +58,7 @@ $lng = [
     'L_CLEAR_ALERTS' => 'Limpiar alertas',
     'L_CLEAR_WARNS' => 'Limpiar avisos',
     'L_CONDITIONAL' => 'Condicional',
+    'L_CLEAN' => 'Limpieza',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',

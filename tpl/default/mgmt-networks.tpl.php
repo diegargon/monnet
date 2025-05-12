@@ -24,7 +24,7 @@
         <table class="table-add-network">
             <tr>
                 <td><label for="networkName"><?= $lng['L_NAME'] ?>:</label></td>
-                <td>
+                <td class="td-network-fields">
                     <input type="text" id="networkName" name="networkName" size="32"
                            maxlength="32" required
                            value="<?= !empty($tdata['networkName']) ? $tdata['networkName'] : null ?>"
@@ -74,6 +74,7 @@
                                required
                                value="<?= !empty($tdata['network_vlan']) ? $tdata['network_vlan'] : 1 ?>"
                         >
+                        <label for="networkClean"><?= $lng['L_CLEAN'] ?></label>
                         <input type="hidden" name="networkClean" value="0"/>
                         <input type="checkbox" name="networkClean" value="1"/>
                     </td>

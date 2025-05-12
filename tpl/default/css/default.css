@@ -4,10 +4,8 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Bellota:ital@1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600&display=swap');
-@import url(https://fonts.googleapis.com/css?family=VT323);
 
 html {
     height: 100%;
@@ -1161,10 +1159,14 @@ input:checked + .slider:before {
 
 .td-network-fields {
     display: flex;
-    padding-left: 5pX;
 }
+
 .td-network-fields input {
-    padding-left: 5px;
+    margin-right: 10px;
+}
+
+.td-network-fields label {
+    margin-right: 4px;
 }
 
 .front-container-bar {
@@ -1564,10 +1566,10 @@ input:checked + .slider:before {
 .ansible-mark, .vm-mark, .hypervisor-mark {
     overflow: hidden;
     content: '';
-    position: absolute;    
-    bottom: 0px;    
-    width: 10px;    
-    height: 1px;    
+    position: absolute;
+    bottom: 0px;
+    width: 10px;
+    height: 1px;
 }
 .ansible-mark {
     right: 15px;
@@ -2039,9 +2041,15 @@ input:checked + .slider:before {
 }
 
 @keyframes blink-animation {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @media (max-width: 600px) {
