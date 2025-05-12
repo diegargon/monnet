@@ -114,9 +114,9 @@ class CommandRouter
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitOSVersion($command_values);
                 break;
-            case 'submitSystemType':
+            case 'submitSystemRol':
                 $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitSystemType($command_values);
+                $response = $hostController->submitSystemRol($command_values);
                 break;
             case 'submitAccessLink':
                 $hostController = new CmdHostController($this->ctx);

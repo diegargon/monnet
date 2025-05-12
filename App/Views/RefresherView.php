@@ -222,11 +222,11 @@ class RefresherView
             }
         }
 
-        if (!empty($vhost['misc']['system_type'])) {
-            $system_type = get_system_type_data($this->ncfg, $vhost['misc']['system_type']);
-            if (is_array($system_type)) {
-                $host_view['system_type_image'] = $system_type['system_type_image'];
-                $host_view['system_type_name'] = $system_type['name'];
+        if (!empty($vhost['misc']['system_rol'])) {
+            $system_rol = get_system_rol_data($this->ncfg, $vhost['misc']['system_rol']);
+            if (is_array($system_rol)) {
+                $host_view['system_rol_image'] = $system_rol['system_rol_image'];
+                $host_view['system_rol_name'] = $system_rol['name'];
             }
         }
     }

@@ -818,16 +818,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.73;
     if ($db_version == 0.00) {
         try {
+            $db->query("ALTER TABLE `hosts` ADD `last_seen` DATETIME DEFAULT NULL");
             $db->query("START TRANSACTION");
-            # For renaming fields
-            # + clean_done_tasks for clean uniq tasks done
-            $db->query("
-                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
-                ('clean_task_done_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
-                ('clean_logs_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
-                ('clean_stats_intvl', JSON_QUOTE('15'), 1, 104, NULL, 0),
-                ('clean_reports_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0);
-            ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
@@ -838,6 +830,37 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+
+    // 0.74
+    $update = 0.74;
+    if ($db_version == 0.00) {
+        try {
+            //$db->query("
+            //");
+            # For renaming fields
+            # + clean_done_tasks for clean uniq tasks done
+            # clean not seen interval for purge host on clean networks
+            $db->query("START TRANSACTION");
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('clean_not_seen_hosts_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
+                ('clean_task_done_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
+                ('clean_logs_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
+                ('clean_stats_intvl', JSON_QUOTE('15'), 1, 104, NULL, 0),
+                ('clean_reports_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0);
+            ");
+
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            Log::notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
     // Later / PENDING
     $update = 0.00;
     if ($db_version == 0.00) {

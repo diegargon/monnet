@@ -603,11 +603,11 @@ class CmdHostController
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
-    public function submitSystemType(array $command_values): array
+    public function submitSystemRol(array $command_values): array
     {
         $target_id = Filter::varInt($command_values['id']);
         $value = Filter::varInt($command_values['value']);
-        $field = 'system_type';
+        $field = 'system_rol';
 
         if (!is_numeric($target_id)) {
             return Response::stdReturn(false, "$field: Invalid input data");

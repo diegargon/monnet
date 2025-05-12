@@ -123,10 +123,10 @@ $h_misc = $tdata['host_details']['misc'];
                     title="<?= $tdata['host_details']['os_name'] ?>"/>
             <?php endif; ?>
 
-            <?php if (!empty($tdata['host_details']['system_type_image'])) : ?>
-                <img class="fab" src="<?= $tdata['host_details']['system_type_image'] ?>"
-                    alt="<?= $tdata['host_details']['system_type_name'] ?>"
-                    title="<?= $tdata['host_details']['system_type_name'] ?>"/>
+            <?php if (!empty($tdata['host_details']['system_rol_image'])) : ?>
+                <img class="fab" src="<?= $tdata['host_details']['system_rol_image'] ?>"
+                    alt="<?= $tdata['host_details']['system_rol_name'] ?>"
+                    title="<?= $tdata['host_details']['system_rol_name'] ?>"/>
             <?php endif; ?>
             <?php if (!empty($ncfg->get('ansible')) && !empty($tdata['host_details']['ansible_enabled'])) : ?>
                 <img class="fab" src="tpl/<?= $tdata['theme']?>/img/ansible.png"
@@ -682,22 +682,22 @@ $h_misc = $tdata['host_details']['misc'];
                         <button id="submitOS"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
-                        <label for="system_type"><?= $lng['L_ROL'] ?>: </label><br/>
-                        <select id="system_type">
-                            <?php foreach ($ncfg->get('system_type') as $system_type) :
+                        <label for="system_rol"><?= $lng['L_ROL'] ?>: </label><br/>
+                        <select id="system_rol">
+                            <?php foreach ($ncfg->get('system_rol') as $system_rol) :
                                 $selected = '';
                                 if (
-                                    !empty($h_misc['system_type']) &&
-                                    ($system_type['id'] == $h_misc['system_type'])
+                                    !empty($h_misc['system_rol']) &&
+                                    ($system_rol['id'] == $h_misc['system_rol'])
                                 ) :
                                     $selected = ' selected=1 ';
                                 endif;
                                 ?>
-                                <option value="<?= $system_type['id'] ?>"<?= $selected ?>><?= $system_type['name'] ?>
+                                <option value="<?= $system_rol['id'] ?>"<?= $selected ?>><?= $system_rol['name'] ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <button id="submitSystemType"><?= $lng['L_SEND'] ?></button>
+                        <button id="submitSystemRol"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
                         <label for="system_aval"><?= $lng['L_AVAILABILITY'] ?>: </label><br/>

@@ -8,7 +8,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.72;
-$cfg['monnet_revision'] = 14;
+$cfg['monnet_revision'] = 16;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.170;
@@ -175,7 +175,7 @@ $cfg['os'] = [
 
 /* System ROL */
 
-$cfg['system_type'] = [
+$cfg['system_rol'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
     1 => ['id' => 1, 'name' => 'Window Desktop', 'img' => 'windows-desktop.png'],
     2 => ['id' => 2, 'name' => 'Linux Desktop', 'img' => 'linux-desktop.png'],

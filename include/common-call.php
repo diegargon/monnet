@@ -65,21 +65,21 @@ function get_os_data(\Config $ncfg, int $id): array|bool
  * @param int $id
  * @return array<string, string|int>|bool
  */
-function get_system_type_data(\Config $ncfg, int $id): array|bool
+function get_system_rol_data(\Config $ncfg, int $id): array|bool
 {
     $theme = $ncfg->get('theme');
 
-    foreach ($ncfg->get('system_type') as $system_type) {
-        if ($system_type['id'] == $id) {
-            $imgfile = 'tpl/' . $theme . '/img/icons/' . $system_type['img'];
+    foreach ($ncfg->get('system_rol') as $system_rol) {
+        if ($system_rol['id'] == $id) {
+            $imgfile = 'tpl/' . $theme . '/img/icons/' . $system_rol['img'];
             if (file_exists($imgfile)) :
-                $system_type['system_type_image'] = $imgfile;
+                $system_rol['system_rol_image'] = $imgfile;
             else :
-                $system_type['system_type_image'] = 'tpl/' . $theme . '/img/icons/unknown.png';
+                $system_rol['system_rol_image'] = 'tpl/' . $theme . '/img/icons/unknown.png';
             endif;
-            $system_type['system_type_name'] = $system_type['name'];
+            $system_rol['system_rol_name'] = $system_rol['name'];
 
-            return $system_type;
+            return $system_rol;
         }
     }
     return false;

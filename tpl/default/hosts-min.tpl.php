@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -20,7 +18,7 @@ if (empty($tdata['hosts'])) {
 
 <div id="<?= $tdata['container-id'] ?>" class="hosts">
     <div class="hosts-head"><?= $tdata['head-title'] ?></div>
-    <?php foreach ($tdata['hosts'] as $host) { ?>
+    <?php foreach ($tdata['hosts'] as $host) : ?>
         <div id="hosts-container" class="hosts-container">
             <a onclick="submitCommand('host-details', {id: <?= $host['id'] ?>})"
                href="javascript:void(0);" rel="noreferrer" class="hosts-item" title="<?= $host['details'] ?>">
@@ -32,7 +30,7 @@ if (empty($tdata['hosts'])) {
                     if (!empty($host['ansible_enabled'])) :
                         echo "<div class=\"ansible-mark\"></div>";
                     endif;
-                    if (!empty($host['misc']['system_type']) && (int) $host['misc']['system_type'] === 17) :
+                    if (!empty($host['misc']['system_rol']) && (int) $host['misc']['system_rol'] === 17) :
                         echo "<div class=\"hypervisor-mark\"></div>";
                     endif;
                     ?>
@@ -47,9 +45,9 @@ if (empty($tdata['hosts'])) {
                         alt="online_status" title=""/>
                 <?php endif; ?>
 
-                <?php if (!empty($host['system_type_image'])) : ?>
-                    <img class="fab" src="<?= $host['system_type_image'] ?>" alt="system_img"
-                        title="<?= $host['system_type_name'] ?>"/>
+                <?php if (!empty($host['system_rol_image'])) : ?>
+                    <img class="fab" src="<?= $host['system_rol_image'] ?>" alt="system_img"
+                        title="<?= $host['system_rol_name'] ?>"/>
                 <?php endif; ?>
                     <div class="hosts-title text_shadow_style2"><?= $host['display_name'] ?> </div>
                     <div class="min-details-hidden">
@@ -71,5 +69,5 @@ if (empty($tdata['hosts'])) {
                 </div>
             </a>
         </div>
-    <?php } ?>
+    <?php endforeach; ?>
 </div>

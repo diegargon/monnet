@@ -278,11 +278,11 @@ $(document).ready(function () {
             submitCommand('submitOSVersion', {id: hostId, value: osversionValue});
         }
     });
-    $(document).on("click", "#submitSystemType", function () {
-        var stValue = $('#system_type').val();
+    $(document).on("click", "#submitSystemRol", function () {
+        var stValue = $('#system_rol').val();
         var hostId = $('#host_id').val();
         if (stValue && hostId) {
-            submitCommand('submitSystemType', {id: hostId, value: stValue});
+            submitCommand('submitSystemRol', {id: hostId, value: stValue});
         }
     });
 

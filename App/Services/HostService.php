@@ -173,7 +173,7 @@ class HostService
 
         if (!empty($hostDetails['misc'])) {
             $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
-            /* TODO: Migrate: keep misc values in misc then delete this */
+            /* TODO: Migration: keep misc values in misc then delete this */
             $hostDetails = array_merge($hostDetails, $hostDetails['misc']);
         }
 
@@ -453,6 +453,12 @@ class HostService
         if (empty($misc)) {
             return false;
         }
+        //TODO: Migration to system_rol
+        if(!empty($misc['system_type']) && empty($misc['system_rol'])) {
+            $misc['system_rol'] = $misc['system_type'];
+        }
+        unset($misc['system_type']);
+        
         $misc = json_encode($misc, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             \Log::warning('Error encodeMisc: Invalid JSON');
@@ -478,6 +484,10 @@ class HostService
             \Log::warning('Error decodeMisc: Invalid JSON');
 
             return ['status' => 'error'];
+        }
+        //TODO: Migration to system_rol
+        if(!empty($misc['system_type']) && empty($misc['system_rol'])) {
+            $misc['system_rol'] = $misc['system_type'];
         }
 
         return $misc;

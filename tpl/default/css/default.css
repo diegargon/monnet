@@ -605,6 +605,7 @@ input:checked + .slider:before {
     -moz-background-clip: text;
     background-clip: text;
 }
+
 .text_shadow_style2 {
     background-color: #d0d0d0;
     font-family: 'Futura' !important;
@@ -615,22 +616,27 @@ input:checked + .slider:before {
     -moz-background-clip: text;
     background-clip: text;
 }
+
 .hosts_cat {
     padding: 3px;
     margin: 0px 5px 0px 5px;
     overflow: visible;
 }
+
 .hosts-container{
     padding: 0px;
     margin: 0px;
 }
+
 .hosts-container img {
     width: 20px;
     border-radius: 5px;
 }
+
 .hosts-container img:first-of-type {
     padding-left: 2px;
 }
+
 .hosts-online {
     padding: 0;
     margin: 0;
@@ -1555,42 +1561,30 @@ input:checked + .slider:before {
     border-radius: 20px
 }
 
-.ansible-mark {
+.ansible-mark, .vm-mark, .hypervisor-mark {
     overflow: hidden;
     content: '';
-    position: absolute;
-    /* top: 0; Arriba  Izquierda*/
-    bottom: 0;
-    left: 0;
-    width: 4px;
-    height: 4px;
-    background-color: #ffef00;
-    /* clip-path: polygon(0 0, 100% 0, 0 100%);  Hace que sea un triángulo  Arriba Izquierda*/
-    clip-path: polygon(0 100%, 0 0, 100% 100%);
+    position: absolute;    
+    bottom: 0px;    
+    width: 10px;    
+    height: 1px;    
+}
+.ansible-mark {
+    right: 15px;
+    background-color: #ff8300;
+    /* clip-path: polygon(0 100%, 0 0, 100% 100%); */
 }
 
 .vm-mark {
-    overflow: hidden;
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 4px;
-    height: 4px;
-    background-color: #f0f0f0;
-    clip-path: polygon(100% 0, 100% 100%, 0 0);
+    right: 25px;
+    background-color: #6c91ff;
+    /* clip-path: polygon(100% 0, 100% 100%, 0 0); */
 }
 
 .hypervisor-mark {
-    overflow: hidden;
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 4px;
-    height: 4px;
+    right: 35px;
     background-color: #37ffc7;
-    clip-path: polygon(100% 0, 100% 100%, 0 0);
+    /* clip-path: polygon(100% 0, 100% 100%, 0 0); */
 }
 
 .report-table-container {

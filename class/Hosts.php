@@ -48,6 +48,7 @@ class Hosts
         'machine_type',
         'sys_availability',
         'system_type',
+        'system_rol',
         'os',
         'os_version',
         'owner',
@@ -197,6 +198,12 @@ class Hosts
                 $misc_container = $vvalue;
                 unset($values[$kvalue]);
                 break;
+            }
+
+            //TODO temporaly move system_type a system_rol
+            if ($kvalue === 'system_type' && empty($values['system_rol'])) {
+                $values['system_rol'] = $vvalue;
+                unset($values['system_type']);
             }
         }
 
@@ -1040,12 +1047,18 @@ class Hosts
              * MISC KEYS EXTRA TASKS
              */
             /* General */
-            if (!empty($host['misc']['system_type'])) :
-                if ((int) $host['misc']['system_type'] === 17) :
+            if (!empty($host['misc']['system_rol'])) {
+                if ((int) $host['misc']['system_rol'] === 17) :
                     $this->hypervisor_rols++;
                 endif;
-            endif;
-
+            }
+            //TODO to migrate to system rol delete in the future
+            if (
+                empty($host['misc']['system_rol']) &&
+                !empty($host['misc']['system_type'])
+            ) {
+                $host['misc']['system_rol'] = $host['misc']['system_type'];
+            }
             /* ALARMS */
             if (empty($host['misc']['disable_alarms'])) :
                 if (!empty($host['alert'])) :
