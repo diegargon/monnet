@@ -18,7 +18,7 @@ class CmdNetworkController
 {
     /** @var \AppContext */
     private \AppContext $ctx;
-    
+
     /** @var TemplateService */
     private TemplateService $templateService;
 
@@ -52,7 +52,7 @@ class CmdNetworkController
             $value_command = '';
         }
 
-        if (!empty($action) && is_numeric($network_id)) :
+        if (!empty($action) && is_numeric($network_id)) {
             if ($action === 'remove') {
                 $this->networksService->removeNetwork($network_id);
                 return Response::stdReturn(
@@ -106,7 +106,7 @@ class CmdNetworkController
                     );
                 }
             }
-        endif;
+        }
 
         $f_networks = $this->networksService->getAllNetworksWithOccupancy();
         foreach ($f_networks as $nid => $network) {
@@ -128,6 +128,7 @@ class CmdNetworkController
                 'data' => $this->templateService->getTpl('mgmt-networks', $tdata)
             ]
         ];
+
         return Response::stdReturn(true, 'ok', false, $extra);
     }
 
@@ -141,9 +142,9 @@ class CmdNetworkController
 
         $tdata['networks'] = $this->networksService->getPoolIPs(2) ?? [];
 
-        if (empty($tdata['networks'])) :
+        if (empty($tdata['networks'])) {
             $tdata['status_msg'] = $lng['L_NO_POOLS'];
-        endif;
+        }
 
         $extra = [
             'command_receive' => 'requestPool',
@@ -202,6 +203,7 @@ class CmdNetworkController
             ($key == 'networkPool') ? $key = 'pool' : null;
             ($key == 'networkWeight') ? $key = 'weight' : null;
             ($key == 'networkOnlyOnline') ? $key = 'only_online' : null;
+            ($key == 'networkClean') ? $key = 'clean' : null;
             $new_network[$key] = trim($dJson);
         }
 
@@ -217,18 +219,26 @@ class CmdNetworkController
         unset($new_network['networkCIDR']);
         $new_network['network'] = $network_plus_cidr;
 
-        if (!Filter::varNetwork($network_plus_cidr)) :
+        if (!Filter::varNetwork($network_plus_cidr)) {
             $data['error'] = 1;
             $data['error_msg'] .= $lng['L_NETWORK'] . ' ' . $lng['L_INVALID'] . '<br/>';
-        endif;
-        if (!is_numeric($new_network['vlan'])) :
+        }
+        if (!is_numeric($new_network['vlan'])) {
             $data['error'] = 1;
             $data['error_msg'] .= 'VLAN ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
-        endif;
-        if (!is_numeric($new_network['scan'])) :
+        }
+        if (!is_numeric($new_network['scan'])) {
             $data['error'] = 1;
             $data['error_msg'] .= 'Scan ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
-        endif;
+        }
+        if (!is_numeric($new_network['pool'])) {
+            $data['error'] = 1;
+            $data['error_msg'] .= 'Pool ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
+        }
+        if (!is_numeric($new_network['clean'])) {
+            $data['error'] = 1;
+            $data['error_msg'] .= 'Clean ' . "{$lng['L_MUST_BE']} {$lng['L_NUMERIC']}<br/>";
+        }
 
         $networks_list = $this->networksService->getNetworks();
         foreach ($networks_list as $net) {
@@ -236,19 +246,19 @@ class CmdNetworkController
                 if (
                     $action !== 'update' ||
                     ((int)$net['id'] !== (int)$new_network['id'])
-                ) :
+                ) {
                     $data['error'] = 1;
                     $data['error_msg'] .= 'Name must be unique<br/>';
-                endif;
+                }
             }
             if ($net['network'] == $network_plus_cidr) {
                 if (
                     $action !== 'update' ||
                     ((int)$net['id'] !== (int)$new_network['id'])
-                ) :
+                ) {
                     $data['error'] = 1;
                     $data['error_msg'] .= 'Network must be unique<br/>';
-                endif;
+                }
             }
         }
         if (isset($data['error'])) {
@@ -258,10 +268,10 @@ class CmdNetworkController
         if (
             (strpos($new_network['network'], "0") === 0) ||
             !$this->networksService->isLocal($new_network['network'])
-        ) :
+        ) {
             $new_network['vlan'] = 0;
             $new_network['scan'] = 0;
-        endif;
+        }
 
         return $new_network;
     }

@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -76,6 +74,8 @@
                                required
                                value="<?= !empty($tdata['network_vlan']) ? $tdata['network_vlan'] : 1 ?>"
                         >
+                        <input type="hidden" name="networkClean" value="0"/>
+                        <input type="checkbox" name="networkClean" value="1"/>
                     </td>
                 </td>
             </tr>
@@ -84,4 +84,3 @@
     </div>
     <?= !empty($tdata['networks_table']) ? $tdata['networks_table'] : '';?>
 </div>
-

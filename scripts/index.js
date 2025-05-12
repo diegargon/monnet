@@ -1,7 +1,7 @@
 /**
  *
  * @author diego/@/envigo.net
-  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
 function changeBookmarksTab(tabId) {
@@ -49,7 +49,8 @@ function addHostsCat(title) {
     if (element) {
         element.style.display = "block";
         title_element.innerHTML = title;
-        std_content.innerHTML = '<input id="hostsCat" type="text"/><button id="submitNewHostsCat" type="submit">+</button>';
+        std_content.innerHTML = '<input id="hostsCat" type="text"/>' +
+                                '<button id="submitNewHostsCat" type="submit">+</button>';
     } else {
         console.error("Stdbox not found.");
     }
@@ -63,7 +64,8 @@ function addBookmarkCat(title) {
     if (element) {
         element.style.display = "block";
         title_element.innerHTML = title;
-        std_content.innerHTML = '<input id="bookmarkCat" type="text"/><button id="submitBookmarkCat" type="submit">+</button>';
+        std_content.innerHTML = '<input id="bookmarkCat" type="text"/>' +
+                                '<button id="submitBookmarkCat" type="submit">+</button>';
     } else {
         console.error("Stdbox not found.");
     }
@@ -106,7 +108,9 @@ $(document).ready(function () {
         var title = $(this).data("title");
         $("#stdbox-container").css("display", "block");
         $("#stdbox-title").html(title);
-        $("#stdbox-content").html('<input id="addedHost" type="text"  value=""/><button id="submitHost" type="submit">+</button>');
+        $("#stdbox-content").html('<input id="addedHost" type="text"  value=""/>' +
+                                '<button id="submitHost" type="submit">+</button>'
+                                );
     });
 
     $("#toggleItemsSettings").on("click", function () {
@@ -130,7 +134,8 @@ $(document).ready(function () {
         submitCommand('show_host_only_cat', {id: catID});
         // Reiniciar la variable clicked
         clicked = false;
-        clearTimeout(timer); // Limpiar el temporizador para evitar que se ejecute el clic normal
+        // Limpiar el temporizador para evitar que se ejecute el clic normal
+        clearTimeout(timer); 
     });
 
     $(document).on("click", ".show_host_cat", function (event) {
@@ -331,10 +336,16 @@ $(document).ready(function () {
         fields.networkCIDR = parseInt($('#network_cidr').val());
         fields.networkScan = parseInt($('input[name="networkScan"]:checked').val()) || 0;
         fields.networkPool = parseInt($('input[name="pool_mark"]:checked').val()) || 0;
+        fields.networkClean = parseInt($('input[name="networkClean"]:checked').val()) || 0;        
         fields.networkVLAN = parseInt($('#network_vlan').val()) || 0;
         fields.networkWeight = parseInt($('#network_weight').val()) || 50;
         fields.networkDisable = $('#networkDisable').is(':checked') ? 1 : 0;
-        if (fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {
+        if (
+            fields.networkName !== "" &&
+            fields.network !== "" &&
+            fields.networkCIDR !== "" && 
+            fields.networkVLAN !== ""
+        ) {
             json_fields = JSON.stringify(fields);
             submitCommand('mgmtNetworks', {id: 0, value: json_fields, action: 'add'});
         } else {
@@ -355,11 +366,19 @@ $(document).ready(function () {
         fields.networkScan = parseInt($(`input[name="networkScan_${id}"]:checked`).val()) || 0;
         fields.networkVLAN = parseInt($(`input[name="networkVLAN_${id}"]`).val());
         fields.networkPool = parseInt($(`input[name="networkPool_${id}"]:checked`).val()) || 0;
+        fields.networkClean = parseInt($(`input[name="networkClean_${id}"]:checked`).val()) || 0;
         fields.networkOnlyOnline = parseInt($(`input[name="networkOnlyOnline_${id}"]:checked`).val()) || 0;
         fields.networkDisable = $(`input[name="networkDisable_${id}"]`).is(':checked') ? 1 : 0;
         fields.networkWeight = parseInt($(`input[name="networkWeight_${id}"]`).val()) || 50;
-
-        if (id !== "" && id > 0 && fields.networkName !== "" && fields.network !== "" && fields.networkCIDR !== "" && fields.networkVLAN !== "") {
+        
+        if (
+            id !== "" &&
+            id > 0 &&
+            fields.networkName !== "" &&
+            fields.network !== "" &&
+            fields.networkCIDR !== "" &&
+            fields.networkVLAN !== ""
+        ) {
             json_fields = JSON.stringify(fields);
             submitCommand('mgmtNetworks', {id: id, value: json_fields, action: 'update'});
         } else {
@@ -379,7 +398,12 @@ $(document).ready(function () {
         fields.field_img = $('#field_img').val();
         fields.weight = $('#weight').val();
 
-        if (fields.bookmarkName !== "" && fields.cat_id !== "" && fields.urlip !== "" && fields.image_type !== "") {
+        if (
+            fields.bookmarkName !== "" &&
+            fields.cat_id !== "" &&
+            fields.urlip !== "" &&
+            fields.image_type !== ""
+        ) {
             json_fields = JSON.stringify(fields);
             submitCommand('addBookmark', {id: 0, value: json_fields});
         } else {
@@ -405,7 +429,12 @@ $(document).ready(function () {
         id = $('#bookmark_id').val();
         if (!id) {
             $('#error_msg').html('Empty Id field');
-        } else if (fields.bookmarkName !== "" && fields.cat_id !== "" && fields.urlip !== "" && fields.image_type !== "") {
+        } else if (
+            fields.bookmarkName !== "" && 
+            fields.cat_id !== "" &&
+            fields.urlip !== "" && 
+            fields.image_type !== ""
+        ) {
             json_fields = JSON.stringify(fields);
             submitCommand('updateBookmark', {id: id, value: json_fields});
         } else {

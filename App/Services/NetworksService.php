@@ -76,12 +76,21 @@ Class NetworksService
         return false;
     }
 
+    /**
+     *
+     * @param int $id
+     * @return bool
+     */
     public function networkExists(int $id): bool
     {
         return isset($this->networks[$id]) ||
             (!$this->allNetworksLoaded && $this->networksModel->getNetworkByID($id) !== false);
     }
 
+    /**
+     *
+     * @return void
+     */
     private function loadAllNetworks(): void
     {
         $networks = $this->networksModel->getAllNetworks();
@@ -97,6 +106,11 @@ Class NetworksService
         $this->allNetworksLoaded = true;
     }
 
+    /**
+     *
+     * @param array<string, string|int> $network
+     * @return void
+     */
     private function cacheNetwork(array $network): void
     {
         $id = (int) $network['id'];
@@ -110,9 +124,8 @@ Class NetworksService
             'weight' => (int) $network['weight'],
             'only_online' => (int) $network['only_online'],
             'disable' => (int) $network['disable'],
-            'pool' => $this->ctx->get('Config')->get('monnet_version') >= 0.44
-                    ? $network['pool']
-                    : null
+            'clean' => (int) $network['clean'],
+            'pool' => $network['pool']
         ];
     }
 
@@ -185,8 +198,6 @@ Class NetworksService
         unset($this->networks[$id]);
         return true;
     }
-
-
 
     public function getNetworkIDbyIP(string $ip): int|false
     {

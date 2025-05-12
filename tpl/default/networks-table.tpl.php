@@ -2,7 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -19,7 +18,7 @@
                 <?php
                 foreach (
                     [
-                        'id', 'ip', 'cidr', 'name', 'pool', 'only_online', 'vlan', 'scan', 'weight', 'disable', 'occ'
+                        'id', 'ip', 'cidr', 'name', 'pool', 'only_online', 'vlan', 'scan', 'weight', 'clean', 'disable', 'occ'
                     ] as $header
                 ) : ?>
                     <th><?= $header ?></th>
@@ -97,6 +96,11 @@
                             maxlength="5"
                             name="networkWeight_<?= $row['id']?>" required value="<?= $row['weight'] ?>"
                         >
+                    </td>
+                    <td>
+                        <?php $checked = $row['clean'] ? 'checked' : ''; ?>
+                        <input type="hidden" name="networkClean_<?= $row['id']?>" value="0" />
+                        <input type="checkbox" name="networkClean_<?= $row['id']?>" value="1" <?= $checked ?> />
                     </td>
                     <td>
                         <?php $checked = $row['disable'] ? 'checked' : ''; ?>
