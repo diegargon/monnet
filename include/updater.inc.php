@@ -816,17 +816,16 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
     // 0.73
     $update = 0.73;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.72) {
         try {
+            # Gateway: When Event Task complete/fail Task ID
+            $db->query("ALTER TABLE `hosts_logs` ADD `tid` INT DEFAULT '0';");
+            # Gateway: Marcar cuando online
             $db->query("ALTER TABLE `hosts` ADD `last_seen` DATETIME DEFAULT NULL");
-            $db->query("START TRANSACTION");
-            $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
             Log::notice("Update version to $update successful");
         } catch (Exception $e) {
-            $db->query("ROLLBACK");
-            $ncfg->set('db_monnet_version', $db_version, 1);
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
