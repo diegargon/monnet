@@ -49,6 +49,8 @@ class FeedMeService
      */
     private \DBManager $db;
 
+    /** @var DateTimeService */
+    private DateTimeService $datetimeService;
     /**
      * Constructor of FeedMeService.
      *
@@ -117,7 +119,7 @@ class FeedMeService
                         $this->processPorts($host_id, $rdata);
                         break;
                     case 'starting': //Only Startup info
-                        $starting_updates = $this->processStarting($host_id, $rdata);
+                        $starting_updates = $this->processStarting($host, $rdata);
                         if (!empty($starting_updates)) {
                             $host_update_values = array_merge($host_update_values, $starting_updates);
                         }
@@ -152,26 +154,31 @@ class FeedMeService
     /**
      * Processes startup data sent by the agent.
      *
-     * @param int $host_id Host ID.
+     * @param array<string, mixed> $host
      * @param array<string, string|int> $rdata Data sent by the agent.
      * @return array<string, string|int> Updated host values.
      */
-    public function processStarting(int $host_id, array $rdata): array
+    public function processStarting(array $host, array $rdata): array
     {
-        $host = $this->hostService->getHostById($host_id);
-        if (!$host) {
+        if (empty(!$host)) {
             return [];
         }
-        \Log::logHost($rdata['log_level'], $host_id, $rdata['msg'], $rdata['log_type'], $rdata['event_type']);
+        \Log::logHost($rdata['log_level'], $host['id'], $rdata['msg'], $rdata['log_type'], $rdata['event_type']);
+
+        // Convert/Decode misc fields if not decoded already
+        if (!empty($host['misc']) && !is_array($host['misc'])) {
+            $host['misc'] = $this->hostService->decodeMisc($host['misc']);
+        }
+
         $host_update_values = [];
 
         if (!empty($rdata['ncpu'])) {
-            if (!isset($host['misc']['ncpu']) || ($rdata['ncpu'] !== $host['ncpu'])) {
+            if (!isset($host['misc']['ncpu']) || ($rdata['ncpu'] !== $host['misc']['ncpu'])) {
                 $host_update_values['misc']['ncpu'] = $rdata['ncpu'];
             }
         }
         if (!empty($rdata['uptime'])) {
-            if (!isset($host['misc']['uptime']) || ($rdata['uptime'] !== $host['uptime'])) {
+            if (!isset($host['misc']['uptime']) || ($rdata['uptime'] !== $host['misc']['uptime'])) {
                 $host_update_values['misc']['uptime'] = $rdata['uptime'];
             }
         }
@@ -193,7 +200,9 @@ class FeedMeService
                 $this->cmdStatsModel = new CmdStatsModel($this->ctx);
             }
 
-            $dateTimeService  = new DateTimeService();
+            if (!isset($this->datetimeService)) {
+                $this->dateTimeService  = new DateTimeService();
+            }
 
             if (!\isEmpty($rdata['load_avg_stats'])) {
                 if (
@@ -201,7 +210,7 @@ class FeedMeService
                     is_numeric($rdata['load_avg_stats']['1min'])
                 ) {
                     $stats_data = [
-                        'date' => $dateTimeService->dateNow(),
+                        'date' => $this->dateTimeService->dateNow(),
                         'type' => 2,   //loadavg
                         'host_id' => $host_id,
                         'value' => $rdata['load_avg_stats']['5min']
@@ -212,7 +221,7 @@ class FeedMeService
 
             if (!\isEmpty($rdata['iowait_stats'])) {
                 $stats_data = [
-                    'date' => $dateTimeService->dateNow(),
+                    'date' => $this->dateTimeService->dateNow(),
                     'type' => 3,   //iowait
                     'host_id' => $host_id,
                     'value' => $rdata['iowait_stats']
@@ -222,7 +231,7 @@ class FeedMeService
 
             if (!\isEmpty($rdata['mem_stats'])) {
                 $stats_data = [
-                    'date' => $dateTimeService->dateNow(),
+                    'date' => $this->dateTimeService->dateNow(),
                     'type' => 4,   // Memory
                     'host_id' => $host_id,
                     'value' => $rdata['mem_stats']
@@ -233,6 +242,7 @@ class FeedMeService
             return true;
         } catch (\Exception $e) {
             \Log::error("Error processing stats: " . $e->getMessage());
+
             return false;
         }
     }
@@ -256,6 +266,7 @@ class FeedMeService
             return true;
         } catch (\Exception $e) {
             \Log::error("Error processing ports: " . $e->getMessage());
+
             return false;
         }
     }
@@ -275,8 +286,9 @@ class FeedMeService
             if (!isset($this->cmdHostModel)) {
                 $this->cmdHostModel = new CmdHostModel($this->db);
             }
-            $dateTimeService  = new DateTimeService();
-
+            if (!isset($this->datetimeService)) {
+                $this->dateTimeService  = new DateTimeService();
+            }
             $db_host_ports = $this->cmdHostModel->getHostScanPorts($host_id, $scan_type);
             $db_ports_map = [];
 
@@ -326,7 +338,7 @@ class FeedMeService
                         $this->hostService->updatePort($db_port['id'], [
                             "service" => $port['service'],
                             "online" => 1,
-                            "last_check" => $dateTimeService->dateNow(),
+                            "last_check" => $this->dateTimeService->dateNow(),
                         ]);
                     } elseif ((int)$db_port['online'] === 0) {
                         $alertmsg = "Port UP detected on $interface ({$port['service']}) ($pnumber)($ip_version)";
@@ -338,10 +350,9 @@ class FeedMeService
 
                         $this->hostService->updatePort($db_port['id'], [
                             "online" => 1,
-                            "last_check" => $dateTimeService->dateNow(),
+                            "last_check" => $this->dateTimeService->dateNow(),
                         ]);
                     }
-
                     unset($db_ports_map[$key]);
                 } else {
                     $new_port_data = [
@@ -353,7 +364,7 @@ class FeedMeService
                         'service' => $port['service'],
                         'interface' => $interface,
                         'ip_version' => $ip_version,
-                        'last_check' => $dateTimeService->dateNow(),
+                        'last_check' => $this->dateTimeService->dateNow(),
                     ];
                     $this->cmdHostModel->addPort($new_port_data);
                     $log_msg = "New port detected on $interface $pnumber ({$port['service']})($ip_version)";
@@ -374,7 +385,7 @@ class FeedMeService
                 if ((int)$db_port['online'] === 1) {
                     $set = [
                         'online' => 0,
-                        'last_check' => $dateTimeService->dateNow(),
+                        'last_check' => $this->dateTimeService->dateNow(),
                     ];
                     $log_msg = "Port DOWN detected on {$interface} {$db_port['pnumber']} ({$db_port['service']})";
                     if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
@@ -522,7 +533,18 @@ class FeedMeService
             'agent_online' => 1
         ];
 
-        if (empty($host['misc']['agent_version']) || $host['misc']['agent_version'] != (string) $request['version']) {
+        // Convert/Decode misc fields if not decoded already
+        if (!empty($host['misc']) && !is_array($host['misc'])) {
+            $host['misc'] = $this->hostService->decodeMisc($host['misc']);
+        }
+
+        if (
+            !empty($request['version']) &&
+            (
+                empty($host['misc']['agent_version']) ||
+                ($host['misc']['agent_version'] != (string) $request['version'])
+            )
+        ) {
             $values['misc']['agent_version'] = (string) $request['version'];
         }
 
@@ -532,6 +554,13 @@ class FeedMeService
         if ((int)$host['agent_online'] !== 1) {
             $values['agent_online'] = 1;
         }
+
+        if (!isset($this->datetimeService)) {
+            $this->dateTimeService  = new DateTimeService();
+        }
+        $dateNow = $this->dateTimeService->dateNow();
+        $values['last_check'] = $dateNow;
+        $values['last_seen'] = $dateNow;
 
         return $values;
     }
