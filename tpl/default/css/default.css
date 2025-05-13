@@ -1567,10 +1567,10 @@ input:checked + .slider:before {
     overflow: hidden;
     content: '';
     position: absolute;
-    top: 2px;    
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;    
+    top: 2px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
     /*
     overflow: hidden;
     content: '';
@@ -1581,19 +1581,19 @@ input:checked + .slider:before {
     */
 }
 .ansible-mark {
-    right: 12px;
+    right: 15px;
     background-color: #ff8300;
     /* clip-path: polygon(0 100%, 0 0, 100% 100%); */
 }
 
 .vm-mark {
-    right: 16px;
+    right: 21px;
     background-color: #6c91ff;
     /* clip-path: polygon(100% 0, 100% 100%, 0 0); */
 }
 
 .hypervisor-mark {
-    right: 20px;
+    right: 26px;
     background-color: #37ffc7;
     /* clip-path: polygon(100% 0, 100% 100%, 0 0); */
 }
