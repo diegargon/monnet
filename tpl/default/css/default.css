@@ -1650,6 +1650,7 @@ input:checked + .slider:before {
 }
 
 .bars_container {
+    display: inline;
     border: 0px black;
     max-width: 355px;
 }
