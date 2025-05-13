@@ -1567,24 +1567,33 @@ input:checked + .slider:before {
     overflow: hidden;
     content: '';
     position: absolute;
+    top: 2px;    
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;    
+    /*
+    overflow: hidden;
+    content: '';
+    position: absolute;
     bottom: 0px;
     width: 10px;
     height: 1px;
+    */
 }
 .ansible-mark {
-    right: 15px;
+    right: 12px;
     background-color: #ff8300;
     /* clip-path: polygon(0 100%, 0 0, 100% 100%); */
 }
 
 .vm-mark {
-    right: 25px;
+    right: 16px;
     background-color: #6c91ff;
     /* clip-path: polygon(100% 0, 100% 100%, 0 0); */
 }
 
 .hypervisor-mark {
-    right: 35px;
+    right: 20px;
     background-color: #37ffc7;
     /* clip-path: polygon(100% 0, 100% 100%, 0 0); */
 }
