@@ -294,7 +294,12 @@ $h_misc = $tdata['host_details']['misc'];
                             <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
                         </div>
                     <?php endif; ?>
-
+                    <?php if (!empty($tdata['host_details']['f_last_seen'])) : ?>
+                        <div>
+                            <span class="resume_label"><?= $lng['L_LAST_SEEN_ONLINE'] ?>: </span>
+                            <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
+                        </div>
+                    <?php endif; ?>
                     <?php if (!empty($h_misc['agent_last_contact'])) : ?>
                         <div>
                             <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>

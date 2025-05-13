@@ -217,7 +217,7 @@ class AnsibleService
             if ($playbook) {
                 $report['pb_name'] = $playbook['name'] . ' - ' . $playbook['description'];
             }
-            $timezone = $user->getTimeZone();
+            $timezone = $user->getTimezone();
             $time_format = $ncfg->get('datetime_format');
 
             $dateTimeService = new DateTimeService();

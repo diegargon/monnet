@@ -166,6 +166,31 @@ class UserService
     }
     */
 
+    public function getDateFormat(): string
+    {
+        $user = $this->userSession->getCurrentUser();
+
+        if (empty($user['dateformat'])) {
+            $dateformat = $this->ncfg->get('datetime_format');
+        }
+
+        return isset($dateformat) ? $dateformat : '';
+    }
+
+    public function getTimezone(): string
+    {
+        $user = $this->userSession->getCurrentUser();
+
+        if (empty($user['timezone'])) {
+            $timezone = $this->ncfg->get('default_timezone');
+        }
+        return is_string($timezone) ? $timezone : 'UTC';
+    }
+
+    /**
+     *
+     * @return void
+     */
     public function logout(): void
     {
         $this->userSession->logout();

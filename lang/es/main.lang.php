@@ -140,7 +140,7 @@ $lng = [
     'L_LAST_UPDATE' => 'Actualizado',
     'L_LOGIN' => 'Identificarse',
     'L_LOGOUT' => 'Salir',
-    'L_LAST_PING_CHECK' => 'Ultimo Ping',
+    'L_LAST_PING_CHECK' => 'Comprobado',
     'L_LATENCY' => 'Latencia',
     'L_LOAD' => 'Carga',
     'L_LOCAL_IMAGE' => 'Imagen Local',
@@ -149,6 +149,7 @@ $lng = [
     'L_LOG' => 'Log',
     'L_LOGGING' => 'Registros',
     'L_LOGMSG_TOO_LONG' => 'Mensaje log demasiado largo. Cortado!',
+    'L_LAST_SEEN_ONLINE' => 'Visto online',
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',

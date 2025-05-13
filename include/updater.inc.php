@@ -862,6 +862,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         try {
             # To delete After change name in use to clean in G
             $db->query("ALTER TABLE `networks` DROP COLUMN clear;");
+            # User date formet
+            $db->query("ALTER TABLE `users` ADD `dateformat` VARCHAR(20) NULL;");
             # User rols
             $db->query("ALTER TABLE `users` ADD `rol` INT NULL DEFAULT 0;");
             //$db->query("

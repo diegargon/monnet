@@ -171,9 +171,8 @@ class User
      *
      * @return string|null
      */
-    public function getTimeZone(): ?string
+    public function getTimezone(): ?string
     {
-
         $timezone = $this->user['timezone'];
         if (empty($timezone)) {
             $timezone = $this->ncfg->get('default_timezone');

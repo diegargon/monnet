@@ -58,7 +58,15 @@ class HostFormatter
         if (!empty($host['last_check'])) :
             $host['f_last_check'] = utc_to_tz(
                 $host['last_check'],
-                $ncfg->get('default_timezone'),
+                $user->getTimezone(),
+                $ncfg->get('datetime_format')
+            );
+        endif;
+
+        if (!empty($host['last_seen'])) :
+            $host['f_last_seen'] = utc_to_tz(
+                $host['last_seen'],
+                $user->getTimezone(),
                 $ncfg->get('datetime_format')
             );
         endif;
