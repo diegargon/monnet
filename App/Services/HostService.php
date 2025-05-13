@@ -458,7 +458,7 @@ class HostService
             $misc['system_rol'] = $misc['system_type'];
         }
         unset($misc['system_type']);
-        
+
         $misc = json_encode($misc, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             \Log::warning('Error encodeMisc: Invalid JSON');
@@ -609,11 +609,20 @@ class HostService
         return null;
     }
 
+    /**
+     *
+     * @param string $ip
+     * @return array<string, mixed>
+     */
     public function getHostByIP(string $ip): array
     {
         return $this->hostsModel->getHostByIP($ip);
     }
 
+    /**
+     *
+     * @return array<string, mixed>
+     */
     public function getAll(): array
     {
         return $this->hostsModel->getAll();
@@ -627,5 +636,28 @@ class HostService
     public function getHostsByNetworkId(int $network_id): array
     {
         return $this->hostsModel->getHostsByNetworkId($network_id);
+    }
+
+    public function updateAgentConfig(int $hid, $set): bool
+    {
+        $host = $this->getHostById($hid);
+        if (empty($host)) {
+            return false;
+        }
+        $hmisc = $this->decodeMisc($host['misc']);
+
+        foreach ($set as $kkey => $kvalue) {
+            if (!empty($hmisc[$kkey]) && ($set[$kkey] === $hmisc[$kkey])) {
+                unset($set[$kkey]);
+            }
+        }
+        if (!empty($set)) {
+            # Flag to trigger the update on the agent
+            $set['agent_config_update'] = 1;
+
+            return $this->cmdHostModel->updateMiscByID($hid, $set);
+        }
+
+        return false;
     }
 }

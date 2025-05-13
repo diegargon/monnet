@@ -987,20 +987,22 @@ $h_misc = $tdata['host_details']['misc'];
         <!-- TAB16 --><!-- Agent  -->
         <?php
         if ($tdata['host_details']['agent_installed']) :
+            $lsel = !empty($h_misc['agent_log_level']) ? $h_misc['agent_log_level'] : 'INFO';
+            $lsel = strtoupper(trim($lsel));
         ?>
         <div id="tab16" class="host-details-tab-content">
             <div id="agent_container" class="agent_container">
                 <div>Log Level</div>
                 <div>
-                    <select id="log_level_agent" name="log_level_agent">
-                        <option value="7">LOG_DEBUG</option>
-                        <option value="6">LOG_INFO</option>
-                        <option value="5">LOG_NOTICE</option>
-                        <option value="4">LOG_WARNING</option>
-                        <option value="3">LOG_ERROR</option>
-                        <option value="2">LOG_CRITICAL</option>
-                        <option value="1">LOG_ALERT</option>
-                        <option value="0">LOG_EMERGENCY</option>
+                    <select id="agent_log_level" name="agent_log_level">
+                        <option value="DEBUG" <?= $lsel == 'DEBUG' ? ' selected' : ''?>>LOG_DEBUG</option>
+                        <option value="INFO" <?= $lsel == 'INFO' ? ' selected' : ''?>>LOG_INFO</option>
+                        <option value="NOTICE" <?= $lsel == 'NOTICE' ? ' selected' : ''?>>LOG_NOTICE</option>
+                        <option value="WARNING" <?= $lsel == 'WARNING' ? ' selected' : ''?>>LOG_WARNING</option>
+                        <option value="ERROR" <?= $lsel == 'ERROR' ? ' selected' : ''?>>LOG_ERROR</option>
+                        <option value="CRITICAL" <?= $lsel == 'CRITICAL' ? ' selected' : ''?>>LOG_CRITICAL</option>
+                        <option value="ALERT" <?= $lsel == 'ALERT' ? ' selected' : ''?>>LOG_ALERT</option>
+                        <option value="EMERGENCY" <?= $lsel == 'EMERGENCY' ? ' selected' : ''?>>LOG_EMERGENCY</option>
                     </select>
                 </div>
                 <div><?= $lng['L_MEMORY'] . ' ' . $lng['L_THRESHOLD'] ?></div>
@@ -1042,6 +1044,8 @@ $h_misc = $tdata['host_details']['misc'];
                     type="number"
                     value="<?= $h_misc['disks_warn_threshold']?>"
                 />
+                <br/>
+                <button id="submitAgentConfig" type="submit>"><?= $lng['L_SEND'] ?></button>
             </div>
         </div>
         <?php endif; ?>

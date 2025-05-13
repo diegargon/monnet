@@ -81,7 +81,25 @@ class HostFormatter
             $host['latency_ms'] = micro_to_ms($host['misc']['latency']) . 'ms';
         endif;
 
-        $this->formatMisc($host);
+        $this->formatMisc($host); // &REF
+
+        if ($host['agent_installed']) {
+            if (empty($host['misc']['agent_log_level'])) {
+                $host['misc']['agent_log_level'] = $ncfg->get('agent_log_level', 'INFO');
+            }
+            if (empty($host['misc']['mem_alert_threshold'])) {
+                $host['misc']['mem_alert_threshold'] = $ncfg->get('default_mem_alert_threshold', 90);
+            }
+            if (empty($host['misc']['mem_warn_threshold'])) {
+                $host['misc']['mem_warn_threshold'] = $ncfg->get('default_mem_warn_threshold', 80);
+            }
+            if (empty($host['misc']['disks_alert_threshold'])) {
+                $host['misc']['disks_alert_threshold'] = $ncfg->get('default_disks_alert_threshold', 90);
+            }
+            if (empty($host['misc']['disks_warn_threshold'])) {
+                $host['misc']['disks_warn_threshold'] = $ncfg->get('default_disks_warn_threshold', 80);
+            }
+        }
 
         return $host;
     }

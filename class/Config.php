@@ -110,11 +110,14 @@ class Config
      * @param string|int $key Configuration key.
      * @return mixed Configuration value or null if it does not exist.
      */
-    public function get($key): mixed
+    public function get(string $key, mixed $default = 'None'): mixed
     {
-        if (!isset($this->cfg[$key]['value'])) :
+        if (empty($this->cfg[$key]['value'])) {
+            if ($default !== 'None') {
+                return $default;
+            }
             return null;
-        endif;
+        }
         if (isset($this->cfg[$key]['ctype']) && $this->cfg[$key]['ctype'] == 6) {
             foreach ($this->cfg[$key]['value'] as $kvalue => $vvalue) {
                 if ($vvalue) :

@@ -61,6 +61,22 @@ $(document).ready(function () {
         requestHostDetails('ackReport', {id: reportId, value: check_value});
     });
 
+    $(document).on("click", "#submitAgentConfig", function (e) {
+        e.preventDefault();
+        var hostId = $('#host_id').val();
+        
+        const data = {
+            id: hostId,
+            agent_log_level: $("#agent_log_level").val(),
+            mem_alert_threshold: $("#mem_alert_threshold").val(),
+            mem_warn_threshold: $("#mem_warn_threshold").val(),
+            disks_alert_threshold: $("#disks_alert_threshold").val(),
+            disks_warn_threshold: $("#disks_warn_threshold").val()
+        };
+
+        requestHostDetails('submitAgentConfig', data);
+    });
+    
     $(document).on("click", "#submitHostToken", function () {
         var hostId = $('#host_id').val();
         if (hostId) {
@@ -256,7 +272,6 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#delete_var_btn", function() {
-
         let selectedOption = $('#ans_var_list option:selected');
         let selectedValue = selectedOption.val();
         let data = {

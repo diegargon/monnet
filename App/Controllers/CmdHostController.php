@@ -1091,4 +1091,33 @@ class CmdHostController
 
         return Response::stdReturn(true, $response, false, $extra);
     }
+
+    /**
+     *
+     * @param array<string, string|int> $cmd_vals
+     * @return array<string, string|int>
+     */
+    public function saveAgentConfig(array $cmd_vals): array
+    {
+        $hid = Filter::varInt($cmd_vals['id']);
+        $data['log_level'] = Filter::varStrict($cmd_vals['agent_log_level']);
+        $data['mem_alert_threshold'] = Filter::varInt($cmd_vals['mem_alert_threshold'], 100);
+        $data['mem_warn_threshold'] = Filter::varInt($cmd_vals['mem_warn_threshold'], 100);
+        $data['disks_alert_threshold'] = Filter::varInt($cmd_vals['disks_alert_threshold'], 100);
+        $data['disks_warn_threshold'] = Filter::varInt($cmd_vals['disks_warn_threshold'], 100);
+
+        $wrongKeys = '';
+        foreach ($data as $kval => $vval) {
+            empty($vval) ? $wrongKeys .= $kval . ', ' : '';
+        }
+        if (!empty($wrongKeys)) {
+            return Response::stdReturn(false, 'Wrong fields: '. $wrongKeys);
+        }
+
+        if ($this->hostService->updateAgentConfig($hid, $data)) {
+            return Response::stdReturn(true, 'Update agent config success');
+        }
+
+        return Response::stdReturn(false, 'Nothing to update'. $wrongKeys);
+    }
 }

@@ -25,13 +25,13 @@ if (empty($tdata['hosts'])) {
                 <div class="hosts-thumb shadow1 <?= $host['glow_tag'] ?>">
                     <?php
                     if (!empty($host['misc']['machine_type']) && (int) $host['misc']['machine_type'] == 2) :
-                        echo "<div class=\"vm-mark\"></div>";
+                        echo "<div title=\"VM\" class=\"vm-mark\"></div>";
                     endif;
                     if (!empty($host['ansible_enabled'])) :
-                        echo "<div class=\"ansible-mark\"></div>";
+                        echo "<div title=\"Ansible\" class=\"ansible-mark\"></div>";
                     endif;
                     if (!empty($host['misc']['system_rol']) && (int) $host['misc']['system_rol'] === 17) :
-                        echo "<div class=\"hypervisor-mark\"></div>";
+                        echo "<div title=\"Hypervisor\" class=\"hypervisor-mark\"></div>";
                     endif;
                     ?>
                     <img class="hosts-online" src="<?= $host['online_image'] ?>"

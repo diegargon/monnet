@@ -80,6 +80,7 @@ class FeedMeService
      */
     public function processRequest(array $request): array
     {
+        $data_reply = [];
         try {
             $command = $request['cmd'];
             $host_id = (int) $request['id'];
@@ -87,6 +88,10 @@ class FeedMeService
             if (!$host) {
                 return ['error' => 'Host not found'];
             }
+            if (!empty($host['misc'])) {
+                $host['misc'] = $this->hostService->decodeMisc($host['misc']);
+            }
+
             $rdata = $request['data'];
             $host_update_values = [];
 
@@ -110,6 +115,10 @@ class FeedMeService
                         $ping_updates = $this->processPingData($host_id, $host_update_values, $rdata);
                         if (!empty($ping_updates)) {
                             $host_update_values = array_merge($host_update_values, $ping_updates);
+                        }
+                        if (!empty($host['misc']['agent_config_update'])) {
+                            //TODO TEST
+                            //$data['config'] = $this->build_agent_config($host);
                         }
                         break;
                     case 'send_stats': // Stats every 5min
@@ -142,7 +151,7 @@ class FeedMeService
                 return $update_response;
             }
 
-            $response = $this->prepareResponse($command, $request, $agent_default_interval);
+            $response = $this->prepareResponse($command, $request, $agent_default_interval, $data_reply);
 
             return ['success' => true, 'response_data' => $response];
         } catch (\Exception $e) {
@@ -164,11 +173,6 @@ class FeedMeService
             return [];
         }
         \Log::logHost($rdata['log_level'], $host['id'], $rdata['msg'], $rdata['log_type'], $rdata['event_type']);
-
-        // Convert/Decode misc fields if not decoded already
-        if (!empty($host['misc']) && !is_array($host['misc'])) {
-            $host['misc'] = $this->hostService->decodeMisc($host['misc']);
-        }
 
         $host_update_values = [];
 
@@ -440,10 +444,11 @@ class FeedMeService
      *
      * @param string $command Command name.
      * @param array<string, mixed> $request Request data.
-     * @param int $interval Refresh interval.
+     * @param int $interval Refresh $interval.
+     * @param array<string, mixed> $data
      * @return array<string, string|int> Response data.
      */
-    private function prepareResponse(string $command, array $request, int $interval): array
+    private function prepareResponse(string $command, array $request, int $interval, array $data = []): array
     {
         $response = [
             'cmd' => $command,
@@ -451,7 +456,7 @@ class FeedMeService
             'version' => $this->ncfg->get('agent_min_version'),
             'response_msg' => null,
             'refresh' => $interval,
-            'data' => []
+            'data' => $data,
         ];
 
         switch ($command) {
@@ -533,11 +538,6 @@ class FeedMeService
             'agent_online' => 1
         ];
 
-        // Convert/Decode misc fields if not decoded already
-        if (!empty($host['misc']) && !is_array($host['misc'])) {
-            $host['misc'] = $this->hostService->decodeMisc($host['misc']);
-        }
-
         if (
             !empty($request['version']) &&
             (
@@ -594,5 +594,28 @@ class FeedMeService
         } else {
             \Log::logHost($log_level, $host_id, $log_msg, $log_type, $event_type);
         }
+    }
+
+    private function build_agent_config(array $host): array
+    {
+        $misc = $host['misc'];
+
+        $agent_config_keys = [
+            'log_level',
+            'mem_alert_threshold',
+            'mem_warn_threshold',
+            'disks_alert_threshold',
+            'disks_warn_threshold',
+        ];
+
+        $config = [];
+
+        foreach ($agent_config_keys as $key) {
+            if (!empty($misc[$key])) {
+                $config[$key] = $misc[$key];
+            }
+        }
+
+        return $config;
     }
 }

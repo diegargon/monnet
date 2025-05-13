@@ -260,7 +260,11 @@ class CommandRouter
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->powerOn($command_values);
                 break;
-
+            # Agent Config
+            case 'submitAgentConfig':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->saveAgentConfig($command_values);
+                break;
             /*
              *  Bookmarks
              */
