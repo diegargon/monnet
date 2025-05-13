@@ -1100,7 +1100,7 @@ class CmdHostController
     public function saveAgentConfig(array $cmd_vals): array
     {
         $hid = Filter::varInt($cmd_vals['id']);
-        $data['log_level'] = Filter::varStrict($cmd_vals['agent_log_level']);
+        $data['agent_log_level'] = Filter::varStrict($cmd_vals['agent_log_level']);
         $data['mem_alert_threshold'] = Filter::varInt($cmd_vals['mem_alert_threshold'], 100);
         $data['mem_warn_threshold'] = Filter::varInt($cmd_vals['mem_warn_threshold'], 100);
         $data['disks_alert_threshold'] = Filter::varInt($cmd_vals['disks_alert_threshold'], 100);

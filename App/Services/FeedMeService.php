@@ -117,8 +117,9 @@ class FeedMeService
                             $host_update_values = array_merge($host_update_values, $ping_updates);
                         }
                         if (!empty($host['misc']['agent_config_update'])) {
-                            //TODO TEST
-                            //$data['config'] = $this->build_agent_config($host);
+                            $data_reply['config'] = $this->build_agent_config($host);
+                            # New config send disable flag
+                            $host_update_values['misc']['agent_config_update'] = 0;
                         }
                         break;
                     case 'send_stats': // Stats every 5min
@@ -448,7 +449,7 @@ class FeedMeService
      * @param array<string, mixed> $data
      * @return array<string, string|int> Response data.
      */
-    private function prepareResponse(string $command, array $request, int $interval, array $data = []): array
+    private function prepareResponse(string $command, array $request, int $interval, array $reply_data = []): array
     {
         $response = [
             'cmd' => $command,
@@ -456,7 +457,7 @@ class FeedMeService
             'version' => $this->ncfg->get('agent_min_version'),
             'response_msg' => null,
             'refresh' => $interval,
-            'data' => $data,
+            'data' => $reply_data,
         ];
 
         switch ($command) {
@@ -601,7 +602,7 @@ class FeedMeService
         $misc = $host['misc'];
 
         $agent_config_keys = [
-            'log_level',
+            'agent_log_level',
             'mem_alert_threshold',
             'mem_warn_threshold',
             'disks_alert_threshold',
