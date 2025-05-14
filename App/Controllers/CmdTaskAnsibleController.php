@@ -34,11 +34,11 @@ class CmdTaskAnsibleController
     public function execPlaybook(string $command, array $command_values): array
     {
         $hid = Filter::varInt($command_values['id']);
-        $playbook = Filter::varString($command_values['value']);
+        $playbook_id = Filter::varString($command_values['value']);
         $extra_vars = [];
         $as_html = !empty(Filter::varBool($command_values['as_html'])) ? 1 : 0;
 
-        if (empty($playbook)) {
+        if (empty($playbook_id)) {
             return Response::stdReturn(false, 'Playbook its mandatory');
         }
         if (!empty($command_values['extra_vars'])) {
@@ -46,13 +46,13 @@ class CmdTaskAnsibleController
         }
 
         if ($command == 'playbook_exec') {
-            $response = $this->ansibleService->runPlaybook($hid, $playbook, $extra_vars);
+            $response = $this->ansibleService->runPlaybook($hid, $playbook_id, $extra_vars);
             if (($response['status'] === 'success') && $as_html) {
                 $report['result'] = $response['response_msg'];
                 $response = $this->ansibleService->asHtml($report);
             }
         } elseif ($command === 'pbqueue') {
-            $response = $this->ansibleService->queueTask($hid, 1, $playbook, $extra_vars);
+            $response = $this->ansibleService->queueTask($hid, 1, $playbook_id, $extra_vars);
         } else {
             return Response::stdReturn(false, 'Unknown Ansible Command');
         }
@@ -81,14 +81,14 @@ class CmdTaskAnsibleController
         $hosts = $this->ctx->get('Hosts');
         $host = $hosts->getHostById($target_id);
 
-        $playbook = $command === 'syslog-load' ? 'std-syslog-linux' : 'std-journald-linux';
+        $playbook_id = $command === 'syslog-load' ? 'std-syslog-linux' : 'std-journald-linux';
 
         if (valid_array($host) && $host['ansible_enabled']) {
             $extra_vars = [];
             if (is_numeric($value)) {
                 $extra_vars['num_lines'] = $value;
             }
-            $response = $this->ansibleService->runPlaybook($target_id, $playbook, $extra_vars);
+            $response = $this->ansibleService->runPlaybook($target_id, $playbook_id, $extra_vars);
             // Connection Error Check
             if ($response['status'] !== 'success') {
                 $hosts->setAnsibleAlarm($target_id, $response['error_msg']);
@@ -124,8 +124,8 @@ class CmdTaskAnsibleController
             return Response::stdReturn(false, 'id error');
         }
 
-        $playbook = $command . '-linux';
-        $response = $this->ansibleService->runPlaybook($hid, $playbook);
+        $playbook_id = $command . '-linux';
+        $response = $this->ansibleService->runPlaybook($hid, $playbook_id);
         if ($response['status'] === "success") {
             return Response::stdReturn(true, $response);
         } else {

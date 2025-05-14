@@ -7,7 +7,7 @@ $host = '127.0.0.1';
 $port = 65432;
 
 if (empty($playbook)) :
-    $playbook = 'journald-linux.yml';
+    $playbook = 'journald-linux';
 endif;
 
 // Datos que enviamos al servicio (en formato JSON)

@@ -53,14 +53,14 @@ class AnsibleService
      * @param array<string, string|int> $extra_vars
      * @return array<string, string|int>
      */
-    public function runPlaybook(int $target_id, string $playbook, array $extra_vars = []): array
+    public function runPlaybook(int $target_id, string $playbook_id, array $extra_vars = []): array
     {
         $user = $this->ctx->get('User');
         $hosts = $this->ctx->get('Hosts');
         $networks = $this->ctx->get('Networks');
         $host = $hosts->getHostById($target_id);
 
-        if ($playbook == 'std-install-monnet-agent-systemd') :
+        if ($playbook_id == 'std-install-monnet-agent-systemd') :
             if (empty($host['token'])) {
                 $token = $hosts->createHostToken($target_id);
             } else {
@@ -95,10 +95,7 @@ class AnsibleService
             }
         endif;
 
-        $data = $this->buildSendData($host, $playbook, $extra_vars);
-
-        $playbook_id = $this->getPbIdByName($playbook);
-        $data['pid'] = $playbook_id;
+        $data = $this->buildSendData($host, $playbook_id, $extra_vars);
 
         $send_data = [
             'command' => 'playbook_exec',
@@ -434,12 +431,11 @@ class AnsibleService
      * @param array<string, string|int> $extraVars
      * @return array<string, string|int>
      */
-    private function buildSendData(array $host, string $playbook, array $extraVars = []): array
+    private function buildSendData(array $host, string $playbook_id, array $extraVars = []): array
     {
-        //TODO Fixme playbook can be yaml or yml metadata must provided filename __source_file
         $user = $this->ctx->get('User');
         return [
-            'playbook' => $playbook . '.yml',
+            'pid' => $playbook_id,
             'extra_vars' => $extraVars,
             'ip' => $host['ip'],
             'hid' => $host['id'],

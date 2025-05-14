@@ -85,7 +85,7 @@ class GatewayService
 
         return $this->sendCommand($send_data);
     }
-    
+
     /**
      * Helper method to send a command via the gateway.
      *
@@ -114,7 +114,7 @@ class GatewayService
             return $response;
         }
 
-        $error_msg = 'Gateway command error: ';
+        $error_msg = 'Gateway erro response: ';
         if (isset($response['message'])) {
             $error_msg .= $response['message'];
         } else {
