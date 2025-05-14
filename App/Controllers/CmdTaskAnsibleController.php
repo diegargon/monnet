@@ -265,11 +265,11 @@ class CmdTaskAnsibleController
         $task_name = Filter::varString($command_values['task_name']);
 
         if (empty($playbook_id)) {
-            return ['status' => 'error', 'error_msg' => 'Playbook id: ', $playbook_id];
+            return ['status' => 'error', 'error_msg' => 'Playbook id: ' . $playbook_id];
         }
 
         if (empty($task_name)) {
-            return ['status' => 'error', 'error_msg' => 'Task name: ', $task_name];
+            return ['status' => 'error', 'error_msg' => 'Task name: ' . $task_name];
         }
 
         if (empty($task_trigger)) {

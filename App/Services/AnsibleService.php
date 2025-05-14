@@ -113,23 +113,23 @@ class AnsibleService
      *
      * @param int $hid
      * @param int $trigger_type
-     * @param string $playbook
+     * @param string $pid
      * @param array<string, string|int> $extra_vars
      * @return array<string, string|int>
      */
-    public function queueTask(int $hid, int $trigger_type, string $playbook, array $extra_vars = [])
+    public function queueTask(int $hid, int $trigger_type, string $pid, array $extra_vars = [])
     {
-        $pid = $this->findPlaybookId($playbook);
+        $pb = $this->getPlaybookById($pid);
 
         if (empty($pid)) {
-            return ['status' => 'error', 'error_msg' => 'pid not exists'];
+            return ['status' => 'error', 'error_msg' => 'pid not exists:' . $pid];
         }
 
         $task_data = [
             'hid' => $hid,
             'pid' => $pid,
             'trigger_type' => $trigger_type,
-            'task_name' => $playbook,
+            'task_name' => $pb['name'],
             /* 'extra' => json_encode($extra_vars), */
         ];
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -384,6 +384,24 @@ class AnsibleService
         ];
 
         return  $response;
+    }
+
+    private function getPlaybookById(string $pid)
+    {
+        // Ensure playbook metadata is loaded
+        $pb_metadata_result = $this->setPbMetadata();
+        if (isset($pb_metadata_result['status']) && $pb_metadata_result['status'] === 'error') {
+            \Log::error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
+            return null;
+        }
+
+        foreach ($this->playbooks_metadata as $pb) {
+            if ($pb['id'] === $pid) {
+                return $pb;
+            }
+        }
+
+        return null;
     }
 
     /**
