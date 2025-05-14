@@ -23,7 +23,7 @@
 
         // Clean all tags
         led.removeClass('led-ok led-off led-warning led-danger blink');
-        led.attr('title', 'Gateway Status: ' + responseData.latency_ms + 'ms');
+        led.attr('title', 'Gateway Status: ' + responseData.latency_ms + 'ms' + ' Version: ' + responseData.version);
         if (responseData.latency_ms >= maxLatencyDanger) {
             led.addClass('led-danger blink');
         } else if (responseData.latency_ms >= maxLatencyWarning) {
