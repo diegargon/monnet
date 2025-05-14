@@ -300,7 +300,7 @@ $h_misc = $tdata['host_details']['misc'];
                             <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
                         </div>
                     <?php endif; ?>
-                    <?php if (!empty($h_misc['agent_last_contact'])) : ?>
+                    <?php if (!empty($h_misc['f_agent_contact'])) : ?>
                         <div>
                             <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>
                             <span class="resume_field">
@@ -310,7 +310,7 @@ $h_misc = $tdata['host_details']['misc'];
                         </div>
                         <div>
                             <span class="resume_label"><?= $lng['L_AGENT_LAST_PING'] ?>:</span>
-                            <span class="resume_field"><?= $h_misc['agent_last_contact'] ?></span>
+                            <span class="resume_field"><?= $h_misc['f_agent_contact'] ?></span>
                         </div>
                     <?php endif; ?>
                     <?php if (!empty($h_misc['access_link'])) : ?>

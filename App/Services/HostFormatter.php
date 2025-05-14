@@ -218,11 +218,11 @@ class HostFormatter
         if (!empty($host['misc']['uptime'])) {
             $host['misc']['uptime'] = $this->formatUptime($host['misc']['uptime']);
         }
-        # TODO No funciona
+
         $dateTimeService = new DateTimeService();
 
         if (!empty($host['misc']['agent_last_contact'])) {
-            $host['misc']['agent_last_contact'] = $dateTimeService->formatTimestamp(
+            $host['misc']['f_agent_contact'] = $dateTimeService->formatTimestamp(
                 $host['misc']['agent_last_contact'],
                 $ncfg->get('default_timezone'),
                 $ncfg->get('datetime_format')
