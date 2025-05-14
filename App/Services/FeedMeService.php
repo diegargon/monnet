@@ -15,6 +15,8 @@ use App\Services\HostService;
 use App\Services\DateTimeService;
 use App\Models\CmdHostModel;
 use App\Models\CmdStatsModel;
+use App\Services\LogSystemService;
+use App\Services\LogHostsService;
 use App\Services\Filter;
 
 class FeedMeService
@@ -51,6 +53,12 @@ class FeedMeService
 
     /** @var DateTimeService */
     private DateTimeService $datetimeService;
+
+    /** @var LogSystemService */
+    private LogSystemService $logSys;
+
+    /** @var LogHostsService */
+    private LogHostsService $logHost;
     /**
      * Constructor of FeedMeService.
      *
@@ -62,6 +70,8 @@ class FeedMeService
         $this->ncfg = $ctx->get('Config');
         $this->db = $ctx->get('DBManager');
         $this->hostService = new HostService($ctx);
+        $this->logSys = new LogSystemService($ctx);
+        $this->logHost = new LogHostsService($ctx);
     }
 
     /**
@@ -105,9 +115,6 @@ class FeedMeService
             $agent_default_interval = $this->getAgentInterval();
 
             $host_update_values = $this->prepareHostUpdateValues($host, $request, $agent_default_interval);
-            if (empty($host['agent_installed'])) {
-                $host_update_values['agent_installed'] = 1;
-            }
 
             if (!empty($request['name'])) {
                 switch ($request['name']) {
@@ -170,9 +177,6 @@ class FeedMeService
      */
     public function processStarting(array $host, array $rdata): array
     {
-        if (empty(!$host)) {
-            return [];
-        }
         \Log::logHost($rdata['log_level'], $host['id'], $rdata['msg'], $rdata['log_type'], $rdata['event_type']);
 
         $host_update_values = [];
@@ -200,6 +204,8 @@ class FeedMeService
      */
     public function processStats(int $host_id, array $rdata): bool
     {
+        # Stats Table receiven every X minutes
+
         try {
             if (empty($this->cmdStatsModel)) {
                 $this->cmdStatsModel = new CmdStatsModel($this->ctx);
@@ -209,10 +215,10 @@ class FeedMeService
                 $this->dateTimeService  = new DateTimeService();
             }
 
-            if (!\isEmpty($rdata['load_avg_stats'])) {
+            if (!empty($rdata['load_avg_stats'])) {
                 if (
-                    isset($rdata['load_avg_stats']['1min']) &&
-                    is_numeric($rdata['load_avg_stats']['1min'])
+                    isset($rdata['load_avg_stats']['5min']) &&
+                    is_numeric($rdata['load_avg_stats']['5min'])
                 ) {
                     $stats_data = [
                         'date' => $this->dateTimeService->dateNow(),
@@ -224,7 +230,7 @@ class FeedMeService
                 }
             }
 
-            if (!\isEmpty($rdata['iowait_stats'])) {
+            if (!empty($rdata['iowait_stats'])) {
                 $stats_data = [
                     'date' => $this->dateTimeService->dateNow(),
                     'type' => 3,   //iowait
@@ -234,10 +240,10 @@ class FeedMeService
                 $this->cmdStatsModel->insertStats($stats_data);
             }
 
-            if (!\isEmpty($rdata['mem_stats'])) {
+            if (!empty($rdata['mem_stats'])) {
                 $stats_data = [
                     'date' => $this->dateTimeService->dateNow(),
-                    'type' => 4,   // Memory
+                    'type' => 4,   # Memory
                     'host_id' => $host_id,
                     'value' => $rdata['mem_stats']
                 ];
@@ -286,7 +292,7 @@ class FeedMeService
     public function updateListenPorts(int $host_id, array $listen_ports): bool
     {
         try {
-            $scan_type = 2; // Agent Based
+            $scan_type = 2; # Agent Based
 
             if (!isset($this->cmdHostModel)) {
                 $this->cmdHostModel = new CmdHostModel($this->db);
@@ -297,7 +303,7 @@ class FeedMeService
             $db_host_ports = $this->cmdHostModel->getHostScanPorts($host_id, $scan_type);
             $db_ports_map = [];
 
-            // Normalize TODO: to method?
+            # Normalize TODO: to method?
             foreach ($db_host_ports as $db_port) {
                 $interface = $db_port['interface'] ?? '';
                 $pnumber = (int) $db_port['pnumber'];
@@ -419,21 +425,22 @@ class FeedMeService
      */
     private function processPingData(int $host_id, array $host_update_values, array $rdata): array
     {
-        if (!isEmpty($rdata['loadavg'])) {
+        # These values are using for realtime
+        if (!empty($rdata['loadavg'])) {
             $host_update_values['misc']['load_avg'] = serialize($rdata['loadavg']);
         }
-        if (!isEmpty($rdata['meminfo'])) {
+        if (!empty($rdata['meminfo'])) {
             $host_update_values['misc']['mem_info'] = serialize($rdata['meminfo']);
         }
-        if (!isEmpty($rdata['misc']['disksinfo'])) {
+        if (!empty($rdata['misc']['disksinfo'])) {
             $host_update_values['disks_info'] = serialize($rdata['disksinfo']);
         }
-        if (!isEmpty($rdata['iowait'])) {
+        if (!empty($rdata['iowait'])) {
             $host_update_values['misc']['iowait'] = $rdata['iowait'];
         }
-        if (!isEmpty($rdata['host_logs'])) :
+        if (!empty($rdata['host_logs'])) :
             foreach ($rdata['host_logs'] as $hlog) {
-                \Log::logHost($hlog['level'], $host_id, 'Agent: ' . $hlog['message']);
+                \Log::logHost($hlog['level'], $host_id, '[Agent]: ' . $hlog['message']);
             }
         endif;
 
@@ -482,9 +489,6 @@ class FeedMeService
      */
     private function validateHostRequest(array $host, string $token, int $host_id): array
     {
-        if (!$host) {
-            $error_msg = 'Host not found, requested id:' . $host_id;
-        }
         if (empty($host['token']) || $host['token'] !== $token) {
             $msg = 'Invalid Token receive from id:' . $host_id;
         }
@@ -492,12 +496,13 @@ class FeedMeService
             $msg = "Invalid Token receive from id:" . $host_id;
         }
 
-        $remote_ip = Filter::getRemoteIp();
-        if ($host['ip'] != $remote_ip ) {
-            $msg = "Empty or wrong ip receive, expected {$host['ip']} receive $remote_ip";
-        }
+        # TODO FIXME same gateway host receive 127.0.0.1
+        #$remote_ip = Filter::getRemoteIp();
+        #if ($host['ip'] != $remote_ip ) {
+        #    $msg = "Empty or wrong ip receive, expected {$host['ip']} receive $remote_ip";
+        #}
 
-        if (!empty($error_msg)) {
+        if (!empty($msg)) {
             \Log::error($msg);
             return ['error' => $msg];
         }
@@ -549,11 +554,16 @@ class FeedMeService
             $values['misc']['agent_version'] = (string) $request['version'];
         }
 
+        # if we receive we assume...
         if ((int)$host['online'] !== 1) {
             $values['online'] = 1;
         }
         if ((int)$host['agent_online'] !== 1) {
             $values['agent_online'] = 1;
+        }
+
+        if (empty($host['agent_installed'])) {
+            $values['agent_installed'] = 1;
         }
 
         if (!isset($this->datetimeService)) {
@@ -581,7 +591,7 @@ class FeedMeService
             ? $rdata['log_type']
             : (!empty($rdata['event_type']) ? \LogType::EVENT : 0);
         $log_level = isset($rdata['log_level']) ? $rdata['log_level'] : 7;
-        $log_msg = "Notification: $request_name";
+        $log_msg = "[Agent] $request_name";
         isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
 
         if (!empty($rdata['event_value'])) {
