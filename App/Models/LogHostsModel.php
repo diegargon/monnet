@@ -57,7 +57,7 @@ class LogHostsModel
             $params[':level'] = (int) $opts['level'];
         }
 
-        if (!empty($opts['ack'])) {
+        if (!empty($opts['show_ack'])) {
             $conditions[] = 'ack >= 0';
         } else {
             $conditions[] = 'ack != 1';

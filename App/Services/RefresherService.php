@@ -92,7 +92,7 @@ class RefresherService
         $logs_opt = [
             'limit' => $this->ncfg->get('term_max_lines'),
             'level' => $this->ncfg->get('term_hosts_log_level'),
-            'ack' => 1,
+            'show_ack' => 0,
         ];
         $host_logs = $this->logHostService->getLogsHosts($logs_opt);
 

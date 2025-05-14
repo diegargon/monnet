@@ -47,7 +47,7 @@ class LogHostsService
 
         $opts = [
             'host_id' => $target_id,
-            'ack' => 1,
+            'show_ack' => 1,
         ];
 
         if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) :
