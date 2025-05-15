@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Service for managing host logs.
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
@@ -17,13 +18,7 @@ class LogHostsService
 
     private LogHostsModel $logHostsModel;
     private DateTimeService $dateTimeService;
-    private bool $console = false;
-
-    /** @var array<string,string> $lng */
-    private array $lng = [];
-
-    /** @var \Config */
-    private \Config $ncfg;    
+  
     /** @var int */
     private int $max_db_msg = 254;
 
@@ -31,19 +26,18 @@ class LogHostsService
     {
         $this->ctx = $ctx;
         $db = $ctx->get('DBManager');
-        $this->lng = $ctx->get('lng');
-        $this->ncfg = $ctx->get('Config');
         $this->logHostsModel = new LogHostsModel($db);
         $this->dateTimeService = new DateTimeService();
     }
 
     /**
+     * Register a log entry for a host.
      *
-     * @param int $log_level
-     * @param int $host_id
-     * @param string $msg
-     * @param int $log_type
-     *
+     * @param int $log_level Log level.
+     * @param int $host_id Host ID.
+     * @param string $msg Log message.
+     * @param int $log_type Log type (optional).
+     * @param int $event_type Event type (optional).
      * @return void
      */
     public function logHost(
@@ -54,7 +48,7 @@ class LogHostsService
         int $event_type = 0
     ): void {
         if (mb_strlen($msg) > $this->max_db_msg) {
-            $msg_db = substr($msg, 0, 254);
+            $msg_db = mb_substr($msg, 0, $this->max_db_msg);
         } else {
             $msg_db = $msg;
         }
@@ -67,31 +61,24 @@ class LogHostsService
         ];
         $this->logHostsModel->insert($set);
     }
-    
-    /**
-     * Output log to console
-     * @param bool $value
-     * @return void
-     */
-    public function setConsole(bool $value): void
-    {
-        $this->console = $value;
-    }
 
     /**
+     * Get host logs based on options.
      *
-     * @param array<string, mixed> $opts
-     * @return array<string, mixed>
+     * @param array<string, mixed> $opts Filter options.
+     * @return array<string, mixed> List of logs.
      */
     public function getLogsHosts(array $opts): array
     {
         return $this->logHostsModel->getLogsHosts($opts);
     }
+
     /**
+     * Get logs for a specific host, formatted for terminal.
      *
-     * @param int $target_id
-     * @param array $command_values
-     * @return array<string, string|int>
+     * @param int $target_id Host ID.
+     * @param array $command_values Command values (filters).
+     * @return array<string, string|int> Formatted logs.
      */
     public function getLogs(int $target_id, array $command_values): array
     {
@@ -126,9 +113,10 @@ class LogHostsService
     }
 
     /**
+     * Get events based on the command.
      *
-     * @param string $command
-     * @return array<string, string|int>
+     * @param string $command Requested command.
+     * @return array<string, string|int> Event data.
      */
     public function getEvents(string $command): array
     {
@@ -156,9 +144,10 @@ class LogHostsService
     }
 
     /**
+     * Format event logs for presentation.
      *
-     * @param array<string, string|int> $logs
-     * @return array<string, string|int>
+     * @param array<string, string|int> $logs Logs to format.
+     * @return array<string, string|int> Formatted logs.
      */
     private function formatEventsLogs(array $logs): array
     {
@@ -178,10 +167,11 @@ class LogHostsService
     }
 
     /**
+     * Format host logs for terminal presentation.
      *
-     * @param array<string, string|int> $logs
-     * @param string $nl
-     * @return array<string, string|int>
+     * @param array<string, string|int> $logs Logs to format.
+     * @param string $nl Line separator (optional).
+     * @return array<string, string|int> Formatted logs.
      */
     private function formatHostLogs(array $logs, string $nl = '<br/>'): array
     {

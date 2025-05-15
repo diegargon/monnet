@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Model for managing host logs in the database.
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
@@ -20,7 +21,7 @@ class LogHostsModel
     /**
      * Add a new log entry to the database.
      *
-     * @param array<string, string|int> $data The log data to insert.
+     * @param array<string, string|int> $data Log data to insert.
      * @return bool True if the log was added successfully, false otherwise.
      */
     public function insert(array $data): bool
@@ -29,11 +30,11 @@ class LogHostsModel
     }
 
     /**
-     * Update...
+     * Update a log entry by ID.
      *
-     * @param int $target_id El ID del host.
-     * @param array<string, string|int> $data Los datos a actualizar.
-     * @return bool True si se actualizó correctamente, False en caso contrario.
+     * @param int $target_id Log ID.
+     * @param array<string, string|int> $data Data to update.
+     * @return bool True if updated successfully, false otherwise.
      */
     public function updateByID(int $target_id, array $data): bool
     {
@@ -41,9 +42,10 @@ class LogHostsModel
     }
 
     /**
-     * Return logs based on [$opt]ions
-     * @param array<string,mixed> $opts
-     * @return array<string,mixed>
+     * Return logs based on the provided options.
+     *
+     * @param array<string,mixed> $opts Filter options.
+     * @return array<string,mixed> List of logs.
      */
     public function getLogsHosts(array $opts = []): array
     {
