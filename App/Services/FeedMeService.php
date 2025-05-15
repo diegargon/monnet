@@ -52,7 +52,7 @@ class FeedMeService
     private \DBManager $db;
 
     /** @var DateTimeService */
-    private DateTimeService $datetimeService;
+    private DateTimeService $dateTimeService;
 
     /** @var LogSystemService */
     private LogSystemService $logSys;
