@@ -9,6 +9,7 @@
 
 namespace App\Services;
 
+use App\Services\LogSystemService;
 use App\Gateway\GwRequest;
 
 class GatewayService
@@ -19,9 +20,13 @@ class GatewayService
     /** @var int */
     private int $socket_timeout = 1;
 
+    /** @var LogSystemService */
+    private LogSystemService $logSystemService;
+
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->logSystemService = new LogSystemService($ctx);
     }
 
     /**
@@ -94,19 +99,42 @@ class GatewayService
      */
     public function sendCommand(array $send_data): array
     {
-        $gwRequest = new GwRequest($this->ctx);
-        if ($gwRequest->connect($this->socket_timeout)) {
-            $response = $gwRequest->request($send_data);
-        } else {
-            return ['status' => 'error', 'error_msg' => 'sendCommand: Can not connect'];
+        try {
+            $gwRequest = new GwRequest($this->ctx);
+            if ($gwRequest->connect($this->socket_timeout)) {
+                $response = $gwRequest->request($send_data);
+            } else {
+                $this->logSystemService->error('GatewayService: sendCommand: Can not connect');
+                return ['status' => 'error', 'error_msg' => 'sendCommand: Can not connect'];
+            }
+        } catch (\Throwable $e) {
+            $context = json_encode([
+                'exception' => (string)$e,
+                'send_data' => $send_data,
+            ]);
+            $this->logSystemService->error(
+                'GatewayService Exception: ' .
+                $e->getMessage() . ' | Context: ' . $context
+            );
+            return ['status' => 'error', 'error_msg' => 'Exception: ' . $e->getMessage()];
         }
 
         if (!isset($response['status'])) {
+            $context = json_encode([
+                'response' => $response,
+                'send_data' => $send_data,
+            ]);
+            $this->logSystemService->error('GatewayService: without status | Context: ' . $context);
             return ['status' => 'error', 'error_msg' => 'Gateway response without status'];
         }
 
         if ($response['status'] === 'success') {
             if (empty($response['message'])) {
+                $context = json_encode([
+                    'response' => $response,
+                    'send_data' => $send_data,
+                ]);
+                $this->logSystemService->error('GatewayService: Success but empty response | Ctx: ' . $context);
                 return ['status' => 'error', 'error_msg' => 'Status success but empty response'];
             }
             // TODO GW must use response_msg;
@@ -120,7 +148,11 @@ class GatewayService
         } else {
             $error_msg .= 'Unknown response from gateway';
         }
-
+        $context = json_encode([
+            'response' => $response,
+            'send_data' => $send_data,
+        ]);
+        $this->logSystemService->error('GatewayService: ' . $error_msg . ' | Context: ' . $context);
         return ['status' => 'error', 'error_msg' => $error_msg];
     }
 }
