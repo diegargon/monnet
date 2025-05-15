@@ -48,21 +48,25 @@
 namespace App\Controllers;
 
 use App\Services\FeedMeService;
+use App\Services\LogSystemService;
 
 class FeedMeController {
     private \AppContext $ctx;
     private FeedMeService $feedMeService;
+    private LogSystemService $logSystemService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->feedMeService = new FeedMeService($ctx);
+        $this->logSystemService = new LogSystemService($ctx);
     }
 
     public function __destruct()
     {
         unset($this->ctx);
         unset($this->feedMeService);
+        unset($this->logSystemService);
     }
     /**
      *
@@ -137,7 +141,7 @@ class FeedMeController {
      */
     private function responseError(string $msg): never
     {
-        \Log::error($msg);
+        $this->logSystemService->error($msg);
 
         http_response_code(400);
         header('Content-Type: application/json');

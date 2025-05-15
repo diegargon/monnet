@@ -17,8 +17,8 @@
     });
 
     function updatePingStatus(responseData) {
-        const maxLatencyWarning = 1.5;  // ms - amarillo/naranja
-        const maxLatencyDanger = 2.5;   // ms - rojo
+        const maxLatencyWarning = 2;  // ms - amarillo/naranja
+        const maxLatencyDanger = 5;   // ms - rojo
         const led = $('#heartbeatLed');
 
         // Clean all tags

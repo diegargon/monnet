@@ -36,8 +36,8 @@ class GwRequest
         $this->server_ip = (string)$ncfg->get('ansible_server_ip');
         $this->server_port = (int)$ncfg->get('ansible_server_port');
 
-        if(empty($this->server_ip)) {
-            return ['status' => 'error', 'GW: Wrong or empty server IP'];
+        if (empty($this->server_ip)) {
+            throw new RuntimeException('GW: Wrong or empty server IP');
         }
 
         if ($this->server_port < 1 || $this->server_port > 65535) {
@@ -46,19 +46,21 @@ class GwRequest
     }
 
     /**
+     * Connect to the socket server and set timeout.
      *
      * @param int $timeout
      * @return SocketClient
+     * @throws RuntimeException
      */
     public function connect(int $timeout = 1): SocketClient
     {
-        $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
-        if ($this->socketClient === null) {
+        try {
             $this->socketClient = new SocketClient($this->server_ip, $this->server_port);
+            $this->socketClient->setTimeout($timeout);
+            return $this->socketClient;
+        } catch (\Throwable $e) {
+            throw new RuntimeException('GW: Failed to create socket client: ' . $e->getMessage(), $e->getCode(), $e);
         }
-        $this->socketClient->setTimeout($timeout);
-
-        return $this->socketClient;
     }
 
     /**
@@ -71,13 +73,13 @@ class GwRequest
         try {
             # SendAndReceive trigger the connection
             $responseArray = $this->socketClient->sendAndReceive($request);
-        } catch (\Exception $e) {
+            if (is_array($responseArray)) {
+                return $responseArray;
+            } 
+            return ['status' => 'error', 'error_msg' => 'Unknown error receiving gw response'];                    
+        } catch (\Throwable $e) {
             return ['status' => 'error', 'error_msg' => $e->getMessage()];
         }
-        if (is_array($responseArray)) {
-            return $responseArray;
-        } else {
-            return ['status' => 'error', 'error_msg' => 'Unknown error receiving gw response'];
-        }
+
     }
 }
