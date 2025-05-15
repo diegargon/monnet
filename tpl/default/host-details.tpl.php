@@ -108,9 +108,10 @@ $h_misc = $tdata['host_details']['misc'];
         </div>
         <!-- SECOND HEADED BAR -->
         <div class="host-details-main">
-            <img class="hosts-item" src="<?= $tdata['host_details']['online_image'] ?>"
-                alt=="<?= $tdata['host_details']['title_online'] ?>"
-                title="<?= $tdata['host_details']['title_online'] ?>"/>
+            <div class="host-led <?= $tdata['host_details']['host-status'] ?>"
+                 alt="<?= $tdata['host_details']['title_online']?>"
+                 title="<?= $tdata['host_details']['title_online']?>">
+            </div>
             <?php if (!empty($tdata['host_details']['manufacture_image'])) : ?>
                 <img class="fab" src="<?= $tdata['host_details']['manufacture_image'] ?>"
                     alt="<?= $tdata['host_details']['manufacture_name'] ?>"

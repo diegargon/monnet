@@ -185,8 +185,7 @@ class RefresherView
 
             // Estado online/offline
             $hosts_view[$key]['title_online'] = $vhost['online'] ? $lng['L_S_ONLINE'] : $lng['L_S_OFFLINE'];
-            $hosts_view[$key]['online_image'] = 'tpl/' . $theme . '/img/' . ($vhost['online'] ? 'green2.png' : 'red2.png');
-
+            $hosts_view[$key]['host-status'] = $vhost['online'] ? 'led-green-on' : 'led-red-on';
 
             // Passing Reference
             $this->addMiscData($hosts_view[$key], $vhost);

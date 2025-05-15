@@ -635,11 +635,6 @@ input:checked + .slider:before {
     padding-left: 2px;
 }
 
-.hosts-online {
-    padding: 0;
-    margin: 0;
-}
-
 .hosts-thumb {
     display: flex;
     position: relative;
@@ -1739,7 +1734,10 @@ input:checked + .slider:before {
 }
 
 .td-host-logs {
-    text-align: left !important;
+    /* text-align: left !important; */
+    align-content: center !important;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .color-red {
@@ -1869,35 +1867,118 @@ input:checked + .slider:before {
     background-repeat: no-repeat;
 }
 
-.led {
+.hosts-online {
+    padding: 0;
+    margin: 0;
+}
+
+.gateway-led, .host-led {
+    padding: 1px;
+    margin: 1px;
+    border-radius: 50%;
     width: 15px;
     height: 15px;
-    border-radius: 50%;
-    margin: 1px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.gateway-led {
+    border: 1px solid #645050;
+    border-style: inset;
 }
 
-.led-ok {
-    background-color: #2a8f55;
-    box-shadow: 0 0 10px #2ecc71;
+.host-led {
+    display: inline-block;
+    margin-left: 2px;
+    border: 1px solid #fff;
+    border-style: outset;
 }
 
-.led-warning {
-    background-color: #f39c12;
-    box-shadow: 0 0 10px #f39c12;
+.led-red {
+    background-color: #900;
+    box-shadow: rgba(9, 8, 8, 0.2) 0 -1px 7px 1px, inset rgb(24, 55, 24) 0 0px 5px, #0C3A06 0 1px 0;
+    animation-name: blinkRed;
 }
 
-.led-danger {
-    background-color: #e74c3c;
-    box-shadow: 0 0 10px #e74c3c;
-}
-.led-off {
-    background-color: #ccc;
+.led-orange {
+    background-color: rgb(120, 65, 10);
+    animation-name: blinkOrange;
 }
 
-.blink {
-    animation: blink-animation 1s ease-in-out infinite;
+.led-green {
+    background-color: rgb(37, 85, 37);
+    animation-name: blinkGreen;
+}
+
+.blink1 {
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+.blink2 {
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+.blink3 {
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+
+.blink4 {
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+
+.led-red-on {
+    background-color: #A00;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset rgb(24, 55, 24) 0 0px 5px, #0C3A06 0 1px 0;
+}
+
+.led-orange-on {
+    background-color: #C4732C;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset rgb(24, 55, 24) 0 0px 5px, #0C3A06 0 1px 0;
+}
+
+.led-green-on {
+    background-color: rgb(46, 166, 46);
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset rgb(24, 55, 24) 0 0px 5px, #0C3A06 0 1px 0;
+}
+
+@keyframes blinkRed {
+    from {
+        background-color: #900;
+    }
+    50% {
+        background-color: #A00;
+        box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset rgb(24, 55, 24) 0 0px 5px, #0C3A06 0 1px 0;
+    }
+    to {
+        background-color: #F00;
+    }
+}
+
+@keyframes blinkOrange {
+    from {
+        background-color: rgb(121, 69, 18);
+    }
+    50% {
+        background-color: #C4732C;
+        box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset rgb(24, 55, 24) 0 0px 5px, #0C3A06 0 1px 0;
+    }
+    to {
+        background-color: rgb(121, 69, 18);
+    }
+}
+
+@keyframes blinkGreen {
+    from {
+        background-color: rgb(16, 32, 16);
+    }
+    50% {
+        background-color: rgb(107, 255, 107);
+        box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset rgb(24, 55, 24) 0 -1px 5px, #0C3A06 0 1px 0;
+    }
+    to {
+        background-color: rgb(16, 32, 16);
+    }
 }
 
 @keyframes crt-glow {

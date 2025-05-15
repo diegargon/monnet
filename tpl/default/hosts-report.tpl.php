@@ -30,20 +30,11 @@
                         <?php
                         if ($key === 'online' && (int) $host['online'] === 1) :
                             ?>
-                            <img
-                                class="hosts-online"
-                                src="tpl/<?= $ncfg->get('theme')?>/img/green2.png"
-                                alt="online_status"
-                                title="On"
-                            >
+                            <div class="host-led led-green-on"></div>
                             <?php
                         elseif ($key === 'online' && (int) $host['online'] === 0) :
                             ?>
-                            <img
-                                class="hosts-offline"
-                                src="tpl/<?= $ncfg->get('theme')?>/img/red2.png"
-                                alt="online_status"
-                                title="Off">
+                            <div class="host-led led-red-on"></div>
                             <?php
                         elseif ($key === 'log_msgs') :
                             if (!isset($host['log_msgs']) || !is_array($host['log_msgs'])) {

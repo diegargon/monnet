@@ -21,21 +21,21 @@
         const maxLatencyDanger = 5;   // ms - rojo
         const led = $('#heartbeatLed');
 
-        // Clean all tags
-        led.removeClass('led-ok led-off led-warning led-danger blink');
+        // Clean all except base led
+        $('.gateway-led').removeClass().addClass('gateway-led');
         led.attr('title', 'Gateway Status: ' + responseData.latency_ms + 'ms' + ' Version: ' + responseData.version);
         if (responseData.latency_ms >= maxLatencyDanger) {
-            led.addClass('led-danger blink');
+            led.addClass('led-red blink3');
         } else if (responseData.latency_ms >= maxLatencyWarning) {
-            led.addClass('led-warning blink');
-        } else {
-            led.addClass('led-ok blink');
+            led.addClass('led-orange blink3');
+        } else if (responseData.latency_ms > 0) {
+            led.addClass('led-green blink3');
         }
     }
 
     function updatePingStatusToError() {
         const led = $('#heartbeatLed');
-        led.removeClass('led-ok led-off led-warning blink').addClass('led-danger');
+        $('.led').removeClass().addClass('led led-rd-on');
     }
 
     function refresh(force = 0) {

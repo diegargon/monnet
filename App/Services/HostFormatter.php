@@ -49,10 +49,10 @@ class HostFormatter
 
         if ($host['online']) :
             $host['title_online'] = $lng['L_S_ONLINE'];
-            $host['online_image'] = 'tpl/' . $theme . '/img/green2.png';
+            $host['host-status'] = 'led-green-on';
         else :
             $host['title_online'] = $lng['L_S_OFFLINE'];
-            $host['online_image'] = 'tpl/' . $theme . '/img/red2.png';
+            $host['host-status'] = 'led-red-on';
         endif;
 
         if (!empty($host['last_check'])) :
