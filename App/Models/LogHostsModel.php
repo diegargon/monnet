@@ -45,7 +45,7 @@ class LogHostsModel
      * Return logs based on the provided options.
      *
      * @param array<string,mixed> $opts Filter options.
-     * @return array<string,mixed> List of logs.
+     * @return array<int, array<string, mixed>> List of logs, each log is an associative array.
      */
     public function getLogsHosts(array $opts = []): array
     {

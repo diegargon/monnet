@@ -66,7 +66,7 @@ class LogHostsService
      * Get host logs based on options.
      *
      * @param array<string, mixed> $opts Filter options.
-     * @return array<string, mixed> List of logs.
+     * @return array<int, array<string, mixed>> List of logs, each log is an associative array.
      */
     public function getLogsHosts(array $opts): array
     {
@@ -78,7 +78,7 @@ class LogHostsService
      *
      * @param int $target_id Host ID.
      * @param array $command_values Command values (filters).
-     * @return array<string, string|int> Formatted logs.
+     * @return array<int, string> Formatted log lines.
      */
     public function getLogs(int $target_id, array $command_values): array
     {
@@ -116,7 +116,7 @@ class LogHostsService
      * Get events based on the command.
      *
      * @param string $command Requested command.
-     * @return array<string, string|int> Event data.
+     * @return array<string, mixed> Event data, including keysToShow and logs.
      */
     public function getEvents(string $command): array
     {
@@ -146,8 +146,8 @@ class LogHostsService
     /**
      * Format event logs for presentation.
      *
-     * @param array<string, string|int> $logs Logs to format.
-     * @return array<string, string|int> Formatted logs.
+     * @param array<int, array<string, mixed>> $logs Logs to format.
+     * @return array<int, array<string, mixed>> Formatted logs.
      */
     private function formatEventsLogs(array $logs): array
     {
@@ -169,9 +169,9 @@ class LogHostsService
     /**
      * Format host logs for terminal presentation.
      *
-     * @param array<string, string|int> $logs Logs to format.
+     * @param array<int, array<string, mixed>> $logs Logs to format.
      * @param string $nl Line separator (optional).
-     * @return array<string, string|int> Formatted logs.
+     * @return array<int, string> Formatted log lines.
      */
     private function formatHostLogs(array $logs, string $nl = '<br/>'): array
     {
