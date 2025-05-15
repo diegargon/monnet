@@ -24,12 +24,14 @@
             <td><label for="disable_task"><?= $lng['L_DISABLE']?></label></td>
             <td><label for="next_task"><?= $lng['L_NEXT_TASK']?></label></td>
             <td><label for="task_done"><?= $lng['L_DONE']?></label></td>
+            <td><label for="task_status"><?= $lng['L_STATUS']?></label></td>
             <td></td>
         </tr>
     <?php
     foreach ($tdata['host_tasks'] as $task) :
         $task_id = $task['id'];
         $task['trigger_type'] == 1 && $task['done'] > 0 ? $disabled = ' disabled' : $disabled = '';
+        $status_ico = $task['status'] == 1 ? 'fail-icon' : 'success-icon';
     ?>
         <tr data-id="<?= $task_id ?>">
             <td>
@@ -101,6 +103,9 @@
             </td>
             <td>
                 <div class="task_done"><?= $task['done'] ?></div>
+            </td>
+            <td class="center">
+                <div class="task_status <?= $status_ico ?>"></div>
             </td>
             <td>
                 <button type="submit" data-action="delete_host_task">Borrar</button>
