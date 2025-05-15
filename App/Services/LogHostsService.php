@@ -17,13 +17,65 @@ class LogHostsService
 
     private LogHostsModel $logHostsModel;
     private DateTimeService $dateTimeService;
+    private bool $console = false;
+
+    /** @var array<string,string> $lng */
+    private array $lng = [];
+
+    /** @var \Config */
+    private \Config $ncfg;    
+    /** @var int */
+    private int $max_db_msg = 254;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
         $db = $ctx->get('DBManager');
+        $this->lng = $ctx->get('lng');
+        $this->ncfg = $ctx->get('Config');
         $this->logHostsModel = new LogHostsModel($db);
         $this->dateTimeService = new DateTimeService();
+    }
+
+    /**
+     *
+     * @param int $log_level
+     * @param int $host_id
+     * @param string $msg
+     * @param int $log_type
+     *
+     * @return void
+     */
+    public function logHost(
+        int $log_level,
+        int $host_id,
+        string $msg,
+        int $log_type = 0,
+        int $event_type = 0
+    ): void {
+        if (mb_strlen($msg) > $this->max_db_msg) {
+            $msg_db = substr($msg, 0, 254);
+        } else {
+            $msg_db = $msg;
+        }
+        $set = [
+            'host_id' => $host_id,
+            'level' => $log_level,
+            'msg' => $msg_db,
+            'log_type' => $log_type,
+            'event_type' => $event_type
+        ];
+        $this->logHostsModel->insert($set);
+    }
+    
+    /**
+     * Output log to console
+     * @param bool $value
+     * @return void
+     */
+    public function setConsole(bool $value): void
+    {
+        $this->console = $value;
     }
 
     /**
