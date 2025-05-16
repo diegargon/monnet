@@ -310,4 +310,34 @@ class Config
                 throw new InvalidArgumentException("Unsupported type: $type");
         }
     }
+
+    /**
+     * Load file configuration from a JSON file. Key=>Value
+     *
+     * @param string $path Path to the JSON config file.
+     * @return array Loaded configuration as an associative array.
+     * @throws RuntimeException If the file can't be read or parsed.
+     */
+    private function loadFileConfig(string $path): array
+    {
+        if (!file_exists($path)) {
+            throw new RuntimeException("Config file not found: $path");
+        }
+
+        $jsonContent = file_get_contents($path);
+        if ($jsonContent === false) {
+            throw new RuntimeException("Unable to read config file: $path");
+        }
+
+        $config = json_decode($jsonContent, true);
+        if ($config === null) {
+            throw new RuntimeException("Invalid JSON in config file: $path");
+        }
+
+        foreach ($config as $ckey => $cvalue) {
+            $this->cfg[$ckey] = $cvalue;
+        }
+        
+        return $config;
+    }
 }
