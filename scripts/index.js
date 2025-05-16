@@ -128,14 +128,14 @@ $(document).ready(function () {
     var timer;
     var catID;
     $(document).on("dblclick", ".show_host_cat", function (event) {
-        event.preventDefault(); // Evitar la acción predeterminada del doble clic
+        event.preventDefault();
 
         catID = $(this).data('catid');
         submitCommand('show_host_only_cat', {id: catID});
         // Reiniciar la variable clicked
         clicked = false;
         // Limpiar el temporizador para evitar que se ejecute el clic normal
-        clearTimeout(timer); 
+        clearTimeout(timer);
     });
 
     $(document).on("click", ".show_host_cat", function (event) {
@@ -336,14 +336,14 @@ $(document).ready(function () {
         fields.networkCIDR = parseInt($('#network_cidr').val());
         fields.networkScan = parseInt($('input[name="networkScan"]:checked').val()) || 0;
         fields.networkPool = parseInt($('input[name="pool_mark"]:checked').val()) || 0;
-        fields.networkClean = parseInt($('input[name="networkClean"]:checked').val()) || 0;        
+        fields.networkClean = parseInt($('input[name="networkClean"]:checked').val()) || 0;
         fields.networkVLAN = parseInt($('#network_vlan').val()) || 0;
         fields.networkWeight = parseInt($('#network_weight').val()) || 50;
         fields.networkDisable = $('#networkDisable').is(':checked') ? 1 : 0;
         if (
             fields.networkName !== "" &&
             fields.network !== "" &&
-            fields.networkCIDR !== "" && 
+            fields.networkCIDR !== "" &&
             fields.networkVLAN !== ""
         ) {
             json_fields = JSON.stringify(fields);
@@ -370,7 +370,7 @@ $(document).ready(function () {
         fields.networkOnlyOnline = parseInt($(`input[name="networkOnlyOnline_${id}"]:checked`).val()) || 0;
         fields.networkDisable = $(`input[name="networkDisable_${id}"]`).is(':checked') ? 1 : 0;
         fields.networkWeight = parseInt($(`input[name="networkWeight_${id}"]`).val()) || 50;
-        
+
         if (
             id !== "" &&
             id > 0 &&
@@ -430,9 +430,9 @@ $(document).ready(function () {
         if (!id) {
             $('#error_msg').html('Empty Id field');
         } else if (
-            fields.bookmarkName !== "" && 
+            fields.bookmarkName !== "" &&
             fields.cat_id !== "" &&
-            fields.urlip !== "" && 
+            fields.urlip !== "" &&
             fields.image_type !== ""
         ) {
             json_fields = JSON.stringify(fields);

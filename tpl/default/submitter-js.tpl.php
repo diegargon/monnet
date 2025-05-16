@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -112,41 +110,44 @@
 
                     if (jsonData.command_receive === 'submitHost' ) {
                         if (!jsonData.command_error) {
-                          closeStdContainer();
+                            closeStdContainer();
                         } else {
                             $('#stdbox_status_msg').append(jsonData.command_error_msg);
                         }
                     }
 
+                    /* Host Cat Single Click */
                     if (jsonData.command_receive === 'show_host_cat' && jsonData.command_success) {
-                            let newState = jsonData.response_msg;
-                            let imgSrc = `/tpl/<?= $ncfg->get('theme') ?>/img/${newState ? 'green.png' : 'red.png'}`;
-                            $('.show_host_cat[data-catid="' + jsonData.id + '"] img').attr('src', imgSrc);
+                        let newState = jsonData.response_msg; // 1 = on, 0 = off
+                        let $led = $('.show_host_cat[data-catid="' + jsonData.id + '"] .menu-led');
+                        if (parseInt(newState)) {
+                            $led.removeClass('led-red-on').addClass('led-green-on');
+                        } else {
+                            $led.removeClass('led-green-on').addClass('led-red-on');
+                        }
                     }
 
                     /* Host Cat Double Click */
                     if (jsonData.command_receive === 'show_host_only_cat' && jsonData.command_success) {
-                        let excludedCategory = '[data-catid="' + jsonData.id + '"]';
+                        let catId = jsonData.id;
+                        let excludedCategory = '[data-catid="' + catId + '"]';
 
-                        // Select all red icons not in the current category
-                        let redIcons = $('.show_host_cat img')
-                            .not(excludedCategory)
-                            .filter('[src$="red.png"]');
+                        // Select all led indicators not in the current category
+                        let ledOnDivs = $('.show_host_cat').not(excludedCategory).find('.led-green-on');
 
                         // Select all containers not in the current category
-                        let otherContainers = $('.show_host_cat')
-                            .not(excludedCategory);
+                        let otherContainers = $('.show_host_cat').not(excludedCategory);
 
-                        // Check if all other containers have red icons
-                        let allOtherRed = redIcons.length === otherContainers.length;
+                        // Check if all other containers are off (do NOT have led-green-on)
+                        let allOtherOff = ledOnDivs.length === 0 && otherContainers.length > 0;
 
-                        if (allOtherRed) {
-                            // if all red except clicked category turn on all
-                            $('.show_host_cat img').attr('src', '/tpl/<?= $ncfg->get('theme') ?>/img/green.png');
+                        if (allOtherOff) {
+                            // If all off except clicked category, turn all on (set all to green)
+                            $('.show_host_cat .led-red-on').removeClass('led-red-on').addClass('led-green-on');
                         } else {
-                            // if not turn all off except the clicked category
-                            $('.show_host_cat img').not('[data-catid="' + jsonData.id + '"]').attr('src', '/tpl/<?= $ncfg->get('theme') ?>/img/red.png');
-                            $('.show_host_cat[data-catid="' + jsonData.id + '"] img').attr('src', '/tpl/<?= $ncfg->get('theme') ?>/img/green.png');
+                            // Turn all off except the clicked category
+                            $('.show_host_cat .led-green-on').removeClass('led-green-on').addClass('led-red-on');
+                            $('.show_host_cat[data-catid="' + catId + '"] .led-red-on').removeClass('led-red-on').addClass('led-green-on');
                         }
                     }
                     if (
