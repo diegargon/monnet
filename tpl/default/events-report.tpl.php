@@ -39,6 +39,10 @@
                                     />
                                 </label>
                             <?php
+                        elseif ($key === 'msg'):
+                            ?>
+                            <div class="row-logs-msg"><?= $log[$key]?></div>
+                            <?php
                         else :
                             echo $log[$key] ?? '.';
                         endif;

@@ -28,13 +28,10 @@
                     <?php foreach ($tdata['keysToShow'] as $key) : ?>
                         <td class="td-host-logs">
                         <?php
-                        if ($key === 'online' && (int) $host['online'] === 1) :
-                            ?>
-                            <div class="host-led led-green-on"></div>
-                            <?php
-                        elseif ($key === 'online' && (int) $host['online'] === 0) :
-                            ?>
-                            <div class="host-led led-red-on"></div>
+                        if ($key === 'online') :
+                             $host_status = $host['online'] ? 'led-green-on' : $host_status = 'led-red-on';
+                             ?>
+                            <div class="host-led <?= $host_status ?>"></div>
                             <?php
                         elseif ($key === 'log_msgs') :
                             if (!isset($host['log_msgs']) || !is_array($host['log_msgs'])) {
@@ -43,7 +40,7 @@
                             }
                             foreach ($host['log_msgs'] as $log_msg) :
                                 ?>
-                            <div>
+                            <div class="row-logs-msg">
                                 <input
                                     type="checkbox"
                                     name="ack_host_log"
