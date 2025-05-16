@@ -49,7 +49,8 @@
                 ?>
                 <div class="category">
                     <a class="show_host_cat"  data-catid="<?= $cat['id'] ?>" href="#">
-                        <img src="/tpl/<?= $ncfg->get('theme') ?>/img/<?= $cat['on'] ? 'green.png' : 'red.png' ?>"/>
+                        <div class="menu-led <?= $cat['on'] ? 'led-green-on' : 'led-red-on' ?>"></div>
+                        
                         <input onclick="confirmSubmit('removeHostsCat', {id: <?= $cat['id'] ?>})" type="image"
                                class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png"
                                alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>">
