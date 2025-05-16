@@ -477,8 +477,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $columnExists = $db->query("SELECT 1
                 FROM INFORMATION_SCHEMA.COLUMNS
                 WHERE TABLE_SCHEMA = DATABASE()
-                  AND TABLE_NAME = 'ports'
-                  AND COLUMN_NAME = 'last_change'");
+                AND TABLE_NAME = 'ports'
+                AND COLUMN_NAME = 'last_change'");
             # DONE DROP unused
             if ($columnExists->num_rows > 0) {
                 $db->query("ALTER TABLE `ports` DROP COLUMN `last_change`");
@@ -500,8 +500,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             SELECT 1
             FROM INFORMATION_SCHEMA.COLUMNS
             WHERE TABLE_SCHEMA = DATABASE()
-              AND TABLE_NAME = 'ports'
-              AND COLUMN_NAME = 'latency'
+            AND TABLE_NAME = 'ports'
+            AND COLUMN_NAME = 'latency'
             LIMIT 1
         ");
         if ($result && $result->num_rows === 0) {
@@ -512,8 +512,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             SELECT 1
             FROM INFORMATION_SCHEMA.COLUMNS
             WHERE TABLE_SCHEMA = DATABASE()
-              AND TABLE_NAME = 'ports'
-              AND COLUMN_NAME = 'last_check'
+            AND TABLE_NAME = 'ports'
+            AND COLUMN_NAME = 'last_check'
             LIMIT 1
         ");
         if ($result && $result->num_rows === 0) {
@@ -549,17 +549,17 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             # To rebuild User
             $db->query("
                 CREATE TABLE `sessions` (
-                  `id` INT(11) NOT NULL AUTO_INCREMENT,
-                  `user_id` INT(11) NOT NULL,
-                  `sid` VARCHAR(64) NOT NULL,
-                  `ip_address` VARCHAR(45) DEFAULT NULL,
-                  `user_agent` VARCHAR(255) DEFAULT NULL,
-                  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-                  `expired_at` DATETIME DEFAULT NULL,
-                  `last_active_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                  PRIMARY KEY (`id`),
-                  UNIQUE KEY `sid` (`sid`),
-                  KEY `user_id` (`user_id`)
+                    `id` INT(11) NOT NULL AUTO_INCREMENT,
+                    `user_id` INT(11) NOT NULL,
+                    `sid` VARCHAR(64) NOT NULL,
+                    `ip_address` VARCHAR(45) DEFAULT NULL,
+                    `user_agent` VARCHAR(255) DEFAULT NULL,
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `expired_at` DATETIME DEFAULT NULL,
+                    `last_active_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`id`),
+                    UNIQUE KEY `sid` (`sid`),
+                    KEY `user_id` (`user_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
             ");
             $ncfg->set('db_monnet_version', $update, 1);
@@ -703,7 +703,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.68 PENDING
+    // 0.68 DONE
     $update = 0.68;
     if ($db_version == 0.67) {
         try {
@@ -711,7 +711,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
-            # system_type to rol
+            # DONE system_type to rol
             $db->query("ALTER TABLE `hosts` ADD `rol` INT NULL DEFAULT 0;");
             # DONE Counter for other task and disable uniq tasks
             $db->query("ALTER TABLE `tasks` ADD `done` INT NULL DEFAULT 0;");
@@ -796,31 +796,26 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
     $update = 0.72;
     if ($db_version == 0.71) {
         try {
-            # Mark task success/fail
+            # DONE Mark task success/fail
             $db->query("ALTER TABLE `tasks` ADD COLUMN status TINYINT NOT NULL DEFAULT '0';");
-            # Clean old host moved from clear G: Change M: Implement
+            # DONE Clean old host moved from clear G: Change M: Implement
             $db->query("ALTER TABLE `networks` ADD `clean` TINYINT NOT NULL DEFAULT '0';");
-            $db->query("START TRANSACTION");
-            //$db->query("
-            //");
-            $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
             Log::notice("Update version to $update successful");
         } catch (Exception $e) {
-            $db->query("ROLLBACK");
             $ncfg->set('db_monnet_version', $db_version, 1);
             Log::error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
 
-    // 0.73
+    // 0.73 PENDING
     $update = 0.73;
     if ($db_version == 0.72) {
         try {
-            # Gateway: When Event Task complete/fail Task ID
+            # Gateway: When Event Task complete/fail Task ID event['tid']
             $db->query("ALTER TABLE `hosts_logs` ADD `tid` INT DEFAULT '0';");
-            # Gateway: Marcar cuando online
+            # DONE Gateway: Marcar cuando online
             $db->query("ALTER TABLE `hosts` ADD `last_seen` DATETIME DEFAULT NULL");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
@@ -830,13 +825,13 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // 0.74
+    // 0.74 DONE
     $update = 0.74;
     if ($db_version == 0.73) {
         try {
             # For renaming fields
-            # + clean_done_tasks for clean uniq tasks done
-            # clean not seen interval for purge host on clean networks
+            # DONE clear_done_tasks for clean uniq tasks done
+            # DONE clear not seen interval for purge host on clean networks
             $db->query("START TRANSACTION");
             $db->query("UPDATE `config` SET `cvalue` = JSON_QUOTE('604800') WHERE `ckey` = 'sid_expire';");
             $db->query("
@@ -844,7 +839,6 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 ('clear_not_seen_hosts_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
                 ('clear_task_done_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0);
             ");
-
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
@@ -856,7 +850,7 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
         }
     }
 
-    // Later / PENDING
+    // Later
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
@@ -869,6 +863,8 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
             //$db->query("
             //");
             $db->query("START TRANSACTION");
+            # Unsed keyword
+            $db->query("DELETE FROM `config` WHERE `ckey` = 'clean_hosts_days'");
             //$db->query("
             //");
             $db->query("COMMIT");
