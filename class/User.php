@@ -7,6 +7,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+use App\Services\DateTimeService;
+
 class User
 {
     /**
@@ -191,7 +193,7 @@ class User
             $format = $this->ncfg->get('datatime_format');
         }
 
-        return format_date_now($this->user['timezone'], $format);
+        return DateTimeService::formatDateNow($this->user['timezone'], $format);
     }
 
     /**

@@ -9,6 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+use App\Services\DateTimeService;
+
 class Log
 {
     /**
@@ -93,7 +95,7 @@ class Log
             }
             if (self::$console) {
                 echo '[' .
-                format_date_now(self::$timezone, self::$ncfg->get('datetime_log_format')) .
+                DateTimeService::formatDateNow(self::$timezone, self::$ncfg->get('datetime_log_format')) .
                 '][' . self::$ncfg->get('app_name') . '][' . $log_level . '] ' . $msg . "\n";
             }
             if (self::$ncfg->get('system_log_to_db')) {
@@ -111,7 +113,7 @@ class Log
             if (self::$ncfg->get('log_to_file')) {
                 $log_file = self::$ncfg->get('log_file');
                 $content = '['
-                    . format_date_now(self::$timezone, self::$ncfg->get('datetime_log_format'))
+                    . DateTimeService::formatDateNow(self::$timezone, self::$ncfg->get('datetime_log_format'))
                     . '][' . self::$ncfg->get('app_name') . ']:[' . $log_level . '] ' . $msg . "\n";
 
                 $file_ready = false;

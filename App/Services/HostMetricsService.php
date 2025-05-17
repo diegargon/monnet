@@ -8,21 +8,19 @@
 
 namespace App\Services;
 
-use App\Services\DateTimeService;
 use App\Services\HostMetricsViewBuilder;
 use App\Models\HostMetricsModel;
+use App\Services\DateTimeService;
 
 class HostMetricsService
 {
     private \AppContext $ctx;
     private HostMetricsViewBuilder $hostMetricsViewBuilder;
-    private DateTimeService $dateTimeService;
     private \App\Models\HostMetricsModel $hostMetricsModel;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->dateTimeService = new DateTimeService();
         $this->hostMetricsViewBuilder = new HostMetricsViewBuilder($ctx);
         $this->hostMetricsModel = new HostMetricsModel($ctx);
     }
@@ -93,7 +91,7 @@ class HostMetricsService
         $timezone = $ncfg->get('default_timezone');
 
         foreach ($metrics as &$metric) {
-            $new_date = $this->dateTimeService->utcToTz($metric['date'], $timezone);
+            $new_date = DateTimeService::utcToTz($metric['date'], $timezone);
             $metric['date'] = $new_date;
         }
 

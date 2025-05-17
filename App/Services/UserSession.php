@@ -12,6 +12,7 @@ use App\Models\UserModel;
 use App\Models\SessionsModel;
 use App\Services\LogSystemService;
 use App\Services\Filter;
+use App\Services\DateTimeService;
 
 class UserSession
 {
@@ -100,12 +101,12 @@ class UserSession
     {
         $sid = session_id();
 
-        $date_now = date('Y-m-d H:i:s');
+        $date_now = DateTimeService::dateNow();
         $sessionData = [
             'user_id' => $userId,
             'sid' => $sid,
             'created' => $date_now,
-            'expire' => date('Y-m-d H:i:s', time() + $this->session_expire),
+            'expire' => DateTimeService::formatTimestamp(time() + $this->session_expire, 'UTC'),
             'last_active' => $date_now,
         ];
 
@@ -124,8 +125,8 @@ class UserSession
             $sid = session_id();
         }
         $sessionData = [
-            'last_active' => date('Y-m-d H:i:s'),
-            'expire' => date('Y-m-d H:i:s', time() + $this->session_expire),
+            'last_active' => DateTimeService::dateNow(),
+            'expire' => DateTimeService::formatTimestamp(time() + $this->session_expire, 'UTC'),
             'sid' => $sid
         ];
 

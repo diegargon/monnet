@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Services\LogSystemService;
 use App\Services\NetworksService;
+use App\Services\DateTimeService;
 
 class HostFormatter
 {
@@ -65,7 +66,7 @@ class HostFormatter
         endif;
 
         if (!empty($host['last_check'])) :
-            $host['f_last_check'] = utc_to_tz(
+            $host['f_last_check'] = DateTimeService::utcToTz(
                 $host['last_check'],
                 $user->getTimezone(),
                 $ncfg->get('datetime_format')
@@ -73,14 +74,14 @@ class HostFormatter
         endif;
 
         if (!empty($host['last_seen'])) :
-            $host['f_last_seen'] = utc_to_tz(
+            $host['f_last_seen'] = DateTimeService::utcToTz(
                 $host['last_seen'],
                 $user->getTimezone(),
                 $ncfg->get('datetime_format')
             );
         endif;
 
-        $host['formated_creation_date'] = utc_to_tz(
+        $host['formated_creation_date'] = DateTimeService::utcToTz(
             $host['created'],
             $ncfg->get('default_timezone'),
             $ncfg->get('datetime_format')
@@ -237,10 +238,8 @@ class HostFormatter
             $host['misc']['uptime'] = $this->formatUptime($host['misc']['uptime']);
         }
 
-        $dateTimeService = new DateTimeService();
-
         if (!empty($host['misc']['agent_last_contact'])) {
-            $host['misc']['f_agent_contact'] = $dateTimeService->formatTimestamp(
+            $host['misc']['f_agent_contact'] = DateTimeService::formatTimestamp(
                 $host['misc']['agent_last_contact'],
                 $ncfg->get('default_timezone'),
                 $ncfg->get('datetime_format')

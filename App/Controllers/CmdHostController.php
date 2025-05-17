@@ -28,6 +28,7 @@ use App\Services\HostMetricsService;
 use App\Models\CmdHostModel;
 use App\Models\CmdHostNotesModel;
 use App\Helpers\Response;
+use App\Services\DateTimeService;
 
 class CmdHostController
 {
@@ -269,7 +270,7 @@ class CmdHostController
             'scan_type' => 1, # Remote
             'pnumber' => $pnumber,
             'protocol' => $protocol,
-            'last_check' => date_now()
+            'last_check' => DateTimeService::dateNow()
         ];
 
         if ($this->cmdHostModel->addRemoteScanHostPort($target_id, $port_details)) {

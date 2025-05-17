@@ -11,6 +11,7 @@ use App\Services\RefresherService;
 use App\Views\RefresherView;
 use App\Services\TemplateService;
 use App\Services\GatewayService;
+use App\Services\DateTimeService;
 
 class RefresherController
 {
@@ -210,14 +211,14 @@ class RefresherController
         $cli_last_run = 'Never';
         if ($ncfg->get('cli_last_run')) {
             $cli_last_run = $ncfg->get('cli_last_run');
-            $cli_last_run = utc_to_tz($cli_last_run, $user->getTimezone(), $ncfg->get('datetime_format_min'));
+            $cli_last_run = DateTimeService::utcToTz($cli_last_run, $user->getTimezone(), $ncfg->get('datetime_format_min'));
             $cli_last_run .= $ncfg->get('cli_last_run_metrics');
         }
 
         $discovery_last_run = 'Never';
         if ($ncfg->get('discovery_last_run')) {
             $discovery_last_run = $ncfg->get('discovery_last_run');
-            $discovery_last_run = utc_to_tz($discovery_last_run, $user->getTimezone(), $ncfg->get('datetime_format_min'));
+            $discovery_last_run = DateTimeService::utcToTz($discovery_last_run, $user->getTimezone(), $ncfg->get('datetime_format_min'));
             $discovery_last_run .= $ncfg->get('discovery_last_run_metrics');
         }
 

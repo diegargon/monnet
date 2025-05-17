@@ -120,14 +120,14 @@ class RefresherView
     {
         array_walk($logs, function(&$log) {
             if (!empty($log['date'])) {
-                $log['date'] = $this->dateTimeService->formatDateString($log['date']);
+                $log['date'] = DateTimeService::formatDateString($log['date']);
             }
         });
 
         $log_lines = [];
         $term_date_format= $this->ncfg->get('term_date_format');
         foreach ($logs as $log) {
-            $log_date =  $this->dateTimeService->formatDateString(
+            $log_date =  DateTimeService::formatDateString(
                     $log['date'],
                     $term_date_format,
                 );
@@ -168,7 +168,7 @@ class RefresherView
         $user = $this->ctx->get('User');
         $theme = $user->getTheme();
         $lng = $this->ctx->get('lng');
-        $date_now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $date_now = new \DateTime(DateTimeService::dateNow(), new \DateTimeZone('UTC'));
 
         foreach ($hosts_view as $key => $vhost) {
             $hosts_view[$key]['theme'] = $theme;

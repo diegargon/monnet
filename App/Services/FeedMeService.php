@@ -219,7 +219,7 @@ class FeedMeService
                     is_numeric($rdata['load_avg_stats']['5min'])
                 ) {
                     $stats_data = [
-                        'date' => $this->dateTimeService->dateNow(),
+                        'date' => DateTimeService::dateNow(),
                         'type' => 2,   //loadavg
                         'host_id' => $host_id,
                         'value' => $rdata['load_avg_stats']['5min']
@@ -230,7 +230,7 @@ class FeedMeService
 
             if (!empty($rdata['iowait_stats'])) {
                 $stats_data = [
-                    'date' => $this->dateTimeService->dateNow(),
+                    'date' => DateTimeService::dateNow(),
                     'type' => 3,   //iowait
                     'host_id' => $host_id,
                     'value' => $rdata['iowait_stats']
@@ -240,7 +240,7 @@ class FeedMeService
 
             if (!empty($rdata['mem_stats'])) {
                 $stats_data = [
-                    'date' => $this->dateTimeService->dateNow(),
+                    'date' => DateTimeService::dateNow(),
                     'type' => 4,   # Memory
                     'host_id' => $host_id,
                     'value' => $rdata['mem_stats']
@@ -345,7 +345,7 @@ class FeedMeService
                         $this->hostService->updatePort($db_port['id'], [
                             "service" => $port['service'],
                             "online" => 1,
-                            "last_check" => $this->dateTimeService->dateNow(),
+                            "last_check" => DateTimeService::dateNow(),
                         ]);
                     } elseif ((int)$db_port['online'] === 0) {
                         $alertmsg = "Port UP detected on $interface ({$port['service']}) ($pnumber)($ip_version)";
@@ -357,7 +357,7 @@ class FeedMeService
 
                         $this->hostService->updatePort($db_port['id'], [
                             "online" => 1,
-                            "last_check" => $this->dateTimeService->dateNow(),
+                            "last_check" => DateTimeService::dateNow(),
                         ]);
                     }
                     unset($db_ports_map[$key]);
@@ -371,7 +371,7 @@ class FeedMeService
                         'service' => $port['service'],
                         'interface' => $interface,
                         'ip_version' => $ip_version,
-                        'last_check' => $this->dateTimeService->dateNow(),
+                        'last_check' => DateTimeService::dateNow(),
                     ];
                     $this->cmdHostModel->addPort($new_port_data);
                     $log_msg = "New port detected on $interface $pnumber ({$port['service']})($ip_version)";
@@ -392,7 +392,7 @@ class FeedMeService
                 if ((int)$db_port['online'] === 1) {
                     $set = [
                         'online' => 0,
-                        'last_check' => $this->dateTimeService->dateNow(),
+                        'last_check' => DateTimeService::dateNow(),
                     ];
                     $log_msg = "Port DOWN detected on {$interface} {$db_port['pnumber']} ({$db_port['service']})";
                     if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
@@ -565,9 +565,9 @@ class FeedMeService
         if (!isset($this->datetimeService)) {
             $this->dateTimeService  = new DateTimeService();
         }
-        $dateNow = $this->dateTimeService->dateNow();
-        $values['last_check'] = $dateNow;
-        $values['last_seen'] = $dateNow;
+        $date_now = DateTimeService::dateNow();
+        $values['last_check'] = $date_now;
+        $values['last_seen'] = $date_now;
 
         return $values;
     }

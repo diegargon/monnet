@@ -9,6 +9,7 @@
 namespace App\Services;
 
 use App\Models\LogSystemModel;
+use App\Services\DateTimeService;
 
 class LogSystemService
 {
@@ -68,7 +69,7 @@ class LogSystemService
             }
             if ($this->console) {
                 echo '[' .
-                format_date_now($this->timezone, $this->ncfg->get('datetime_log_format')) .
+                DateTimeService::formatDateNow($this->timezone, $this->ncfg->get('datetime_log_format')) .
                 '][' . $this->ncfg->get('app_name') . '][' . $log_level . '] ' . $msg . "\n";
             }
             if ($this->ncfg->get('system_log_to_db')) {
@@ -86,7 +87,7 @@ class LogSystemService
             if ($this->ncfg->get('log_to_file')) {
                 $log_file = $this->ncfg->get('log_file');
                 $content = '['
-                    . format_date_now($this->timezone, $this->ncfg->get('datetime_log_format'))
+                    . DateTimeService::formatDateNow($this->timezone, $this->ncfg->get('datetime_log_format'))
                     . '][' . $this->ncfg->get('app_name') . ']:[' . $log_level . '] ' . $msg . "\n";
 
                 $file_ready = false;

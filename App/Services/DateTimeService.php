@@ -11,22 +11,12 @@ namespace App\Services;
 class DateTimeService
 {
     /**
-     * @var string
-     */
-    private string $timezone = 'UTC';
-
-    public function __construct(string $timezone = 'UTC')
-    {
-        $this->timezone = $timezone;
-    }
-
-    /**
      * Validate timezone
      *
      * @param string $timezone
      * @return bool
      */
-    public function validTimezone(string $timezone): bool
+    public static function validTimezone(string $timezone): bool
     {
         if (empty($timezone)) {
             return false;
@@ -41,9 +31,9 @@ class DateTimeService
      * @param string $timezone
      * @return string|false
      */
-    public function dateNow(string $timezone = 'UTC'): string|false
+    public static function dateNow(string $timezone = 'UTC'): string|false
     {
-        if (!$this->validTimezone($timezone)) {
+        if (!self::validTimezone($timezone)) {
             return false;
         }
         $date_timezone = new \DatetimeZone($timezone);
@@ -60,7 +50,7 @@ class DateTimeService
      * @param string $time_format
      * @return string
      */
-    public function utcToTz(string $utc_date, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
+    public static function utcToTz(string $utc_date, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
     {
         $date = new \DateTime($utc_date, new \DateTimeZone('UTC'));
         $date->setTimezone(new \DateTimeZone($timezone));
@@ -74,9 +64,9 @@ class DateTimeService
      * @param string $time_format
      * @return string|false
      */
-    public function formatDateNow(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s'): string|false
+    public static function formatDateNow(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s'): string|false
     {
-        if (!$this->validTimezone($timezone)) {
+        if (!self::validTimezone($timezone)) {
             return false;
         }
         $date_timezone = new \DatetimeZone($timezone);
@@ -92,7 +82,7 @@ class DateTimeService
      * @param string $time_format
      * @return string|false
      */
-    public function formatDateString(string $date, string $time_format = 'Y-m-d H:i:s'): string|false
+    public static function formatDateString(string $date, string $time_format = 'Y-m-d H:i:s'): string|false
     {
         $timestamp = strtotime($date);
 
@@ -103,7 +93,7 @@ class DateTimeService
      *
      * @return string
      */
-    public function datetimeMachine(): string
+    public static function datetimeMachine(): string
     {
         $now = new \DateTime();
         return $now->format('Y-m-d H:i:s');
@@ -118,7 +108,7 @@ class DateTimeService
      * @return string Fecha formateada en la zona horaria especificada.
      */
 
-    public function formatTimestamp(int $timestamp, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
+    public static function formatTimestamp(int $timestamp, string $timezone, string $time_format = 'Y-m-d H:i:s'): string
     {
         try {
             $date = new \DateTime('@' . $timestamp); // '@' indica un timestamp UNIX

@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\DateTimeService;
 /**
  *
  * @author diego/@/envigo.net
@@ -213,7 +214,7 @@ function cached_img(User $user, int $id, string $img_url, int $renew = 0): strin
             $img_item_check = new DateTime($img_item_check);
             $img_item_check->modify('+48 hours');
 
-            if ($img_item_check > date_now()) :
+            if ($img_item_check > DateTimeService::dateNow()) :
                 return $img_url;
             endif;
         }
@@ -225,7 +226,7 @@ function cached_img(User $user, int $id, string $img_url, int $renew = 0): strin
                 return $cache_img_path;
             endif;
         } else {
-            $user->setPref($img_url, date_now());
+            $user->setPref($img_url, DateTimeService::dateNow());
             $error = error_get_last();
             Log::error('Error getting image error msg ' . $error['message']);
         }
