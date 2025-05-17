@@ -15,6 +15,7 @@ use App\Services\DateTimeService;
 use App\Services\Filter;
 use App\Services\NetworksService;
 use App\Services\LogSystemService;
+use App\Services\LogHostsService;
 
 class HostService
 {
@@ -62,6 +63,11 @@ class HostService
      */
     private LogSystemService $logSystem;
 
+    /**
+     * @var LogHostsService
+     */
+    private LogHostsService $logHost;
+
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
@@ -75,6 +81,7 @@ class HostService
         $this->hostFormatter = new HostFormatter($ctx);
         $this->ansibleService = new AnsibleService($ctx);
         $this->logSystem = new LogSystemService($ctx);
+        $this->logHost = new LogHostsService($ctx);
     }
 
     public function __destruct()
@@ -122,9 +129,9 @@ class HostService
         $networkService = new NetworksService($this->ctx);
         $network_match = $networkService->matchNetwork($host['ip']);
 
-        $this->hostsModel->add($host);
-
-        $host_id = $this->hostsModel->insertId();
+        if (empty($network_match)) {
+            return ['status' => 'error', 'error_msg' => 'Adding host: No network match'];
+        }
         if (!empty($host['hostname'])) {
             $display_name = $host['hostname'];
         } else {
@@ -145,9 +152,10 @@ class HostService
         $host['network'] = $network_match['id'];
 
         $this->hostsModel->add($host);
+        $host_id = $this->hostsModel->insertId();
 
         $log_msg = 'Found new host: ' . $display_name . ' on network ' . $network_match['name'];
-        \Log::logHost(
+        $this->logHost->logHost(
             \LogLevel::WARNING,
             $host_id,
             $log_msg,
@@ -546,7 +554,7 @@ class HostService
      */
     public function setAlertOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        \Log::logHost(\LogLevel::ALERT, $id, $msg, $log_type, $event_type);
+        $this->logHost->logHost(\LogLevel::ALERT, $id, $msg, $log_type, $event_type);
         $dateTime = new DateTimeService();
         $update = [
             'alert' => 1,
@@ -564,7 +572,7 @@ class HostService
      */
     public function setWarnOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        \Log::logHost(\LogLevel::WARNING, $id, $msg, $log_type, $event_type);
+        $this->logHost->logHost(\LogLevel::WARNING, $id, $msg, $log_type, $event_type);
         $dateTime = new DateTimeService();
         $update = [
             'warn' => 1,
