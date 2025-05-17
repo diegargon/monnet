@@ -224,7 +224,6 @@ $lng = [
     'L_SERVERS' => 'Servers',
     'L_SHOWED' => 'Mostrando',
     'L_SCAN' => 'Scan',
-    'L_SYSTEM_TYPE' => 'Tipo sistema',
     'L_STATS' => 'Estadisticas',
     'L_SUMMARY' => 'Resumen',
     'L_SEL_PLAYBOOK' => 'Selecciona Playbook',

@@ -143,16 +143,17 @@ class HostFormatter
             endif;
         endforeach;
         */
-        
+
         $timezone = $ncfg->get('default_timezone');
         $timeformat = $ncfg->get('datetime_format_min');
         foreach ($logs_items as $item) :
+            $msg = !empty($item['msg']) ? $item['msg'] : '?';
             $date = utc_to_tz($item['date'], $timezone, $timeformat);
             $log_msg[] = [
                 'log_id' => $item['id'],
                 'log_type' => \LogType::getName($item['log_type']),
                 'event_type' => \EventType::getName($item['event_type']),
-                'msg' => "{$item['msg']} - $date",
+                'msg' => "$msg - $date",
                 'ack_state' => $item['ack']
             ];
         endforeach;

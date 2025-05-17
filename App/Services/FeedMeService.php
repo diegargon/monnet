@@ -110,8 +110,6 @@ class FeedMeService
                 return $validated_response;
             }
 
-            //$agent_logId = '[AGENT v' . $request['version'] . '][' . $host['display_name'] . '] ';
-
             $agent_default_interval = $this->getAgentInterval();
 
             $host_update_values = $this->prepareHostUpdateValues($host, $request, $agent_default_interval);

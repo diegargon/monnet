@@ -25,12 +25,12 @@
             "id": id,
             "cmd": "notification",
             "token": token,
-            "version": AGENT_VERSION,
             "data":  data,
             "meta": meta
+            "name": "notification name" // Mandatory
+            "version": to remplace (field is in meta)
         }
             data {
-                "name": "notification name" // Mandatory
                 "msg": "Custom msg" //Optional
                 ... other custom fields ...
             }
