@@ -11,6 +11,7 @@ namespace App\Services;
 use App\Models\UserModel;
 use App\Models\SessionsModel;
 use App\Services\LogSystemService;
+use App\Services\Filter;
 
 class UserSession
 {
@@ -76,13 +77,10 @@ class UserSession
             return true;
         }
 
-        if (
-                isset($_COOKIE[self::REMEMBER_COOKIE]) &&
-                isset($_COOKIE['uid'])
-        ) {
-            $sid = $_COOKIE[self::REMEMBER_COOKIE];
-            $uid = $_COOKIE['uid'];
+        $sid = Filter::cookieSid(self::REMEMBER_COOKIE);
+        $uid = Filter::cookieInt('uid');
 
+        if ($sid && $uid) {
             if ($this->sessionModel->sidExists($uid, $sid)) {
                 $user = $this->userModel->getById($uid);
                 if ($user) {

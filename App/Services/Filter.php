@@ -612,12 +612,12 @@ class Filter
         return $var;
         // Validate email
         /*
-          if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-          (!empty($min_size) && (strlen($var) < $min_size))) {
-          return false;
-          }
+            if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
+                (!empty($min_size) && (strlen($var) < $min_size))) {
+                return false;
+            }
 
-          return $var;
+            return $var;
          */
     }
 
@@ -1270,5 +1270,51 @@ class Filter
             ?: filter_var($_SERVER['HTTP_HOST'], FILTER_VALIDATE_IP);
 
         return $host !== false ? $host : false;
+    }
+
+    /**
+     * Retrieves a string from $_COOKIE and validates it.
+     *
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated string or false if invalid.
+     */
+    public static function cookieString(mixed $val, int $size = PHP_INT_MAX): string|false
+    {
+        if (empty($_COOKIE[$val])) {
+            return false;
+        }
+        return self::varString($_COOKIE[$val], $size);
+    }
+
+    /**
+     * Retrieves an integer from $_COOKIE and validates it.
+     *
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return int|null The validated integer or null if invalid.
+     */
+    public static function cookieInt(mixed $val, int $size = PHP_INT_MAX): ?int
+    {
+        if (empty($_COOKIE[$val])) {
+            return null;
+        }
+        return self::varInt($_COOKIE[$val], $size);
+    }
+
+    /**
+     * Retrieves a session id (SID) from $_COOKIE and validates it (strict alphanumeric).
+     *
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated SID or false if invalid.
+     */
+    public static function cookieSid(mixed $val, int $size = 128): string|false
+    {
+        if (empty($_COOKIE[$val])) {
+            return false;
+        }
+        // SID: strict alphanumeric + dash/underscore (PHP default session id charset)
+        return self::varStrict($_COOKIE[$val], $size);
     }
 }

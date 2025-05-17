@@ -99,8 +99,8 @@ class UserService
         return $this->getUser($userId);
     }
 
-     public function updateUser(int $userId, array $userData): string|bool
-     {
+    public function updateUser(int $userId, array $userData): string|bool
+    {
         $user = $this->getUser($userId);
 
         if (empty($user)) {

@@ -18,7 +18,7 @@ class LogHostsService
 
     private LogHostsModel $logHostsModel;
     private DateTimeService $dateTimeService;
-  
+
     /** @var int */
     private int $max_db_msg = 254;
 

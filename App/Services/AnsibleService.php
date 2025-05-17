@@ -31,7 +31,7 @@ class AnsibleService
     private CmdAnsibleModel $cmdAnsibleModel;
     private CmdAnsibleReportModel $ansibleReportModel;
     private TemplateService $templateService;
-    private LogSystemService $logSystem;
+    private LogSystemService $logSys;
     private GatewayService $gatewayService;
 
     private array $playbooks_metadata = [];
@@ -43,7 +43,7 @@ class AnsibleService
         $this->cmdAnsibleModel = new CmdAnsibleModel($ctx);
         $this->templateService = new TemplateService($ctx);
         $this->gatewayService = new GatewayService($ctx);
-        $this->logSystem = new LogSystemService($ctx);
+        $this->logSys = new LogSystemService($ctx);
     }
 
     /**
@@ -287,7 +287,7 @@ class AnsibleService
                 }
             }
         }
-        $this->logSystem->warning("Playbook name: $pb_name not found");
+        $this->logSys->warning("Playbook name: $pb_name not found");
 
         return '';
     }
@@ -306,7 +306,7 @@ class AnsibleService
                 endif;
             }
         }
-        $this->logSystem->warning("Playbook id: $id not found");
+        $this->logSys->warning("Playbook id: $id not found");
 
         return [];
     }
@@ -388,7 +388,7 @@ class AnsibleService
         // Ensure playbook metadata is loaded
         $pb_metadata_result = $this->setPbMetadata();
         if (isset($pb_metadata_result['status']) && $pb_metadata_result['status'] === 'error') {
-            \Log::error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
+            $this->logSys->error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
             return null;
         }
 
@@ -411,7 +411,7 @@ class AnsibleService
         // Ensure playbook metadata is loaded
         $pb_metadata_result = $this->setPbMetadata();
         if (isset($pb_metadata_result['status']) && $pb_metadata_result['status'] === 'error') {
-            \Log::error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
+            $this->logSys->error('Error loading playbook metadata: ' . $pb_metadata_result['error_msg']);
             return null;
         }
 
@@ -486,7 +486,7 @@ class AnsibleService
         $response = $this->gatewayService->sendCommand($request);
 
         if (!isset($response['status'])) {
-            $this->logSystem->warning('No status error setting pb metada');
+            $this->logSys->warning('No status error setting pb metada');
             return false;
         }
 
@@ -494,11 +494,11 @@ class AnsibleService
             $this->playbooks_metadata = $response['response_msg'];
             return true;
         } elseif ($response['status'] == 'error' && isset($response['error_msg'])) {
-            $this->logSystem->warning($response['error_msg']);
+            $this->logSys->warning($response['error_msg']);
             return false;
         }
 
-        $this->logSystem->warning('Unknown error setting pb metada');
+        $this->logSys->warning('Unknown error setting pb metada');
         return false;
     }
 }

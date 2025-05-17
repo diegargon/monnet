@@ -14,6 +14,7 @@ use App\Models\HostsModel;
 use App\Services\DateTimeService;
 use App\Services\Filter;
 use App\Services\NetworksService;
+use App\Services\LogSystemService;
 
 class HostService
 {
@@ -56,6 +57,11 @@ class HostService
      */
     private array $lng;
 
+    /**
+     * @var LogSystemService
+     */
+    private LogSystemService $logSystem;
+
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
@@ -68,6 +74,7 @@ class HostService
 
         $this->hostFormatter = new HostFormatter($ctx);
         $this->ansibleService = new AnsibleService($ctx);
+        $this->logSystem = new LogSystemService($ctx);
     }
 
     public function __destruct()
@@ -461,8 +468,7 @@ class HostService
 
         $misc = json_encode($misc, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            \Log::warning('Error encodeMisc: Invalid JSON');
-
+            $this->logSystem->warning('Error encodeMisc: Invalid JSON');
             return false;
         }
 
@@ -481,8 +487,7 @@ class HostService
         }
         $misc = json_decode($misc, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            \Log::warning('Error decodeMisc: Invalid JSON');
-
+            $this->logSystem->warning('Error decodeMisc: Invalid JSON');
             return ['status' => 'error'];
         }
         //TODO: Migration to system_rol

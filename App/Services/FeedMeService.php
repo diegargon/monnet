@@ -148,7 +148,7 @@ class FeedMeService
                         $this->notificationLog($request['name'], $host_id, $rdata);
                         break;
                     default:
-                        \Log::warning('Notification receive with unknown reference: '. $request['name']);
+                        $this->logSys->warning('Notification receive with unknown reference: '. $request['name']);
                 }
             }
 
@@ -161,7 +161,7 @@ class FeedMeService
 
             return ['success' => true, 'response_data' => $response];
         } catch (\Exception $e) {
-            \Log::error("Error processing request: " . $e->getMessage());
+            $this->logSys->error("Error processing request: " . $e->getMessage());
             return ['error' => 'Internal server error'];
         }
     }
@@ -175,7 +175,7 @@ class FeedMeService
      */
     public function processStarting(array $host, array $rdata): array
     {
-        \Log::logHost($rdata['log_level'], $host['id'], $rdata['msg'], $rdata['log_type'], $rdata['event_type']);
+        $this->logHost->logHost($rdata['log_level'], $host['id'], $rdata['msg'], $rdata['log_type'], $rdata['event_type']);
 
         $host_update_values = [];
 
@@ -250,8 +250,7 @@ class FeedMeService
 
             return true;
         } catch (\Exception $e) {
-            \Log::error("Error processing stats: " . $e->getMessage());
-
+            $this->logSys->error("Error processing stats: " . $e->getMessage());
             return false;
         }
     }
@@ -274,8 +273,7 @@ class FeedMeService
 
             return true;
         } catch (\Exception $e) {
-            \Log::error("Error processing ports: " . $e->getMessage());
-
+            $this->logSys->error("Error processing ports: " . $e->getMessage());
             return false;
         }
     }
@@ -335,7 +333,7 @@ class FeedMeService
                             . "({$db_port['service']}->{$port['service']}) ({$pnumber}) ({$ip_version})";
                         # Do not alert on localhost ports
                         if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
-                            \Log::logHost(\LogLevel::NOTICE , $host_id, $warnmsg, \LogType::EVENT, \EventType::SERVICE_NAME_CHANGE);
+                            $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $warnmsg, \LogType::EVENT, \EventType::SERVICE_NAME_CHANGE);
                         } else {
                             $this->hostService->setWarnOn(
                                 $host_id,
@@ -352,7 +350,7 @@ class FeedMeService
                     } elseif ((int)$db_port['online'] === 0) {
                         $alertmsg = "Port UP detected on $interface ({$port['service']}) ($pnumber)($ip_version)";
                         if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
-                            \Log::logHost(\LogLevel::NOTICE , $host_id, $alertmsg, \LogType::EVENT, \EventType::PORT_UP_LOCAL);
+                            $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $alertmsg, \LogType::EVENT, \EventType::PORT_UP_LOCAL);
                         } else {
                             $this->hostService->setWarnOn($host_id, $alertmsg, \LogType::EVENT_WARN, \EventType::PORT_UP);
                         }
@@ -380,7 +378,7 @@ class FeedMeService
 
                     # Do not alert on localhost ports
                     if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
-                        \Log::logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_NEW_LOCAL);
+                        $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_NEW_LOCAL);
                     } else {
                         $this->hostService->setAlertOn($host_id, $log_msg, \EventType::PORT_NEW, \LogType::EVENT_ALERT);
                     }
@@ -398,7 +396,7 @@ class FeedMeService
                     ];
                     $log_msg = "Port DOWN detected on {$interface} {$db_port['pnumber']} ({$db_port['service']})";
                     if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
-                        \Log::logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_DOWN_LOCAL);
+                        $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_DOWN_LOCAL);
                     } else {
                         $this->hostService->setAlertOn($host_id, $log_msg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
                     }
@@ -408,7 +406,7 @@ class FeedMeService
 
             return true;
         } catch (\Exception $e) {
-            \Log::error("Error updating listen ports: " . $e->getMessage());
+            $this->logSys->error("Error updating listen ports: " . $e->getMessage());
             return false;
         }
     }
@@ -438,7 +436,7 @@ class FeedMeService
         }
         if (!empty($rdata['host_logs'])) :
             foreach ($rdata['host_logs'] as $hlog) {
-                \Log::logHost($hlog['level'], $host_id, '[Agent]: ' . $hlog['message']);
+                $this->logHost->logHost($hlog['level'], $host_id, '[Agent]: ' . $hlog['message']);
             }
         endif;
 
@@ -501,7 +499,7 @@ class FeedMeService
         #}
 
         if (!empty($msg)) {
-            \Log::error($msg);
+            $this->logSys->error($msg);
             return ['error' => $msg];
         }
 
@@ -601,7 +599,7 @@ class FeedMeService
         } elseif ($log_level == \LogLevel::ERROR || $log_level == \LogLevel::WARNING) {
             $this->hostService->setWarnOn($host_id, $log_msg, \LogType::EVENT_WARN, $event_type);
         } else {
-            \Log::logHost($log_level, $host_id, $log_msg, $log_type, $event_type);
+            $this->logHost->logHost($log_level, $host_id, $log_msg, $log_type, $event_type);
         }
     }
 

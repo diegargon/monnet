@@ -10,6 +10,7 @@ namespace App\Services;
 use App\Models\NetworksModel;
 use App\Services\Filter;
 use App\Services\HostService;
+use App\Services\LogSystemService;
 
 Class NetworksService
 {
@@ -33,11 +34,17 @@ Class NetworksService
      */
     private \AppContext $ctx;
 
+    /**
+     * @var LogSystemService
+     */
+    private LogSystemService $logSystem;
+
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
         $db = $ctx->get('DBManager');
         $this->networksModel = new NetworksModel($db);
+        $this->logSystem = new LogSystemService($ctx);
     }
 
     /**
@@ -141,7 +148,7 @@ Class NetworksService
         $cidr = $set['network'] ?? '';
 
         if ($this->networkExistsByCIDR($cidr)) {
-            \Log::error("Network already exists: " . $cidr);
+            $this->logSystem->error("Network already exists: " . $cidr);
             return false;
         }
 
@@ -381,7 +388,7 @@ Class NetworksService
             }
 
             if (empty($network['network']) || Filter::varNetwork($network['network']) === false) {
-                \Log::error("Invalid network detected: " . $network['network']);
+                $this->logSystem->error("Invalid network detected: " . $network['network']);
                 continue;
             }
 
@@ -394,7 +401,7 @@ Class NetworksService
             $prefix = (int)$prefix;
 
             if (!filter_var($network_address, FILTER_VALIDATE_IP)) {
-                \Log::error("Invalid IP in network configuration: " . $network['network']);
+                $this->logSystem->error("Invalid IP in network configuration: " . $network['network']);
                 continue;
             }
 

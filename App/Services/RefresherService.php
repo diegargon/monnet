@@ -68,7 +68,7 @@ class RefresherService
         $valid_cats = $user->getEnabledHostCatId();
 
         if (count($valid_cats) > 0) {
-           $hosts_filter['cats'] = $valid_cats;
+            $hosts_filter['cats'] = $valid_cats;
         }
 
         $hosts_view = $this->hostService->getFiltered($hosts_filter);
