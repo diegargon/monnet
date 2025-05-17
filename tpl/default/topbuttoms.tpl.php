@@ -12,8 +12,12 @@
  * @var array<string> $lng Language data
  * @var array<mixed> $tdata Template Data
  */
+
+# TODO fix this, the check not belong here
+use App\Services\Filter;
+
 $privacy_page = 'privacy';
-if (Filters::getString('page') == $privacy_page) {
+if (Filter::getString('page') == $privacy_page) {
     $privacy_page = 'index';
 }
 ?>

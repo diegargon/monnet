@@ -22,10 +22,11 @@ require_once 'include/common-call.php';
 require_once 'include/usermode.inc.php';
 
 use App\Router\CommandRouter;
+use App\Services\Filter;
 $cmdRouter = new CommandRouter($ctx);
 
-$command = Filters::postString('command');
-$command_values = Filters::sanArray('command_values', 'post');
+$command = Filter::postString('command');
+$command_values = Filter::sanArray('command_values', 'post');
 $response = $cmdRouter->handleCommand($command, $command_values);
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 exit();
