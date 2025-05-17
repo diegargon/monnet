@@ -33,6 +33,7 @@ class CmdNetworkController
         $this->templateService = new TemplateService($ctx);
         $this->networksService = new NetworksService($ctx);
         $this->ctx = $ctx;
+        $this->hostService = new HostService($ctx);
     }
 
     /**
@@ -164,7 +165,6 @@ class CmdNetworkController
      */
     public function submitPoolReserver(array $command_values): array
     {
-        $hosts = $this->ctx->get('Hosts');
         $user = $this->ctx->get('User');
         $username = $user->getUsername();
 
@@ -176,7 +176,9 @@ class CmdNetworkController
             'ip' => $value_command,
             'network' => $network_id
         ];
-        if ($hosts->addHost($reserved_host)) {
+
+        $result = $this->hostService->add($reserved_host);
+        if (isset($result['status']) && $result['status'] === 'success') {
             return Response::stdReturn(true, 'Reserved', true);
         }
 

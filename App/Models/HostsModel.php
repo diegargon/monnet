@@ -192,4 +192,16 @@ class HostsModel
 
         return $result;
     }
+
+    /**
+     * Obtiene un host por su id.
+     *
+     * @param int $id
+     * @return array<string, mixed>
+     */
+    public function getHostById(int $id): array
+    {
+        $result = $this->db->selectOne('hosts', ['*'], 'id = :id', ['id' => $id]);
+        return $result ?: [];
+    }
 }

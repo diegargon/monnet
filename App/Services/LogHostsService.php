@@ -11,6 +11,7 @@ namespace App\Services;
 
 use App\Models\LogHostsModel;
 use App\Services\DateTimeService;
+use App\Services\HostService;
 
 class LogHostsService
 {
@@ -152,10 +153,10 @@ class LogHostsService
     private function formatEventsLogs(array $logs): array
     {
         $ncfg = $this->ctx->get('Config');
-        $hosts = $this->ctx->get('Hosts');
+        $hostService = new HostService($this->ctx);
 
         foreach ($logs as &$log) {
-            $log['host'] = $hosts->getDisplayNameById($log['host_id']);
+            $log['host'] = $hostService->getDisplayNameById($log['host_id']);
             $log['date'] = format_datetime_from_string($log['date'], $ncfg->get('datetime_log_format'));
             $log['level'] = \LogLevel::getName($log['level']);
             $log['log_type'] = \LogType::getName($log['log_type']);

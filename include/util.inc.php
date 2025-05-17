@@ -208,7 +208,6 @@ function cached_img(User $user, int $id, string $img_url, int $renew = 0): strin
     if (file_exists($cache_img_path) && $renew === 0) {
         return $cache_img_path;
     } else {
-        Log::debug("image path NOT exists or renew getting content " . $img_url);
         $img_item_check = $user->getPref($img_url);
         if ($img_item_check) {
             $img_item_check = new DateTime($img_item_check);

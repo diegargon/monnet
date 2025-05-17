@@ -79,7 +79,6 @@ $lng = [
     'L_ERR_NOT_INTERNET_IP' => 'Error: Not an internet address',
     'L_ERR_NOT_NET_CONTAINER' => 'Error: No container/network for this IP',
     'L_ERR_DUP_IP' => 'Error: Duplicate IP',
-    'L_ERR_MAILER' => 'Error: PhpMailer not installed',
     'L_ERR_MAIL_HOST' => 'Error: Invalid host',
     'L_ERR_USERPASS_INVALID' => 'Error: Invalid username or password',
     'L_ERR_PORT_INVALID' => 'Error: Invalid port',

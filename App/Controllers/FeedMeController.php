@@ -86,7 +86,6 @@ class FeedMeController {
             $this->responseError('Invalid JSON received: ' . json_last_error_msg());
         }
         unset($request_content);
-        //\Log::debug("Host contact request" . print_r($request, true));
 
         $validation = $this->validateRequest($request);
         if (!empty($validation['error'])) {

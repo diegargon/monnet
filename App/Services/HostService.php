@@ -16,7 +16,7 @@ use App\Services\Filter;
 use App\Services\NetworksService;
 use App\Services\LogSystemService;
 use App\Services\LogHostsService;
-
+use \App\Models\NotesModel;
 class HostService
 {
     /**
@@ -127,11 +127,22 @@ class HostService
         }
 
         $networkService = new NetworksService($this->ctx);
-        $network_match = $networkService->matchNetwork($host['ip']);
 
-        if (empty($network_match)) {
-            return ['status' => 'error', 'error_msg' => 'Adding host: No network match'];
+        // Si ya viene el network, úsalo directamente
+        if (!empty($host['network'])) {
+            $network_id = (int)$host['network'];
+            $network_match = $networkService->getNetworkById($network_id);
+            if (empty($network_match)) {
+                return ['status' => 'error', 'error_msg' => 'Adding host: Provided network_id not found'];
+            }
+        } else {
+            $network_match = $networkService->matchNetwork($host['ip']);
+            if (empty($network_match)) {
+                return ['status' => 'error', 'error_msg' => 'Adding host: No network match'];
+            }
+            $host['network'] = $network_match['id'];
         }
+
         if (!empty($host['hostname'])) {
             $display_name = $host['hostname'];
         } else {
@@ -149,10 +160,18 @@ class HostService
             }
         }
 
-        $host['network'] = $network_match['id'];
+        if (!$this->hostsModel->add($host)) {
+            return ['status' => 'error', 'error_msg' => 'Adding host: Error inserting host'];
+        }
 
-        $this->hostsModel->add($host);
         $host_id = $this->hostsModel->insertId();
+
+        if ($host_id === false) {
+            return ['status' => 'error', 'error_msg' => 'Adding host: Error inserting host'];
+        }
+
+        $notesModel = new NotesModel($this->db);
+        $notesModel->createForHost($host_id, '');
 
         $log_msg = 'Found new host: ' . $display_name . ' on network ' . $network_match['name'];
         $this->logHost->logHost(
@@ -672,5 +691,39 @@ class HostService
         }
 
         return false;
+    }
+
+    /**
+     * Obtiene el display name de un host por su id.
+     *
+     * @param int $id
+     * @return string
+     */
+    public function getDisplayNameById(int $id): string
+    {
+        $host = $this->hostsModel->getHostById($id);
+        if (!$host) {
+            return '';
+        }
+        if (!empty($host['title'])) {
+            return $host['title'];
+        } elseif (!empty($host['hostname'])) {
+            return ucfirst(explode('.', $host['hostname'])[0]);
+        }
+        return $host['ip'] ?? '';
+    }
+
+    /**
+     * Marca un host con alarma ansible y registra el mensaje.
+     *
+     * @param int $id
+     * @param string $msg
+     * @return void
+     */
+    public function setAnsibleAlarm(int $id, string $msg): void
+    {
+        $log_msg = 'Ansible alert: ' . $msg;
+        $this->logHost->logHost(\LogLevel::WARNING, $id, $log_msg, 3);
+        $this->hostsModel->update($id, ['alert' => 1, 'ansible_fail' => 1]);
     }
 }

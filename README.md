@@ -183,16 +183,6 @@ $ nano /etc/crontab
 */15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
 ```
 
-## Composer (OBSOLETE)
-
-Necessary if you want support for send mails. (Probably will migrate this to Monnet Gateway in the future))
-
-```
-apt install composer
-
-/path/to/monnet# composer require phpmailer/phpmailer
-```
-
 # Monnet Core
 
 monnet-core contains monnet-gateway service and the monnet-agent service

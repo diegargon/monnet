@@ -17,15 +17,16 @@ CommandRouter       Devuelve la respuesta final al cliente.
 
 namespace App\Controllers;
 
-use App\Models\CmdHostModel;
-use App\Models\CmdHostNotesModel;
 use App\Services\Filter;
 use App\Services\AnsibleService;
 use App\Services\HostFormatter;
 use App\Services\HostService;
 use App\Services\LogHostsService;
+use App\Services\LogSystemService;
 use App\Services\HostViewBuilder;
 use App\Services\HostMetricsService;
+use App\Models\CmdHostModel;
+use App\Models\CmdHostNotesModel;
 use App\Helpers\Response;
 
 class CmdHostController
@@ -43,6 +44,7 @@ class CmdHostController
 
     private \AppContext $ctx;
     private \DBManager $db;
+    private LogSystemService $logSys;
 
     public function __construct(\AppContext $ctx)
     {
@@ -59,6 +61,7 @@ class CmdHostController
         $this->hostViewBuilder = new HostViewBuilder($ctx);
 
         $this->ctx = $ctx;
+        $this->logSys = new LogSystemService($ctx);
     }
 
     /**
@@ -142,7 +145,7 @@ class CmdHostController
         }
 
         if ($this->cmdHostModel->removeByID($target_id)) {
-            \Log::notice('Deleted host id: ' . $target_id);
+            $this->logSys->notice('Deleted host id: ' . $target_id);
             return Response::stdReturn(true, "$field: Host removed $target_id", true, ['command_receive' => $command]);
         }
 
@@ -478,18 +481,18 @@ class CmdHostController
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
+
     public function powerOn(array $command_values): array
     {
-        $hosts = $this->ctx->get('Hosts');
         $target_id = Filter::varInt($command_values['id']);
-        $host = $hosts->getHostById($target_id);
+        $host = $this->hostService->getHostById($target_id);
 
         if (valid_array($host) && !empty($host['mac'])) {
-            sendWOL($host['mac']);
+            \sendWOL($host['mac']);
             return Response::stdReturn(true, 'WOL: ' . $target_id);
         } else {
-            $err_msg = $host['ip'] . ' not mac address';
-            \Log::warning($err_msg);
+            $err_msg = ($host['ip'] ?? '') . ' not mac address';
+            $this->logSys->warning($err_msg);
             return Response::stdReturn(false, $err_msg);
         }
     }
@@ -709,10 +712,14 @@ class CmdHostController
             'alert' => 0,
             'warn' => 0,
             'ansible_fail' => 0,
-            ];
+        ];
         $this->cmdHostModel->updateByID($hid, $values);
 
-        \Log::logHost(\LogLevel::NOTICE, $hid, $lng['L_CLEAR_ALARMS_BITS_BY'] . ': ' . $username);
+        $this->logHostsService->logHost(
+            \LogLevel::NOTICE,
+            $hid,
+            $lng['L_CLEAR_ALARMS_BITS_BY'] . ': ' . $username
+        );
         return Response::stdReturn(true, 'ok', true);
     }
 
@@ -899,7 +906,6 @@ class CmdHostController
     {
         $host = [];
         $ip = $domain = false;
-        $hosts = $this->ctx->get('Hosts');
         $lng = $this->ctx->get('lng');
 
         $ip = Filter::varIP($command_values['value']);
@@ -910,32 +916,26 @@ class CmdHostController
         }
 
         if (empty($ip) && !empty($domain)) {
-            $host['ip'] = $hosts->getHostnameIP($host['hostname']);
+            $host['ip'] = gethostbyname($domain);
             $host['hostname'] = $domain;
         }
 
         if (!empty($host['ip'])) {
-            $network_match = $this->ctx->get('Networks')->matchNetwork($host['ip']);
-            if (
-                !valid_array($network_match) ||
-                $this->ctx->get('Networks')->isLocal($host['ip']) && $network_match['network'] == '0.0.0.0/0'
-            ) {
-                return Response::stdReturn(false, $lng['L_ERR_NOT_NET_CONTAINER']);
+            $result = $this->hostService->add($host);
+            if (isset($result['status']) && $result['status'] === 'success') {
+                return Response::stdReturn(true, $lng['L_OK'], true);
+            } elseif (isset($result['status']) && $result['status'] === 'error') {
+                $msg = $result['error_msg'] ?? $lng['L_ERR_NOT_NET_CONTAINER'];
+                return Response::stdReturn(false, $msg);
             } else {
-                if ($hosts->getHostByIP($host['ip'])) {
-                    return Response::stdReturn(false, $lng['L_ERR_DUP_IP']);
-                } else {
-                    $host['network'] = $network_match['id'];
-                    $hosts->addHost($host);
-                    return Response::stdReturn(true, $lng['L_OK'], true);
-                }
+                return Response::stdReturn(false, $lng['L_ERR_NOT_NET_CONTAINER']);
             }
         } else {
-            return Response::stdReturn(false, $lng['L_ERR_NOT_INTERNET_IP'] . $host['ip']);
+            return Response::stdReturn(false, $lng['L_ERR_NOT_INTERNET_IP'] . ($host['ip'] ?? ''));
         }
     }
 
-   /**
+    /**
      *
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>

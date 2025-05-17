@@ -23,6 +23,7 @@ use App\Services\DateTimeService;
 use App\Services\LogSystemService;
 use App\Services\GatewayService;
 use App\Services\Filter;
+use App\Services\HostService;
 
 class AnsibleService
 {
@@ -58,11 +59,12 @@ class AnsibleService
         $user = $this->ctx->get('User');
         $hosts = $this->ctx->get('Hosts');
         $networks = $this->ctx->get('Networks');
+        $hostService = new HostService($this->ctx);
         $host = $hosts->getHostById($target_id);
 
         if ($playbook_id == 'std-install-monnet-agent-systemd') :
             if (empty($host['token'])) {
-                $token = $hosts->createHostToken($target_id);
+                $token = $hostService->createToken($target_id);
             } else {
                 $token = $host['token'];
             }

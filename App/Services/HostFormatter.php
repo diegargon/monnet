@@ -8,13 +8,20 @@
 
 namespace App\Services;
 
+use App\Services\LogSystemService;
+use App\Services\NetworksService;
+
 class HostFormatter
 {
     private \AppContext $ctx;
 
+    private LogSystemService $logSys;
+    private NetworksService $networksService;
+
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->logSys = new LogSystemService($ctx);
     }
 
     /**
@@ -26,7 +33,9 @@ class HostFormatter
     {
         $lng = $this->ctx->get('lng');
         $user = $this->ctx->get('User');
-        $networks = $this->ctx->get('Networks');
+        if (!isset($this->networksService)) {
+            $this->networksService = new NetworksService($this->ctx);
+        }
         $categories = $this->ctx->get('Categories');
         $ncfg = $this->ctx->get('Config');
 
@@ -38,13 +47,13 @@ class HostFormatter
         $host['display_name'] = $this->getDisplayName($host);
         $host['hosts_categories'] = $categories->getByType(1);
 
-        $network = $networks->getNetworkByID($net_id);
+        $network = $this->networksService->getNetworkByID($net_id);
         if ($network !== false) {
             $host['net_cidr'] = $network['network'];
             $host['network_name'] = $network['name'];
             $host['network_vlan'] = $network['vlan'];
         } else {
-            \Log::warning('Host network seems not exists: ' . "[H: $id][N: $net_id]");
+            $this->logSys->warning('Host network seems not exists: ' . "[H: $id][N: $net_id]");
         }
 
         if ($host['online']) :

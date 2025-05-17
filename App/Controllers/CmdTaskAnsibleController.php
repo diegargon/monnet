@@ -13,15 +13,18 @@ use App\Services\AnsibleService;
 use App\Services\Filter;
 use App\Models\CmdAnsibleModel;
 use App\Services\EncryptionService;
+use App\Services\HostService;
 
 class CmdTaskAnsibleController
 {
     private \AppContext $ctx;
     private AnsibleService $ansibleService;
+    private HostService $hostService;
 
     public function __construct(\AppContext $ctx)
     {
         $this->ansibleService = new AnsibleService($ctx);
+        $this->hostService = new HostService($ctx);
         $this->ctx = $ctx;
     }
 
@@ -78,8 +81,7 @@ class CmdTaskAnsibleController
         $value = isset($command_values['value']) ? Filter::varInt($command_values['value']) : 25;
 
         $lng = $this->ctx->get('lng');
-        $hosts = $this->ctx->get('Hosts');
-        $host = $hosts->getHostById($target_id);
+        $host = $this->hostService->getHostById($target_id);
 
         $playbook_id = $command === 'syslog-load' ? 'std-syslog-linux' : 'std-journald-linux';
 
@@ -91,7 +93,7 @@ class CmdTaskAnsibleController
             $response = $this->ansibleService->runPlaybook($target_id, $playbook_id, $extra_vars);
             // Connection Error Check
             if ($response['status'] !== 'success') {
-                $hosts->setAnsibleAlarm($target_id, $response['error_msg']);
+                $this->hostService->setAnsibleAlarm($target_id, $response['error_msg']);
                 return Response::stdReturn(false, $response['error_msg'], false, ['command_receive' => $command]);
             }
             // Ansible Error return check

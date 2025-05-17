@@ -8,6 +8,7 @@
 !defined('IN_WEB') ? exit : true;
 
 use App\Services\UserService;
+use App\Services\NetworksService;
 /**
  *
  *
@@ -108,7 +109,8 @@ function page_index(AppContext $ctx): array
     $user = $ctx->get('User');
     $ncfg = $ctx->get('Config');
     $categories = $ctx->get('Categories');
-    $networks_list = $ctx->get('Networks')->getNetworks();
+    $networks  = new NetworksService($ctx);
+    $networks_list = $networks->getNetworks();
     $page = page_common_head($ctx);
     $networks_selected = 0;
 

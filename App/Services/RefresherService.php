@@ -11,6 +11,7 @@ use App\Models\HostsModel;
 use App\Services\LogHostsService;
 use App\Services\LogSystemService;
 use App\Services\HostService;
+use App\Services\NetworksService;
 
 class RefresherService
 {
@@ -21,6 +22,7 @@ class RefresherService
     private LogHostsService $logHostService;
     private LogSystemService $logSystemService;
     private HostService $hostService;
+    private NetworksService $networksService;
     private HostsModel $hostsModel;
 
 
@@ -46,7 +48,6 @@ class RefresherService
     public function getHostsView(int $hosts_other = 1, int $highlight = 0): array
     {
         $user = $this->ctx->get('User');
-        $networks = $this->ctx->get('Networks');
 
         $hosts_filter = [];
 
@@ -77,7 +78,7 @@ class RefresherService
             return [];
         }
 
-        $hosts_view = $this->filterNetwork($hosts_view, $networks);
+        $hosts_view = $this->filterNetwork($hosts_view);
 
         return $hosts_view;
     }
@@ -136,14 +137,16 @@ class RefresherService
      *
      * @param array<string, mixed> $hosts_view
      * @param array $user
-     * @param \Networks $networks
      * @return array<string, mixed>
      */
-    private function filterNetwork(array $hosts_view,  $networks): array
+    private function filterNetwork(array $hosts_view): array
     {
+        if (!isset($this->networksService)) {
+            $this->networksService = new NetworksService($this->ctx);
+        }
         foreach ($hosts_view as $key => $host) {
             if (!empty($host['network'])) {
-                $network = $networks->getNetworkById($host['network']);
+                $network = $this->networksService->getNetworkByID($host['network']);
                 if ((int)$host['online'] === 0 && (int)$network['only_online'] === 1) {
                     unset($hosts_view[$key]);
                 }
