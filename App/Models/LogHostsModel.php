@@ -84,7 +84,7 @@ class LogHostsModel
 
         $query .= ' ORDER BY date DESC';
 
-        if (!empty($opts['limit'])) {
+        if (!empty($opts['limit']) && is_numeric($opts['limit'])) {
             $query .= ' LIMIT ' . (int) $opts['limit'];
         }
 
