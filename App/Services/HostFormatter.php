@@ -129,19 +129,24 @@ class HostFormatter
     public function fHostLogsMsgs(array $logs_items): array
     {
         $log_msg = [];
-        $flogs_msgs = [];
-        $flogs_items = [];
         $ncfg = $this->ctx->get('Config');
 
+        # Usado para evitar repeticion de mensajes deshabilitado por que no tienen en cuenta
+        # la hora
+        /*
+        $flogs_msgs = [];
+        $flogs_items = [];
         foreach ($logs_items as $item) :
             if (!empty($item['msg']) && !in_array($item['msg'], $flogs_msgs)) :
                 $flogs_msgs[] = $item['msg'];
                 $flogs_items[] = $item;
             endif;
         endforeach;
+        */
+        
         $timezone = $ncfg->get('default_timezone');
         $timeformat = $ncfg->get('datetime_format_min');
-        foreach ($flogs_items as $item) :
+        foreach ($logs_items as $item) :
             $date = utc_to_tz($item['date'], $timezone, $timeformat);
             $log_msg[] = [
                 'log_id' => $item['id'],
