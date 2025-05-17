@@ -18,9 +18,11 @@ class Items
     private array $items = [];
     /** @var int */
     private int $uid;
+    private \AppContext $ctx;
 
     public function __construct(AppContext $ctx)
     {
+        $this->ctx = $ctx;
         $this->db = $ctx->get('Mysql');
         $this->uid = $ctx->get('User')->getId();
         //$this->categories = $ctx->get('Categories')->getByType(2); //2:items
@@ -47,7 +49,8 @@ class Items
             $en_conf = json_encode($conf);
 
             if ($en_conf === false) :
-                Log::error("Error adding item: json_encode conf");
+                $logSys = new LogSystemService($this->ctx);
+                $logSys->error("Error adding item: json_encode conf");
                 return false;
             endif;
 

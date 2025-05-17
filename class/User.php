@@ -8,6 +8,7 @@
 !defined('IN_WEB') ? exit : true;
 
 use App\Services\DateTimeService;
+use App\Services\LogSystemService;
 
 class User
 {
@@ -321,7 +322,8 @@ class User
             return false;
         }
         if (mb_strlen($json_cats_state, 'UTF-8') > 255) {
-            Log::error('Max cats state reached');
+            $logSys = new LogSystemService($this->ctx);
+            $logSys->error('Max cats state reached');
             return false;
         }
         $this->setPref('hosts_cats_state', $json_cats_state);

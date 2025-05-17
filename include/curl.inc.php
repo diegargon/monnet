@@ -30,11 +30,13 @@ function curl_get(string $url, int $timeout = 2): mixed
 
     $response = curl_exec($ch);
 
+    $logSys = new \App\Services\LogSystemService($GLOBALS['ctx'] ?? null);
+
     if ($response == false) {
         $error = curl_error($ch);
         $errno = curl_errno($ch);
         $error = "Curl Error ($errno): $error on $url";
-        Log::warning($error);
+        $logSys->warning($error);
     }
 
     curl_close($ch);
@@ -53,7 +55,8 @@ function curl_get(string $url, int $timeout = 2): mixed
 function curl_check_webport(string $url, bool $https = true, bool $allowSelfSigned = false, float $timeout = 5): array
 {
     $result = [];
-    Log::debug('curl_check_webport:' . $url);
+    $logSys = new \App\Services\LogSystemService($GLOBALS['ctx'] ?? null);
+    $logSys->debug('curl_check_webport:' . $url);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

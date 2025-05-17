@@ -55,11 +55,14 @@ function request_weather(\Config $ncfg): mixed
 
     $response = curl_get($ApiUrl);
 
+    // Instanciar LogSystemService si no existe
+    $logSys = new \App\Services\LogSystemService($GLOBALS['ctx'] ?? null);
+
     if ($response) {
         $response = json_decode($response);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            Log::warning("Weather: Error al decodificar JSON: " . json_last_error_msg());
+            $logSys->warning("Weather: Error al decodificar JSON: " . json_last_error_msg());
             return null;
         }
 

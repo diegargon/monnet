@@ -63,7 +63,7 @@ try {
     exit();
 }
 
-require_once 'class/Log.php';
+#require_once 'class/Log.php';
 
 /**
  * @var array<string> $lng
@@ -81,7 +81,7 @@ $ncfg->init($cfg);
 
 date_default_timezone_set($ncfg->get('default_timezone'));
 
-Log::init($ctx);
+// Log::init($ctx);
 
 require_once 'include/updater.inc.php';
 require_once 'include/curl.inc.php';

@@ -122,8 +122,11 @@ function base_url(string $url): string|false
 {
     $parsed_url = parse_url($url);
 
+    // Instanciar LogSystemService si no existe
+    $logSys = new \App\Services\LogSystemService($GLOBALS['ctx'] ?? null);
+
     if ($parsed_url === false) {
-        Log::warning('Cant parse url: ' . $url);
+        $logSys->warning('Cant parse url: ' . $url);
         return false;
     }
 
@@ -132,7 +135,7 @@ function base_url(string $url): string|false
     }
 
     if (empty($parsed_url['scheme']) || empty($parsed_url['host'])) :
-        Log::warning('Cant parse url: ' . $url);
+        $logSys->warning('Cant parse url: ' . $url);
         return false;
     endif;
 
