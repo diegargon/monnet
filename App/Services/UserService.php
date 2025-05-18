@@ -25,7 +25,7 @@ class UserService
     private \Config $ncfg;
     private int $session_expire;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $db = new DBManager($ctx);
@@ -34,21 +34,23 @@ class UserService
         $this->logSystem = new LogSystemService($ctx);
         $this->ncfg = $ctx->get('Config');
         $this->session_expire = (int) $this->ncfg->get('sid_expire');
-        $this->userSession->tryAutoLogin();
+        $this->userSession->AutoLogin();
     }
 
     public function login(string $username, string $password, bool $remember = true): array
     {
         $user = $this->userModel->getByUsername($username);
 
-        if (!$user || !password_verify($password, $user['password'])) {
-            throw new \RuntimeException("Credenciales inválidas");
+        if (!$user || !$this->verify_password($password, $user['password'])) {
+            throw new \RuntimeException("Credenciales invalidas");
         }
         $this->userSession->set($user);
 
-        if ($remember) {
-            $this->userSession->rememberSession($user['id']);
-        }
+
+        #if ($remember) {
+        #    Create DB Session
+        #}
+
         unset($user['password']);
 
         return $user;
@@ -190,6 +192,23 @@ class UserService
         return is_string($timezone) ? $timezone : 'UTC';
     }
 
+    public function verify_password(string $password, string $db_password): bool
+    {
+        # return password_verify($password, $db_password);
+        return $this->encryptPassword($password) === $db_password;
+    }
+
+    /**
+     *
+     * @param string $password
+     * @return string
+     */
+    private function encryptPassword(string $password): string
+    {
+        return sha1($password);
+    }
+
+
     /**
      *
      * @return void
@@ -197,5 +216,16 @@ class UserService
     public function logout(): void
     {
         $this->userSession->logout();
+    }
+
+    /**
+     * Obtiene el ID del usuario autenticado actual.
+     *
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        $user = $this->userSession->getCurrentUser();
+        return isset($user['id']) ? (int)$user['id'] : null;
     }
 }

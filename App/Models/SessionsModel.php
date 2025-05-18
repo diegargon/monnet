@@ -4,7 +4,20 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
-*/
+ * Tabla: sessions
+ * +-------------+--------------+------+-----+---------+-------------------+
+ * | Columna     | Tipo         | Nulo | Key | Extra   | Default           |
+ * +-------------+--------------+------+-----+---------+-------------------+
+ * | id          | int          | NO   | PRI | auto    | None              |
+ * | user_id     | int          | NO   | MUL |         | None              |
+ * | sid         | varchar(64)  | NO   | MUL |         | None              |
+ * | ip_address  | varchar(45)  | YES  |     |         | NULL              |
+ * | user_agent  | varchar(255) | YES  |     |         | NULL              |
+ * | created     | datetime     | YES  |     |         | NULL              |
+ * | expire      | datetime     | YES  |     |         | NULL              |
+ * | last_active | datetime     | YES  |     |         | NULL              |
+ * +-------------+--------------+------+-----+---------+-------------------+
+ */
 
 namespace App\Models;
 
@@ -26,9 +39,19 @@ class SessionsModel
         return true;
     }
 
-    public function update(int $userId, array $userData): bool
+    /**
+     * Actualiza una sesión por user_id y opcionalmente sid.
+     * Si $sid es null, actualiza todas las sesiones del usuario.
+     */
+    public function update(int $userId, array $userData, ?string $sid = null): bool
     {
-        return $this->db->update('sessions', $userData, 'user_id = :uid', ['uid' => $userId]);
+        $condition = 'user_id = :uid';
+        $params = [':uid' => $userId];
+        if ($sid !== null) {
+            $condition .= ' AND sid = :sid';
+            $params[':sid'] = $sid;
+        }
+        return $this->db->update('sessions', $userData, $condition, $params);
     }
 
     public function clearSession(array $clear_data): bool
@@ -37,11 +60,11 @@ class SessionsModel
         $params = [];
 
         if (isset($clear_data['uid']) && is_numeric($clear_data['uid'])) {
-            $params['user_id'] = $clear_data['uid'];
+            $params[':user_id'] = $clear_data['uid'];
             $condition .= 'user_id = :user_id';
         }
         if (isset($clear_data['sid']) && is_numeric($clear_data['sid'])) {
-            $params['sid'] = $clear_data['sid'];
+            $params[':sid'] = $clear_data['sid'];
             if (!empty($condition)) {
                 $condition .= ' AND ';
             }
@@ -57,8 +80,7 @@ class SessionsModel
     public function sidExists(int $uid, string $sid): bool
     {
         $query = "SELECT user_id FROM sessions WHERE user_id = :uid AND sid = :sid";
-
-        $result = $this->db->qfetch($query, ['uid' => $uid, 'sid' => $sid]);
+        $result = $this->db->qfetch($query, [':uid' => $uid, ':sid' => $sid]);
 
         return !empty($result);
     }

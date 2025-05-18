@@ -44,17 +44,20 @@ class UserSession
     public function set(array $user): void
     {
         $user['logged_in'] = true;
+        $_SESSION['uid'] = $user['id'];
         $this->user = $user;
-        $this->createDBSession($user['id']);
+        $this->rememberSession();
     }
 
     public function isLoggedIn(): bool
     {
-        if (!$this->user) {
+        if (isset($_COOKIE['PHPSESSID']) && $_COOKIE['PHPSESSID'] === session_id()) {
+            return true;
+        } else {
             return false;
         }
 
-        return $this->user['logged_in'];
+        return false;
     }
 
     public function getCurrentUser(): array
@@ -66,7 +69,7 @@ class UserSession
         return $this->user;
     }
 
-    public function getUserId(): int|bool
+    public function getCurrentUserId(): int|bool
     {
         if ($this->user && isset($this->user['id'])) {
             return $this->user['id'];
@@ -75,25 +78,32 @@ class UserSession
         return false;
     }
 
-    public function tryAutoLogin(): bool
+    public function AutoLogin(): bool
     {
-        if ($this->isLoggedIn()) {
-            return true;
+        # Check if user is logged in with PHPSESSID
+        if ($this->isLoggedIn() and isset($_SESSION['uid']) and is_numeric($_SESSION['uid'])) {
+            $user = $this->userModel->getById($_SESSION['uid']);
+            if ($user) {
+                $this->set($user);
+                return true;
+            }
         }
 
+        # Remember me: Check cookies and compare with DB
         $sid = Filter::cookieSid(self::REMEMBER_COOKIE);
         $uid = Filter::cookieInt('uid');
-
+        //print("sid: $sid, uid: $uid <br>/>");
         if ($sid && $uid) {
             if ($this->sessionModel->sidExists($uid, $sid)) {
                 $user = $this->userModel->getById($uid);
                 if ($user) {
-                    //TODO
-                    //$this->login($user, true);
-                    //return true;
+                    $this->set($user);
+                    return true;
                 }
             }
-
+            # If the session is not valid, force logout
+            #print"Session not valid<br/>";
+            #exit();
             $this->logout();
         }
 
@@ -158,17 +168,18 @@ class UserSession
         $this->user = [];
     }
 
-    public function rememberSession(int $userId): void
+    public function rememberSession(): void
     {
-        $sid = $this->userSession->saveSession($userId);
+        $sId = $this->user['sid'];
+        $uId = $this->user['id'];
 
         if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
-            setcookie('uid', $userId, [
+            setcookie('uid', $uId, [
                 'expires' => time() + $this->session_expire,
                 'secure' => true,
                 'samesite' => 'lax',
             ]);
-            setcookie(self::REMEMBER_COOKIE, $sid, [
+            setcookie(self::REMEMBER_COOKIE, $sId, [
                 'expires' => time() + $this->session_expire,
                 'secure' => true,
                 'samesite' => 'lax',
@@ -176,13 +187,13 @@ class UserSession
         } else {
             setcookie(
                 'uid',
-                $userId,
+                $uId,
                 time() + $this->session_expire,
                 $this->ncfg->get('rel_path')
             );
             setcookie(
                 self::REMEMBER_COOKIE,
-                $sid,
+                $sId,
                 time() + $this->session_expire,
                 $this->ncfg->get('rel_path')
             );
