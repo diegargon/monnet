@@ -1,0 +1,235 @@
+<?php
+/**
+ *
+ * @author diego/@/envigo.net
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ */
+
+
+/**
+ * Config class
+ * ctype =
+ *      0 (string)
+ *      1 (int)
+ *      2 (bool)
+ *      3 (float)
+ *      4 (datetime)
+ *      5 (url)
+ *      6 (dropdown select) (json object) {"val1"=> 1, "val2=>0} (1 selected)
+ *      7 (password) (TODO)
+ *      8 (email) (Not yet)
+ *      10 (text/textbox)
+ *
+ *
+ * ('keyname', JSON_QUOTE('key_value'), ctype, ccat, cdesc, cuid=0);
+ *
+ * ccat
+ *      0 (hidden)
+ *      1 (general)
+ *      4 (Gateway)
+ *      5 (Format)
+ *      101 (mail)
+ *      102 Ansible
+ *      103 (Agent)
+ *      104 (Purge)
+ *      105 (Logging)
+ *      106 Network
+ */
+namespace App\Core;
+
+use App\Models\ConfigModel;
+
+class ConfigService
+{
+    private \AppContext $ctx;
+    private ConfigModel $model;
+    private array $cfg = [];
+    private array $modifiedKeys = [];
+
+    public function __construct(\AppContext $ctx)
+    {
+        $this->ctx = $ctx;
+        $this->model = new ConfigModel($ctx->get('Mysql'));
+        register_shutdown_function([$this, 'saveChanges']);
+    }
+
+    /**
+     * Inicializa la configuración con un array base.
+     */
+    public function init(array $cfg): void
+    {
+        foreach ($cfg as $cfg_key => $cfg_value) {
+            $this->cfg[$cfg_key]['value'] = $cfg_value;
+        }
+        $this->loadFromDatabase();
+    }
+
+    /**
+     * Carga configuraciones desde la base de datos y las fusiona con las existentes.
+     */
+    private function loadFromDatabase(): void
+    {
+        $rows = $this->model->getAll();
+        foreach ($rows as $row) {
+            $key = $row['ckey'];
+            $value = $this->parseRowValue($row['cvalue'], (int)$row['ctype']);
+            if (
+                (isset($row['ccat']) && $row['ccat'] > 0) ||
+                !isset($this->cfg[$key])
+            ) {
+                $this->cfg[$key]['value'] = $value;
+                $this->cfg[$key]['ctype'] = (int)$row['ctype'];
+                $this->cfg[$key]['ccat'] = $row['ccat'];
+            }
+        }
+    }
+
+    /**
+     * Obtiene el valor de una clave de configuración.
+     */
+    public function get(string $key, mixed $default = 'None'): mixed
+    {
+        if (empty($this->cfg[$key]['value'])) {
+            return $default !== 'None' ? $default : null;
+        }
+        if (isset($this->cfg[$key]['ctype']) && $this->cfg[$key]['ctype'] == 6) {
+            foreach ($this->cfg[$key]['value'] as $kvalue => $vvalue) {
+                if ($vvalue) {
+                    return $kvalue;
+                }
+            }
+        }
+        return $this->cfg[$key]['value'];
+    }
+
+    /**
+     * Devuelve toda la configuración.
+     */
+    public function getAll(): array
+    {
+        return $this->cfg;
+    }
+
+    /**
+     * Devuelve todas las configuraciones editables.
+     */
+    public function getAllEditable(): array
+    {
+        $lng = $this->ctx->get('lng');
+        $rows = $this->model->getAllEditable();
+        $config = [];
+        foreach ($rows as $row) {
+            $row['cvalue'] = $this->parseRowValue($row['cvalue'], (int)$row['ctype']);
+            if (empty($row['cdesc'])) {
+                $row['cdisplay'] = ucfirst($row['ckey']);
+            } else {
+                if (substr($row['cdesc'], 0, 2) == 'L_' && isset($lng[$row['cdesc']])) {
+                    $row['cdisplay'] = $lng[$row['cdesc']];
+                } else {
+                    $row['cdisplay'] = ucfirst($row['ckey']);
+                }
+            }
+            $config[] = $row;
+        }
+        return $config;
+    }
+
+    /**
+     * Establece el valor de una clave de configuración.
+     */
+    public function set($key, $value, int $force_save = 0): int
+    {
+        if (isset($this->cfg[$key]['ctype'])) {
+            $config = &$this->cfg[$key];
+            if ($config['ctype'] == 6) {
+                foreach ($config['value'] as $key_value => &$value_value) {
+                    if ($key_value == $value) {
+                        if ($value_value != 1) {
+                            $config['value'][$key_value] = 1;
+                        }
+                    } else {
+                        $value_value = 0;
+                    }
+                    unset($value_value);
+                }
+                $this->modifiedKeys[$key]['value'] = $config['value'];
+                return 1;
+            } elseif ($config['ctype'] == 10) {
+                $this->modifiedKeys[$key]['value'] = base64_encode($value);
+            } elseif ($config['value'] !== $value) {
+                $config['value'] = $value;
+                $this->modifiedKeys[$key]['value'] = $value;
+                return 1;
+            }
+        } else {
+            $this->cfg[$key]['value'] = $value;
+        }
+        if ($force_save) {
+            $this->saveChanges();
+        }
+        return 0;
+    }
+
+    /**
+     * Establece múltiples valores de configuración.
+     */
+    public function setMultiple(array $values): int
+    {
+        $changes = 0;
+        foreach ($values as $key => $value) {
+            $this->set($key, $value) && $changes++;
+        }
+        return $changes;
+    }
+
+    /**
+     * Guarda los cambios en la base de datos.
+     */
+    public function saveChanges(): void
+    {
+        if (empty($this->modifiedKeys)) {
+            return;
+        }
+        $this->model->saveChanges($this->modifiedKeys);
+        $this->modifiedKeys = [];
+    }
+
+    /**
+     * Parsea el valor según el tipo esperado.
+     */
+    private function parseRowValue(?string $value, int $type = 0): mixed
+    {
+        if ($value === null) {
+            return null;
+        }
+        $decodedValue = json_decode($value, true);
+        switch ($type) {
+            case 0: return (string)$decodedValue;
+            case 1: return (int)$decodedValue;
+            case 2: return (bool)$decodedValue;
+            case 3: return (float)$decodedValue;
+            case 4:
+                $timestamp = strtotime($decodedValue);
+                return ($timestamp !== false) ? date('Y-m-d H:i:s', $timestamp) : null;
+            case 5: return (string)$decodedValue;
+            case 6:
+                if ((!is_array($decodedValue) && $json = $this->isJson($decodedValue))) {
+                    $decodedValue = $json;
+                }
+                return $decodedValue;
+            case 7: return $decodedValue;
+            case 10: return $decodedValue;
+            default:
+                throw new \InvalidArgumentException("Unsupported type: $type");
+        }
+    }
+
+    /**
+     * Verifica si un valor es JSON válido y lo decodifica.
+     */
+    private function isJson($string)
+    {
+        $data = json_decode($string, true);
+        return (json_last_error() == JSON_ERROR_NONE) ? $data : false;
+    }
+}
