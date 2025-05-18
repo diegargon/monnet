@@ -8,10 +8,13 @@
 !defined('IN_WEB') ? exit : true;
 
 use App\Core\AppContext;
+use App\Core\DBManager;
 
 use App\Services\UserService;
 use App\Services\NetworksService;
 use App\Services\Filter;
+use App\Utils\NetUtils;
+
 /**
  *
  *
@@ -20,12 +23,13 @@ use App\Services\Filter;
  */
 function page_defaults(AppContext $ctx): array
 {
+    $ncfg = $ctx->get('Config');
     $page = [];
 
-    $user = $ctx->get('User');
-    $ncfg = $ctx->get('Config');
+    $userService = new UserService($ctx);
+    $_user = $userService->getCurrentUser();
 
-    $_user = $user->getUser();
+    //$_user = $user->getCurrentUser();
 
     if (empty($_user['theme'])) {
         $page['theme'] = $ncfg->get('theme');
@@ -234,7 +238,7 @@ function page_index(AppContext $ctx): array
  * @param AppContext $ctx
  * @return array<string,mixed>
  */
-function page_login(AppContext $ctx): array
+function _page_login(AppContext $ctx): array
 {
     $page = [];
 
@@ -253,6 +257,64 @@ function page_login(AppContext $ctx): array
             $userid = $user->checkUser($username, $password);
             if (!empty($userid) && $userid > 0) {
                 $user->setUser($userid);
+                if (empty($ncfg->get('rel_path'))) {
+                    $ncfg->set('rel_path', '/');
+                }
+                header("Location: {$ncfg->get('rel_path')} ");
+
+                exit();
+            }
+        }
+    }
+    $page['head_name'] = $ncfg->get('web_title');
+    $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
+    $page['web_main']['scriptlink'][] = './scripts/background.js';
+
+    $page['page'] = 'login';
+    $page['tpl'] = 'login';
+    $page['log_in'] = $lng['L_LOGIN'];
+
+    if (isset($_COOKIE['username'])) {
+        $page['username'] = htmlspecialchars($_COOKIE['username']);
+    } else {
+        $page['username'] = '';
+    }
+
+    $page['username_placeholder'] = $lng['L_USERNAME'];
+    $page['password_placeholder'] = $lng['L_PASSWORD'];
+    if (!empty($page['username'])) {
+        $page['set_pass_focus'] = 1;
+    } else {
+        $page['set_username_focus'] = 1;
+    }
+
+    return $page;
+}
+
+/**
+ *
+ * @param AppContext $ctx
+ * @return array<string,mixed>
+ */
+function page_login(AppContext $ctx): array
+{
+    $page = [];
+
+    //$db = $ctx->get('Mysql');
+    $userService = new UserService($ctx);
+
+    $ncfg = $ctx->get('Config');
+    $lng = $ctx->get('lng');
+
+    if (
+        !empty($_SERVER['REQUEST_METHOD']) &&
+        $_SERVER['REQUEST_METHOD'] == 'POST'
+    ) {
+        $username = Filter::postUsername('username');
+        $password = Filter::postPassword('password');
+        if (!empty($username) && !empty($password)) {
+            $user = $userService->login($username, $password);
+            if (!empty($user['id']) && $user['id'] > 0) {
                 if (empty($ncfg->get('rel_path'))) {
                     $ncfg->set('rel_path', '/');
                 }
@@ -380,10 +442,11 @@ function page_privacy(AppContext $ctx): array
  */
 function page_user(AppContext $ctx): array
 {
-    $page = [];
-    $user = $ctx->get('User');
     $ncfg = $ctx->get('Config');
-    $user->getCurrentUser();
+    $page = [];
+    $userService = new UserService($ctx);
+    $user = $userService->getCurrentUser();
+
     $page = page_common_head($ctx);
 
     /* Top Buttons */
@@ -406,4 +469,68 @@ function page_user(AppContext $ctx): array
         'place' => 'right_col',
     ];
     return $page;
+}
+
+function format_items(User $user, array $items_results): array
+{
+    $items = [];
+    $theme = $user->getTheme();
+    foreach ($items_results as $item) {
+        $item_conf = json_decode($item['conf'], true);
+        $item_img = '';
+        if ($item_conf['image_type'] === 'favicon' && empty($item_conf['image_resource'])) {
+            $item_img = $item_conf['url'] . '/favicon.ico';
+            //$item_img = NetUtils::cachedImg($user, $item['id'], $item_img);
+            //$item_img = NetUtils::cachedImg($user, $item['id'], $item_img);
+        } elseif ($item_conf['image_type'] === 'favicon') {
+            $favicon_path = $item_conf['image_resource'];
+            $parse_item_img = NetUtils::baseUrl($item_conf['url']);
+            if ($parse_item_img !== false) :
+                $item_img = $parse_item_img . '/' . $favicon_path;
+                //$item_img = NetUtils::cachedImg($user, $item['id'], $item_img);
+            endif;
+        } elseif ($item_conf['image_type'] === 'url' && !empty($item_conf['image_resource'])) {
+            $item_img = $item_conf['image_resource'];
+            //$item_img = NetUtils::cachedImg($user, $item['id'], $item_img);
+        } elseif ($item_conf['image_type'] === 'local_img') {
+            $item_img = '/bookmarks_icons/' . $item_conf['image_resource'];
+        } else {
+            $item_img = 'bookmarks_icons/www.png';
+        }
+
+        $item['img'] = $item_img;
+        $items[] = array_merge($item, $item_conf);
+    }
+
+    return $items;
+}
+
+function page_index_post(AppContext $ctx): bool
+{
+    $user = $ctx->get('User');
+
+    $profile_type = Filter::postString('profile_type');
+    $show_bookmarks = Filter::postInt('show_bookmarks');
+    $show_highlight_hosts = Filter::postInt('show_highlight_hosts');
+    $show_other_hosts = Filter::postInt('show_rest_hosts');
+    $show_termlog = Filter::postInt('show_termlog');
+    //add Item
+
+    if ($profile_type !== null) {
+        $user->setPref('profile_type', $profile_type);
+    }
+    if ($show_bookmarks !== null) {
+        $user->setPref('show_bookmarks_status', $show_bookmarks);
+    }
+    if ($show_highlight_hosts !== null) {
+        $user->setPref('show_highlight_hosts_status', $show_highlight_hosts);
+    }
+    if ($show_other_hosts !== null) {
+        $user->setPref('show_other_hosts_status', $show_other_hosts);
+    }
+    if ($show_termlog !== null) {
+        $user->setPref('show_termlog_status', $show_termlog);
+    }
+
+    return true;
 }

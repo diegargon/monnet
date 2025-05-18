@@ -34,9 +34,8 @@ class SessionsModel
 
     public function create($data): bool
     {
-        $this->db->insert('sessions', $data);
-
-        return true;
+        // Asume que la tabla tiene UNIQUE KEY (user_id, sid)
+        return $this->db->upsert('sessions', $data, ['user_id', 'sid']);
     }
 
     /**

@@ -218,7 +218,7 @@ class CmdBookmarksController
             $tdata['web_categories'] = $categories->getByType(2);
         }
 
-        $tdata['local_icons'] = getLocalIconsData($ncfg->get('allowed_images_ext'), 'bookmarks_icons/');
+        $tdata['local_icons'] = $this->getLocalIconsData($ncfg->get('allowed_images_ext'), 'bookmarks_icons/');
         if (isset($command_values['action']) && $command_values['action'] === 'edit') {
             $tdata['bookmark_buttonid'] = 'updateBookmark';
             $tdata['bookmark_title'] = $lng['L_EDIT'];
@@ -280,5 +280,33 @@ class CmdBookmarksController
         }
 
         return Response::stdReturn(false, $lng['L_ERROR']);
+    }
+
+    /**
+    *
+    * @param array $allowed_ext
+    * @param string $directory
+    * @return array<int, array<string, string>>
+    */
+    function getLocalIconsData(array $allowed_ext, string $directory): array
+    {
+        $imageData = [];
+
+        if (is_dir($directory)) {
+            $dir = new DirectoryIterator($directory);
+            foreach ($dir as $fileinfo) {
+                if ($fileinfo->isFile()) {
+                    $extension = strtolower($fileinfo->getExtension());
+                    if (in_array($extension, $allowed_ext)) {
+                        $imageData[] = [
+                            'path' => $fileinfo->getPathname(),
+                            'basename' => $fileinfo->getBasename()
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $imageData;
     }
 }

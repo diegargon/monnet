@@ -9,7 +9,7 @@
 namespace App\Controllers;
 
 use App\Core\AppContext;
-
+use App\Services\UserService;
 
 !defined('IN_WEB') ? exit : true;
 
@@ -29,10 +29,17 @@ class Web
      */
     private \User $user;
 
+    /**
+     *
+     * @var UserService
+     */
+    private UserService $userService;
+
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->user = $ctx->get('User');
+        #$this->user = $ctx->get('User');
+        $this->userService = new UserService($ctx);
     }
 
     /**
@@ -45,11 +52,11 @@ class Web
         $req_page = Filter::getString('page');
         empty($req_page) ? $req_page = 'index' : null;
 
-        if (!$this->hasAccess()) :
+        if (!$this->userService->isAuthorized()) {
             $pageData = $this->get('login');
-        else :
+        } else {
             $pageData = $this->get($req_page);
-        endif;
+        }
 
         $this->render($pageData);
     }
@@ -64,20 +71,6 @@ class Web
     {
         $frontend = new \Frontend($this->ctx);
         $frontend->showPage($page_data);
-    }
-
-    /**
-     * Check Access
-     *
-     * @return bool
-     */
-    private function hasAccess(): bool
-    {
-        if (empty($this->user) || $this->user->getId() < 1) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

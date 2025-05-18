@@ -12,6 +12,7 @@ use App\Core\AppContext;
 use App\Core\DBManager;
 
 use App\Models\UserModel;
+use App\Models\PrefsModel;
 use App\Services\LogSystemService;
 use App\Services\UserSession;
 
@@ -21,9 +22,12 @@ class UserService
     private UserModel $userModel;
     private UserSession $userSession;
     private LogSystemService $logSystem;
+    private PrefsModel $prefsModel;
 
     private \Config $ncfg;
     private int $session_expire;
+
+    private array $prefs = [];
 
     public function __construct(AppContext $ctx)
     {
@@ -32,9 +36,11 @@ class UserService
         $this->userModel = new UserModel($db);
         $this->userSession = new UserSession($ctx);
         $this->logSystem = new LogSystemService($ctx);
+        $this->prefsModel = new PrefsModel($db);
         $this->ncfg = $ctx->get('Config');
         $this->session_expire = (int) $this->ncfg->get('sid_expire');
         $this->userSession->AutoLogin();
+        $this->loadPrefs();
     }
 
     public function login(string $username, string $password, bool $remember = true): array
@@ -46,10 +52,9 @@ class UserService
         }
         $this->userSession->set($user);
 
-
-        #if ($remember) {
-        #    Create DB Session
-        #}
+        if ($remember) {
+            $this->userSession->createDBSession($user['id']);
+        }
 
         unset($user['password']);
 
@@ -151,26 +156,6 @@ class UserService
         ];
     }
 
-    /**
-     * Autentica un usuario
-     */
-    /*
-    public function authenticate(string $email, string $password): array
-    {
-        $user = $this->userModel->getByEmail($email);
-
-        if (!$user || !password_verify($password, $user['password'])) {
-            throw new \RuntimeException("Credenciales inválidas");
-        }
-
-        // Eliminar datos sensibles antes de retornar
-        unset($user['password']);
-        unset($user['sid']);
-
-        return $user;
-    }
-    */
-
     public function getDateFormat(): string
     {
         $user = $this->userSession->getCurrentUser();
@@ -227,5 +212,82 @@ class UserService
     {
         $user = $this->userSession->getCurrentUser();
         return isset($user['id']) ? (int)$user['id'] : null;
+    }
+
+    /**
+     * Obtiene el ID del usuario autenticado actual.
+     *
+     * @return int|null
+     */
+    public function getLang(): string
+    {
+        $user = $this->userSession->getCurrentUser();
+        return isset($user['lang']) ? $user['lang'] : 'en';
+    }
+
+    /**
+     * Obtiene el nombre de usuario del usuario autenticado actual.
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        $user = $this->userSession->getCurrentUser();
+        return isset($user['username']) ? $user['username'] : '';
+    }
+
+    /**
+     * Verifica si el usuario está autenticado.
+     *
+     * @return bool
+     */
+    public function isAuthorized(): bool
+    {
+        return $this->checkCurrentUser();
+    }
+
+    /**
+     * Carga todas las preferencias del usuario autenticado.
+     */
+    public function loadPrefs(): void
+    {
+        $user = $this->getCurrentUser();
+        $this->prefs = [];
+        if (!empty($user['id'])) {
+            $this->prefs = $this->prefsModel->loadPrefs((int)$user['id']);
+        }
+    }
+
+    /**
+     * Obtiene una preferencia del usuario autenticado.
+     */
+    public function getPref(string $key): string|false
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user['id'])) {
+            return false;
+        }
+        // Prefetch cache
+        if (isset($this->prefs[$key])) {
+            return $this->prefs[$key];
+        }
+        $value = $this->prefsModel->getPref((int)$user['id'], $key);
+        if ($value !== false) {
+            $this->prefs[$key] = $value;
+        }
+        return $value;
+    }
+
+    /**
+     * Establece una preferencia para el usuario autenticado.
+     */
+    public function setPref(string $key, mixed $value): void
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user['id'])) {
+            return;
+        }
+        $this->prefsModel->setPref((int)$user['id'], $key, $value);
+        $this->prefs[$key] = $value;
     }
 }
