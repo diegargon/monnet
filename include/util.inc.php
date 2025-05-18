@@ -384,30 +384,6 @@ function floatToPercentage(float $value, float $min = 0.0, float $max = 100.0): 
     return max(0, min(100, $normalized * 100));
 }
 
-/**
- * Seconds to day/hours/minutes/seconds array
- *
- * @param int $seconds
- * @return array<string|int>
- */
-function secondsToDHMS(int $seconds): array
-{
-    $days = intdiv($seconds, 86400);
-    $seconds %= 86400;
-
-    $hours = intdiv($seconds, 3600);
-    $seconds %= 3600;
-
-    $minutes = intdiv($seconds, 60);
-    $seconds %= 60;
-
-    return [
-        'days' => $days,
-        'hours' => $hours,
-        'minutes' => $minutes,
-        'seconds' => $seconds,
-    ];
-}
 
 /**
  * Used in ansible report template to extract data msg recursiively
