@@ -3,11 +3,11 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+
+use App\Utils\ArrayUtils;
 
 class Items
 {
@@ -138,7 +138,7 @@ class Items
     public function getAll(?string $key_order = null, ?string $dir = 'asc'): array
     {
         if (!empty($key_order)) {
-            order($this->items, $key_order, $dir);
+            ArrayUtils::order($this->items, $key_order, $dir);
         }
 
         return $this->items;
@@ -176,7 +176,7 @@ class Items
                 $result[] = $item;
             }
         }
-        order($result, $key_order, $dir);
+        ArrayUtils::order($result, $key_order, $dir);
 
         return $result;
     }

@@ -101,7 +101,7 @@ Class NetworksService
     private function loadAllNetworks(): void
     {
         $networks = $this->networksModel->getAllNetworks();
-        if (valid_array($networks)) {
+        if (!empty($networks)) {
             usort($networks, fn($a, $b) =>
                 ((int)explode('/', $b['network'])[1] ?? 0) <=> ((int)explode('/', $a['network'])[1] ?? 0)
             );

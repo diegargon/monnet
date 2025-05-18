@@ -488,7 +488,7 @@ class CmdHostController
         $target_id = Filter::varInt($command_values['id']);
         $host = $this->hostService->getHostById($target_id);
 
-        if (valid_array($host) && !empty($host['mac'])) {
+        if (!empty($host) && !empty($host['mac'])) {
             \sendWOL($host['mac']);
             return Response::stdReturn(true, 'WOL: ' . $target_id);
         } else {

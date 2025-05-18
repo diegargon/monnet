@@ -22,7 +22,7 @@
             <img src="/tpl/<?= $ncfg->get('theme') ?>/img/network.png"/>
             <div class="dropdown-content" id="myDropdown">
                 <?php
-                if (!empty($tdata['networks']) && valid_array($tdata['networks'])) {
+                if (!empty($tdata['networks'])) {
                     ($tdata['networks_selected']) === 1 ? $disabled = ' disabled ' : $disabled = '';
                     foreach ($tdata['networks'] as $net) {
                         $netid = $net['id'];

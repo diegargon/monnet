@@ -73,7 +73,6 @@ require_once 'lang/es/main.lang.php';
 $ctx->setLang($lng);
 
 require_once 'class/Lang.php';
-require_once 'include/util.inc.php';
 require_once 'class/Filters.php';
 
 $ncfg = $ctx->set('Config', new Config($ctx));

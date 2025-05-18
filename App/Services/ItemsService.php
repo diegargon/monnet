@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Models\ItemsModel;
+use App\Utils\MiscUtils;
 
 class ItemsService
 {
@@ -23,7 +24,7 @@ class ItemsService
     {
         $items = $this->items;
         if (!empty($key_order)) {
-            order($items, $key_order, $dir);
+            MiscUtils::order($items, $key_order, $dir);
         }
         return $items;
     }
@@ -111,7 +112,7 @@ class ItemsService
     {
         $result = $this->model->getByType($this->uid, $type);
         if (!empty($key_order)) {
-            order($result, $key_order, $dir);
+            MiscUtils::order($result, $key_order, $dir);
         }
         return $result;
     }

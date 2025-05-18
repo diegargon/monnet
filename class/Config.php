@@ -298,7 +298,7 @@ class Config
                 //TODO Filter?
                 return (string) $decodedValue;
             case 6: // json object VALUE=1 (1 selected)
-                if ((!is_array($decodedValue) && $json = isJson($decodedValue))) :
+                if ((!is_array($decodedValue) && $json = $this->isJson($decodedValue))) :
                     $decodedValue = $json;
                 endif;
                 return $decodedValue;
@@ -337,7 +337,15 @@ class Config
         foreach ($config as $ckey => $cvalue) {
             $this->cfg[$ckey] = $cvalue;
         }
-        
+
         return $config;
+    }
+    /**
+     * Verifica si un valor es JSON válido y lo decodifica.
+     */
+    private function isJson($string)
+    {
+        $data = json_decode($string, true);
+        return (json_last_error() == JSON_ERROR_NONE) ? $data : false;
     }
 }

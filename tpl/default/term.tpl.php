@@ -2,10 +2,9 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+
 /**
  * In frontend->getTpl()
  * @var array<string> $lng
@@ -19,7 +18,7 @@
         <div id="term_frame" class="frame glow">
             <div  id="term-output" class="term-output">
                 <?php
-                if (valid_array($tdata['term_logs'])) {
+                if (!empty($tdata['term_logs'])) {
                     echo implode('', $tdata['term_logs']);
                 }
                 ?>

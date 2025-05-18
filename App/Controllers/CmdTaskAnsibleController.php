@@ -85,7 +85,7 @@ class CmdTaskAnsibleController
 
         $playbook_id = $command === 'syslog-load' ? 'std-syslog-linux' : 'std-journald-linux';
 
-        if (valid_array($host) && $host['ansible_enabled']) {
+        if (!empty($host) && $host['ansible_enabled']) {
             $extra_vars = [];
             if (is_numeric($value)) {
                 $extra_vars['num_lines'] = $value;

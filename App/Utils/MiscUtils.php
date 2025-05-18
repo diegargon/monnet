@@ -3,11 +3,6 @@ namespace App\Utils;
 
 class MiscUtils
 {
-    public static function validArray($array): bool
-    {
-        return is_array($array) && !empty($array);
-    }
-
     public static function microToMs(float $microseconds): float
     {
         return round($microseconds * 1000, 3);

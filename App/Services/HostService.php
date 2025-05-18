@@ -150,7 +150,7 @@ class HostService
         }
 
         if (
-            !valid_array($network_match) ||
+            !empty($network_match) ||
             $networkService->isLocal($host['ip']) && $network_match['network'] == '0.0.0.0/0'
         ) {
             return ['status' => 'error', 'error_msg' => $this->lng['L_ERR_NOT_NET_CONTAINER']];

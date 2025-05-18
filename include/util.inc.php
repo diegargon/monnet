@@ -7,16 +7,6 @@ use App\Services\DateTimeService;
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
-/**
- * Check if is array and is not empty
- *
- * @param mixed $array
- * @return bool
- */
-function valid_array(mixed $array): bool
-{
-    return is_array($array) && !empty($array);
-}
 
 /**
  * micro to ms

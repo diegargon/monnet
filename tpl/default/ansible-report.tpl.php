@@ -12,6 +12,9 @@
  * @var array<mixed> $report Template Data
  */
 
+ # TODO: Refactor to remove this dependency
+ use App\Utils\MiscUtils;
+
 $report = $tdata['result'];
 ?>
 
@@ -53,7 +56,7 @@ foreach ($report['plays'] as $play) {
     foreach ($play['tasks'] as $task) {
         foreach ($task['hosts'] as $ip => $hostData) {
             $msg = '';
-            $extractedMessages = extractMessages($hostData);
+            $extractedMessages = ArrayUtils::extractMessages($hostData);
             if (!empty($extractedMessages)) {
                 $msg .= implode("", $extractedMessages);
             }

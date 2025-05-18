@@ -11,6 +11,7 @@ namespace App\Services;
 use App\Services\LogSystemService;
 use App\Services\NetworksService;
 use App\Services\DateTimeService;
+use App\Utils\MiscUtils;
 
 class HostFormatter
 {
@@ -88,7 +89,7 @@ class HostFormatter
         );
 
         if ($host['online'] && !empty($host['misc']['latency'])) :
-            $host['latency_ms'] = micro_to_ms($host['misc']['latency']) . 'ms';
+            $host['latency_ms'] = MiscUtils::microToMs($host['misc']['latency']) . 'ms';
         endif;
 
         $this->formatMisc($host); // &REF
@@ -187,9 +188,9 @@ class HostFormatter
             $loadavg = unserialize($host['misc']['load_avg']);
 
             (!empty($host['misc']['ncpu'])) ? $ncpu = (int) $host['misc']['ncpu'] : $ncpu = 1;
-            $m1 = floatToPercentage((float) $loadavg['1min'], 0.0, $ncpu);
-            $m5 = floatToPercentage((float) $loadavg['5min'], 0.0, $ncpu);
-            $m15 = floatToPercentage((float) $loadavg['15min'], 0.0, $ncpu);
+            $m1 = MiscUtils::floatToPercentage((float) $loadavg['1min'], 0.0, $ncpu);
+            $m5 = MiscUtils::floatToPercentage((float) $loadavg['5min'], 0.0, $ncpu);
+            $m15 = MiscUtils::floatToPercentage((float) $loadavg['15min'], 0.0, $ncpu);
 
             $host['load_avg'] = [
                 ['value' => round($m1, 1), 'legend' => $lng['L_LOAD'] . ' 1m', 'min' => 0, 'max' => 100],
@@ -201,9 +202,9 @@ class HostFormatter
             $mem_info = unserialize($host['misc']['mem_info']);
             $total = $mem_info['total'];
             $used = $mem_info['used'];
-            $gtotal = mbToGb($total, 0);
-            $gused = mbToGb($used, 0);
-            $gfree = mbToGb($mem_info['free'], 0);
+            $gtotal = MiscUtils::mbToGb($total, 0);
+            $gused = MiscUtils::mbToGb($used, 0);
+            $gfree = MiscUtils::mbToGb($mem_info['free'], 0);
             $legend = "{$lng['L_MEMORY']}: ({$mem_info['percent']}%) {$lng['L_TOTAL']}:{$gtotal}GB";
             $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB";
             $host['mem_info'] = [
