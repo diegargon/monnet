@@ -1,20 +1,24 @@
 <?php
 
 namespace App\Services;
+
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\ItemsModel;
 use App\Utils\MiscUtils;
 
 class ItemsService
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private ItemsModel $model;
     private int $uid;
     private array $items = [];
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $db = $this->ctx->get('DBManager');
+        $db = new DBManager($ctx);
         $this->model = new ItemsModel($db);
         $this->uid = $ctx->get('User')->getId();
         $this->items = $this->model->getAllByUser($this->uid);

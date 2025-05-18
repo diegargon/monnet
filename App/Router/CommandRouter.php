@@ -9,6 +9,9 @@
 
 namespace App\Router;
 
+use App\Core\AppContext;
+
+
 use App\Controllers\CmdHostController;
 use App\Controllers\LogHostsController;
 use App\Controllers\CmdBookmarksController;
@@ -21,9 +24,9 @@ use App\Controllers\GatewayController;
 
 class CommandRouter
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
     }

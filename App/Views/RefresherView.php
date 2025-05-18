@@ -7,19 +7,21 @@
 
 namespace App\Views;
 
+use App\Core\AppContext;
+
 use App\Services\TemplateService;
 use App\Services\HostService;
 use App\Services\DateTimeService;
 
 class RefresherView
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private \Config $ncfg;
     private TemplateService $templates;
     private HostService $hostService;
     private DateTimeService $dateTimeService;
 
-    public function __construct(\AppContext $ctx, TemplateService $templates)
+    public function __construct(AppContext $ctx, TemplateService $templates)
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');
@@ -206,7 +208,7 @@ class RefresherView
     private function addMiscData(array &$host_view, array $vhost): void
     {
         if (!empty($vhost['misc']['manufacture'])) {
-            $manufacture = get_manufacture_data($this->ncfg, $vhost['misc']['manufacture']);
+            $manufacture = $this->getManufacture($this->ncfg, $vhost['misc']['manufacture']);
             if (is_array($manufacture)) {
                 $host_view['manufacture_image'] = $manufacture['manufacture_image'];
                 $host_view['manufacture_name'] = $manufacture['name'];
@@ -214,7 +216,7 @@ class RefresherView
         }
 
         if (!empty($vhost['misc']['os'])) {
-            $os = get_os_data($this->ncfg, $vhost['misc']['os']);
+            $os = $this->getOs($this->ncfg, $vhost['misc']['os']);
             if (is_array($os)) {
                 $host_view['os_image'] = $os['os_image'];
                 $host_view['os_name'] = $os['name'];
@@ -222,7 +224,7 @@ class RefresherView
         }
 
         if (!empty($vhost['misc']['system_rol'])) {
-            $system_rol = get_system_rol_data($this->ncfg, $vhost['misc']['system_rol']);
+            $system_rol = $this->getSystemRol($this->ncfg, $vhost['misc']['system_rol']);
             if (is_array($system_rol)) {
                 $host_view['system_rol_image'] = $system_rol['system_rol_image'];
                 $host_view['system_rol_name'] = $system_rol['name'];
@@ -273,5 +275,82 @@ class RefresherView
                 $host_view['warn_mark'] = 'tpl/' . $theme . '/img/warn-mark.png';
             }
         }
+    }
+
+    /**
+     *
+     * @param array<string, mixed> $ncfg
+     * @param int $id
+     * @return array<string, string|int>|bool
+     */
+    function getManufacture(\Config $ncfg, int $id): array|bool
+    {
+        $theme = $ncfg->get('theme');
+
+        foreach ($ncfg->get('manufacture') as $manufacture) {
+            if ($manufacture['id'] == $id) {
+                $imgfile = 'tpl/' . $theme . '/img/icons/' . $manufacture['img'];
+                if (file_exists($imgfile)) :
+                    $manufacture['manufacture_image'] = $imgfile;
+                else :
+                    $manufacture['manufacture_image'] = 'tpl/' . $theme . '/img/icons/unknown.png';
+                endif;
+                $manufacture['manufacture_name'] = $manufacture['name'];
+
+                return $manufacture;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param array<string, mixed> $ncfg
+     * @param int $id
+     * @return array<string, string|int>|bool
+     */
+    function getOs(\Config $ncfg, int $id): array|bool
+    {
+        $theme = $ncfg->get('theme');
+
+        foreach ($ncfg->get('os') as $os) {
+            if ($os['id'] == $id) {
+                $imgfile = 'tpl/' . $theme . '/img/icons/' . $os['img'];
+                if (file_exists($imgfile)) :
+                    $os['os_image'] = $imgfile;
+                else :
+                    $os['os_image'] = 'tpl/' . $theme . '/img/icons/unknown.png';
+                endif;
+                $os['os_name'] = $os['name'];
+
+                return $os;
+            }
+        }
+        return false;
+    }
+    /**
+     *
+     * @param array<string, mixed> $ncfg
+     * @param int $id
+     * @return array<string, string|int>|bool
+     */
+    function getSystemRol(\Config $ncfg, int $id): array|bool
+    {
+        $theme = $ncfg->get('theme');
+
+        foreach ($ncfg->get('system_rol') as $system_rol) {
+            if ($system_rol['id'] == $id) {
+                $imgfile = 'tpl/' . $theme . '/img/icons/' . $system_rol['img'];
+                if (file_exists($imgfile)) :
+                    $system_rol['system_rol_image'] = $imgfile;
+                else :
+                    $system_rol['system_rol_image'] = 'tpl/' . $theme . '/img/icons/unknown.png';
+                endif;
+                $system_rol['system_rol_name'] = $system_rol['name'];
+
+                return $system_rol;
+            }
+        }
+        return false;
     }
 }

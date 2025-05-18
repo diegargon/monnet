@@ -7,6 +7,9 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\HostsModel;
 use App\Services\LogHostsService;
 use App\Services\LogSystemService;
@@ -15,9 +18,9 @@ use App\Services\NetworksService;
 
 class RefresherService
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private \Config $ncfg;
-    private \DBManager $db;
+    private DBManager $db;
 
     private LogHostsService $logHostService;
     private LogSystemService $logSystemService;
@@ -26,9 +29,9 @@ class RefresherService
     private HostsModel $hostsModel;
 
 
-    public function __construct(\AppContext $ctx) {
+    public function __construct(AppContext $ctx) {
         $this->ctx = $ctx;
-        $this->db = $ctx->get('DBManager');
+        $this->db = new DBManager($ctx);
         $this->ncfg = $ctx->get('Config');
 
         $this->logHostService = new LogHostsService($ctx);

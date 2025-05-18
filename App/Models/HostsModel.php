@@ -8,11 +8,13 @@
 
 namespace App\Models;
 
+use App\Core\DBManager;
+
 class HostsModel
 {
-    private \DBManager $db;
+    private DBManager $db;
 
-    public function __construct(\DBManager $db)
+    public function __construct(DBManager $db)
     {
         $this->db = $db;
     }
@@ -125,9 +127,6 @@ class HostsModel
     {
         $stats = [];
 
-        /* OLD
-         SUM(agent_installed = 1 and online = 0) AS agent_offline,
-        */
         $result = $this->db->query("
             SELECT
                 COUNT(*) AS total_hosts,

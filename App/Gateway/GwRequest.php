@@ -11,13 +11,14 @@
 
 namespace App\Gateway;
 
+use App\Core\AppContext;
 use App\Core\Network\SocketClient;
 use RuntimeException;
 
 class GwRequest
 {
-    /** @var \AppContext */
-    private \AppContext $ctx;
+    /** @var AppContext */
+    private AppContext $ctx;
 
     /** @var SocketClient */
     private SocketClient $socketClient;
@@ -28,7 +29,7 @@ class GwRequest
     /** @var int */
     private int $server_port;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $ncfg = $ctx->get('Config');
@@ -75,8 +76,8 @@ class GwRequest
             $responseArray = $this->socketClient->sendAndReceive($request);
             if (is_array($responseArray)) {
                 return $responseArray;
-            } 
-            return ['status' => 'error', 'error_msg' => 'Unknown error receiving gw response'];                    
+            }
+            return ['status' => 'error', 'error_msg' => 'Unknown error receiving gw response'];
         } catch (\Throwable $e) {
             return ['status' => 'error', 'error_msg' => $e->getMessage()];
         }

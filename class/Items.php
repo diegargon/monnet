@@ -7,6 +7,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+use App\Core\AppContext;
 use App\Utils\ArrayUtils;
 
 class Items
@@ -18,7 +19,7 @@ class Items
     private array $items = [];
     /** @var int */
     private int $uid;
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
     public function __construct(AppContext $ctx)
     {

@@ -8,19 +8,21 @@
 
 namespace App\Models;
 
+
+use App\Core\DBManager;
 /**
  * Modelo para la tabla notes.
  * Campos: id, uid, host_id, update, content
  */
 class NotesModel
 {
-    /** @var \DBManager */
-    private \DBManager $db;
+    /** @var DBManager */
+    private DBManager $db;
 
     /**
-     * @param \DBManager $db Instancia de DBManager para acceso a base de datos
+     * @param DBManager $db Instancia de DBManager para acceso a base de datos
      */
-    public function __construct(\DBManager $db)
+    public function __construct(DBManager $db)
     {
         $this->db = $db;
     }

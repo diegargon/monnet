@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 class ConfigModel
 {
-    private $db;
+    private DBManager $db;
 
-    public function __construct($db)
+    public function __construct(DBManager $db)
     {
         $this->db = $db;
     }

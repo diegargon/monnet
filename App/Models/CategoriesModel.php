@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-class CategoriesModel {
-    private \DBManager $db;
+use App\Core\DBManager;
 
-    public function __construct(\DBManager $db)
+class CategoriesModel {
+    private DBManager $db;
+
+    public function __construct(DBManager $db)
     {
         $this->db = $db;
     }
@@ -35,7 +37,7 @@ class CategoriesModel {
         return $row ? $row['cat_type'] : false;
     }
 
-    public function create(int $cat_type, string $value): array
+    public function create(int $cat_type, string $value): bool
     {
         // Verifica existencia usando selectOne
         $exists = $this->db->selectOne('categories', ['cat_name'], 'cat_type = :type AND cat_name = :name', [
@@ -43,10 +45,11 @@ class CategoriesModel {
             'name' => $value
         ]);
         if ($exists) {
-            return ['success' => -1, 'msg' => 'EXISTS'];
+            return false;
         }
         $ok = $this->db->insert('categories', ['cat_name' => $value, 'cat_type' => $cat_type]);
-        return ['success' => $ok ? 1 : 0, 'msg' => 'OK'];
+
+        return true;
     }
 
     public function remove(int $id): bool

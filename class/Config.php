@@ -5,6 +5,7 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+use App\Core\AppContext;
 
 !defined('IN_WEB') ? exit : true;
 /**
@@ -258,7 +259,7 @@ class Config
 
         // Combine all rows into a single query
         $query = "INSERT INTO config (ckey, cvalue) VALUES " . implode(', ', $values) . "
-              ON DUPLICATE KEY UPDATE cvalue = VALUES(cvalue)";
+            ON DUPLICATE KEY UPDATE cvalue = VALUES(cvalue)";
 
         $db->query($query);
 

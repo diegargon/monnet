@@ -3,8 +3,6 @@
 /**
  *
  *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
@@ -29,9 +27,7 @@ if ($user->getLang() !== 'es') {
     }
 }
 
-require_once 'class/Web.php';
 require_once 'include/pages-func.inc.php';
 require_once 'include/pages-post.inc.php';
 require_once 'include/pages.inc.php';
 require_once 'class/Frontend.php';
-require_once 'include/net-user.inc.php';

@@ -7,6 +7,8 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+
 class EncryptionService
 {
     /**
@@ -24,7 +26,7 @@ class EncryptionService
      */
     private string $cipherType;
 
-    public function __construct(\AppContext $ctx, string $cipherType = 'RSA')
+    public function __construct(\ppContext $ctx, string $cipherType = 'RSA')
     {
         $this->ncfg = $ctx->get('Config');
 

@@ -8,6 +8,9 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
 */
+
+namespace App\Core;
+
 class DBManager
 {
     private AppContext $ctx;
@@ -574,17 +577,17 @@ class DBManager
         }
         foreach ($params as $key => $value) {
             if (is_int($value)) {
-                $stmt->bindValue($key, $value, PDO::PARAM_INT);
+                $stmt->bindValue($key, $value, \PDO::PARAM_INT);
                 continue;
             } elseif (is_bool($value)) {
-                $stmt->bindValue($key, (int) $value, PDO::PARAM_INT);
+                $stmt->bindValue($key, (int) $value, \PDO::PARAM_INT);
                 continue;
             } elseif (is_null($value)) {
-                $stmt->bindValue($key, null, PDO::PARAM_NULL);
+                $stmt->bindValue($key, null, \PDO::PARAM_NULL);
                 continue;
             }
 
-            $stmt->bindValue($key, $value, PDO::PARAM_STR);
+            $stmt->bindValue($key, $value, \PDO::PARAM_STR);
         }
     }
 }

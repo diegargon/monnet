@@ -9,14 +9,15 @@
 
 namespace App\Controllers;
 
+use App\Core\AppContext;
 use App\Services\GatewayService;
 
 class GatewayController
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private GatewayService $gatewayService;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->gatewayService = new GatewayService($this->ctx);

@@ -11,24 +11,27 @@
 
 namespace App\Controllers;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\LogHostsModel;
 use App\Services\LogHostsService;
 use App\Services\Filter;
-use App\Helpers\Response;
 use App\Services\TemplateService;
+use App\Helpers\Response;
 
 class LogHostsController
 {
-    private \AppContext $ctx;
-    private \DBManager $db;
+    private AppContext $ctx;
+    private DBManager $db;
     private LogHostsModel $logHostsModel;
     private LogHostsService $logHostsService;
     private TemplateService $templateService;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->db = $ctx->get('DBManager');
+        $this->db = new DBManager($ctx);
         $this->logHostsModel = new LogHostsModel($this->db);
         $this->logHostsService = new LogHostsService($ctx);
         $this->templateService = new TemplateService($ctx);

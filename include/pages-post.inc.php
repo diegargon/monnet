@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
@@ -14,15 +12,17 @@
  * @param AppContext $ctx
  * @return bool
  */
+use App\Services\Filter;
+
 function page_index_post(AppContext $ctx): bool
 {
     $user = $ctx->get('User');
 
-    $profile_type = Filters::postString('profile_type');
-    $show_bookmarks = Filters::postInt('show_bookmarks');
-    $show_highlight_hosts = Filters::postInt('show_highlight_hosts');
-    $show_other_hosts = Filters::postInt('show_rest_hosts');
-    $show_termlog = Filters::postInt('show_termlog');
+    $profile_type = Filter::postString('profile_type');
+    $show_bookmarks = Filter::postInt('show_bookmarks');
+    $show_highlight_hosts = Filter::postInt('show_highlight_hosts');
+    $show_other_hosts = Filter::postInt('show_rest_hosts');
+    $show_termlog = Filter::postInt('show_termlog');
     //add Item
 
     if ($profile_type !== null) {

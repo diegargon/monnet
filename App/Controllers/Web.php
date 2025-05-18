@@ -3,11 +3,17 @@
 /**
  *
  *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+
+namespace App\Controllers;
+
+use App\Core\AppContext;
+
+
 !defined('IN_WEB') ? exit : true;
+
+use App\Services\Filter;
 
 class Web
 {
@@ -21,7 +27,7 @@ class Web
      *
      * @var User
      */
-    private User $user;
+    private \User $user;
 
     public function __construct(AppContext $ctx)
     {
@@ -36,7 +42,7 @@ class Web
     public function run(): void
     {
         $pageData = [];
-        $req_page = Filters::getString('page');
+        $req_page = Filter::getString('page');
         empty($req_page) ? $req_page = 'index' : null;
 
         if (!$this->hasAccess()) :
@@ -56,7 +62,7 @@ class Web
      */
     public function render(array $page_data): void
     {
-        $frontend = new Frontend($this->ctx);
+        $frontend = new \Frontend($this->ctx);
         $frontend->showPage($page_data);
     }
 

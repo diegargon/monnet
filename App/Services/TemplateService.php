@@ -8,12 +8,14 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+
 class TemplateService
 {
     private string $templatesPath = 'tpl/default/';
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         //$this->templatesPath = $templatesPath;

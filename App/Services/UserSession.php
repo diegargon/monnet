@@ -8,6 +8,9 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\UserModel;
 use App\Models\SessionsModel;
 use App\Services\LogSystemService;
@@ -24,13 +27,13 @@ class UserSession
     private \Config $ncfg;
     private array $user = [];
     private int $session_expire;
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private LogSystemService $logSystem;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $db = $this->ctx->get('DBManager');
+        $db = new DBManager($ctx);
         $this->ncfg = $ctx->get('Config');
         $this->session_expire = (int) $this->ncfg->get('sid_expire');
         $this->userModel = new UserModel($db);

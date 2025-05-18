@@ -8,6 +8,9 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\LogSystemModel;
 use App\Services\DateTimeService;
 
@@ -24,14 +27,16 @@ class LogSystemService
     private string $timezone = 'UTC';
     private array $lng = [];
     private \Config $ncfg;
+    private DBManager $db;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
-        $db = $ctx->get('DBManager');
+        $this->db = new DBManager($ctx);
+
         $this->lng = $ctx->get('lng');
         $this->ncfg = $ctx->get('Config');
 
-        $this->logSystemModel = new LogSystemModel($db);
+        $this->logSystemModel = new LogSystemModel($this->db);
     }
 
     /**

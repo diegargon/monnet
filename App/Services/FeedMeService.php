@@ -11,6 +11,9 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Services\HostService;
 use App\Services\DateTimeService;
 use App\Models\CmdHostModel;
@@ -22,9 +25,9 @@ use App\Services\Filter;
 class FeedMeService
 {
     /**
-     * @var \AppContext $ctx Context
+     * @var AppContext $ctx Context
      */
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
     /**
      * @var HostService $hostService Service to handle hosts.
@@ -47,9 +50,9 @@ class FeedMeService
     private \Config $ncfg;
 
     /**
-     * @var \DBManager
+     * @var DBManager
      */
-    private \DBManager $db;
+    private DBManager $db;
 
     /** @var DateTimeService */
     private DateTimeService $dateTimeService;
@@ -59,16 +62,13 @@ class FeedMeService
 
     /** @var LogHostsService */
     private LogHostsService $logHost;
-    /**
-     * Constructor of FeedMeService.
-     *
-     * @param \AppContext $ctx Application context.
-     */
-    public function __construct(\AppContext $ctx)
+
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');
-        $this->db = $ctx->get('DBManager');
+        $this->db = new DBManager($ctx);
+
         $this->hostService = new HostService($ctx);
         $this->logSys = new LogSystemService($ctx);
         $this->logHost = new LogHostsService($ctx);

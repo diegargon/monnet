@@ -8,6 +8,8 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+
 use App\Services\LogSystemService;
 use App\Services\NetworksService;
 use App\Services\DateTimeService;
@@ -15,12 +17,12 @@ use App\Utils\MiscUtils;
 
 class HostFormatter
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
     private LogSystemService $logSys;
     private NetworksService $networksService;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->logSys = new LogSystemService($ctx);
@@ -220,8 +222,8 @@ class HostFormatter
                 $disk_percent = round($disk['percent']);
                 $name = substr($disk['mountpoint'], strrpos($disk['mountpoint'], '/'));
                 $legend = "($disk_percent%): $name";
-                $gused = mbToGb($disk['used'], 0);
-                $gfree = mbToGb($disk['free'], 0);
+                $gused = MiscUtils::mbToGb($disk['used'], 0);
+                $gfree = MiscUtils::mbToGb($disk['free'], 0);
                 $tooltip = "{$lng['L_USED']} {$gused}GB/{$lng['L_FREE']} {$gfree}GB\n";
                 $tooltip .= "{$disk['device']} {$disk['fstype']}";
 

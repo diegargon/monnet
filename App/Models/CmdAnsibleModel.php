@@ -27,15 +27,18 @@
 
 namespace App\Models;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 class CmdAnsibleModel
 {
-    private \AppContext $ctx;
-    private \DBManager $db;
+    private AppContext $ctx;
+    private DBManager $db;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->db = $ctx->get('DBManager');
+        $this->db = new DBManager($ctx);
     }
 
     /**

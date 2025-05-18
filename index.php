@@ -15,6 +15,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+use App\Controllers\Web;
+
 require('include/common.inc.php');
 require('include/usermode.inc.php');
 

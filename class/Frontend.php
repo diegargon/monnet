@@ -10,6 +10,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+use App\Core\AppContext;
+
 class Frontend
 {
     /** @var AppContext $ctx */

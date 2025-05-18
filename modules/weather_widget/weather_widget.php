@@ -3,11 +3,11 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
+
+use App\Services\CurlService;
 
 /**
  *
@@ -53,17 +53,13 @@ function request_weather(\Config $ncfg): mixed
             . '&appid=' . $api
             . '&lang=es&units=metric';
 
-    $response = curl_get($ApiUrl);
-
-    // Instanciar LogSystemService si no existe
-    $logSys = new \App\Services\LogSystemService($GLOBALS['ctx'] ?? null);
+    $response = CurlService::curlGet($ApiUrl);
 
     if ($response) {
         $response = json_decode($response);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $logSys->warning("Weather: Error al decodificar JSON: " . json_last_error_msg());
-            return null;
+            throw new \RuntimeException("Weather: Error al decodificar JSON: " . json_last_error_msg());
         }
 
     } else {

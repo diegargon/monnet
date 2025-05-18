@@ -8,13 +8,16 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\UserModel;
 use App\Services\LogSystemService;
 use App\Services\UserSession;
 
 class UserService
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private UserModel $userModel;
     private UserSession $userSession;
     private LogSystemService $logSystem;
@@ -25,7 +28,7 @@ class UserService
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $db = $this->ctx->get('DBManager');
+        $db = new DBManager($ctx);
         $this->userModel = new UserModel($db);
         $this->userSession = new UserSession($ctx);
         $this->logSystem = new LogSystemService($ctx);

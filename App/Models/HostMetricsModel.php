@@ -9,13 +9,18 @@
 
 namespace App\Models;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 class HostMetricsModel
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
+    private DBManager $db;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->db = new DBManager($ctx);
     }
 
     /**
@@ -26,7 +31,6 @@ class HostMetricsModel
      */
     public function getDbMetrics(int $hid, int $metric_type): array
     {
-        $db = $this->ctx->get('DBManager');
 
         $query = 'SELECT date, value
             FROM stats
@@ -37,7 +41,7 @@ class HostMetricsModel
 
         $params = ['hid' => $hid, 'mtype' => $metric_type];
 
-        $result = $db->qfetchAll($query, $params);
+        $result = $this->db->qfetchAll($query, $params);
 
         if (!$result) {
             return [];

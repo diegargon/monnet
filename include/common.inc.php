@@ -7,6 +7,9 @@
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 !defined('IN_WEB') ? exit : true;
 
 /**
@@ -38,7 +41,6 @@ require_once 'include/checks.inc.php';
 
 common_checks($cfg_db, $cfg);
 
-require_once 'class/AppContext.php';
 
 if ($cfg_db['dbtype'] == 'mysqli') {
     require_once 'class/Mysql.php';
@@ -63,8 +65,6 @@ try {
     exit();
 }
 
-#require_once 'class/Log.php';
-
 /**
  * @var array<string> $lng
  */
@@ -73,14 +73,10 @@ require_once 'lang/es/main.lang.php';
 $ctx->setLang($lng);
 
 require_once 'class/Lang.php';
-require_once 'class/Filters.php';
 
 $ncfg = $ctx->set('Config', new Config($ctx));
 $ncfg->init($cfg);
 
 date_default_timezone_set($ncfg->get('default_timezone'));
 
-// Log::init($ctx);
-
 require_once 'include/updater.inc.php';
-require_once 'include/curl.inc.php';

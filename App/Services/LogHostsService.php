@@ -9,13 +9,16 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\LogHostsModel;
 use App\Services\DateTimeService;
 use App\Services\HostService;
 
 class LogHostsService
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
     private LogHostsModel $logHostsModel;
     private DateTimeService $dateTimeService;
@@ -23,10 +26,11 @@ class LogHostsService
     /** @var int */
     private int $max_db_msg = 254;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $db = $ctx->get('DBManager');
+        $db = new DBManager($ctx);
+
         $this->logHostsModel = new LogHostsModel($db);
         $this->dateTimeService = new DateTimeService();
     }
@@ -157,7 +161,7 @@ class LogHostsService
 
         foreach ($logs as &$log) {
             $log['host'] = $hostService->getDisplayNameById($log['host_id']);
-            $log['date'] = format_datetime_from_string($log['date'], $ncfg->get('datetime_log_format'));
+            $log['date'] = $this->dateTimeService->formatDateString($log['date'], $ncfg->get('datetime_log_format'));
             $log['level'] = \LogLevel::getName($log['level']);
             $log['log_type'] = \LogType::getName($log['log_type']);
             if (\EventType::getName($log['event_type'])) {

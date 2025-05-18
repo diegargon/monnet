@@ -8,18 +8,21 @@
 
 namespace App\Models;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 class CmdAnsibleReportModel
 {
-    /** @var \AppContext */
-    private \AppContext $ctx;
+    /** @var AppContext */
+    private AppContext $ctx;
 
-    /** @var \DBManager */
-    private \DBManager $db;
+    /** @var DBManager */
+    private DBManager $db;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->db = $this->ctx->get('DBManager');
+        $this->db = new DBManager($ctx);
     }
 
     /**

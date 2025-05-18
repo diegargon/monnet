@@ -8,11 +8,13 @@
 
 namespace App\Models;
 
+use App\Core\DBManager;
+
 class SessionsModel
 {
-    private \DBManager $db;
+    private DBManager $db;
 
-    public function __construct(\DBManager $db)
+    public function __construct(DBManager $db)
     {
         $this->db = $db;
     }
@@ -57,7 +59,7 @@ class SessionsModel
         $query = "SELECT user_id FROM sessions WHERE user_id = :uid AND sid = :sid";
 
         $result = $this->db->qfetch($query, ['uid' => $uid, 'sid' => $sid]);
-        
+
         return !empty($result);
     }
 

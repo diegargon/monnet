@@ -16,6 +16,8 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+
 use App\Models\CmdAnsibleModel;
 use App\Models\CmdAnsibleReportModel;
 use App\Services\TemplateService;
@@ -27,7 +29,7 @@ use App\Services\HostService;
 
 class AnsibleService
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private \Config $ncfg;
     private CmdAnsibleModel $cmdAnsibleModel;
     private CmdAnsibleReportModel $ansibleReportModel;
@@ -37,7 +39,7 @@ class AnsibleService
 
     private array $playbooks_metadata = [];
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');

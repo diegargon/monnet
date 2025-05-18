@@ -7,14 +7,15 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
 use App\Services\TemplateService;
 
 class HostMetricsViewBuilder
 {
     private TemplateService $templateService;
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->templateService = new TemplateService($ctx);

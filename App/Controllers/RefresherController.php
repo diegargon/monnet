@@ -7,21 +7,24 @@
 
 namespace App\Controllers;
 
+use App\Core\AppContext;
+
 use App\Services\RefresherService;
-use App\Views\RefresherView;
 use App\Services\TemplateService;
 use App\Services\GatewayService;
 use App\Services\DateTimeService;
 
+use App\Views\RefresherView;
+
 class RefresherController
 {
-    private $ctx;
+    private AppContext $ctx;
     private $view;
     private \Config $ncfg;
     private RefresherService $refresherService;
     private GatewayService $gwService;
 
-    public function __construct($ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');

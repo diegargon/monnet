@@ -7,11 +7,14 @@
 
 namespace App\Models;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 class CmdHostModel
 {
-    private \DBManager $db;
+    private DBManager $db;
 
-    public function __construct(\DBManager $db)
+    public function __construct(DBManager $db)
     {
         $this->db = $db;
     }

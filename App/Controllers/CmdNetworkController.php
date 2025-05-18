@@ -13,11 +13,12 @@ use App\Services\Filter;
 use App\Services\TemplateService;
 use App\Services\NetworksService;
 use App\Helpers\Response;
+use App\Core\AppContext;
 
 class CmdNetworkController
 {
-    /** @var \AppContext */
-    private \AppContext $ctx;
+    /** @var AppContext */
+    private AppContext $ctx;
 
     /** @var TemplateService */
     private TemplateService $templateService;
@@ -28,7 +29,7 @@ class CmdNetworkController
     /** @var NetworksService*/
     private NetworksService $networksService;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->templateService = new TemplateService($ctx);
         $this->networksService = new NetworksService($ctx);

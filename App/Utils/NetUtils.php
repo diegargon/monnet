@@ -2,6 +2,7 @@
 namespace App\Utils;
 
 use App\Services\DateTimeService;
+use App\Services\Filter;
 
 class NetUtils
 {
@@ -30,7 +31,7 @@ class NetUtils
             return false;
         }
 
-        if (!Filters::varImgUrl($img_url)) {
+        if (!Filter::varImgUrl($img_url)) {
             throw new \InvalidArgumentException($img_url . ' invalid image url');
         }
 

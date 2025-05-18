@@ -7,8 +7,11 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+use App\Core\AppContext;
+
 use App\Services\UserService;
 use App\Services\NetworksService;
+use App\Services\Filter;
 /**
  *
  *
@@ -244,8 +247,8 @@ function page_login(AppContext $ctx): array
         !empty($_SERVER['REQUEST_METHOD']) &&
         $_SERVER['REQUEST_METHOD'] == 'POST'
     ) {
-        $username = Filters::postUsername('username');
-        $password = Filters::postPassword('password');
+        $username = Filter::postUsername('username');
+        $password = Filter::postPassword('password');
         if (!empty($username) && !empty($password)) {
             $userid = $user->checkUser($username, $password);
             if (!empty($userid) && $userid > 0) {

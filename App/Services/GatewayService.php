@@ -9,13 +9,15 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+
 use App\Services\LogSystemService;
 use App\Gateway\GwRequest;
 
 class GatewayService
 {
-    /** @var \AppContext */
-    private \AppContext $ctx;
+    /** @var AppContext */
+    private AppContext $ctx;
 
     /** @var int */
     private int $socket_timeout = 1;
@@ -23,7 +25,7 @@ class GatewayService
     /** @var LogSystemService */
     private LogSystemService $logSystemService;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->logSystemService = new LogSystemService($ctx);

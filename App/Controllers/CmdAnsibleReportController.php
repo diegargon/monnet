@@ -12,14 +12,15 @@ use App\Services\AnsibleService;
 use App\Services\Filter;
 use App\Models\CmdAnsibleReportModel;
 use App\Helpers\Response;
+use App\Core\AppContext;
 
 class CmdAnsibleReportController
 {
     private CmdAnsibleReportModel $reportModel;
     private AnsibleService $ansibleService;
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->reportModel = new CmdAnsibleReportModel($ctx);

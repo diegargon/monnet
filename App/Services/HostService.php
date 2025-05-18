@@ -8,6 +8,9 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\CmdHostModel;
 use App\Models\LogHostsModel;
 use App\Models\HostsModel;
@@ -41,17 +44,17 @@ class HostService
     private HostsModel $hostsModel;
 
     /**
-     * @var \AppContext
+     * @var AppContext
      */
-    private \AppContext $ctx;
+    private AppContext $ctx;
     /**
      * @var \Config
      */
     private \Config $ncfg;
     /**
-     * @var \DBManager
+     * @var DBManager
      */
-    private \DBManager $db;
+    private DBManager $db;
 
     /**
      * @var array
@@ -68,12 +71,12 @@ class HostService
      */
     private LogHostsService $logHost;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');
         $this->lng = $ctx->get('lng');
-        $this->db = $ctx->get('DBManager');
+        $this->db = new DBManager($ctx);
         $this->cmdHostModel = new CmdHostModel($this->db);
         $this->logHostsModel = new LogHostsModel($this->db);
         $this->hostsModel = new HostsModel($this->db);

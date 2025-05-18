@@ -12,15 +12,16 @@ namespace App\Controllers;
 use App\Services\Filter;
 use App\Helpers\Response;
 use App\Services\GatewayService;
+use App\Core\AppContext;
 
 /* Temp Wrap Pre Migration */
 
 class ConfigController
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private \Config $ncfg;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get('Config');

@@ -8,17 +8,19 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+
 use App\Services\HostMetricsViewBuilder;
 use App\Models\HostMetricsModel;
 use App\Services\DateTimeService;
 
 class HostMetricsService
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private HostMetricsViewBuilder $hostMetricsViewBuilder;
-    private \App\Models\HostMetricsModel $hostMetricsModel;
+    private HostMetricsModel $hostMetricsModel;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->hostMetricsViewBuilder = new HostMetricsViewBuilder($ctx);

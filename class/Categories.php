@@ -9,6 +9,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+use App\Core\AppContext;
+
 class Categories
 {
     /**

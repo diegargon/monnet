@@ -16,7 +16,6 @@ header('Content-Type: application/json; charset=UTF-8');
  * @var Config $ncfg
  */
 require_once 'include/common.inc.php';
-require_once 'include/common-call.php';
 require_once 'include/usermode.inc.php';
 
 use App\Controllers\RefresherController;

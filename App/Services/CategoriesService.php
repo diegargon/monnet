@@ -1,21 +1,25 @@
 <?php
 
 namespace App\Services;
+
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\CategoriesModel;
 
 class CategoriesService
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private CategoriesModel $model;
     private array $categories = [];
     private array $cat_types = [];
     private array $lng = [];
     private \Config $ncfg;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $db = $this->ctx->get('DBManager');
+        $db = new DBManager($ctx);
         $this->ncfg = $ctx->get('Config');
         $this->lng = $ctx->get('lng');
         $this->model = new CategoriesModel($db);
@@ -60,15 +64,9 @@ class CategoriesService
         return $categories_by_type;
     }
 
-    public function create(int $cat_type, string $value): array
+    public function create(int $cat_type, string $value): bool
     {
-        $result = $this->model->create($cat_type, $value);
-        if ($result['success'] === -1) {
-            $result['msg'] = $this->lng['L_VALUE_EXISTS'];
-        } else {
-            $result['msg'] = $this->lng['L_OK'];
-        }
-        return $result;
+        return $this->model->create($cat_type, $value);
     }
 
     public function remove(int $id): bool

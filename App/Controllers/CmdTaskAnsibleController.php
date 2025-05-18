@@ -14,14 +14,15 @@ use App\Services\Filter;
 use App\Models\CmdAnsibleModel;
 use App\Services\EncryptionService;
 use App\Services\HostService;
+use App\Core\AppContext;
 
 class CmdTaskAnsibleController
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private AnsibleService $ansibleService;
     private HostService $hostService;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ansibleService = new AnsibleService($ctx);
         $this->hostService = new HostService($ctx);

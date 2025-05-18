@@ -7,16 +7,18 @@
 
 namespace App\Services;
 
+use App\Core\AppContext;
+
 use App\Services\TemplateService;
 
 class HostViewBuilder
 {
     private TemplateService $templateService;
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
     private array $reportKeysToShow = ['id', 'display_name', 'ip', 'mac', 'online'];
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->templateService = new TemplateService($ctx);

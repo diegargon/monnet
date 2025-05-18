@@ -37,11 +37,13 @@
  */
 namespace App\Core;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
 use App\Models\ConfigModel;
 
 class ConfigService
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private ConfigModel $model;
     private array $cfg = [];
     private array $modifiedKeys = [];
@@ -49,7 +51,8 @@ class ConfigService
     public function __construct(\AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->model = new ConfigModel($ctx->get('Mysql'));
+        $this->db = new DBManager($ctx);
+        $this->model = new ConfigModel($db);
         register_shutdown_function([$this, 'saveChanges']);
     }
 

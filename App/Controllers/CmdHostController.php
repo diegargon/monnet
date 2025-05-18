@@ -17,6 +17,9 @@ CommandRouter       Devuelve la respuesta final al cliente.
 
 namespace App\Controllers;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Services\Filter;
 use App\Services\AnsibleService;
 use App\Services\HostFormatter;
@@ -29,6 +32,7 @@ use App\Models\CmdHostModel;
 use App\Models\CmdHostNotesModel;
 use App\Helpers\Response;
 use App\Services\DateTimeService;
+use App\Utils\NetUtils;
 
 class CmdHostController
 {
@@ -43,13 +47,14 @@ class CmdHostController
     private HostViewBuilder $hostViewBuilder;
     private HostFormatter $hostFormatter;
 
-    private \AppContext $ctx;
-    private \DBManager $db;
+    private AppContext $ctx;
+    private DBManager $db;
     private LogSystemService $logSys;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
-        $this->db = $ctx->get('DBManager');
+        $this->db = new DBManager($ctx);
+
         $this->hostService = new HostService($ctx);
         $this->ansibleService = new AnsibleService($ctx);
         $this->logHostsService = new LogHostsService($ctx);
@@ -489,7 +494,8 @@ class CmdHostController
         $host = $this->hostService->getHostById($target_id);
 
         if (!empty($host) && !empty($host['mac'])) {
-            \sendWOL($host['mac']);
+            # TODO Move to gateway?
+            NetUtils::sendWOL($host['mac']);
             return Response::stdReturn(true, 'WOL: ' . $target_id);
         } else {
             $err_msg = ($host['ip'] ?? '') . ' not mac address';

@@ -7,6 +7,8 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+use App\Core\AppContext;
+
 use App\Services\DateTimeService;
 use App\Services\LogSystemService;
 

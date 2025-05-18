@@ -3,10 +3,10 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+
+namespace App\Core;
 
 class AppContext
 {
@@ -100,7 +100,7 @@ class AppContext
             return $this->services[$name];
         }
 
-        throw new InvalidArgumentException("Invalid service provided: $name");
+        throw new \InvalidArgumentException("Invalid service provided: $name");
     }
 
     /**

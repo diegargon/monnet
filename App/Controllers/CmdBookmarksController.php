@@ -11,13 +11,14 @@ namespace App\Controllers;
 use App\Services\Filter;
 use App\Services\TemplateService;
 use App\Helpers\Response;
+use App\Core\AppContext;
 
 class CmdBookmarksController
 {
-    private \AppContext $ctx;
+    private AppContext $ctx;
     private TemplateService $templateService;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->templateService = new TemplateService($ctx);

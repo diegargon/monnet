@@ -7,6 +7,9 @@
  */
 namespace App\Services;
 
+use App\Core\AppContext;
+use App\Core\DBManager;
+
 use App\Models\NetworksModel;
 use App\Services\Filter;
 use App\Services\HostService;
@@ -30,19 +33,19 @@ Class NetworksService
     private array $networks = [];
 
     /**
-     * @var \AppContext
+     * @var AppContext
      */
-    private \AppContext $ctx;
+    private AppContext $ctx;
 
     /**
      * @var LogSystemService
      */
     private LogSystemService $logSystem;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $db = $ctx->get('DBManager');
+        $db = new DBManager($ctx);
         $this->networksModel = new NetworksModel($db);
         $this->logSystem = new LogSystemService($ctx);
     }

@@ -4,6 +4,9 @@ namespace App\Core;
 
 use App\Core\ConfigService;
 use App\Services\LogSystemService;
+use App\Core\AppContext;
+
+
 use DBManager;
 use Exception;
 use Throwable;
@@ -12,7 +15,7 @@ class UpdateService
 {
     private $logSys;
 
-    public function __construct($ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->logSys = new \App\Services\LogSystemService($ctx);
     }

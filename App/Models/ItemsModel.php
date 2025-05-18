@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-class ItemsModel {
-    private \DBManager $db;
 
-    public function __construct(\DBManager $db)
+use App\Core\DBManager;
+
+class ItemsModel {
+    private DBManager $db;
+
+    public function __construct(DBManager $db)
     {
         $this->db = $db;
     }

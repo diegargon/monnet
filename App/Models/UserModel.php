@@ -8,11 +8,14 @@
 
 namespace App\Models;
 
+
+use App\Core\DBManager;
+
 class UserModel
 {
-    private \DBManager $db;
+    private DBManager $db;
 
-    public function __construct(\DBManager $db)
+    public function __construct(DBManager $db)
     {
         $this->db = $db;
     }
