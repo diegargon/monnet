@@ -47,7 +47,7 @@ class NewAppContext
             if (!class_exists($className)) {
                 throw new InvalidArgumentException("Clase no encontrada: $className");
             }
-            $service = new $className();
+            $service = new $className($this);
         }
 
         self::$services[$className] = $service;
