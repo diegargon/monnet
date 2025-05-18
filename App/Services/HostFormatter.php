@@ -157,7 +157,7 @@ class HostFormatter
         $timezone = $ncfg->get('default_timezone');
         $timeformat = $ncfg->get('datetime_format_min');
         foreach ($logs_items as $item) :
-            $date = utc_to_tz($item['date'], $timezone, $timeformat);
+            $date = DateTimeService::utcToTz($item['date'], $timezone, $timeformat);
             $msg = '';
             $msg .= '[' . $date . '] ';
             $msg .= !empty($item['msg']) ? $item['msg'] : '?';
