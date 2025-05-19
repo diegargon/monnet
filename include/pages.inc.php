@@ -91,10 +91,8 @@ function page_common_head(AppContext $ctx): array
     try {
         $weather = weather_widget($ncfg, $lng);
     } catch (\Throwable $e) {
-        if (class_exists('\App\Services\LogSystemService')) {
-            $logSys = LogSystemService($ctx);
-            $logSys->error('Weather widget error: ' . $e->getMessage());
-        }
+        $logSys = new LogSystemService($ctx);
+        $logSys->error('Weather widget error: ' . $e->getMessage());
         $weather = null;
     }
 
