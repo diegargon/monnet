@@ -13,14 +13,16 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
 
 use App\Services\HostService;
 use App\Services\DateTimeService;
-use App\Models\CmdHostModel;
-use App\Models\CmdStatsModel;
 use App\Services\LogSystemService;
 use App\Services\LogHostsService;
 use App\Services\Filter;
+
+use App\Models\CmdHostModel;
+use App\Models\CmdStatsModel;
 
 class FeedMeService
 {
@@ -45,9 +47,9 @@ class FeedMeService
     private CmdHostModel $cmdHostModel;
 
     /**
-     * @var \Config $ncfg Config
+     * @var ConfigService $ncfg Config
      */
-    private \Config $ncfg;
+    private ConfigService $ncfg;
 
     /**
      * @var DBManager
@@ -66,7 +68,7 @@ class FeedMeService
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
         $this->db = new DBManager($ctx);
 
         $this->hostService = new HostService($ctx);

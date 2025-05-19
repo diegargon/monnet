@@ -11,6 +11,7 @@
 !defined('IN_WEB') ? exit : true;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 class Frontend
 {
@@ -22,15 +23,15 @@ class Frontend
 
     /**
      *
-     * @var \Config
+     * @var ConfigService $ncfg
      */
-    private \Config $ncfg;
+    private ConfigService $ncfg;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->lng = &$this->ctx->get('lng');
-        $this->ncfg = $this->ctx->get('Config');
+        $this->ncfg = $this->ctx->get(ConfigService::class);
     }
 
     /**
@@ -111,7 +112,7 @@ class Frontend
     public function getTpl(string $tpl, array $tdata = []): string|bool
     {
         $lng = $this->lng;
-        $ncfg = $this->ctx->get('Config');
+        $ncfg = $this->ncfg;
         $user = $this->ctx->get('User');
 
         ob_start();

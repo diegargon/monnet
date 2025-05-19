@@ -5,21 +5,23 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
-
 namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
 
-use App\Models\CmdHostModel;
-use App\Models\LogHostsModel;
-use App\Models\HostsModel;
 use App\Services\DateTimeService;
 use App\Services\Filter;
 use App\Services\NetworksService;
 use App\Services\LogSystemService;
 use App\Services\LogHostsService;
-use \App\Models\NotesModel;
+
+use App\Models\NotesModel;
+use App\Models\CmdHostModel;
+use App\Models\LogHostsModel;
+use App\Models\HostsModel;
+
 class HostService
 {
     /**
@@ -34,10 +36,7 @@ class HostService
      * @var HostFormatter
      */
     private HostFormatter $hostFormatter;
-    /**
-     * @var AnsibleService
-     */
-    private AnsibleService $ansibleService;
+
     /**
      * @var HostsModel
      */
@@ -48,9 +47,9 @@ class HostService
      */
     private AppContext $ctx;
     /**
-     * @var \Config
+     * @var ConfigService
      */
-    private \Config $ncfg;
+    private ConfigService $ncfg;
     /**
      * @var DBManager
      */
@@ -74,7 +73,7 @@ class HostService
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
         $this->lng = $ctx->get('lng');
         $this->db = new DBManager($ctx);
         $this->cmdHostModel = new CmdHostModel($this->db);
@@ -82,7 +81,6 @@ class HostService
         $this->hostsModel = new HostsModel($this->db);
 
         $this->hostFormatter = new HostFormatter($ctx);
-        $this->ansibleService = new AnsibleService($ctx);
         $this->logSystem = new LogSystemService($ctx);
         $this->logHost = new LogHostsService($ctx);
     }
@@ -93,7 +91,6 @@ class HostService
         unset($this->cmdHostModel);
         unset($this->logHostsModel);
         unset($this->hostFormatter);
-        unset($this->ansibleService);
         unset($this->logHostsModel);
         unset($this->hostsModel);
     }

@@ -61,10 +61,10 @@ class DateTimeService
     /**
      *
      * @param string $timezone
-     * @param string $time_format
+     * @param ?string $time_format
      * @return string|false
      */
-    public static function formatDateNow(string $timezone = 'UTC', string $time_format = 'Y-m-d H:i:s'): string|false
+    public static function formatDateNow(string $timezone = 'UTC', ?string $time_format = 'Y-m-d H:i:s'): string|false
     {
         if (!self::validTimezone($timezone)) {
             return false;

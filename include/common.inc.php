@@ -9,6 +9,7 @@
  */
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
 
 !defined('IN_WEB') ? exit : true;
 
@@ -72,9 +73,13 @@ try {
 require_once 'lang/es/main.lang.php';
 $ctx->setLang($lng);
 
-require_once 'class/Lang.php';
+#require_once 'class/Lang.php';
 
-$ncfg = $ctx->set('Config', new Config($ctx));
+# TODO: Remove after migration Config to ConfigService
+# Migration Complete remove after week test start 19052025
+#$ncfg = $ctx->set('Config', new Config($ctx));
+#$ncfg->init($cfg);
+$ncfg = $ctx->set(ConfigService::class, new ConfigService($ctx));
 $ncfg->init($cfg);
 
 date_default_timezone_set($ncfg->get('default_timezone'));

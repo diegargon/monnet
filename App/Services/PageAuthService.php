@@ -8,13 +8,15 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
+
 use App\Services\UserService;
 
 class PageAuthService
 {
     public static function login(AppContext $ctx): ?array
     {
-        $ncfg = $ctx->get('Config');
+        $ncfg = $ctx->get(ConfigService::class);
         $lng = $ctx->get('lng');
 
         if (
@@ -48,6 +50,7 @@ class PageAuthService
         $page['tpl'] = 'login';
         $page['log_in'] = $lng['L_LOGIN'];
 
+        # TODO FILTER
         if (isset($_COOKIE['username'])) {
             $page['username'] = htmlspecialchars($_COOKIE['username']);
         } else {
@@ -67,7 +70,7 @@ class PageAuthService
 
     public static function logout(AppContext $ctx): void
     {
-        $ncfg = $ctx->get('Config');
+        $ncfg = $ctx->get(ConfigService::class);
         $userService = new UserService($ctx);
 
         $userService->logout();

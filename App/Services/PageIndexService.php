@@ -8,14 +8,21 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 class PageIndexService
 {
+    /**
+     *
+     * @param AppContext $ctx
+     * @return array<string, mixed>
+     */
     public static function getIndex(AppContext $ctx): array
     {
         $page = [];
         $user = $ctx->get('User');
-        $ncfg = $ctx->get('Config');
+        $ncfg = $ctx->get(ConfigService::class);
+
         $categories = $ctx->get('Categories');
         $networks  = new NetworksService($ctx);
         $networks_list = $networks->getNetworks();
@@ -126,6 +133,12 @@ class PageIndexService
         return $page;
     }
 
+    /**
+     *
+     * @param \User $user
+     * @param array<string, mixed> $items_results
+     * @return array<string, mixed>
+     */
     private static function format_items(\User $user, array $items_results): array
     {
         $items = [];
@@ -160,6 +173,11 @@ class PageIndexService
         return $items;
     }
 
+    /**
+     *
+     * @param AppContext $ctx
+     * @return bool
+     */
     private static function page_index_post(AppContext $ctx): bool
     {
         $user = $ctx->get('User');

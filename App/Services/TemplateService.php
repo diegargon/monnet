@@ -9,6 +9,7 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 class TemplateService
 {
@@ -31,7 +32,7 @@ class TemplateService
     public function getTpl(string $templateName, array $tdata = []): string
     {
         $lng = $this->ctx->get('lng');
-        $ncfg = $this->ctx->get('Config');
+        $ncfg = $this->ctx->get(ConfigService::class);
 
         $templateFile = $this->templatesPath . $templateName . '.tpl.php';
 

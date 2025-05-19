@@ -8,14 +8,21 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 class PageSettingsService
 {
+    /**
+     *
+     * @param AppContext $ctx
+     * @return array<string, mixed>
+     */
     public static function getSettings(AppContext $ctx): array
     {
         $page = [];
-        $ncfg = $ctx->get('Config');
+        $ncfg = $ctx->get(ConfigService::class);
         $config_all = $ncfg->getAllEditable();
+
         $groupedConfig = [];
         foreach ($config_all as $config) {
             $ccat = $config['ccat'];

@@ -17,56 +17,60 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
-use App\Models\CmdAnsibleModel;
-use App\Models\CmdAnsibleReportModel;
 use App\Services\TemplateService;
 use App\Services\DateTimeService;
 use App\Services\LogSystemService;
 use App\Services\GatewayService;
 use App\Services\Filter;
 use App\Services\HostService;
+use App\Services\NetworksService;
+
+use App\Models\CmdAnsibleModel;
+use App\Models\CmdAnsibleReportModel;
 
 class AnsibleService
 {
     private AppContext $ctx;
-    private \Config $ncfg;
+    private ConfigService $ncfg;
     private CmdAnsibleModel $cmdAnsibleModel;
     private CmdAnsibleReportModel $ansibleReportModel;
     private TemplateService $templateService;
     private LogSystemService $logSys;
     private GatewayService $gatewayService;
+    private HostService $hostService;
+    private NetworksService $networksService;
 
     private array $playbooks_metadata = [];
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
         $this->cmdAnsibleModel = new CmdAnsibleModel($ctx);
         $this->templateService = new TemplateService($ctx);
         $this->gatewayService = new GatewayService($ctx);
         $this->logSys = new LogSystemService($ctx);
+        $this->hostService = new HostService($ctx);
+        $this->networksService = new NetworksService($ctx);
     }
 
     /**
      *
      * @param int $target_id
-     * @param string $playbook
+     * @param string $playbook_id
      * @param array<string, string|int> $extra_vars
      * @return array<string, string|int>
      */
     public function runPlaybook(int $target_id, string $playbook_id, array $extra_vars = []): array
     {
         $user = $this->ctx->get('User');
-        $hosts = $this->ctx->get('Hosts');
-        $networks = $this->ctx->get('Networks');
-        $hostService = new HostService($this->ctx);
-        $host = $hosts->getHostById($target_id);
+        $host = $this->hostService->getHostById($target_id);
 
-        if ($playbook_id == 'std-install-monnet-agent-systemd') :
+        if ($playbook_id == 'std-install-monnet-agent-systemd') {
             if (empty($host['token'])) {
-                $token = $hostService->createToken($target_id);
+                $token = $this->hostService->createToken($target_id);
             } else {
                 $token = $host['token'];
             }
@@ -85,7 +89,8 @@ class AnsibleService
                 "server_endpoint" => "/feedme.php",
             ];
 
-            empty($networks) ? $networks = $this->ctx->get('Networks') : null;
+            // Usar networksService en vez de contexto
+            $networks = $this->networksService;
 
             if (!empty($this->ncfg->get('agent_external_host')) && !$networks->isLocal($host['ip'])) {
                 $agent_config['server_host'] = $this->ncfg->get('agent_external_host');
@@ -97,7 +102,7 @@ class AnsibleService
             if (json_last_error() !== JSON_ERROR_NONE) {
                 return ['status' => 'error', 'error_msg' => 'Error encoding JSON: ' . json_last_error_msg()];
             }
-        endif;
+        }
 
         $data = $this->buildSendData($host, $playbook_id, $extra_vars);
 
@@ -211,7 +216,7 @@ class AnsibleService
         $reports = $this->ansibleReportModel->getDbReports($reports_opts);
 
         $user = $this->ctx->get('User');
-        $ncfg = $this->ctx->get('Config');
+        $ncfg = $this->ctx->get(ConfigService::class);
         //format TODO: Move
         foreach ($reports as &$report) {
             $playbook = $this->getPbById($report['pid']);
@@ -431,7 +436,7 @@ class AnsibleService
     /**
      *
      * @param array<string, string|int> $host
-     * @param string $playbook
+     * @param string $playbook_id
      * @param array<string, string|int> $extraVars
      * @return array<string, string|int>
      */

@@ -12,8 +12,9 @@
  * @var array<mixed> $report Template Data
  */
 
- # TODO: Refactor to remove this dependency
- use App\Utils\MiscUtils;
+# TODO: Refactor to remove this dependency from a tpl
+use App\Utils\MiscUtils;
+use App\Utils\ArrayUtils;
 
 $report = $tdata['result'];
 ?>
@@ -148,7 +149,7 @@ foreach ($report['plays'] as $playIndex => $play) : ?>
         </div>
         <div class="indent4 section hidden-section" id="<?= $host ?>_<?= $playIndex ?>_task<?= $taskIndex ?>">
             <?php
-            echo array2Html($host_result);
+            echo ArrayUtils::array2Html($host_result);
             ?>
         </div>
             <?php

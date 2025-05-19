@@ -10,11 +10,10 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
 
 use App\Models\UserModel;
 use App\Models\PrefsModel;
-use App\Services\LogSystemService;
-use App\Services\UserSession;
 
 class UserService
 {
@@ -23,10 +22,8 @@ class UserService
     private UserSession $userSession;
     private LogSystemService $logSystem;
     private PrefsModel $prefsModel;
-
-    private \Config $ncfg;
+    private ConfigService $ncfg;
     private int $session_expire;
-
     private array $prefs = [];
 
     public function __construct(AppContext $ctx)
@@ -37,7 +34,7 @@ class UserService
         $this->userSession = new UserSession($ctx);
         $this->logSystem = new LogSystemService($ctx);
         $this->prefsModel = new PrefsModel($db);
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
         $this->session_expire = (int) $this->ncfg->get('sid_expire');
         $this->userSession->AutoLogin();
         $this->loadPrefs();
@@ -215,14 +212,20 @@ class UserService
     }
 
     /**
-     * Obtiene el ID del usuario autenticado actual.
+     * Get the language of the authenticated user.
      *
      * @return int|null
      */
     public function getLang(): string
     {
         $user = $this->userSession->getCurrentUser();
-        return isset($user['lang']) ? $user['lang'] : 'en';
+
+        if (empty($user['lang'])) {
+            $lang = $user['lang'];
+        } else {
+            $lang = $this->ncfg->get('default_lang');
+        }
+        return $lang ?? 'es';
     }
 
     /**

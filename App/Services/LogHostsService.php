@@ -5,16 +5,20 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ *
+ * TODO WARNING: remove HostService from here cyclic dependency
  */
 
 namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
 
-use App\Models\LogHostsModel;
 use App\Services\DateTimeService;
 use App\Services\HostService;
+
+use App\Models\LogHostsModel;
 
 class LogHostsService
 {
@@ -22,6 +26,7 @@ class LogHostsService
 
     private LogHostsModel $logHostsModel;
     private DateTimeService $dateTimeService;
+    private ConfigService $ncfg;
 
     /** @var int */
     private int $max_db_msg = 254;
@@ -30,9 +35,9 @@ class LogHostsService
     {
         $this->ctx = $ctx;
         $db = new DBManager($ctx);
-
         $this->logHostsModel = new LogHostsModel($db);
         $this->dateTimeService = new DateTimeService();
+        $this->ncfg = $ctx->get(ConfigService::class);
     }
 
     /**
@@ -87,26 +92,24 @@ class LogHostsService
      */
     public function getLogs(int $target_id, array $command_values): array
     {
-        $ncfg = $this->ctx->get('Config');
-
         $opts = [
             'host_id' => $target_id,
             'show_ack' => 1,
         ];
 
-        if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) :
+        if (!empty($command_values['log_size']) && is_numeric($command_values['log_size'])) {
             $opts['limit'] = (int) $command_values['log_size'];
-        else :
-            $opts['limit'] = (int) $ncfg->get('term_max_lines');
-        endif;
+        } else {
+            $opts['limit'] = (int) $this->ncfg->get('term_max_lines');
+        }
 
         if (
             isset($command_values['log_level']) &&
             is_numeric($command_values['log_level']) &&
             $command_values['log_level'] >= 0
-        ) :
+        ) {
             $opts['level'] = $command_values['log_level'];
-        endif;
+        }
 
         $logs =  $this->logHostsModel->getLogsHosts($opts);
 
@@ -156,12 +159,11 @@ class LogHostsService
      */
     private function formatEventsLogs(array $logs): array
     {
-        $ncfg = $this->ctx->get('Config');
         $hostService = new HostService($this->ctx);
 
         foreach ($logs as &$log) {
             $log['host'] = $hostService->getDisplayNameById($log['host_id']);
-            $log['date'] = $this->dateTimeService->formatDateString($log['date'], $ncfg->get('datetime_log_format'));
+            $log['date'] = $this->dateTimeService->formatDateString($log['date'], $this->ncfg->get('datetime_log_format'));
             $log['level'] = \LogLevel::getName($log['level']);
             $log['log_type'] = \LogType::getName($log['log_type']);
             if (\EventType::getName($log['event_type'])) {
@@ -180,26 +182,24 @@ class LogHostsService
      */
     private function formatHostLogs(array $logs, string $nl = '<br/>'): array
     {
-        $ncfg = $this->ctx->get('Config');
-
         $log_lines = [];
-        foreach ($logs as $term_log) :
-            if (is_numeric($term_log['level'])) :
+        foreach ($logs as $term_log) {
+            if (is_numeric($term_log['level'])) {
                 $log_level = (int) $term_log['level'];
-                $date = $this->dateTimeService->formatDateString($term_log['date'], $ncfg->get('term_date_format'));
+                $date = $this->dateTimeService->formatDateString($term_log['date'], $this->ncfg->get('term_date_format'));
                 $loglevelname = \LogLevel::getName($term_log['level']);
                 $loglevelname = str_replace('LOG_', '', $loglevelname);
                 $loglevelname = substr($loglevelname, 0, 4);
-                if ($log_level <= 2) :
+                if ($log_level <= 2) {
                     $loglevelname = '<span class="color-red">' . $loglevelname . '</span>';
-                elseif ($log_level === 3) :
+                } elseif ($log_level === 3) {
                     $loglevelname = '<span class="color-orange">' . $loglevelname . '</span>';
-                elseif ($log_level === 4) :
+                } elseif ($log_level === 4) {
                     $loglevelname = '<span class="color-yellow">' . $loglevelname . '</span>';
-                endif;
+                }
                 $log_lines[] = $date . '[' . $loglevelname . ']' . $term_log['msg'] . $nl;
-            endif;
-        endforeach;
+            }
+        }
 
         return $log_lines;
     }

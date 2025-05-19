@@ -9,23 +9,26 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 use App\Services\LogSystemService;
 use App\Services\NetworksService;
 use App\Services\DateTimeService;
+
 use App\Utils\MiscUtils;
 
 class HostFormatter
 {
     private AppContext $ctx;
-
     private LogSystemService $logSys;
     private NetworksService $networksService;
+    private ConfigService $ncfg;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->logSys = new LogSystemService($ctx);
+        $this->ncfg = $ctx->get(ConfigService::class);
     }
 
     /**
@@ -41,7 +44,6 @@ class HostFormatter
             $this->networksService = new NetworksService($this->ctx);
         }
         $categories = $this->ctx->get('Categories');
-        $ncfg = $this->ctx->get('Config');
 
         $id = (int) $host['id'];
         $net_id = $host['network'];
@@ -72,7 +74,7 @@ class HostFormatter
             $host['f_last_check'] = DateTimeService::utcToTz(
                 $host['last_check'],
                 $user->getTimezone(),
-                $ncfg->get('datetime_format')
+                $this->ncfg->get('datetime_format')
             );
         endif;
 
@@ -80,14 +82,14 @@ class HostFormatter
             $host['f_last_seen'] = DateTimeService::utcToTz(
                 $host['last_seen'],
                 $user->getTimezone(),
-                $ncfg->get('datetime_format')
+                $this->ncfg->get('datetime_format')
             );
         endif;
 
         $host['formated_creation_date'] = DateTimeService::utcToTz(
             $host['created'],
-            $ncfg->get('default_timezone'),
-            $ncfg->get('datetime_format')
+            $this->ncfg->get('default_timezone'),
+            $this->ncfg->get('datetime_format')
         );
 
         if ($host['online'] && !empty($host['misc']['latency'])) :
@@ -98,19 +100,19 @@ class HostFormatter
 
         if ($host['agent_installed']) {
             if (empty($host['misc']['agent_log_level'])) {
-                $host['misc']['agent_log_level'] = $ncfg->get('agent_log_level', 'INFO');
+                $host['misc']['agent_log_level'] = $this->ncfg->get('agent_log_level', 'INFO');
             }
             if (empty($host['misc']['mem_alert_threshold'])) {
-                $host['misc']['mem_alert_threshold'] = $ncfg->get('default_mem_alert_threshold', 90);
+                $host['misc']['mem_alert_threshold'] = $this->ncfg->get('default_mem_alert_threshold', 90);
             }
             if (empty($host['misc']['mem_warn_threshold'])) {
-                $host['misc']['mem_warn_threshold'] = $ncfg->get('default_mem_warn_threshold', 80);
+                $host['misc']['mem_warn_threshold'] = $this->ncfg->get('default_mem_warn_threshold', 80);
             }
             if (empty($host['misc']['disks_alert_threshold'])) {
-                $host['misc']['disks_alert_threshold'] = $ncfg->get('default_disks_alert_threshold', 90);
+                $host['misc']['disks_alert_threshold'] = $this->ncfg->get('default_disks_alert_threshold', 90);
             }
             if (empty($host['misc']['disks_warn_threshold'])) {
-                $host['misc']['disks_warn_threshold'] = $ncfg->get('default_disks_warn_threshold', 80);
+                $host['misc']['disks_warn_threshold'] = $this->ncfg->get('default_disks_warn_threshold', 80);
             }
         }
 
@@ -142,7 +144,6 @@ class HostFormatter
     public function fHostLogsMsgs(array $logs_items): array
     {
         $log_msg = [];
-        $ncfg = $this->ctx->get('Config');
 
         # Usado para evitar repeticion de mensajes deshabilitado por que no tienen en cuenta
         # la hora
@@ -157,8 +158,8 @@ class HostFormatter
         endforeach;
         */
 
-        $timezone = $ncfg->get('default_timezone');
-        $timeformat = $ncfg->get('datetime_format_min');
+        $timezone = $this->ncfg->get('default_timezone');
+        $timeformat = $this->ncfg->get('datetime_format_min');
         foreach ($logs_items as $item) :
             $date = DateTimeService::utcToTz($item['date'], $timezone, $timeformat);
             $msg = '';
@@ -184,7 +185,6 @@ class HostFormatter
     public function formatMisc(array &$host): void
     {
         $lng = $this->ctx->get('lng');
-        $ncfg = $this->ctx->get('Config');
 
         if (!empty($host['misc']['load_avg'])) :
             $loadavg = unserialize($host['misc']['load_avg']);
@@ -244,8 +244,8 @@ class HostFormatter
         if (!empty($host['misc']['agent_last_contact'])) {
             $host['misc']['f_agent_contact'] = DateTimeService::formatTimestamp(
                 $host['misc']['agent_last_contact'],
-                $ncfg->get('default_timezone'),
-                $ncfg->get('datetime_format')
+                $this->ncfg->get('default_timezone'),
+                $this->ncfg->get('datetime_format')
             );
         }
     }

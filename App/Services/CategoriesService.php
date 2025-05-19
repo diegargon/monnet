@@ -1,9 +1,16 @@
 <?php
 
+/**
+ *
+ * @author diego/@/envigo.net
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ */
+
 namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
 
 use App\Models\CategoriesModel;
 
@@ -14,13 +21,13 @@ class CategoriesService
     private array $categories = [];
     private array $cat_types = [];
     private array $lng = [];
-    private \Config $ncfg;
+    private ConfigService $ncfg;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $db = new DBManager($ctx);
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
         $this->lng = $ctx->get('lng');
         $this->model = new CategoriesModel($db);
         $this->categories = $this->model->getAll();

@@ -8,13 +8,20 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
+
 use App\Services\UserService;
 
 class PageUserService
 {
+    /**
+     *
+     * @param AppContext $ctx
+     * @return array<string, mixed>
+     */
     public static function getUserPage(AppContext $ctx): array
     {
-        $ncfg = $ctx->get('Config');
+        $ncfg = $ctx->get(ConfigService::class);
         $page = [];
         $userService = new UserService($ctx);
         $user = $userService->getCurrentUser();

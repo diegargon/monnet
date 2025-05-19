@@ -6,14 +6,15 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 use App\Core\AppContext;
-
+use App\Services\LogSystemService;
 
 !defined('IN_WEB') ? exit : true;
 
-$logSys = new \App\Services\LogSystemService($GLOBALS['ctx'] ?? null);
+$logSys = new LogSystemService($GLOBALS['ctx'] ?? null);
 
 function trigger_update(Config $ncfg, Database $db, float $db_version, float $files_version): void
 {
+    # TODO: No Initialice in func
     $logSys->notice("Triggered updater File version: $files_version DB version: $db_version");
 
     // 0.44 COMPLETED
@@ -843,6 +844,28 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('clear_not_seen_hosts_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
                 ('clear_task_done_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0);
+            ");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // Template
+    $update = 0.75;
+    if ($db_version == 0.00) {
+        try {
+            //$db->query("
+            //");
+            $db->query("START TRANSACTION");
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('default_lang', JSON_QUOTE('es'), 0, 1, NULL, 0);
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);

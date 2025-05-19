@@ -7,6 +7,8 @@
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+use App\Core\ConfigService;
+
 !defined('IN_WEB') ? exit : true;
 
 /**
@@ -62,9 +64,9 @@ function common_checks(array $cfg_db, array $cfg): void
 
 /**
  *
- * @param Config $ncfg
+ * @param ConfigService $ncfg
  */
-function usermode_checks(\Config $ncfg): void
+function usermode_checks(ConfigService $ncfg): void
 {
     $err_empty_msg = ' can\'t be empty check config.inc.php';
     $err_nofile_msg = ' file/directory not exists';

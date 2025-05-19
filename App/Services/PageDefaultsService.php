@@ -8,12 +8,18 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 class PageDefaultsService
 {
+    /**
+     *
+     * @param AppContext $ctx
+     * @return array<string, mixed>
+     */
     public static function getDefaults(AppContext $ctx): array
     {
-        $ncfg = $ctx->get('Config');
+        $ncfg = $ctx->get(ConfigService::class);
         $userService = new UserService($ctx);
         $_user = $userService->getCurrentUser();
 

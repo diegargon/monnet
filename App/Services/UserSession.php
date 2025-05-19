@@ -10,12 +10,14 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
 
-use App\Models\UserModel;
-use App\Models\SessionsModel;
 use App\Services\LogSystemService;
 use App\Services\Filter;
 use App\Services\DateTimeService;
+
+use App\Models\UserModel;
+use App\Models\SessionsModel;
 
 class UserSession
 {
@@ -23,8 +25,7 @@ class UserSession
     private UserModel $userModel;
     private SessionsModel $sessionModel;
     private const REMEMBER_COOKIE = 'sid';
-
-    private \Config $ncfg;
+    private ConfigService $ncfg;
     private array $user = [];
     private int $session_expire;
     private AppContext $ctx;
@@ -34,7 +35,7 @@ class UserSession
     {
         $this->ctx = $ctx;
         $db = new DBManager($ctx);
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
         $this->session_expire = (int) $this->ncfg->get('sid_expire');
         $this->userModel = new UserModel($db);
         $this->logSystem = new LogSystemService($ctx);
@@ -51,6 +52,7 @@ class UserSession
 
     public function isLoggedIn(): bool
     {
+        # TODO: Filter
         if (isset($_COOKIE['PHPSESSID']) && $_COOKIE['PHPSESSID'] === session_id()) {
             return true;
         } else {

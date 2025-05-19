@@ -12,7 +12,9 @@
 namespace App\Gateway;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 use App\Core\Network\SocketClient;
+
 use RuntimeException;
 
 class GwRequest
@@ -32,7 +34,7 @@ class GwRequest
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $ncfg = $ctx->get('Config');
+        $ncfg = $ctx->get(ConfigService::class);
 
         $this->server_ip = (string)$ncfg->get('ansible_server_ip');
         $this->server_port = (int)$ncfg->get('ansible_server_port');

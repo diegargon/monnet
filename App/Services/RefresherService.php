@@ -9,17 +9,19 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
 
-use App\Models\HostsModel;
 use App\Services\LogHostsService;
 use App\Services\LogSystemService;
 use App\Services\HostService;
 use App\Services\NetworksService;
 
+use App\Models\HostsModel;
+
 class RefresherService
 {
     private AppContext $ctx;
-    private \Config $ncfg;
+    private ConfigService $ncfg;
     private DBManager $db;
 
     private LogHostsService $logHostService;
@@ -32,7 +34,7 @@ class RefresherService
     public function __construct(AppContext $ctx) {
         $this->ctx = $ctx;
         $this->db = new DBManager($ctx);
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
 
         $this->logHostService = new LogHostsService($ctx);
         $this->logSystemService = new LogSystemService($ctx);
@@ -123,11 +125,10 @@ class RefresherService
      */
     public function getHostsStats(): array
     {
-        $ncfg = $this->ctx->get('Config');
         $total = $this->hostsModel->getTotalsStats();
         $online = $total['total_online'];
         $total['total_offline'] = $total['total_hosts'] - $online;
-        if ($ncfg->get('ansible')) {
+        if ($this->ncfg->get('ansible')) {
             $total['ansible_hosts_off'] = $total['ansible_hosts'] - $total['ansible_online'];
         }
 

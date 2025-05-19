@@ -5,10 +5,10 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
-
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 use App\Services\HostMetricsViewBuilder;
 use App\Models\HostMetricsModel;
@@ -89,7 +89,7 @@ class HostMetricsService
      */
     public function fMetricsDate(array $metrics): array
     {
-        $ncfg = $this->ctx->get('Config');
+        $ncfg = $this->ctx->get(ConfigService::class);
         $timezone = $ncfg->get('default_timezone');
 
         foreach ($metrics as &$metric) {

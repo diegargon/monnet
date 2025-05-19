@@ -3,13 +3,12 @@
 /**
  *
  *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 !defined('IN_WEB') ? exit : true;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 class Categories
 {
@@ -40,14 +39,14 @@ class Categories
 
     /**
      *
-     * @var \Config
+     * @var ConfigService
      */
-    private \Config $ncfg;
+    private ConfigService $ncfg;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
         $this->db = $ctx->get('Mysql');
         $this->lng = $ctx->get('lng');
 

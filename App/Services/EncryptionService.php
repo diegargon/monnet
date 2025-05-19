@@ -8,13 +8,14 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 class EncryptionService
 {
     /**
-     * @var \Config
+     * @var ConfigService
      */
-    private \Config $ncfg;
+    private ConfigService $ncfg;
 
     /**
      * @var string
@@ -26,9 +27,9 @@ class EncryptionService
      */
     private string $cipherType;
 
-    public function __construct(\ppContext $ctx, string $cipherType = 'RSA')
+    public function __construct(AppContext $ctx, string $cipherType = 'RSA')
     {
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
 
         $public_cert_base64 = $this->ncfg->get('public_key');
 

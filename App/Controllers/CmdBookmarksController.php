@@ -8,10 +8,12 @@
 
 namespace App\Controllers;
 
+use App\Core\AppContext;
+use App\Core\ConfigService;
+
 use App\Services\Filter;
 use App\Services\TemplateService;
 use App\Helpers\Response;
-use App\Core\AppContext;
 
 class CmdBookmarksController
 {
@@ -201,7 +203,7 @@ class CmdBookmarksController
         $target_id = Filter::varInt($command_values['id']);
         $tdata = [];
         $items = $this->ctx->get('Items');
-        $ncfg =  $this->ctx->get('Config');
+        $ncfg =  $this->ctx->get(ConfigService::class);
         $lng =  $this->ctx->get('lng');
 
 

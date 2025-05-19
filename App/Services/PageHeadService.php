@@ -8,15 +8,21 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 class PageHeadService
 {
+    /**
+     *
+     * @param AppContext $ctx
+     * @return array<string, mixed>
+     */
     public static function getCommonHead(AppContext $ctx): array
     {
         $page = [];
         $db = $ctx->get('Mysql');
         $lng = $ctx->get('lng');
-        $ncfg = $ctx->get('Config');
+        $ncfg = $ctx->get(ConfigService::class);
 
         $results = $db->select('items', '*', ['type' => 'search_engine']);
         $search_engines = $db->fetchAll($results);

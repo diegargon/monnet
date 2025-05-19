@@ -5,17 +5,18 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
-!defined('IN_WEB') ? exit : true;
 
+use App\Core\AppContext;
+use App\Core\ConfigService;
 use App\Services\CurlService;
 
 /**
  *
- * @param Config $ncfg
+ * @param ConfigService $ncfg
  * @param array<string,string> $lng
  * @return array<string,string|int>|null
  */
-function weather_widget(\Config $ncfg, array $lng): ?array
+function weather_widget(ConfigService $ncfg, array $lng): ?array
 {
 
     $page_data = [];
@@ -38,11 +39,11 @@ function weather_widget(\Config $ncfg, array $lng): ?array
 
 /**
  *
- * @param Config $ncfg
+ * @param ConfigService $ncfg
  *
  * @return mixed
  */
-function request_weather(\Config $ncfg): mixed
+function request_weather(ConfigService $ncfg): mixed
 {
     $weather_config = $ncfg->get('weather_widget');
     $api = $weather_config['weather_api'];

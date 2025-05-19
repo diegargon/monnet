@@ -8,6 +8,7 @@
 namespace App\Views;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 use App\Services\TemplateService;
 use App\Services\HostService;
@@ -16,7 +17,7 @@ use App\Services\DateTimeService;
 class RefresherView
 {
     private AppContext $ctx;
-    private \Config $ncfg;
+    private ConfigService $ncfg;
     private TemplateService $templates;
     private HostService $hostService;
     private DateTimeService $dateTimeService;
@@ -24,7 +25,7 @@ class RefresherView
     public function __construct(AppContext $ctx, TemplateService $templates)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
         $this->templates = $templates;
     }
 
@@ -279,11 +280,11 @@ class RefresherView
 
     /**
      *
-     * @param array<string, mixed> $ncfg
+     * @param ConfigService $ncfg
      * @param int $id
      * @return array<string, string|int>|bool
      */
-    function getManufacture(\Config $ncfg, int $id): array|bool
+    function getManufacture(ConfigService $ncfg, int $id): array|bool
     {
         $theme = $ncfg->get('theme');
 
@@ -305,11 +306,11 @@ class RefresherView
 
     /**
      *
-     * @param array<string, mixed> $ncfg
+     * @param ConfigService $ncfg
      * @param int $id
      * @return array<string, string|int>|bool
      */
-    function getOs(\Config $ncfg, int $id): array|bool
+    function getOs(ConfigService $ncfg, int $id): array|bool
     {
         $theme = $ncfg->get('theme');
 
@@ -330,11 +331,11 @@ class RefresherView
     }
     /**
      *
-     * @param array<string, mixed> $ncfg
+     * @param ConfigService $ncfg
      * @param int $id
      * @return array<string, string|int>|bool
      */
-    function getSystemRol(\Config $ncfg, int $id): array|bool
+    function getSystemRol(ConfigService $ncfg, int $id): array|bool
     {
         $theme = $ncfg->get('theme');
 

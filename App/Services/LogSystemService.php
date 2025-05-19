@@ -10,9 +10,11 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
+use App\Core\ConfigService;
+
+use App\Services\DateTimeService;
 
 use App\Models\LogSystemModel;
-use App\Services\DateTimeService;
 
 class LogSystemService
 {
@@ -26,7 +28,7 @@ class LogSystemService
     private bool $console = false;
     private string $timezone = 'UTC';
     private array $lng = [];
-    private \Config $ncfg;
+    private ConfigService $ncfg;
     private DBManager $db;
 
     public function __construct(AppContext $ctx)
@@ -34,7 +36,7 @@ class LogSystemService
         $this->db = new DBManager($ctx);
 
         $this->lng = $ctx->get('lng');
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
 
         $this->logSystemModel = new LogSystemModel($this->db);
     }

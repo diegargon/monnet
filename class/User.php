@@ -8,6 +8,7 @@
 !defined('IN_WEB') ? exit : true;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 use App\Services\DateTimeService;
 use App\Services\LogSystemService;
@@ -21,9 +22,9 @@ class User
 
     /**
      *
-     * @var \Config
+     * @var ConfigService
      */
-    private \Config $ncfg;
+    private ConfigService $ncfg;
     /**
      *
      * @var Database
@@ -52,7 +53,7 @@ class User
     {
         $this->ctx = $ctx;
         $this->db = $ctx->get('Mysql');
-        $this->ncfg = $ctx->get('Config');
+        $this->ncfg = $ctx->get(ConfigService::class);
 
         if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
             $this->user = $this->getProfile($_SESSION['uid']);
@@ -192,10 +193,6 @@ class User
      */
     public function getDateNow(string $format = null): string|bool
     {
-        if (!$format) {
-            $format = $this->ncfg->get('datatime_format');
-        }
-
         return DateTimeService::formatDateNow($this->user['timezone'], $format);
     }
 
