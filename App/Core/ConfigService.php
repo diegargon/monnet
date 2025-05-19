@@ -47,12 +47,13 @@ class ConfigService
     private ConfigModel $model;
     private array $cfg = [];
     private array $modifiedKeys = [];
+    private DBManager $db;
 
-    public function __construct(\AppContext $ctx)
+    public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->db = new DBManager($ctx);
-        $this->model = new ConfigModel($db);
+        $this->model = new ConfigModel($this->db);
         register_shutdown_function([$this, 'saveChanges']);
     }
 
