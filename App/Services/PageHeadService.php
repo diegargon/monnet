@@ -28,6 +28,7 @@ class PageHeadService
                 'name' => $conf['name'],
             ];
         }
+        $page['head_name'] = $ncfg->get('web_title');
         $page['load_tpl'][] = [
             'file' => 'main-center-box',
             'place' => 'head-center',
