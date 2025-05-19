@@ -15,6 +15,7 @@ use App\Services\PageHeadService;
 use App\Services\PageIndexService;
 use App\Services\PageAuthService;
 use App\Services\PageSettingsService;
+use App\Services\PageUserService;
 
 !defined('IN_WEB') ? exit : true;
 

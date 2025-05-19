@@ -19,7 +19,7 @@ class PageUserService
         $userService = new UserService($ctx);
         $user = $userService->getCurrentUser();
 
-        $page = page_common_head($ctx);
+        $page = PageHeadService::getCommonHead($ctx);
 
         /* Top Buttons */
         $page['load_tpl'][] = [
