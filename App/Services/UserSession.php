@@ -153,6 +153,7 @@ class UserSession
     public function logout(): void
     {
         $clear_data = [];
+        session_destroy();
 
         if (isset($_COOKIE[self::REMEMBER_COOKIE])) {
             $clear_data['sid'] = $_COOKIE[self::REMEMBER_COOKIE];

@@ -1,0 +1,28 @@
+<?php
+/**
+ *
+ * @author diego/@/envigo.net
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ *
+*/
+namespace App\Services;
+
+use App\Core\AppContext;
+
+class PageDefaultsService
+{
+    public static function getDefaults(AppContext $ctx): array
+    {
+        $ncfg = $ctx->get('Config');
+        $userService = new UserService($ctx);
+        $_user = $userService->getCurrentUser();
+
+        $page = [];
+        $page['theme'] = empty($_user['theme']) ? $ncfg->get('theme') : $_user['theme'];
+        $page['lang'] = empty($_user['lang']) ? $ncfg->get('lang') : $_user['lang'];
+        $page['page_charset'] = empty($_user['page_charset']) ? $ncfg->get('default_charset') : $_user['charset'];
+        $page['web_title'] = $ncfg->get('web_title');
+
+        return $page;
+    }
+}

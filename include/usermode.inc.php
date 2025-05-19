@@ -28,5 +28,4 @@ if ($user->getLang() !== 'es') {
     }
 }
 
-require_once 'include/pages.inc.php';
 require_once 'class/Frontend.php';

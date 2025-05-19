@@ -10,6 +10,11 @@ namespace App\Controllers;
 
 use App\Core\AppContext;
 use App\Services\UserService;
+use App\Services\PageDefaultsService;
+use App\Services\PageHeadService;
+use App\Services\PageIndexService;
+use App\Services\PageAuthService;
+use App\Services\PageSettingsService;
 
 !defined('IN_WEB') ? exit : true;
 
@@ -82,24 +87,31 @@ class Web
      */
     private function get(string $page): array
     {
-        $pageDefaults = page_defaults($this->ctx);
+        $pageDefaults = PageDefaultsService::getDefaults($this->ctx);
         $pageData = [];
 
-        $pageFunctions = $this->getPageFunctions();
-        if (array_key_exists($page, $pageFunctions)) {
-            $pageFunc = $pageFunctions[$page];
-            if (!is_callable($pageFunc)) :
-                return [];
-            endif;
-            if ($page === 'logout') :
-                $pageFunc($this->ctx);
+        switch ($page) {
+            case 'login':
+                $pageData = PageAuthService::login($this->ctx);
+                break;
+            case 'logout':
+                PageAuthService::logout($this->ctx);
                 exit();
-            endif;
-            $pageData = $pageFunc($this->ctx);
-        } else {
-            return [];
+            case 'privacy':
+                $pageData = PageHeadService::getCommonHead($this->ctx);
+                break;
+            case 'index':
+                $pageData = PageIndexService::getIndex($this->ctx);
+                break;
+            case 'settings':
+                $pageData = PageSettingsService::getSettings($this->ctx);
+                break;
+            case 'user':
+                $pageData = PageUserService::getUserPage($this->ctx);
+                break;
+            default:
+                return [];
         }
-
 
         return array_merge($pageDefaults, $pageData);
     }
