@@ -11,7 +11,7 @@ namespace App\Core;
 class AppContext
 {
     /**
-     * @var array<string,mixed> $services Registered services in the context.
+     * @var array<string,mixed> $services Registered services
      */
     private array $services = [];
 
@@ -24,6 +24,11 @@ class AppContext
      * @var array<string,string> $lng Language data. TODO migrate to Lang class.
      */
     private array $lng = [];
+
+    /**
+     * @var array<int, string> $resolving - cyclic dependency detection.
+     */
+    private array $resolving = [];
 
     public function __construct()
     {
@@ -77,23 +82,34 @@ class AppContext
      */
     public function set(string $name, mixed $service = null): mixed
     {
-        if ($service && is_object($service)) {
-            $this->services[$name] = $service;
-            return $service;
+        // Detect cyclic dependency
+        if (in_array($name, $this->resolving, true)) {
+            $cycle = implode(' -> ', array_merge($this->resolving, [$name]));
+            throw new \RuntimeException("Cyclic dependency detected: $cycle");
         }
 
-        if (class_exists($name)) {
-            $this->services[$name] = new $name($this);
-            return $this->services[$name];
-        }
+        $this->resolving[] = $name;
+        try {
+            if ($service && is_object($service)) {
+                $this->services[$name] = $service;
+                return $service;
+            }
 
-        if ($this->existsFileSrv($name)) {
-            require_once 'class/' . $name . '.php';
-            $this->services[$name] = new $name($this);
-            return $this->services[$name];
-        }
+            if (class_exists($name)) {
+                $this->services[$name] = new $name($this);
+                return $this->services[$name];
+            }
 
-        throw new \InvalidArgumentException("Invalid service provided: $name");
+            if ($this->existsFileSrv($name)) {
+                require_once 'class/' . $name . '.php';
+                $this->services[$name] = new $name($this);
+                return $this->services[$name];
+            }
+
+            throw new \InvalidArgumentException("Invalid service provided: $name");
+        } finally {
+            array_pop($this->resolving);
+        }
     }
 
     /**
