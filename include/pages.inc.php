@@ -13,6 +13,7 @@ use App\Core\DBManager;
 use App\Services\UserService;
 use App\Services\NetworksService;
 use App\Services\Filter;
+use App\Services\logSystemService;
 use App\Utils\NetUtils;
 
 /**
@@ -87,8 +88,16 @@ function page_common_head(AppContext $ctx): array
     $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
     $page['web_main']['scriptlink'][] = './scripts/common.js';
 
+    try {
+        $weather = weather_widget($ncfg, $lng);
+    } catch (\Throwable $e) {
+        if (class_exists('\App\Services\LogSystemService')) {
+            $logSys = LogSystemService($ctx);
+            $logSys->error('Weather widget error: ' . $e->getMessage());
+        }
+        $weather = null;
+    }
 
-    $weather = weather_widget($ncfg, $lng);
     if (!empty($weather)) {
         $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
         $page['weather_widget'] = $weather;
