@@ -13,17 +13,20 @@ use App\Core\ConfigService;
 
 use App\Services\Filter;
 use App\Services\TemplateService;
+use App\Services\CategoriesService;
 use App\Helpers\Response;
 
 class CmdBookmarksController
 {
     private AppContext $ctx;
     private TemplateService $templateService;
+    private CategoriesService $categoriesService;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->templateService = new TemplateService($ctx);
+        $this->categoriesService = new CategoriesService($ctx);
     }
 
     /**
@@ -199,7 +202,7 @@ class CmdBookmarksController
      */
     public function mgmtBookmark(string $command, array $command_values): array
     {
-        $categories = $this->ctx->get('Categories');
+        $categories = $this->categoriesService;
         $target_id = Filter::varInt($command_values['id']);
         $tdata = [];
         $items = $this->ctx->get('Items');
@@ -248,7 +251,7 @@ class CmdBookmarksController
     public function submitBookmarkCat(array $command_values): array
     {
         $value = Filter::varString($command_values['value']);
-        $response = $this->ctx->get('Categories')->create(2, $value);
+        $response = $this->categoriesService->create(2, $value);
 
         if ($response['success'] == 1) {
             return Response::stdReturn(true, $response['msg']);
@@ -272,7 +275,7 @@ class CmdBookmarksController
             return Response::stdReturn(false, $lng['L_ERR_CAT_NODELETE']);
         }
 
-        $categories = $this->ctx->get('Categories');
+        $categories = $this->categoriesService;
         $items = $this->ctx->get('Items');
 
         if ($categories->remove($target_id)) {

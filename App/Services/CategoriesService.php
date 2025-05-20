@@ -71,9 +71,30 @@ class CategoriesService
         return $categories_by_type;
     }
 
-    public function create(int $cat_type, string $value): bool
+    public function create(int $cat_type, string $value): array
     {
-        return $this->model->create($cat_type, $value);
+        // Check if category exists
+        $exists = $this->model->getByType($cat_type);
+        foreach ($exists as $cat) {
+            if ($cat['cat_name'] === $value) {
+                return [
+                    'success' => -1,
+                    'msg' => $this->lng['L_VALUE_EXISTS'] ?? 'Value exists'
+                ];
+            }
+        }
+        $ok = $this->model->create($cat_type, $value);
+        if ($ok) {
+            return [
+                'success' => 1,
+                'msg' => $this->lng['L_OK'] ?? 'OK'
+            ];
+        } else {
+            return [
+                'success' => 0,
+                'msg' => $this->lng['L_ERROR'] ?? 'Error'
+            ];
+        }
     }
 
     public function remove(int $id): bool

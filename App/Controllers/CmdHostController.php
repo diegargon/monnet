@@ -30,6 +30,7 @@ use App\Services\HostViewBuilder;
 use App\Services\HostMetricsService;
 use App\Services\UserService;
 use App\Services\DateTimeService;
+use App\Services\CategoriesService;
 
 use App\Models\CmdHostModel;
 use App\Models\CmdHostNotesModel;
@@ -53,6 +54,7 @@ class CmdHostController
     private AppContext $ctx;
     private DBManager $db;
     private LogSystemService $logSys;
+    private CategoriesService $categoriesService;
 
     public function __construct(AppContext $ctx)
     {
@@ -71,6 +73,7 @@ class CmdHostController
 
         $this->ctx = $ctx;
         $this->logSys = new LogSystemService($ctx);
+        $this->categoriesService = new CategoriesService($ctx);
     }
 
     /**
@@ -476,7 +479,7 @@ class CmdHostController
     public function submitNewHostsCat(array $command_values): array
     {
         $value = Filter::varString($command_values['value']);
-        $response = $this->ctx->get('Categories')->create(1, $value);
+        $response = $this->categoriesService->create(1, $value);
 
         if ($response['success'] == 1) {
             return Response::stdReturn(true, $response['msg']);
