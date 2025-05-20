@@ -44,7 +44,6 @@ class Web
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        #$this->user = $ctx->get('User');
         $this->userService = new UserService($ctx);
     }
 
