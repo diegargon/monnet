@@ -168,7 +168,6 @@ class RefresherView
      */
     public function formatHosts(array $hosts_view): array
     {
-        //$user = $this->ctx->get('User');
         $user = $this->ctx->get(UserService::class);
         $theme = $user->getTheme();
         $lng = $this->ctx->get('lng');
