@@ -7,38 +7,9 @@ DB_PASS="monnetadmin"
 DB_NAME="monnet"
 SQL_FILE="/var/www/html/config/monnet.sql"
 ANSIBLE_SCRIPT="/opt/monnet-core/monnet_gateway/venv/bin/python3 /opt/monnet-core/monnet_gateway/mgateway.py"
-CRON_LINE_1="*/5 * * * * root php /var/www/html/monnet-cli.php"
-CRON_LINE_2="*/15 * * * * root php /var/www/html/monnet-discovery.php"
-CRONTAB_FILE="/etc/crontab"
 
-echo "V.31"
+echo "V.32"
 pwd
-
-echo "Fetching latest changes"
-git config --global --add safe.directory /var/www/html
-git -C /var/www/html fetch --verbose
-git -C /opt/monnet-core fetch --verbose
-
-# Configurar trabajos cron
-echo "Configurando trabajos cron..."
-if ! grep -Fxq "$CRON_LINE_1" "$CRONTAB_FILE"; then
-  echo "$CRON_LINE_1" >> "$CRONTAB_FILE"
-  echo "Añadido: $CRON_LINE_1"
-else
-  echo "La línea ya existe: $CRON_LINE_1"
-fi
-
-if ! grep -Fxq "$CRON_LINE_2" "$CRONTAB_FILE"; then
-  echo "$CRON_LINE_2" >> "$CRONTAB_FILE"
-  echo "Añadido: $CRON_LINE_2"
-else
-  echo "La línea ya existe: $CRON_LINE_2"
-fi
-
-cat /etc/crontab
-
-service cron start
-service cron status
 
 mkdir -p "/etc/ansible"
 
