@@ -42,7 +42,6 @@ class RefresherController
      */
     public function refreshPage(): void
     {
-        #$user = $this->ctx->get('User');
         $user = $this->ctx->get(UserService::class);
         $lng = $this->ctx->get('lng');
         $ncfg = $this->ncfg;
