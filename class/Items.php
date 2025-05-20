@@ -25,7 +25,6 @@ class Items
     {
         $this->ctx = $ctx;
         $this->db = $ctx->get('Mysql');
-        #$this->uid = $ctx->get('User')->getId();
         $user = $ctx->get(UserService::class);
         $this->uid = $user->getId();
 
