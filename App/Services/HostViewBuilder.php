@@ -10,6 +10,7 @@ namespace App\Services;
 use App\Core\AppContext;
 
 use App\Services\TemplateService;
+use App\Services\UserService;
 
 class HostViewBuilder
 {
@@ -33,7 +34,7 @@ class HostViewBuilder
      */
     public function hostDetails(int $hid, array $hostDetails): string
     {
-        $user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
         $hostDetails = $this->buildStats($hostDetails);
 
         $tdata['theme'] = $user->getTheme();

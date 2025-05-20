@@ -89,9 +89,12 @@ class ConfigService
     }
 
     /**
-     * Obtiene el valor de una clave de configuración.
+     * Get key value
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
      */
-    public function get(string $key, mixed $default = 'None'): mixed
+    public function get(string $key, mixed $default = null): mixed
     {
         if (empty($this->cfg[$key]['value'])) {
             return $default !== 'None' ? $default : null;
@@ -107,7 +110,8 @@ class ConfigService
     }
 
     /**
-     * Devuelve toda la configuración.
+     * Get all config
+     * @return array<string, mixed>
      */
     public function getAll(): array
     {
@@ -115,7 +119,8 @@ class ConfigService
     }
 
     /**
-     * Devuelve todas las configuraciones editables.
+     * Get all user editable config
+     * @return array<string, mixed>
      */
     public function getAllEditable(): array
     {
@@ -139,9 +144,13 @@ class ConfigService
     }
 
     /**
-     * Establece el valor de una clave de configuración.
+     * Set config value
+     * @param string $key
+     * @param mixed $value
+     * @param int $force_save
+     * @return int
      */
-    public function set($key, $value, int $force_save = 0): int
+    public function set(string $key, mixed $value, int $force_save = 0): int
     {
         if (isset($this->cfg[$key]['ctype'])) {
             $config = &$this->cfg[$key];
@@ -175,7 +184,9 @@ class ConfigService
     }
 
     /**
-     * Establece múltiples valores de configuración.
+     * Set multiple values
+     * @param array $values
+     * @return int Number of changes
      */
     public function setMultiple(array $values): int
     {
@@ -187,7 +198,8 @@ class ConfigService
     }
 
     /**
-     * Guarda los cambios en la base de datos.
+     * Save Changes
+     * @return void
      */
     public function saveChanges(): void
     {
@@ -199,7 +211,11 @@ class ConfigService
     }
 
     /**
-     * Parsea el valor según el tipo esperado.
+     * Parse values
+     * @param string|null $value
+     * @param int $type
+     * @return mixed
+     * @throws \InvalidArgumentException
      */
     private function parseRowValue(?string $value, int $type = 0): mixed
     {
@@ -229,9 +245,11 @@ class ConfigService
     }
 
     /**
-     * Verifica si un valor es JSON válido y lo decodifica.
+     * Check and decode json
+     * @param string $string
+     * @return array|false
      */
-    private function isJson($string)
+    private function isJson(string $string): array|false
     {
         $data = json_decode($string, true);
         return (json_last_error() == JSON_ERROR_NONE) ? $data : false;

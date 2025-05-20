@@ -3,8 +3,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
  */
@@ -12,6 +10,8 @@
 
 use App\Core\AppContext;
 use App\Core\ConfigService;
+
+use App\Services\UserService;
 
 class Frontend
 {
@@ -113,7 +113,8 @@ class Frontend
     {
         $lng = $this->lng;
         $ncfg = $this->ncfg;
-        $user = $this->ctx->get('User');
+        #$user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
 
         ob_start();
         $tpl_file = 'tpl/' . $ncfg->get('theme') . '/' . $tpl . '.tpl.php';

@@ -8,6 +8,7 @@
 !defined('IN_WEB') ? exit : true;
 
 use App\Core\AppContext;
+use App\Services\UserService;
 use App\Utils\ArrayUtils;
 
 class Items
@@ -25,7 +26,10 @@ class Items
     {
         $this->ctx = $ctx;
         $this->db = $ctx->get('Mysql');
-        $this->uid = $ctx->get('User')->getId();
+        #$this->uid = $ctx->get('User')->getId();
+        $user = $ctx->get(UserService::class);
+        $this->uid = $user->getId();
+
         //$this->categories = $ctx->get('Categories')->getByType(2); //2:items
 
         $results = $this->db->select('items', '*', ['uid' => $this->uid], 'ORDER BY weight');

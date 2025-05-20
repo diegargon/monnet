@@ -3,12 +3,16 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
- *
 */
 namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\ConfigService;
+
+use App\Services\UserService;
+use App\Services\CategoriesService;
+
+use App\Utils\NetUtils;
 
 class PageIndexService
 {
@@ -20,10 +24,11 @@ class PageIndexService
     public static function getIndex(AppContext $ctx): array
     {
         $page = [];
-        $user = $ctx->get('User');
+        #$user = $ctx->get('User');
+        $user = $ctx->get(UserService::class);
         $ncfg = $ctx->get(ConfigService::class);
-
-        $categories = $ctx->get('Categories');
+        #$categories = $ctx->get('Categories');
+        $categories = $ctx->get(CategoriesService::class);
         $networks  = new NetworksService($ctx);
         $networks_list = $networks->getNetworks();
         $page = PageHeadService::getCommonHead($ctx);
@@ -135,11 +140,11 @@ class PageIndexService
 
     /**
      *
-     * @param \User $user
+     * @param UserService $user
      * @param array<string, mixed> $items_results
      * @return array<string, mixed>
      */
-    private static function format_items(\User $user, array $items_results): array
+    private static function format_items(UserService $user, array $items_results): array
     {
         $items = [];
         $theme = $user->getTheme();
@@ -180,8 +185,8 @@ class PageIndexService
      */
     private static function page_index_post(AppContext $ctx): bool
     {
-        $user = $ctx->get('User');
-
+        //$user = $ctx->get('User');
+        $user = $ctx->get(UserService::class);
         $profile_type = Filter::postString('profile_type');
         $show_bookmarks = Filter::postInt('show_bookmarks');
         $show_highlight_hosts = Filter::postInt('show_highlight_hosts');

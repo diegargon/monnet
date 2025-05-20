@@ -26,6 +26,7 @@ use App\Services\GatewayService;
 use App\Services\Filter;
 use App\Services\HostService;
 use App\Services\NetworksService;
+use App\Services\UserService;
 
 use App\Models\CmdAnsibleModel;
 use App\Models\CmdAnsibleReportModel;
@@ -65,7 +66,7 @@ class AnsibleService
      */
     public function runPlaybook(int $target_id, string $playbook_id, array $extra_vars = []): array
     {
-        $user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
         $host = $this->hostService->getHostById($target_id);
 
         if ($playbook_id == 'std-install-monnet-agent-systemd') {
@@ -215,7 +216,7 @@ class AnsibleService
 
         $reports = $this->ansibleReportModel->getDbReports($reports_opts);
 
-        $user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
         $ncfg = $this->ctx->get(ConfigService::class);
         //format TODO: Move
         foreach ($reports as &$report) {
@@ -442,7 +443,7 @@ class AnsibleService
      */
     private function buildSendData(array $host, string $playbook_id, array $extraVars = []): array
     {
-        $user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
         return [
             'pid' => $playbook_id,
             'extra_vars' => $extraVars,

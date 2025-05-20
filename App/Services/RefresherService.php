@@ -15,6 +15,7 @@ use App\Services\LogHostsService;
 use App\Services\LogSystemService;
 use App\Services\HostService;
 use App\Services\NetworksService;
+use App\Services\UserService;
 
 use App\Models\HostsModel;
 
@@ -52,7 +53,7 @@ class RefresherService
      */
     public function getHostsView(int $hosts_other = 1, int $highlight = 0): array
     {
-        $user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
 
         $hosts_filter = [];
 
@@ -65,7 +66,7 @@ class RefresherService
         }
 
         # Filter User Selected Networks
-        $user_networks = $user->getSelectedNetworks();
+        $user_networks = $user->getSelNetworks();
         if (!empty($user_networks) && count($user_networks) > 0) {
             $hosts_filter['networks'] = $user_networks;
         }

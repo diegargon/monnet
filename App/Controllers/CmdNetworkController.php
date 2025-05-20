@@ -12,6 +12,8 @@ use App\Services\HostService;
 use App\Services\Filter;
 use App\Services\TemplateService;
 use App\Services\NetworksService;
+use App\Services\UserService;
+
 use App\Helpers\Response;
 use App\Core\AppContext;
 
@@ -166,7 +168,7 @@ class CmdNetworkController
      */
     public function submitPoolReserver(array $command_values): array
     {
-        $user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
         $username = $user->getUsername();
 
         $network_id = Filter::varInt($command_values['id']);

@@ -13,6 +13,7 @@ use App\Core\ConfigService;
 use App\Services\TemplateService;
 use App\Services\HostService;
 use App\Services\DateTimeService;
+use App\Services\UserService;
 
 class RefresherView
 {
@@ -62,7 +63,6 @@ class RefresherView
         usort($logs, fn($a, $b) => $b['date'] <=>$a['date']);
 
         # Limit term max lines
-
         $term_max_lines = $this->ncfg->get('term_max_lines');
         if (is_array($logs) && count($logs) > $term_max_lines) {
             $term_logs = array_slice($logs, 0, $term_max_lines);
@@ -168,7 +168,8 @@ class RefresherView
      */
     public function formatHosts(array $hosts_view): array
     {
-        $user = $this->ctx->get('User');
+        //$user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
         $theme = $user->getTheme();
         $lng = $this->ctx->get('lng');
         $date_now = new \DateTime(DateTimeService::dateNow(), new \DateTimeZone('UTC'));

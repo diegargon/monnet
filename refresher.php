@@ -34,7 +34,6 @@ if (!$userService->isAuthorized()) {
 }
 
 
-
 $controller = new RefresherController($ctx);
 $controller->refreshPage();
 exit();

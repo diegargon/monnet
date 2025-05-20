@@ -14,7 +14,8 @@ use App\Core\ConfigService;
 use App\Services\LogSystemService;
 use App\Services\NetworksService;
 use App\Services\DateTimeService;
-
+use App\Services\CategoriesService;
+use App\Services\UserService;
 use App\Utils\MiscUtils;
 
 class HostFormatter
@@ -39,11 +40,12 @@ class HostFormatter
     public function format(array $host): array
     {
         $lng = $this->ctx->get('lng');
-        $user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
+
         if (!isset($this->networksService)) {
             $this->networksService = new NetworksService($this->ctx);
         }
-        $categories = $this->ctx->get('Categories');
+        $categories = $this->ctx->get(CategoriesService::class);
 
         $id = (int) $host['id'];
         $net_id = $host['network'];

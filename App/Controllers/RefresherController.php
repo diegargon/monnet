@@ -14,6 +14,7 @@ use App\Services\RefresherService;
 use App\Services\TemplateService;
 use App\Services\GatewayService;
 use App\Services\DateTimeService;
+use App\Services\UserService;
 
 use App\Views\RefresherView;
 
@@ -41,7 +42,8 @@ class RefresherController
      */
     public function refreshPage(): void
     {
-        $user = $this->ctx->get('User');
+        #$user = $this->ctx->get('User');
+        $user = $this->ctx->get(UserService::class);
         $lng = $this->ctx->get('lng');
         $ncfg = $this->ncfg;
         $view_highlight = 0;
@@ -128,7 +130,8 @@ class RefresherController
         $total_hosts = $hosts_totals['total_hosts'];
         $total_showing = count($hosts_highlight) + count($hosts_other);
         $data['misc']['totals'] = $lng['L_SHOWED'] . ": $total_showing | {$lng['L_TOTAL']}: $total_hosts";
-        $timenow = $user->getDateNow($ncfg->get('datetime_format_min'));
+        $user_timezone = $user->getTimezone();
+        $timenow = DateTimeService::formatDateNow($user_timezone);
         $data['misc']['last_refresher'] = $lng['L_REFRESHED'] . ': ' . $timenow;
 
         $data['footer_dropdown'][] = [

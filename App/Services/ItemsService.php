@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Core\AppContext;
 use App\Core\DBManager;
 
+use App\Service\UserService;
 use App\Models\ItemsModel;
 use App\Utils\MiscUtils;
 
@@ -20,7 +21,8 @@ class ItemsService
         $this->ctx = $ctx;
         $db = new DBManager($ctx);
         $this->model = new ItemsModel($db);
-        $this->uid = $ctx->get('User')->getId();
+        $userService = $ctx->get(UserService::class);
+        $this->uid = $userService->getId();
         $this->items = $this->model->getAllByUser($this->uid);
     }
 
