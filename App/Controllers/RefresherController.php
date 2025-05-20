@@ -228,7 +228,7 @@ class RefresherController
             $discovery_last_run .= $ncfg->get('discovery_last_run_metrics');
         }
 
-        /* Usado para saber si hay alguien conectado */
+        /* Usado para informar al gateway de alguien esta conectado */
         $ncfg->set('refreshing', time());
 
         $data['misc']['cli_last_run'] = 'CLI ' . strtolower($lng['L_UPDATED']) . ' ' . $cli_last_run;
