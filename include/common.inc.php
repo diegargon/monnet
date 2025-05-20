@@ -42,28 +42,15 @@ require_once 'include/checks.inc.php';
 
 common_checks($cfg_db, $cfg);
 
-
-if ($cfg_db['dbtype'] == 'mysqli') {
-    require_once 'class/Mysql.php';
-} else {
-    exit('Only support mysqli db type');
-}
-
 $ctx = new AppContext();
 $ctx->setCfg($cfg);
 $ctx->setCfgDb($cfg_db);
 
-try {
-    $db = $ctx->set('Mysql', new Database($cfg_db));
+$db = $ctx->set('DBManager', new DBManager($ctx));
 
-    if (!$db instanceof Database) {
-        throw new Exception("Database instance is not created.");
-    }
-
-    $db->connect();
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-    exit();
+if (!$db->isConnected()) {
+    print 'DB connection failed';
+    exit(1);
 }
 
 /**

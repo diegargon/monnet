@@ -12,7 +12,7 @@ use App\Services\LogSystemService;
 
 $logSys = new LogSystemService($GLOBALS['ctx'] ?? null);
 
-function trigger_update(Config $ncfg, Database $db, float $db_version, float $files_version): void
+function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $files_version): void
 {
     # TODO: No Initialice in func
     $logSys->notice("Triggered updater File version: $files_version DB version: $db_version");
@@ -448,10 +448,10 @@ function trigger_update(Config $ncfg, Database $db, float $db_version, float $fi
 
 /**
  * @var Config $ncfg
- * @var Database $db
+ * @var DBManager $db
  */
-if (!$db->isConn()) {
-    echo "No Dabase Connection Error";
+if (!$db->isConnected()) {
+    echo "No Database Connection Error";
     exit();
 }
 $lockFile = '/tmp/monnet_update.lock';
