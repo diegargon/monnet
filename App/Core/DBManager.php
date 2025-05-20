@@ -593,4 +593,14 @@ class DBManager
             $stmt->bindValue($key, $value, \PDO::PARAM_STR);
         }
     }
+
+    /**
+     * Check if the database connection is active.
+     *
+     * @return bool True if connected, false otherwise.
+     */
+    public function isConnected(): bool
+    {
+        return $this->connection instanceof \PDO;
+    }
 }
