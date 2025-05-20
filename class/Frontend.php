@@ -113,7 +113,6 @@ class Frontend
     {
         $lng = $this->lng;
         $ncfg = $this->ncfg;
-        #$user = $this->ctx->get('User');
         $user = $this->ctx->get(UserService::class);
 
         ob_start();
