@@ -31,12 +31,6 @@ class Web
 
     /**
      *
-     * @var User
-     */
-    private \User $user;
-
-    /**
-     *
      * @var UserService
      */
     private UserService $userService;
