@@ -15,10 +15,7 @@ usermode_checks($ncfg);
 
 session_start();
 
-//$userService = new UserService($ctx);
 $userService = $ctx->get(UserService::class);
-
-#$user = $ctx->get('User');
 
 if ($userService->getLang() !== 'es') {
     $default_lng = $lng; # Default lang
