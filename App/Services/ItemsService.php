@@ -5,9 +5,9 @@ namespace App\Services;
 use App\Core\AppContext;
 use App\Core\DBManager;
 
-use App\Service\UserService;
+use App\Services\UserService;
 use App\Models\ItemsModel;
-use App\Utils\MiscUtils;
+use App\Utils\ArrayUtils;
 
 class ItemsService
 {
@@ -30,7 +30,7 @@ class ItemsService
     {
         $items = $this->items;
         if (!empty($key_order)) {
-            MiscUtils::order($items, $key_order, $dir);
+            ArrayUtils::order($items, $key_order, $dir);
         }
         return $items;
     }
@@ -118,7 +118,7 @@ class ItemsService
     {
         $result = $this->model->getByType($this->uid, $type);
         if (!empty($key_order)) {
-            MiscUtils::order($result, $key_order, $dir);
+            ArrayUtils::order($result, $key_order, $dir);
         }
         return $result;
     }

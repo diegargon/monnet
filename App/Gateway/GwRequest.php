@@ -6,9 +6,6 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
-
-# TODO must throw exceptions, GatewayService must catch that exceptions and return the status.
-
 namespace App\Gateway;
 
 use App\Core\AppContext;

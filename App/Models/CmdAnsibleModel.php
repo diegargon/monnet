@@ -22,8 +22,7 @@
     Trigger Manual: Encolo el comando, se ejecuta via mgateway, deberia enviar un mensaje
         para avisar de que hay algo en la queue.
 
-        TODO: Field temporizador ¿formato? horas? fecha?
- */
+*/
 
 namespace App\Models;
 
