@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Service for managing user items (CRUD operations, filtering, etc).
+ *
+ * @author diego/@/envigo.net
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ */
 namespace App\Services;
 
 use App\Core\AppContext;
@@ -16,6 +21,11 @@ class ItemsService
     private int $uid;
     private array $items = [];
 
+    /**
+     * ItemsService constructor.
+     *
+     * @param AppContext $ctx Application context.
+     */
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
@@ -26,6 +36,13 @@ class ItemsService
         $this->items = $this->model->getAllByUser($this->uid);
     }
 
+    /**
+     * Get all items for the current user, optionally ordered by a key.
+     *
+     * @param string|null $key_order Field to order by.
+     * @param string|null $dir Order direction ('asc' or 'desc').
+     * @return array List of items.
+     */
     public function getAll(?string $key_order = null, ?string $dir = 'asc'): array
     {
         $items = $this->items;
@@ -35,6 +52,13 @@ class ItemsService
         return $items;
     }
 
+    /**
+     * Add a new item of the specified type.
+     *
+     * @param string $item_type The type of item (e.g., 'bookmarks').
+     * @param array $item_data The item data.
+     * @return bool True on success, false on failure.
+     */
     public function addItem(string $item_type, array $item_data): bool
     {
         if ($item_type == 'bookmarks') {
@@ -65,6 +89,13 @@ class ItemsService
         return false;
     }
 
+    /**
+     * Update an existing item of the specified type.
+     *
+     * @param string $item_type The type of item (e.g., 'bookmarks').
+     * @param array $item_data The item data (must include 'id').
+     * @return bool True on success, false on failure.
+     */
     public function updateItem(string $item_type, array $item_data): bool
     {
         if ($item_type == 'bookmarks') {
@@ -91,6 +122,12 @@ class ItemsService
         return false;
     }
 
+    /**
+     * Get an item by its ID, merging configuration data.
+     *
+     * @param int $id Item ID.
+     * @return array Item data, or empty array if not found.
+     */
     public function getById(int $id): array
     {
         $item = $this->model->getById($id);
@@ -105,6 +142,12 @@ class ItemsService
         return [];
     }
 
+    /**
+     * Remove an item by its ID.
+     *
+     * @param int $id Item ID.
+     * @return bool True on success, false on failure.
+     */
     public function remove(int $id): bool
     {
         $ok = $this->model->delete($id);
@@ -114,6 +157,14 @@ class ItemsService
         return $ok;
     }
 
+    /**
+     * Get items by type for the current user (and global items), optionally ordered.
+     *
+     * @param string $type Item type.
+     * @param string|null $key_order Field to order by.
+     * @param string|null $dir Order direction ('asc' or 'desc').
+     * @return array List of items.
+     */
     public function getByType(string $type, ?string $key_order = 'weight', ?string $dir = 'asc'): array
     {
         $result = $this->model->getByType($this->uid, $type);
@@ -123,11 +174,22 @@ class ItemsService
         return $result;
     }
 
+    /**
+     * Get items by category ID for the current user.
+     *
+     * @param int $category_id Category ID.
+     * @return array List of items.
+     */
     public function getByCatID(int $category_id): array
     {
         return $this->model->getByCatID($this->uid, $category_id);
     }
 
+    /**
+     * Get all unique item types for the current user.
+     *
+     * @return array List of unique item types.
+     */
     public function getTypes(): array
     {
         $types = array_column($this->items, 'type');
@@ -135,6 +197,13 @@ class ItemsService
         return array_values($uniq_types);
     }
 
+    /**
+     * Change all items of a given type and removed category to the default category.
+     *
+     * @param string $item_type Item type.
+     * @param int $removed_cat_id Category ID to be replaced.
+     * @return bool True on success, false on failure.
+     */
     public function changeToDefaultCat(string $item_type, int $removed_cat_id): bool
     {
         if ($item_type == 'bookmarks') {

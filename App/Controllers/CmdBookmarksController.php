@@ -14,6 +14,7 @@ use App\Core\ConfigService;
 use App\Services\Filter;
 use App\Services\TemplateService;
 use App\Services\CategoriesService;
+use App\Services\ItemsService;
 use App\Helpers\Response;
 
 class CmdBookmarksController
@@ -21,12 +22,14 @@ class CmdBookmarksController
     private AppContext $ctx;
     private TemplateService $templateService;
     private CategoriesService $categoriesService;
+    private ItemsService $itemsService;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->templateService = new TemplateService($ctx);
         $this->categoriesService = new CategoriesService($ctx);
+        $this->itemsService = new ItemsService($ctx);
     }
 
     /**
@@ -93,7 +96,7 @@ class CmdBookmarksController
         }
 
         // TODO BookmarkModel?
-        $result = $this->ctx->get('Items')->addItem('bookmarks', $new_bookmark);
+        $result = $this->itemsService->addItem('bookmarks', $new_bookmark);
 
         if ($result) {
             return Response::stdReturn(true, 'Bookmark added successfully');
@@ -169,7 +172,7 @@ class CmdBookmarksController
         endif;
 
         // TODO BookmarkModel?
-        $result = $this->ctx->get('Items')->updateItem('bookmarks', $bookmark);
+        $result = $this->itemsService->updateItem('bookmarks', $bookmark);
 
         if ($result) {
             return Response::stdReturn(true, 'Bookmark updated successfully');
@@ -187,7 +190,8 @@ class CmdBookmarksController
     {
         $target_id = Filter::varInt($command_values['id']);
 
-        if ($this->ctx->get('Items')->remove($target_id)) {
+        // if ($this->ctx->get('Items')->remove($target_id)) {
+        if ($this->itemsService->remove($target_id)) {
             return Response::stdReturn(true, 'Bookmark removed successfully');
         } else {
             return Response::stdReturn(false, 'Error removing bookmark');
@@ -205,7 +209,8 @@ class CmdBookmarksController
         $categories = $this->categoriesService;
         $target_id = Filter::varInt($command_values['id']);
         $tdata = [];
-        $items = $this->ctx->get('Items');
+        // $items = $this->ctx->get('Items');
+        $items = $this->itemsService;
         $ncfg =  $this->ctx->get(ConfigService::class);
         $lng =  $this->ctx->get('lng');
 
@@ -276,7 +281,8 @@ class CmdBookmarksController
         }
 
         $categories = $this->categoriesService;
-        $items = $this->ctx->get('Items');
+        // $items = $this->ctx->get('Items');
+        $items = $this->itemsService;
 
         if ($categories->remove($target_id)) {
             //Change remain items to default category

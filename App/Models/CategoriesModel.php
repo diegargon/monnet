@@ -47,9 +47,7 @@ class CategoriesModel {
         if ($exists) {
             return false;
         }
-        $ok = $this->db->insert('categories', ['cat_name' => $value, 'cat_type' => $cat_type]);
-
-        return true;
+        return $this->db->insert('categories', ['cat_name' => $value, 'cat_type' => $cat_type]);
     }
 
     public function remove(int $id): bool

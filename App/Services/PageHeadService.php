@@ -9,6 +9,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\ConfigService;
+use App\Services\ItemsService;
 
 class PageHeadService
 {
@@ -20,12 +21,11 @@ class PageHeadService
     public static function getCommonHead(AppContext $ctx): array
     {
         $page = [];
-        $db = $ctx->get('Mysql');
         $lng = $ctx->get('lng');
         $ncfg = $ctx->get(ConfigService::class);
 
-        $results = $db->select('items', '*', ['type' => 'search_engine']);
-        $search_engines = $db->fetchAll($results);
+        $itemsService = new ItemsService($ctx);
+        $search_engines = $itemsService->getByType('search_engine');
 
         foreach ($search_engines as $search_engine) {
             $conf = json_decode($search_engine['conf'], true);
