@@ -714,7 +714,6 @@ class CmdHostController
     public function clearHostAlarms(array $command_values): array
     {
         $hid = Filter::varInt($command_values['id']);
-        //$user = $this->ctx->get('User');
         $user = $this->ctx->get(UserService::class);
         $username = $user->getUsername();
         $lng = $this->ctx->get('lng');
