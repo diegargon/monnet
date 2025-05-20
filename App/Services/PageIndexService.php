@@ -11,6 +11,7 @@ use App\Core\ConfigService;
 
 use App\Services\UserService;
 use App\Services\CategoriesService;
+use App\Services\ItemsService;
 
 use App\Utils\NetUtils;
 
@@ -24,10 +25,8 @@ class PageIndexService
     public static function getIndex(AppContext $ctx): array
     {
         $page = [];
-        #$user = $ctx->get('User');
         $user = $ctx->get(UserService::class);
         $ncfg = $ctx->get(ConfigService::class);
-        #$categories = $ctx->get('Categories');
         $categories = $ctx->get(CategoriesService::class);
         $networks  = new NetworksService($ctx);
         $networks_list = $networks->getNetworks();
@@ -46,7 +45,7 @@ class PageIndexService
             self::page_index_post($ctx);
         }
 
-        $items = $ctx->get('Items');
+        $items = $ctx->get(ItemsService::class);
 
         $page['page'] = 'index';
         $page['head_name'] = $ncfg->get('web_title');
@@ -185,7 +184,6 @@ class PageIndexService
      */
     private static function page_index_post(AppContext $ctx): bool
     {
-        //$user = $ctx->get('User');
         $user = $ctx->get(UserService::class);
         $profile_type = Filter::postString('profile_type');
         $show_bookmarks = Filter::postInt('show_bookmarks');
