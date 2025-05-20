@@ -301,6 +301,7 @@ class DBManager
 
         $this->bindParams($stmt, $data);
         $result = $stmt->execute();
+        $stmt->closeCursor();
 
         return $result;
     }
@@ -359,6 +360,8 @@ class DBManager
             if (!$success) {
                 throw new \RuntimeException("Error executing JSON update");
             }
+
+            $this->connection->commit(); // Commit si todo va bien
 
             return true;
         } catch (\Exception $e) {
