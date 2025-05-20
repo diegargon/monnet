@@ -16,9 +16,9 @@ use App\Core\DBManager;
 use App\Core\ConfigService;
 
 use App\Services\DateTimeService;
-use App\Services\HostService;
 
 use App\Models\LogHostsModel;
+use App\Models\HostsModel;
 
 class LogHostsService
 {
@@ -27,6 +27,7 @@ class LogHostsService
     private LogHostsModel $logHostsModel;
     private DateTimeService $dateTimeService;
     private ConfigService $ncfg;
+    private DBManager $db;
 
     /** @var int */
     private int $max_db_msg = 254;
@@ -34,8 +35,8 @@ class LogHostsService
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $db = new DBManager($ctx);
-        $this->logHostsModel = new LogHostsModel($db);
+        $this->db = new DBManager($ctx);
+        $this->logHostsModel = new LogHostsModel($this->db);
         $this->dateTimeService = new DateTimeService();
         $this->ncfg = $ctx->get(ConfigService::class);
     }
@@ -159,10 +160,8 @@ class LogHostsService
      */
     private function formatEventsLogs(array $logs): array
     {
-        $hostService = new HostService($this->ctx);
-
         foreach ($logs as &$log) {
-            $log['host'] = $hostService->getDisplayNameById($log['host_id']);
+            $log['host'] = $this->getHostDisplayName($log['host_id']);
             $log['date'] = $this->dateTimeService->formatDateString($log['date'], $this->ncfg->get('datetime_log_format'));
             $log['level'] = \LogLevel::getName($log['level']);
             $log['log_type'] = \LogType::getName($log['log_type']);
@@ -202,5 +201,25 @@ class LogHostsService
         }
 
         return $log_lines;
+    }
+
+    /**
+     * Avoid call hostService to avoid cyclic dependency.
+     *
+     * @param int $host_id Host ID.
+     * @return string
+     */
+    public function getHostDisplayName(int $host_id): string
+    {
+        $hostModel = new HostsModel($this->db);
+        $host = $hostModel->getHostById($host_id);
+
+        if (!empty($host['title'])) {
+            return $host['title'];
+        } elseif (!empty($host['hostname'])) {
+            return ucfirst(explode('.', $host['hostname'])[0]);
+        }
+
+        return $host['ip'];
     }
 }
