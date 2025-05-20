@@ -28,5 +28,3 @@ if ($userService->getLang() !== 'es') {
         $ctx->setLang($lng);
     }
 }
-
-require_once 'class/Frontend.php';

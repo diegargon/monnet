@@ -9,6 +9,7 @@
 namespace App\Controllers;
 
 use App\Core\AppContext;
+
 use App\Services\UserService;
 use App\Services\PageDefaultsService;
 use App\Services\PageHeadService;
@@ -16,8 +17,7 @@ use App\Services\PageIndexService;
 use App\Services\PageAuthService;
 use App\Services\PageSettingsService;
 use App\Services\PageUserService;
-
-!defined('IN_WEB') ? exit : true;
+use App\Services\TemplateService;
 
 use App\Services\Filter;
 
@@ -68,7 +68,7 @@ class Web
      */
     public function render(array $page_data): void
     {
-        $frontend = new \Frontend($this->ctx);
+        $frontend = new TemplateService($this->ctx);
         $frontend->showPage($page_data);
     }
 
