@@ -375,15 +375,23 @@ function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $f
         }
     }
 
-    // Template
+    // 0.75
     $update = 0.75;
     if ($db_version == 0.00) {
         try {
             //$db->query("
             //");
             $db->query("START TRANSACTION");
+            # DONE already after update
+            $now = gmdate('Y-m-d H:i:s');
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('last_send_logs', JSON_QUOTE('$now'), 4, 0, NULL, 0),
+                ('last_discovery_hosts', JSON_QUOTE('$now'), 4, 0, NULL, 0),
+                ('last_host_checker', JSON_QUOTE('$now'), 4, 0, NULL, 0),
+                ('last_ansible_task', JSON_QUOTE('$now'), 4, 0, NULL, 0),
+                ('last_prune', JSON_QUOTE('$now'), 4, 0, NULL, 0),
+                ('last_weekly_task', JSON_QUOTE('$now'), 4, 0, NULL, 0),
                 ('default_lang', JSON_QUOTE('es'), 0, 1, NULL, 0);
             ");
             $db->query("COMMIT");
