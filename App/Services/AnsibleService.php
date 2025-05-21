@@ -208,7 +208,6 @@ class AnsibleService
         $response['ansible_vars'] = $this->cmdAnsibleModel->getAnsibleVarsByHostId($host_id);
 
         # TODO: Filter tags respect os
-        # TODO: Add os_family and os to tags filter of host os is set
         if ($this->setPbMetadata()) {
             // Añadir os y os_family a tags si existen
             $playbooks_metadata = [];
