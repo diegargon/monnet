@@ -133,7 +133,7 @@ class AnsibleService
         }
 
         $task_name = $pb['name'];
-        
+
         // Verify if a task with the same name and host already exists and is not done=1
         $existing_tasks = $this->cmdAnsibleModel->getHostsTasks($hid);
         foreach ($existing_tasks as $task) {
@@ -207,8 +207,48 @@ class AnsibleService
         $response['reports_list'] = $this->getHostHeadsReports($host_id);
         $response['ansible_vars'] = $this->cmdAnsibleModel->getAnsibleVarsByHostId($host_id);
 
+        # TODO: Filter tags respect os
+        # TODO: Add os_family and os to tags filter of host os is set
         if ($this->setPbMetadata()) {
-            $response['playbooks_metadata'] = $this->playbooks_metadata;
+            // Añadir os y os_family a tags si existen
+            $playbooks_metadata = [];
+            foreach ($this->playbooks_metadata as $pb) {
+                $pb_mod = $pb;
+                if (isset($pb_mod['os'])) {
+                    if (!isset($pb_mod['tags']) || !is_array($pb_mod['tags'])) {
+                        $pb_mod['tags'] = [];
+                    }
+                    if (is_array($pb_mod['os'])) {
+                        foreach ($pb_mod['os'] as $os) {
+                            if (!in_array($os, $pb_mod['tags'], true)) {
+                                $pb_mod['tags'][] = $os;
+                            }
+                        }
+                    } elseif (is_string($pb_mod['os'])) {
+                        if (!in_array($pb_mod['os'], $pb_mod['tags'], true)) {
+                            $pb_mod['tags'][] = $pb_mod['os'];
+                        }
+                    }
+                }
+                if (isset($pb_mod['os_family'])) {
+                    if (!isset($pb_mod['tags']) || !is_array($pb_mod['tags'])) {
+                        $pb_mod['tags'] = [];
+                    }
+                    if (is_array($pb_mod['os_family'])) {
+                        foreach ($pb_mod['os_family'] as $osf) {
+                            if (!in_array($osf, $pb_mod['tags'], true)) {
+                                $pb_mod['tags'][] = $osf;
+                            }
+                        }
+                    } elseif (is_string($pb_mod['os_family'])) {
+                        if (!in_array($pb_mod['os_family'], $pb_mod['tags'], true)) {
+                            $pb_mod['tags'][] = $pb_mod['os_family'];
+                        }
+                    }
+                }
+                $playbooks_metadata[] = $pb_mod;
+            }
+            $response['playbooks_metadata'] = $playbooks_metadata;
         }
 
         return $response;
@@ -525,7 +565,7 @@ class AnsibleService
             return false;
         }
 
-        $this->logSys->warning('Unknown error setting pb metada');
+        $this->logSys->warning('Unknown error getting pb metadata');
         return false;
     }
 }
