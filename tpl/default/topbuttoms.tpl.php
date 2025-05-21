@@ -23,10 +23,10 @@ if (Filter::getString('page') == $privacy_page) {
 ?>
 <div id="top_button_bar" class="top_button_bar">
     <div class="bar_button_container">
-        <a href="<?= $ncfg->get('rel_path') ?>?page=logout">
+        <a href="?page=logout">
             <img src="tpl/<?= $ncfg->get('theme') ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT']; ?>">
         </a>
-        <a href="<?= $ncfg->get('rel_path') ?>?page=<?= $privacy_page ?>">
+        <a href="?page=<?= $privacy_page ?>">
             <img src="tpl/<?= $ncfg->get('theme') ?>/img/privacy.png" alt="privacy" title="<?= $lng['L_PRIVACY']; ?>"/>
         </a>
     </div>

@@ -18,7 +18,6 @@ $cfg_db['dbcharset'] = 'utf8';
 
 /* General  Config */
 $cfg['path'] = '/var/www/html';
-$cfg['rel_path'] = '/';
 $cfg['lang'] = 'es';
 
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];

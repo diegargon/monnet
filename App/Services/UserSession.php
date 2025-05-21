@@ -176,6 +176,12 @@ class UserSession
         $sId = $this->user['sid'];
         $uId = $this->user['id'];
 
+        $basePath = dirname($_SERVER['SCRIPT_NAME']);
+        if ($basePath !== '/' && substr($basePath, -1) !== '/') {
+            $basePath .= '/';
+        }
+        $rel_path = $basePath;
+
         if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
             setcookie('uid', $uId, [
                 'expires' => time() + $this->session_expire,
@@ -192,13 +198,13 @@ class UserSession
                 'uid',
                 $uId,
                 time() + $this->session_expire,
-                $this->ncfg->get('rel_path')
+                $rel_path,
             );
             setcookie(
                 self::REMEMBER_COOKIE,
                 $sId,
                 time() + $this->session_expire,
-                $this->ncfg->get('rel_path')
+                $rel_path,
             );
         }
     }

@@ -154,13 +154,6 @@ $cfg_db['dbpassword']
 $cfg['path'] = '/var/www/html';
 ```
 
-Optional
-
-```
-$cfg['rel_path'] = '/';
-$cfg['lang'] = 'es';
-```
-
 ## Setting the database
 
 ```

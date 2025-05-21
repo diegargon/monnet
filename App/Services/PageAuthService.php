@@ -32,11 +32,11 @@ class PageAuthService
             if (!empty($username) && !empty($password)) {
                 $user = $userService->login($username, $password);
                 if (!empty($user['id']) && $user['id'] > 0) {
-                    if (empty($ncfg->get('rel_path'))) {
-                        $ncfg->set('rel_path', '/');
+                    $basePath = dirname($_SERVER['SCRIPT_NAME']);
+                    if ($basePath !== '/' && substr($basePath, -1) !== '/') {
+                        $basePath .= '/';
                     }
-                    header("Location: {$ncfg->get('rel_path')} ");
-
+                    header("Location: {$basePath}");
                     exit();
                 }
             }
@@ -70,10 +70,12 @@ class PageAuthService
 
     public static function logout(AppContext $ctx): void
     {
-        $ncfg = $ctx->get(ConfigService::class);
         $userService = new UserService($ctx);
-
         $userService->logout();
-        header("Location: {$ncfg->get('rel_path')}index.php");
+        $basePath = dirname($_SERVER['SCRIPT_NAME']);
+        if ($basePath !== '/' && substr($basePath, -1) !== '/') {
+            $basePath .= '/';
+        }
+        header("Location: {$basePath}");
     }
 }

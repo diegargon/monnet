@@ -49,4 +49,30 @@ class PageUserService
         ];
         return $page;
     }
+
+    /**
+     *
+     * @param AppContext $ctx
+     * @return array<string,string>
+     */
+    public static function getPrivacy(AppContext $ctx): array
+    {
+        $page = [];
+
+        $ncfg = $ctx->get(ConfigService::class);
+
+        $page = PageHeadService::getCommonHead($ctx);
+        /* Top Buttons */
+        $page['load_tpl'][] = [
+            'file' => 'topbuttoms',
+            'place' => 'head-left',
+        ];
+
+        $page['page'] = 'index';
+        $page['head_name'] = $ncfg->get('web_title');
+        $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
+        $page['web_main']['scriptlink'][] = './scripts/background.js';
+
+        return $page;
+    }
 }

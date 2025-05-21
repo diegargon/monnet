@@ -92,7 +92,7 @@ class Web
                 PageAuthService::logout($this->ctx);
                 exit();
             case 'privacy':
-                $pageData = PageHeadService::getCommonHead($this->ctx);
+                $pageData = PageUserService::getPrivacy($this->ctx);
                 break;
             case 'index':
                 $pageData = PageIndexService::getIndex($this->ctx);
