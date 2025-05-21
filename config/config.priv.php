@@ -8,7 +8,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.74;
-$cfg['monnet_revision'] = 34;
+$cfg['monnet_revision'] = 35;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.184;
@@ -163,6 +163,7 @@ $cfg['os'] = [
     33 => ['id' => 33, 'name' => 'Other Proprietary', 'img' => 'proprietary.png'],
     34 => ['id' => 34, 'name' => 'Linux Embebbed', 'img' => 'embedded.png'],
     35 => ['id' => 35, 'name' => 'Tasmota', 'img' => 'embedded.png'],
+    36 => ['id' => 36, 'name' => 'NetBSD', 'img' => 'netbsd.png'],
     37 => ['id' => 37, 'name' => 'Cisco IOS', 'img' => 'unknown.png'],
     38 => ['id' => 38, 'name' => 'Cisco NXOS', 'img' => 'unknown.png'],
     39 => ['id' => 39, 'name' => 'JunOS', 'img' => 'unknown.png'],
@@ -171,8 +172,37 @@ $cfg['os'] = [
     42 => ['id' => 42, 'name' => 'AMI', 'img' => 'unknown.png'],
     43 => ['id' => 43, 'name' => 'Opnsense', 'img' => 'opnsense.png'],
     44 => ['id' => 44, 'name' => 'Proxmox VE', 'img' => 'proxmox.png'],
+    45 => ['id' => 45, 'name' => 'QNX', 'img' => 'unknown.png'],
+    46 => ['id' => 46, 'name' => 'Tizen', 'img' => 'unknown.png'],
+    47 => ['id' => 47, 'name' => 'OpenVMS', 'img' => 'unknown.png'],
+    48 => ['id' => 48, 'name' => 'Haiku', 'img' => 'unknown.png'],
+    49 => ['id' => 49, 'name' => 'AmigaOS', 'img' => 'unknown.png'],
+    50 => ['id' => 50, 'name' => 'BeOS', 'img' => 'unknown.png'],
 ];
 
+/* OS Family */
+$cfg['os_family'] = [
+    0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'default.png'],
+    1 => ['id' => 1, 'name' => 'Other', 'img' => 'default.png'],
+    2 => ['id' => 2, 'name' => 'Linux', 'img' => 'default.png'],
+    3 => ['id' => 3, 'name' => 'Windows', 'img' => 'default.png'],
+    4 => ['id' => 4, 'name' => 'macOS', 'img' => 'default.png'],
+    5 => ['id' => 5, 'name' => 'Android', 'img' => 'default.png'],
+    6 => ['id' => 6, 'name' => 'iOS', 'img' => 'default.png'],
+    7 => ['id' => 7, 'name' => 'BSD', 'img' => 'default.png'],
+    8 => ['id' => 8, 'name' => 'Solaris', 'img' => 'default.png'],
+    9 => ['id' => 9, 'name' => 'Unix', 'img' => 'default.png'],
+    10 => ['id' => 10, 'name' => 'Chrome OS', 'img' => 'default.png'],
+    11 => ['id' => 11, 'name' => 'AIX', 'img' => 'default.png'],
+    12 => ['id' => 12, 'name' => 'HP-UX', 'img' => 'default.png'],
+    13 => ['id' => 13, 'name' => 'FreeRTOS', 'img' => 'default.png'],
+    14 => ['id' => 14, 'name' => 'QNX', 'img' => 'default.png'],
+    15 => ['id' => 15, 'name' => 'Tizen', 'img' => 'default.png'],
+    16 => ['id' => 16, 'name' => 'OpenVMS', 'img' => 'default.png'],
+    17 => ['id' => 17, 'name' => 'AmigaOS', 'img' => 'default.png'],
+    18 => ['id' => 18, 'name' => 'BeOS', 'img' => 'default.png'],
+    19 => ['id' => 19, 'name' => 'Haiku', 'img' => 'default.png'],
+];
 /* System ROL */
 
 $cfg['system_rol'] = [
