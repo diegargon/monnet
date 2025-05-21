@@ -686,6 +686,7 @@ $h_misc = $tdata['host_details']['misc'];
                             <?php endforeach; ?>
                         </select>
                         <button id="submitOSFamily"><?= $lng['L_SEND'] ?></button>
+                    </div>
                     <div class="">
                         <label for="os"><?= $lng['L_OS'] ?>: </label><br/>
                         <select id="os">
