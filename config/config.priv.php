@@ -8,7 +8,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.74;
-$cfg['monnet_revision'] = 33;
+$cfg['monnet_revision'] = 34;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.184;
