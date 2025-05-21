@@ -132,11 +132,28 @@ class AnsibleService
             return ['status' => 'error', 'error_msg' => 'pid not exists:' . $pid];
         }
 
+        $task_name = $pb['name'];
+        
+        // Verify if a task with the same name and host already exists and is not done=1
+        $existing_tasks = $this->cmdAnsibleModel->getHostsTasks($hid);
+        foreach ($existing_tasks as $task) {
+            if (
+                isset($task['task_name'], $task['done']) &&
+                $task['task_name'] === $task_name &&
+                (int)$task['done'] !== 1
+            ) {
+                return [
+                    'status' => 'error',
+                    'error_msg' => 'Task already exists with the same name and host that is not done=1'
+                ];
+            }
+        }
+
         $task_data = [
             'hid' => $hid,
             'pid' => $pid,
             'trigger_type' => $trigger_type,
-            'task_name' => $pb['name'],
+            'task_name' => $task_name,
             /* 'extra' => json_encode($extra_vars), */
         ];
         if (json_last_error() !== JSON_ERROR_NONE) {

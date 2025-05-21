@@ -830,6 +830,15 @@ function requestHostDetails(command, command_values = []) {
                         $('#tasks_status_msg').html(jsonData.command_error_msg);
                     }
                 }
+
+                if (jsonData.command_receive === 'pbqueue') {
+                    if (jsonData.command_error === 1 && jsonData.command_error_msg) {
+                        $('.status_msg').html(jsonData.command_error_msg);
+                    } else if (jsonData.command_success === 1 && jsonData.response_msg) {
+
+                        $('.status_msg').html(jsonData.response_msg);
+                    }
+                }
                 /* Delete port */
                 if (jsonData.command_receive === 'deleteHostPort') {
                     $('.status_msg').html(jsonData.response_msg);

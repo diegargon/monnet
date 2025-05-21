@@ -3,25 +3,32 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
 /*
-    TABLA TASK
-    `id`
-    `hid`             host id, ver posibilidad de rango en el futuro
-    `pid`           playbook a ejecutar
-    `trigger_type`    tipo de trigger 1 manual  2 temporizaedo 3 otra task 4 evento
-    `last_triggered`  ultima vez que se ejecuto
-    `task_name`       nombre comun
-    `next_task`       encadena tareas por id
-    `disable`         deshabilita la tarea
+    TABLA TASKS
+
+    `id`                int(11)         PRIMARY KEY AUTO_INCREMENT
+    `hid`               int(11)         NOT NULL
+    `trigger_type`      smallint(6)     NOT NULL
+    `last_triggered`    datetime        NULL
+    `next_trigger`      datetime        NULL
+    `task_name`         varchar(100)    NOT NULL
+    `next_task`         int(11)         NULL DEFAULT 0
+    `disable`           tinyint(1)      NULL DEFAULT 0
+    `task_interval`     varchar(10)     NULL
+    `interval_seconds`  int(11)         NULL
+    `created`           datetime        NULL DEFAULT current_timestamp()
+    `event_id`          int(11)         NULL DEFAULT 0
+    `crontime`          varchar(255)    NULL
+    `groups`            varchar(255)    NULL
+    `pid`               varchar(255)    NOT NULL DEFAULT 'std-ansible-ping'
+    `done`              int(11)         NULL DEFAULT 0
+    `status`            tinyint(4)      NOT NULL DEFAULT 0
 
     Trigger Manual: Encolo el comando, se ejecuta via mgateway, deberia enviar un mensaje
         para avisar de que hay algo en la queue.
-
 */
 
 namespace App\Models;
