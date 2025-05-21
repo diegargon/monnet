@@ -361,7 +361,7 @@ class DBManager
                 throw new \RuntimeException("Error executing JSON update");
             }
 
-            $this->connection->commit(); // Commit si todo va bien
+            $this->connection->commit();
 
             return true;
         } catch (\Exception $e) {

@@ -69,8 +69,7 @@ class FeedMeService
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get(ConfigService::class);
-        $this->db = new DBManager($ctx);
-
+        $this->db = $ctx->get(DBManager::class);
         $this->hostService = new HostService($ctx);
         $this->logSys = new LogSystemService($ctx);
         $this->logHost = new LogHostsService($ctx);

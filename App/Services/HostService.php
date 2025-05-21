@@ -75,7 +75,7 @@ class HostService
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get(ConfigService::class);
         $this->lng = $ctx->get('lng');
-        $this->db = new DBManager($ctx);
+        $this->db = $ctx->get(DBManager::class);
         $this->cmdHostModel = new CmdHostModel($this->db);
         $this->logHostsModel = new LogHostsModel($this->db);
         $this->hostsModel = new HostsModel($this->db);

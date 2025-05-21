@@ -58,7 +58,7 @@ class CmdHostController
 
     public function __construct(AppContext $ctx)
     {
-        $this->db = new DBManager($ctx);
+        $this->db = $ctx->get(DBManager::class);
 
         $this->hostService = new HostService($ctx);
         $this->ansibleService = new AnsibleService($ctx);

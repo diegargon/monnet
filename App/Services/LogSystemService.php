@@ -33,8 +33,7 @@ class LogSystemService
 
     public function __construct(AppContext $ctx)
     {
-        $this->db = new DBManager($ctx);
-
+        $this->db = $ctx->get(DBManager::class);
         $this->lng = $ctx->get('lng');
         $this->ncfg = $ctx->get(ConfigService::class);
 

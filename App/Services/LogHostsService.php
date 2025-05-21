@@ -33,7 +33,7 @@ class LogHostsService
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->db = new DBManager($ctx);
+        $this->db = $ctx->get(DBManager::class);
         $this->logHostsModel = new LogHostsModel($this->db);
         $this->dateTimeService = new DateTimeService();
         $this->ncfg = $ctx->get(ConfigService::class);
