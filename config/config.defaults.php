@@ -8,12 +8,11 @@
 global $cfg_db;
 /* Db Config */
 
-$cfg_db['dbtype'] = 'mysqli'; //do not change
+$cfg_db['dbtype'] = 'mysqli'; # do not change unstested
 $cfg_db['dbhost'] = '172.18.0.1';
 $cfg_db['dbname'] = 'monnet';
 $cfg_db['dbuser'] = 'root';
 $cfg_db['dbpassword'] = 'monnetadmin';
-$cfg_db['dbprefix'] = '';
 $cfg_db['dbcharset'] = 'utf8';
 
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];

@@ -61,7 +61,6 @@ class AppContext
         $this->cfg['dbname'] = $cfg_db['dbname'];
         $this->cfg['dbuser'] = $cfg_db['dbuser'];
         $this->cfg['dbpassword'] = $cfg_db['dbpassword'];
-        $this->cfg['dbprefix'] = $cfg_db['dbprefix'];
         $this->cfg['dbcharset'] = $cfg_db['dbcharset'];
     }
 
