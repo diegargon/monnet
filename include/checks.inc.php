@@ -50,16 +50,6 @@ function common_checks(array $cfg_db, array $cfg): void
     if (empty($cfg)) :
         exit('cfg empty');
     endif;
-    $err_empty_msg = ' can\'t be empty check config.inc.php';
-    $err_nofile_msg = ' file/directory not exists';
-
-    if (empty($cfg['path'])) :
-        exit('path' . $err_empty_msg);
-    elseif (!is_string($cfg['path'])) :
-        exit('path is not a valid string');
-    elseif (!is_dir($cfg['path'])) :
-        exit($cfg['path'] . $err_nofile_msg);
-    endif;
 }
 
 /**
@@ -73,11 +63,7 @@ function usermode_checks(ConfigService $ncfg): void
     $err_numeric_msg = ' must be numeric';
     $err_noexists_msg = ' not exists';
 
-    if (empty($ncfg->get('lang'))) {
-        exit('lang' . $err_empty_msg);
-    }
-
-    $lang_file = $ncfg->get('path') . '/lang/' . $ncfg->get('lang') . '/main.lang.php';
+    $lang_file = 'lang/' . $ncfg->get('default_lang', 'es') . '/main.lang.php';
     if (!file_exists($lang_file)) {
         exit($lang_file . $err_nofile_msg);
     }
@@ -96,9 +82,5 @@ function usermode_checks(ConfigService $ncfg): void
 
     if (empty($ncfg->get('theme'))) {
         exit('theme' . $err_empty_msg);
-    }
-
-    if (!is_dir($ncfg->get('path') . '/tpl/' . $ncfg->get('theme'))) {
-        exit('theme ' . $this->ncfg->get('theme') . ' ' . $err_noexists_msg);
     }
 }

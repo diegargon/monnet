@@ -16,10 +16,6 @@ $cfg_db['dbpassword'] = 'monnetadmin';
 $cfg_db['dbprefix'] = '';
 $cfg_db['dbcharset'] = 'utf8';
 
-/* General  Config */
-$cfg['path'] = '/var/www/html';
-$cfg['lang'] = 'es';
-
 $cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
 
 /* Modules Config */

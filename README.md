@@ -151,7 +151,6 @@ $cfg_db['dbhost']
 $cfg_db['dbname']
 $cfg_db['dbuser']
 $cfg_db['dbpassword']
-$cfg['path'] = '/var/www/html';
 ```
 
 ## Setting the database

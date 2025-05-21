@@ -260,7 +260,7 @@ class UserService
         if ($user && !empty($user['lang'])) {
             $lang = $user['lang'];
         } else {
-            $lang = $this->ncfg->get('default_lang');
+            $lang = $this->ncfg->get('default_lang', 'es');
         }
         return $lang ?? 'es';
     }
