@@ -113,6 +113,10 @@ class CommandRouter
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitOS($command_values);
                 break;
+            case 'submitOSFamily':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitOSFamily($command_values);
+                break;
             case 'submitOSVersion':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitOSVersion($command_values);

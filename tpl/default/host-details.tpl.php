@@ -671,6 +671,22 @@ $h_misc = $tdata['host_details']['misc'];
                         <button id="submitManufacture"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
+                        <label for="os_family"><?= $lng['L_OS_FAMILY'] ?>: </label><br/>
+                        <select id="os_family">
+                            <?php foreach ($ncfg->get('os_family') as $os) :
+                                $selected = '';
+                                if (
+                                    !empty($h_misc['os_family']) &&
+                                    ($os['id'] == $h_misc['os_family'])
+                                ) :
+                                    $selected = ' selected=1 ';
+                                endif;
+                                ?>
+                                <option value="<?= $os['id'] ?>"<?= $selected ?>><?= $os['name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="submitOSFamily"><?= $lng['L_SEND'] ?></button>
+                    <div class="">
                         <label for="os"><?= $lng['L_OS'] ?>: </label><br/>
                         <select id="os">
                             <?php foreach ($ncfg->get('os') as $os) :

@@ -271,6 +271,13 @@ $(document).ready(function () {
             submitCommand('submitOS', {id: hostId, value: osValue});
         }
     });
+    $(document).on("click", "#submitOSFamily", function () {
+        var osValue = $('#os_family').val();
+        var hostId = $('#host_id').val();
+        if (osValue && hostId) {
+            submitCommand('submitOSFamily', {id: hostId, value: osValue});
+        }
+    });    
     $(document).on("click", "#submitOSVersion", function () {
         var osversionValue = $('#os_version').val();
         var hostId = $('#host_id').val();

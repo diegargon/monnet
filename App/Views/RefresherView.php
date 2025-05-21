@@ -224,6 +224,13 @@ class RefresherView
             }
         }
 
+        if (!empty($vhost['misc']['os_family'])) {
+            $os_family = $this->getOsFamily($this->ncfg, $vhost['misc']['os_family']);
+            if (is_array($os_family)) {
+                $host_view['os_family_image'] = $os_family['os_family_image'];
+                $host_view['os_family_name'] = $os_family['name'];
+            }
+        }
         if (!empty($vhost['misc']['system_rol'])) {
             $system_rol = $this->getSystemRol($this->ncfg, $vhost['misc']['system_rol']);
             if (is_array($system_rol)) {
@@ -325,6 +332,32 @@ class RefresherView
                 $os['os_name'] = $os['name'];
 
                 return $os;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param ConfigService $ncfg
+     * @param int $id
+     * @return array<string, string|int>|bool
+     */
+    function getOsFamily(ConfigService $ncfg, int $id): array|bool
+    {
+        $theme = $ncfg->get('theme');
+
+        foreach ($ncfg->get('os_family') as $osf) {
+            if ($osf['id'] == $id) {
+                $imgfile = 'tpl/' . $theme . '/img/icons/' . $osf['img'];
+                if (file_exists($imgfile)) :
+                    $osf['os_family_image'] = $imgfile;
+                else :
+                    $osf['os_family_image'] = 'tpl/' . $theme . '/img/icons/unknown.png';
+                endif;
+                $osf['os_family_name'] = $osf['name'];
+
+                return $osf;
             }
         }
         return false;

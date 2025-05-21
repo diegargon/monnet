@@ -178,6 +178,7 @@ $lng = [
     'L_ONLINE' => 'Online',
     'L_OFFLINE' => 'Offline',
     'L_OS' => 'Os',
+    'L_OS_FAMILY' => 'Os Familia',
     'L_OTHERS' => 'Otros',
     'L_OVERVIEW' => 'Resumen',
     'L_OWNER' => 'Responsable',

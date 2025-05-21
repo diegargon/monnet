@@ -598,6 +598,27 @@ class CmdHostController
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
+    public function submitOSFamily(array $command_values): array
+    {
+        $target_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
+        $field = 'os_family';
+
+        if (!is_numeric($target_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        if ($this->cmdHostModel->updateMiscByID($target_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
+    }    
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
     public function submitOSVersion(array $command_values): array
     {
         $target_id = Filter::varInt($command_values['id']);
