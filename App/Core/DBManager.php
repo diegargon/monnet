@@ -38,13 +38,14 @@ class DBManager
         $dbName = $config['dbname'];
         $username = $config['dbuser'];
         $password = $config['dbpassword'];
+        $charset = $config['dbcharset'];
 
         // Build DSN depending on the database type
         switch ($dbType) {
             case 'mysql':
             case 'mysqli':
                 $port = $port ?? '3306';
-                $this->dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=utf8";
+                $this->dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=$charset";
                 break;
             case 'pgsql':
                 $port = $port ?? '5432';
