@@ -62,7 +62,7 @@ class AnsibleService
      * @param int $target_id
      * @param string $playbook_id
      * @param array<string, string|int> $extra_vars
-     * @return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function runPlaybook(int $target_id, string $playbook_id, array $extra_vars = []): array
     {

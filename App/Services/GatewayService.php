@@ -97,7 +97,7 @@ class GatewayService
      * Helper method to send a command via the gateway.
      *
      * @param array<string, string|int> $send_data
-     * @return array<string, string|int>
+     * @return array<string, mixed>
      */
     public function sendCommand(array $send_data): array
     {
