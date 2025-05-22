@@ -16,26 +16,32 @@ use App\Core\ConfigService;
 /**
  *
  * @var array<string, mixed> $cfg
- * @var array<string, string> $cfg_db
+ * @var array<string, string|int> $cfg_db
  */
 require 'App/Autoloader.php';
 App\Autoloader::register();
 
-if (!file_exists('config/config.defaults.php')) {
-    print 'Missing config.defaults.php. Leaving';
-    exit(1);
-}
 if (!file_exists('config/config.priv.php')) {
     print 'Missing config.priv.php. Leaving';
     exit(1);
 }
-if (!file_exists('/etc/monnet/config.inc.php')) {
-    print 'Missing config.inc.php. Leaving';
+require_once 'config/config.priv.php';
+
+if (!file_exists($cfg['db_cfg_file'])) {
+    print 'Missing config-db.json Leaving';
     exit(1);
 }
+$json_db_cfg = file_get_contents($cfg['db_cfg_file']);
 
-require_once 'config/config.priv.php';
-require_once 'config/config.defaults.php';
+if ($json_db_cfg === false) {
+    exit('Could not read configuration file');
+}
+$cfg_db = json_decode($json_db_cfg, true);
+
+if (json_last_error() !== JSON_ERROR_NONE) {
+    exit(json_last_error_msg());
+}
+
 require_once 'Constants/Constants.php';
 require_once '/etc/monnet/config.inc.php';
 require_once 'include/checks.inc.php';

@@ -1,0 +1,10 @@
+{
+    "python_driver": "mysql-connector", 
+    "dbhost": "localhost",
+    "dbport": 3306,
+    "dbname": "monnet",
+    "dbuser": "root",
+    "dbpassword": "mydbpass",
+    "dbtype": "mysqli",
+    "dbcharset": "utf8"
+}

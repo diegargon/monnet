@@ -8,12 +8,21 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.74;
-$cfg['monnet_revision'] = 37;
+$cfg['monnet_revision'] = 38;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.184;
 $cfg['agent_latest_version'] = 0.194;
 $cfg['app_name'] = 'monnet';
+$cfg['db_cfg_file'] = '/etc/monnet/config-db.json';
+
+$cfg['allowed_images_ext'] = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
+
+/* TO DB */
+$cfg['weather_widget'] = [
+    'country' => 'vigo',
+    'weather_api' => '89fe8d3a8486486fc682ba97dc28850f'
+];
 
 /* Hardware Manufacture */
 $cfg['manufacture'] = [

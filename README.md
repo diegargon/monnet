@@ -23,7 +23,8 @@ I started implementing Ansible as a replacement for phpseclib as a method to con
 
 ## Breaking/Mayor changes
 
-* MonNet no uses the CRON scripts anymore, now MonNet Gateway is in charge, so the two CRON scripts need to be removed.
+* MonNet now use /etc/monnet/config-db.json configuration file, the same as Monnet Gateway, check 'Config' section
+* MonNet not uses the CRON scripts anymore, now MonNet Gateway is in charge, so the two CRON scripts need to be removed.
 
 # Features
 
@@ -67,7 +68,7 @@ Resume:
 
     Non-Commercial Use = Allowed
 
-    Commercial Use = License
+    Commercial Use = Ask
 
 ## MonNet Install
 
@@ -134,24 +135,22 @@ mysql> GRANT ALL PRIVILEGES ON monnet.* TO 'monnet'@'localhost'
 
 ## Config
 
-Check config/config.defaults.php and add the keywords you want to change to /etc/monnet/config.inc.php.
-
-Avoid copy the file just add the keywords you want or need change
-
-Do not rename or modify config.defaults.php directly, as it will be overwritten.
-
-These are the main config keywords you must check/change and copy to the /etc file.
-
-Warning: path config must included even if the default is valid
-
-Mandatory
+Create the file /etc/monnet/config-db.json
 
 ```
-$cfg_db['dbhost']
-$cfg_db['dbname']
-$cfg_db['dbuser']
-$cfg_db['dbpassword']
+{
+    "python_driver": "mysql-connector", 
+    "dbhost": "localhost",
+    "dbport": 3306,
+    "dbname": "monnet",
+    "dbuser": "root",
+    "dbpassword": "mydbpass",
+    "dbtype": "mysqli",
+    "dbcharset": "utf8"
+}
 ```
+
+"python_driver" is relate to Monnet Gateway 
 
 ## Setting the database
 
