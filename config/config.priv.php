@@ -8,11 +8,11 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['monnet_version'] = 0.74;
-$cfg['monnet_revision'] = 39;
+$cfg['monnet_revision'] = 40;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.184;
-$cfg['agent_latest_version'] = 0.194;
+$cfg['agent_latest_version'] = 0.196;
 $cfg['app_name'] = 'monnet';
 $cfg['db_cfg_file'] = '/etc/monnet/config-db.json';
 

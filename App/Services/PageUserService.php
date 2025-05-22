@@ -36,8 +36,7 @@ class PageUserService
 
         $page['page'] = 'index';
         $page['head_name'] = $ncfg->get('web_title');
-        //$page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
-        //$page['web_main']['scriptlink'][] = './scripts/background.js';
+        $page['web_main']['scriptlink'][] = './scripts/user-mgmt.js';
 
         $page['load_tpl'][] = [
             'file' => 'user',
