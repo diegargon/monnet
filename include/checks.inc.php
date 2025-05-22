@@ -22,7 +22,7 @@ function common_checks(array $cfg_db, array $cfg): void
     if (empty($cfg_db)) :
         exit('cfg_db empty');
     endif;
-    $err_empty_msg = ' can\'t be empty check config.inc.php';
+    $err_empty_msg = ' can\'t be empty check /etc/monnet/config.db.json';
 
     if (empty($cfg_db['dbtype'])) :
         exit('dbtype' . $err_empty_msg);
@@ -50,37 +50,4 @@ function common_checks(array $cfg_db, array $cfg): void
     if (empty($cfg)) :
         exit('cfg empty');
     endif;
-}
-
-/**
- *
- * @param ConfigService $ncfg
- */
-function usermode_checks(ConfigService $ncfg): void
-{
-    $err_empty_msg = ' can\'t be empty check config.inc.php';
-    $err_nofile_msg = ' file/directory not exists';
-    $err_numeric_msg = ' must be numeric';
-    $err_noexists_msg = ' not exists';
-
-    $lang_file = 'lang/' . $ncfg->get('default_lang', 'es') . '/main.lang.php';
-    if (!file_exists($lang_file)) {
-        exit($lang_file . $err_nofile_msg);
-    }
-
-    if (empty($ncfg->get('sid_expire'))) {
-        exit('sid_expire' . $err_empty_msg);
-    }
-
-    if (!is_numeric($ncfg->get('sid_expire'))) {
-        exit('sid_expire' . $err_numeric_msg);
-    }
-
-    if (empty($ncfg->get('theme_css'))) {
-        exit('Theme CSS' . $err_empty_msg);
-    }
-
-    if (empty($ncfg->get('theme'))) {
-        exit('theme' . $err_empty_msg);
-    }
 }
