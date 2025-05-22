@@ -109,6 +109,10 @@ class CommandRouter
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitSysAval($command_values);
                 break;
+            case 'submitLinked':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->submitLinked($command_values);
+                break;
             case 'submitOS':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->submitOS($command_values);
@@ -171,6 +175,10 @@ class CommandRouter
             case 'setAlwaysOn':
                 $hostController = new CmdHostController($this->ctx);
                 $response = $hostController->setAlwaysOn($command_values);
+                break;
+            case 'setLinkable':
+                $hostController = new CmdHostController($this->ctx);
+                $response = $hostController->setLinkable($command_values);
                 break;
             case 'setHighlight':
                 $hostController = new CmdHostController($this->ctx);

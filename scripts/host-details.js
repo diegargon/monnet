@@ -132,6 +132,13 @@ $(document).ready(function () {
             submitCommand('submitTitle', {id: hostId, value: titleValue});
         }
     });
+    $(document).on("click", "#submitLinked", function () {
+        var linkedValue = $('#linked_to').val();
+        var hostId = $('#host_id').val();
+        if (linkedValue && hostId) {
+            submitCommand('submitLinked', {id: hostId, value: linkedValue});
+        }
+    });    
     $(document).on("click", "#submitHostname", function () {
         var titleValue = $('#host-name').val();
         var hostId = $('#host_id').val();

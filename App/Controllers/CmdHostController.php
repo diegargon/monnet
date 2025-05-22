@@ -577,6 +577,28 @@ class CmdHostController
      * @param array<string, string|int> $command_values
      * @return array<string, string|int>
      */
+    public function submitLinked(array $command_values): array
+    {
+        $host_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
+        $field = 'linked';
+
+        if (!is_numeric($host_id)) {
+            return Response::stdReturn(false, "$field: Invalid input data");
+        }
+        # TODO check if is valid linked host
+        if ($this->cmdHostModel->updateByID($host_id, [$field => $value])) {
+            return Response::stdReturn(true, "$field: successfully");
+        }
+
+        return Response::stdReturn(false, "$field: error");
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
     public function submitOS(array $command_values): array
     {
         $target_id = Filter::varInt($command_values['id']);
@@ -612,7 +634,7 @@ class CmdHostController
         }
 
         return Response::stdReturn(false, "$field: error");
-    }    
+    }
 
     /**
      *
@@ -1005,6 +1027,23 @@ class CmdHostController
         $value = Filter::varInt($command_values['value']);
 
         if ($this->cmdHostModel->updateMiscByID($target_id, ['always_on' => $value])) {
+            return Response::stdReturn(true, $field . ': success', true);
+        } else {
+            return Response::stdReturn(false, "$field: failed");
+        }
+    }
+    public function setLinkable(array $command_values): array
+    {
+        $field = 'linked';
+        $host_id = Filter::varInt($command_values['id']);
+        $value = Filter::varInt($command_values['value']);
+
+        # Linkable host the linked field is equal to his ID
+        if ($value == 1) {
+            $value = $host_id; 
+        }
+
+        if ($this->cmdHostModel->updateByID($host_id, [$field => $value])) {
             return Response::stdReturn(true, $field . ': success', true);
         } else {
             return Response::stdReturn(false, "$field: failed");

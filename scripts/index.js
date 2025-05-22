@@ -226,7 +226,6 @@ $(document).ready(function () {
         }
     });
 
-    //TODO Borrar
     $(document).on("click", "#submitPorts", function () {
         var portsValue = $('#checkports').val();
         var hostId = $('#host_id').val();
@@ -263,7 +262,7 @@ $(document).ready(function () {
         if (savalValue && hostId) {
             submitCommand('submitSysAval', {id: hostId, value: savalValue});
         }
-    });
+    });   
     $(document).on("click", "#submitOS", function () {
         var osValue = $('#os').val();
         var hostId = $('#host_id').val();

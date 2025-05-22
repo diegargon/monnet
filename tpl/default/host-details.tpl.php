@@ -563,9 +563,19 @@ $h_misc = $tdata['host_details']['misc'];
                             <?= !empty($h_misc['always_on']) ? ' checked' : '' ?>>
                     </div>
                     <div class="">
+                        <label for="linkable"><?= $lng['L_LINKABLE'] ?></label>
+                        <input type="hidden" id="linkable" value="0">
+                        <input
+                            type="checkbox"
+                            id="linkable"
+                            data-command="setLinkable"
+                            <?= $tdata['host_details']['linked'] == $tdata['host_details']['id'] ? ' checked' : null ?>>
+                    </div>
+                    <div class="">
                         <label for="disable_host"><?= $lng['L_DISABLE'] ?></label>
                         <input type="hidden" id="host_disable" value="0">
                         <input
+                            disabled 
                             type="checkbox"
                             id="host_on"
                             data-command="setHostDisable"
@@ -705,6 +715,12 @@ $h_misc = $tdata['host_details']['misc'];
                         <button id="submitOS"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
+                        <label for="os_version"><?= $lng['L_VERSION'] ?>: </label><br/>
+                        <input type="text" size="20" id="os_version" name="os_version"
+                            value="<?= $h_misc['os_version'] ?? '' ?>" />
+                        <button id="submitOSVersion"><?= $lng['L_SEND'] ?></button>
+                    </div>
+                    <div class="">
                         <label for="system_rol"><?= $lng['L_ROL'] ?>: </label><br/>
                         <select id="system_rol">
                             <?php foreach ($ncfg->get('system_rol') as $system_rol) :
@@ -741,10 +757,11 @@ $h_misc = $tdata['host_details']['misc'];
                         <button id="submitSysAval"><?= $lng['L_SEND'] ?></button>
                     </div>
                     <div class="">
-                        <label for="os_version"><?= $lng['L_VERSION'] ?>: </label><br/>
-                        <input type="text" size="20" id="os_version" name="os_version"
-                            value="<?= $h_misc['os_version'] ?? '' ?>" />
-                        <button id="submitOSVersion"><?= $lng['L_SEND'] ?></button>
+                        <label for="linked_to"><?= $lng['L_LINKED'] ?>: </label><br/>
+                        <select id="linked_to">
+                            <option value="0"><?= $lng['L_NONE'] ?></option>
+                        </select>
+                        <button id="submitLinked"><?= $lng['L_SEND'] ?></button>
                     </div>
                 </div>
                 <!-- /right config column -->

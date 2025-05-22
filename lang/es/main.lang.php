@@ -149,6 +149,8 @@ $lng = [
     'L_LOGGING' => 'Registros',
     'L_LOGMSG_TOO_LONG' => 'Mensaje log demasiado largo. Cortado!',
     'L_LAST_SEEN_ONLINE' => 'Visto online',
+    'L_LINKED' => 'Linked',
+    'L_LINKABLE' => 'Enlazable',
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',
