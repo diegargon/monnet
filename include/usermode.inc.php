@@ -11,8 +11,6 @@
  */
 use App\Services\UserService;
 
-usermode_checks($ncfg);
-
 session_start();
 
 $userService = $ctx->get(UserService::class);
