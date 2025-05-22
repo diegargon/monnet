@@ -4,6 +4,7 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+$user = $tdata['user'];
 ?>
 <div class="user-container">
     <h1>Editar Perfil</h1>
@@ -11,19 +12,19 @@
         <table class="form-table">
             <tr>
                 <td><label for="username">Usuario:</label></td>
-                <td><input type="text" id="username" name="username" required></td>
+                <td><input type="text" id="username" name="username" required value="<?php echo $user['username'] ?? ''; ?>"></td>
             </tr>
 
             <tr>
                 <td><label for="email">Email:</label></td>
-                <td><input type="text" id="email" name="email" required></td>
+                <td><input type="text" id="email" name="email" required value="<?php echo $user['email'] ?? ''; ?>"></td>
             </tr>
 
             <tr>
                 <td><label for="currentPassword">Contraseña actual:</label></td>
                 <td>
                     <div class="password-container">
-                        <input type="password" id="currentPassword" name="currentPassword">
+                        <input type="password" id="currentPassword" name="currentPassword" required>
                         <span class="toggle-password">👁️</span>
                     </div>
                 </td>
@@ -33,7 +34,7 @@
                 <td><label for="newPassword">Nueva contraseña:</label></td>
                 <td>
                     <div class="password-container">
-                        <input type="password" id="newPassword" name="newPassword">
+                        <input type="password" id="newPassword" name="newPassword" required>
                         <span class="toggle-password">👁️</span>
                     </div>
                 </td>
@@ -43,7 +44,7 @@
                 <td><label for="confirmPassword">Confirmar contraseña:</label></td>
                 <td>
                     <div class="password-container">
-                        <input type="password" id="confirmPassword" name="confirmPassword">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
                         <span class="toggle-password">👁️</span>
                     </div>
                 </td>
@@ -163,7 +164,7 @@
                 <td><label for="theme">Tema:</label></td>
                 <td>
                     <select id="theme" name="theme" disabled required>
-                        <option value="default">default</option>
+                        <option value="default" <?php echo (isset($user['theme']) && $user['theme'] === 'default') ? 'selected' : ''; ?>>default</option>
 
                     </select>
                 </td>
@@ -173,8 +174,8 @@
                 <td><label for="lang">Idioma:</label></td>
                 <td>
                     <select id="lang" name="lang" required>
-                        <option value=en>English</option>
-                        <option value=es>Spanish</option>
+                        <option value="en" <?php echo (isset($user['lang']) && $user['lang'] === 'en') ? 'selected' : ''; ?>>English</option>
+                        <option value="es" <?php echo (isset($user['lang']) && $user['lang'] === 'es') ? 'selected' : ''; ?>>Spanish</option>
                         <option value=af>Afrikaans</option>
                         <option value=sq>Albanian</option>
                         <option value=am>Amharic</option>

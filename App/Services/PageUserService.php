@@ -38,6 +38,7 @@ class PageUserService
         $page['head_name'] = $ncfg->get('web_title');
         $page['web_main']['scriptlink'][] = './scripts/user-mgmt.js';
 
+        $page['user'] = $user;
         $page['load_tpl'][] = [
             'file' => 'user',
             'place' => 'left_col_pre',
