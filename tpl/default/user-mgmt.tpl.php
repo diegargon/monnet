@@ -6,6 +6,7 @@
  */
 ?>
 <div class="user-container">
+    <div class="status-msg-create"></div>
     <h1>Crear Nuevo Usuario</h1>
     <form id="createUserForm">
         <table class="user-form-table">
@@ -51,7 +52,7 @@
         </table>
 
         <div class="btn-container">
-            <button disabled type="submit">Crear Usuario</button>
+            <button type="submit">Crear Usuario</button>
         </div>
     </form>
 </div>

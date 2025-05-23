@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    // Utilidad para mostrar mensajes de error
+    // Common Code
     function showFormError(formSelector, msg) {
         let $form = $(formSelector);
         let $err = $form.find('.form-error');
@@ -19,7 +19,21 @@ $(document).ready(function () {
         });
     }
 
-    // --- Crear usuario ---
+    // Función para mostrar/ocultar contraseña
+    document.querySelectorAll('.toggle-password').forEach(function(element) {
+        element.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.textContent = '👁️';
+            } else {
+                input.type = 'password';
+                this.textContent = '👁️';
+            }
+        });
+    });
+
+    // Create User Code
     function validateUserForm() {
         const username = $('#newUsername').val().trim();
         const email = $('#newEmail').val().trim();
@@ -40,14 +54,11 @@ $(document).ready(function () {
         $('#createUserForm button[type=submit]').prop('disabled', !validateUserForm());
     });
 
-    $('#createUserForm .toggle-password').on('click', function () {
-        let input = $(this).siblings('input');
-        input.attr('type', input.attr('type') === 'password' ? 'text' : 'password');
-    });
 
     $('#createUserForm').on('submit', function (e) {
         e.preventDefault();
         clearFormError('#createUserForm');
+        $('.status-msg-create').text('').hide();
         if (!validateUserForm()) {
             showFormError('#createUserForm', 'Todos los campos son obligatorios y las contraseñas deben coincidir.');
             return;
@@ -61,10 +72,8 @@ $(document).ready(function () {
         };
 
         const data = {
-            ct: {
-                command: 'createUser',
-                command_values: command_values
-            }
+            command: 'createUser',
+            command_values: command_values
         };
 
         console.log('Enviando (createUser):', data);
@@ -76,7 +85,7 @@ $(document).ready(function () {
                 try {
                     json = (typeof resp === 'object') ? resp : JSON.parse(resp);
                 } catch (e) {
-                    showFormError('#createUserForm', 'Respuesta inesperada del servidor.');
+                    $('.status-msg-create').text('Respuesta inesperada del servidor.').show();
                     return;
                 }
                 if (json.success) {
@@ -85,92 +94,98 @@ $(document).ready(function () {
                     $('#createUserForm button[type=submit]').prop('disabled', true);
                     clearFormError('#createUserForm');
                     markInvalidFields('#createUserForm', []);
+                    $('.status-msg-create').text('').hide();
+                } else if (json.command_error) {
+                    $('.status-msg-create').text(json.command_error_msg || 'Error al crear usuario').show();
                 } else {
                     showFormError('#createUserForm', json.message || 'Error al crear usuario');
                 }
             })
             .fail(function () {
-                showFormError('#createUserForm', 'Error al crear usuario');
+                $('.status-msg-create').text('Error al crear usuario').show();
             });
     });
 
-    // --- Modificar usuario actual ---
-    function validateEditUserForm() {
-        const username = $('#editUsername').val().trim();
-        const email = $('#editEmail').val().trim();
-        const pass = $('#editUserPassword').val();
-        const pass2 = $('#editConfirmUserPassword').val();
+    // EDIT USER
+
+    function validateProfileForm() {
+        const username = $('#username').val().trim();
+        const email = $('#email').val().trim();
+        const currentPass = $('#currentPassword').val();
+        const newPass = $('#newPassword').val();
+        const confirmPass = $('#confirmPassword').val();
         let invalid = [];
-        if (!username) invalid.push('#editUsername');
-        if (!email) invalid.push('#editEmail');
-        if (pass || pass2) {
-            if (!pass) invalid.push('#editUserPassword');
-            if (!pass2) invalid.push('#editConfirmUserPassword');
-            if (pass && pass2 && pass !== pass2) invalid.push('#editUserPassword', '#editConfirmUserPassword');
+        if (!username) invalid.push('#username');
+        if (!email) invalid.push('#email');
+        if (!currentPass) invalid.push('#currentPassword');
+        if (newPass || confirmPass) {
+            if (!newPass) invalid.push('#newPassword');
+            if (!confirmPass) invalid.push('#confirmPassword');
+            if (newPass && confirmPass && newPass !== confirmPass) invalid.push('#newPassword', '#confirmPassword');
         }
-        markInvalidFields('#editUserForm', invalid);
+        markInvalidFields('#profileForm', invalid);
         return invalid.length === 0;
     }
 
-    $('#editUserForm input').on('input', function () {
-        clearFormError('#editUserForm');
-        $('#editUserForm button[type=submit]').prop('disabled', !validateEditUserForm());
+    $('#profileForm input').on('input', function () {
+        clearFormError('#profileForm');
+        $('#profileForm button[type=submit]').prop('disabled', !validateProfileForm());
     });
 
-    $('#editUserForm .toggle-password').on('click', function () {
-        let input = $(this).siblings('input');
-        input.attr('type', input.attr('type') === 'password' ? 'text' : 'password');
-    });
-
-    $('#editUserForm').on('submit', function (e) {
+    $('#profileForm').on('submit', function (e) {
         e.preventDefault();
-        clearFormError('#editUserForm');
-        if (!validateEditUserForm()) {
-            showFormError('#editUserForm', 'Todos los campos son obligatorios y las contraseñas deben coincidir.');
+        clearFormError('#profileForm');
+        $('.status-msg-modify').text('').hide();
+        if (!validateProfileForm()) {
+            showFormError('#profileForm', 'Todos los campos obligatorios deben estar completos y las contraseñas deben coincidir.');
             return;
         }
 
         const command_values = {
-            user_id: $('#editUserId').val(),
-            username: $('#editUsername').val().trim(),
-            email: $('#editEmail').val().trim(),
-            isAdmin: $('#editIsAdmin').is(':checked') ? 1 : 0
+            username: $('#username').val().trim(),
+            email: $('#email').val().trim(),
+            current_password: $('#currentPassword').val(),
+            timezone: $('#timezone').val(),
+            theme: $('#theme').val(),
+            lang: $('#lang').val()
         };
-        const pass = $('#editUserPassword').val();
-        if (pass) command_values.password = pass;
+        const newPass = $('#newPassword').val();
+        if (newPass) command_values.new_password = newPass;
+
         const data = {
-            ct: {
-                command: 'updateUser',
-                command_values: command_values
-            }
+            command: 'updateProfile',
+            command_values: command_values
         };
 
-        console.log('Enviando (updateUser):', data);
+        console.log('Enviando (updateProfile):', data);
 
         $.post('submitter.php', data)
             .done(function (resp) {
-                console.log('Recibido (updateUser):', resp);
+                console.log('Recibido (updateProfile):', resp);
                 let json;
                 try {
                     json = (typeof resp === 'object') ? resp : JSON.parse(resp);
                 } catch (e) {
-                    showFormError('#editUserForm', 'Respuesta inesperada del servidor.');
+                    $('.status-msg-modify').text('Respuesta inesperada del servidor.').show();
                     return;
                 }
                 if (json.success) {
-                    alert('Usuario modificado correctamente');
-                    clearFormError('#editUserForm');
-                    markInvalidFields('#editUserForm', []);
+                    alert('Perfil actualizado correctamente');
+                    clearFormError('#profileForm');
+                    markInvalidFields('#profileForm', []);
+                    $('.status-msg-modify').text('').hide();
+                } else if (json.command_error) {
+                    $('.status-msg-modify').text(json.command_error_msg || 'Error al actualizar perfil').show();
                 } else {
-                    showFormError('#editUserForm', json.message || 'Error al modificar usuario');
+                    showFormError('#profileForm', json.message || 'Error al actualizar perfil');
                 }
             })
             .fail(function () {
-                showFormError('#editUserForm', 'Error al modificar usuario');
+                $('.status-msg-modify').text('Error al actualizar perfil').show();
             });
     });
 
 });
 
 // (mover esto CSS)
-$('<style>.invalid-field{border:1.5px solid red !important;}</style>').appendTo('head');
+$('<style>.invalid-field{border:2.5px solid red !important;}</style>').appendTo('head');
