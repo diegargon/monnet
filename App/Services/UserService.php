@@ -142,25 +142,29 @@ class UserService
 
     public function updateUser(int $userId, array $userData): string|bool
     {
-        $user = $this->getUser($userId);
+        try {
+            $user = $this->getUser($userId);
 
-        if (empty($user)) {
-            return 'User not exists';
-        }
-
-        if (!empty($userData['email'])) {
-            $existingUser = $this->userModel->getByEmail($userData['email']);
-            if ($existingUser && $existingUser['id'] != $userId) {
-                return 'Email is already in use';
+            if (empty($user)) {
+                return 'User not exists';
             }
-        }
 
-        if (!empty($userData['password'])) {
-            $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
-        }
-        $this->userModel->update($userId, $userData);
+            if (!empty($userData['email'])) {
+                $existingUser = $this->userModel->getByEmail($userData['email']);
+                if ($existingUser && $existingUser['id'] != $userId) {
+                    return 'Email is already in use';
+                }
+            }
 
-        return  true;
+            if (!empty($userData['password'])) {
+                $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
+            }
+            $this->userModel->update($userId, $userData);
+
+            return true;
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
     }
 
     public function deleteUser(int $userId): bool
