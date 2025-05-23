@@ -530,7 +530,7 @@ class Filter
      */
     public static function varUsername(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
-        // Filter name, only az, no special chars, no spaces
+        // Allow letters, numbers, underscore, hyphen
         $length = strlen($var);
 
         if (
@@ -538,16 +538,8 @@ class Filter
         ) {
             return false;
         }
-        /*
-            if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-            (!empty($min_size) && (strlen($var) < $min_size))) {
-            return false;
-            }
 
-            return $var;
-        */
-
-        if (!preg_match('/^[A-Za-z]+$/', $var)) {
+        if (!preg_match('/^[A-Za-z0-9_-]+$/', $var)) {
             return false;
         }
         return $var;
@@ -597,28 +589,19 @@ class Filter
     {
         $length = strlen($var);
 
-        // Validate length and email format
+        // Validate length
         if (
             empty($var) || (!empty($max_size) && $length > $max_size) || (!empty($min_size) && $length < $min_size)
         ) {
             return false;
         }
 
-        // Improvement: Use filter_var to check email format
+
         if (!filter_var($var, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
         return $var;
-        // Validate email
-        /*
-            if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) ||
-                (!empty($min_size) && (strlen($var) < $min_size))) {
-                return false;
-            }
-
-            return $var;
-         */
     }
 
     /**
@@ -720,13 +703,21 @@ class Filter
      */
     public static function varPassword(mixed $var, ?int $max_size = null, ?int $min_size = null): string|false
     {
-        // Password validate safe password
+        // Password validate: allow A-Za-z0-9 and safe specials, forbid spaces and DB-conflicting chars
         if (
-            (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
+            (!empty($max_size) && (strlen($var) > $max_size)) ||
+            (!empty($min_size) && (strlen($var) < $min_size))
         ) {
             return false;
         }
-        // TODO
+        // Forbidden: space, ', ", \, ;, `
+        if (preg_match('/[\'"\\\\;` ]/', $var)) {
+            return false;
+        }
+        // Allowed: A-Za-z0-9 and specials except forbidden above
+        if (!preg_match('/^[A-Za-z0-9!@#$%^&*()_\-+=\[\]{}:,.<>\/?|~]+$/', $var)) {
+            return false;
+        }
         return $var;
     }
 
