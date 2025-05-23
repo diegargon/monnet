@@ -44,7 +44,7 @@
                 <td><label for="userRole">Rol:</label></td>
                 <td>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="isAdmin" name="isAdmin">
+                        <input type="checkbox" id="isAdmin" name="isAdmin" checked disabled>
                         <label for="isAdmin">Usuario administrador</label>
                     </div>
                 </td>

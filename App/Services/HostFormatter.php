@@ -41,6 +41,7 @@ class HostFormatter
     {
         $lng = $this->ctx->get('lng');
         $user = $this->ctx->get(UserService::class);
+        $timezone = $user->getTimezone();
 
         if (!isset($this->networksService)) {
             $this->networksService = new NetworksService($this->ctx);
@@ -75,7 +76,7 @@ class HostFormatter
         if (!empty($host['last_check'])) :
             $host['f_last_check'] = DateTimeService::utcToTz(
                 $host['last_check'],
-                $user->getTimezone(),
+                $timezone,
                 $this->ncfg->get('datetime_format')
             );
         endif;
@@ -83,14 +84,14 @@ class HostFormatter
         if (!empty($host['last_seen'])) :
             $host['f_last_seen'] = DateTimeService::utcToTz(
                 $host['last_seen'],
-                $user->getTimezone(),
+                $timezone,
                 $this->ncfg->get('datetime_format')
             );
         endif;
 
         $host['formated_creation_date'] = DateTimeService::utcToTz(
             $host['created'],
-            $this->ncfg->get('default_timezone'),
+            $timezone,
             $this->ncfg->get('datetime_format')
         );
 
@@ -159,8 +160,8 @@ class HostFormatter
             endif;
         endforeach;
         */
-
-        $timezone = $this->ncfg->get('default_timezone');
+        $user = $this->ctx->get(UserService::class);
+        $timezone = $user->getTimezone();
         $timeformat = $this->ncfg->get('datetime_format_min');
         foreach ($logs_items as $item) :
             $date = DateTimeService::utcToTz($item['date'], $timezone, $timeformat);
@@ -244,9 +245,10 @@ class HostFormatter
         }
 
         if (!empty($host['misc']['agent_last_contact'])) {
+            $user = $this->ctx->get(UserService::class);
             $host['misc']['f_agent_contact'] = DateTimeService::formatTimestamp(
                 $host['misc']['agent_last_contact'],
-                $this->ncfg->get('default_timezone'),
+                $user->getTimezone(),
                 $this->ncfg->get('datetime_format')
             );
         }

@@ -52,7 +52,6 @@ class UserSession
 
     public function isLoggedIn(): bool
     {
-        # TODO: Filter
         if (isset($_COOKIE['PHPSESSID']) && $_COOKIE['PHPSESSID'] === session_id()) {
             return true;
         } else {

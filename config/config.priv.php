@@ -5,10 +5,8 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
-!defined('IN_WEB') ? exit : true;
-
-$cfg['monnet_version'] = 0.74;
-$cfg['monnet_revision'] = 40;
+$cfg['monnet_version'] = 0.76;
+$cfg['monnet_revision'] = 3;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.184;
@@ -299,7 +297,7 @@ $cfg['system_rol'] = [
 $cfg['sys_availability'] = [
     0 => ['id' => 0, 'name' => 'None'],
     1 => ['id' => 1, 'name' => 'HA Active-Passive'],
-    2 => ['id' => 1, 'name' => 'HA Active-Active'],
+    2 => ['id' => 2, 'name' => 'HA Active-Active'],
     3 => ['id' => 3, 'name' => 'Fault Tolerant'],
     4 => ['id' => 4, 'name' => 'Standalone/SPOF'],
     5 => ['id' => 5, 'name' => 'Clustered'],

@@ -22,14 +22,24 @@ class RefresherView
     private TemplateService $templates;
     private HostService $hostService;
     private DateTimeService $dateTimeService;
+    private userService $user;
 
     public function __construct(AppContext $ctx, TemplateService $templates)
     {
         $this->ctx = $ctx;
         $this->ncfg = $ctx->get(ConfigService::class);
         $this->templates = $templates;
+        $this->user = $this->ctx->get(UserService::class);
+        $this->timezone = $this->user->getTimezone();
     }
 
+    /**
+     *
+     * @param array<string, mixed> $hosts_view
+     * @param string $title
+     * @param string $containerId
+     * @return array<string, mixed>
+     */
     public function renderHighlightHosts(array $hosts_view, string $title, string $containerId): array
     {
         return [
@@ -42,6 +52,13 @@ class RefresherView
         ];
     }
 
+    /**
+     *
+     * @param array<string, mixed> $hosts_view
+     * @param string $title
+     * @param string $containerId
+     * @return array
+     */
     public function renderOtherHosts(array $hosts_view, string $title, string $containerId): array
     {
         return [
@@ -54,6 +71,11 @@ class RefresherView
         ];
     }
 
+    /**
+     *
+     * @param array<string, string|int> $logs
+     * @return array<string, string|int>
+     */
     public function renderTermLogs(array $logs): array
     {
         if (!isset($this->dateTimeService)) {
@@ -79,12 +101,22 @@ class RefresherView
         ];
     }
 
+    /**
+     *
+     * @param array<string, mixed> $data
+     * @return void
+     */
     public function renderJson(array $data): void
     {
         header('Content-Type: application/json; charset=UTF-8');
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     *
+     * @param array $host_logs
+     * @return array<string, string|int>
+     */
     public function termHostsLogsFormat(array $host_logs): array
     {
         if (!isset($this->hostService)) {
@@ -109,6 +141,11 @@ class RefresherView
         return $host_logs;
     }
 
+    /**
+     *
+     * @param array<string, string|int> $logs
+     * @return array<string, string>
+     */
     public function termSystemLogsFormat(array $system_logs): array
     {
         foreach ($system_logs as &$system_log) {
@@ -119,6 +156,11 @@ class RefresherView
         return $system_logs;
     }
 
+    /**
+     *
+     * @param array<string, string|int> $logs
+     * @return array
+     */
     private function termLogsFormat(array $logs): array
     {
         array_walk($logs, function(&$log) {
@@ -162,16 +204,13 @@ class RefresherView
      * Formatea los datos de los hosts para la vista.
      *
      * @param array<string, mixed> $hosts_view
-     * @param object $user
-     * @param object $ncfg
      * @return array<string, mixed>
      */
     public function formatHosts(array $hosts_view): array
     {
-        $user = $this->ctx->get(UserService::class);
-        $theme = $user->getTheme();
+        $theme = $this->user->getTheme();
         $lng = $this->ctx->get('lng');
-        $date_now = new \DateTime(DateTimeService::dateNow(), new \DateTimeZone('UTC'));
+        $date_now = new \DateTime(DateTimeService::dateNow(), new \DateTimeZone($this->timezone));
 
         foreach ($hosts_view as $key => $vhost) {
             $hosts_view[$key]['theme'] = $theme;
@@ -204,7 +243,6 @@ class RefresherView
      *
      * @param array<string, mixed> $host_view
      * @param array<string, mixed> $vhost
-     * @param object $ncfg
      */
     private function addMiscData(array &$host_view, array $vhost): void
     {
@@ -246,12 +284,12 @@ class RefresherView
      * @param array<string, mixed> $host_view
      * @param array<string, mixed> $vhost
      * @param \DateTime $date_now
-     * @param object $ncfg
      */
     private function addGlowTag(array &$host_view, array $vhost, \DateTime $date_now): void
     {
         $host_view['glow_tag'] = '';
-        $change_time = new \DateTime($vhost['glow'], new \DateTimeZone('UTC'));
+        $timezone = $this->user->getTimezone();
+        $change_time = new \DateTime($vhost['glow'], new \DateTimeZone($timezone));
         $diff = $date_now->diff($change_time);
         $minutes_diff = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
 

@@ -207,7 +207,6 @@ class UserService
         $user = $this->userSession->getCurrentUser();
 
         if (!empty($user['timezone'])) {
-            # TODO: Validate
             $timezone = $user['timezone'];
         } else {
             $timezone = $this->ncfg->get('default_timezone', 'UTC');
@@ -230,7 +229,6 @@ class UserService
     {
         return sha1($password);
     }
-
 
     /**
      *

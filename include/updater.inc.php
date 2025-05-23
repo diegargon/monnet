@@ -5,16 +5,18 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+use App\Core\DBManager;
 use App\Core\AppContext;
+use App\Core\ConfigService;
 use App\Services\LogSystemService;
 
 !defined('IN_WEB') ? exit : true;
 
-$logSys = new LogSystemService($GLOBALS['ctx'] ?? null);
+$logSys = new LogSystemService($ctx);
 
-function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $files_version): void
+function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, float $files_version): void
 {
-    # TODO: No Initialice in func
+    global $logSys;
     $logSys->notice("Triggered updater File version: $files_version DB version: $db_version");
 
     // 0.60 COMPLETED
@@ -375,27 +377,25 @@ function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $f
         }
     }
 
-    // 0.75
+    // 0.75 DONE
     $update = 0.75;
-    if ($db_version == 0.00) {
+    if ($db_version == 0.74) {
         try {
-            //$db->query("
-            //");
             $db->query("START TRANSACTION");
-            # DONE already after update
+            # DONE already done, need update
             $now = gmdate('Y-m-d H:i:s');
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('last_send_logs', JSON_QUOTE('$now'), 4, 0, NULL, 0),
                 ('last_discovery_hosts', JSON_QUOTE('$now'), 4, 0, NULL, 0),
-                ('last_host_checker', JSON_QUOTE('$now'), 4, 0, NULL, 0),
+                ('last_hosts_checker', JSON_QUOTE('$now'), 4, 0, NULL, 0),
                 ('last_ansible_task', JSON_QUOTE('$now'), 4, 0, NULL, 0),
                 ('last_prune', JSON_QUOTE('$now'), 4, 0, NULL, 0),
                 ('last_weekly_task', JSON_QUOTE('$now'), 4, 0, NULL, 0),
                 ('default_lang', JSON_QUOTE('es'), 0, 1, NULL, 0);
             ");
-            $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
+            $db->query("COMMIT");
             $db_version = $update;
             $logSys->notice("Update version to $update successful");
         } catch (Exception $e) {
@@ -405,6 +405,20 @@ function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $f
         }
     }
 
+    // 0.76
+    $update = 0.76;
+    if ($db_version == 0.75) {
+        try {
+            # DONE
+            $db->query("ALTER TABLE `users` ADD `updated` DATETIME DEFAULT NULL");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
     // Later
     $update = 0.00;
     if ($db_version == 0.00) {
@@ -415,8 +429,6 @@ function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $f
             $db->query("ALTER TABLE `users` ADD `dateformat` VARCHAR(20) NULL;");
             # User rols
             $db->query("ALTER TABLE `users` ADD `rol` INT NULL DEFAULT 0;");
-            //$db->query("
-            //");
             $db->query("START TRANSACTION");
             # Unsed keyword
             $db->query("DELETE FROM `config` WHERE `ckey` = 'clean_hosts_days'");
@@ -455,7 +467,7 @@ function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $f
 }
 
 /**
- * @var Config $ncfg
+ * @var ConfigService $ncfg
  * @var DBManager $db
  */
 if (!$db->isConnected()) {

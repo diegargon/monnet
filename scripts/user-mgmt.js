@@ -1,3 +1,10 @@
+
+/**
+ *
+ * @author diego/@/envigo.net
+ * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ */
+
 $(document).ready(function () {
     // Common Code
     function showFormError(formSelector, msg) {
@@ -88,7 +95,7 @@ $(document).ready(function () {
                     $('.status-msg-create').text('Respuesta inesperada del servidor.').show();
                     return;
                 }
-                if (json.success) {
+                if (json.command_success) {
                     alert('Usuario creado correctamente');
                     $('#createUserForm')[0].reset();
                     $('#createUserForm button[type=submit]').prop('disabled', true);
@@ -169,7 +176,7 @@ $(document).ready(function () {
                     $('.status-msg-modify').text('Respuesta inesperada del servidor.').show();
                     return;
                 }
-                if (json.success) {
+                if (json.command_success) {
                     alert('Perfil actualizado correctamente');
                     clearFormError('#profileForm');
                     markInvalidFields('#profileForm', []);

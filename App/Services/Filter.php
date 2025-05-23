@@ -1308,4 +1308,18 @@ class Filter
         // SID: strict alphanumeric + dash/underscore (PHP default session id charset)
         return self::varStrict($_COOKIE[$val], $size);
     }
+
+    /**
+     * Validates a timezone string (must be a valid PHP timezone identifier).
+     *
+     * @param mixed $val The value to validate.
+     * @return string|false The validated timezone or false if invalid.
+     */
+    public static function varTimezone(mixed $val): string|false
+    {
+        if (empty($val) || !in_array($val, \DateTimeZone::listIdentifiers(), true)) {
+            return false;
+        }
+        return $val;
+    }
 }

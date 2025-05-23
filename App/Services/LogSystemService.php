@@ -36,8 +36,8 @@ class LogSystemService
         $this->db = $ctx->get(DBManager::class);
         $this->lng = $ctx->get('lng');
         $this->ncfg = $ctx->get(ConfigService::class);
-
         $this->logSystemModel = new LogSystemModel($this->db);
+        # TODO user timezone (cycle dependencia UserService)
     }
 
     /**

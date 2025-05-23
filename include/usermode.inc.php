@@ -14,6 +14,8 @@ use App\Services\UserService;
 session_start();
 
 $userService = $ctx->get(UserService::class);
+$timezone = $userService->getTimezone();
+date_default_timezone_set($timezone);
 
 if ($userService->getLang() !== 'es') {
     $default_lng = $lng; # Default lang

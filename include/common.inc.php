@@ -69,6 +69,4 @@ $ctx->setLang($lng);
 $ncfg = $ctx->set(ConfigService::class, new ConfigService($ctx));
 $ncfg->init($cfg);
 
-date_default_timezone_set($ncfg->get('default_timezone'));
-
 require_once 'include/updater.inc.php';
