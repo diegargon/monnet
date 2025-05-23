@@ -315,7 +315,7 @@ class CommandRouter
                 $response = $cfgController->setMultiple($command_values);
                 break;
             /*
-             *  User Prefs
+             *  User
              */
             case 'network_select':
             case 'network_unselect':
@@ -331,6 +331,16 @@ class CommandRouter
             case 'show_host_only_cat':
                 $userController = new UserController($this->ctx);
                 $response = $userController->onlyOneHostsCat($command, $command_values);
+                break;
+
+            case 'updateProfile':
+                $userController = new UserController($this->ctx);
+                $response = $userController->updateProfile($command_values);
+                break;
+
+            case 'createUser':
+                $userController = new UserController($this->ctx);
+                $response = $userController->createUser($command_values);
                 break;
 
             case 'change_bookmarks_tab':

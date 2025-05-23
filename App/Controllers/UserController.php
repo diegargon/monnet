@@ -125,4 +125,133 @@ class UserController
 
         return Response::stdReturn(true, 'ok');
     }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function updateProfile(array $command_values): array
+    {
+        $user = $this->user->getCurrentUser();
+        if (empty($user['id'])) {
+            return Response::stdReturn(false, 'No autenticado', true);
+        }
+
+        $current_password = $command_values['current_password'] ?? '';
+        if (!$this->user->verify_password($current_password, $user['password'])) {
+            return Response::stdReturn(false, 'Contraseña actual incorrecta', true);
+        }
+
+        $updateData = [];
+
+        // Filtrar username (alphanum, min 3, max 32)
+        if (!empty($command_values['username']) && $command_values['username'] !== $user['username']) {
+            $username = Filter::varAlphanum($command_values['username'], 32, 3);
+            if ($username === false) {
+                return Response::stdReturn(false, 'Username inválido', true);
+            }
+            $updateData['username'] = $username;
+        }
+        // Filtrar email
+        if (!empty($command_values['email']) && $command_values['email'] !== $user['email']) {
+            $email = Filter::varEmail($command_values['email'], 128, 5);
+            if ($email === false) {
+                return Response::stdReturn(false, 'Email inválido', true);
+            }
+            $updateData['email'] = $email;
+        }
+        // Filtrar password (min 8)
+        if (!empty($command_values['password'])) {
+            $password = Filter::varPassword($command_values['password'], 128, 8);
+            if ($password === false) {
+                return Response::stdReturn(false, 'Contraseña inválida', true);
+            }
+            $updateData['password'] = $password;
+        }
+
+        if (empty($updateData)) {
+            return Response::stdReturn(true, 'Sin cambios', true);
+        }
+
+        $result = $this->user->updateUser($user['id'], $updateData);
+
+        if ($result === true) {
+            return Response::stdReturn(true, 'Perfil actualizado', true);
+        } else {
+            return Response::stdReturn(false, $result, true);
+        }
+    }
+
+    /**
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function createUser(array $command_values): array
+    {
+        // Campos obligatorios
+        $required = ['username', 'email', 'password', 'isAdmin'];
+        $missing = [];
+        foreach ($required as $field) {
+            if (!isset($command_values[$field]) || $command_values[$field] === '' || $command_values[$field] === null) {
+                $missing[] = $field;
+            }
+        }
+        if (!empty($missing)) {
+            return Response::stdReturn(false, 'Faltan campos obligatorios: ' . implode(', ', $missing), true);
+        }
+
+        // Filtrar username (alphanum, min 3, max 32)
+        $username = Filter::varAlphanum($command_values['username'], 32, 3);
+        if ($username === false) {
+            return Response::stdReturn(false, 'Username inválido', true);
+        }
+        // Filtrar email
+        $email = Filter::varEmail($command_values['email'], 128, 5);
+        if ($email === false) {
+            return Response::stdReturn(false, 'Email inválido', true);
+        }
+        // Filtrar password (min 8)
+        $password = Filter::varPassword($command_values['password'], 128, 8);
+        if ($password === false) {
+            return Response::stdReturn(false, 'Contraseña inválida', true);
+        }
+        // Filtrar isAdmin (entero 0 o 1)
+        $isAdmin = Filter::varInt($command_values['isAdmin'], 1);
+        if ($isAdmin === null || ($isAdmin !== 0 && $isAdmin !== 1)) {
+            return Response::stdReturn(false, 'isAdmin inválido', true);
+        }
+
+        // Comprobar si ya existe usuario con mismo username o email
+        $userExists = false;
+        $existing = $this->user->userModel->getByUsername($username);
+        if ($existing) {
+            $userExists = true;
+        }
+        if (!$userExists) {
+            $existing = $this->user->userModel->getByEmail($email);
+            if ($existing) {
+                $userExists = true;
+            }
+        }
+
+        if ($userExists) {
+            return Response::stdReturn(false, 'Usuario o email ya existe', true);
+        }
+
+        $userData = [
+            'username' => $username,
+            'email' => $email,
+            'password' => $password,
+            'isAdmin' => $isAdmin,
+        ];
+
+        try {
+            $user = $this->user->register($userData);
+            return Response::stdReturn(true, 'Usuario creado', true, ['user' => $user]);
+        } catch (\Throwable $e) {
+            return Response::stdReturn(false, $e->getMessage(), true);
+        }
+    }
 }

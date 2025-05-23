@@ -64,7 +64,7 @@ $(document).ready(function () {
     $(document).on("click", "#submitAgentConfig", function (e) {
         e.preventDefault();
         var hostId = $('#host_id').val();
-        
+
         const data = {
             id: hostId,
             agent_log_level: $("#agent_log_level").val(),
@@ -76,7 +76,7 @@ $(document).ready(function () {
 
         requestHostDetails('submitAgentConfig', data);
     });
-    
+
     $(document).on("click", "#submitHostToken", function () {
         var hostId = $('#host_id').val();
         if (hostId) {
@@ -138,7 +138,7 @@ $(document).ready(function () {
         if (linkedValue && hostId) {
             submitCommand('submitLinked', {id: hostId, value: linkedValue});
         }
-    });    
+    });
     $(document).on("click", "#submitHostname", function () {
         var titleValue = $('#host-name').val();
         var hostId = $('#host_id').val();
@@ -815,7 +815,7 @@ function requestHostDetails(command, command_values = []) {
                 /* Tasks */
                 if (
                     ['delete_host_task', 'create_host_task',
-                     'update__host_task', 'force_exec_task']
+                    'update__host_task', 'force_exec_task']
                     .includes(jsonData.command)
                 ) {
                     if(jsonData.response_msg) {
