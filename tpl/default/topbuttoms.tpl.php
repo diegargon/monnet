@@ -26,7 +26,7 @@ if (Filter::getString('page') == $privacy_page) {
         <a href="?page=logout">
             <img src="tpl/<?= $ncfg->get('theme') ?>/img/logout.png" alt="logout" title="<?= $lng['L_LOGOUT']; ?>">
         </a>
-        <a href="?page=<?= $privacy_page ?>">
+        <a href="?page=index">
             <img src="tpl/<?= $ncfg->get('theme') ?>/img/privacy.png" alt="privacy" title="<?= $lng['L_PRIVACY']; ?>"/>
         </a>
     </div>

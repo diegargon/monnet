@@ -207,8 +207,6 @@ class HostService
 
         if (!empty($hostDetails['misc'])) {
             $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
-            /* TODO: Migration: keep misc values in misc then delete this */
-            $hostDetails = array_merge($hostDetails, $hostDetails['misc']);
         }
 
         if (!isset($hostDetails['misc']['mem_alert_threshold'])) {
@@ -300,8 +298,6 @@ class HostService
 
         if (!empty($hostDetails['misc'])) {
             $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
-            /* TODO: Migrate: keep misc values in misc then delete this */
-            $hostDetails = array_merge($hostDetails, $hostDetails['misc']);
         }
 
         $this->hostFormatter->formatMisc($hostDetails);
@@ -343,8 +339,6 @@ class HostService
                 continue;
             }
             $host['misc'] = $misc;
-            // TODO: misc array must be in misc key this merge is temporary for compatibility
-            $host = array_merge($host, $misc);
 
             if (
                 // All
@@ -377,9 +371,6 @@ class HostService
 
             $misc = $this->decodeMisc($host['misc']);
             $host['misc'] = $misc;
-            // TODO: misc array must be in misc key this merge is temporary for compatibility
-            $host = array_merge($host, $misc);
-
             // All
             if ($status === null) :
                 $result_hosts[] = $host;

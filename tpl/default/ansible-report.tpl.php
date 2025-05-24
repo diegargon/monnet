@@ -12,7 +12,7 @@
  * @var array<mixed> $report Template Data
  */
 
-# TODO: Refactor to remove this dependency from a tpl
+# TODO: Refactor to remove this dependencys from a tpl
 use App\Utils\MiscUtils;
 use App\Utils\ArrayUtils;
 

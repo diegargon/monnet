@@ -62,7 +62,6 @@ while (!$jsonComplete) {
         exit;
     }
     if ($chunk === '') {
-        //TODO No hay más datos, pero el JSON aún no está completo
         break;
     }
 

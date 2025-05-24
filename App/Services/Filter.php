@@ -1310,6 +1310,21 @@ class Filter
     }
 
     /**
+     * Retrieves a username from $_COOKIE and validates it.
+     *
+     * @param mixed $val The key to retrieve.
+     * @param int $size Maximum allowed size.
+     * @return string|false The validated username or false if invalid.
+     */
+    public static function cookieUsername(mixed $val, int $size = PHP_INT_MAX): string|false
+    {
+        if (empty($_COOKIE[$val])) {
+            return false;
+        }
+        return self::varUsername($_COOKIE[$val], $size);
+    }
+
+    /**
      * Validates a timezone string (must be a valid PHP timezone identifier).
      *
      * @param mixed $val The value to validate.

@@ -9,11 +9,7 @@
  * @var array<string> $lng
  * @var array<mixed> $tdata
  */
-!defined('IN_WEB') ? exit : true;
 
-/*
- * TODO: split for refresh less
- */
 ?>
 
 <div id="hosts_cat" class="hosts_cat">

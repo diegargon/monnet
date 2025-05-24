@@ -11,6 +11,7 @@ use App\Core\AppContext;
 use App\Core\ConfigService;
 
 use App\Services\UserService;
+use App\Services\Filter;
 
 class PageAuthService
 {
@@ -50,9 +51,9 @@ class PageAuthService
         $page['tpl'] = 'login';
         $page['log_in'] = $lng['L_LOGIN'];
 
-        # TODO FILTER
-        if (isset($_COOKIE['username'])) {
-            $page['username'] = htmlspecialchars($_COOKIE['username']);
+        $filteredUsername = Filter::cookieUsername('username');
+        if ($filteredUsername) {
+            $page['username'] = $filteredUsername;
         } else {
             $page['username'] = '';
         }

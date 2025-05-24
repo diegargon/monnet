@@ -115,9 +115,7 @@ class CmdHostController
      */
     public function reloadStatsView(string $command, array $command_values): array
     {
-        /*
-         * TODO: Actually reload send all html/js again
-         */
+        # TODO: Actually reload send all html/js again
         $target_id = Filter::varInt($command_values['id']);
         $field = 'reloadStatsView';
 
@@ -1040,7 +1038,7 @@ class CmdHostController
 
         # Linkable host the linked field is equal to his ID
         if ($value == 1) {
-            $value = $host_id; 
+            $value = $host_id;
         }
 
         if ($this->cmdHostModel->updateByID($host_id, [$field => $value])) {

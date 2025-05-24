@@ -95,7 +95,6 @@ class CmdBookmarksController
             }
         }
 
-        // TODO BookmarkModel?
         $result = $this->itemsService->addItem('bookmarks', $new_bookmark);
 
         if ($result) {
@@ -171,7 +170,6 @@ class CmdBookmarksController
             }
         endif;
 
-        // TODO BookmarkModel?
         $result = $this->itemsService->updateItem('bookmarks', $bookmark);
 
         if ($result) {

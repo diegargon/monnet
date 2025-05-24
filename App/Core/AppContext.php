@@ -65,7 +65,7 @@ class AppContext
     }
 
     /**
-     * Autoload method Legacy. TODO: ¿composer?
+     * Autoload method Legacy.
      */
     public function autoload(string $class_name): void
     {
