@@ -17,70 +17,14 @@
 <div id="status_msg" style="text-align:right;"></div>
 <div class="settings-container" id="settings-container">
     <div class="settings-tabs-head-container">
+    <?php foreach ($ncfg->getCategories() as $catId => $cat): ?>
         <button
-            id="settings_tab_1"
-            onclick="changeSettingsTab(1)"
-            class="settings-tabs-head active"><?= $lng['L_GENERAL'];?>
+            id="settings_tab_<?= $catId ?>"
+            onclick="changeSettingsTab(<?= $catId ?>)"
+            class="settings-tabs-head<?= $catId === 1 ? ' active' : '' ?>">
+            <?= $lng['L_' . strtoupper($cat['name'])] ?? $cat['name']; ?>
         </button>
-        <button
-            id="settings_tab_2"
-            onclick="changeSettingsTab(2)"
-            class="settings-tabs-head"><?= $lng['L_UI'];?>
-        </button>
-        <button
-            id="settings_tab_4"
-            onclick="changeSettingsTab(4)"
-            class="settings-tabs-head">Gateway
-        </button>
-        <button
-            id="settings_tab_5"
-            onclick="changeSettingsTab(5)"
-            class="settings-tabs-head"><?= $lng['L_FORMAT'];?>
-        </button>
-        <button
-            id="settings_tab_10"
-            onclick="changeSettingsTab(10)"
-            class="settings-tabs-head"><?= $lng['L_SECURITY'];?>
-        </button>
-        <?php if ($ncfg->get('ansible')) : ?>
-        <button
-            id="settings_tab_102"
-            onclick="changeSettingsTab(102)"
-            class="settings-tabs-head">Ansible
-        </button>
-        <?php endif; ?>
-        <button
-            id="settings_tab_103"
-            onclick="changeSettingsTab(103)"
-            class="settings-tabs-head"><?= $lng['L_AGENT'];?>
-        </button>
-        <button
-            id="settings_tab_104"
-            onclick="changeSettingsTab(104)"
-            class="settings-tabs-head"><?= $lng['L_PURGE'];?>
-        </button>
-        <button
-            id="settings_tab_105"
-            onclick="changeSettingsTab(105)"
-            class="settings-tabs-head"><?= $lng['L_LOGGING'];?>
-        </button>
-        <button
-            id="settings_tab_106"
-            onclick="changeSettingsTab(106)"
-            class="settings-tabs-head"><?= $lng['L_NETWORK'];?>
-        </button>
-        <?php if ($ncfg->get('mail')) : ?>
-        <button
-            id="settings_tab_101" onclick="changeSettingsTab(101)"
-            class="settings-tabs-head"><?= $lng['L_MAIL']?>
-        </button>
-        <?php endif; ?>
-        <!--
-            <button id="settings_tab_3" onclick="changeSettingsTab(3)" class="settings-tabs-head">Apartado 3</button>
-        -->
-        <!--
-            <button id="settings_tab_4" onclick="changeSettingsTab(4)" class="settings-tabs-head">Apartado 4</button>
-        -->
+    <?php endforeach; ?>
         <div id="config_status_msg"></div>
     </div>
 <?php

@@ -49,12 +49,16 @@ class ConfigService
     private array $cfg = [];
     private array $modifiedKeys = [];
     private DBManager $db;
+    private array $lng = [];
+    private array $ccats = [];
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->db = new DBManager($ctx);
         $this->model = new ConfigModel($this->db);
+        $this->lng = $ctx->get('lng');
+        $this->setDefaultCcats();
         register_shutdown_function([$this, 'saveChanges']);
     }
 
@@ -284,5 +288,40 @@ class ConfigService
         }
 
         return $config;
+    }
+
+    public function registerCcat(int $id, string $name): bool
+    {
+        if (isset($this->categories[$id])) {
+            # Already exists
+            return false;
+        }
+
+        $this->ccats[$id] = ['name' => $name];
+
+        return true;
+    }
+
+    public function getCategories(): array
+    {
+        return $this->ccats;
+    }
+
+    private function setDefaultCcats(): void
+    {
+        $lng = $this->lng;
+        $this->ccats = [
+            1     => ['name' => $lng['L_GENERAL']],
+            2     => ['name' => $lng['L_UI']],
+            4     => ['name' => $lng['L_GATEWAY']],
+            5     => ['name' => $lng['L_FORMAT']],
+            10    => ['name' => $lng['L_SECURITY']],
+            101   => ['name' => $lng['L_MAIL']],
+            102   => ['name' => $lng['L_ANSIBLE']],
+            103   => ['name' => $lng['L_AGENT']],
+            104   => ['name' => $lng['L_PURGE']],
+            105   => ['name' => $lng['L_LOGGING']],
+            106   => ['name' => $lng['L_NETWORK']],
+        ];
     }
 }

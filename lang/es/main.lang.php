@@ -40,6 +40,7 @@ $lng = [
     'L_ALWAYS_ON' => 'Always On',
     'L_ADD_VAR' => 'Añadir Ansible Var',
     'L_AVAILABLE_PB' => 'Playbooks disponibles',
+    'L_ANSIBLE' => 'Ansible',
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
@@ -104,6 +105,7 @@ $lng = [
     //G
     'L_GENERAL' => 'General',
     'L_GROUPS' => 'Grupos',
+    'L_GATEWAY' => 'Gateway',
     //H
     'L_HIGHLIGHT_HOSTS' => 'Destacados',
     'L_HOSTNAME' => 'Hostname',
