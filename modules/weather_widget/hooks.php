@@ -1,4 +1,5 @@
 <?php
+use App\Core\ConfigService;
 
 /**
  *
@@ -19,13 +20,18 @@ return [
         }
     },
     'onInstall' => function($ctx) {
-        // ...instalación opcional...
+        // ...instalación ...
         // $db = $ctx->get('db');
         // $db->query("CREATE TABLE ...");
     },
     'onUninstall' => function($ctx) {
-        // ...desinstalación opcional...
+        // ...desinstalación ...
         // $db = $ctx->get('db');
         // $db->query("DROP TABLE IF EXISTS ...");
+    },
+    'onRegisterConfigCategories' => function($ctx) {
+        $ncfg = $ctx->get(ConfigService::class);
+        $lng = $ctx->get('lng');
+        $ncfg->registerCcat(10000, $lng['L_WEATHER_WIDGET'] ?? 'Weather Widget');
     }
 ];

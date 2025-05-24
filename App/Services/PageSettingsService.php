@@ -7,6 +7,7 @@
 */
 namespace App\Services;
 
+use App\Core\ModuleManager;
 use App\Core\AppContext;
 use App\Core\ConfigService;
 
@@ -19,6 +20,12 @@ class PageSettingsService
      */
     public static function getSettings(AppContext $ctx): array
     {
+        /**  Hook: Register Config Category */
+        $moduleManager = $ctx->get(ModuleManager::class);
+        if ($moduleManager) {
+            $moduleManager->runHook('onRegisterConfigCategories', [$ctx]);
+        }
+
         $page = [];
         $ncfg = $ctx->get(ConfigService::class);
         $config_all = $ncfg->getAllEditable();

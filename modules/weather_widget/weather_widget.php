@@ -57,6 +57,9 @@ function request_weather(ConfigService $ncfg): mixed
     $api = $ncfg->get('weather_api');
     $country = $ncfg->get('weather_country');
 
+    if (empty($api) || empty($country)) {
+        return null;
+    }
     $ApiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' .
             $country
             . '&appid=' . $api
