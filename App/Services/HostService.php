@@ -624,6 +624,7 @@ class HostService
      */
     public function createToken(int $hid): ?string
     {
+        # $token = bin2hex(openssl_random_pseudo_bytes(16))
         $token = bin2hex(random_bytes(16));
         if ($this->cmdHostModel->submitHostToken($hid, $token)) {
             return $token;

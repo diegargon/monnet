@@ -31,11 +31,6 @@ class MiscUtils
         return $latency;
     }
 
-    public static function createToken(): string
-    {
-        return bin2hex(openssl_random_pseudo_bytes(16));
-    }
-
     public static function isEmpty(&$var): bool
     {
         if (!isset($var) || $var === null) {
