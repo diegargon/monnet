@@ -438,6 +438,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
     $update = 0.78;
     if ($db_version == 0.77) {
         try {
+            $db->query("ALTER TABLE `config` MODIFY `ccat` INT(11) NOT NULL DEFAULT 0");
             $db->query("START TRANSACTION");
             # DONE: Module weather_widget config keys
             $db->query("
