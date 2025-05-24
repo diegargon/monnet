@@ -19,7 +19,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
     global $logSys;
     $logSys->notice("Triggered updater File version: $files_version DB version: $db_version");
 
-    // 0.60 COMPLETED
+    // 0.60 DONE
     $update = 0.60;
     if ($db_version == 0.59) {
         Log::warning("Init version $update");
@@ -54,7 +54,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         Log::warning("Update version to $update successful");
     }
 
-    // 0.61 COMPLETED
+    // 0.61 DONE
     $update = 0.61;
     if ($db_version == 0.60) {
         try {
@@ -66,14 +66,14 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.62 PENDING
+    // 0.62 DONE
     $update = 0.62;
     if ($db_version == 0.61) {
         try {
             $db_version = $update;
             # DONE getTotalsStats
             $db->query("ALTER TABLE `hosts` ADD `agent_online` TINYINT(1) NOT NULL DEFAULT 0;");
-            # To rebuild User
+            # DONE To rebuild User
             $db->query("
                 CREATE TABLE `sessions` (
                     `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -97,7 +97,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
     }
 
 
-    // 0.63 COMPLETED
+    // 0.63 DONE
     $update = 0.63;
     if ($db_version == 0.62) {
         try {
@@ -114,7 +114,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $logSys->error('Transaction failed: ' . $e->getMessage());
         }
     }
-    // 0.64 PENDING
+    // 0.64 DONE
     $update = 0.64;
     if ($db_version == 0.63) {
         try {
@@ -131,7 +131,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             // DONE changed to clean. GW must do a task host clean
             $db->query("ALTER TABLE `networks` ADD `clear` TINYINT NOT NULL DEFAULT '0';");
             $db->query("START TRANSACTION");
-            // Enable Clean never seen again host time
+            // DONE key was renamed to clean_hosts_days
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('clean_host_days', JSON_QUOTE('30'), 1, 104, NULL, 0)
@@ -147,7 +147,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.65 COMPLETED
+    // 0.65 DONE
     $update = 0.65;
     if ($db_version == 0.64) {
         try {
@@ -163,7 +163,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.66 COMPLETED
+    // 0.66 DONE
     $update = 0.66;
     if ($db_version == 0.65) {
         try {
@@ -266,7 +266,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.69 COMPLETED Update Test
+    // 0.69 DONE Update Test
     $update = 0.69;
     if ($db_version == 0.68) {
         try {
@@ -278,7 +278,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
-    // 0.70 COMPLETED Update Test
+    // 0.70 DONE Update Test
     $update = 0.70;
     if ($db_version == 0.69) {
         try {
@@ -336,11 +336,11 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.73 PENDING
+    // 0.73 DONE
     $update = 0.73;
     if ($db_version == 0.72) {
         try {
-            # Gateway: When Event Task complete/fail Task ID event['tid']
+            # DONE tid renamed to reference
             $db->query("ALTER TABLE `hosts_logs` ADD `tid` INT DEFAULT '0';");
             # DONE Gateway: Marcar cuando online
             $db->query("ALTER TABLE `hosts` ADD `last_seen` DATETIME DEFAULT NULL");
@@ -405,7 +405,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.76
+    // 0.76 DONE
     $update = 0.76;
     if ($db_version == 0.75) {
         try {
@@ -420,7 +420,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.77 DONE Error Solve
+    // 0.77 DONE Error Solving update
     $update = 0.77;
     if ($db_version == 0.76) {
         try {
@@ -457,12 +457,29 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
+    // 0.79 PENDING
+    $update = 0.79;
+    if ($db_version == 0.78) {
+        try {
+            # Use ref instad of tid
+            $db->query("ALTER TABLE `hosts_logs` DROP COLUMN `tid`;");
+            $db->query("ALTER TABLE `hosts_logs` ADD COLUMN `reference` VARCHAR(255) DEFAULT NULL;");
+            # DONE To delete After change name in use to clean in G
+            $db->query("ALTER TABLE `networks` DROP COLUMN clear;");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
     // Later
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
-            # To delete After change name in use to clean in G
-            $db->query("ALTER TABLE `networks` DROP COLUMN clear;");
+
             # User date formet
             $db->query("ALTER TABLE `users` ADD `dateformat` VARCHAR(20) NULL;");
             # User rols
