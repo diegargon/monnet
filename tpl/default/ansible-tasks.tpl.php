@@ -16,6 +16,7 @@
     <table id="tasksTable">
         <!-- labels -->
         <tr>
+            <td><label for="task_id">Id</label></td>
             <td><label for="task_name"><?= $lng['L_NAME'] ?></label></td>
             <td><label for="task_trigger"><?= $lng['L_TASK_TRIGGER'] ?></label></td>
             <td><label for="conditional_field"><?= $lng['L_CONDITIONAL'] ?></label></td>
@@ -34,6 +35,9 @@
         $status_ico = $task['status'] == 1 ? 'fail-icon' : 'success-icon';
     ?>
         <tr data-id="<?= $task_id ?>">
+            <td>
+                <span><?= $task_id ?></span>
+            </td>
             <td>
                 <input type="hidden" name="hid" value="<?= $task['hid'] ?>"/>
                 <input
