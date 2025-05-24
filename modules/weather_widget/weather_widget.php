@@ -54,9 +54,8 @@ function weather_widget($ctx): ?array
  */
 function request_weather(ConfigService $ncfg): mixed
 {
-    $weather_config = $ncfg->get('weather_widget');
-    $api = $weather_config['weather_api'];
-    $country = $weather_config['country'];
+    $api = $ncfg->get('weather_api');
+    $country = $ncfg->get('weather_country');
 
     $ApiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' .
             $country

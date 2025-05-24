@@ -134,7 +134,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             // Enable Clean never seen again host time
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
-                ('clean_host_days', JSON_QUOTE('30'), 1, 104, NULL, 0);
+                ('clean_host_days', JSON_QUOTE('30'), 1, 104, NULL, 0)
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
@@ -180,7 +180,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_log_level', JSON_QUOTE('5'), 1, 103, NULL, 0),
-                ('server_endpoint', JSON_QUOTE('/feedme.php'), 0, 103, NULL, 0);
+                ('server_endpoint', JSON_QUOTE('/feedme.php'), 0, 103, NULL, 0)
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
@@ -217,7 +217,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('agent_internal_host', JSON_QUOTE(''), 0, 103, NULL, 0),
-                ('sid_expire', JSON_QUOTE('604.800'), 1, 10, NULL, 0);
+                ('sid_expire', JSON_QUOTE('604.800'), 1, 10, NULL, 0)
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
@@ -245,7 +245,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             # DONE Renaming
             $db->query("UPDATE `config`
                 SET `ckey` = 'clean_hosts_days'
-                WHERE `ckey` = 'clean_host_days';
+                WHERE `ckey` = 'clean_host_days'
             ");
             # DONE Gw Intervals
             $db->query("
@@ -298,15 +298,15 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $db->query("START TRANSACTION");
             $db->query("UPDATE `config`
                 SET `cvalue` = JSON_QUOTE('info')
-                WHERE `ckey` = 'agent_log_level';
+                WHERE `ckey` = 'agent_log_level'
             ");
             $db->query("UPDATE `config`
                 SET `ctype` = 0
-                WHERE `ckey` = 'agent_log_level';
+                WHERE `ckey` = 'agent_log_level'
             ");
             $db->query("UPDATE `config`
                 SET `cvalue` = JSON_QUOTE('1320')
-                WHERE `ckey` = 'gw_discover_host_intvl';
+                WHERE `ckey` = 'gw_discover_host_intvl'
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
@@ -360,11 +360,11 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             # DONE clear_done_tasks for clean uniq tasks done
             # DONE clear not seen interval for purge host on clean networks
             $db->query("START TRANSACTION");
-            $db->query("UPDATE `config` SET `cvalue` = JSON_QUOTE('604800') WHERE `ckey` = 'sid_expire';");
+            $db->query("UPDATE `config` SET `cvalue` = JSON_QUOTE('604800') WHERE `ckey` = 'sid_expire'");
             $db->query("
                 INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
                 ('clear_not_seen_hosts_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0),
-                ('clear_task_done_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0);
+                ('clear_task_done_intvl', JSON_QUOTE('30'), 1, 104, NULL, 0)
             ");
             $db->query("COMMIT");
             $ncfg->set('db_monnet_version', $update, 1);
@@ -392,7 +392,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
                 ('last_ansible_task', JSON_QUOTE('$now'), 4, 0, NULL, 0),
                 ('last_prune', JSON_QUOTE('$now'), 4, 0, NULL, 0),
                 ('last_weekly_task', JSON_QUOTE('$now'), 4, 0, NULL, 0),
-                ('default_lang', JSON_QUOTE('es'), 0, 1, NULL, 0);
+                ('default_lang', JSON_QUOTE('es'), 0, 1, NULL, 0)
             ");
             $ncfg->set('db_monnet_version', $update, 1);
             $db->query("COMMIT");
@@ -419,6 +419,43 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+
+    // 0.77 DONE Error Solve
+    $update = 0.77;
+    if ($db_version == 0.76) {
+        try {
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $db->query("COMMIT");
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
+    // 0.78 DONE
+    $update = 0.78;
+    if ($db_version == 0.77) {
+        try {
+            $db->query("START TRANSACTION");
+            # DONE: Module weather_widget config keys
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('weather_country', JSON_QUOTE('vigo'), 0, 10000, NULL, 0),
+                ('weather_api', JSON_QUOTE('89fe8d3a8486486fc682ba97dc28850f'), 0, 10000, NULL, 0)
+            ");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $db->query("COMMIT");
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
     // Later
     $update = 0.00;
     if ($db_version == 0.00) {
