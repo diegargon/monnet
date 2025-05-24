@@ -55,7 +55,8 @@
             </td>
             <td id="conditional_field_<?= $task_id ?>">
                 <?php
-                if ($task['trigger_type'] == 3) : # Event
+                # Trigger By a Event (field event_id)
+                if ($task['trigger_type'] == 3) :
                     ?>
                     <select id="conditional" <?= $disabled ?>>
                         <?php
