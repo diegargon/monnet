@@ -6,9 +6,17 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 return [
-    'onPageHead' => function($ctx) {
+    'onPageHead' => function($ctx, &$page) {
         require_once __DIR__ . '/weather_widget.php';
-        return weather_widget($ctx);
+        $widget = weather_widget($ctx);
+        if ($widget) {
+            $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
+            $page['load_tpl'][] = [
+                'file' => 'weather-widget',
+                'place' => 'head-right',
+            ];
+            $page['weather_widget'] = $widget['weather_widget'] ?? $widget;
+        }
     },
     'onInstall' => function($ctx) {
         // ...instalación opcional...

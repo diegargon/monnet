@@ -11,6 +11,7 @@ use App\Core\AppContext;
 use App\Core\ConfigService;
 use App\Core\ModuleManager;
 use App\Services\ItemsService;
+use App\Services\LogSystemService;
 
 class PageHeadService
 {
@@ -44,27 +45,10 @@ class PageHeadService
         try {
             $moduleManager = $ctx->get(ModuleManager::class);
             if ($moduleManager) {
-                $hookPageData = $moduleManager->runHook('onPageHead', [$ctx]);
-
-
-                if (is_array($hookPageData)) {
-                    if (isset($hookPageData['add_scriptlink'])) {
-                        foreach ($hookPageData['add_scriptlink'] as $script) {
-                            $page['web_main']['scriptlink'][] = $script;
-                        }
-                    }
-                    if (isset($hookPageData['add_load_tpl'])) {
-                        foreach ($hookPageData['add_load_tpl'] as $tpl) {
-                            $page['load_tpl'][] = $tpl;
-                        }
-                    }
-                    if (isset($hookPageData['weather_widget'])) {
-                        $page['weather_widget'] = $hookPageData['weather_widget'];
-                    }
-                }
+                $moduleManager->runHook('onPageHead', [$ctx, &$page]);
             }
         } catch (\Throwable $e) {
-            $logSys = new LogSystemService($ctx);
+            $logSys = $ctx->get(LogSystemService::class);
             $logSys->error('Widget error: ' . $e->getMessage());
         }
         #file_put_contents('/tmp/hookPageData.log', print_r($page, true), FILE_APPEND);

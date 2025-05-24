@@ -51,7 +51,7 @@ class ModuleManager
         $results = [];
         if (!empty($this->hooks[$hook])) {
             foreach ($this->hooks[$hook] as $fn) {
-                $result = call_user_func_array($fn, $args);
+                $result = $fn(...$args); // Esto permite pasar referencias
                 if ($result !== null) {
                     $results[] = $result;
                 }
