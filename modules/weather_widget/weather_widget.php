@@ -6,7 +6,6 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-use App\Core\AppContext;
 use App\Core\ConfigService;
 use App\Services\CurlService;
 
@@ -16,25 +15,35 @@ use App\Services\CurlService;
  * @param array<string,string> $lng
  * @return array<string,string|int>|null
  */
-function weather_widget(ConfigService $ncfg, array $lng): ?array
+function weather_widget($ctx): ?array
 {
+    $lng = $ctx->get('lng');
+    $ncfg = $ctx->get(ConfigService::class);
 
-    $page_data = [];
-
+    $weather = [];
     $weather_data = request_weather($ncfg);
     if ($weather_data === null) {
         return null;
     }
-    $page_data['desc'] = ucwords($weather_data->weather[0]->description);
-    $page_data['city_name'] = $weather_data->name;
-    $page_data['weather_icon'] = 'https://openweathermap.org/img/wn/' . $weather_data->weather[0]->icon . '.png';
-    $page_data['weather_temp'] = round($weather_data->main->temp) . '°C';
-    $page_data['weather_l_humidity'] = $lng['L_HUMIDITY'];
-    $page_data['weather_humidity'] = $weather_data->main->humidity . '%';
-    $page_data['weather_l_wind'] = $lng['L_WINDSPEED'];
-    $page_data['weather_wind'] = $weather_data->wind->speed . 'km/h';
+    $weather['desc'] = ucwords($weather_data->weather[0]->description);
+    $weather['city_name'] = $weather_data->name;
+    $weather['weather_icon'] = 'https://openweathermap.org/img/wn/' . $weather_data->weather[0]->icon . '.png';
+    $weather['weather_temp'] = round($weather_data->main->temp) . '°C';
+    $weather['weather_l_humidity'] = $lng['L_HUMIDITY'];
+    $weather['weather_humidity'] = $weather_data->main->humidity . '%';
+    $weather['weather_l_wind'] = $lng['L_WINDSPEED'];
+    $weather['weather_wind'] = $weather_data->wind->speed . 'km/h';
 
-    return $page_data;
+    return [
+        'add_scriptlink' => ['./modules/weather_widget/weather_widget.js'],
+        'add_load_tpl' => [
+            [
+                'file' => 'weather-widget',
+                'place' => 'head-right',
+            ]
+        ],
+        'weather_widget' => $weather
+    ];
 }
 
 /**
@@ -54,7 +63,8 @@ function request_weather(ConfigService $ncfg): mixed
             . '&appid=' . $api
             . '&lang=es&units=metric';
 
-    $response = CurlService::curlGet($ApiUrl);
+    $response = App\Services\CurlService::curlGet($ApiUrl);
+
 
     if ($response) {
         $response = json_decode($response);

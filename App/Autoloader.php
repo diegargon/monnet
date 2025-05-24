@@ -27,5 +27,10 @@ class Autoloader
         if (file_exists($file)) {
             require $file;
         }
+        // Autoload para módulos
+        $modFile = dirname(__DIR__) . '/modules/' . str_replace('\\', '/', $class) . '.php';
+        if (file_exists($modFile)) {
+            require $modFile;
+        }
     }
 }

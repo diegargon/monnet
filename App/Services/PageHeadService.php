@@ -9,6 +9,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\ConfigService;
+use App\Core\ModuleManager;
 use App\Services\ItemsService;
 
 class PageHeadService
@@ -40,27 +41,36 @@ class PageHeadService
             'place' => 'head-center',
         ];
 
-        // Widget y scripts
         try {
-            require_once('modules/weather_widget/weather_widget.php');
-            $weather = \weather_widget($ncfg, $lng);
+            $moduleManager = $ctx->get(ModuleManager::class);
+            if ($moduleManager) {
+                $hookPageData = $moduleManager->runHook('onPageHead', [$ctx]);
+
+
+                if (is_array($hookPageData)) {
+                    if (isset($hookPageData['add_scriptlink'])) {
+                        foreach ($hookPageData['add_scriptlink'] as $script) {
+                            $page['web_main']['scriptlink'][] = $script;
+                        }
+                    }
+                    if (isset($hookPageData['add_load_tpl'])) {
+                        foreach ($hookPageData['add_load_tpl'] as $tpl) {
+                            $page['load_tpl'][] = $tpl;
+                        }
+                    }
+                    if (isset($hookPageData['weather_widget'])) {
+                        $page['weather_widget'] = $hookPageData['weather_widget'];
+                    }
+                }
+            }
         } catch (\Throwable $e) {
             $logSys = new LogSystemService($ctx);
-            $logSys->error('Weather widget error: ' . $e->getMessage());
-            $weather = null;
+            $logSys->error('Widget error: ' . $e->getMessage());
         }
+        #file_put_contents('/tmp/hookPageData.log', print_r($page, true), FILE_APPEND);
 
         $page['web_main']['scriptlink'][] = './scripts/jquery-2.2.4.min.js';
         $page['web_main']['scriptlink'][] = './scripts/common.js';
-
-        if (!empty($weather)) {
-            $page['web_main']['scriptlink'][] = './modules/weather_widget/weather_widget.js';
-            $page['weather_widget'] = $weather;
-            $page['load_tpl'][] = [
-                'file' => 'weather-widget',
-                'place' => 'head-right',
-            ];
-        }
 
         // Footer
         $page['web_main']['main_footer_tpl'][] = 'footer';

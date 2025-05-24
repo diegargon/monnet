@@ -9,8 +9,10 @@
  * @var AppContext|null $ctx An instance of AppCtx or null if not defined
  * @var array<string,string> $lng - Default included in common, we overwrite user lang here
  */
+use App\Core\ModuleManager;
 use App\Services\UserService;
 
+$ctx->set(ModuleManager::class, new ModuleManager());
 session_start();
 
 $userService = $ctx->get(UserService::class);
