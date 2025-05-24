@@ -102,9 +102,6 @@ class UserSession
                     return true;
                 }
             }
-            # If the session is not valid, force logout
-            #print"Session not valid<br/>";
-            #exit();
             $this->logout();
         }
 
@@ -126,8 +123,6 @@ class UserSession
 
         $this->sessionModel->create($sessionData);
 
-        $this->user['sid'] = $sid;
-
         return $sid;
     }
 
@@ -145,8 +140,6 @@ class UserSession
         ];
 
         $this->sessionModel->update($userId, $sessionData);
-
-        $this->user['sid'] = $sid;
 
         return $sid;
     }
@@ -172,7 +165,7 @@ class UserSession
 
     public function rememberSession(): void
     {
-        $sId = $this->user['sid'];
+        $sId = session_id();
         $uId = $this->user['id'];
 
         $basePath = dirname($_SERVER['SCRIPT_NAME']);

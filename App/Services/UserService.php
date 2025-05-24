@@ -108,7 +108,6 @@ class UserService
             return [];
         }
         unset($user['password']);
-        unset($user['sid']);
 
         return $user;
     }
