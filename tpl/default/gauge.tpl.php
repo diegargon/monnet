@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -13,15 +11,15 @@
  * @var array<mixed> $tdata
  */
 /*
-  $tdata = [
-    'gauge_container_width' => 100,
-    'gauge_graphs' => [
-        1 => ['value' => 93, 'legend' => 'Test 1', 'min' => 0, 'max' => 100],
-        2 => ['value' => 43, 'legend' => 'Test 2', 'min' => 0, 'max' => 100],
-        3 => ['value' => 20, 'legend' => 'Test 3', 'min' => 0, 'max' => 100],
-        4 => ['value' => 80, 'legend' => 'Test 4', 'min' => 0, 'max' => 100],
-    ],
-  ];
+    $tdata = [
+        'gauge_container_width' => 100,
+        'gauge_graphs' => [
+            1 => ['value' => 93, 'legend' => 'Test 1', 'min' => 0, 'max' => 100],
+            2 => ['value' => 43, 'legend' => 'Test 2', 'min' => 0, 'max' => 100],
+            3 => ['value' => 20, 'legend' => 'Test 3', 'min' => 0, 'max' => 100],
+            4 => ['value' => 80, 'legend' => 'Test 4', 'min' => 0, 'max' => 100],
+        ],
+    ];
  */
 
 $gauge_container_width = $tdata['gauge_container_width'] ?? 100;
