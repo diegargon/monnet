@@ -1,11 +1,11 @@
 <?php
-use App\Core\ConfigService;
-
 /**
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+use App\Core\ConfigService;
+
 return [
     'onPageHead' => function($ctx, &$page) {
         require_once __DIR__ . '/weather_widget.php';

@@ -65,7 +65,7 @@ function request_weather(ConfigService $ncfg): mixed
             . '&appid=' . $api
             . '&lang=es&units=metric';
 
-    $response = App\Services\CurlService::curlGet($ApiUrl);
+    $response = CurlService::curlGet($ApiUrl);
 
 
     if ($response) {

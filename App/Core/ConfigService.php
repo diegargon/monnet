@@ -34,6 +34,7 @@
  *      104 (Purge)
  *      105 (Logging)
  *      106 Network
+ * 
  *    10000 Weather Widget
  */
 namespace App\Core;
