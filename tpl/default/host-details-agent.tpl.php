@@ -4,6 +4,9 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+
+$lsel = !empty($h_misc['agent_log_level']) ? $h_misc['agent_log_level'] : 'INFO';
+$lsel = strtoupper(trim($lsel));
 ?>
 <div id="tab16" class="host-details-tab-content">
     <div id="agent_container" class="agent_container">

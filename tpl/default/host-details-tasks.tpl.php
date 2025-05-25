@@ -1,8 +1,10 @@
+<?php
 /**
  * Host Details Template
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
+?>
 <div id="tab15" class="host-details-tab-content">
     <div id="tasks_status_msg" class="center">&nbsp</div>
     <div class="create_task">

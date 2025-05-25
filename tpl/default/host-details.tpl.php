@@ -88,12 +88,12 @@ $h_misc = $tdata['host_details']['misc'];
                 if (
                     !empty($tdata['host_details']['ansible_enabled']) &&
                     !empty($tdata['host_details']['online'])
-                ) {
+                ) :
                     ?>
                     <input onClick="submitCommand('shutdown', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                         class="action-icon power-on" src="tpl/<?= $ncfg->get('theme') ?>/img/power-on.png"
                         alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
-                <?php } ?>
+                <?php endif; ?>
                 <?php if (!empty($tdata['host_details']['ansible_enabled'])) : ?>
                 <input onClick="submitCommand('reboot', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                     class="action-icon reboot" src="tpl/<?= $ncfg->get('theme') ?>/img/reboot.png"
@@ -184,15 +184,25 @@ $h_misc = $tdata['host_details']['misc'];
         <?php require __DIR__ . '/host-details-checks.tpl.php'; ?>
         <!-- /TAB13 -->
         <!-- TAB15 --><!-- Tasks -->
-        <?php require __DIR__ . '/host-details-tasks.tpl.php'; ?>
+        <?php
+        if (!empty($tdata['host_details']['ansible_enabled'])) :
+            require __DIR__ . '/host-details-tasks.tpl.php';
+        endif;
+        ?>
         <!-- /TAB15 -->
         <!-- TAB20 --><!-- Ansible -->
-        <?php require __DIR__ . '/host-details-ansible.tpl.php'; ?>
+        <?php
+        if (!empty($tdata['host_details']['ansible_enabled'])) :
+            require __DIR__ . '/host-details-ansible.tpl.php';
+        endif;
+        ?>
         <!-- /TAB20 -->
         <!-- TAB16 --><!-- Agent  -->
-        <?php if ($tdata['host_details']['agent_installed']) : ?>
-            <?php require __DIR__ . '/host-details-agent.tpl.php'; ?>
-        <?php endif; ?>
+        <?php
+        if ($tdata['host_details']['agent_installed']) :
+            require __DIR__ . '/host-details-agent.tpl.php';
+        endif;
+        ?>
         <!-- /TAB16 -->
     </div> <!-- host-details-container -->
     <!-- host-details -->
