@@ -302,14 +302,18 @@ class CmdBookmarksController
         $imageData = [];
 
         if (is_dir($directory)) {
-            $dir = new DirectoryIterator($directory);
-            foreach ($dir as $fileinfo) {
-                if ($fileinfo->isFile()) {
-                    $extension = strtolower($fileinfo->getExtension());
+            $files = scandir($directory);
+            foreach ($files as $file) {
+                if ($file === '.' || $file === '..') {
+                    continue;
+                }
+                $filePath = $directory . DIRECTORY_SEPARATOR . $file;
+                if (is_file($filePath)) {
+                    $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
                     if (in_array($extension, $allowed_ext)) {
                         $imageData[] = [
-                            'path' => $fileinfo->getPathname(),
-                            'basename' => $fileinfo->getBasename()
+                            'path' => $filePath,
+                            'basename' => $file
                         ];
                     }
                 }
