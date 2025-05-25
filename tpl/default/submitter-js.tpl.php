@@ -392,7 +392,7 @@
                             "max-width": "90vw",
                             "word-wrap": "break-word",
                             "white-space": "normal",
-                            "overflow": "auto",
+
                             "resize": "both"
                         });
                     }

@@ -11,35 +11,8 @@
  */
 ?>
 <div class="inventory-report-container">
-    <h2>Inventario de Hosts</h2>
-    <table class="inventory-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>IP</th>
-                <th>MAC</th>
-                <th>Red</th>
-                <th>Online</th>
-                <th>Categoria</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($tdata['hosts'] as $host): ?>
-            <tr>
-                <td><?= $host['id'] ?></td>
-                <td><?= $host['hostname'] ?? $host['title'] ?? $host['ip'] ?></td>
-                <td><?= $host['ip'] ?></td>
-                <td><?= $host['mac'] ?? '' ?></td>
-                <td><?= $host['network'] ?></td>
-                <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
-                <td><?= $host['category'] ?? '' ?></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
     <h2>Redes</h2>
-    <table class="inventory-table" style="min-width:600px;">
+    <table class="inventory-table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -65,4 +38,83 @@
         <?php endforeach; ?>
         </tbody>
     </table>
+
+    <h2>Inventario de Hosts por Red</h2>
+    <?php
+    // Agrupar hosts por network (ID de red)
+    $hosts_by_network_id = [];
+    $hosts_no_network = [];
+    foreach ($tdata['hosts'] as $host) {
+        if (isset($host['network']) && $host['network'] !== '' && $host['network'] !== null) {
+            $hosts_by_network_id[$host['network']][] = $host;
+        } else {
+            $hosts_no_network[] = $host;
+        }
+    }
+    ?>
+
+    <?php foreach ($tdata['networks'] as $net): ?>
+        <h3><?= $net['name'] ?> (<?= $net['network'] ?>)</h3>
+        <table class="inventory-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>IP</th>
+                    <th>MAC</th>
+                    <th>Online</th>
+                    <th>Categoria</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            $hosts = isset($hosts_by_network_id[$net['id']]) ? $hosts_by_network_id[$net['id']] : [];
+            ?>
+            <?php if (!empty($hosts)): ?>
+                <?php foreach ($hosts as $host): ?>
+                    <tr>
+                        <td><?= $host['id'] ?></td>
+                        <td><?= $host['hostname'] ?? $host['title'] ?? $host['ip'] ?></td>
+                        <td><?= $host['ip'] ?></td>
+                        <td><?= $host['mac'] ?? '' ?></td>
+                        <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
+                        <td><?= $host['category'] ?? '' ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6" style="text-align:center;">Sin hosts en esta red</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    <?php endforeach; ?>
+
+    <?php if (!empty($hosts_no_network)): ?>
+        <h3>Sin Red</h3>
+        <table class="inventory-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>IP</th>
+                    <th>MAC</th>
+                    <th>Online</th>
+                    <th>Categoria</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($hosts_no_network as $host): ?>
+                <tr>
+                    <td><?= $host['id'] ?></td>
+                    <td><?= $host['hostname'] ?? $host['title'] ?? $host['ip'] ?></td>
+                    <td><?= $host['ip'] ?></td>
+                    <td><?= $host['mac'] ?? '' ?></td>
+                    <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
+                    <td><?= $host['category'] ?? '' ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
 </div>
