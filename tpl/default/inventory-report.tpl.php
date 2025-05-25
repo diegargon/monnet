@@ -10,7 +10,98 @@
  *   - networks: array
  */
 ?>
+<style>
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    * {
+        color: black !important;
+    }
+    .inventory-report-container, .inventory-report-container * {
+        visibility: visible !important;
+    }
+    .inventory-report-container {
+        position: static !important;
+        margin: 0 !important;
+        background: white !important;
+        box-sizing: border-box !important;
+        padding: 0 !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    button[onclick="window.print()"] {
+        display: none !important;
+    }
+
+    tr:nth-child(2n) {
+        background-color: #bfbfbf !important;
+    }
+    #stdbox-container {
+        display: block !important;
+        position: static !important;
+        top: auto !important;
+        left: auto !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        width: auto !important;
+        height: auto !important;
+        max-width: none !important;
+        max-height: none !important;
+        overflow: visible !important;
+        resize: none !important;
+        background: white !important;
+        box-shadow: none !important;
+        border: none !important;
+        z-index: auto !important;
+    }
+    #stdbox-container {
+        resize: none !important;
+        overflow: unset !important;
+        min-width: 250px;
+        min-height: 120px;
+        position: unset !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+
+    .left-container {
+        display: none !important;
+    }
+    #right-container {
+        width: 100% !important;
+        overflow: visible !important;
+        margin: 0 !important;
+    }
+    .bookmarks-container {
+        display: none !important;
+    }
+    .header {
+        display: none !important;
+    }
+    .main_container {
+        overflow: visible !important;
+    }
+    .main {
+        margin: 0 !important;
+    }
+    .stdbox-bar {
+        display: none;
+    }
+    .form_container {
+        display: none !important;
+    }
+}
+
+</style>
 <div class="inventory-report-container">
+    <!-- Botón Imprimir -->
+    <button onclick="window.print()" style="float:right; margin-bottom:10px;">🖨️ Imprimir</button>
+
     <h2>Redes</h2>
     <table class="inventory-table">
         <thead>
@@ -123,7 +214,7 @@
                     <td><?= $host['ip'] ?></td>
                     <td><?= $host['hostname'] ?? '' ?></td>
                     <td><?= $host['vlan'] ?></td>
-                    <td><?= $host['mac'] ?? '' ?></td>
+                    <td><?= $host['mac'] ?></td>
                     <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
                     <td><?= $host['rol_name'] ?? '' ?></td>
                     <td><?= $host['category'] ?? '' ?></td>

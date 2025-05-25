@@ -1289,7 +1289,7 @@ input:checked + .slider:before {
 }
 
 .category a:hover {
-    box-shadow: 6px 6px 6px rgba(255,0,0,0.40), 6px 6px 6px rgba(255,0,0,0.40);
+    box-shadow: 6px 6px 6px rgba(255, 0, 0, 0.40), 6px 6px 6px rgba(255, 0, 0, 0.40);
 }
 
 .cat_name {
