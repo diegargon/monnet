@@ -230,7 +230,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.68 DONE
+    // 0.68 PENDING
     $update = 0.68;
     if ($db_version == 0.67) {
         try {
@@ -238,7 +238,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $db->query("ALTER TABLE reports DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN pb_id;");
             $db->query("ALTER TABLE tasks DROP COLUMN extra;");
-            # DONE system_type to rol
+            # PENDING system_type to rol
             $db->query("ALTER TABLE `hosts` ADD `rol` INT NULL DEFAULT 0;");
             # DONE Counter for other task and disable uniq tasks
             $db->query("ALTER TABLE `tasks` ADD `done` INT NULL DEFAULT 0;");
