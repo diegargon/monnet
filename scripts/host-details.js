@@ -361,7 +361,15 @@ $(document).ready(function () {
                 console.error('Acción desconocida:', action);
         }
     });
- });
+
+    $(document).on("click", "#btn_bitacora_entry", function () {
+        var hostId = $('#host_id').val();
+        var entry = $('#bitacora_entry').val();
+        if (hostId && entry) {
+            requestHostDetails('submitBitacora', {id: hostId, value: entry});
+        }
+    });
+});
 
 function initTasks() {
     $(document).on('change', '[name^="task_trigger["], #task_trigger', function() {
@@ -852,6 +860,16 @@ function requestHostDetails(command, command_values = []) {
 
                     if (jsonData.command_success === 1 && jsonData.port_id) {
                         $('.current_agent_ports option[value="' + jsonData.port_id + '"]').remove();
+                    }
+                }
+
+                // --- Bitácora: manejar submitBitacora ---
+                if (jsonData.command_receive === 'submitBitacora') {
+                    if (jsonData.command_success === 1) {
+                        $('.status_msg').html(jsonData.response_msg);
+                        $('#bitacora_entry').val('');
+                    } else if (jsonData.command_error_msg) {
+                        $('.status_msg').html(jsonData.command_error_msg);
                     }
                 }
             })
