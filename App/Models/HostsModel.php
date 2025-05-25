@@ -107,6 +107,16 @@ class HostsModel
             $query .= " AND category IN (" . implode(',', $placeholders) . ")";
         }
 
+        # Get linked hosts
+        if (isset($filters['linked'])) {
+            $query .= " AND linked = :linked AND id <> :linked";
+            $params['linked'] = (int)$filters['linked'];
+        }
+
+        # Get linkable hosts
+        if (isset($filters['linkable'])) {
+            $query .= " AND linkable = 1";
+        }
 
         $results = $this->db->qfetchAll($query, $params);
 
