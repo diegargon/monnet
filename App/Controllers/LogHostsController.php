@@ -17,6 +17,7 @@ use App\Core\DBManager;
 use App\Models\LogHostsModel;
 use App\Services\LogHostsService;
 use App\Services\Filter;
+use App\Services\UserService;
 use App\Services\TemplateService;
 use App\Helpers\Response;
 
@@ -87,5 +88,30 @@ class LogHostsController
         $reportTpl = $this->templateService->getTpl('events-report', $eventsTplData);
 
         return Response::stdReturn(true, $reportTpl, false, ['command_receive' => $command]);
+    }
+
+    /**
+     * Adds a bitacora entry for a host.
+     *
+     * @param array<string, string|int> $command_values
+     * @return array<string, string|int>
+     */
+    public function submitBitacora(array $command_values): array
+    {
+        $host_id = isset($command_values['id']) ? (int)$command_values['id'] : 0;
+        $msg = isset($command_values['value']) ? trim((string)$command_values['value']) : '';
+
+        if ($host_id <= 0 || $msg === '') {
+            return Response::stdReturn(false, "Invalid data for bitacora");
+        }
+        $username = $this->ctx->get(UserService::class)->getUsername() ?? 'unknown';
+
+        $ok = $this->logHostsService->submitBitacora($host_id, $msg, $username);
+
+        if ($ok) {
+            return Response::stdReturn(true, "Bitacora entry added successfully");
+        } else {
+            return Response::stdReturn(false, "Failed to add bitacora entry");
+        }
     }
 }

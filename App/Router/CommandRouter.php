@@ -53,7 +53,7 @@ class CommandRouter
                 'clear_alerts', 'clear_warns', 'submitHost', 'submitNewHostsCat', 'power_on', 'submitAgentConfig'
             ],
             'log' => [
-                'ack_host_log', 'logs-reload', 'auto_reload_logs', 'showAlarms', 'showEvents'
+                'ack_host_log', 'logs-reload', 'auto_reload_logs', 'showAlarms', 'showEvents', 'submitBitacora'
             ],
             'bookmark' => [
                 'addBookmark', 'updateBookmark', 'removeBookmark', 'mgmtBookmark', 'submitBookmarkCat', 'removeBookmarkCat'

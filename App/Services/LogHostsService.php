@@ -14,6 +14,7 @@ use App\Core\DBManager;
 use App\Core\ConfigService;
 
 use App\Services\DateTimeService;
+use App\Services\UserService;
 
 use App\Models\LogHostsModel;
 use App\Models\HostsModel;
@@ -69,6 +70,67 @@ class LogHostsService
             'event_type' => $event_type
         ];
         $this->logHostsModel->insert($set);
+    }
+
+    /**
+     * Add a bitacora entry for a host.
+     *
+     * @param int $host_id
+     * @param string $msg
+     * @param string $username
+     * @return bool
+     */
+    public function submitBitacora(int $host_id, string $msg, string $username): bool
+    {
+        if (mb_strlen($msg) > $this->max_db_msg) {
+            $msg_db = mb_substr($msg, 0, $this->max_db_msg);
+        } else {
+            $msg_db = $msg;
+        }
+        $set = [
+            'host_id' => $host_id,
+            'level' => 7,
+            'msg' => $msg_db,
+            'log_type' => 4, // BITACORA
+            'reference' => $username,
+        ];
+        return $this->logHostsModel->insert($set);
+    }
+
+    /**
+     * Returns the latest bitacora entries for a host.
+     *
+     * @param int $host_id
+     * @param int $limit
+     * @return array<int, array<string, mixed>>
+     */
+    public function getBitacora(int $host_id, int $limit = 50): array
+    {
+        return $this->logHostsModel->getBitacoraEntries($host_id, $limit);
+    }
+
+    /**
+     * Devuelve las últimas entradas de bitácora para un host, formateadas como HTML <tr>.
+     *
+     * @param int $host_id
+     * @param int $limit
+     * @return string HTML rows for bitacora table
+     */
+    public function formatBitacoraRows(int $host_id, int $limit = 50): string
+    {
+        $entries = $this->getBitacora($host_id, $limit);
+        $rows = '';
+        foreach ($entries as $entry) {
+            $date = $entry['date'] ?? '';
+            $user = $entry['reference'] ?? $entry['username'] ?? '';
+            $msg = $entry['msg'] ?? '';
+            $rows .= "<tr>"
+                . "<td style=\"white-space:nowrap;\">$date</td>"
+                . "<td style=\"white-space:nowrap;\">$user</td>"
+                . "<td>$msg</td>"
+                . "</tr>";
+        }
+        return $rows;
     }
 
     /**

@@ -671,12 +671,17 @@ function requestHostDetails(command, command_values = []) {
                     }
                 }
 
-                /* Tex Notes */
+                /* Text Notes and Bitacora */
                 if (
                         jsonData.command_receive === 'load_notes' ||
                         (jsonData.command_receive === 'changeHDTab' && jsonData.command_value === 'load_notes')
                 ) {
-                    $('#textnotes').html(jsonData.response_msg);
+                    if (jsonData.response_msg.notes) {
+                        $('#textnotes').html(jsonData.response_msg.notes);
+                    }
+                    if (jsonData.response_msg.bitacora) {
+                        $('.bitacora-table-container tbody').html(jsonData.response_msg.bitacora);
+                    }
                 }
                 /* Syslog Journald load */
                 if (

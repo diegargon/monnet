@@ -44,6 +44,11 @@ $lng = [
     //B
     'L_BOOKMARKS' => 'Bookmarks',
     'L_BOOKMARK' => 'Bookmark',
+    // Bitacora
+    'L_BITACORA' => 'Bitácora',
+    'L_BITACORA_ENTRY' => 'Entrada de bitácora',
+    'L_BITACORA_ADD' => 'Añadir entrada',
+    'L_BITACORA_NO_ENTRIES' => 'Sin entradas',
     //C
     'L_CODENAME' => 'Codename',
     'L_CLOSE' => 'Cerrar',

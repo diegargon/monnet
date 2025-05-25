@@ -31,6 +31,8 @@ class LogCommandRouter
             case 'showAlarms':
             case 'showEvents':
                 return $logHostsController->getEvents($command);
+            case 'submitBitacora':
+                return $logHostsController->submitBitacora($command_values);
             default:
                 return [
                     'command_error' => 1,

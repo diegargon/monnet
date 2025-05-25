@@ -1132,7 +1132,8 @@ class CmdHostController
         switch ($tabName) :
             case 'tab3':    # Notes
                 $cmd_value = 'load_notes';
-                $response = $this->cmdHostNotesModel->getNotes($target_id);
+                $response['notes'] = $this->cmdHostNotesModel->getNotes($target_id);
+                $response['bitacora'] = $this->logHostsService->formatBitacoraRows($target_id);
                 break;
             case 'tab9':    # Log
                 $cmd_value = 'logs-reload';

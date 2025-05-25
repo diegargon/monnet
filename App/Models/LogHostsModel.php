@@ -103,4 +103,23 @@ class LogHostsModel
 
         return $this->db->qfetchAll($query, $params);
     }
+
+    /**
+     * Devuelve las últimas entradas de bitácora para un host.
+     *
+     * @param int $host_id
+     * @param int $limit
+     * @return array<int, array<string, mixed>>
+     */
+    public function getBitacoraEntries(int $host_id, int $limit = 50): array
+    {
+        $query = "SELECT * FROM hosts_logs WHERE host_id = :host_id AND log_type = 4 ORDER BY date DESC LIMIT :limit";
+        $params = [
+            ':host_id' => $host_id,
+            ':limit' => $limit
+        ];
+        // Algunos drivers no permiten LIMIT como parámetro, así que lo forzamos como entero
+        $query = str_replace(':limit', (int)$limit, $query);
+        return $this->db->qfetchAll($query, [':host_id' => $host_id]);
+    }
 }
