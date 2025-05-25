@@ -148,6 +148,7 @@
                         <th>MAC</th>
                         <th>Online</th>
                         <th>Rol</th>
+                        <th>Linked</th>
                         <th>Categoria</th>
                         <th>Última conexión</th>
                     </tr>
@@ -167,13 +168,14 @@
                             <td><?= $host['mac'] ?? '' ?></td>
                             <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
                             <td><?= $host['rol_name'] ?? '' ?></td>
+                            <td><?= $host['linked_name'] ?? '' ?></td>
                             <td><?= $host['category'] ?? '' ?></td>
                             <td><?= $host['last_seen_fmt'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="10" style="text-align:center;">Sin hosts en esta red</td>
+                        <td colspan="11" style="text-align:center;">Sin hosts en esta red</td>
                     </tr>
                 <?php endif; ?>
                 </tbody>
@@ -194,6 +196,7 @@
                     <th>MAC</th>
                     <th>Online</th>
                     <th>Rol</th>
+                    <th>Linked</th>
                     <th>Categoria</th>
                     <th>Última conexión</th>
                 </tr>
@@ -209,6 +212,7 @@
                     <td><?= $host['mac'] ?></td>
                     <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
                     <td><?= $host['rol_name'] ?? '' ?></td>
+                    <td><?= $host['linked_name'] ?? '' ?></td>
                     <td><?= $host['category'] ?? '' ?></td>
                     <td><?= $host['last_seen_fmt'] ?></td>
                 </tr>

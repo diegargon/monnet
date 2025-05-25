@@ -69,14 +69,23 @@ class CmdInventoryController
                 'name' => $net['name'] ?? ''
             ];
         }
+
+        // Crear un mapa de hosts por id para lookup rápido de linked
+        $host_id_map = [];
+        foreach ($hosts as $h) {
+            if (isset($h['id'])) {
+                $host_id_map[$h['id']] = $h;
+            }
+        }
+
         foreach ($hosts as &$host) {
             // display_name
-            if (!empty($host['title'])) {
-                $host['display_name'] = $host['title'];
-            } elseif (!empty($host['hostname'])) {
-                $host['display_name'] = explode('.', $host['hostname'])[0];
+            $host['display_name'] = $this->getDisplayName($host);
+            // linked_name
+            if (isset($host['linked']) && $host['linked'] != 0 && isset($host_id_map[$host['linked']])) {
+                $host['linked_name'] = $this->getDisplayName($host_id_map[$host['linked']]);
             } else {
-                $host['display_name'] = $host['ip'];
+                $host['linked_name'] = '';
             }
             // vlan (name(vlanid))
             if (isset($host['network']) && isset($vlan_map[$host['network']])) {
@@ -146,5 +155,22 @@ class CmdInventoryController
         }
         unset($host);
         return $hosts;
+    }
+
+    /**
+     * Obtiene el display_name de un host.
+     * @param array $host
+     * @return string
+     */
+    private function getDisplayName(array $host): string
+    {
+        if (!empty($host['title'])) {
+            return $host['title'];
+        } elseif (!empty($host['hostname'])) {
+            return explode('.', $host['hostname'])[0];
+        } elseif (!empty($host['ip'])) {
+            return $host['ip'];
+        }
+        return '';
     }
 }
