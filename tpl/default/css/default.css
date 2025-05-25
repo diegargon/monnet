@@ -1931,6 +1931,12 @@ input:checked + .slider:before {
     animation-name: blinkGreen;
 }
 
+.led-blue {
+    background-color: #1e90ff;
+    box-shadow: rgba(30, 144, 255, 0.3) 0 -1px 7px 1px, inset #1e90ff 0 0px 5px, #0C3A06 0 1px 0;
+    animation-name: blinkBlue;
+}
+
 .blink1 {
     animation-duration: 1s;
     animation-iteration-count: infinite;
@@ -2001,6 +2007,19 @@ input:checked + .slider:before {
     }
     to {
         background-color: rgb(16, 32, 16);
+    }
+}
+
+@keyframes blinkBlue {
+    from {
+        background-color: #1e90ff;
+    }
+    50% {
+        background-color: #63b3ff;
+        box-shadow: rgba(30, 144, 255, 0.5) 0 -1px 7px 1px, inset #63b3ff 0 0px 5px, #0C3A06 0 1px 0;
+    }
+    to {
+        background-color: #1e90ff;
     }
 }
 
