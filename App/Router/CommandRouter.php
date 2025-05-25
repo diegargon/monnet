@@ -32,6 +32,65 @@ class CommandRouter
     }
 
     /**
+     * Mapea un comando a su grupo correspondiente.
+     *
+     * @param string $command
+     * @return string|null
+     */
+    private function getCommandGroup(string $command): ?string
+    {
+        $groups = [
+            'host' => [
+                'host-details', 'remove_host', 'toggleDisablePing', 'setCheckPorts', 'submitHostToken',
+                'submitHostPort', 'deleteHostPort', 'submitCustomServiceName', 'submitTitle', 'submitHostname',
+                'submitOwner', 'submitHostTimeout', 'submitChangeCat', 'submitManufacture', 'submitMachineType',
+                'submitSysAval', 'submitLinked', 'submitOS', 'submitOSFamily', 'submitOSVersion', 'submitSystemRol',
+                'submitAccessLink', 'submitAccessType', 'clearHostAlarms', 'setHostAlarms', 'toggleMailAlarms',
+                'alarm_ping_disable', 'alarm_port_disable', 'alarm_macchange_disable', 'alarm_newport_disable',
+                'alarm_hostname_disable', 'alarm_ping_email', 'alarm_port_email', 'alarm_macchange_email',
+                'alarm_newport_email', 'updateAlertEmailList', 'changeHDTab', 'setAlwaysOn', 'setLinkable',
+                'setHighlight', 'setHostAnsible', 'saveNote', 'auto_reload_host_details', 'setHostDisable',
+                'report_ansible_hosts', 'report_ansible_hosts_off', 'report_ansible_hosts_fail', 'report_agents_hosts',
+                'report_agents_hosts_off', 'report_agents_hosts_missing_pings', 'report_alerts', 'report_warns',
+                'clear_alerts', 'clear_warns', 'submitHost', 'submitNewHostsCat', 'power_on', 'submitAgentConfig'
+            ],
+            'log' => [
+                'ack_host_log', 'logs-reload', 'auto_reload_logs', 'showAlarms', 'showEvents'
+            ],
+            'bookmark' => [
+                'addBookmark', 'updateBookmark', 'removeBookmark', 'mgmtBookmark', 'submitBookmarkCat', 'removeBookmarkCat'
+            ],
+            'config' => [
+                'submitConfigform'
+            ],
+            'user' => [
+                'network_select', 'network_unselect', 'footer_dropdown_status', 'show_host_cat', 'show_host_only_cat',
+                'updateProfile', 'createUser', 'change_bookmarks_tab'
+            ],
+            'network' => [
+                'mgmtNetworks', 'requestPool', 'submitPoolReserver'
+            ],
+            'ansible_report' => [
+                'submitDeleteReport', 'submitViewReport', 'ackReport'
+            ],
+            'task_ansible' => [
+                'playbook_exec', 'pbqueue', 'syslog-load', 'journald-load', 'reboot', 'shutdown',
+                'create_host_task', 'delete_host_task', 'update_host_task', 'force_exec_task',
+                'add_ansible_var', 'del_ansible_var'
+            ],
+            'gateway' => [
+                'restart-daemon', 'reload-pbmeta', 'reload-config'
+            ]
+        ];
+        foreach ($groups as $group => $commands) {
+            if (in_array($command, $commands, true)) {
+                return $group;
+            }
+        }
+        return null;
+    }
+
+    /**
      *
      * @param string $command
      * @param array<string, string|int> $command_values
