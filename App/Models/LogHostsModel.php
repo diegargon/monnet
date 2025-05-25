@@ -1,10 +1,21 @@
 <?php
 
 /**
- * Model for managing host logs in the database.
- *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ *
+ * Model for managing host logs in the database.
+ *
+ * Tabla: hosts_logs
+ *  - id: int, PRIMARY KEY, AUTO_INCREMENT
+ *  - host_id: int, INDEX
+ *  - level: tinyint, INDEX, default 7
+ *  - log_type: varchar(255), default 0; valores: 0=DEFAULT, 1=EVENT, 2=EVENT_WARN, 3=EVENT_ALERT, 4=BITACORA
+ *  - event_type: smallint, nullable, default 0
+ *  - msg: char(255), NOT NULL
+ *  - ack: tinyint(1), default 0
+ *  - date: datetime, INDEX, default CURRENT_TIMESTAMP
+ *
  */
 
 namespace App\Models;
