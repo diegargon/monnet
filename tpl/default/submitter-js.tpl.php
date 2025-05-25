@@ -336,6 +336,66 @@
                         refresh(1);
                     }
 
+                    if (
+                        jsonData &&
+                        !(
+                            jsonData.command_receive === 'inventoryReport'
+                            /*
+                            jsonData.command_receive === 'submitBookmarkCat' ||
+                            jsonData.command_receive === 'submitHost' ||
+                            jsonData.command_receive === 'removeBookmarkCat' ||
+                            jsonData.command_receive === 'removeBookmark' ||
+                            jsonData.command_receive === 'remove_host' ||
+                            jsonData.command_receive === 'show_host_cat' ||
+                            jsonData.command_receive === 'show_host_only_cat' ||
+                            jsonData.command_receive === 'report_ansible' ||
+                            jsonData.command_receive === 'report_ansible_hosts' ||
+                            jsonData.command_receive === 'report_ansible_hosts_off' ||
+                            jsonData.command_receive === 'report_ansible_hosts_fail' ||
+                            jsonData.command_receive === 'report_agents_hosts' ||
+                            jsonData.command_receive === 'report_agents_hosts_off' ||
+                            jsonData.command_receive === 'report_agents_hosts_missing_pings' ||
+                            jsonData.command_receive === 'report_alerts' ||
+                            jsonData.command_receive === 'report_warns' ||
+                            jsonData.command_receive === 'showAlarms' ||
+                            jsonData.command_receive === 'showEvents' ||
+                            jsonData.command_receive === 'reboot' ||
+                            jsonData.command_receive === 'shutdown' ||
+                            jsonData.command_receive === 'mgmtBookmark' ||
+                            jsonData.command_receive === 'mgmtNetworks' ||
+                            jsonData.command_receive === 'requestPool' ||
+                            jsonData.command_receive === 'submitPoolReserver' ||
+                            jsonData.command_receive === 'updateBookmark' ||
+                            jsonData.command_receive === 'addBookmark' ||
+                            jsonData.command_receive === 'host_details'
+                            */
+                        )
+                    ) {
+
+                        $("#stdbox-title").html(jsonData.command_receive || "Respuesta");
+                        let content = "";
+                        if (jsonData.response_msg) {
+                            if (typeof jsonData.response_msg === "object") {
+                                content = '<pre>' + JSON.stringify(jsonData.response_msg, null, 2) + '</pre>';
+                            } else {
+                                content = jsonData.response_msg;
+                            }
+                        } else {
+                            content = '<pre>' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                        }
+                        $("#stdbox-content").html(content);
+                        $("#stdbox-container").css({
+                            "display": "block",
+                            "max-width": "50vw"
+                        });
+                        $("#stdbox-content").css({
+                            "max-width": "50vw",
+                            "word-wrap": "break-word",
+                            "white-space": "normal",
+                            "overflow": "auto"
+                        });
+                    }
+
                 })
 
                 .fail(function (xhr, status, error) {

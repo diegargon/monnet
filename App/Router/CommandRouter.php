@@ -78,6 +78,9 @@ class CommandRouter
             ],
             'gateway' => [
                 'restart-daemon', 'reload-pbmeta', 'reload-config'
+            ],
+            'inventory' => [
+                'showInventory'
             ]
         ];
         foreach ($groups as $group => $commands) {
@@ -133,6 +136,10 @@ class CommandRouter
                 break;
             case 'gateway':
                 $router = new GatewayCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'inventory':
+                $router = new InventoryCommandRouter($this->ctx);
                 $response = $router->handle($command, $command_values);
                 break;
             default:

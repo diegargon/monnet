@@ -2,8 +2,6 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -21,21 +19,21 @@
         <div class="user_ctrl">
             <a class="ctrl_link" href="/?page=user">
                 <img class="settings_link"
-                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_USER'] ?>">
+                    src="./tpl/default/img/settings-items.png" title="<?= $lng['L_USER'] ?>">
             </a>
             <span class="opt_labels"><?= ucfirst($tdata['username']) ?></span>
         </div>
         <div class="general_ctrl">
             <button id="toggleItemsSettings" class="button-ctrl" type="submit">
                 <img class="settings_link"
-                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_EDIT'] ?>">
+                    src="./tpl/default/img/settings-items.png" title="<?= $lng['L_EDIT'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_QUICK_CONFIG'] ?></span>
         </div>
         <div class="general_ctrl">
             <a class="ctrl_link" href="?page=settings">
                 <img class="settings_link"
-                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_CONFIG'] ?>">
+                    src="./tpl/default/img/settings-items.png" title="<?= $lng['L_CONFIG'] ?>">
             </a>
             <span class="opt_labels"><?= $lng['L_CONFIG'] ?></span>
         </div>
@@ -44,7 +42,7 @@
                     onclick="submitCommand('mgmtNetworks',{id: 0, action: 'mgmt'})"
                     class="button-ctrl" type="submit">
                 <img class="add_link"
-                     src="./tpl/default/img/settings-items.png" title="<?= $lng['L_NETWORK'] ?>">
+                    src="./tpl/default/img/settings-items.png" title="<?= $lng['L_NETWORK'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_NETWORKS'] ?></span>
         </div>
@@ -71,7 +69,7 @@
                     onclick="submitCommand('requestPool',{id: 0, action: 'mgmt'})"
                     class="button-ctrl" type="submit">
                 <img class="add_link"
-                     src="./tpl/default/img/add.png" title="<?= $lng['L_NETWORK'] ?>">
+                    src="./tpl/default/img/add.png" title="<?= $lng['L_NETWORK'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_IP_POOL'] ?></span>
         </div>
@@ -83,7 +81,7 @@
                     onclick="submitCommand('showAlarms',{id: 0, action: 'show'})"
                     class="button-ctrl" type="submit">
                 <img class="settings_link"
-                     src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
+                    src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_ALARMS'] ?></span>
         </div>
@@ -92,9 +90,18 @@
                     onclick="submitCommand('showEvents',{id: 0, action: 'show'})"
                     class="button-ctrl" type="submit">
                 <img class="settings_link"
-                     src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
+                    src="./tpl/default/img/info.png" title="<?= $lng['L_ALARMS'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_EVENTS'] ?></span>
+        </div>
+        <div class="general_ctrl">
+            <button id="inventory-report"
+                    onclick="submitCommand('showInventory',{id: 0, action: 'show'})"
+                    class="button-ctrl" type="submit">
+                <img class="settings_link"
+                    src="./tpl/default/img/info.png" title="Inventory Report">
+            </button>
+            <span class="opt_labels">Inventory Report</span>
         </div>
     </fieldset>
 
@@ -105,7 +112,7 @@
                     onclick="submitCommand('restart-daemon',{id: 0})"
                     class="button-ctrl" type="submit">
                 <img class="settings_link"
-                     src="./tpl/default/img/refresh.png" title="<?= $lng['L_RESTART_G'] ?>">
+                    src="./tpl/default/img/refresh.png" title="<?= $lng['L_RESTART_G'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_REBOOT'] ?></span>
         </div>
@@ -114,7 +121,7 @@
                     onclick="submitCommand('reload-pbmeta',{id: 0})"
                     class="button-ctrl" type="submit">
                 <img class="settings_link"
-                     src="./tpl/default/img/refresh.png" title="<?= $lng['L_REFRESH_PBMETA'] ?>">
+                    src="./tpl/default/img/refresh.png" title="<?= $lng['L_REFRESH_PBMETA'] ?>">
             </button>
             <span class="opt_labels"><?= $lng['L_REFRESH_PBMETA'] ?></span>
         </div>

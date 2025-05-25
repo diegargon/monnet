@@ -27,8 +27,8 @@
                         <td class="td-host-logs">
                         <?php
                         if ($key === 'online') :
-                             $host_status = $host['online'] ? 'led-green-on' : $host_status = 'led-red-on';
-                             ?>
+                            $host_status = $host['online'] ? 'led-green-on' : $host_status = 'led-red-on';
+                            ?>
                             <div class="host-led <?= $host_status ?>"></div>
                             <?php
                         elseif ($key === 'log_msgs') :
