@@ -139,7 +139,7 @@ Create the file /etc/monnet/config-db.json
 
 ```
 {
-    "python_driver": "mysql-connector", 
+    "python_driver": "mysql-connector",
     "dbhost": "localhost",
     "dbport": 3306,
     "dbname": "monnet",
@@ -150,7 +150,7 @@ Create the file /etc/monnet/config-db.json
 }
 ```
 
-"python_driver" is relate to Monnet Gateway 
+"python_driver" is relate to Monnet Gateway
 
 ## Setting the database
 
@@ -164,15 +164,20 @@ Create the file /etc/monnet/config-db.json
 monnet : monnetadmin
 ```
 
-## Setting crontab (OBSOLETE)
+## Code Stats 25/05
 
-Must removed this CRON lines, script already migrated to MonNet Gateway.
+
+ *.php lines
+```
+ find . -name '*.php' -type f -exec wc -l {} +
+```
+
+25857 total
 
 ```
-$ nano /etc/crontab
-*/5 * * * * root /usr/bin/php /var/www/html/monnet-cli.php
-*/15 * * * * root /usr/bin/php /var/www/html/monnet-discovery.php
+find .  -type f |wc -l
 ```
+425
 
 # Monnet Core
 
