@@ -39,7 +39,7 @@
         </tbody>
     </table>
     <h2>Redes</h2>
-    <table class="inventory-table">
+    <table class="inventory-table" style="min-width:600px;">
         <thead>
             <tr>
                 <th>ID</th>

@@ -13,7 +13,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 ?>
-<div id="stdbox-container" class="draggable">
+<div id="stdbox-container" class="draggable" style="resize: both; overflow: auto; min-width: 250px; min-height: 120px;">
     <div class="stdbox-bar dragbar">
         <button id="close_stdcontainer" onclick="closeStdContainer()" class="button-ctrl" type="submit">
             <img class="close_link" src="./tpl/<?= $ncfg->get('theme') ?>/img/close.png" title="<?= $lng['L_CLOSE'] ?>">

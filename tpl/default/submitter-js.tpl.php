@@ -386,13 +386,14 @@
                         $("#stdbox-content").html(content);
                         $("#stdbox-container").css({
                             "display": "block",
-                            "max-width": "50vw"
+                            "max-width": "90vw"
                         });
                         $("#stdbox-content").css({
-                            "max-width": "50vw",
+                            "max-width": "90vw",
                             "word-wrap": "break-word",
                             "white-space": "normal",
-                            "overflow": "auto"
+                            "overflow": "auto",
+                            "resize": "both"
                         });
                     }
 

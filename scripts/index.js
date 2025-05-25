@@ -256,13 +256,15 @@ $(document).ready(function () {
             submitCommand('submitMachineType', {id: hostId, value: mtypeValue});
         }
     });
+
     $(document).on("click", "#submitSysAval", function () {
         var savalValue = $('#system_aval').val();
         var hostId = $('#host_id').val();
         if (savalValue && hostId) {
             submitCommand('submitSysAval', {id: hostId, value: savalValue});
         }
-    });   
+    });
+
     $(document).on("click", "#submitOS", function () {
         var osValue = $('#os').val();
         var hostId = $('#host_id').val();
@@ -276,7 +278,7 @@ $(document).ready(function () {
         if (osValue && hostId) {
             submitCommand('submitOSFamily', {id: hostId, value: osValue});
         }
-    });    
+    });
     $(document).on("click", "#submitOSVersion", function () {
         var osversionValue = $('#os_version').val();
         var hostId = $('#host_id').val();
@@ -521,5 +523,4 @@ $(document).ready(function () {
     $hosts_cat.on('mousedown touchstart', resizeStart);
 
     // END Resize code
-
 });

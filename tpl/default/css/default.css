@@ -1152,6 +1152,14 @@ input:checked + .slider:before {
     background-color: rgb(55, 50, 37);
 }
 
+
+#stdbox-container {
+    resize: both !important;
+    overflow: auto !important;
+    min-width: 250px;
+    min-height: 120px;
+}
+
 .td-network-fields {
     display: flex;
 }
