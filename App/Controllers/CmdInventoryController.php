@@ -8,9 +8,13 @@
 namespace App\Controllers;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 use App\Services\HostService;
 use App\Services\NetworksService;
 use App\Services\TemplateService;
+use App\Services\CategoriesService;
+use App\Services\LogSystemService;
+
 use App\Helpers\Response;
 
 class CmdInventoryController
@@ -19,13 +23,19 @@ class CmdInventoryController
     private HostService $hostService;
     private NetworksService $networksService;
     private TemplateService $templateService;
+    private CategoriesService $categoriesService;
+    private LogSystemService $logSystemService;
+    private array $lng = [];
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $this->lng = $ctx->get('lng');
         $this->hostService = new HostService($ctx);
         $this->networksService = new NetworksService($ctx);
         $this->templateService = new TemplateService($ctx);
+        $this->categoriesService = new CategoriesService($ctx);
+        $this->logSystemService = new LogSystemService($ctx);
     }
 
     /**
@@ -38,6 +48,25 @@ class CmdInventoryController
         $hosts = $this->hostService->getAll();
         $networks = $this->networksService->getNetworks();
 
+        $this->logSystemService->notice('Entry point: showInventory');
+        // Obtener roles del sistema (id => name)
+        $configService = $this->ctx->get(ConfigService::class);
+        $system_roles = $configService->get('system_rol');
+        $rol_map = [];
+        if (is_array($system_roles)) {
+            foreach ($system_roles as $role) {
+                // Asegura que $role sea un array y tenga los campos requeridos
+                if (is_array($role) && isset($role['id']) && isset($role['name'])) {
+                    $rol_map[$role['id']] = $role['name'];
+                }
+            }
+            $this->logSystemService->notice('Roles del sistema obtenidos: ' . json_encode($rol_map));
+        } else {
+            $this->logSystemService->error('Error al obtener los roles del sistema: ' . json_encode($system_roles));
+        }
+
+        $hosts = $this->formatHosts($hosts, $rol_map);
+
         $tdata = [
             'hosts' => $hosts,
             'networks' => $networks
@@ -49,5 +78,33 @@ class CmdInventoryController
             'command_receive' => 'showInventory',
             'response_msg' => $report,
         ]);
+    }
+
+    /**
+     * Format hosts
+     * @param array $hosts
+     * @param array $rol_map
+     * @return array
+     */
+    private function formatHosts(array $hosts, array $rol_map = []): array
+    {
+        $categories = $this->categoriesService->getAll();
+        $cat_map = [];
+        foreach ($categories as $cat) {
+            $cat_map[$cat['id']] = $cat['cat_name'];
+        }
+        foreach ($hosts as &$host) {
+            if (isset($host['category']) && isset($cat_map[$host['category']])) {
+                $cat_name = $cat_map[$host['category']];
+                $host['category'] = isset($this->lng[$cat_name]) ? $this->lng[$cat_name] : $cat_name;
+            }
+            if (isset($host['rol']) && isset($rol_map[$host['rol']])) {
+                $host['rol_name'] = $rol_map[$host['rol']];
+            } else {
+                $host['rol_name'] = 'N/A';
+            }
+        }
+        unset($host);
+        return $hosts;
     }
 }
