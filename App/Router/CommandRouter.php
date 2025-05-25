@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Router for handling commands in the application.
+ * Main Router for handling commands in the application.
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
@@ -10,17 +10,15 @@
 namespace App\Router;
 
 use App\Core\AppContext;
-
-
-use App\Controllers\CmdHostController;
-use App\Controllers\LogHostsController;
-use App\Controllers\CmdBookmarksController;
-use App\Controllers\CmdNetworkController;
-use App\Controllers\CmdTaskAnsibleController;
-use App\Controllers\CmdAnsibleReportController;
-use App\Controllers\UserController;
-use App\Controllers\ConfigController;
-use App\Controllers\GatewayController;
+use App\Router\HostCommandRouter;
+use App\Router\LogCommandRouter;
+use App\Router\BookmarkCommandRouter;
+use App\Router\ConfigCommandRouter;
+use App\Router\UserCommandRouter;
+use App\Router\NetworkCommandRouter;
+use App\Router\AnsibleReportCommandRouter;
+use App\Router\TaskAnsibleCommandRouter;
+use App\Router\GatewayCommandRouter;
 
 class CommandRouter
 {
@@ -91,392 +89,51 @@ class CommandRouter
     }
 
     /**
-     *
      * @param string $command
      * @param array<string, string|int> $command_values
-     * @return array<string, mixed> // Corrected return type
+     * @return array<string, mixed>
      */
     public function handleCommand(string $command, array $command_values): array
     {
+        $group = $this->getCommandGroup($command);
         $response = [];
 
-        switch ($command) :
-            /*
-             * Hosts
-             */
-            case 'host-details':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getHostDetails($command_values);
-                break;
-            case 'remove_host':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->removeHost($command, $command_values);
-                break;
-            case 'toggleDisablePing':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->toggleDisablePing($command_values);
-                break;
-            case 'setCheckPorts':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->setCheckPorts($command_values);
-                break;
-            case 'submitHostToken':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitHostToken($command_values);
-                break;
-            case 'submitHostPort':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->addRemotePort($command_values);
-                break;
-            case 'deleteHostPort':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->deleteHostPort($command_values);
-                break;
-            case 'submitCustomServiceName':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitCustomServiceName($command_values);
-                break;
-            case 'submitTitle':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitTitle($command_values);
-                break;
-            case 'submitHostname':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitHostname($command_values);
-                break;
-            case 'submitOwner':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitOwner($command_values);
-                break;
-            case 'submitHostTimeout':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitHostTimeout($command_values);
-                break;
-            case 'submitChangeCat':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitChangeHostCategory($command_values);
-                break;
-            case 'submitManufacture':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitManufacture($command_values);
-                break;
-            case 'submitMachineType':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitMachineType($command_values);
-                break;
-            case 'submitSysAval':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitSysAval($command_values);
-                break;
-            case 'submitLinked':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitLinked($command_values);
-                break;
-            case 'submitOS':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitOS($command_values);
-                break;
-            case 'submitOSFamily':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitOSFamily($command_values);
-                break;
-            case 'submitOSVersion':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitOSVersion($command_values);
-                break;
-            case 'submitSystemRol':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitSystemRol($command_values);
-                break;
-            case 'submitAccessLink':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitAccessLink($command_values);
-                break;
-            case 'submitAccessType':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitAccessType($command_values);
-                break;
-            case 'clearHostAlarms':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->clearHostAlarms($command_values);
-                break;
-            case 'setHostAlarms':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->setHostAlarms($command_values);
-                break;
-            case 'toggleMailAlarms':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->toggleMailAlarms($command_values);
-                break;
-            case 'alarm_ping_disable':
-            case 'alarm_port_disable':
-            case 'alarm_macchange_disable':
-            case 'alarm_newport_disable':
-            case 'alarm_hostname_disable':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->toggleAlarmType($command, $command_values);
-                break;
-            case 'alarm_ping_email':
-            case 'alarm_port_email':
-            case 'alarm_macchange_email':
-            case 'alarm_newport_email':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->toggleEmailAlarmType($command, $command_values);
-                break;
-            case 'updateAlertEmailList':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->setEmailList($command_values);
-                break;
-            case 'changeHDTab':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->handleTabChange($command_values);
-                break;
-            case 'setAlwaysOn':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->setAlwaysOn($command_values);
-                break;
-            case 'setLinkable':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->setLinkable($command_values);
-                break;
-            case 'setHighlight':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->setHighlight($command_values);
-                break;
-            case 'setHostAnsible':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->setHostAnsible($command_values);
-                break;
-            case 'saveNote':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->saveNote($command_values);
-                break;
-            case 'auto_reload_host_details':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->reloadStatsView($command, $command_values);
-                break;
-            case 'setHostDisable':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->setHostDisable($command_values);
-                break;
-            /*
-             *  Hosts Logs
-             */
-            case 'ack_host_log':
-                $logHostsController = new LogHostsController($this->ctx);
-                $response = $logHostsController->ackHostLog($command_values);
-                break;
-            case 'logs-reload':
-                $logHostsController = new LogHostsController($this->ctx);
-                $response = $logHostsController->logsReload($command_values);
-                break;
-            case 'auto_reload_logs':
-                $logHostsController = new LogHostsController($this->ctx);
-                $response = $logHostsController->logsReload($command_values);
-                break;
-            case 'showAlarms':
-            case 'showEvents':
-                $logHostsController = new LogHostsController($this->ctx);
-                $response = $logHostsController->getEvents($command);
-                break;
-            /*
-             *  Host Ansible Reports
-             */
-            case 'report_ansible_hosts':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getAnsibleHosts();
-                break;
-            case 'report_ansible_hosts_off':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getAnsibleHosts(0);
-                break;
-            case 'report_ansible_hosts_fail':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getAnsibleHosts(2);
-                break;
-            case 'report_agents_hosts':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getAgentsHosts(1);
-                break;
-            case 'report_agents_hosts_off':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getAgentsHosts(0);
-                break;
-            case 'report_agents_hosts_missing_pings':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getAgentsHosts(2);
-                break;
-            case 'report_alerts':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getAlertHosts(2);
-                break;
-            case 'report_warns':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->getWarnHosts();
-                break;
-            case 'clear_alerts':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->clearAlerts();
-                break;
-            case 'clear_warns':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->clearWarns();
-                break;
-            case 'submitHost':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitHost($command_values);
-                break;
-            case 'submitNewHostCat':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->submitNewHostsCat($command_values);
-                break;
-            case 'power_on':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->powerOn($command_values);
-                break;
-            # Agent Config
-            case 'submitAgentConfig':
-                $hostController = new CmdHostController($this->ctx);
-                $response = $hostController->saveAgentConfig($command_values);
-                break;
-            /*
-             *  Bookmarks
-             */
-            case 'addBookmark':
-                $bookmarksController = new CmdBookmarksController($this->ctx);
-                $response = $bookmarksController->addBookmark($command_values);
-                break;
-            case 'updateBookmark':
-                $bookmarksController = new CmdBookmarksController($this->ctx);
-                $response = $bookmarksController->updateBookmark($command_values);
-                break;
-            case 'removeBookmark':
-                $bookmarksController = new CmdBookmarksController($this->ctx);
-                $response = $bookmarksController->removeBookmark($command_values);
-                break;
-            case 'mgmtBookmark':
-                $bookmarksController = new CmdBookmarksController($this->ctx);
-                $response = $bookmarksController->mgmtBookmark($command, $command_values);
-                break;
-            case 'submitBookmarkCat':
-                $bookmarksController = new CmdBookmarksController($this->ctx);
-                $response = $bookmarksController->submitBookmarkCat($command_values);
-                break;
-            case 'removeBookmarkCat':
-                $bookmarksController = new CmdBookmarksController($this->ctx);
-                $response = $bookmarksController->removeBookmarkCat($command_values);
-                break;
-            /*
-             * Config
-             */
-            case 'submitConfigform':
-                $cfgController = new ConfigController($this->ctx);
-                $response = $cfgController->setMultiple($command_values);
-                break;
-            /*
-             *  User
-             */
-            case 'network_select':
-            case 'network_unselect':
-            case 'footer_dropdown_status':
-                $userController = new UserController($this->ctx);
-                $response = $userController->setPref($command, $command_values);
-                break;
-
-            case 'show_host_cat':
-                $userController = new UserController($this->ctx);
-                $response = $userController->toggleHostsCat($command, $command_values);
-                break;
-            case 'show_host_only_cat':
-                $userController = new UserController($this->ctx);
-                $response = $userController->onlyOneHostsCat($command, $command_values);
-                break;
-
-            case 'updateProfile':
-                $userController = new UserController($this->ctx);
-                $response = $userController->updateProfile($command_values);
-                break;
-
-            case 'createUser':
-                $userController = new UserController($this->ctx);
-                $response = $userController->createUser($command_values);
-                break;
-
-            case 'change_bookmarks_tab':
-                $userController = new UserController($this->ctx);
-                $response = $userController->changeBookmarksTab($command_values);
-                break;
-            /*
-             *  Network
-             */
-            case 'mgmtNetworks':
-                $networkController = new CmdNetworkController($this->ctx);
-                $response = $networkController->manageNetworks($command, $command_values);
-                break;
-            case 'requestPool':
-                $networkController = new CmdNetworkController($this->ctx);
-                $response = $networkController->requestPoolIPs($command_values);
-                break;
-            case 'submitPoolReserver':
-                $networkController = new CmdNetworkController($this->ctx);
-                $response = $networkController->submitPoolReserver($command_values);
-                break;
-
-            /**
-             * Ansible Reports
-             */
-            case 'submitDeleteReport':
-                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
-                $response = $ansibleReportController->deleteReport($command, $command_values);
-                break;
-            case 'submitViewReport':
-                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
-                $response = $ansibleReportController->viewReport($command, $command_values);
-                break;
-            case 'ackReport':
-                $ansibleReportController = new CmdAnsibleReportController($this->ctx);
-                $response = $ansibleReportController->ackReport($command, $command_values);
-                break;
-
-            /*
-             *  Task Ansible
-             */
-            case 'playbook_exec':
-            case 'pbqueue':
-                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
-                $response = $taskAnsibleController->execPlaybook($command, $command_values);
-                break;
-            case 'syslog-load':
-            case 'journald-load':
-                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
-                $response = $taskAnsibleController->getSystemLogs($command, $command_values);
-                break;
-            case 'reboot':
-            case 'shutdown':
-                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
-                $response = $taskAnsibleController->handleShutdownReboot($command, $command_values);
-                break;
-            case 'create_host_task':
-            case 'delete_host_task':
-            case 'update_host_task':
-            case 'force_exec_task':
-                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
-                $response = $taskAnsibleController->mgmtTask($command, $command_values);
-                break;
-            case 'add_ansible_var':
-                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
-                $response = $taskAnsibleController->addAnsibleVar($command, $command_values);
-                break;
-            case 'del_ansible_var':
-                $taskAnsibleController = new CmdTaskAnsibleController($this->ctx);
-                $response = $taskAnsibleController->delAnsibleVar($command, $command_values);
-                break;
-            # Gateway daemon
-            case 'restart-daemon':
-            case 'reload-pbmeta':
-            case 'reload-config';
-                $gatewayController = new GatewayController($this->ctx);
-                $response = $gatewayController->handleCommand($command);
+        switch ($group) {
+            case 'host':
+                $router = new HostCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'log':
+                $router = new LogCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'bookmark':
+                $router = new BookmarkCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'config':
+                $router = new ConfigCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'user':
+                $router = new UserCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'network':
+                $router = new NetworkCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'ansible_report':
+                $router = new AnsibleReportCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'task_ansible':
+                $router = new TaskAnsibleCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
+                break;
+            case 'gateway':
+                $router = new GatewayCommandRouter($this->ctx);
+                $response = $router->handle($command, $command_values);
                 break;
             default:
                 $response = [
@@ -484,9 +141,8 @@ class CommandRouter
                     'command_error_msg' => 'Comando no reconocido: ' . $command,
                 ];
                 break;
-        endswitch;
+        }
         $response['command_receive'] = $command;
-
         return $response;
     }
 }
