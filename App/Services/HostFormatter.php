@@ -117,6 +117,15 @@ class HostFormatter
             if (empty($host['misc']['disks_warn_threshold'])) {
                 $host['misc']['disks_warn_threshold'] = $this->ncfg->get('default_disks_warn_threshold', 80);
             }
+            /*
+            if (!isset($hostDetails['misc']['cpu_alert_threshold'])) {
+                $hostDetails['misc']['cpu_alert_threshold'] = $this->ncfg->get('default_cpu_alert_threshold');
+
+            }
+            if (!isset($hostDetails['misc']['cpu_warn_threshold'])) {
+                $hostDetails['misc']['cpu_warn_threshold'] = $this->ncfg->get('default_cpu_warn_threshold');
+            }
+            */
         }
 
         return $host;
