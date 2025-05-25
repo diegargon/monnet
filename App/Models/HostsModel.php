@@ -1,9 +1,42 @@
 <?php
 
 /**
- *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ *
+ * Tabla: hosts
+ *  - id: int, PRIMARY KEY, AUTO_INCREMENT
+ *  - title: char(32), nullable
+ *  - hostname: varchar(1024), nullable
+ *  - ip: char(18), INDEX, NOT NULL
+ *  - category: int, default 1
+ *  - mac: char(17), nullable
+ *  - highlight: tinyint(1), default 0
+ *  - check_method: tinyint, default 1 (1:ping, 2:tcp ports, 3:https)
+ *  - weight: tinyint, default 60
+ *  - online: tinyint, default 0
+ *  - glow: datetime, default CURRENT_TIMESTAMP
+ *  - disable: tinyint, default 0
+ *  - warn: tinyint, default 0
+ *  - warn_mail: tinyint(1), default 0
+ *  - scan: tinyint, default 0
+ *  - alert: tinyint, default 0
+ *  - network: tinyint, default 1
+ *  - updated: datetime, default CURRENT_TIMESTAMP
+ *  - created: datetime, default CURRENT_TIMESTAMP
+ *  - token: char(255), nullable
+ *  - notes_id: int, nullable
+ *  - last_check: datetime, nullable
+ *  - misc: json, nullable
+ *  - ansible_enabled: tinyint, default 0
+ *  - ansible_fail: tinyint, default 0
+ *  - agent_installed: tinyint(1), default 0
+ *  - agent_online: tinyint(1), default 0
+ *  - linked: int, nullable, default 0
+ *  - rol: int, nullable, default 0
+ *  - last_seen: datetime, nullable
+ *  - linkable: tinyint(1), nullable, default 0
+ *
  */
 
 namespace App\Models;
