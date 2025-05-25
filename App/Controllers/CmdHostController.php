@@ -5,14 +5,14 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
-CommandRouter       Recibe el comando y los valores.
-CommandRouter       Redirige la solicitud al método correspondiente en HostController.
-CmdHostController   Valida los datos de entrada y llama a HostService para obtener los datos.
-HostService         Se comunica con HostModel para obtener los datos y realiza cualquier lógica de negocio necesaria.
-HostService         Devuelve los datos a HostController.
-CmdHostController   Formatea los datos (opcionalmente usando HostFormatted) y prepara la respuesta.
-CmdHostController   Devuelve la respuesta a CommandRouter.
-CommandRouter       Devuelve la respuesta final al cliente.
+ * CommandRouter       Recibe el comando y los valores.
+ * CommandRouter       Redirige la solicitud al método correspondiente en HostController.
+ * CmdHostController   Valida los datos de entrada y llama a HostService para obtener los datos.
+ * HostService         Se comunica con HostModel para obtener los datos y realiza cualquier lógica de negocio necesaria.
+ * HostService         Devuelve los datos a HostController.
+ * CmdHostController   Formatea los datos (opcionalmente usando HostFormatted) y prepara la respuesta.
+ * CmdHostController   Devuelve la respuesta a CommandRouter.
+ * CommandRouter       Devuelve la respuesta final al cliente.
  */
 
 namespace App\Controllers;
@@ -1032,13 +1032,13 @@ class CmdHostController
     }
     public function setLinkable(array $command_values): array
     {
-        $field = 'linked';
+        $field = 'linkable';
         $host_id = Filter::varInt($command_values['id']);
         $value = Filter::varInt($command_values['value']);
 
-        # Linkable host the linked field is equal to his ID
-        if ($value == 1) {
-            $value = $host_id;
+
+        if ($value != 1) {
+            $value = 0;
         }
 
         if ($this->cmdHostModel->updateByID($host_id, [$field => $value])) {

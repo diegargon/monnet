@@ -42,7 +42,7 @@
                     type="checkbox"
                     id="linkable"
                     data-command="setLinkable"
-                    <?= $tdata['host_details']['linked'] == $tdata['host_details']['id'] ? ' checked' : null ?>>
+                    <?= !empty($tdata['host_details']['linkable']) ? ' checked' : '' ?>>
             </div>
             <div class="">
                 <label for="disable_host"><?= $lng['L_DISABLE'] ?></label>
@@ -233,6 +233,15 @@
                 <label for="linked_to"><?= $lng['L_LINKED'] ?>: </label><br/>
                 <select id="linked_to">
                     <option value="0"><?= $lng['L_NONE'] ?></option>
+                    <?php if (!empty($tdata['host_details']['linkable_hosts'])): ?>
+                        <?php foreach ($tdata['host_details']['linkable_hosts'] as $host): ?>
+                            <option value="<?= $host['id'] ?>"
+                                <?php if (!empty($tdata['host_details']['linked']) && $tdata['host_details']['linked'] == $host['id']): ?>
+                                    selected
+                                <?php endif; ?>
+                            ><?= $host['display_name'] ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
                 <button id="submitLinked"><?= $lng['L_SEND'] ?></button>
             </div>

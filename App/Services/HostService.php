@@ -209,29 +209,14 @@ class HostService
             $hostDetails['misc'] = $this->decodeMisc($hostDetails['misc']);
         }
 
-        if (!isset($hostDetails['misc']['mem_alert_threshold'])) {
-            $hostDetails['misc']['mem_alert_threshold'] = $this->ncfg->get('default_mem_alert_threshold');
-        }
-        if (!isset($hostDetails['misc']['mem_warn_threshold'])) {
-            $hostDetails['misc']['mem_warn_threshold'] = $this->ncfg->get('default_mem_warn_threshold');
-        }
-        if (!isset($hostDetails['misc']['disks_alert_threshold'])) {
-            $hostDetails['misc']['disks_alert_threshold'] = $this->ncfg->get('default_disks_alert_threshold');
-        }
-        if (!isset($hostDetails['misc']['disks_warn_threshold'])) {
-            $hostDetails['misc']['disks_warn_threshold'] = $this->ncfg->get('default_disks_warn_threshold');
-        }
-        /*
-        if (!isset($hostDetails['misc']['cpu_alert_threshold'])) {
-            $hostDetails['misc']['cpu_alert_threshold'] = $this->ncfg->get('default_cpu_alert_threshold');
-
-        }
-        if (!isset($hostDetails['misc']['cpu_warn_threshold'])) {
-            $hostDetails['misc']['cpu_warn_threshold'] = $this->ncfg->get('default_cpu_warn_threshold');
-        }
-        */
-
         $hostDetails = $this->hostFormatter->format($hostDetails);
+
+        $linkable_hosts = $this->getLinkable();
+        foreach ($linkable_hosts as $key => $linkable_host) {
+            $linkable_hosts[$key]['display_name'] = $this->hostFormatter->getDisplayName($linkable_host);
+        }
+        $hostDetails['linkable_hosts'] = $linkable_hosts;
+
 
         // Get remote  ports (1)
         $hostDetails['remote_ports'] = $this->cmdHostModel->getHostScanPorts($target_id, 1);
@@ -717,5 +702,24 @@ class HostService
         $log_msg = 'Ansible alert: ' . $msg;
         $this->logHost->logHost(\LogLevel::WARNING, $id, $log_msg, 3);
         $this->hostsModel->update($id, ['alert' => 1, 'ansible_fail' => 1]);
+    }
+
+    /**
+     * Obtiene los hosts linked to a un host específico.
+     * @param int $id
+     * @return array
+     */
+    public function getLinked(int $id): array
+    {
+        return $this->hostsModel->getFiltered(['linked' => $id]);
+    }
+
+    /**
+     * Obtiene los hosts linkables
+     * @return array
+     */
+    public function getLinkable(): array
+    {
+        return $this->hostsModel->getFiltered(['linkable' => 1]);
     }
 }
