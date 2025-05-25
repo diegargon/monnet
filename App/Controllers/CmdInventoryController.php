@@ -65,6 +65,51 @@ class CmdInventoryController
             $this->logSystemService->error('Error al obtener los roles del sistema: ' . json_encode($system_roles));
         }
 
+        // --- Formateo de hosts para la vista ---
+        // Crear un mapa de VLANs por ID de red
+        $vlan_map = [];
+        foreach ($networks as $net) {
+            $vlan_map[$net['id']] = [
+                'vlan' => $net['vlan'] ?? '',
+                'name' => $net['name'] ?? ''
+            ];
+        }
+        foreach ($hosts as &$host) {
+            // display_name
+            if (!empty($host['title'])) {
+                $host['display_name'] = $host['title'];
+            } elseif (!empty($host['hostname'])) {
+                $host['display_name'] = explode('.', $host['hostname'])[0];
+            } else {
+                $host['display_name'] = $host['ip'];
+            }
+            // vlan (name(vlanid))
+            if (isset($host['network']) && isset($vlan_map[$host['network']])) {
+                $host['vlan'] = $vlan_map[$host['network']]['name'] . ' (' . $vlan_map[$host['network']]['vlan'] . ')';
+            } else {
+                $host['vlan'] = '';
+            }
+            // last_seen_fmt
+            if (!empty($host['last_seen'])) {
+                try {
+                    $dt = new \DateTime($host['last_seen']);
+                    $host['last_seen_fmt'] = $dt->format('Y-m-d');
+                } catch (\Exception $e) {
+                    $host['last_seen_fmt'] = '';
+                }
+            } else {
+                $host['last_seen_fmt'] = '';
+            }
+            // rol_name
+            if (isset($host['rol']) && isset($rol_map[$host['rol']])) {
+                $host['rol_name'] = $rol_map[$host['rol']];
+            } else {
+                $host['rol_name'] = 'N/A';
+            }
+        }
+        unset($host);
+        // --- Fin formateo hosts ---
+
         $hosts = $this->formatHosts($hosts, $rol_map);
 
         $tdata = [

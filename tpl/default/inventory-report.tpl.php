@@ -44,43 +44,7 @@
     // Agrupar hosts por network (ID de red)
     $hosts_by_network_id = [];
     $hosts_no_network = [];
-    // Crear un mapa de VLANs por ID de red
-    $vlan_map = [];
-    foreach ($tdata['networks'] as $net) {
-        $vlan_map[$net['id']] = [
-            'vlan' => $net['vlan'] ?? '',
-            'name' => $net['name'] ?? ''
-        ];
-    }
     foreach ($tdata['hosts'] as $host) {
-        // Construir display_name
-        if (!empty($host['title'])) {
-            $host['display_name'] = $host['title'];
-        } elseif (!empty($host['hostname'])) {
-            $host['display_name'] = explode('.', $host['hostname'])[0];
-        } else {
-            $host['display_name'] = $host['ip'];
-        }
-
-        // Agregar campo vlan (name(vlanid)) si corresponde
-        if (isset($host['network']) && isset($vlan_map[$host['network']])) {
-            $host['vlan'] = $vlan_map[$host['network']]['name'] . ' (' . $vlan_map[$host['network']]['vlan'] . ')';
-        } else {
-            $host['vlan'] = '';
-        }
-
-        // Formatear fecha de last_seen
-        if (!empty($host['last_seen'])) {
-            try {
-                $dt = new DateTime($host['last_seen']);
-                $host['last_seen_fmt'] = $dt->format('Y-m-d');
-            } catch (\Exception $e) {
-                $host['last_seen_fmt'] = '';
-            }
-        } else {
-            $host['last_seen_fmt'] = '';
-        }
-
         if (isset($host['network']) && $host['network'] !== '' && $host['network'] !== null) {
             $hosts_by_network_id[$host['network']][] = $host;
         } else {
