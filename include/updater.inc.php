@@ -457,11 +457,11 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
-    // 0.79 PENDING
+    // 0.79 DONE
     $update = 0.79;
     if ($db_version == 0.78) {
         try {
-            # Use ref instad of tid
+            # DONE Use ref instad of tid
             $db->query("ALTER TABLE `hosts_logs` DROP COLUMN `tid`;");
             $db->query("ALTER TABLE `hosts_logs` ADD COLUMN `reference` VARCHAR(255) DEFAULT NULL;");
             # DONE To delete After change name in use to clean in G
@@ -475,6 +475,20 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
         }
     }
 
+    // 0.80 DONE
+    $update = 0.80;
+    if ($db_version == 0.79) {
+        try {
+            # DONE Use linkable to mark hosts that can be linked
+            $db->query("ALTER TABLE `hosts` ADD COLUMN `linkable` tinyint(1) DEFAULT 0;");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
     // Later
     $update = 0.00;
     if ($db_version == 0.00) {
