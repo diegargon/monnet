@@ -35,7 +35,7 @@ class CmdInventoryController
         $this->networksService = new NetworksService($ctx);
         $this->templateService = new TemplateService($ctx);
         $this->categoriesService = new CategoriesService($ctx);
-        $this->logSystemService = new LogSystemService($ctx);
+        //$this->logSystemService = new LogSystemService($ctx);
     }
 
     /**
@@ -48,7 +48,6 @@ class CmdInventoryController
         $hosts = $this->hostService->getAll();
         $networks = $this->networksService->getNetworks();
 
-        $this->logSystemService->notice('Entry point: showInventory');
         // Obtener roles del sistema (id => name)
         $configService = $this->ctx->get(ConfigService::class);
         $system_roles = $configService->get('system_rol');
@@ -60,12 +59,8 @@ class CmdInventoryController
                     $rol_map[$role['id']] = $role['name'];
                 }
             }
-            $this->logSystemService->notice('Roles del sistema obtenidos: ' . json_encode($rol_map));
-        } else {
-            $this->logSystemService->error('Error al obtener los roles del sistema: ' . json_encode($system_roles));
         }
 
-        // --- Formateo de hosts para la vista ---
         // Crear un mapa de VLANs por ID de red
         $vlan_map = [];
         foreach ($networks as $net) {

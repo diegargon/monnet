@@ -12,11 +12,12 @@
 ?>
 <style>
 @media print {
+    body *,
+    .inventory-report-container * {
+        color: black !important;
+    }
     body * {
         visibility: hidden !important;
-    }
-    * {
-        color: black !important;
     }
     .inventory-report-container, .inventory-report-container * {
         visibility: visible !important;
@@ -33,11 +34,11 @@
         height: auto !important;
         max-height: none !important;
         overflow: visible !important;
+        margin-left: 10px !important;
     }
     button[onclick="window.print()"] {
         display: none !important;
     }
-
     tr:nth-child(2n) {
         background-color: #bfbfbf !important;
     }
@@ -58,9 +59,6 @@
         box-shadow: none !important;
         border: none !important;
         z-index: auto !important;
-    }
-    #stdbox-container {
-        resize: none !important;
         overflow: unset !important;
         min-width: 250px;
         min-height: 120px;
@@ -68,20 +66,16 @@
         top: 0 !important;
         left: 0 !important;
     }
-
-    .left-container {
+    .left-container,
+    .bookmarks-container,
+    .header,
+    .form_container {
         display: none !important;
     }
     #right-container {
         width: 100% !important;
         overflow: visible !important;
         margin: 0 !important;
-    }
-    .bookmarks-container {
-        display: none !important;
-    }
-    .header {
-        display: none !important;
     }
     .main_container {
         overflow: visible !important;
@@ -90,13 +84,9 @@
         margin: 0 !important;
     }
     .stdbox-bar {
-        display: none;
-    }
-    .form_container {
         display: none !important;
     }
 }
-
 </style>
 <div class="inventory-report-container">
     <!-- Botón Imprimir -->
@@ -145,48 +135,50 @@
     ?>
 
     <?php foreach ($tdata['networks'] as $net): ?>
-        <h3><?= $net['name'] ?> (<?= $net['network'] ?>)</h3>
-        <table class="inventory-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>IP</th>
-                    <th>Hostname</th>
-                    <th>VLAN</th>
-                    <th>MAC</th>
-                    <th>Online</th>
-                    <th>Rol</th>
-                    <th>Categoria</th>
-                    <th>Última conexión</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-            $hosts = isset($hosts_by_network_id[$net['id']]) ? $hosts_by_network_id[$net['id']] : [];
-            ?>
-            <?php if (!empty($hosts)): ?>
-                <?php foreach ($hosts as $host): ?>
+        <div class="network-group network-group-<?= $net['id'] ?>">
+            <h3><?= $net['name'] ?> (<?= $net['network'] ?>)</h3>
+            <table class="inventory-table">
+                <thead>
                     <tr>
-                        <td><?= $host['id'] ?></td>
-                        <td><?= $host['display_name'] ?></td>
-                        <td><?= $host['ip'] ?></td>
-                        <td><?= $host['hostname'] ?? '' ?></td>
-                        <td><?= $host['vlan'] ?></td>
-                        <td><?= $host['mac'] ?? '' ?></td>
-                        <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
-                        <td><?= $host['rol_name'] ?? '' ?></td>
-                        <td><?= $host['category'] ?? '' ?></td>
-                        <td><?= $host['last_seen_fmt'] ?></td>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>IP</th>
+                        <th>Hostname</th>
+                        <th>VLAN</th>
+                        <th>MAC</th>
+                        <th>Online</th>
+                        <th>Rol</th>
+                        <th>Categoria</th>
+                        <th>Última conexión</th>
                     </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="10" style="text-align:center;">Sin hosts en esta red</td>
-                </tr>
-            <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <?php
+                $hosts = isset($hosts_by_network_id[$net['id']]) ? $hosts_by_network_id[$net['id']] : [];
+                ?>
+                <?php if (!empty($hosts)): ?>
+                    <?php foreach ($hosts as $host): ?>
+                        <tr>
+                            <td><?= $host['id'] ?></td>
+                            <td><?= $host['display_name'] ?></td>
+                            <td><?= $host['ip'] ?></td>
+                            <td><?= $host['hostname'] ?? '' ?></td>
+                            <td><?= $host['vlan'] ?></td>
+                            <td><?= $host['mac'] ?? '' ?></td>
+                            <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
+                            <td><?= $host['rol_name'] ?? '' ?></td>
+                            <td><?= $host['category'] ?? '' ?></td>
+                            <td><?= $host['last_seen_fmt'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="10" style="text-align:center;">Sin hosts en esta red</td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     <?php endforeach; ?>
 
     <?php if (!empty($hosts_no_network)): ?>
