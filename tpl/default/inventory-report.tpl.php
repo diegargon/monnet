@@ -18,20 +18,18 @@
     }
     body * {
         visibility: hidden !important;
+        zoom: 98% !important;
     }
-    .term_container {
+    .main_align_container {
         visibility: hidden !important;
     }
     .inventory-report-container, .inventory-report-container * {
         visibility: visible !important;
 
     }
-    .inventory-report-container {
-        
-    }
+
     .inventory-table {
-        width: 200mm !important;
-        /* margin: 20mm !important; */
+        width: 100% !important;
     }
     .inventory-report-container {
         position: static !important;
@@ -56,8 +54,14 @@
         position: unset !important;
         top: 0 !important;
         left: 0 !important;
-        max-width: 200mm;
+        max-width: 100% !important;
     }
+    #stdbox-content {
+        max-height: fit-content !important;
+        margin: 0px !important;
+    }
+    .term_container,
+    #term_container,
     .left-container,
     .bookmarks-container,
     .header,
@@ -65,10 +69,10 @@
         display: none !important;
     }
     #right-container {
-        width: 100% !important;
-        max-width: 200mm !important;
+        flex-grow: 0;
         overflow: visible !important;
         margin: 0 !important;
+        width: 100% !important;
     }
     .main_container {
         overflow: visible !important;
@@ -78,10 +82,6 @@
     }
     .stdbox-bar {
         display: none !important;
-    }
-    table {
-        border: 0px !important;
-        width: 200mm !important;
     }
 }
 </style>
