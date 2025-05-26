@@ -72,95 +72,101 @@
     <div class="resume_container">
         <div class="resume-left-column">
             <!-- LEFT -->
-        <?php if (!empty($tdata['host_details']['agent_installed'])) : ?>
-            <button id="auto_reload_host_details">Auto: OFF</button>
-        <?php endif; ?>
-            <div class="">
-                <span class="resume_label"><?= $lng['L_NAME'] ?>:</span>
-                <span class="display_name"><?= $tdata['host_details']['display_name'] ?></span>
-            </div>
-            <div class="">
-                <span class="resume_label"><?= $lng['L_IP'] ?>:</span>
-                <span class="display_name"><?= $tdata['host_details']['ip'] ?></span>
-            </div>
-            <div class="">
-                <span class="resume_label"><?= $lng['L_HOSTNAME'] ?>:</span>
-                <span class="display_name"><?= $tdata['host_details']['hostname'] ?></span>
-            </div>
-            <div class"">
-                <div><?= $lng['L_NETWORK'] ?>: <?= $tdata['host_details']['net_cidr'] ?></div>
-                <div><?= $lng['L_NETWORK_NAME'] ?>: <?= $tdata['host_details']['network_name'] ?></div>
-                <div><?= $lng['L_VLAN'] ?>: <?= $tdata['host_details']['network_vlan'] ?></div>
-            </div>
-            <?php if (!empty($h_misc['owner'])) : ?>
-                <div class="">
-                    <span class="resume_label"><?= $lng['L_OWNER'] ?>:</span>
-                    <span class="resume_field"><?= $h_misc['owner'] ?></span>
-                </div>
-            <?php endif; ?>
-            <div class="">
-                <span class="resume_label"><?= $lng['L_ADDED'] ?>:</span>
-                <span class="resume_field">
-                    <?= $tdata['host_details']['formated_creation_date'] ?>
-                </span>
-            </div>
-            <?php
-            if (
-                !empty($h_misc['uptime'])
-            ) {
-                ?>
-                <div class="" >
-                    <span class="resume_label"><?= $lng['L_UPTIME'] ?>:</span>
-                    <span class="resume_field">
-                        <?= $h_misc['uptime']?>
-                    </span>
-                </div>
-            <?php } ?>
-            <?php if (!empty($tdata['host_details']['latency_ms'])) : ?>
-                <span class="resume_label"><?= $lng['L_LATENCY'] ?>:</span>
-                <span class="resume_field"><?= $tdata['host_details']['latency_ms'] ?></span>
+            <?php if (!empty($tdata['host_details']['agent_installed'])) : ?>
+                <button id="auto_reload_host_details">Auto: OFF</button>
             <?php endif; ?>
 
-            <?php
-            if (!empty($tdata['host_details']['ncpu'])) {
-                ?>
-                <div>
-                    <span class="cpu_label">CPUs: </span>
-                    <span class="cpu_field"><?= $h_misc['ncpu'] ?></span>
-                </div>
-            <?php } ?>
+            <div class="resume-section">
+                <table class="resume-fields-table">
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_NAME'] ?>:</td>
+                        <td class="display_name"><?= $tdata['host_details']['display_name'] ?></td>
+                    </tr>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_IP'] ?>:</td>
+                        <td class="display_name"><?= $tdata['host_details']['ip'] ?></td>
+                    </tr>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_HOSTNAME'] ?>:</td>
+                        <td class="display_name"><?= $tdata['host_details']['hostname'] ?></td>
+                    </tr>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_NETWORK'] ?>:</td>
+                        <td><?= $tdata['host_details']['net_cidr'] ?></td>
+                    </tr>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_NETWORK_NAME'] ?>:</td>
+                        <td><?= $tdata['host_details']['network_name'] ?></td>
+                    </tr>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_VLAN'] ?>:</td>
+                        <td><?= $tdata['host_details']['network_vlan'] ?></td>
+                    </tr>
+                    <?php if (!empty($h_misc['owner'])) : ?>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_OWNER'] ?>:</td>
+                        <td class="resume_field"><?= $h_misc['owner'] ?></td>
+                    </tr>
+                    <?php endif; ?>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_ADDED'] ?>:</td>
+                        <td class="resume_field"><?= $tdata['host_details']['formated_creation_date'] ?></td>
+                    </tr>
+                    <?php if (!empty($h_misc['uptime'])) : ?>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_UPTIME'] ?>:</td>
+                        <td class="resume_field"><?= $h_misc['uptime']?></td>
+                    </tr>
+                    <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['latency_ms'])) : ?>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_LATENCY'] ?>:</td>
+                        <td class="resume_field"><?= $tdata['host_details']['latency_ms'] ?></td>
+                    </tr>
+                    <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['ncpu'])) : ?>
+                    <tr>
+                        <td class="resume_label">CPUs:</td>
+                        <td class="cpu_field"><?= $h_misc['ncpu'] ?></td>
+                    </tr>
+                    <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_LAST_PING_CHECK'] ?>:</td>
+                        <td class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></td>
+                    </tr>
+                    <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['f_last_seen'])) : ?>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_LAST_SEEN_ONLINE'] ?>:</td>
+                        <td class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></td>
+                    </tr>
+                    <?php endif; ?>
+                </table>
+            </div>
 
-            <?php if (!empty($tdata['host_details']['f_last_check'])) : ?>
-                <div>
-                    <span class="resume_label"><?= $lng['L_LAST_PING_CHECK'] ?>: </span>
-                    <span class="resume_field"><?= $tdata['host_details']['f_last_check'] ?></span>
-                </div>
-            <?php endif; ?>
-            <?php if (!empty($tdata['host_details']['f_last_seen'])) : ?>
-                <div>
-                    <span class="resume_label"><?= $lng['L_LAST_SEEN_ONLINE'] ?>: </span>
-                    <span class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></span>
-                </div>
-            <?php endif; ?>
             <?php if (!empty($h_misc['f_agent_contact'])) : ?>
-                <div>
-                    <span class="resume_field"><?= $lng['L_AGENT_INSTALLED'] ?></span>
-                    <span class="resume_field">
-                        <?= $h_misc['agent_version'] ?>
-                        (<?= $ncfg->get('agent_latest_version') ?>)
-                    </span>
-                </div>
-                <div>
-                    <span class="resume_label"><?= $lng['L_AGENT_LAST_PING'] ?>:</span>
-                    <span class="resume_field"><?= $h_misc['f_agent_contact'] ?></span>
-                </div>
+            <div class="resume-section">
+                <table class="resume-fields-table">
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_AGENT_INSTALLED'] ?>:</td>
+                        <td class="resume_field">
+                            <?= $h_misc['agent_version'] ?>
+                            (<?= $ncfg->get('agent_latest_version') ?>)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_AGENT_LAST_PING'] ?>:</td>
+                        <td class="resume_field"><?= $h_misc['f_agent_contact'] ?></td>
+                    </tr>
+                </table>
+            </div>
             <?php endif; ?>
+
             <?php if (!empty($h_misc['access_link'])) : ?>
-                <div>
-                    <a href="<?= $h_misc['access_link'] ?>"
-                        target="_blank"><?= $h_misc['access_link'] ?>
-                    </a>
-                </div>
+            <div class="resume-section">
+                <a href="<?= $h_misc['access_link'] ?>" target="_blank"><?= $h_misc['access_link'] ?></a>
+            </div>
             <?php endif; ?>
         </div>
         <!-- RIGHT COLUMN -->

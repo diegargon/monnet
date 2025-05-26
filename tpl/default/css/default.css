@@ -2113,6 +2113,63 @@ input:checked + .slider:before {
     }
 }
 
+.resume-left-column {
+    background: #232323;
+    border-radius: 10px;
+    padding: 14px 12px 12px 12px;
+    margin: 8px 8px 8px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    min-width: 260px;
+    max-width: 420px;
+}
+
+.resume-fields-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.resume-fields-table td {
+    padding: 2px 4px;
+    vertical-align: middle;
+    font-size: 11px;
+}
+
+.resume-fields-table td.resume_label {
+    width: 120px;
+    max-width: 140px;
+    text-align: right;
+    font-weight: bold;
+    color: #b0b0b0;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.resume-fields-table td:not(.resume_label) {
+    text-align: left;
+    word-break: break-all;
+}
+
+.resume_field, .display_name {
+    color: #fff;
+    font-weight: 400;
+}
+
+.resume-section {
+    margin-bottom: 12px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 6px;
+}
+
+.resume-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
 @keyframes GlowGreen {
     0% {
         background-color: rgb(16, 32, 16);
