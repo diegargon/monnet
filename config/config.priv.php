@@ -197,6 +197,7 @@ $cfg['os'] = [
     80 => ['id' => 80, 'name' => 'webOS', 'img' => 'unknown.jpg'],
     81 => ['id' => 81, 'name' => 'Fire OS', 'img' => 'unknown.jpg'],
     82 => ['id' => 82, 'name' => 'LineageOS', 'img' => 'unknown.jpg'],
+    83 => ['id' => 83, 'name' => 'DiskStation Mananager', 'img' => 'unknown.jpg'],
     /* */
     200 => ['id' => 200, 'name' => 'KaiOS', 'img' => 'unknown.jpg'],
     201 => ['id' => 201, 'name' => 'Sailfish OS', 'img' => 'unknown.jpg'],
@@ -228,7 +229,7 @@ $cfg['os_family'] = [
     2 => ['id' => 2, 'name' => 'Linux', 'img' => 'default.png'],
     3 => ['id' => 3, 'name' => 'Windows', 'img' => 'default.png'],
     4 => ['id' => 4, 'name' => 'macOS', 'img' => 'default.png'],
-    5 => ['id' => 5, 'name' => 'Android', 'img' => 'default.png'],
+    5 => ['id' => 5, 'name' => 'Android', 'img' => 'android-phone.png'],
     6 => ['id' => 6, 'name' => 'iOS', 'img' => 'default.png'],
     7 => ['id' => 7, 'name' => 'BSD', 'img' => 'default.png'],
     8 => ['id' => 8, 'name' => 'Solaris', 'img' => 'default.png'],
@@ -247,13 +248,13 @@ $cfg['os_family'] = [
 /* System ROL */
 
 $cfg['system_rol'] = [
-    0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'unknown.png'],
+    0 => ['id' => 0, 'name' => 'N/A', 'img' => 'unknown.png'],
     1 => ['id' => 1, 'name' => 'Window Desktop', 'img' => 'windows-desktop.png'],
     2 => ['id' => 2, 'name' => 'Linux Desktop', 'img' => 'linux-desktop.png'],
-    3 => ['id' => 3, 'name' => 'Iphone', 'img' => 'iphone.png'],
-    4 => ['id' => 4, 'name' => 'Android Phone', 'img' => 'android-phone.png'],
-    5 => ['id' => 5, 'name' => 'Apple Tablet', 'img' => 'ipad.png'],
-    6 => ['id' => 6, 'name' => 'Android Tablet', 'img' => 'android-tablet.png'],
+    3 => ['id' => 3, 'name' => 'Domain Controller', 'img' => 'default.png'],
+    /* */
+    5 => ['id' => 5, 'name' => 'Monitoring', 'img' => 'default.png'],
+    6 => ['id' => 6, 'name' => 'Radius Server', 'img' => 'default.png'],
     7 => ['id' => 7, 'name' => 'TV', 'img' => 'tv.png'],
     8 => ['id' => 8, 'name' => 'Windows Server', 'img' => 'windows-server.png'],
     9 => ['id' => 9, 'name' => 'Linux Server', 'img' => 'linux-server.png'],
@@ -286,6 +287,10 @@ $cfg['system_rol'] = [
     36 => ['id' => 36, 'name' => 'Proxy', 'img' => 'balancer-balancer.png'],
     37 => ['id' => 37, 'name' => 'Management', 'img' => 'management.png'],
     38 => ['id' => 38, 'name' => 'Connectivity', 'img' => 'connectivity.png'],
+    39 => ['id' => 39, 'name' => 'Phone', 'img' => 'default.png'],
+    41 => ['id' => 41, 'name' => 'PBX', 'img' => 'default.png'],
+    42 => ['id' => 42, 'name' => 'Certificate Authority', 'img' => 'default.png'],
+    43 => ['id' => 43, 'name' => 'Visualization', 'img' => 'default.png'],
 ];
 
 $cfg['sys_availability'] = [
