@@ -187,9 +187,9 @@ class HostService
 
     /**
      * @param int $id
-     * @return array<string, string|int>
+     * @return ?array<string, string|int>
      */
-    public function getHostById(int $id): array
+    public function getHostById(int $id): ?array
     {
         $host = $this->cmdHostModel->getHostById($id);
 
