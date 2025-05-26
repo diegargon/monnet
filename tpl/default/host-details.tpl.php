@@ -79,8 +79,15 @@ $h_misc = $tdata['host_details']['misc'];
                 </div>
             </div> <!--host-controls-right -->
             <div class="host-controls-right">
-                <?php if (!empty($tdata['host_details']['mac']) && empty($tdata['host_details']['online'])) : ?>
-                    <input onClick="submitCommand('power_on', {id: <?= $tdata['host_details']['id'] ?>})" type="image"
+                <?php
+                    if (
+                        empty($tdata['host_details']['online']) &&
+                        (
+                            !empty($tdata['host_details']['mac']) ||
+                            ($tdata['host_details']['linked'] > 0 && $h_misc['machine_type'] == 2) # Virtual
+                        )
+                    ) : ?>
+                    <input onClick="requestHostDetails('power_on', {id: <?= $tdata['host_details']['id'] ?>})" type="image"
                         class="action-icon power-off" src="tpl/<?= $ncfg->get('theme') ?>/img/power-off.png"
                         alt="<?= $lng['L_PWR_ON'] ?>" title="<?= $lng['L_PWR_ON'] ?>"/>
                 <?php endif; ?>
@@ -94,7 +101,11 @@ $h_misc = $tdata['host_details']['misc'];
                         class="action-icon power-on" src="tpl/<?= $ncfg->get('theme') ?>/img/power-on.png"
                         alt="<?= $lng['L_PWR_OFF'] ?>" title="<?= $lng['L_PWR_OFF'] ?>"/>
                 <?php endif; ?>
-                <?php if (!empty($tdata['host_details']['ansible_enabled'])) : ?>
+                <?php
+                    if (
+                        $tdata['host_details']['online'] &&
+                        (!empty($tdata['host_details']['ansible_enabled']) || $tdata['host_details']['agent_online'])
+                    ) : ?>
                 <input onClick="submitCommand('reboot', {id:<?= $tdata['host_details']['id'] ?>})" type="image"
                     class="action-icon reboot" src="tpl/<?= $ncfg->get('theme') ?>/img/reboot.png"
                     alt="<?= $lng['L_REBOOT'] ?>" title="<?= $lng['L_REBOOT'] ?>"/>

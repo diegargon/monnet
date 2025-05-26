@@ -670,7 +670,14 @@ function requestHostDetails(command, command_values = []) {
                         $('#term-output').html('Error');
                     }
                 }
-
+                /* Power On Reply */
+                if (
+                    jsonData.command_receive === 'power_on'
+                    ) {
+                    if (jsonData.response_msg) {
+                        $('.status_msg').html(jsonData.response_msg);
+                    }
+                }                
                 /* Text Notes and Bitacora */
                 if (
                         jsonData.command_receive === 'load_notes' ||
