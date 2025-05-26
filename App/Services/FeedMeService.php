@@ -97,7 +97,7 @@ class FeedMeService
             $host_id = (int) $request['id'];
             $host = $this->hostService->getHostById($host_id);
             if (!$host) {
-                return ['error' => 'Host not found'];
+                return ['error' => 'Agent Host not found in database. deleted? (' . $host_id . ')'];
             }
             if (!empty($host['misc'])) {
                 $host['misc'] = $this->hostService->decodeMisc($host['misc']);
