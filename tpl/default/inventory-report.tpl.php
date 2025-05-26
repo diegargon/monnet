@@ -46,25 +46,15 @@
         display: block !important;
         position: static !important;
         top: auto !important;
-        left: auto !important;
-        min-width: 0 !important;
-        min-height: 0 !important;
-        width: auto !important;
-        height: auto !important;
-        max-width: none !important;
-        max-height: none !important;
         overflow: visible !important;
         resize: none !important;
         background: white !important;
-        box-shadow: none !important;
-        border: none !important;
         z-index: auto !important;
         overflow: unset !important;
-        min-width: 250px;
-        min-height: 120px;
         position: unset !important;
         top: 0 !important;
         left: 0 !important;
+        max-width: 200mm;
     }
     .left-container,
     .bookmarks-container,
@@ -74,6 +64,7 @@
     }
     #right-container {
         width: 100% !important;
+        max-width: 200mm;
         overflow: visible !important;
         margin: 0 !important;
     }
