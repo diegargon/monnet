@@ -123,11 +123,23 @@ class CmdTaskAnsibleController
     public function handleShutdownReboot(string $command, array $command_values): array
     {
         $hid = Filter::varInt($command_values['id']);
+
         if (!$hid) {
             return Response::stdReturn(false, 'id error');
         }
+        $host = $this->hostService->getHostById($hid);
 
-        $playbook_id = $command . '-linux';
+        if (!$host['ansible_enabled']) {
+            return Response::stdReturn(false, 'Only Ansible Enable host supported');
+        }
+
+        $h_misc = $this->hostService->decodeMisc($host['misc']);
+
+         # 2 Os family Linux
+        if (!empty($h_misc['os_family']) && $h_misc['os_family'] != 2) {
+             return Response::stdReturn(false, 'Os Family not set or not supported');
+        }
+        $playbook_id = "std-$command-linux";
         $response = $this->ansibleService->runPlaybook($hid, $playbook_id);
         if ($response['status'] === "success") {
             return Response::stdReturn(true, $response);
