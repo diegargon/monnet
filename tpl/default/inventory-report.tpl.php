@@ -19,22 +19,24 @@
     body * {
         visibility: hidden !important;
     }
+    .term_container {
+        visibility: hidden !important;
+    }
     .inventory-report-container, .inventory-report-container * {
         visibility: visible !important;
+
+    }
+    .inventory-report-container {
+        
+    }
+    .inventory-table {
+        width: 200mm !important;
+        /* margin: 20mm !important; */
     }
     .inventory-report-container {
         position: static !important;
-        margin: 0 !important;
         background: white !important;
-        box-sizing: border-box !important;
-        padding: 0 !important;
-        width: auto !important;
-        min-width: 0 !important;
-        max-width: none !important;
-        height: auto !important;
-        max-height: none !important;
         overflow: visible !important;
-        margin-left: 10px !important;
     }
     button[onclick="window.print()"] {
         display: none !important;
@@ -64,7 +66,7 @@
     }
     #right-container {
         width: 100% !important;
-        max-width: 200mm;
+        max-width: 200mm !important;
         overflow: visible !important;
         margin: 0 !important;
     }
@@ -76,6 +78,10 @@
     }
     .stdbox-bar {
         display: none !important;
+    }
+    table {
+        border: 0px !important;
+        width: 200mm !important;
     }
 }
 </style>
