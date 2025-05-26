@@ -92,7 +92,7 @@ class UserController
     public function onlyOneHostsCat(string $command, array $command_values): array
     {
         $id = Filter::varInt($command_values['id']);
-        $categories_state = $this->user->getHostsCatState();
+        $categories_state = $this->user->getHostsCats();
 
         $ones = 0;
         foreach ($categories_state as $state) :
