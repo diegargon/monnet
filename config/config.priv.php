@@ -147,7 +147,7 @@ $cfg['os'] = [
     30 => ['id' => 30, 'name' => 'DSM', 'img' => 'dsm.png'],
     31 => ['id' => 31, 'name' => 'ArubaOS', 'img' => 'unknown.png'],
     32 => ['id' => 32, 'name' => 'VMware', 'img' => 'vmware.png'],
-    33 => ['id' => 33, 'name' => 'Other Proprietary', 'img' => 'proprietary.png'],
+    33 => ['id' => 33, 'name' => 'Other/Proprietary', 'img' => 'proprietary.png'],
     34 => ['id' => 34, 'name' => 'Linux Embebbed', 'img' => 'embedded.png'],
     35 => ['id' => 35, 'name' => 'Tasmota', 'img' => 'embedded.png'],
     36 => ['id' => 36, 'name' => 'NetBSD', 'img' => 'netbsd.png'],
@@ -224,7 +224,7 @@ $cfg['os'] = [
 /* OS Family */
 $cfg['os_family'] = [
     0 => ['id' => 0, 'name' => 'Unknown', 'img' => 'default.png'],
-    1 => ['id' => 1, 'name' => 'Other', 'img' => 'default.png'],
+    1 => ['id' => 1, 'name' => 'Other/Propietary', 'img' => 'default.png'],
     2 => ['id' => 2, 'name' => 'Linux', 'img' => 'default.png'],
     3 => ['id' => 3, 'name' => 'Windows', 'img' => 'default.png'],
     4 => ['id' => 4, 'name' => 'macOS', 'img' => 'default.png'],
