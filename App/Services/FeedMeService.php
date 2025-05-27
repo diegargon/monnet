@@ -641,7 +641,7 @@ class FeedMeService
     {
         $serviceGroups = [
             // Postfix
-            ['master', 'postfix', 'smtp', 'mail'],
+            ['master', 'postfix', 'smtp', 'smtpd', 'mail'],
             // Dovecot
             ['dovecot', 'imap', 'pop3', 'pop3-login'],
             // Proxmox
