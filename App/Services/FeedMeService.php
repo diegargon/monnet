@@ -383,8 +383,6 @@ class FeedMeService
                     } else {
                         $this->hostService->setAlertOn($host_id, $log_msg, \EventType::PORT_NEW, \LogType::EVENT_ALERT);
                     }
-
-
                     unset($db_ports_map[$key]);
                 }
             }
@@ -435,11 +433,11 @@ class FeedMeService
         if (!empty($rdata['iowait'])) {
             $host_update_values['misc']['iowait'] = $rdata['iowait'];
         }
-        if (!empty($rdata['host_logs'])) :
+        if (!empty($rdata['host_logs'])) {
             foreach ($rdata['host_logs'] as $hlog) {
                 $this->logHost->logHost($hlog['level'], $host_id, '[Agent]: ' . $hlog['message']);
             }
-        endif;
+        }
 
         return $host_update_values;
     }
@@ -493,11 +491,11 @@ class FeedMeService
             $msg = "Invalid Token receive from id:" . $host_id;
         }
 
-        # TODO FIXME same gateway host receive 127.0.0.1
-        $remote_ip = Filter::getRemoteIp();
-        if ($host['ip'] != $remote_ip &&  $remote_ip !== '127.0.0.1') {
-            $msg = "Empty or wrong ip receive, expected {$host['ip']} receive $remote_ip";
-        }
+        # TODO 127.0.0.1 and proxys should be allowed
+        #$remote_ip = Filter::getRemoteIp();
+        #if ($host['ip'] != $remote_ip &&  $remote_ip !== '127.0.0.1') {
+        #    $msg = "Empty or wrong ip receive, expected {$host['ip']} receive $remote_ip";
+        #}
 
         if (!empty($msg)) {
             $this->logSys->error($msg);
