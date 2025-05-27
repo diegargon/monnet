@@ -643,11 +643,19 @@ class FeedMeService
             // Postfix
             ['master', 'postfix', 'smtp', 'smtpd', 'mail'],
             // Dovecot
-            ['dovecot', 'imap', 'pop3', 'pop3-login'],
+            ['dovecot', 'imap', 'pop3', 'pop3-login', 'imap-login', 'lmtp', 'anvil'],
+            // Amavis/SpamAssassin
+            ['amavis', 'amavisd', 'spamassassin', 'spamd'],
             // Proxmox
             ['postscreen', 'master'],
+            // ClamAV
+            ['clamd', 'clamav', 'clamav-milter'],
             // systemd-resolved
             ['systemd-resolved', 'resolved'],
+            // OpenDKIM/OpenDMARC
+            ['opendkim', 'opendmarc'],
+            // Courier
+            ['courier-imap', 'courier-pop', 'courier'],
         ];
 
         foreach ($serviceGroups as $group) {
