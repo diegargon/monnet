@@ -48,7 +48,9 @@
                             </div>
                                 <?php
                             endforeach;
-                        else :
+                        elseif (!empty($host['misc'][$key])):
+                            echo $host['misc'][$key] ?? '.';
+                        else:
                             echo $host[$key] ?? '.';
                         endif;
 
