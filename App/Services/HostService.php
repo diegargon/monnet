@@ -354,14 +354,16 @@ class HostService
         foreach ($hosts as $host) :
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
 
-            $misc = $this->decodeMisc($host['misc']);
-            $host['misc'] = $misc;
+            $host['misc'] = $this->decodeMisc($host['misc']);
             // All
             if ($status === null) :
                 $result_hosts[] = $host;
             endif;
             // Off
-            if ($status === 0 && (int) $host['online'] === 0) :
+            if (
+                $status === 0 &&
+                ((int) $host['online'] === 0 || $host['agent_online']  === 0)
+            ) :
                 $result_hosts[] = $host;
             endif;
             // On
