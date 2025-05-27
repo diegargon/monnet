@@ -351,7 +351,9 @@ class FeedMeService
                             "online" => 1,
                             "last_check" => DateTimeService::dateNow(),
                         ]);
-                    } elseif ((int)$db_port['online'] === 0) {
+                    }
+
+                    if ((int)$db_port['online'] === 0) {
                         $alertmsg = "Port UP detected on $interface ({$port['service']}) ($pnumber)($ip_version)";
                         if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
                             $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $alertmsg, \LogType::EVENT, \EventType::PORT_UP_LOCAL);
@@ -641,7 +643,7 @@ class FeedMeService
             // Postfix
             ['master', 'postfix', 'smtp', 'mail'],
             // Dovecot
-            ['dovecot', 'imap', 'pop3'],
+            ['dovecot', 'imap', 'pop3', 'pop3-login'],
             // Proxmox
             ['postscreen', 'master'],
             // systemd-resolved
