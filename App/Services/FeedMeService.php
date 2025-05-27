@@ -494,10 +494,10 @@ class FeedMeService
         }
 
         # TODO FIXME same gateway host receive 127.0.0.1
-        #$remote_ip = Filter::getRemoteIp();
-        #if ($host['ip'] != $remote_ip ) {
-        #    $msg = "Empty or wrong ip receive, expected {$host['ip']} receive $remote_ip";
-        #}
+        $remote_ip = Filter::getRemoteIp();
+        if ($host['ip'] != $remote_ip &&  $remote_ip !== '127.0.0.1') {
+            $msg = "Empty or wrong ip receive, expected {$host['ip']} receive $remote_ip";
+        }
 
         if (!empty($msg)) {
             $this->logSys->error($msg);
