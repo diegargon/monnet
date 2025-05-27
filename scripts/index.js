@@ -523,4 +523,86 @@ $(document).ready(function () {
     $hosts_cat.on('mousedown touchstart', resizeStart);
 
     // END Resize code
+    
+    // Search IA GENERATE not review
+
+    const $searchInput = $('#search-box');
+    let originalContents = new WeakMap();
+    let isHighlighting = false;
+
+    function highlightMatches() {
+        if (isHighlighting) return;
+        isHighlighting = true;
+        
+        const searchTerm = $searchInput.val().toLowerCase().trim();
+        
+        $('.hosts-title').each(function() {
+            const $title = $(this);
+                        
+            if (!originalContents.has($title[0])) {
+                originalContents.set($title[0], $title.html());
+            }
+            
+            const originalContent = originalContents.get($title[0]);
+            
+            if (searchTerm === '') {
+                $title.html(originalContent);
+            } else {
+                const textContent = $title.text().toLowerCase();
+                if (textContent.includes(searchTerm)) {
+                    const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+                    const highlightedContent = originalContent.replace(regex, 
+                        '<span class="search-highlight">$1</span>');
+                    $title.html(highlightedContent);
+                } else {
+                    $title.html(originalContent);
+                }
+            }
+        });
+        
+        isHighlighting = false;
+    }
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    let typingTimer;
+    function scheduleSearch() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            highlightMatches();
+        }, 300);
+    }
+
+    $searchInput.on('input', scheduleSearch);
+
+    // Observador 
+    const observer = new MutationObserver(function(mutations) {
+        let needsUpdate = false;
+        
+        mutations.forEach(mutation => {
+            if (mutation.type === 'childList') {
+                $(mutation.addedNodes).find('.hosts-title').addBack('.hosts-title').each(function() {
+                    originalContents.delete(this);
+                    needsUpdate = true;
+                });
+            }
+        });
+        
+        if (needsUpdate && $searchInput.val().trim() !== '') {
+            scheduleSearch();
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: false,
+        characterData: false
+    });
+
+    // Ejecución inicial
+    highlightMatches();
+
 });
