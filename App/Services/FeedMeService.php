@@ -329,10 +329,7 @@ class FeedMeService
                 if (isset($db_ports_map[$key])) {
                     $db_port = $db_ports_map[$key];
 
-                    if (
-                        $db_port['service'] !== $port['service'] &&
-                        !$this->areServicesEquivalent($db_port['service'], $port['service'])
-                    ) {
+                    if ($db_port['service'] !== $port['service']) {
                         $warnmsg = "Service name change detected on $interface "
                             . "({$db_port['service']}->{$port['service']}) ({$pnumber}) ({$ip_version})";
                         # Do not alert on localhost ports
@@ -626,39 +623,5 @@ class FeedMeService
         }
 
         return $config;
-    }
-
-    /**
-     * Checks if two service names are considered equivalent (belong to the same group).
-     *
-     * @param string $service1
-     * @param string $service2
-     * @return bool
-     */
-    private function areServicesEquivalent(string $service1, string $service2): bool
-    {
-        $service_groups = [
-            // Postfix y variantes
-            ['mail', 'master', 'smtpd', 'smtp', 'postfix'],
-            // Proxmox Mail Gateway
-            ['mail', 'postscreen'],
-            // Dovecot (IMAP/POP3)
-            ['dovecot', 'imap-login', 'pop3-login', 'lmtp', 'anvil'],
-            // Amavis/SpamAssassin
-            ['amavis', 'amavisd', 'spamassassin', 'spamd'],
-            // ClamAV
-            ['clamd', 'clamav', 'clamav-milter'],
-            // OpenDKIM/OpenDMARC
-            ['opendkim', 'opendmarc'],
-            // Courier
-            ['courier-imap', 'courier-pop', 'courier'],
-        ];
-
-        foreach ($service_groups as $group) {
-            if (in_array($service1, $group, true) && in_array($service2, $group, true)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
