@@ -533,35 +533,48 @@ $(document).ready(function () {
     function highlightMatches() {
         if (isHighlighting) return;
         isHighlighting = true;
-        
+
         const searchTerm = $searchInput.val().toLowerCase().trim();
-        
-        $('.hosts-title').each(function() {
-            const $title = $(this);
-                        
+
+        $('.hosts-container').each(function () {
+            const $container = $(this);
+            const $title = $container.find('.hosts-title').first();
+            if (!$title.length) return;
+
+            // Save original content if not already saved
             if (!originalContents.has($title[0])) {
                 originalContents.set($title[0], $title.html());
             }
-            
+
             const originalContent = originalContents.get($title[0]);
-            
+
             if (searchTerm === '') {
                 $title.html(originalContent);
-            } else {
-                const textContent = $title.text().toLowerCase();
-                if (textContent.includes(searchTerm)) {
-                    const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
-                    const highlightedContent = originalContent.replace(regex, 
-                        '<span class="search-highlight">$1</span>');
-                    $title.html(highlightedContent);
-                } else {
-                    $title.html(originalContent);
+                return;
+            }
+
+            // Get visible text and all title="" attributes inside this container
+            let searchText = $title.text().toLowerCase();
+
+            $container.find('[title]').each(function () {
+                const attr = $(this).attr('title');
+                if (attr) {
+                    searchText += ' ' + attr.toLowerCase();
                 }
+            });
+
+            if (searchText.includes(searchTerm)) {
+                const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+                const highlighted = originalContent.replace(regex, '<span class="search-highlight">$1</span>');
+                $title.html(highlighted);
+            } else {
+                $title.html(originalContent);
             }
         });
-        
+
         isHighlighting = false;
     }
+
 
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -587,13 +600,13 @@ $(document).ready(function () {
                     originalContents.delete(this);
                     needsUpdate = true;
                 });
-            }
-        });
+                    }
+                });
         
         if (needsUpdate && $searchInput.val().trim() !== '') {
             scheduleSearch();
-        }
-    });
+            }
+        });
 
     observer.observe(document.body, {
         childList: true,
@@ -604,5 +617,5 @@ $(document).ready(function () {
 
     // Ejecución inicial
     highlightMatches();
-
+    
 });
