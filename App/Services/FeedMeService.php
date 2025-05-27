@@ -429,8 +429,8 @@ class FeedMeService
         if (!empty($rdata['meminfo'])) {
             $host_update_values['misc']['mem_info'] = serialize($rdata['meminfo']);
         }
-        if (!empty($rdata['misc']['disksinfo'])) {
-            $host_update_values['disks_info'] = serialize($rdata['disksinfo']);
+        if (!empty($rdata['disksinfo'])) {
+            $host_update_values['misc']['disks_info'] = serialize($rdata['disksinfo']);
         }
         if (!empty($rdata['iowait'])) {
             $host_update_values['misc']['iowait'] = $rdata['iowait'];
