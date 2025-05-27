@@ -21,7 +21,7 @@
                     <h1 class='title gradiant'><a href=""><?= strtoupper($ncfg->get('app_name')) ?></a></h1>
                     <div class="search-wrapper">
                         <form target="_blank"  action="https://gooogle.com/search" method="GET">
-                            <input type="text" name="q" required class="search-box" placeholder="Google" />
+                            <input type="text" name="q" required id="search-box" placeholder="Search" />
                             <button class="close-icon" type="reset"></button>
                         </form>
                     </div>

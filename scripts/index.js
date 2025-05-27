@@ -536,45 +536,38 @@ $(document).ready(function () {
 
         const searchTerm = $searchInput.val().toLowerCase().trim();
 
-        $('.hosts-container').each(function () {
+        $('.hosts-container').each(function() {
             const $container = $(this);
-            const $title = $container.find('.hosts-title').first();
-            if (!$title.length) return;
+            const $title = $container.find('.hosts-title').first(); // Asegúrate de que la clase sea correcta
+            let hasMatch = false;
 
-            // Save original content if not already saved
-            if (!originalContents.has($title[0])) {
-                originalContents.set($title[0], $title.html());
+            // Search hosts-title class
+            if ($title.length && $title.text().toLowerCase().includes(searchTerm)) {
+                hasMatch = true;
             }
 
-            const originalContent = originalContents.get($title[0]);
+            // Search title="*"
+            if (!hasMatch) {
+                $container.find('[title]').each(function() {
+                    if ($(this).attr('title').toLowerCase().includes(searchTerm)) {
+                        hasMatch = true;
+                        return false; 
+                    }
+                });
+            }
 
+            // Highlight if match
             if (searchTerm === '') {
-                $title.html(originalContent);
-                return;
-            }
-
-            // Get visible text and all title="" attributes inside this container
-            let searchText = $title.text().toLowerCase();
-
-            $container.find('[title]').each(function () {
-                const attr = $(this).attr('title');
-                if (attr) {
-                    searchText += ' ' + attr.toLowerCase();
-                }
-            });
-
-            if (searchText.includes(searchTerm)) {
-                const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
-                const highlighted = originalContent.replace(regex, '<span class="search-highlight">$1</span>');
-                $title.html(highlighted);
+                //$container.removeClass('container-highlight');
+                $container.find('.hosts-thumb').removeClass('container-highlight');
             } else {
-                $title.html(originalContent);
+                $container.find('.hosts-thumb').toggleClass('container-highlight', hasMatch);
+                //$container.toggleClass('container-highlight', hasMatch); 
             }
         });
 
         isHighlighting = false;
     }
-
 
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
