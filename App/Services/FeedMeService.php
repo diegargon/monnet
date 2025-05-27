@@ -329,7 +329,10 @@ class FeedMeService
                 if (isset($db_ports_map[$key])) {
                     $db_port = $db_ports_map[$key];
 
-                    if ($db_port['service'] !== $port['service']) {
+                    if (
+                        $db_port['service'] !== $port['service'] &&
+                        !$this->isServiceNameEquivalent($db_port['service'], $port['service'])
+                    ) {
                         $warnmsg = "Service name change detected on $interface "
                             . "({$db_port['service']}->{$port['service']}) ({$pnumber}) ({$ip_version})";
                         # Do not alert on localhost ports
@@ -623,5 +626,33 @@ class FeedMeService
         }
 
         return $config;
+    }
+
+    /**
+     * Determines if a service name change should be ignored
+     *
+     * @param string $oldService
+     * @param string $newService
+     * @return bool
+     */
+    private function isServiceNameEquivalent(string $oldService, string $newService): bool
+    {
+        $serviceGroups = [
+            // Postfix
+            ['master', 'postfix', 'smtp', 'mail'],
+            // Dovecot
+            ['dovecot', 'imap', 'pop3'],
+            // Proxmox
+            ['postscreen', 'master'],
+            // systemd-resolved
+            ['systemd-resolved', 'resolved'],
+        ];
+
+        foreach ($serviceGroups as $group) {
+            if (in_array($oldService, $group, true) && in_array($newService, $group, true)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
