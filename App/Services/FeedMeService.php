@@ -645,7 +645,7 @@ class FeedMeService
             // Dovecot
             ['dovecot', 'imap', 'pop3', 'pop3-login', 'imap-login', 'lmtp', 'anvil'],
             // Amavis/SpamAssassin
-            ['amavis', 'amavisd', 'spamassassin', 'spamd'],
+            ['amavis', 'amavisd', 'spamassassin', 'spamd', 'spamd child', 'perl'],
             // Proxmox
             ['postscreen', 'master'],
             // ClamAV
