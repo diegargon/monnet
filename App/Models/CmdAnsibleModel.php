@@ -29,6 +29,14 @@
 
     Trigger Manual: Encolo el comando, se ejecuta via mgateway, deberia enviar un mensaje
         para avisar de que hay algo en la queue.
+
+    Tabla Ansible Vars
+
+    hid 	int(11)
+    vtype 	tinyint(4) 1 Encrypter 2 string
+    vkey 	varchar(255)
+    vvalue 	varchar(700)
+    global      tinyint     Global var is passing to all pb
 */
 
 namespace App\Models;
