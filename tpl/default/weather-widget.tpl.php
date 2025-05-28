@@ -2,8 +2,6 @@
 /**
  *
  *  @author diego/@/envigo.net
- *  @package
- *  @subpackage
  *  @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 /**
@@ -31,5 +29,4 @@
         <?= $tdata['weather_widget']['weather_humidity'] ?></div>
     <div><?= $tdata['weather_widget']['weather_l_wind'] ?>:
         <?= $tdata['weather_widget']['weather_wind'] ?></div>
-
 </div>

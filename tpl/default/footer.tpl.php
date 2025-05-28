@@ -2,8 +2,6 @@
 /**
 *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
  */
@@ -18,7 +16,6 @@ $start_time = $_SERVER["REQUEST_TIME_FLOAT"];
 $execution_time = round(microtime(true) - $start_time, 2);
 $load = sys_getloadavg();
 $cpu_usage = round($load[0], 2);
-
 ?>
 <div class="footer-bar">
     <div class="footer-left-element">

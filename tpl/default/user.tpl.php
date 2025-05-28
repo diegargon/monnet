@@ -5,7 +5,6 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-
 $timezones = [
     "Pacific/Midway" => "(UTC-11:00) Midway Island, American Samoa",
     "Pacific/Honolulu" => "(UTC-10:00) Hawaii",

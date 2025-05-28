@@ -24,8 +24,8 @@
                     onclick="changeBookmarksTab(<?= $id ?>)">
                         <?= $bookmark_head['cat_name'] ?>
                 <input onclick="confirmSubmit('removeBookmarkCat', {id: <?= $id ?>})"
-                       type="image" class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png"
-                       alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>">
+                    type="image" class="delete_cat_btn action-icon-tab" src="tpl/default/img/remove.png"
+                    alt="<?= $lng['L_DELETE'] ?>" title="<?= $lng['L_DELETE'] ?>">
             </button>
             <?php
         }
@@ -57,19 +57,19 @@
                 <div id="item_num_<?= $bookmark['id'] ?>" class="item-container">
                     <div class="delete_bookmark">
                         <input onclick="confirmSubmit('removeBookmark',{id: <?= $bookmark['id'] ?>})" type="image"
-                               class="action-icon remove" src="tpl/default/img/remove.png" alt="Delete"
-                               title="Borrar">
+                            class="action-icon remove" src="tpl/default/img/remove.png" alt="Delete"
+                            title="Borrar">
                     </div>
                     <div class="edit_bookmark">
                         <input onclick="submitCommand('mgmtBookmark',{id: <?= $bookmark['id'] ?>, action: 'edit'})"
-                               type="image" class="action-icon remove" src="tpl/default/img/edit.png"
-                               alt="Edit" title="Borrar">
+                            type="image" class="action-icon remove" src="tpl/default/img/edit.png"
+                            alt="Edit" title="Borrar">
                     </div>
                     <a href="<?= $bookmark['url'] ?>" rel="noopener noreferrer" target="_blank"
-                       class="item_link" title="<?= $bookmark['url'] ?>">
+                        class="item_link" title="<?= $bookmark['url'] ?>">
                         <div class="item-thumb shadow1">
                             <img class="fab" src="<?= $bookmark['img'] ?>" alt=""
-                                 style="<?=
+                                style="<?=
                                             !empty($bookmark['icon_bg']) ? 'background-color: ' .
                                             $bookmark['icon_bg'] : null
                                     ?>"/>

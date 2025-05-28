@@ -67,9 +67,9 @@ foreach ($tdata['progress_bar_data'] as $pbar) :
 <div class="progress-bar-container">
     <div class="pbar_legend"><?= $pbar['legend'] ?></div>
     <div class="progress-bar"
-         style="background: <?= $gradient ?>;"
-         data-tooltip="<?= $pbar['tooltip'] ?? '' ?>"
-         >
+        style="background: <?= $gradient ?>;"
+        data-tooltip="<?= $pbar['tooltip'] ?? '' ?>"
+    >
     </div>
 </div>
     <?php

@@ -28,8 +28,8 @@
         <br/>
         <label for="bookmarkName"><?= $lng['L_NAME'] ?>:</label>
         <input type="text" id="bookmarkName"
-               name="bookmarkName" size="12" maxlength="12" required
-               value="<?= $tdata['title'] ?? '' ?>">
+            name="bookmarkName" size="12" maxlength="12" required
+            value="<?= $tdata['title'] ?? '' ?>">
         <br/>
         <label for="cat_id"><?= $lng['L_CATEGORY'] ?>:</label>
         <select id="cat_id" name="cat_id" required>
@@ -46,7 +46,7 @@
         <br/>
         <label for="urlip"><?= $lng['L_URLIP'] ?>:</label>
         <input type="text" id="urlip" name="urlip" size="32" maxlength="450" required
-               value="<?= $tdata['url'] ?? '' ?>">
+            value="<?= $tdata['url'] ?? '' ?>">
         <br/>
         <label for="image_type"><?= $lng['L_IMAGE_TYPE'] ?>:</label>
         <select id="image_type" name="image_type">
@@ -76,7 +76,7 @@
         </div>
         <label for="field_img"><?= $lng['L_LINK_HELP'] ?>:</label>
         <input type="text" id="field_img" name="field_img" size="32" maxlength="450"
-               value="<?= $tdata['image_resource'] ?? '' ?>">
+            value="<?= $tdata['image_resource'] ?? '' ?>">
         <br/>
         <label for="weight"><?= $lng['L_WEIGHT'] ?>:</label>
         <select id="weight" name="weight" required>

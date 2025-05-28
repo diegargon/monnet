@@ -380,5 +380,4 @@
                     console.error('Respuesta completa:', xhr.responseText);
                 });
     }
-
 </script>
