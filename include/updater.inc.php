@@ -493,7 +493,8 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
-
+            # Playbooks Global Variable
+            $db->query("ALTER TABLE `ansible_vars` ADD `global` TINYINT NOT NULL DEFAULT '0';");
             # User date formet
             $db->query("ALTER TABLE `users` ADD `dateformat` VARCHAR(20) NULL;");
             # User rols
