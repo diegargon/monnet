@@ -724,4 +724,45 @@ class HostService
     {
         return $this->hostsModel->getFiltered(['linkable' => 1]);
     }
+
+    /**
+     * Actualiza la dirección MAC de un host dado su IP.
+     *
+     * @param string $ip
+     * @param string $mac
+     * @return bool
+     */
+    public function updateMacByIp(string $ip, string $mac): bool
+    {
+        // Busca el host por IP y actualiza el campo mac y mac_check
+        $host = $this->hostsModel->getHostByIP($ip);
+        if (empty($host)) {
+            return false;
+        }
+        return $this->hostsModel->update((int)$host['id'], ['mac' => $mac, 'mac_check' => 0]);
+    }
+
+    /**
+     * Obtiene todos los hosts con el campo mac_check = 1.
+     *
+     * @return array
+     */
+    public function getHostsWithMacCheck(): array
+    {
+        return $this->hostsModel->getFiltered(['mac_check' => 1]);
+    }
+
+    /**
+     * Obtiene todos los hosts con el campo mac_check = 1 y network = $network_id.
+     *
+     * @param int $network_id
+     * @return array
+     */
+    public function getHostsWithMacCheckByNetwork(int $network_id): array
+    {
+        return $this->hostsModel->getFiltered([
+            'mac_check' => 1,
+            'network' => $network_id
+        ]);
+    }
 }

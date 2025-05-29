@@ -127,6 +127,12 @@ class FeedMeService
                             # New config send disable flag
                             $host_update_values['misc']['agent_config_update'] = 0;
                         }
+                        # TODO Test
+                        #if (!empty($host['network']) && $this->shouldCheckMacs((string)$host['network'])) {
+                        #    $hosts_mac_check = $this->hostService->getHostsWithMacCheckByNetwork((int)$host['network']);
+                        #    $data_reply['check_macs'] = array_column($hosts_mac_check, 'ip');
+                        #}
+
                         break;
                     case 'send_stats': // Stats every 5min
                         $this->processStats($host_id, $rdata);
@@ -443,6 +449,16 @@ class FeedMeService
                 $this->logHost->logHost($hlog['level'], $host_id, '[Agent]: ' . $hlog['message']);
             }
         }
+        # Update macs asked from an agent
+        if (!empty($rdata['collect_macs'])) {
+            if (is_array($rdata['collect_macs'])) {
+                foreach ($rdata['collect_macs'] as $mac_entry) {
+                    if (!empty($mac_entry['ip']) && !empty($mac_entry['mac'])) {
+                        $this->hostService->updateMacByIp($mac_entry['ip'], $mac_entry['mac']);
+                    }
+                }
+            }
+        }
 
         return $host_update_values;
     }
@@ -664,5 +680,19 @@ class FeedMeService
             }
         }
         return false;
+    }
+
+    private function shouldCheckMacs(string $networkId, int $intervalSeconds = 3600): bool
+    {
+        $configKey = 'last_mac_check_network_' . $networkId;
+        $lastRun = (int) $this->ncfg->get($configKey, 0);
+        $now = time();
+
+        if (($now - $lastRun) < $intervalSeconds) {
+            return false;
+        }
+
+        $this->ncfg->set($configKey, $now, 1);
+        return true;
     }
 }

@@ -36,7 +36,7 @@
  *  - rol: int, nullable, default 0
  *  - last_seen: datetime, nullable
  *  - linkable: tinyint(1), nullable, default 0
- *
+ *  - mac_check: tinyint(1),  default 0   # 0: no check, 1: check mac address 2 in  process
  */
 
 namespace App\Models;
@@ -149,6 +149,18 @@ class HostsModel
         # Get linkable hosts
         if (isset($filters['linkable'])) {
             $query .= " AND linkable = 1";
+        }
+
+        // Filtro por network (id)
+        if (isset($filters['network'])) {
+            $query .= " AND network = :network";
+            $params['network'] = (int)$filters['network'];
+        }
+
+        // Filtro por mac_check
+        if (isset($filters['mac_check'])) {
+            $query .= " AND mac_check = :mac_check";
+            $params['mac_check'] = (int)$filters['mac_check'];
         }
 
         $results = $this->db->qfetchAll($query, $params);
