@@ -369,6 +369,10 @@ $(document).ready(function () {
             requestHostDetails('submitBitacora', {id: hostId, value: entry});
         }
     });
+    
+    $('#logic-switch').on('change', function () {
+        filterPlaybooks();
+    });    
 });
 
 function initTasks() {
@@ -586,8 +590,12 @@ function filterPlaybooks() {
 
         //console.log(`Playbook ${$(this).val()} tiene tags:`, tags);
 
-        // Show selected
-        const shouldShow = tags.some(tag => selectedTags.includes(tag));
+        // Show selected with AND/OR logic
+        const isOrLogic = document.getElementById('logic-switch')?.checked ?? true;
+        const shouldShow = isOrLogic
+          ? tags.some(tag => selectedTags.includes(tag)) // OR
+          : selectedTags.every(tag => tags.includes(tag)); // AND        
+          
         $(this).toggle(shouldShow);
         if(shouldShow) visibleCount++;
     });
@@ -738,7 +746,7 @@ function requestHostDetails(command, command_values = []) {
                             const playbooksMap = {};
 
                             // Default
-                            $playbookSelect.append('<option value="" selected>Selecciona un playbook</option>');
+                            $playbookSelect.append('<option value="" selected>Select Playbook</option>');
 
                             // Procesar playbooks
                             jsonData.response_msg.playbooks_metadata
@@ -765,7 +773,7 @@ function requestHostDetails(command, command_values = []) {
                             $tagsContainer.html('');
                             allTags.forEach(tag => {
                                 $tagsContainer.append(`
-                                    <label class="checkbox-inline">
+                                    <label class="checkbox-inline" data-label="${tag}">
                                         <input type="checkbox" data-tag="${tag}"> <span>${tag}<span>
                                     </label>
                                 `);

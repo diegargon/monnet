@@ -40,8 +40,17 @@
         <!-- /left config column -->
         <!-- right config column -->
         <div class="right-details-column">
-                <div id="tags_filter">
-                </div>
+            <div class="switch-container">
+              <input type="checkbox" id="logic-switch" />
+              <label for="logic-switch" class="switch-label">
+                <span class="switch-inner">
+                  <span class="label-and">&</span>
+                  <span class="label-or">/</span>
+                </span>
+                <span class="switch-handle"></span>
+              </label>
+            </div>
+            <div id="tags_filter"></div>
         </div>
         <div id="reports-table" class="reports-table"></div>
         <div class="bottom-details-row">

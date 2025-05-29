@@ -1780,11 +1780,14 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
+#reports-table {
+    width: 100%;
+}
+
 #reports-container {
-    width: 50vw;
     height: 15vh;
     overflow-y: auto;
-    resize: vertical;
+    resize: both;
 }
 
 .config_textbox {
@@ -1797,10 +1800,73 @@ input:checked + .slider:before {
     overflow-y: scroll;
 }
 
+label[data-label="usr"] {
+    background-color: #fff8ea;
+}
+
+label[data-label="std"] {
+    background-color: #fff8ea;
+}
+
+/* Switch START */
+.switch-container {
+  display: inline-block;
+  position: relative;
+  width: 28px;
+  height: 14px;
+  margin-bottom: 2px;
+}
+
+.switch-label {
+  display: block;
+  cursor: pointer;
+  background: #ccc;
+  border-radius: 6px;
+  position: relative;
+  transition: background 0.3s;
+  height: 100%;
+}
+
+.switch-label .switch-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1px 4px;
+  font-size: 11px;
+  font-weight: bold;
+  height: 100%;
+  color: white;
+  user-select: none;
+}
+
+.label-and, .label-or {
+  color: black;
+}
+
+.switch-handle {
+  position: absolute;
+  top: 1.1px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background: #007bff;
+  border-radius: 50%;
+  transition: left 0.3s;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"]:checked + .switch-label .switch-handle {
+  left: 15px;
+}
+/*  Switch END */
+
 .checkbox-inline {
     display: inline-flex;
     align-items: center;
-    padding-right: 3px;
+    padding: 2px;
     background-color: #a89f9f;
     border-radius: 3px;
     border: 1px solid #ddd;
