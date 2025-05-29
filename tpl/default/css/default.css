@@ -1541,7 +1541,7 @@ input:checked + .slider:before {
 }
 
 .left-config-column {
-    padding-left: 4px;
+    padding-right: 4px;
 }
 .left-details-column, .right-details-column {
     border: 0px solid red;
