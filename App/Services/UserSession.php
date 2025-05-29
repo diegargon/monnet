@@ -147,8 +147,11 @@ class UserSession
     public function logout(): void
     {
         $clear_data = [];
-        session_destroy();
 
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
+        // TODO filter values
         if (isset($_COOKIE[self::REMEMBER_COOKIE])) {
             $clear_data['sid'] = $_COOKIE[self::REMEMBER_COOKIE];
             setcookie(self::REMEMBER_COOKIE, '', time() - 3600, '/');
