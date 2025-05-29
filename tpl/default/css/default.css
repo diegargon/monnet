@@ -1854,7 +1854,7 @@ label[data-label="std"] {
   transition: left 0.3s;
 }
 
-input[type="checkbox"] {
+#logic-switch {
   display: none;
 }
 
