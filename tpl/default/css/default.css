@@ -835,7 +835,7 @@ input:checked + .slider:before {
     background-color: rgb(55, 50, 37);
     resize: both;
     padding-bottom: 8px;
-    width: 50vw;
+    max-width: 70vw;
 }
 .host-details-bar {
     display: inline-block;

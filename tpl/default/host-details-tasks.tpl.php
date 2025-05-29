@@ -66,5 +66,5 @@
             />
         </fieldset>
     </div>
-    <div id="tasks-list" class="task-list"></div>
+    <div id="tasks-list"></div>
 </div>

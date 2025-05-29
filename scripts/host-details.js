@@ -7,7 +7,7 @@
 $(document).ready(function () {
     let autoReloadStates = {}; // Button state
     let autoReloadIntervals = {}; // Button Intevals
-
+       
     $(document).off("click", "button[id^='auto_reload_']").on("click", "button[id^='auto_reload_']", function () {
         const buttonId = $(this).attr('id'); // Obtener el ID del botón
         autoReloadStates[buttonId] = !autoReloadStates[buttonId]; // Alternar estado
@@ -529,7 +529,7 @@ function changeHDTab(id, tabId) {
     }
     if (['tab15'].includes(tabId)) {
         initTasks();
-    }
+    }    
 }
 
 function executePlaybookAction(pb_cmd) {

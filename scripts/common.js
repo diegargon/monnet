@@ -12,8 +12,7 @@ window.onload = function () {
 
 function show_loading() {
     document.getElementById("loading_wrap").style.display = "block";
-}
-;
+};
 
 function makeDraggable(element) {
     var isDragging = false;
