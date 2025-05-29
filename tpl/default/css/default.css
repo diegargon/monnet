@@ -1522,6 +1522,13 @@ input:checked + .slider:before {
     display: flex;
 }
 
+.config_container button, input, select {
+    font-size: 11px;
+}
+
+.config_container select {
+    padding: 2px;
+}
 .ansible_container {
     display: flex;
     flex-wrap: wrap;
@@ -1533,6 +1540,9 @@ input:checked + .slider:before {
     width: 49%;
 }
 
+.left-config-column {
+    padding-left: 4px;
+}
 .left-details-column, .right-details-column {
     border: 0px solid red;
     width: 50%;
@@ -2040,6 +2050,119 @@ input[type="checkbox"]:checked + .switch-label .switch-handle {
     box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset rgb(24, 55, 24) 0 0px 5px, #0C3A06 0 1px 0;
 }
 
+.resume-left-column {
+    background: #232323;
+    border-radius: 10px;
+    padding: 14px 12px 12px 12px;
+    margin: 8px 8px 8px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    min-width: 260px;
+    max-width: 420px;
+}
+
+.resume-fields-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.agent_container .resume-fields-table {
+    width: auto;
+}
+.resume-fields-table td {
+    padding: 2px 4px;
+    vertical-align: middle;
+    font-size: 11px;
+}
+
+.resume-fields-table td.resume_label {
+    width: 120px;
+    max-width: 140px;
+    text-align: right;
+    font-weight: bold;
+    color: #b0b0b0;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.resume-fields-table td:not(.resume_label) {
+    text-align: left;
+    word-break: break-all;
+}
+
+.resume_field, .display_name {
+    color: #fff;
+    font-weight: 400;
+}
+
+.resume-section {
+    margin-bottom: 12px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 6px;
+}
+
+.resume-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.container-highlight {
+    border: 1px solid #4D69A8;
+    background-color: #112944;
+    box-shadow: 0 0 10px rgba(85, 83, 145, 0.5);  
+}
+
+.config-checkbox-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.config-checkbox-row label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 11px;
+    margin-right: 8px;
+    gap: 3px;
+    white-space: nowrap;
+}
+.config-checkbox-row input[type="checkbox"] {
+    margin-right: 2px;
+    margin-left: 0;
+    accent-color: #4CAF50;
+    transform: scale(1.1);
+}
+
+.alarms-checkbox-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.alarms-checkbox-row label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 11px;
+    margin-right: 8px;
+    gap: 3px;
+    white-space: nowrap;
+}
+.alarms-checkbox-row input[type="checkbox"] {
+    margin-right: 2px;
+    margin-left: 0;
+    accent-color: #4CAF50;
+    transform: scale(1.1);
+}
+
+
 @keyframes blinkRed {
     from {
         background-color: #900;
@@ -2182,69 +2305,6 @@ input[type="checkbox"]:checked + .switch-label .switch-handle {
     }
 }
 
-.resume-left-column {
-    background: #232323;
-    border-radius: 10px;
-    padding: 14px 12px 12px 12px;
-    margin: 8px 8px 8px 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    display: flex;
-    flex-direction: column;
-    min-width: 260px;
-    max-width: 420px;
-}
-
-.resume-fields-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-.resume-fields-table td {
-    padding: 2px 4px;
-    vertical-align: middle;
-    font-size: 11px;
-}
-
-.resume-fields-table td.resume_label {
-    width: 120px;
-    max-width: 140px;
-    text-align: right;
-    font-weight: bold;
-    color: #b0b0b0;
-    white-space: normal;
-    word-break: break-word;
-    overflow-wrap: break-word;
-}
-
-.resume-fields-table td:not(.resume_label) {
-    text-align: left;
-    word-break: break-all;
-}
-
-.resume_field, .display_name {
-    color: #fff;
-    font-weight: 400;
-}
-
-.resume-section {
-    margin-bottom: 12px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 6px;
-}
-
-.resume-section:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.container-highlight {
-    border: 1px solid #4D69A8;
-    background-color: #112944;
-    box-shadow: 0 0 10px rgba(85, 83, 145, 0.5);  
-}
-
 @keyframes GlowGreen {
     0% {
         background-color: rgb(16, 32, 16);
@@ -2339,3 +2399,4 @@ color: transparent;
     display:none !important;
 }
 */
+
