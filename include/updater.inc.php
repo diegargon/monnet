@@ -489,11 +489,27 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+    // 0.81 DONE
+    $update = 0.81;
+    if ($db_version == 0.80) {
+        try {
+            # 0 checked, 1 must check 2, in check process
+            $db->query("ALTER TABLE `hosts` ADD COLUMN `mac_check` tinyint(1) DEFAULT 0;");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
     // Later
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
-            # Playbooks Global Variable
+            # Mole Agent is used as a gateway to stealh discovery scan in network, perhaps ping check
+            $db->query("ALTER TABLE `hosts` ADD COLUMN `mole` tinyint(1) DEFAULT 0;");
+            # Set Playbooks Global Variable
             $db->query("ALTER TABLE `ansible_vars` ADD `global` TINYINT NOT NULL DEFAULT '0';");
             # User date formet
             $db->query("ALTER TABLE `users` ADD `dateformat` VARCHAR(20) NULL;");
