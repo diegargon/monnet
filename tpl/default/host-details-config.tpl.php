@@ -109,12 +109,6 @@
                 </select>
                 <button id="submitAccessLink"><?= $lng['L_SEND'] ?></button>
             </div>
-            <div class="">
-                <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
-                <input type="text" size="32" id="host_token" name="host_token"
-                    value="<?= $tdata['host_details']['token'] ?>" readonly/>
-                <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
-            </div>
         </div>
         <!-- /left config column -->
         <!-- right config column -->

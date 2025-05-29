@@ -62,6 +62,12 @@ $lsel = strtoupper(trim($lsel));
             type="number"
             value="<?= $h_misc['disks_warn_threshold']?>"
         />
+        <div class="">
+            <label for="host_token"><?= $lng['L_TOKEN'] ?>: </label><br/>
+            <input type="text" size="32" id="host_token" name="host_token"
+                value="<?= $tdata['host_details']['token'] ?>" readonly/>
+            <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
+        </div>
         <br/>
         <button id="submitAgentConfig" type="submit>"><?= $lng['L_SEND'] ?></button>
     </div>
