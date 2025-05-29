@@ -34,7 +34,7 @@
  *      104 (Purge)
  *      105 (Logging)
  *      106 Network
- * 
+ *
  *    10000 Weather Widget
  */
 namespace App\Core;
@@ -182,6 +182,12 @@ class ConfigService
             }
         } else {
             $this->cfg[$key]['value'] = $value;
+            // Marcar como modificado para que se cree en la base de datos
+            $this->modifiedKeys[$key]['value'] = $value;
+            if ($force_save) {
+                $this->saveChanges();
+                return 1;
+            }
         }
         if ($force_save) {
             $this->saveChanges();
