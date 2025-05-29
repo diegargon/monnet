@@ -10,59 +10,84 @@ $lsel = strtoupper(trim($lsel));
 ?>
 <div id="tab16" class="host-details-tab-content">
     <div id="agent_container" class="agent_container">
-        <div>Log Level</div>
-        <div>
-            <select id="agent_log_level" name="agent_log_level">
-                <option value="DEBUG" <?= $lsel == 'DEBUG' ? ' selected' : ''?>>LOG_DEBUG</option>
-                <option value="INFO" <?= $lsel == 'INFO' ? ' selected' : ''?>>LOG_INFO</option>
-                <option value="NOTICE" <?= $lsel == 'NOTICE' ? ' selected' : ''?>>LOG_NOTICE</option>
-                <option value="WARNING" <?= $lsel == 'WARNING' ? ' selected' : ''?>>LOG_WARNING</option>
-                <option value="ERROR" <?= $lsel == 'ERROR' ? ' selected' : ''?>>LOG_ERROR</option>
-                <option value="CRITICAL" <?= $lsel == 'CRITICAL' ? ' selected' : ''?>>LOG_CRITICAL</option>
-                <option value="ALERT" <?= $lsel == 'ALERT' ? ' selected' : ''?>>LOG_ALERT</option>
-                <option value="EMERGENCY" <?= $lsel == 'EMERGENCY' ? ' selected' : ''?>>LOG_EMERGENCY</option>
-            </select>
-        </div>
-        <div><?= $lng['L_MEMORY'] . ' ' . $lng['L_THRESHOLD'] ?></div>
-        <label for="mem_alert_threshold"><?= $lng['L_ALERTS'] ?></label>
-        <input
-            id="mem_alert_threshold"
-            name="mem_alert_threshold"
-            size="2"
-            max-size="2"
-            type="number"
-            value="<?= $h_misc['mem_alert_threshold']?>"
-        />
-        <label for="mem_warn_threshold"><?= $lng['L_WARNS'] ?></label>
-        <input
-            id="mem_warn_threshold"
-            name="mem_warn_threshold"
-            size="2"
-            max-size="2"
-            type="number"
-            value="<?= $h_misc['mem_warn_threshold']?>"
-        />
-        <div><?= $lng['L_DISKS'] . ' ' . $lng['L_THRESHOLD'] ?></div>
-        <label for="disks_alert_threshold"><?= $lng['L_ALERTS'] ?></label>
-        <input
-            id="disks_alert_threshold"
-            name="disks_alert_threshold"
-            size="2" max-size="2"
-            type="number"
-            value="<?= $h_misc['disks_alert_threshold']?>"
-        />
-        <label for="disks_warn_threshold"><?= $lng['L_WARNS'] ?></label>
-        <input
-            id="disks_warn_threshold"
-            name="disks_warn_threshold"
-            min="0"
-            max="100"
-            size="2"
-            max-size="2"
-            type="number"
-            value="<?= $h_misc['disks_warn_threshold']?>"
-        />
-        <br/>
-        <button id="submitAgentConfig" type="submit>"><?= $lng['L_SEND'] ?></button>
+        <form>
+        <table class="resume-fields-table">
+            <tr>
+                <td class="resume_label"><?= $lng['L_LOG_LEVEL'] ?? 'Log Level' ?></td>
+                <td>
+                    <select id="agent_log_level" name="agent_log_level">
+                        <option value="DEBUG" <?= $lsel == 'DEBUG' ? ' selected' : ''?>>LOG_DEBUG</option>
+                        <option value="INFO" <?= $lsel == 'INFO' ? ' selected' : ''?>>LOG_INFO</option>
+                        <option value="NOTICE" <?= $lsel == 'NOTICE' ? ' selected' : ''?>>LOG_NOTICE</option>
+                        <option value="WARNING" <?= $lsel == 'WARNING' ? ' selected' : ''?>>LOG_WARNING</option>
+                        <option value="ERROR" <?= $lsel == 'ERROR' ? ' selected' : ''?>>LOG_ERROR</option>
+                        <option value="CRITICAL" <?= $lsel == 'CRITICAL' ? ' selected' : ''?>>LOG_CRITICAL</option>
+                        <option value="ALERT" <?= $lsel == 'ALERT' ? ' selected' : ''?>>LOG_ALERT</option>
+                        <option value="EMERGENCY" <?= $lsel == 'EMERGENCY' ? ' selected' : ''?>>LOG_EMERGENCY</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="resume_label"><?= $lng['L_MEMORY'] . ' ' . $lng['L_THRESHOLD'] ?></td>
+                <td>
+                    <label for="mem_alert_threshold"><?= $lng['L_ALERTS'] ?></label>
+                    <input
+                        id="mem_alert_threshold"
+                        name="mem_alert_threshold"
+                        size="2"
+                        max-size="2"
+                        type="number"
+                        value="<?= $h_misc['mem_alert_threshold']?>"
+                    />
+                    <label for="mem_warn_threshold"><?= $lng['L_WARNS'] ?></label>
+                    <input
+                        id="mem_warn_threshold"
+                        name="mem_warn_threshold"
+                        size="2"
+                        max-size="2"
+                        type="number"
+                        value="<?= $h_misc['mem_warn_threshold']?>"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="resume_label"><?= $lng['L_DISKS'] . ' ' . $lng['L_THRESHOLD'] ?></td>
+                <td>
+                    <label for="disks_alert_threshold"><?= $lng['L_ALERTS'] ?></label>
+                    <input
+                        id="disks_alert_threshold"
+                        name="disks_alert_threshold"
+                        size="2" max-size="2"
+                        type="number"
+                        value="<?= $h_misc['disks_alert_threshold']?>"
+                    />
+                    <label for="disks_warn_threshold"><?= $lng['L_WARNS'] ?></label>
+                    <input
+                        id="disks_warn_threshold"
+                        name="disks_warn_threshold"
+                        min="0"
+                        max="100"
+                        size="2"
+                        max-size="2"
+                        type="number"
+                        value="<?= $h_misc['disks_warn_threshold']?>"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="resume_label"><label for="host_token"><?= $lng['L_TOKEN'] ?>: </label></td>
+                <td>
+                    <input type="text" size="32" id="host_token" name="host_token"
+                        value="<?= $tdata['host_details']['token'] ?>" readonly/>
+                    <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:right;">
+                    <button id="submitAgentConfig" type="submit"><?= $lng['L_SEND'] ?></button>
+                </td>
+            </tr>
+        </table>
+        </form>
     </div>
 </div>
