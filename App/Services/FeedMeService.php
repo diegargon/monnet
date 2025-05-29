@@ -386,7 +386,7 @@ class FeedMeService
                     if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
                         $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_NEW_LOCAL);
                     } else {
-                        $this->hostService->setAlertOn($host_id, $log_msg, \EventType::PORT_NEW, \LogType::EVENT_ALERT);
+                        $this->hostService->setAlertOn($host_id, $log_msg, \LogType::EVENT_ALERT, \EventType::PORT_NEW);
                     }
                     unset($db_ports_map[$key]);
                 }
