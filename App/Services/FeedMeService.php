@@ -127,11 +127,14 @@ class FeedMeService
                             # New config send disable flag
                             $host_update_values['misc']['agent_config_update'] = 0;
                         }
-                        # TODO Test
-                        #if (!empty($host['network']) && $this->shouldCheckMacs((string)$host['network'])) {
-                        #    $hosts_mac_check = $this->hostService->getHostsWithMacCheckByNetwork((int)$host['network']);
-                        #    $data_reply['check_macs'] = array_column($hosts_mac_check, 'ip');
-                        #}
+
+                        # Send ips to agent same network to discovery macs
+                        if ($host['misc']['agent_version'] >= 0.199) {
+                            if (!empty($host['network']) && $this->shouldCheckMacs((string)$host['network'])) {
+                                $hosts_mac_check = $this->hostService->getHostsWithMacCheckByNetwork((int)$host['network']);
+                                $data_reply['check_macs'] = array_column($hosts_mac_check, 'ip');
+                            }
+                        }
 
                         break;
                     case 'send_stats': // Stats every 5min
@@ -449,11 +452,12 @@ class FeedMeService
                 $this->logHost->logHost($hlog['level'], $host_id, '[Agent]: ' . $hlog['message']);
             }
         }
-        # Update macs asked from an agent
+        # Update macs asked to and receive from an agent
         if (!empty($rdata['collect_macs'])) {
             if (is_array($rdata['collect_macs'])) {
                 foreach ($rdata['collect_macs'] as $mac_entry) {
-                    if (!empty($mac_entry['ip']) && !empty($mac_entry['mac'])) {
+                    # Do not check for mac null since updateMacByIp set the mac_check
+                    if (!empty($mac_entry['ip'])) {
                         $this->hostService->updateMacByIp($mac_entry['ip'], $mac_entry['mac']);
                     }
                 }

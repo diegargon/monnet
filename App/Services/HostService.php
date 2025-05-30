@@ -743,16 +743,6 @@ class HostService
     }
 
     /**
-     * Obtiene todos los hosts con el campo mac_check = 1.
-     *
-     * @return array
-     */
-    public function getHostsWithMacCheck(): array
-    {
-        return $this->hostsModel->getFiltered(['mac_check' => 1]);
-    }
-
-    /**
      * Obtiene todos los hosts con el campo mac_check = 1 y network = $network_id.
      *
      * @param int $network_id
@@ -761,6 +751,7 @@ class HostService
     public function getHostsWithMacCheckByNetwork(int $network_id): array
     {
         return $this->hostsModel->getFiltered([
+            'online' => 1,
             'mac_check' => 1,
             'network' => $network_id
         ]);

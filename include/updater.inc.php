@@ -19,101 +19,6 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
     global $logSys;
     $logSys->notice("Triggered updater File version: $files_version DB version: $db_version");
 
-    // 0.60 DONE
-    $update = 0.60;
-    if ($db_version == 0.59) {
-        Log::warning("Init version $update");
-        $result = $db->query("
-            SELECT 1
-            FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = DATABASE()
-            AND TABLE_NAME = 'ports'
-            AND COLUMN_NAME = 'latency'
-            LIMIT 1
-        ");
-        if ($result && $result->num_rows === 0) {
-            $db->query("ALTER TABLE `ports` ADD `latency` FLOAT DEFAULT NULL");
-        }
-
-        $result = $db->query("
-            SELECT 1
-            FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = DATABASE()
-            AND TABLE_NAME = 'ports'
-            AND COLUMN_NAME = 'last_check'
-            LIMIT 1
-        ");
-        if ($result && $result->num_rows === 0) {
-            $db->query("ALTER TABLE `ports` ADD `last_check` DATETIME DEFAULT NULL");
-        }
-        $db->query("ALTER TABLE `ports` MODIFY `scan_type` tinyint");
-        $db->query("ALTER TABLE `ports` MODIFY `service` varchar(255) DEFAULT NULL");
-        $ncfg->set('db_monnet_version', $update, 1);
-        $db->query("COMMIT");
-        $db_version = $update;
-        Log::warning("Update version to $update successful");
-    }
-
-    // 0.61 DONE
-    $update = 0.61;
-    if ($db_version == 0.60) {
-        try {
-            $db_version = $update;
-            $ncfg->set('db_monnet_version', $update, 1);
-            $logSys->notice("Update version to $update successful");
-        } catch (Exception $e) {
-            $ncfg->set('db_monnet_version', $db_version, 1);
-        }
-    }
-
-    // 0.62 DONE
-    $update = 0.62;
-    if ($db_version == 0.61) {
-        try {
-            $db_version = $update;
-            # DONE getTotalsStats
-            $db->query("ALTER TABLE `hosts` ADD `agent_online` TINYINT(1) NOT NULL DEFAULT 0;");
-            # DONE To rebuild User
-            $db->query("
-                CREATE TABLE `sessions` (
-                    `id` INT(11) NOT NULL AUTO_INCREMENT,
-                    `user_id` INT(11) NOT NULL,
-                    `sid` VARCHAR(64) NOT NULL,
-                    `ip_address` VARCHAR(45) DEFAULT NULL,
-                    `user_agent` VARCHAR(255) DEFAULT NULL,
-                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    `expired_at` DATETIME DEFAULT NULL,
-                    `last_active_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                    PRIMARY KEY (`id`),
-                    UNIQUE KEY `sid` (`sid`),
-                    KEY `user_id` (`user_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
-            ");
-            $ncfg->set('db_monnet_version', $update, 1);
-            $logSys->notice("Update version to $update successful");
-        } catch (Exception $e) {
-            $ncfg->set('db_monnet_version', $db_version, 1);
-        }
-    }
-
-
-    // 0.63 DONE
-    $update = 0.63;
-    if ($db_version == 0.62) {
-        try {
-            /* Remove unused */
-            $db->query("ALTER TABLE hosts DROP COLUMN access_method;");
-            $db->query("ALTER TABLE hosts DROP COLUMN status;");
-            /* DONE change pb_id to pid */
-            $db->query("ALTER TABLE tasks ADD COLUMN pid VARCHAR(255) DEFAULT 'std-ansible-ping' AFTER hid;");
-            $ncfg->set('db_monnet_version', $update, 1);
-            $db_version = $update;
-            $logSys->notice("Update version to $update successful");
-        } catch (Exception $e) {
-            $ncfg->set('db_monnet_version', $db_version, 1);
-            $logSys->error('Transaction failed: ' . $e->getMessage());
-        }
-    }
     // 0.64 DONE
     $update = 0.64;
     if ($db_version == 0.63) {
@@ -493,7 +398,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
     $update = 0.81;
     if ($db_version == 0.80) {
         try {
-            # 0 checked, 1 must check 2, in check process
+            # DONE 0 checked, 1 must check
             $db->query("ALTER TABLE `hosts` ADD COLUMN `mac_check` tinyint(1) DEFAULT 0;");
             $ncfg->set('db_monnet_version', $update, 1);
             $db_version = $update;
@@ -503,6 +408,28 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
             $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
         }
     }
+
+    // 0.82 DONE /SQL
+    $update = 0.82;
+    if ($db_version == 0.81) {
+        $now = gmdate('Y-m-d H:i:s');
+        try {
+            $db->query("START TRANSACTION");
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('last_hourly_task', JSON_QUOTE('$now'), 4, 0, NULL, 0)
+            ");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
     // Later
     $update = 0.00;
     if ($db_version == 0.00) {
