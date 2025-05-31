@@ -157,6 +157,12 @@ class FeedMeService
                     case 'system_shutdown':
                         $this->notificationLog($request['name'], $host_id, $rdata);
                         break;
+                    case 'scheduler_update':
+                        $scheduler_updates = $this->processSchedulerUpdater($request);
+                        if (!empty($scheduler_updates)) {
+                            $host_update_values = array_merge($host_update_values, $scheduler_updates);
+                        }
+                        break;
                     default:
                         $this->logSys->warning('Notification receive with unknown reference: '. $request['name']);
                 }
@@ -197,6 +203,14 @@ class FeedMeService
         if (!empty($rdata['uptime'])) {
             if (!isset($host['misc']['uptime']) || ($rdata['uptime'] !== $host['misc']['uptime'])) {
                 $host_update_values['misc']['uptime'] = $rdata['uptime'];
+            }
+        }
+        if (!empty($rdata['mac'])) {
+            if (!isset($host['mac']) || ($rdata['mac'] !== $host['mac'])) {
+                if (isset($host['mac'])) {
+                    $this->hostService->setWarnOn($host['id'], "Mac has changed", \LogType::EVENT_WARN, \EventType::HOST_INFO_CHANGE);
+                }
+                $host_update_values['mac'] = $rdata['mac'];
             }
         }
 
@@ -698,5 +712,20 @@ class FeedMeService
 
         $this->ncfg->set($configKey, $now, 1);
         return true;
+    }
+
+    /**
+     * Procesa el update recibido por el scheduler (actualmente solo uptime).
+     *
+     * @param array<string, mixed> $request
+     * @return array<string, mixed>
+     */
+    private function processSchedulerUpdater(array $request): array
+    {
+        $updates = [];
+        if (isset($request['uptime'])) {
+            $updates['misc']['uptime'] = $request['uptime'];
+        }
+        return $updates;
     }
 }
