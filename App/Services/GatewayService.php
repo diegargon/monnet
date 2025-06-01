@@ -140,11 +140,12 @@ class GatewayService
                 return ['status' => 'error', 'error_msg' => 'Status success but empty response'];
             }
             // TODO GW must use response_msg;
+            $response['status'] = 'success';
             $response['response_msg'] = $response['message'];
             return $response;
         }
 
-        $error_msg = 'Gateway erro response: ';
+        $error_msg = 'Gateway error response: ';
         if (isset($response['message'])) {
             $error_msg .= $response['message'];
         } else {

@@ -97,11 +97,7 @@ class CmdTaskAnsibleController
                 $this->hostService->setAnsibleAlarm($target_id, $response['error_msg']);
                 return Response::stdReturn(false, $response['error_msg'], false, ['command_receive' => $command]);
             }
-            // Ansible Error return check
-            if (!isset($response['response_msg']['result'])) {
-                return Response::stdReturn(false, 'Response format error', false, ['command_receive' => $command]);
-            }
-            $result = $response['response_msg']['result'];
+            $result = $response['response_msg'];
             if (isset($result['status']) && $result['status'] === 'error') {
                 return Response::stdReturn(false, $result['message'], false, ['command_receive' => $command]);
             }
