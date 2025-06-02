@@ -757,7 +757,7 @@ class HostService
      * Actualiza la dirección MAC de un host dado su IP.
      *
      * @param string $ip
-     * @param string $mac
+     * @param ?string $mac
      * @return bool
      */
     public function updateMacByIp(string $ip, ?string $mac): bool
