@@ -469,13 +469,21 @@ class FeedMeService
                 $this->logHost->logHost($hlog['level'], $host_id, '[Agent]: ' . $hlog['message']);
             }
         }
-        # Update macs asked to and receive from an agent
+        /*
+         *  Update macs asked to and receive from an agent, mac can be null
+         *  since updateMacByIp will set mac_check to mark as checked
+         */
         if (!empty($rdata['collect_macs'])) {
             if (is_array($rdata['collect_macs'])) {
+                $i = 0;
+                foreach($rdata['collect_macs'] as $cmacs) {
+                    if (!empty($cmacs['macs'])) {
+                        $i++;
+                    }
+                }
                 $num_macs = count($rdata['collect_macs']);
-                $this->logSys->notice("Update $num_macs provided by agent host id: " . $host_id);
+                $this->logSys->notice("Checked $num_macs. Found $i macs provided by agent host id: " . $host_id);
                 foreach ($rdata['collect_macs'] as $mac_entry) {
-                    # Do not check for mac null since updateMacByIp set the mac_check
                     if (!empty($mac_entry['ip'])) {
                         $this->hostService->updateMacByIp($mac_entry['ip'], $mac_entry['mac']);
                     }
