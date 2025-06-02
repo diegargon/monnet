@@ -131,8 +131,11 @@ class FeedMeService
                         # Send ips to agent same network to discovery macs
                         if ($host['misc']['agent_version'] >= 0.199) {
                             if (!empty($host['network']) && $this->shouldCheckMacs((string)$host['network'])) {
+                                $this->logSys->info("Checking MACs for network: {$host['network']}. Sending to agent {$host['id']}");
                                 $hosts_mac_check = $this->hostService->getHostsWithMacCheckByNetwork((int)$host['network']);
-                                $data_reply['check_macs'] = array_column($hosts_mac_check, 'ip');
+                                if (!empty($hosts_mac_check)) {
+                                    $data_reply['collect_macs'] = array_column($hosts_mac_check, 'ip');
+                                }
                             }
                         }
 
@@ -469,6 +472,8 @@ class FeedMeService
         # Update macs asked to and receive from an agent
         if (!empty($rdata['collect_macs'])) {
             if (is_array($rdata['collect_macs'])) {
+                $num_macs = count($rdata['collect_macs']);
+                $this->logSys->notice("Update $num_macs provided by agent host id: " . $host_id);
                 foreach ($rdata['collect_macs'] as $mac_entry) {
                     # Do not check for mac null since updateMacByIp set the mac_check
                     if (!empty($mac_entry['ip'])) {
