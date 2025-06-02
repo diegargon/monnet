@@ -1192,4 +1192,68 @@ class CmdHostController
 
         return Response::stdReturn(false, 'Nothing to update'. $wrongKeys);
     }
+
+    public function updateHostConfig(array $command_values): array
+    {
+        $hid = isset($command_values['host_id']) ? Filter::varInt($command_values['host_id']) : (isset($command_values['id']) ? Filter::varInt($command_values['id']) : null);
+        if (!$hid) {
+            return Response::stdReturn(false, 'Invalid host id');
+        }
+
+        // Main Row Fields
+        $mainFields = [
+            'highlight', 'ansible_enabled', 'linkable', 'disable',
+            'title', 'hostname', 'category', 'linked'
+        ];
+        // Misc Fields
+        $miscFields = [
+            'owner', 'access_link', 'access_link_type', 'machine_type',
+            'os_family', 'os', 'os_version', 'system_rol', 'manufacture',
+            'sys_availability', 'always_on', 'compliant', 'bastion',
+            'location',
+        ];
+
+        $mainData = [];
+        $miscData = [];
+        $validFields = array_merge($mainFields, $miscFields);
+
+        foreach ($command_values as $key => $value) {
+            if ($key === 'host_id' || $key === 'id') {
+                continue;
+            }
+            if (!in_array($key, $validFields, true)) {
+                return Response::stdReturn(false, "Invalid field: $key");
+            }
+            if (in_array($key, $mainFields, true)) {
+                $mainData[$key] = $value;
+            }
+            if (in_array($key, $miscFields, true)) {
+                $miscData[$key] = $value;
+            }
+        }
+
+        // Normaliza valores booleanos
+        foreach ([
+            'highlight', 'ansible_enabled', 'linkable', 'disable', 'always_on', 'compliant', 'bastion'
+        ] as $boolField) {
+            if (isset($mainData[$boolField])) {
+                $mainData[$boolField] = (int)$mainData[$boolField];
+            }
+        }
+
+        $updateData = $mainData;
+        if (!empty($miscData)) {
+            $updateData['misc'] = $miscData;
+        }
+
+        $result = $this->hostService->updateHost($hid, $updateData);
+
+        if (isset($result['success']) && $result['success']) {
+            return Response::stdReturn(true, $result['msg']);
+        } elseif (isset($result['error_msg'])) {
+            return Response::stdReturn(false, $result['error_msg']);
+        } else {
+            return Response::stdReturn(false, 'Error updating host config');
+        }
+    }
 }

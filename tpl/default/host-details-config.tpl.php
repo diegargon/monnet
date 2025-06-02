@@ -40,6 +40,20 @@
                                     <?= !empty($tdata['host_details']['linkable']) ? ' checked' : '' ?>>
                                 <?= $lng['L_LINKABLE'] ?>
                             </label>
+                            <label for="bastion">
+                                <input type="checkbox"
+                                    id="bastion"
+                                    data-command="setBastion"
+                                    <?= !empty($h_misc['bastion']) ? ' checked' : '' ?>>
+                                <?= 'Bastion' ?>
+                            </label>
+                            <label for="compliant">
+                                <input type="checkbox"
+                                    id="compliant"
+                                    data-command="setCompliant"
+                                    <?= !empty($h_misc['compliant']) ? ' checked' : '' ?>>
+                                <?= $lng['L_COMPLIANT'] ?>
+                            </label>
                             <label for="disable_host">
                                 <input
                                     disabled
@@ -267,8 +281,18 @@
                         <button id="submitLinked"><?= $lng['L_SEND'] ?></button>
                     </td>
                 </tr>
+                <tr>
+                    <td class="resume_label"><label for="location"><?= $lng['L_LOCATION'] ?>: </label></td>
+                    <td>
+                        <input type="text" maxlength="255" id="location" name="location"
+                            value="<?= $h_misc['location'] ?? '' ?>" />
+                    </td>
+                </tr>
             </table>
         </div>
         <!-- /right config column -->
+    </div>
+    <div style="margin-top:20px;">
+        <button id="submitAllConfig"><?= $lng['L_SEND'] ?></button>
     </div>
 </div>

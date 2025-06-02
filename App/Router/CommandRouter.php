@@ -50,7 +50,8 @@ class CommandRouter
                 'setHighlight', 'setHostAnsible', 'saveNote', 'auto_reload_host_details', 'setHostDisable',
                 'report_ansible_hosts', 'report_ansible_hosts_off', 'report_ansible_hosts_fail', 'report_agents_hosts',
                 'report_agents_hosts_off', 'report_agents_hosts_missing_pings', 'report_alerts', 'report_warns',
-                'clear_alerts', 'clear_warns', 'submitHost', 'submitNewHostsCat', 'power_on', 'submitAgentConfig'
+                'clear_alerts', 'clear_warns', 'submitHost', 'submitNewHostsCat', 'power_on', 'submitAgentConfig',
+                'updateHostConfig'
             ],
             'log' => [
                 'ack_host_log', 'logs-reload', 'auto_reload_logs', 'showAlarms', 'showEvents', 'submitBitacora'

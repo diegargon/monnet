@@ -50,6 +50,39 @@ $(document).ready(function () {
         }
     });
 
+    /* Submit Config Tab */
+    $(document).on('click', '#submitAllConfig', function(e) {
+        e.preventDefault();
+        var data = {
+            host_id: $('#host_id').val(),
+            highlight: $('#chkHighlight').is(':checked') ? 1 : 0,
+            ansible_enabled: $('#ansible_enabled').length ? ($('#ansible_enabled').is(':checked') ? 1 : 0) : undefined,
+            always_on: $('#always_on').is(':checked') ? 1 : 0,
+            linkable: $('#linkable').is(':checked') ? 1 : 0,
+            disable: $('#host_on').is(':checked') ? 1 : 0,
+            bastion: $('#bastion').is(':checked') ? 1 : 0,
+            compliant: $('#compliant').is(':checked') ? 1 : 0,
+            location: $('#location').val(),
+            title: $('#host-title').val(),
+            hostname: $('#host-name').val(),
+            category: $('#hostcat_id').val(),
+            owner: $('#host_owner').val(),
+            access_link: $('#access_link').val(),
+            access_link_type: $('#access_link_type').val(),
+            machine_type: $('#machine_type').val(),
+            manufacture: $('#manufacture').val(),
+            os_family: $('#os_family').val(),
+            os: $('#os').val(),
+            os_version: $('#os_version').val(),
+            system_rol: $('#system_rol').val(),
+            sys_availability: $('#system_aval').val(),
+            linked: $('#linked_to').val()
+        };
+        Object.keys(data).forEach(function(k){ if(data[k] === undefined) delete data[k]; });
+        requestHostDetails('updateHostConfig', data);
+    });
+
+
     $(document).on('change', '.ack-checkbox', function() {
         var reportId = $(this).data('report-id');
 

@@ -65,6 +65,7 @@ $lng = [
     'L_CLEAR_WARNS' => 'Limpiar avisos',
     'L_CONDITIONAL' => 'Condicional',
     'L_CLEAN' => 'Limpieza',
+    'L_COMPLIANT' => 'Conforme',
     //D
     'L_DELETE' => 'Borrar',
     'L_DISTRIBUTION' => 'Distribucion',
@@ -158,6 +159,7 @@ $lng = [
     'L_LAST_SEEN_ONLINE' => 'Visto online',
     'L_LINKED' => 'Linked',
     'L_LINKABLE' => 'Enlazable',
+    'L_LOCATION' => 'Ubicacion',
     //M
     'L_MEM' => 'Mem',
     'L_METRICS' => 'Metricas',

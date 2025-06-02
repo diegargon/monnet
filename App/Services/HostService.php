@@ -513,30 +513,58 @@ class HostService
      */
     public function updateHost(int $id, array $data): array
     {
+        $currentHost = $this->getHostById($id);
+        if (!$currentHost) {
+            return ['error' => 'Host not found'];
+        }
+
+        $currentMisc = [];
+        if (!empty($currentHost['misc'])) {
+            $currentMisc = $this->decodeMisc($currentHost['misc']);
+            if (isset($currentMisc['error'])) {
+                return $currentMisc;
+            }
+        }
+
+        foreach ($data as $key => $value) {
+            if ($key === 'misc') {
+                continue;
+            }
+            if (array_key_exists($key, $currentHost) && $currentHost[$key] == $value) {
+                unset($data[$key]);
+            }
+        }
+
         if (isset($data['misc'])) {
             if (!is_array($data['misc'])) {
                 return ['error', 'error_msg' => 'Misc value is set but not an array'];
             }
-            //Database Current Misc
-            $host_misc  = $this->cmdHostModel->getMiscById($id);
-            $currentMisc = $this->decodeMisc($host_misc['misc']);
-            if (isset($currentMisc['error'])) {
-                return $currentMisc;
+            $miscToUpdate = $data['misc'];
+            foreach ($miscToUpdate as $mKey => $mValue) {
+                if (isset($currentMisc[$mKey]) && $currentMisc[$mKey] == $mValue) {
+                    unset($miscToUpdate[$mKey]);
+                }
             }
-
-            $newMisc = array_merge($currentMisc, $data['misc']);
-
-            $newMiscEncoded = $this->encodeMisc($newMisc);
-
-            if ($newMiscEncoded === false) {
-                return ['error', 'error_msg' => 'Error encoding misc'];
+            if (!empty($miscToUpdate)) {
+                // Solo si hay cambios en misc
+                $newMisc = array_merge($currentMisc, $miscToUpdate);
+                $newMiscEncoded = $this->encodeMisc($newMisc);
+                if ($newMiscEncoded === false) {
+                    return ['error', 'error_msg' => 'Error encoding misc'];
+                }
+                $data['misc'] = $newMiscEncoded;
+            } else {
+                unset($data['misc']);
             }
+        }
 
-            $data['misc'] = $newMiscEncoded;
+        if (empty($data)) {
+            return ['success' => true, 'msg' => 'Nothing to update'];
         }
 
         if ($this->cmdHostModel->updateByID($id, $data)) {
-            return ['success' => true];
+            $keys = implode(', ', array_keys($data));
+            return ['success' => true, 'msg' => 'Update ' . count($data) . ' fields:' . $keys];
         }
 
         return ['error', 'error_msg' => 'Error updating host'];
@@ -732,14 +760,18 @@ class HostService
      * @param string $mac
      * @return bool
      */
-    public function updateMacByIp(string $ip, string $mac): bool
+    public function updateMacByIp(string $ip, ?string $mac): bool
     {
         // Busca el host por IP y actualiza el campo mac y mac_check
         $host = $this->hostsModel->getHostByIP($ip);
         if (empty($host)) {
             return false;
         }
-        return $this->hostsModel->update((int)$host['id'], ['mac' => $mac, 'mac_check' => 0]);
+        $set['mac_check'] = 0;
+        if (!empty($mac)) {
+            $set['mac'] = $mac;
+        }
+        return $this->hostsModel->update((int)$host['id'], $set);
     }
 
     /**

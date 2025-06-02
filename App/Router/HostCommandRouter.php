@@ -23,7 +23,6 @@ class HostCommandRouter
     {
         $hostController = new CmdHostController($this->ctx);
         switch ($command) {
-            // ...todos los casos del grupo host...
             case 'host-details':
                 return $hostController->getHostDetails($command_values);
             case 'remove_host':
@@ -133,6 +132,8 @@ class HostCommandRouter
                 return $hostController->powerOn($command_values);
             case 'submitAgentConfig':
                 return $hostController->saveAgentConfig($command_values);
+            case 'updateHostConfig':
+                return $hostController->updateHostConfig($command_values);
             default:
                 return [
                     'command_error' => 1,
