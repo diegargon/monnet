@@ -627,7 +627,7 @@ input:checked + .slider:before {
 }
 
 .hosts-container img {
-    width: 20px;
+    width: 18px;
     border-radius: 5px;
 }
 
@@ -1987,8 +1987,9 @@ input[type="checkbox"]:checked + .switch-label .switch-handle {
 
 .host-led {
     display: inline-block;
-    width: 13px;
-    height: 13px;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
     margin-left: 2px;
     border: 1px solid #b5b5b5;
     border-style: outset;
