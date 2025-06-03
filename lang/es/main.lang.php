@@ -172,6 +172,7 @@ $lng = [
     'L_MISC' => 'Misc',
     'L_MEMORY' => 'Memoria',
     'L_MANUAL' => 'Manual',
+    'L_MACHINE_ID' => 'ID Maquina',
     //N
     'L_NONE' => 'Nada',
     'L_NOTES' => 'Notas',

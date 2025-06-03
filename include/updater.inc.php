@@ -434,6 +434,8 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
+            # Machine ID
+            $db->query("ALTER TABLE `hosts` ADD COLUMN `mid` CHAR(32) NULL AFTER id;");
             # Mole Agent is used as a gateway to stealh discovery scan in network, perhaps ping check
             $db->query("ALTER TABLE `hosts` ADD COLUMN `mole` tinyint(1) DEFAULT 0;");
             # Set Playbooks Global Variable

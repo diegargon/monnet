@@ -142,6 +142,12 @@
                         <td class="resume_field"><?= $tdata['host_details']['f_last_seen'] ?></td>
                     </tr>
                     <?php endif; ?>
+                    <?php if (!empty($tdata['host_details']['mid'])) : ?>
+                    <tr>
+                        <td class="resume_label"><?= $lng['L_MACHINE_ID'] ?>:</td>
+                        <td class="resume_field"><?= $tdata['host_details']['mid'] ?></td>
+                    </tr>
+                    <?php endif; ?>
                 </table>
             </div>
 
