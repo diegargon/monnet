@@ -112,6 +112,7 @@ class CmdInventoryController
         foreach ($hosts as &$host) {
             // display_name
             $host['display_name'] = $this->getDisplayName($host);
+            $host['misc'] = $this->hostService->decodeMisc($host['misc']);
 
             // linked_name
             if (isset($host['linked']) && $host['linked'] != 0 && isset($host_id_map[$host['linked']])) {
@@ -140,12 +141,20 @@ class CmdInventoryController
             }
 
             // rol_name
-            if (isset($host['rol']) && isset($rol_map[$host['rol']])) {
-                $host['rol_name'] = $rol_map[$host['rol']];
+            if (isset($host['misc']['system_rol']) && isset($rol_map[$host['misc']['system_rol']])) {
+                $host['rol_name'] = $rol_map[$host['misc']['system_rol']];
             } else {
                 $host['rol_name'] = 'N/A';
             }
-
+            if (!empty($host['misc']['mac_vendor'])) {
+                if (mb_strlen($host['misc']['mac_vendor'] > 12)) {
+                    $host['vendor_short'] = substr($host['misc']['mac_vendor'],0 ,12) .'..';
+                } else {
+                    $host['vendor_short'] = $host['misc']['mac_vendor'];
+                }
+            } else {
+                $host['vendor_short'] = 'N/A';
+            }
             // category (translation)
             if (isset($host['category']) && isset($cat_map[$host['category']])) {
                 $cat_name = $cat_map[$host['category']];
@@ -153,6 +162,7 @@ class CmdInventoryController
             }
         }
         unset($host);
+
         return $hosts;
     }
 

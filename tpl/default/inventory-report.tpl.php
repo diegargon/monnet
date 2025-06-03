@@ -143,6 +143,7 @@
                         <th>Hostname</th>
                         <th>VLAN</th>
                         <th>MAC</th>
+                        <th>Vendor</th>
                         <th>Online</th>
                         <th>Rol</th>
                         <th>Linked</th>
@@ -163,6 +164,9 @@
                             <td><?= $host['hostname'] ?? '' ?></td>
                             <td><?= $host['vlan'] ?></td>
                             <td><?= $host['mac'] ?? '' ?></td>
+                            <td title="<?= $host['misc']['mac_vendor'] ?>">
+                                <?= $host['vendor_short'] ?? '' ?>
+                            </td>
                             <td><?= $host['online'] ? 'Sí' : 'No' ?></td>
                             <td><?= $host['rol_name'] ?? '' ?></td>
                             <td><?= $host['linked_name'] ?? '' ?></td>
