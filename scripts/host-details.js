@@ -76,7 +76,8 @@ $(document).ready(function () {
             os_version: $('#os_version').val(),
             system_rol: $('#system_rol').val(),
             sys_availability: $('#system_aval').val(),
-            linked: $('#linked_to').val()
+            linked: $('#linked_to').val(),
+            token: $('#host_token').val()
         };
         Object.keys(data).forEach(function(k){ if(data[k] === undefined) delete data[k]; });
         requestHostDetails('updateHostConfig', data);

@@ -1203,7 +1203,7 @@ class CmdHostController
         // Main Row Fields
         $mainFields = [
             'highlight', 'ansible_enabled', 'linkable', 'disable',
-            'title', 'hostname', 'category', 'linked'
+            'title', 'hostname', 'category', 'linked', 'token'
         ];
         // Misc Fields
         $miscFields = [

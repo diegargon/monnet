@@ -75,14 +75,6 @@ $lsel = strtoupper(trim($lsel));
                 </td>
             </tr>
             <tr>
-                <td class="resume_label"><label for="host_token"><?= $lng['L_TOKEN'] ?>: </label></td>
-                <td>
-                    <input type="text" size="32" id="host_token" name="host_token"
-                        value="<?= $tdata['host_details']['token'] ?>" readonly/>
-                    <button id="submitHostToken"><?= $lng['L_CREATE'] ?></button>
-                </td>
-            </tr>
-            <tr>
                 <td colspan="2" style="text-align:right;">
                     <button id="submitAgentConfig" type="submit"><?= $lng['L_SEND'] ?></button>
                 </td>
