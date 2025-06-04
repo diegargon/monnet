@@ -434,6 +434,8 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
+            # Degraded For OS check like missing updates, one interface down when multiple
+            $db->query("ALTER TABLE `hosts` ADD COLUMN `degraded` tinyint(1) NULL;");
             # Machine ID
             $db->query("ALTER TABLE `hosts` ADD COLUMN `mid` CHAR(32) NULL AFTER id;");
             # Mole Agent is used as a gateway to stealh discovery scan in network, perhaps ping check
