@@ -15,10 +15,15 @@ class TemplateService
 {
     private string $templatesPath = 'tpl/default/';
     private AppContext $ctx;
+    private string $theme = 'default';
+    private string $theme_css = 'default';
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $ncfg = $this->ctx->get(ConfigService::class);
+        $this->theme = $ncfg->get('theme');
+        $this->theme_css = $ncfg->get('theme_css');
         //$this->templatesPath = $templatesPath;
     }
 
@@ -60,17 +65,20 @@ class TemplateService
     /**
      * Returns a CSS <link> tag for the given theme and CSS file.
      *
-     * @param string $theme
      * @param string $css
      * @return string
      */
-    public function cssLinkFile(string $theme, string $css): string
+    public function cssLink(string $css): string
     {
-        $css_file = 'tpl/' . $theme . '/css/' . $css . '.css';
-        if (!file_exists($css_file)) {
-            $css_file = 'tpl/default/css/default.css';
+        if (strpos($css, 'http') === 0) {
+            $css_file = $css;
+        } else {
+            $css_file = 'tpl/' . $this->theme . '/css/' . $css . '.css';
+            if (!file_exists($css_file)) {
+                $css_file = 'tpl/default/css/default.css';
+            }
+            $css_file .= '?nocache=' . time();
         }
-        $css_file .= '?nocache=' . time(); // Avoid cache during development
         return '<link rel="stylesheet" href="' . $css_file . '">' . "\n";
     }
 
@@ -137,19 +145,13 @@ class TemplateService
      */
     public function showPage(array $tdata): void
     {
-        $web['main_head'] = $this->cssLinkFile(
-            $this->ctx->get(ConfigService::class)->get('theme'),
-            $this->ctx->get(ConfigService::class)->get('theme_css')
-        );
+        $web['main_head'] = $this->cssLink($this->theme_css);
         $web['main_footer'] = '';
 
         // Add custom css files
         if (!empty($tdata['web_main']['cssfile']) && is_array($tdata['web_main']['cssfile'])) {
             foreach ($tdata['web_main']['cssfile'] as $cssfile) {
-                $web['main_head'] .= $this->cssLinkFile(
-                    $this->ctx->get(ConfigService::class)->get('theme'),
-                    $cssfile
-                );
+                $web['main_head'] .= $this->cssLink($cssfile);
             }
         }
         // Add script link
