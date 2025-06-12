@@ -5,14 +5,14 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
 */
-namespace App\Services;
+namespace App\Pages;
 
 use App\Core\AppContext;
 use App\Core\ConfigService;
 
 use App\Services\UserService;
 
-class PageUserService
+class PageUser
 {
     /**
      *
@@ -26,7 +26,7 @@ class PageUserService
         $userService = new UserService($ctx);
         $user = $userService->getCurrentUser();
 
-        $page = PageHeadService::getCommonHead($ctx);
+        $page = PageHead::getCommonHead($ctx);
 
         /* Top Buttons */
         $page['load_tpl'][] = [
@@ -61,7 +61,7 @@ class PageUserService
 
         $ncfg = $ctx->get(ConfigService::class);
 
-        $page = PageHeadService::getCommonHead($ctx);
+        $page = PageHead::getCommonHead($ctx);
         /* Top Buttons */
         $page['load_tpl'][] = [
             'file' => 'topbuttoms',

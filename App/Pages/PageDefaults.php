@@ -5,12 +5,13 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
 */
-namespace App\Services;
+namespace App\Pages;
 
 use App\Core\AppContext;
 use App\Core\ConfigService;
+use App\Services\UserService;
 
-class PageDefaultsService
+class PageDefaults
 {
     /**
      *

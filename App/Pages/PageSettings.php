@@ -5,13 +5,13 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  *
 */
-namespace App\Services;
+namespace App\Pages;
 
 use App\Core\ModuleManager;
 use App\Core\AppContext;
 use App\Core\ConfigService;
 
-class PageSettingsService
+class PageSettings
 {
     /**
      *
@@ -38,7 +38,7 @@ class PageSettingsService
             //endif;
             $groupedConfig[$ccat][] = $config;
         }
-        $page = PageHeadService::getCommonHead($ctx);
+        $page = PageHead::getCommonHead($ctx);
         $page['groupedConfig'] = $groupedConfig;
         /* Top Buttons */
         $page['load_tpl'][] = [

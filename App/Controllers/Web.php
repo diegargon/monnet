@@ -11,13 +11,13 @@ namespace App\Controllers;
 use App\Core\AppContext;
 
 use App\Services\UserService;
-use App\Services\PageDefaultsService;
-use App\Services\PageHeadService;
-use App\Services\PageIndexService;
-use App\Services\PageAuthService;
-use App\Services\PageSettingsService;
-use App\Services\PageUserService;
 use App\Services\TemplateService;
+use App\Pages\PageDefaults;
+use App\Pages\PageHead;
+use App\Pages\PageIndex;
+use App\Pages\PageAuth;
+use App\Pages\PageSettings;
+use App\Pages\PageUser;
 
 use App\Services\Filter;
 
@@ -81,27 +81,27 @@ class Web
      */
     private function get(string $page): array
     {
-        $pageDefaults = PageDefaultsService::getDefaults($this->ctx);
+        $pageDefaults = PageDefaults::getDefaults($this->ctx);
         $pageData = [];
 
         switch ($page) {
             case 'login':
-                $pageData = PageAuthService::login($this->ctx);
+                $pageData = PageAuth::login($this->ctx);
                 break;
             case 'logout':
-                PageAuthService::logout($this->ctx);
+                PageAuth::logout($this->ctx);
                 exit();
             case 'privacy':
-                $pageData = PageUserService::getPrivacy($this->ctx);
+                $pageData = PageUser::getPrivacy($this->ctx);
                 break;
             case 'index':
-                $pageData = PageIndexService::getIndex($this->ctx);
+                $pageData = PageIndex::getIndex($this->ctx);
                 break;
             case 'settings':
-                $pageData = PageSettingsService::getSettings($this->ctx);
+                $pageData = PageSettings::getSettings($this->ctx);
                 break;
             case 'user':
-                $pageData = PageUserService::getUserPage($this->ctx);
+                $pageData = PageUser::getUserPage($this->ctx);
                 break;
             default:
                 return [];

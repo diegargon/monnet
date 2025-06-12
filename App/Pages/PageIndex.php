@@ -4,7 +4,7 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
 */
-namespace App\Services;
+namespace App\Pages;
 
 use App\Core\AppContext;
 use App\Core\ConfigService;
@@ -12,10 +12,13 @@ use App\Core\ConfigService;
 use App\Services\UserService;
 use App\Services\CategoriesService;
 use App\Services\ItemsService;
+use App\Services\NetworksService;
 
 use App\Utils\NetUtils;
 
-class PageIndexService
+use App\Pages\PageHead;
+
+class PageIndex
 {
     /**
      *
@@ -30,7 +33,7 @@ class PageIndexService
         $categories = $ctx->get(CategoriesService::class);
         $networks  = new NetworksService($ctx);
         $networks_list = $networks->getNetworks();
-        $page = PageHeadService::getCommonHead($ctx);
+        $page = PageHead::getCommonHead($ctx);
         $networks_selected = 0;
 
         foreach ($networks_list as &$net) {
