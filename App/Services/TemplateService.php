@@ -157,12 +157,7 @@ class TemplateService
         // Add script link
         if (!empty($tdata['web_main']['scriptlink']) && is_array($tdata['web_main']['scriptlink'])) {
             foreach ($tdata['web_main']['scriptlink'] as $scriptlink) {
-                if (
-                    (strpos($scriptlink, 'http') === 0) ||
-                    (file_exists($scriptlink))
-                ) {
-                    $web['main_head'] .= $this->scriptLink($scriptlink);
-                }
+                $web['main_head'] .= $this->scriptLink($scriptlink);
             }
         }
 
