@@ -4,6 +4,7 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ * v1.0
  */
 
 namespace App\Services;
@@ -91,50 +92,6 @@ class TemplateService
     public function scriptLink(string $scriptlink): string
     {
         return '<script src="' . $scriptlink . '"></script>' . "\n";
-    }
-
-    /**
-     * Renders a message box template.
-     *
-     * @param array<string> $msg
-     * @return string|bool
-     */
-    public function msgBox(array $msg): string|bool
-    {
-        $lng = $this->ctx->get('lng');
-        if (isset($msg['title']) && substr($msg['title'], 0, 2) == 'L_') {
-            $msg['title'] = $lng[$msg['title']] ?? $msg['title'];
-        }
-        if (isset($msg['body']) && substr($msg['body'], 0, 2) == 'L_') {
-            $msg['body'] = $lng[$msg['body']] ?? $msg['body'];
-        }
-        return $this->getTpl('msgbox', $msg);
-    }
-
-    /**
-     * Renders a full message page and exits.
-     *
-     * @param array<string> $msg
-     * @return void
-     */
-    public function msgPage(array $msg): void
-    {
-        $footer = $this->getFooter();
-        $menu = '';
-        $body = $this->msgBox(['title' => $msg['title'], 'body' => $msg['body']]);
-        $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
-        echo $this->getTpl('html_mstruct', $tdata);
-        exit();
-    }
-
-    /**
-     * Returns the footer HTML.
-     *
-     * @return string
-     */
-    public function getFooter(): string
-    {
-        return '';
     }
 
     /**
