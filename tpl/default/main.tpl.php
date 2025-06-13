@@ -2,9 +2,8 @@
 /**
  *
  * @author diego/@/envigo.net
- * @package
- * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ * @version 0.5
  */
 /**
  * In frontend->getTpl()
@@ -13,10 +12,13 @@
  */
 ?>
 <!DOCTYPE html>
-<html lang="<?= $tdata['lang'] ?>">
+<html lang="<?= $tdata['lang'] ?>" dir="<?= $tdata['dir'] ?? 'ltr' ?>">
     <head>
         <meta charset="<?= $tdata['page_charset'] ?>" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="<?= $tdata['description'] ?? 'Web' ?>">
+        <meta name="keywords" content="<?= $tdata['keywords'] ?? '' ?>">
+        <?= $tdata['meta_extra'] ?? '' ?>
         <link rel="shortcut icon" href="favicon.ico" />
         <meta name="referrer" content="never">
         <title><?= $tdata['web_title'] ?></title>
@@ -30,5 +32,6 @@
             <?= $tdata['main_body'] ?>
         </div>
         <footer><?= $tdata['main_footer'] ?></footer>
+        <?= $tdata['footer_script'] ?? '' ?>
     </body>
 </html>
