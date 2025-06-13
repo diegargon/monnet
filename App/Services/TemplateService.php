@@ -145,11 +145,20 @@ class TemplateService
                 return $weightA <=> $weightB;
             });
             foreach ($tdata['load_tpl'] as $tpl) {
+                /*
+                 * tdata have global data and load_tpl['data'] template expefic data
+                 * we pass to template in ['tpl_data'] along with global data
+                */
+                $tpl_data = $tdata;
+                unset($tpl_data['load_tpl']);
+                if (!empty($tpl['data'])) {
+                    $tdata['tpl_data'] = $tpl['data'];
+                }
                 if (!empty($tpl['file']) && !empty($tpl['place'])) {
                     if (empty($tdata[$tpl['place']])) {
-                        $tdata[$tpl['place']] = $this->getTpl($tpl['file'], $tdata);
+                        $tdata[$tpl['place']] = $this->getTpl($tpl['file'], $tpl_data);
                     } else {
-                        $tdata[$tpl['place']] .= $this->getTpl($tpl['file'], $tdata);
+                        $tdata[$tpl['place']] .= $this->getTpl($tpl['file'], $tpl_data);
                     }
                 }
             }
