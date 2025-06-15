@@ -5,7 +5,7 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
- * v1.1
+ * v1.2
  */
 
 namespace App\Services;
@@ -28,8 +28,8 @@ class GatewayService
     {
         $this->ctx = $ctx;
         $cfg = $ctx->get(Config::class);
-        $this->server_ip = (string)$cfg->get('ansible_server_ip');
-        $this->server_port = (int)$cfg->get('ansible_server_port');
+        $this->server_ip = (string)$cfg->get('gateway_ip');
+        $this->server_port = (int)$cfg->get('gateway_port');
         $this->logSystemService = new LogSystemService($ctx);
     }
 

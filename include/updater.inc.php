@@ -430,10 +430,34 @@ function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $f
         }
     }
 
+    // 0.83
+    $update = 0.83;
+    if ($db_version == 0.82) {
+         try {
+            $db->query("START TRANSACTION");
+            $db->query("
+                INSERT IGNORE INTO `config` (`ckey`, `cvalue`, `ctype`, `ccat`, `cdesc`, `uid`) VALUES
+                ('gateway_ip', JSON_QUOTE('127.0.0.1'), 0, 4, NULL, 0),
+                ('gateway_port', JSON_QUOTE('65432'), 1, 4, NULL, 0)
+            ");
+            $db->query("COMMIT");
+            $ncfg->set('db_monnet_version', $update, 1);
+            $db_version = $update;
+            $logSys->notice("Update version to $update successful");
+        } catch (Exception $e) {
+            $db->query("ROLLBACK");
+            $ncfg->set('db_monnet_version', $db_version, 1);
+            $logSys->error('Transaction failed, trying rolling back: ' . $e->getMessage());
+        }
+    }
+
     // Later
     $update = 0.00;
     if ($db_version == 0.00) {
         try {
+            # Unused now gatway_*
+            $db->query("DELETE FROM `config` WHERE `ckey` = 'ansible_server_ip'");
+            $db->query("DELETE FROM `config` WHERE `ckey` = 'ansible_server_port'");
             # Degraded For OS check like missing updates, one interface down when multiple
             $db->query("ALTER TABLE `hosts` ADD COLUMN `degraded` tinyint(1) NULL;");
             # Machine ID
