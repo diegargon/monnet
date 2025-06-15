@@ -28,12 +28,25 @@ class GatewayController
         $response = ['status' => 'error', 'error_msg' => 'Unknown Gateway command'];
 
         if ($command === 'restart-daemon') {
-            $response = $this->gatewayService->restartDaemon();
+            $send_data = [
+                'command' => 'restart-daemon',
+                'module' => 'gateway-daemon',
+            ];
         } else if ($command === 'reload-pbmeta') {
-            $response = $this->gatewayService->reloadPbMeta();
+            $send_data = [
+                'command' => 'reload-pbmeta',
+                'module' => 'gateway-daemon',
+            ];
         } else if ($command === 'reload-config') {
-            $response = $this->gatewayService->reloadConfig();
+            $send_data = [
+                'command' => 'reload-config',
+                'module' => 'gateway-daemon',
+            ];
+        } else {
+            return $response;
         }
+
+        $response = $this->gatewayService->sendCommand($send_data);
 
         return $response;
     }

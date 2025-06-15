@@ -5,6 +5,7 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ * v1.0
  */
 
 namespace App\Services;
@@ -30,68 +31,6 @@ class GatewayService
         $this->server_ip = (string)$cfg->get('ansible_server_ip');
         $this->server_port = (int)$cfg->get('ansible_server_port');
         $this->logSystemService = new LogSystemService($ctx);
-    }
-
-    /**
-     * Sends the restart-daemon command.
-     *
-     * @return array<string, string|int>
-     */
-    public function restartDaemon(): array
-    {
-        $send_data = [
-            'command' => 'restart-daemon',
-            'module' => 'gateway-daemon',
-        ];
-
-        return $this->sendCommand($send_data);
-    }
-
-    /**
-     * Sends the reload-pbmeta command.
-     *
-     * @return array<string, string|int>
-     */
-    public function reloadPbMeta(): array
-    {
-        $send_data = [
-            'command' => 'reload-pbmeta',
-            'module' => 'gateway-daemon',
-        ];
-
-        return $this->sendCommand($send_data);
-    }
-
-    /**
-     * Sends the reload-config command.
-     *
-     * @return array<string, string|int>
-     */
-    public function reloadConfig(): array
-    {
-        $send_data = [
-            'command' => 'reload-config',
-            'module' => 'gateway-daemon',
-        ];
-
-
-        return $this->sendCommand($send_data);
-    }
-
-    /**
-     *
-     * @return array<string, mixed>
-     */
-    public function pingGateway(): array
-    {
-        $data = ['timestamp' => microtime(true)];
-        $send_data = [
-            'command' => 'ping',
-            'module' => 'gateway-daemon',
-            'data' => $data,
-        ];
-
-        return $this->sendCommand($send_data);
     }
 
     /**

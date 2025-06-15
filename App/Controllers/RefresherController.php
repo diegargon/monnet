@@ -212,7 +212,12 @@ class RefresherController
          */
 
         // Ping the Gateway
-        $data['ping'] = $this->gwService->pingGateway();
+        $ping_data = [
+            'command' => 'ping',
+            'module' => 'gateway-daemon',
+            'data' => ['timestamp' => microtime(true)],
+        ];
+        $data['ping'] = $this->gwService->sendCommand($ping_data);
 
         $cli_last_run = 'Never';
         if ($ncfg->get('cli_last_run')) {
