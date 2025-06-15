@@ -9,7 +9,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\CategoriesService;
 
@@ -23,7 +23,7 @@ class UserService
     private UserSession $userSession;
     private LogSystemService $logSystem;
     private PrefsModel $prefsModel;
-    private ConfigService $ncfg;
+    private Config $ncfg;
     private int $session_expire;
 
     /** @var <string, mixed> */
@@ -39,7 +39,7 @@ class UserService
         $this->userSession = new UserSession($ctx);
         $this->logSystem = new LogSystemService($ctx);
         $this->prefsModel = new PrefsModel($db);
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
         $this->session_expire = (int) $this->ncfg->get('sid_expire');
         $this->userSession->AutoLogin();
         $this->loadPrefs();

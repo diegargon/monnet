@@ -10,7 +10,7 @@
 namespace App\Services;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 class TemplateService
 {
@@ -22,7 +22,7 @@ class TemplateService
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $ncfg = $this->ctx->get(ConfigService::class);
+        $ncfg = $this->ctx->get(Config::class);
         $this->theme = $ncfg->get('theme');
         $this->theme_css = $ncfg->get('theme_css');
         //$this->templatesPath = $templatesPath;
@@ -38,7 +38,7 @@ class TemplateService
     public function getTpl(string $templateName, array $tdata = []): string
     {
         $lng = $this->ctx->get('lng');
-        $ncfg = $this->ctx->get(ConfigService::class);
+        $ncfg = $this->ctx->get(Config::class);
         $user = $this->ctx->get(UserService::class);
 
         $templateFile = $this->templatesPath . $templateName . '.tpl.php';

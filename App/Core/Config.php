@@ -43,7 +43,7 @@ use App\Core\AppContext;
 use App\Core\DBManager;
 use App\Models\ConfigModel;
 
-class ConfigService
+class Config
 {
     private AppContext $ctx;
     private ConfigModel $model;

@@ -8,7 +8,7 @@
 namespace App\Controllers;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\RefresherService;
 use App\Services\TemplateService;
@@ -22,14 +22,14 @@ class RefresherController
 {
     private AppContext $ctx;
     private $view;
-    private ConfigService $ncfg;
+    private Config $ncfg;
     private RefresherService $refresherService;
     private GatewayService $gwService;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
         $templates = new TemplateService($ctx);
         $this->view = new RefresherView($ctx, $templates);
         $this->refresherService  = new RefresherService($ctx);

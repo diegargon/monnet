@@ -9,7 +9,7 @@ namespace App\Pages;
 
 use App\Core\ModuleManager;
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 class PageSettings
 {
@@ -27,7 +27,7 @@ class PageSettings
         }
 
         $page = [];
-        $ncfg = $ctx->get(ConfigService::class);
+        $ncfg = $ctx->get(Config::class);
         $config_all = $ncfg->getAllEditable();
 
         $groupedConfig = [];

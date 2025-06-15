@@ -9,7 +9,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\LogHostsService;
 use App\Services\LogSystemService;
@@ -22,7 +22,7 @@ use App\Models\HostsModel;
 class RefresherService
 {
     private AppContext $ctx;
-    private ConfigService $ncfg;
+    private Config $ncfg;
     private DBManager $db;
 
     private LogHostsService $logHostService;
@@ -35,7 +35,7 @@ class RefresherService
     public function __construct(AppContext $ctx) {
         $this->ctx = $ctx;
         $this->db = new DBManager($ctx);
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
 
         $this->logHostService = new LogHostsService($ctx);
         $this->logSystemService = new LogSystemService($ctx);

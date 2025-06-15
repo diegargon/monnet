@@ -4,7 +4,7 @@
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
-use App\Core\ConfigService;
+use App\Core\Config;
 
 return [
     'onPageHead' => function($ctx, &$page) {
@@ -30,7 +30,7 @@ return [
         // $db->query("DROP TABLE IF EXISTS ...");
     },
     'onRegisterConfigCategories' => function($ctx) {
-        $ncfg = $ctx->get(ConfigService::class);
+        $ncfg = $ctx->get(Config::class);
         $lng = $ctx->get('lng');
         $ncfg->registerCcat(10000, $lng['L_WEATHER_WIDGET'] ?? 'Weather Widget');
     }

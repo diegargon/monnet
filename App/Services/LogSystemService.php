@@ -10,7 +10,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\DateTimeService;
 
@@ -28,14 +28,14 @@ class LogSystemService
     private bool $console = false;
     private string $timezone = 'UTC';
     private array $lng = [];
-    private ConfigService $ncfg;
+    private Config $ncfg;
     private DBManager $db;
 
     public function __construct(AppContext $ctx)
     {
         $this->db = $ctx->get(DBManager::class);
         $this->lng = $ctx->get('lng');
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
         $this->logSystemModel = new LogSystemModel($this->db);
         # TODO user timezone (cycle dependencia UserService)
     }

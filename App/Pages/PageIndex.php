@@ -7,7 +7,7 @@
 namespace App\Pages;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\UserService;
 use App\Services\CategoriesService;
@@ -29,7 +29,7 @@ class PageIndex
     {
         $page = [];
         $user = $ctx->get(UserService::class);
-        $ncfg = $ctx->get(ConfigService::class);
+        $ncfg = $ctx->get(Config::class);
         $categories = $ctx->get(CategoriesService::class);
         $networks  = new NetworksService($ctx);
         $networks_list = $networks->getNetworks();

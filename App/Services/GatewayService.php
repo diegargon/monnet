@@ -5,13 +5,13 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
- * v1.0
+ * v1.1
  */
 
 namespace App\Services;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\LogSystemService;
 use App\Gateway\GwRequest;
@@ -27,7 +27,7 @@ class GatewayService
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $cfg = $ctx->get(ConfigService::class);
+        $cfg = $ctx->get(Config::class);
         $this->server_ip = (string)$cfg->get('ansible_server_ip');
         $this->server_port = (int)$cfg->get('ansible_server_port');
         $this->logSystemService = new LogSystemService($ctx);

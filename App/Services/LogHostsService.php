@@ -11,7 +11,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\DateTimeService;
 use App\Services\UserService;
@@ -25,7 +25,7 @@ class LogHostsService
 
     private LogHostsModel $logHostsModel;
     private DateTimeService $dateTimeService;
-    private ConfigService $ncfg;
+    private Config $ncfg;
     private DBManager $db;
 
     /** @var int */
@@ -37,7 +37,7 @@ class LogHostsService
         $this->db = $ctx->get(DBManager::class);
         $this->logHostsModel = new LogHostsModel($this->db);
         $this->dateTimeService = new DateTimeService();
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
     }
 
     /**

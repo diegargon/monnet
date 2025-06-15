@@ -9,7 +9,7 @@
  */
 use App\Core\AppContext;
 use App\Core\DBManager;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 !defined('IN_WEB') ? exit : true;
 
@@ -66,7 +66,7 @@ if (!$db->isConnected()) {
 require_once 'lang/es/main.lang.php';
 $ctx->setLang($lng);
 
-$ncfg = $ctx->set(ConfigService::class, new ConfigService($ctx));
+$ncfg = $ctx->set(Config::class, new Config($ctx));
 $ncfg->init($cfg);
 
 require_once 'include/updater.inc.php';

@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-use App\Core\ConfigService;
+use App\Core\Config;
 use App\Services\LogSystemService;
 use App\Core\AppContext;
 

@@ -8,7 +8,7 @@
 namespace App\Views;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\TemplateService;
 use App\Services\HostService;
@@ -18,7 +18,7 @@ use App\Services\UserService;
 class RefresherView
 {
     private AppContext $ctx;
-    private ConfigService $ncfg;
+    private Config $ncfg;
     private TemplateService $templates;
     private HostService $hostService;
     private DateTimeService $dateTimeService;
@@ -27,7 +27,7 @@ class RefresherView
     public function __construct(AppContext $ctx, TemplateService $templates)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
         $this->templates = $templates;
         $this->user = $this->ctx->get(UserService::class);
         $this->timezone = $this->user->getTimezone();
@@ -325,11 +325,11 @@ class RefresherView
 
     /**
      *
-     * @param ConfigService $ncfg
+     * @param Config $ncfg
      * @param int $id
      * @return array<string, string|int>|bool
      */
-    function getManufacture(ConfigService $ncfg, int $id): array|bool
+    function getManufacture(Config $ncfg, int $id): array|bool
     {
         $theme = $ncfg->get('theme');
 
@@ -351,11 +351,11 @@ class RefresherView
 
     /**
      *
-     * @param ConfigService $ncfg
+     * @param Config $ncfg
      * @param int $id
      * @return array<string, string|int>|bool
      */
-    function getOs(ConfigService $ncfg, int $id): array|bool
+    function getOs(Config $ncfg, int $id): array|bool
     {
         $theme = $ncfg->get('theme');
 
@@ -377,11 +377,11 @@ class RefresherView
 
     /**
      *
-     * @param ConfigService $ncfg
+     * @param Config $ncfg
      * @param int $id
      * @return array<string, string|int>|bool
      */
-    function getOsFamily(ConfigService $ncfg, int $id): array|bool
+    function getOsFamily(Config $ncfg, int $id): array|bool
     {
         $theme = $ncfg->get('theme');
 
@@ -402,11 +402,11 @@ class RefresherView
     }
     /**
      *
-     * @param ConfigService $ncfg
+     * @param Config $ncfg
      * @param int $id
      * @return array<string, string|int>|bool
      */
-    function getSystemRol(ConfigService $ncfg, int $id): array|bool
+    function getSystemRol(Config $ncfg, int $id): array|bool
     {
         $theme = $ncfg->get('theme');
 

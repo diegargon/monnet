@@ -10,7 +10,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\LogSystemService;
 use App\Services\Filter;
@@ -25,7 +25,7 @@ class UserSession
     private UserModel $userModel;
     private SessionsModel $sessionModel;
     private const REMEMBER_COOKIE = 'sid';
-    private ConfigService $ncfg;
+    private Config $ncfg;
     private array $user = [];
     private int $session_expire;
     private AppContext $ctx;
@@ -35,7 +35,7 @@ class UserSession
     {
         $this->ctx = $ctx;
         $db = new DBManager($ctx);
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
         $this->session_expire = (int) $this->ncfg->get('sid_expire');
         $this->userModel = new UserModel($db);
         $this->logSystem = new LogSystemService($ctx);

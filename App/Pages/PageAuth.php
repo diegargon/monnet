@@ -8,7 +8,7 @@
 namespace App\Pages;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\UserService;
 use App\Services\Filter;
@@ -17,7 +17,7 @@ class PageAuth
 {
     public static function login(AppContext $ctx): ?array
     {
-        $ncfg = $ctx->get(ConfigService::class);
+        $ncfg = $ctx->get(Config::class);
         $lng = $ctx->get('lng');
 
         if (

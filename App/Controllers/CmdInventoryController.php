@@ -8,7 +8,7 @@
 namespace App\Controllers;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 use App\Services\HostService;
 use App\Services\NetworksService;
 use App\Services\TemplateService;
@@ -49,8 +49,8 @@ class CmdInventoryController
         $networks = $this->networksService->getNetworks();
 
         // Get system roles (id => name)
-        $configService = $this->ctx->get(ConfigService::class);
-        $system_roles = $configService->get('system_rol');
+        $Config = $this->ctx->get(Config::class);
+        $system_roles = $Config->get('system_rol');
         $rol_map = [];
         if (is_array($system_roles)) {
             foreach ($system_roles as $role) {

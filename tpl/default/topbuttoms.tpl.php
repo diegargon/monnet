@@ -6,7 +6,7 @@
  */
 /**
  * In frontend->getTpl()
- * @var ConfigService ncfg
+ * @var Config ncfg
  * @var array<string> $lng Language data
  * @var array<mixed> $tdata Template Data
  */

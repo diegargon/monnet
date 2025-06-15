@@ -9,7 +9,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\DateTimeService;
 use App\Services\Filter;
@@ -47,9 +47,9 @@ class HostService
      */
     private AppContext $ctx;
     /**
-     * @var ConfigService
+     * @var Config
      */
-    private ConfigService $ncfg;
+    private Config $ncfg;
     /**
      * @var DBManager
      */
@@ -73,7 +73,7 @@ class HostService
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
         $this->lng = $ctx->get('lng');
         $this->db = $ctx->get(DBManager::class);
         $this->cmdHostModel = new CmdHostModel($this->db);

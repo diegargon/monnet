@@ -10,7 +10,7 @@ namespace App\Services;
 
 use App\Core\AppContext;
 use App\Core\DBManager;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Models\CategoriesModel;
 
@@ -21,13 +21,13 @@ class CategoriesService
     private array $categories = [];
     private array $cat_types = [];
     private array $lng = [];
-    private ConfigService $ncfg;
+    private Config $ncfg;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $db = new DBManager($ctx);
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
         $this->lng = $ctx->get('lng');
         $this->model = new CategoriesModel($db);
         $this->categories = $this->model->getAll();

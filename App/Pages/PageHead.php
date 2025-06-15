@@ -8,7 +8,7 @@
 namespace App\Pages;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 use App\Core\ModuleManager;
 use App\Services\ItemsService;
 use App\Services\LogSystemService;
@@ -24,7 +24,7 @@ class PageHead
     {
         $page = [];
         $lng = $ctx->get('lng');
-        $ncfg = $ctx->get(ConfigService::class);
+        $ncfg = $ctx->get(Config::class);
 
         $itemsService = new ItemsService($ctx);
         $search_engines = $itemsService->getByType('search_engine');

@@ -7,14 +7,14 @@
  */
 use App\Core\DBManager;
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 use App\Services\LogSystemService;
 
 !defined('IN_WEB') ? exit : true;
 
 $logSys = new LogSystemService($ctx);
 
-function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, float $files_version): void
+function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $files_version): void
 {
     global $logSys;
     $logSys->notice("Triggered updater File version: $files_version DB version: $db_version");
@@ -484,7 +484,7 @@ function trigger_update(ConfigService $ncfg, DBManager $db, float $db_version, f
 }
 
 /**
- * @var ConfigService $ncfg
+ * @var Config $ncfg
  * @var DBManager $db
  */
 if (!$db->isConnected()) {

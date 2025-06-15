@@ -17,7 +17,7 @@
 namespace App\Services;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\TemplateService;
 use App\Services\DateTimeService;
@@ -34,7 +34,7 @@ use App\Models\CmdAnsibleReportModel;
 class AnsibleService
 {
     private AppContext $ctx;
-    private ConfigService $ncfg;
+    private Config $ncfg;
     private CmdAnsibleModel $cmdAnsibleModel;
     private CmdAnsibleReportModel $ansibleReportModel;
     private TemplateService $templateService;
@@ -48,7 +48,7 @@ class AnsibleService
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
         $this->cmdAnsibleModel = new CmdAnsibleModel($ctx);
         $this->templateService = new TemplateService($ctx);
         $this->gatewayService = new GatewayService($ctx);
@@ -273,7 +273,7 @@ class AnsibleService
         $reports = $this->ansibleReportModel->getDbReports($reports_opts);
 
         $user = $this->ctx->get(UserService::class);
-        $ncfg = $this->ctx->get(ConfigService::class);
+        $ncfg = $this->ctx->get(Config::class);
         //format TODO: Move
         foreach ($reports as &$report) {
             $playbook = $this->getPbById($report['pid']);

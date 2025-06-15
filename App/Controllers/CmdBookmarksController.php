@@ -9,7 +9,7 @@
 namespace App\Controllers;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\Filter;
 use App\Services\TemplateService;
@@ -209,7 +209,7 @@ class CmdBookmarksController
         $tdata = [];
         // $items = $this->ctx->get('Items');
         $items = $this->itemsService;
-        $ncfg =  $this->ctx->get(ConfigService::class);
+        $ncfg =  $this->ctx->get(Config::class);
         $lng =  $this->ctx->get('lng');
 
 

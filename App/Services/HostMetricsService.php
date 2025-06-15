@@ -8,7 +8,7 @@
 namespace App\Services;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\HostMetricsViewBuilder;
 use App\Models\HostMetricsModel;

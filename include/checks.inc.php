@@ -7,7 +7,7 @@
  * @subpackage
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
-use App\Core\ConfigService;
+use App\Core\Config;
 
 !defined('IN_WEB') ? exit : true;
 

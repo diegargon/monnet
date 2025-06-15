@@ -6,19 +6,19 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 
-use App\Core\ConfigService;
+use App\Core\Config;
 use App\Services\CurlService;
 
 /**
  *
- * @param ConfigService $ncfg
+ * @param Config $ncfg
  * @param array<string,string> $lng
  * @return array<string,string|int>|null
  */
 function weather_widget($ctx): ?array
 {
     $lng = $ctx->get('lng');
-    $ncfg = $ctx->get(ConfigService::class);
+    $ncfg = $ctx->get(Config::class);
 
     $weather = [];
     $weather_data = request_weather($ncfg);
@@ -48,11 +48,11 @@ function weather_widget($ctx): ?array
 
 /**
  *
- * @param ConfigService $ncfg
+ * @param Config $ncfg
  *
  * @return mixed
  */
-function request_weather(ConfigService $ncfg): mixed
+function request_weather(Config $ncfg): mixed
 {
     $api = $ncfg->get('weather_api');
     $country = $ncfg->get('weather_country');

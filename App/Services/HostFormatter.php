@@ -9,7 +9,7 @@
 namespace App\Services;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\LogSystemService;
 use App\Services\NetworksService;
@@ -23,13 +23,13 @@ class HostFormatter
     private AppContext $ctx;
     private LogSystemService $logSys;
     private NetworksService $networksService;
-    private ConfigService $ncfg;
+    private Config $ncfg;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
         $this->logSys = new LogSystemService($ctx);
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
     }
 
     /**

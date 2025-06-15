@@ -10,7 +10,7 @@
 namespace App\Controllers;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
+use App\Core\Config;
 
 use App\Services\Filter;
 use App\Services\GatewayService;
@@ -20,12 +20,12 @@ use App\Helpers\Response;
 class ConfigController
 {
     private AppContext $ctx;
-    private ConfigService $ncfg;
+    private Config $ncfg;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
-        $this->ncfg = $ctx->get(ConfigService::class);
+        $this->ncfg = $ctx->get(Config::class);
     }
 
     /**
