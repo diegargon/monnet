@@ -430,7 +430,7 @@ function trigger_update(Config $ncfg, DBManager $db, float $db_version, float $f
         }
     }
 
-    // 0.83
+    // 0.83 DONE
     $update = 0.83;
     if ($db_version == 0.82) {
          try {
