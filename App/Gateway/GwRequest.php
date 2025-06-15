@@ -5,36 +5,27 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
+ * v1.0
  */
 namespace App\Gateway;
 
 use App\Core\AppContext;
-use App\Core\ConfigService;
 use App\Core\Network\SocketClient;
 
 use RuntimeException;
 
 class GwRequest
 {
-    /** @var AppContext */
     private AppContext $ctx;
-
-    /** @var SocketClient */
     private SocketClient $socketClient;
-
-    /** @var string */
     private string $server_ip;
-
-    /** @var int */
     private int $server_port;
 
-    public function __construct(AppContext $ctx)
+    public function __construct(AppContext $ctx, string $server_ip, int $server_port)
     {
         $this->ctx = $ctx;
-        $ncfg = $ctx->get(ConfigService::class);
-
-        $this->server_ip = (string)$ncfg->get('ansible_server_ip');
-        $this->server_port = (int)$ncfg->get('ansible_server_port');
+        $this->server_ip = $server_ip;
+        $this->server_port = $server_port;
 
         if (empty($this->server_ip)) {
             throw new RuntimeException('GW: Wrong or empty server IP');

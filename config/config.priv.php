@@ -6,7 +6,7 @@
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
  */
 $cfg['monnet_version'] = 0.82;
-$cfg['monnet_revision'] = 9;
+$cfg['monnet_revision'] = 10;
 
 $cfg['monnet_homepage'] = 'https://github.com/diegargon/monnet';
 $cfg['agent_min_version'] = 0.184;

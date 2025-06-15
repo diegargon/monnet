@@ -10,24 +10,25 @@
 namespace App\Services;
 
 use App\Core\AppContext;
+use App\Core\ConfigService;
 
 use App\Services\LogSystemService;
 use App\Gateway\GwRequest;
 
 class GatewayService
 {
-    /** @var AppContext */
     private AppContext $ctx;
-
-    /** @var int */
+    private string $server_ip;
+    private int $server_port;
     private int $socket_timeout = 1;
-
-    /** @var LogSystemService */
     private LogSystemService $logSystemService;
 
     public function __construct(AppContext $ctx)
     {
         $this->ctx = $ctx;
+        $cfg = $ctx->get(ConfigService::class);
+        $this->server_ip = (string)$cfg->get('ansible_server_ip');
+        $this->server_port = (int)$cfg->get('ansible_server_port');
         $this->logSystemService = new LogSystemService($ctx);
     }
 
@@ -102,7 +103,7 @@ class GatewayService
     public function sendCommand(array $send_data): array
     {
         try {
-            $gwRequest = new GwRequest($this->ctx);
+            $gwRequest = new GwRequest($this->ctx, $this->server_ip, $this->server_port);
             if ($gwRequest->connect($this->socket_timeout)) {
                 $response = $gwRequest->request($send_data);
             } else {
