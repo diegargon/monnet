@@ -20,6 +20,7 @@ use App\Utils\MiscUtils;
 
 use App\Constants\LogLevel;
 use App\Constants\LogType;
+use App\Constants\EventType;
 
 class HostFormatter
 {
