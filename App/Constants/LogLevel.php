@@ -6,6 +6,8 @@
  * v1.0
  */
 
+namespace App\Constants;
+
 class LogLevel
 {
     use ConstantsUtils;

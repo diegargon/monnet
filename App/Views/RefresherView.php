@@ -15,6 +15,8 @@ use App\Services\HostService;
 use App\Services\DateTimeService;
 use App\Services\UserService;
 
+use App\Constants\LogLevel;
+
 class RefresherView
 {
     private AppContext $ctx;
@@ -177,7 +179,7 @@ class RefresherView
                     $term_date_format,
                 );
             $log_level = (int) $log['level'];
-            $loglevelname = \LogLevel::getName($log_level);
+            $loglevelname = LogLevel::getName($log_level);
             $loglevelname = str_replace('LOG_', '', $loglevelname);
             $loglevelname = substr($loglevelname, 0, 4);
 

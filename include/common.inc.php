@@ -42,7 +42,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit(json_last_error_msg());
 }
 
-require_once 'Constants/Constants.php';
+//require_once 'Constants/Constants.php';
 require_once '/etc/monnet/config.inc.php';
 require_once 'include/checks.inc.php';
 

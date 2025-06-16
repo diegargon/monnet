@@ -10,6 +10,9 @@
  * @var array<string> $lng Language data
  * @var array<mixed> $tdata Template Data
  */
+//TODO avoid this in tpl
+use App\Constants\EventType;
+
 ?>
 <fieldset>
     <legend>Tasks</legend>
@@ -64,7 +67,7 @@
                     ?>
                     <select id="conditional" <?= $disabled ?>>
                         <?php
-                        foreach (\EventType::getConstants() as $value => $name) :
+                        foreach (EventType::getConstants() as $value => $name) :
                             $value === $task['event_id'] ? $event_selected = 'selected' : $event_selected = null;
                             echo '<option value="' . $name . '" ' . $event_selected . '>' . $value . '</option>';
                         endforeach;

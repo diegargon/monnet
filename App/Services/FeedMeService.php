@@ -24,6 +24,10 @@ use App\Services\Filter;
 use App\Models\CmdHostModel;
 use App\Models\CmdStatsModel;
 
+use App\Constants\LogLevel;
+use App\Constants\EventType;
+use App\Constants\LogType;
+
 class FeedMeService
 {
     /**
@@ -211,7 +215,7 @@ class FeedMeService
         if (!empty($rdata['mac'])) {
             if (!isset($host['mac']) || ($rdata['mac'] !== $host['mac'])) {
                 if (isset($host['mac'])) {
-                    $this->hostService->setWarnOn($host['id'], "Mac has changed", \LogType::EVENT_WARN, \EventType::HOST_INFO_CHANGE);
+                    $this->hostService->setWarnOn($host['id'], "Mac has changed", LogType::EVENT_WARN, EventType::HOST_INFO_CHANGE);
                 }
                 $host_update_values['mac'] = $rdata['mac'];
             }
@@ -363,13 +367,13 @@ class FeedMeService
                             . "({$db_port['service']}->{$port['service']}) ({$pnumber}) ({$ip_version})";
                         # Do not alert on localhost ports
                         if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
-                            $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $warnmsg, \LogType::EVENT, \EventType::SERVICE_NAME_CHANGE);
+                            $this->logHost->logHost(LogLevel::NOTICE , $host_id, $warnmsg, LogType::EVENT, EventType::SERVICE_NAME_CHANGE);
                         } else {
                             $this->hostService->setWarnOn(
                                 $host_id,
                                 $warnmsg,
-                                \LogType::EVENT_WARN,
-                                \EventType::SERVICE_NAME_CHANGE
+                                LogType::EVENT_WARN,
+                                EventType::SERVICE_NAME_CHANGE
                             );
                         }
                         $this->hostService->updatePort($db_port['id'], [
@@ -382,9 +386,9 @@ class FeedMeService
                     if ((int)$db_port['online'] === 0) {
                         $alertmsg = "Port UP detected on $interface ({$port['service']}) ($pnumber)($ip_version)";
                         if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
-                            $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $alertmsg, \LogType::EVENT, \EventType::PORT_UP_LOCAL);
+                            $this->logHost->logHost(LogLevel::NOTICE , $host_id, $alertmsg, LogType::EVENT, EventType::PORT_UP_LOCAL);
                         } else {
-                            $this->hostService->setWarnOn($host_id, $alertmsg, \LogType::EVENT_WARN, \EventType::PORT_UP);
+                            $this->hostService->setWarnOn($host_id, $alertmsg, LogType::EVENT_WARN, EventType::PORT_UP);
                         }
 
                         $this->hostService->updatePort($db_port['id'], [
@@ -410,9 +414,9 @@ class FeedMeService
 
                     # Do not alert on localhost ports
                     if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
-                        $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_NEW_LOCAL);
+                        $this->logHost->logHost(LogLevel::NOTICE , $host_id, $log_msg, LogType::EVENT, EventType::PORT_NEW_LOCAL);
                     } else {
-                        $this->hostService->setAlertOn($host_id, $log_msg, \LogType::EVENT_ALERT, \EventType::PORT_NEW);
+                        $this->hostService->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_NEW);
                     }
                     unset($db_ports_map[$key]);
                 }
@@ -426,9 +430,9 @@ class FeedMeService
                     ];
                     $log_msg = "Port DOWN detected on {$interface} {$db_port['pnumber']} ({$db_port['service']})";
                     if (strpos($interface, '127.') === 0 || strpos($interface, '[::') === 0) {
-                        $this->logHost->logHost(\LogLevel::NOTICE , $host_id, $log_msg, \LogType::EVENT, \EventType::PORT_DOWN_LOCAL);
+                        $this->logHost->logHost(LogLevel::NOTICE , $host_id, $log_msg, LogType::EVENT, EventType::PORT_DOWN_LOCAL);
                     } else {
-                        $this->hostService->setAlertOn($host_id, $log_msg, \LogType::EVENT_ALERT, \EventType::PORT_DOWN);
+                        $this->hostService->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, EventType::PORT_DOWN);
                     }
                     $this->hostService->updatePort($db_port['id'], $set);
                 }
@@ -636,7 +640,7 @@ class FeedMeService
         $event_type = !empty($rdata['event_type']) ? $rdata['event_type'] : 0;
         $log_type = isset($rdata['log_type'])
             ? $rdata['log_type']
-            : (!empty($rdata['event_type']) ? \LogType::EVENT : 0);
+            : (!empty($rdata['event_type']) ? LogType::EVENT : 0);
         $log_level = isset($rdata['log_level']) ? $rdata['log_level'] : 7;
         $log_msg = "[Agent] $request_name";
         isset($rdata['msg']) ? $log_msg .= ': ' . $rdata['msg'] : null;
@@ -645,10 +649,10 @@ class FeedMeService
             $log_msg .= ' Event value: ' . $rdata['event_value'];
         }
 
-        if ($log_level <= \LogLevel::CRITICAL) {
-            $this->hostService->setAlertOn($host_id, $log_msg, \LogType::EVENT_ALERT, $event_type);
-        } elseif ($log_level == \LogLevel::ERROR || $log_level == \LogLevel::WARNING) {
-            $this->hostService->setWarnOn($host_id, $log_msg, \LogType::EVENT_WARN, $event_type);
+        if ($log_level <= LogLevel::CRITICAL) {
+            $this->hostService->setAlertOn($host_id, $log_msg, LogType::EVENT_ALERT, $event_type);
+        } elseif ($log_level == LogLevel::ERROR || $log_level == LogLevel::WARNING) {
+            $this->hostService->setWarnOn($host_id, $log_msg, LogType::EVENT_WARN, $event_type);
         } else {
             $this->logHost->logHost($log_level, $host_id, $log_msg, $log_type, $event_type);
         }

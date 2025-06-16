@@ -38,6 +38,8 @@ use App\Models\CmdHostNotesModel;
 use App\Helpers\Response;
 use App\Utils\NetUtils;
 
+use App\Constants\LogLevel;
+
 class CmdHostController
 {
     private CmdHostModel $cmdHostModel;
@@ -770,7 +772,7 @@ class CmdHostController
         $this->cmdHostModel->updateByID($hid, $values);
 
         $this->logHostsService->logHost(
-            \LogLevel::NOTICE,
+            LogLevel::NOTICE,
             $hid,
             $lng['L_CLEAR_ALARMS_BITS_BY'] . ': ' . $username
         );

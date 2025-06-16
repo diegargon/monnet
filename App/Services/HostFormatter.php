@@ -18,6 +18,9 @@ use App\Services\CategoriesService;
 use App\Services\UserService;
 use App\Utils\MiscUtils;
 
+use App\Constants\LogLevel;
+use App\Constants\LogType;
+
 class HostFormatter
 {
     private AppContext $ctx;
@@ -177,8 +180,8 @@ class HostFormatter
             $msg = '';
             $msg .= '[' . $date . '] ';
             $msg .= !empty($item['msg']) ? $item['msg'] : '?';
-            $msg .= '[' . \LogType::getName($item['log_type']) . '] ';
-            $msg .= '[' . \EventType::getName($item['event_type']) . ']';
+            $msg .= '[' . LogType::getName($item['log_type']) . '] ';
+            $msg .= '[' . EventType::getName($item['event_type']) . ']';
 
             $log_msg[] = [
                 'log_id' => $item['id'],

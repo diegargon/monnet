@@ -22,6 +22,10 @@ use App\Models\CmdHostModel;
 use App\Models\LogHostsModel;
 use App\Models\HostsModel;
 
+use App\Constants\LogLevel;
+use App\Constants\EventType;
+use App\Constants\LogType;
+
 class HostService
 {
     /**
@@ -175,11 +179,11 @@ class HostService
 
         $log_msg = 'Found new host: ' . $display_name . ' on network ' . $network_match['name'];
         $this->logHost->logHost(
-            \LogLevel::WARNING,
+            LogLevel::WARNING,
             $host_id,
             $log_msg,
-            \LogType::EVENT_WARN,
-            \EventType::NEW_HOST_DISCOVERY
+            LogType::EVENT_WARN,
+            EventType::NEW_HOST_DISCOVERY
         );
 
         return ['status' => 'success', 'response_msg' => $this->lng['L_OK']];
@@ -387,7 +391,7 @@ class HostService
     {
 
         $hosts = $this->cmdHostModel->getAlertOn();
-        $log_type = [ \LogType::EVENT_ALERT ];
+        $log_type = [LogType::EVENT_ALERT];
         $result_hosts = [];
 
         foreach ($hosts as $host) :
@@ -426,7 +430,7 @@ class HostService
     {
         $hosts = $this->cmdHostModel->getWarnOn();
         $result_hosts = [];
-        $log_type = [ \LogType::EVENT_WARN ];
+        $log_type = [LogType::EVENT_WARN];
 
         foreach ($hosts as $host) :
             $host['display_name'] = $this->hostFormatter->getDisplayName($host);
@@ -579,7 +583,7 @@ class HostService
      */
     public function setAlertOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        $this->logHost->logHost(\LogLevel::ALERT, $id, $msg, $log_type, $event_type);
+        $this->logHost->logHost(LogLevel::ALERT, $id, $msg, $log_type, $event_type);
         $dateTime = new DateTimeService();
         $update = [
             'alert' => 1,
@@ -597,7 +601,7 @@ class HostService
      */
     public function setWarnOn(int $id, string $msg, int $log_type, int $event_type): void
     {
-        $this->logHost->logHost(\LogLevel::WARNING, $id, $msg, $log_type, $event_type);
+        $this->logHost->logHost(LogLevel::WARNING, $id, $msg, $log_type, $event_type);
         $dateTime = new DateTimeService();
         $update = [
             'warn' => 1,
@@ -730,7 +734,7 @@ class HostService
     public function setAnsibleAlarm(int $id, string $msg): void
     {
         $log_msg = 'Ansible alert: ' . $msg;
-        $this->logHost->logHost(\LogLevel::WARNING, $id, $log_msg, 3);
+        $this->logHost->logHost(LogLevel::WARNING, $id, $log_msg, 3);
         $this->hostsModel->update($id, ['alert' => 1, 'ansible_fail' => 1]);
     }
 

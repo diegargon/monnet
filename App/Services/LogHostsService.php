@@ -19,6 +19,10 @@ use App\Services\UserService;
 use App\Models\LogHostsModel;
 use App\Models\HostsModel;
 
+use App\Constants\LogLevel;
+use App\Constants\EventType;
+use App\Constants\LogType;
+
 class LogHostsService
 {
     private AppContext $ctx;
@@ -195,14 +199,14 @@ class LogHostsService
         ];
         if ($command === 'showAlarms') :
             $log_opts['log_type'] = [
-                \LogType::EVENT_ALERT,
-                \LogType::EVENT_WARN,
+                LogType::EVENT_ALERT,
+                LogType::EVENT_WARN,
             ];
         else :
             $log_opts['log_type'] = [
-                \LogType::EVENT,
-                \LogType::EVENT_ALERT,
-                \LogType::EVENT_WARN,
+                LogType::EVENT,
+                LogType::EVENT_ALERT,
+                LogType::EVENT_WARN,
             ];
         endif;
 
@@ -223,10 +227,10 @@ class LogHostsService
         foreach ($logs as &$log) {
             $log['host'] = $this->getHostDisplayName($log['host_id']);
             $log['date'] = $this->dateTimeService->formatDateString($log['date'], $this->ncfg->get('datetime_log_format'));
-            $log['level'] = \LogLevel::getName($log['level']);
-            $log['log_type'] = \LogType::getName($log['log_type']);
-            if (\EventType::getName($log['event_type'])) {
-                $log['event_type'] = \EventType::getName($log['event_type']);
+            $log['level'] = LogLevel::getName($log['level']);
+            $log['log_type'] = LogType::getName($log['log_type']);
+            if (EventType::getName($log['event_type'])) {
+                $log['event_type'] = EventType::getName($log['event_type']);
             }
         }
         return $logs;
@@ -246,7 +250,7 @@ class LogHostsService
             if (is_numeric($term_log['level'])) {
                 $log_level = (int) $term_log['level'];
                 $date = $this->dateTimeService->formatDateString($term_log['date'], $this->ncfg->get('term_date_format'));
-                $loglevelname = \LogLevel::getName($term_log['level']);
+                $loglevelname = LogLevel::getName($term_log['level']);
                 $loglevelname = str_replace('LOG_', '', $loglevelname);
                 $loglevelname = substr($loglevelname, 0, 4);
                 if ($log_level <= 2) {

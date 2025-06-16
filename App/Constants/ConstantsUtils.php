@@ -6,6 +6,8 @@
  * v1.0
  */
 
+namespace App\Constants;
+
 trait ConstantsUtils
 {
     /**
@@ -14,7 +16,7 @@ trait ConstantsUtils
      */
     public static function getConstants(): array
     {
-        return (new ReflectionClass(self::class))->getConstants();
+        return (new \ReflectionClass(self::class))->getConstants();
     }
 
     /**
@@ -24,7 +26,7 @@ trait ConstantsUtils
      */
     public static function getName(int $value): ?string
     {
-        $constants = (new ReflectionClass(self::class))->getConstants();
+        $constants = (new \ReflectionClass(self::class))->getConstants();
         $flipped = array_flip($constants);
 
         return $flipped[$value] ?? null;
