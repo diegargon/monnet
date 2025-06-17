@@ -4,7 +4,7 @@
  *
  * @author diego/@/envigo.net
  * @copyright Copyright CC BY-NC-ND 4.0 @ 2020 - 2025 Diego Garcia (diego/@/envigo.net)
- * v1.0
+ * v1.1
  */
 
 namespace App\Services;
@@ -104,6 +104,7 @@ class TemplateService
     {
         $web['main_head'] = $this->cssLink($this->theme_css);
         $web['main_footer'] = '';
+        $web['footer_script'] = '';
 
         // Add custom css files
         if (!empty($tdata['web_main']['cssfile']) && is_array($tdata['web_main']['cssfile'])) {
@@ -115,6 +116,12 @@ class TemplateService
         if (!empty($tdata['web_main']['scriptlink']) && is_array($tdata['web_main']['scriptlink'])) {
             foreach ($tdata['web_main']['scriptlink'] as $scriptlink) {
                 $web['main_head'] .= $this->scriptLink($scriptlink);
+            }
+        }
+        // Footer Script
+        if (!empty($tdata['web_main']['footer_script']) && is_array($tdata['web_main']['footer_script'])) {
+            foreach ($tdata['web_main']['footer_script'] as $scriptlink) {
+                $web['footer_script'] .= $this->scriptLink($scriptlink);
             }
         }
 
