@@ -22,10 +22,9 @@ class Filter
      */
     public static function getInt(mixed $val, int $size = PHP_INT_MAX): ?int
     {
-        if (empty($val) || !isset($_GET['val'])) {
+        if (!isset($_GET[$val])) {
             return null;
         }
-
         return self::varInt($_GET[$val], $size);
     }
 
@@ -38,10 +37,9 @@ class Filter
      */
     public static function postInt(mixed $val, int $size = PHP_INT_MAX): ?int
     {
-        if (empty($val) || !isset($_POST[$val])) {
+        if (!isset($_POST[$val])) {
             return null;
         }
-
         return self::varInt($_POST[$val], $size);
     }
 
@@ -95,13 +93,11 @@ class Filter
      */
     public static function getString(mixed $val, int $size = PHP_INT_MAX): ?string
     {
-        if (empty($_GET[$val])) {
+        if (!isset($_GET[$val])) {
             return null;
         }
-
         return self::varString($_GET[$val], $size);
     }
-
     /**
      * Retrieves a string from $_POST and validates it.
      *
@@ -111,10 +107,9 @@ class Filter
      */
     public static function postString(mixed $val, int $size = PHP_INT_MAX): ?string
     {
-        if (empty($_POST[$val])) {
+        if (!isset($_POST[$val])) {
             return null;
         }
-
         return self::varString($_POST[$val], $size);
     }
 
